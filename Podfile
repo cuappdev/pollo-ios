@@ -6,5 +6,7 @@ target 'Clicker' do
   # Pods for Clicker
 
   pod 'SwiftLint'
+  pod 'Google/SignIn'
+  pod 'Alamofire'
 
 end
