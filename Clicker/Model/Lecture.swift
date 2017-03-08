@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  Lecture.swift
 //  Clicker
 //
 //  Created by AE7 on 3/8/17.
@@ -8,12 +8,11 @@
 
 import RealmSwift
 
-class User: Object {
+class Lecture: Object {
     dynamic var id: Int = 0
     dynamic var name: String = ""
-    dynamic var netid: String = ""
- 
+    
     override class func primaryKey() -> String? {
-        return "netid"
+        return "id"
     }
 }
