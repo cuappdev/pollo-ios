@@ -10,18 +10,18 @@ import Foundation
 import Alamofire
 
 enum Router: URLConvertible {
-    static let baseURL = "http://localhost"
-    case login,users
+    static let baseURL = "http://10.148.4.89:8080"
+    
+    case signIn
     
     func asURL() throws -> URL {
-        let ext: String = {
+        let route: String = {
             switch self {
-            case .login: return "/login"
-            case .users: return "/users"
+            case .signIn: return "/auth/signin"
             }
         }()
         
-        return URL(string: Router.baseURL + ext)!
+        return URL(string: Router.baseURL + route)!
     }
 }
 
@@ -29,14 +29,10 @@ enum Router: URLConvertible {
 class NetworkAPI {
     
     static func login(_ idToken: String) {
-        NetworkAPI.makeRequest(route: Router.login, method: .post, parameters: ["idToken": idToken])
+        NetworkAPI.makeRequest(route: .signIn, method: .post, parameters: ["idToken": idToken])
     }
     
-    fileprivate static func makeRequest(route: URLConvertible, method: HTTPMethod, parameters: Parameters?) {
-        var parameters = parameters ?? [:]
-        if let sessionHash = UserDefaults.standard.string(forKey: "Auth") {
-            parameters["Auth"] = sessionHash
-        }
+    fileprivate static func makeRequest(route: Router, method: HTTPMethod, parameters: Parameters = [:]) {
         
         Alamofire.request(route, method: method, parameters: parameters)
             .validate()
