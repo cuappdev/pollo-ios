@@ -10,14 +10,19 @@ import Foundation
 import Alamofire
 
 enum Router: URLConvertible {
-    static let baseURL = "http://10.148.4.89:8080"
+    static let baseURL = "http://clicker-dev.us-west-2.elasticbeanstalk.com"
     
     case signIn
+    case makeClass, searchClasses, getClasses, joinClass(Int), updateClass, deleteClass
     
     func asURL() throws -> URL {
         let route: String = {
             switch self {
             case .signIn: return "/auth/signin"
+            case .makeClass, .searchClasses, .deleteClass: return "/classes"
+            case .getClasses: return "/classes/enrolled"
+            case .joinClass(let id): return "/classes/join/\(id)"
+            case .updateClass(let id): return "/classes/update/\(id)"
             }
         }()
         
@@ -32,6 +37,13 @@ class NetworkAPI {
         NetworkAPI.makeRequest(route: .signIn, method: .post, parameters: ["idToken": idToken])
     }
     
+    static func makeClass(_ courseNumber: Int, _ semester: String, _ course: String, _ courseName: String, _ professorNetids: [String], _ time: String, _ place: String) {
+        NetworkAPI.makeRequest(route: .makeClass, method: .post, parameters: ["courseNumber": courseNumber, "semester": semester, "course": course, "courseName": courseName, "professorNetids": professorNetids, "time": time, "place": place])
+    }
+    static func searchClasses(_ search: String) {
+        NetworkAPI.makeRequest(route: .searchClasses, method: .get, parameters: ["search": search])
+    }
+
     fileprivate static func makeRequest(route: Router, method: HTTPMethod, parameters: Parameters = [:]) {
         
         Alamofire.request(route, method: method, parameters: parameters)

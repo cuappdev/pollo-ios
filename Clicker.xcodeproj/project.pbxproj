@@ -16,6 +16,7 @@
 		65D670CF1E50EB8F00118CBA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D670CE1E50EB8F00118CBA /* ViewController.swift */; };
 		65D670D41E50EB8F00118CBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65D670D31E50EB8F00118CBA /* Assets.xcassets */; };
 		65D670D71E50EB8F00118CBA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65D670D51E50EB8F00118CBA /* LaunchScreen.storyboard */; };
+		F04922D81E85CE2100D39E3A /* CourseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04922D71E85CE2100D39E3A /* CourseViewController.swift */; };
 		F0E9158D1E6C91F3001EE4B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */; };
 		F0E9158F1E6C9781001EE4B4 /* NetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E9158E1E6C9781001EE4B4 /* NetworkAPI.swift */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,7 @@
 		65D670D31E50EB8F00118CBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65D670D61E50EB8F00118CBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		65D670D81E50EB8F00118CBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F04922D71E85CE2100D39E3A /* CourseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseViewController.swift; sourceTree = "<group>"; };
 		F0665F871E70C4B3004092D9 /* Lecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
 		F0665F881E70C4B3004092D9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F0665F8C1E70C4EB004092D9 /* Course.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				65D670CC1E50EB8F00118CBA /* AppDelegate.swift */,
 				F0E9158E1E6C9781001EE4B4 /* NetworkAPI.swift */,
 				65D670CE1E50EB8F00118CBA /* ViewController.swift */,
+				F04922D71E85CE2100D39E3A /* CourseViewController.swift */,
 				65D670D31E50EB8F00118CBA /* Assets.xcassets */,
 				F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */,
 				65D670D51E50EB8F00118CBA /* LaunchScreen.storyboard */,
@@ -243,6 +246,7 @@
 				65A57FA71E7F02500077D77B /* User.swift in Sources */,
 				65A57FA81E7F02500077D77B /* Question.swift in Sources */,
 				65D670CF1E50EB8F00118CBA /* ViewController.swift in Sources */,
+				F04922D81E85CE2100D39E3A /* CourseViewController.swift in Sources */,
 				65D670CD1E50EB8F00118CBA /* AppDelegate.swift in Sources */,
 				F0E9158F1E6C9781001EE4B4 /* NetworkAPI.swift in Sources */,
 			);

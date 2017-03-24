@@ -49,6 +49,11 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>clicker-dev.us-west-2.elasticbeanstalk.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
