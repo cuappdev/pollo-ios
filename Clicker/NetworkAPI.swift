@@ -34,22 +34,22 @@ enum Router: URLConvertible {
 class NetworkAPI {
     
     static func login(_ idToken: String) {
-        NetworkAPI.makeRequest(route: .signIn, method: .post, parameters: ["idToken": idToken])
+        _ = NetworkAPI.makeRequest(route: .signIn, method: .post, parameters: ["idToken": idToken])
     }
     
     static func makeClass(_ courseNumber: Int, _ semester: String, _ course: String, _ courseName: String, _ professorNetids: [String], _ time: String, _ place: String) {
-        NetworkAPI.makeRequest(route: .makeClass, method: .post, parameters: ["courseNumber": courseNumber, "semester": semester, "course": course, "courseName": courseName, "professorNetids": professorNetids, "time": time, "place": place])
+        _ = NetworkAPI.makeRequest(route: .makeClass, method: .post, parameters: ["courseNumber": courseNumber, "semester": semester, "course": course, "courseName": courseName, "professorNetids": professorNetids, "time": time, "place": place])
     }
-    static func searchClasses(_ search: String) {
-        NetworkAPI.makeRequest(route: .searchClasses, method: .get, parameters: ["search": search])
+    
+    static func searchClasses(_ search: String) -> DataRequest {
+        return NetworkAPI.makeRequest(route: .searchClasses, method: .get, parameters: ["search": search])
     }
 
-    fileprivate static func makeRequest(route: Router, method: HTTPMethod, parameters: Parameters = [:]) {
-        
-        Alamofire.request(route, method: method, parameters: parameters)
+    fileprivate static func makeRequest(route: Router, method: HTTPMethod, parameters: Parameters = [:]) -> DataRequest {
+        return Alamofire.request(route, method: method, parameters: parameters)
             .validate()
             .responseJSON { response in
-                print(response)
+                //print(response)
         }
     }
 }

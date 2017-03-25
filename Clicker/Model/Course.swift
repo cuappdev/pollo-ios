@@ -11,6 +11,7 @@ import RealmSwift
 class Course: Object {
     dynamic var id: Int = 0
     dynamic var name: String = ""
+    dynamic var display: String = ""
     
     let lectures = List<Lecture>()
     
