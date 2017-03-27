@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Google
+import GoogleSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -49,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             // ...
             
-            NetworkAPI.login(idToken!)
+            
             
         } else {
             print("\(error.localizedDescription)")

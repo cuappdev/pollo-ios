@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class Course: Object {
+class Class: Object {
     dynamic var id: Int = 0
     dynamic var name: String = ""
     dynamic var display: String = ""

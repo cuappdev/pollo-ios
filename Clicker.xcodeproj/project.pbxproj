@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4D59FFC3061FEE4ED19BD67C /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51ECA7568355F568248C5881 /* Pods_Clicker.framework */; };
+		65816A9C1E885BE8007E5436 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65816A9B1E885BE8007E5436 /* Requests.swift */; };
 		65A57FA51E7F02500077D77B /* Lecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0665F871E70C4B3004092D9 /* Lecture.swift */; };
-		65A57FA61E7F02500077D77B /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0665F8C1E70C4EB004092D9 /* Course.swift */; };
+		65A57FA61E7F02500077D77B /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0665F8C1E70C4EB004092D9 /* Class.swift */; };
 		65A57FA71E7F02500077D77B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0665F881E70C4B3004092D9 /* User.swift */; };
 		65A57FA81E7F02500077D77B /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0665F8E1E70C57C004092D9 /* Question.swift */; };
 		65D670CD1E50EB8F00118CBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D670CC1E50EB8F00118CBA /* AppDelegate.swift */; };
@@ -18,14 +19,14 @@
 		65D670D71E50EB8F00118CBA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65D670D51E50EB8F00118CBA /* LaunchScreen.storyboard */; };
 		F04922D81E85CE2100D39E3A /* CourseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04922D71E85CE2100D39E3A /* CourseViewController.swift */; };
 		F0E9158D1E6C91F3001EE4B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */; };
-		F0E9158F1E6C9781001EE4B4 /* NetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E9158E1E6C9781001EE4B4 /* NetworkAPI.swift */; };
+		F0E9158F1E6C9781001EE4B4 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E9158E1E6C9781001EE4B4 /* NetworkRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1C943BCC9F16D78287F58B2C /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
 		3216299DD6D1EF2A0CE980B6 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		51ECA7568355F568248C5881 /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		658ADE3E1E636F6F00389BC1 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
+		65816A9B1E885BE8007E5436 /* Requests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
 		65D670C91E50EB8F00118CBA /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65D670CC1E50EB8F00118CBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65D670CE1E50EB8F00118CBA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,10 +36,10 @@
 		F04922D71E85CE2100D39E3A /* CourseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseViewController.swift; sourceTree = "<group>"; };
 		F0665F871E70C4B3004092D9 /* Lecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
 		F0665F881E70C4B3004092D9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		F0665F8C1E70C4EB004092D9 /* Course.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		F0665F8C1E70C4EB004092D9 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 		F0665F8E1E70C57C004092D9 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../Secrets/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		F0E9158E1E6C9781001EE4B4 /* NetworkAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAPI.swift; sourceTree = "<group>"; };
+		F0E9158E1E6C9781001EE4B4 /* NetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +54,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6534754F1E88A161005E8C07 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				65D670CC1E50EB8F00118CBA /* AppDelegate.swift */,
+				65D670D31E50EB8F00118CBA /* Assets.xcassets */,
+				F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */,
+				65D670D51E50EB8F00118CBA /* LaunchScreen.storyboard */,
+				65D670D81E50EB8F00118CBA /* Info.plist */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		65816A9F1E889B46007E5436 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				65816A9B1E885BE8007E5436 /* Requests.swift */,
+				F0E9158E1E6C9781001EE4B4 /* NetworkRequest.swift */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
 		65D670C01E50EB8E00118CBA = {
 			isa = PBXGroup;
 			children = (
@@ -74,16 +96,11 @@
 		65D670CB1E50EB8F00118CBA /* Clicker */ = {
 			isa = PBXGroup;
 			children = (
+				6534754F1E88A161005E8C07 /* Application */,
+				65816A9F1E889B46007E5436 /* Networking */,
 				F0665F851E70C4B3004092D9 /* Model */,
-				65D670CC1E50EB8F00118CBA /* AppDelegate.swift */,
-				F0E9158E1E6C9781001EE4B4 /* NetworkAPI.swift */,
 				65D670CE1E50EB8F00118CBA /* ViewController.swift */,
 				F04922D71E85CE2100D39E3A /* CourseViewController.swift */,
-				65D670D31E50EB8F00118CBA /* Assets.xcassets */,
-				F0E9158C1E6C91F3001EE4B4 /* GoogleService-Info.plist */,
-				65D670D51E50EB8F00118CBA /* LaunchScreen.storyboard */,
-				65D670D81E50EB8F00118CBA /* Info.plist */,
-				658ADE3E1E636F6F00389BC1 /* Clicker-Bridging-Header.h */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";
@@ -109,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				F0665F871E70C4B3004092D9 /* Lecture.swift */,
-				F0665F8C1E70C4EB004092D9 /* Course.swift */,
+				F0665F8C1E70C4EB004092D9 /* Class.swift */,
 				F0665F881E70C4B3004092D9 /* User.swift */,
 				F0665F8E1E70C57C004092D9 /* Question.swift */,
 			);
@@ -242,13 +259,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				65A57FA51E7F02500077D77B /* Lecture.swift in Sources */,
-				65A57FA61E7F02500077D77B /* Course.swift in Sources */,
+				65A57FA61E7F02500077D77B /* Class.swift in Sources */,
 				65A57FA71E7F02500077D77B /* User.swift in Sources */,
+				65816A9C1E885BE8007E5436 /* Requests.swift in Sources */,
 				65A57FA81E7F02500077D77B /* Question.swift in Sources */,
 				65D670CF1E50EB8F00118CBA /* ViewController.swift in Sources */,
 				F04922D81E85CE2100D39E3A /* CourseViewController.swift in Sources */,
 				65D670CD1E50EB8F00118CBA /* AppDelegate.swift in Sources */,
-				F0E9158F1E6C9781001EE4B4 /* NetworkAPI.swift in Sources */,
+				F0E9158F1E6C9781001EE4B4 /* NetworkRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +386,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.Clicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Clicker/Clicker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -385,7 +402,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.Clicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Clicker/Clicker-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

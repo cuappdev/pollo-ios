@@ -8,6 +8,7 @@ target 'Clicker' do
   pod 'SwiftLint'
   pod 'Google/SignIn'
   pod 'Alamofire'
+  pod 'SwiftyJSON'
   pod 'RealmSwift'
 
 end

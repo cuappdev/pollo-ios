@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSource, UITableViewDelegate {
 
     var signInBtn: GIDSignInButton!
     var tableView: UITableView!
-    var classes = [Course]()
+    var classes = [Class]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,21 +37,21 @@ class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSour
         // TODO(developer) Configure the sign-in button look/feel
         // ...
         
-        NetworkAPI.searchClasses("").responseJSON { response in
-            print(response)
-            
-            if let json = response.result.value as? [[String: Any]] {
-                self.classes.removeAll()
-                for course in json {
-                    let c = Course()
-                    c.id = course["courseId"] as! Int
-                    c.name = course["course"] as! String
-                    c.display = course["courseName"] as! String
-                    self.classes.append(c)
-                }
-                self.tableView.reloadData()
-            }
-        }
+//        NetworkAPI.searchClasses("").responseJSON { response in
+//            print(response)
+//            
+//            if let json = response.result.value as? [[String: Any]] {
+//                self.classes.removeAll()
+//                for course in json {
+//                    let c = Course()
+//                    c.id = course["courseId"] as! Int
+//                    c.name = course["course"] as! String
+//                    c.display = course["courseName"] as! String
+//                    self.classes.append(c)
+//                }
+//                self.tableView.reloadData()
+//            }
+//        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

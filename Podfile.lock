@@ -49,12 +49,14 @@ PODS:
   - RealmSwift (2.4.1):
     - Realm (= 2.4.1)
   - SwiftLint (0.16.1)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - Alamofire
   - Google/SignIn
   - RealmSwift
   - SwiftLint
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
@@ -72,7 +74,8 @@ SPEC CHECKSUMS:
   Realm: 37a5198a197598d9ec0e4d1ae2f64924c86eeb9a
   RealmSwift: d69e431b79a41acdf14c404b868ae1c2458916e1
   SwiftLint: b8b683208cc09640898f16318a7a452274e91f61
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: adf3c3e43bfd78a7fa4c46cb508d72866a465d70
+PODFILE CHECKSUM: 4d138f7ad26d4ac56cab444e0f2d1d389eb6b2dd
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
