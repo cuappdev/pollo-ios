@@ -10,6 +10,8 @@ import Alamofire
 import SwiftyJSON
 import GoogleSignIn
 
+//// -- SIGN IN 
+
 struct SignInRequest: NetworkRequest {
     
     let route: String = "/auth/signin", method: HTTPMethod = .post
@@ -27,6 +29,8 @@ struct SignInRequest: NetworkRequest {
         return User(value: userDict)
     }
 }
+
+//// -- CLASSES
 
 struct CreateClassRequest: NetworkRequest {
     
@@ -98,4 +102,49 @@ struct GetClassesRequest: NetworkRequest {
     }
 }
 
+struct JoinClassRequest: NetworkRequest {
+    
+    let courseId: Int
+    
+    var route: String {
+        return "/classes/enrolled/\(courseId)"
+    }
 
+    typealias ResponseType = Bool
+    func process(json: JSON) throws -> Bool {
+        return json["message"] == "success"
+    }
+}
+
+/*
+struct UpdateClassRequest: CreateClassRequest {
+    
+    let courseId: Int
+
+    var route: String {
+        return "/classes/update/\(courseId)"
+    }
+    
+    typealias ResponseType = Bool
+    func process(json: JSON) throws -> Bool {
+        return json["message"] == "success"
+    }
+}
+ */
+
+struct DeleteClassRequest: NetworkRequest {
+    
+    let courseId: Int
+    
+    let route = "/classes"
+    var parameters: [String : Any] {
+        return ["courseId": courseId]
+    }
+    
+    typealias ResponseType = Bool
+    func process(json: JSON) throws -> Bool {
+        return json["message"] == "success"
+    }
+}
+
+//// -- LECTURES
