@@ -9,7 +9,7 @@
 import UIKit
 import GoogleSignIn
 
-class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSource, UITableViewDelegate {
+class ClassesViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSource, UITableViewDelegate {
 
     var signInBtn: GIDSignInButton!
     var tableView: UITableView!
@@ -18,7 +18,7 @@ class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Home Screen"
+        title = "Your Classes"
         
         GIDSignIn.sharedInstance().uiDelegate = self
         
@@ -32,24 +32,26 @@ class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSour
         view.addSubview(signInBtn)
 
         // Uncomment to automatically sign in the user.
-        //GIDSignIn.sharedInstance().signInSilently()
+        GIDSignIn.sharedInstance().signInSilently()
         
         // TODO(developer) Configure the sign-in button look/feel
         // ...
         
-//        NetworkAPI.searchClasses("").responseJSON { response in
+        //NetworkAPI.searchClasses("").responseJSON { response in
 //            print(response)
 //            
 //            if let json = response.result.value as? [[String: Any]] {
-//                self.classes.removeAll()
-//                for course in json {
-//                    let c = Course()
-//                    c.id = course["courseId"] as! Int
-//                    c.name = course["course"] as! String
-//                    c.display = course["courseName"] as! String
-//                    self.classes.append(c)
-//                }
-//                self.tableView.reloadData()
+        let json = [["courseName":"Eng Prob Stats", "course": "ENGRD 2700", "courseId":1],
+                    ["courseName":"Java FTW", "course": "CS 2110", "courseId":2]]
+                self.classes.removeAll()
+                for course in json {
+                    let c = Class()
+                    c.id = course["courseId"] as! Int
+                    c.name = course["course"] as! String
+                    c.display = course["courseName"] as! String
+                    self.classes.append(c)
+                }
+                self.tableView.reloadData()
 //            }
 //        }
     }
@@ -73,7 +75,7 @@ class ViewController: UIViewController, GIDSignInUIDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let c = CourseViewController()
+        let c = LecturesViewController()
         c.title = classes[indexPath.row].name
         navigationController?.pushViewController(c, animated: true)
     }

@@ -23,10 +23,10 @@ struct SignInRequest: NetworkRequest {
     
     typealias ResponseType = User
     func process(json: JSON) throws -> User {
-        guard let userDict = json.dictionaryObject else {
+//        guard let userDict = json.dictionaryObject else {
             throw NetworkError.badJsonFormatting
-        }
-        return User(value: userDict)
+//        }
+//        return User(value: userDict)
     }
 }
 

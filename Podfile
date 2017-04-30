@@ -10,5 +10,5 @@ target 'Clicker' do
   pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'RealmSwift'
-
+  pod 'Socket.IO-Client-Swift'
 end

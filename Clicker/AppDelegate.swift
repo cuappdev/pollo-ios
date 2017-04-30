@@ -27,8 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let window = UIWindow()
         window.makeKeyAndVisible()
         self.window = window
-        let nav = UINavigationController(rootViewController: ViewController())
-        window.rootViewController = nav
+        window.rootViewController = UINavigationController(rootViewController: ClassesViewController())
         
         return true
     }
@@ -51,8 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             // ...
             
-            
-            
+            let signInReq = SignInRequest()
+            signInReq.make()
+
         } else {
             print("\(error.localizedDescription)")
         }

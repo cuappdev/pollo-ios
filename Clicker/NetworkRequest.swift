@@ -40,6 +40,8 @@ extension NetworkRequest {
         Alamofire.request(URL(string: baseURL + route)!, method: method, parameters: parameters, encoding: encoding, headers: headers)
             .validate()
             .responseJSON { response in
+                print(response.response?.allHeaderFields)
+                
                 switch response.result {
                 case .success(let data):
                     do {

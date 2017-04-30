@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CourseViewController: UITableViewController {
+class LecturesViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,14 +26,16 @@ class CourseViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LectureCell") ??
             UITableViewCell(style: .default, reuseIdentifier: "LectureCell")
         
-        cell.textLabel?.text = "Lecture 1"
+        cell.textLabel?.text = indexPath.row == 0 ? "LIVE Lecture #5" : "Lecture #\(5 - indexPath.row)"
         cell.detailTextLabel?.text = "Dan Li"
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO
+        let c = QuestionsViewController()
+        c.title = "LIVE Lecture #\(5 - indexPath.row)"
+        navigationController?.pushViewController(c, animated: true)
     }
     
     override func didReceiveMemoryWarning() {
