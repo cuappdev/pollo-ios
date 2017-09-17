@@ -1,6 +1,6 @@
 # Clicker iOS Client 
 
-Clicker is another app from [CUAppDev](http://cuappdev.org), a project team at Cornell University. It is an app that seeks to extend the functionality of iClickers on a web and mobile platform.
+Clicker is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is an app that seeks to extend the functionality of iClickers on a web and mobile platform.
 
 ## Development
 ### Installation
