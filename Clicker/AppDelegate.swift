@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let window = UIWindow()
         window.makeKeyAndVisible()
         self.window = window
-        window.rootViewController = UINavigationController(rootViewController: ClassesViewController())
+        //window.rootViewController = UINavigationController(rootViewController: ClassesViewController())
         
         return true
     }
