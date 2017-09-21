@@ -12,3 +12,5 @@ pod install
 ```
 Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 
+### Documention 
+Check out our documentation [here](https://github.com/cuappdev/clicker-ios/wiki/Clicker-by-AppDev-Documentation).
