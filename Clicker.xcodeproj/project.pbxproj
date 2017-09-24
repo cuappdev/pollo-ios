@@ -125,6 +125,7 @@
 				C7F923C01F73540600B1E975 /* Resources */,
 				A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */,
 				DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */,
+				C71173CA1F780BF600B4F9A1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -211,6 +212,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C71173CA1F780BF600B4F9A1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 50d77fbd594f6229f8bb9a3669ce18dce7dac38e 0f35fd962076cda8200e58ca1763bfa75f7f2d5942bcdbad450417d0b01a3739";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
