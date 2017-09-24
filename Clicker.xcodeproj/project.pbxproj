@@ -10,7 +10,6 @@
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		C24083671F78059200DA98A1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24083661F78059200DA98A1 /* LoginViewController.swift */; };
 		C240836C1F780B0200DA98A1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */; };
-		C240836E1F780C1D00DA98A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C240836D1F780C1D00DA98A1 /* HomeViewController.swift */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923C81F73540600B1E975 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C71F73540600B1E975 /* ViewController.swift */; };
 		C7F923CB1F73540600B1E975 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923C91F73540600B1E975 /* Main.storyboard */; };
@@ -24,7 +23,6 @@
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
 		C24083661F78059200DA98A1 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = SOURCE_ROOT; };
 		C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Secrets/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
-		C240836D1F780C1D00DA98A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = SOURCE_ROOT; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C7F923C71F73540600B1E975 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				C24083661F78059200DA98A1 /* LoginViewController.swift */,
-				C240836D1F780C1D00DA98A1 /* HomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -275,7 +272,6 @@
 				C24083671F78059200DA98A1 /* LoginViewController.swift in Sources */,
 				C7F923C81F73540600B1E975 /* ViewController.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
-				C240836E1F780C1D00DA98A1 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

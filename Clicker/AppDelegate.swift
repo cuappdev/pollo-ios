@@ -25,9 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
         GIDSignIn.sharedInstance().delegate = self
         
-        window = UIWindow()
-        window?.rootViewController = LoginViewController()
-        window?.makeKeyAndVisible()
         
         return true
     }
