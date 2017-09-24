@@ -21,12 +21,14 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         
         GIDSignIn.sharedInstance().uiDelegate = self
         
-        signInButton = GIDSignInButton(frame: CGRect(x: 0, y: 0, width: view.frame.width*0.5, height: 200))
+        signInButton = GIDSignInButton()
         signInButton.colorScheme = .light
         view.addSubview(signInButton)
         
         signInButton.snp.makeConstraints { (make) in
             make.center.equalTo(view.snp.center)
+            make.width.equalTo(view.snp.width).multipliedBy(0.3)
+            make.height.equalTo(150)
         }
         
         
