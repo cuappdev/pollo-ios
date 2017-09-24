@@ -10,9 +10,14 @@
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		652915021F7803E500882CBB /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915011F7803E500882CBB /* Session.swift */; };
+
+		C24083671F78059200DA98A1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24083661F78059200DA98A1 /* LoginViewController.swift */; };
+		C240836C1F780B0200DA98A1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */; };
+
+		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
+		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
+
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
-		C7F923C81F73540600B1E975 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C71F73540600B1E975 /* ViewController.swift */; };
-		C7F923CB1F73540600B1E975 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923C91F73540600B1E975 /* Main.storyboard */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -23,10 +28,15 @@
 		652915011F7803E500882CBB /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
+
+		C24083661F78059200DA98A1 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = SOURCE_ROOT; };
+		C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Secrets/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+
+		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C7F923C71F73540600B1E975 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C7F923CA1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,10 +99,10 @@
 				C7F923D71F73542100B1E975 /* Models */,
 				C7F923D81F73542600B1E975 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
-				C7F923C91F73540600B1E975 /* Main.storyboard */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
+				C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";
@@ -114,6 +124,9 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C24083661F78059200DA98A1 /* LoginViewController.swift */,
+				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
+				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -131,6 +144,7 @@
 				C7F923C01F73540600B1E975 /* Resources */,
 				A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */,
 				DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */,
+				C71173CA1F780BF600B4F9A1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -181,8 +195,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */,
+				C240836C1F780B0200DA98A1 /* GoogleService-Info.plist in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
-				C7F923CB1F73540600B1E975 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +257,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C71173CA1F780BF600B4F9A1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 50d77fbd594f6229f8bb9a3669ce18dce7dac38e 0f35fd962076cda8200e58ca1763bfa75f7f2d5942bcdbad450417d0b01a3739";
+		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -271,21 +298,17 @@
 				652915021F7803E500882CBB /* Session.swift in Sources */,
 				C7F923C81F73540600B1E975 /* ViewController.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
+				C24083671F78059200DA98A1 /* LoginViewController.swift in Sources */,
+				C7F923C81F73540600B1E975 /* ViewController.swift in Sources */,
+				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
+				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		C7F923C91F73540600B1E975 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C7F923CA1F73540600B1E975 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
