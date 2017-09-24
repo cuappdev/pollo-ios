@@ -4,12 +4,12 @@ target 'Clicker' do
   use_frameworks!
 
   # Pods for Clicker
-	pod 'Alamofire'
-	pod 'Crashlytics'
-	pod 'Fabric'
-	pod 'Google/SignIn'
-	pod 'SnapKit'
-	pod 'Socket.IO-Client-Swift'
-	pod 'SwiftLint'
-	pod 'SwiftyJSON'
+  pod 'Alamofire'
+  pod 'Crashlytics'
+  pod 'Fabric'
+  pod 'GoogleSignIn'
+  pod 'SnapKit'
+  pod 'Socket.IO-Client-Swift'
+  pod 'SwiftLint'
+  pod 'SwiftyJSON'
 end
