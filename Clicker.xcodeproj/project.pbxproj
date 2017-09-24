@@ -117,12 +117,9 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				C24083661F78059200DA98A1 /* LoginViewController.swift */,
-=======
 				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
->>>>>>> 3aac6638d20c7ef0f93e9d24d5e8e157b72f0f64
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -291,12 +288,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
 				C24083671F78059200DA98A1 /* LoginViewController.swift in Sources */,
 				C7F923C81F73540600B1E975 /* ViewController.swift in Sources */,
-=======
 				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
->>>>>>> 3aac6638d20c7ef0f93e9d24d5e8e157b72f0f64
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 			);
