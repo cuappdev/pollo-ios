@@ -44,9 +44,9 @@ PODS:
   - RealmSwift (2.10.1):
     - Realm (= 2.10.1)
   - SnapKit (4.0.0)
-  - Socket.IO-Client-Swift (11.1.3):
-    - StarscreamSocketIO (~> 8.0.5)
-  - StarscreamSocketIO (8.0.6)
+  - Socket.IO-Client-Swift (12.0.0):
+    - StarscreamSocketIO (~> 8.0.7)
+  - StarscreamSocketIO (8.0.7)
   - SwiftLint (0.22.0)
   - SwiftyJSON (3.1.4)
 
@@ -76,11 +76,11 @@ SPEC CHECKSUMS:
   Realm: fc7a317a5c2c9ba91f5f235ede4e2ea76e9eba0c
   RealmSwift: 505ed6c15942a2e76f5cfa78a8667cfa997ee75b
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  Socket.IO-Client-Swift: b8e59ddc16bc3609ca2f49a4b50253f095d535c8
-  StarscreamSocketIO: 5f1159208ffdabd19daf1d5d6235a2958f1f74a1
+  Socket.IO-Client-Swift: 5b0154b42b3892bfb4c44fa138cbeb8afec4f6ef
+  StarscreamSocketIO: 00b54e4208481ca5cef089545353aaf126bae16d
   SwiftLint: 1134786caedd2caab0560d2f36b76414a5a56808
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: ba99c0f1d2d54194d9b0863401b7631e64fac0d7
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1
