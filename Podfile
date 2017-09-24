@@ -8,7 +8,6 @@ target 'Clicker' do
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'GoogleSignIn'
-  pod 'RealmSwift'
   pod 'SnapKit'
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
