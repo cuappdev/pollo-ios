@@ -29,12 +29,24 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>50d77fbd594f6229f8bb9a3669ce18dce7dac38e</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -42,8 +54,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

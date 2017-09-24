@@ -9,12 +9,13 @@
 import UIKit
 import Google
 import GoogleSignIn
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -25,7 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
         GIDSignIn.sharedInstance().delegate = self
         
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        window?.rootViewController = TabBarController()
         
+        Fabric.with([Crashlytics.self])
         return true
     }
 
