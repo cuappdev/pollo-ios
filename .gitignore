@@ -64,7 +64,7 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 
-Secrets/GoogleService-Info.plist
+Secrets/
 
 
 .DS_Store
