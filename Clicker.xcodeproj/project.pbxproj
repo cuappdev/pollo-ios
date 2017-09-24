@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
+		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
+		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
-		C7F923C81F73540600B1E975 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C71F73540600B1E975 /* ViewController.swift */; };
-		C7F923CB1F73540600B1E975 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923C91F73540600B1E975 /* Main.storyboard */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -19,10 +19,10 @@
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
+		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C7F923C71F73540600B1E975 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C7F923CA1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,11 +79,9 @@
 			isa = PBXGroup;
 			children = (
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
-				C7F923C71F73540600B1E975 /* ViewController.swift */,
 				C7F923D71F73542100B1E975 /* Models */,
 				C7F923D81F73542600B1E975 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
-				C7F923C91F73540600B1E975 /* Main.storyboard */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
@@ -108,6 +106,8 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
+				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -176,7 +176,6 @@
 			files = (
 				C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
-				C7F923CB1F73540600B1E975 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,22 +234,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7F923C81F73540600B1E975 /* ViewController.swift in Sources */,
+				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
+				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		C7F923C91F73540600B1E975 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C7F923CA1F73540600B1E975 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
