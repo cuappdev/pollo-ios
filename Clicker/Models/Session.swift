@@ -13,7 +13,7 @@ enum QuestionType: String {
 }
 
 
-class Session: NSObject {
+class Session {
     
     var question: String
     var questionType: QuestionType

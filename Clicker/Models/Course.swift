@@ -8,40 +8,41 @@
 
 import UIKit
 
-enum SubjectType {
-    // Will add rest later if we plan
-    // on keeping this
-    case CS, INFO, MATH
-}
 
-class Course: NSObject {
+class Course {
     
-    var subject: SubjectType
-    var courseNumber: Int
+    var courseCode: String // i.e. "CS 2110"
     var name: String
-    var professors: Set<User> = Set<User>()
-    var students: Set<User> = Set<User>()
+    var professors: [User] = [User]()
+    var students: [User] = [User]()
     
-    init(subject: SubjectType, courseNumber: Int, name: String) {
-        self.subject = subject
-        self.courseNumber = courseNumber
+    init(courseCode: String, name: String) {
+        self.courseCode = courseCode
         self.name = name
     }
     
     func addProfessor(_ professor: User) {
-        professors.insert(professor)
+        professors.append(professor)
     }
     
     func removeProfessor(_ professor: User) {
-        professors.remove(professor)
+        for i in 0...(professors.count - 1) {
+            if professors[i].netID == professor.netID {
+                professors.remove(at: i)
+            }
+        }
     }
     
     func addStudent(_ student: User) {
-        students.insert(student)
+        students.append(student)
     }
     
     func removeStudent(_ student: User) {
-        students.remove(student)
+        for i in 0...(students.count - 1) {
+            if students[i].netID == student.netID {
+                professors.remove(at: i)
+            }
+        }
     }
     
     

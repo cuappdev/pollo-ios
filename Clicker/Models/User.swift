@@ -8,11 +8,11 @@
 
 import UIKit
 
-class User: NSObject {
+class User : NSObject {
     
     var netID: String
     var name: String
-    var courses: Set<Course> = Set<Course>()
+    var courses: [Course] = [Course]()
     var sessions: [Session] = [Session]()
     
     
@@ -22,21 +22,20 @@ class User: NSObject {
     }
     
     func addCourse(_ course: Course) {
-        courses.insert(course)
+        courses.append(course)
     }
     
     func removeCourse(_ course: Course) {
-        courses.remove(course)
+        for i in 0...(courses.count - 1) {
+            if courses[i].courseCode == course.courseCode {
+                courses.remove(at: i)
+            }
+        }
     }
     
     func addSession(_ session: Session) {
         sessions.append(session)
     }
     
-    func removeSession(_ session: Session) {
-        if let index = sessions.index(of: session) {
-            sessions.remove(at: index)
-        }
-    }
     
 }
