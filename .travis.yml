@@ -3,3 +3,5 @@ language: swift
 xcode_workspace: Clicker.xcworkspace
 xcode_scheme: ClickerTests
 install: pod update
+notifications:
+  slack: cornellappdev:lztjgTNbsWkJY6GLY587e9mB
