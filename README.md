@@ -1,4 +1,5 @@
 # Clicker iOS Client 
+[![Build Status](https://travis-ci.org/cuappdev/clicker-ios.svg?branch=master)](https://travis-ci.org/cuappdev/clicker-ios)
 
 Clicker is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is an app that seeks to extend the functionality of iClickers on a web and mobile platform.
 
