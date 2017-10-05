@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class PastSessionHeader: UITableViewHeaderFooterView {
 
@@ -23,7 +24,7 @@ class PastSessionHeader: UITableViewHeaderFooterView {
     
     // MARK: - VIEWS
     let sectionHeaderLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 10, width: 180, height: 29))
+        let label = UILabel(frame: .zero)
         label.text = "Past Sessions"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
@@ -32,21 +33,24 @@ class PastSessionHeader: UITableViewHeaderFooterView {
         return label
     }()
     
+    let bottomBorder: CALayer = {
+        let border = CALayer()
+        border.frame = CGRect(x: 0.0, y: Double(Constants.Headers.Height.pastSession), width: Double(Constants.Screen.width!), height: 0.5)
+        border.backgroundColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1.0).cgColor
+        return border
+    }()
+    
     func addViews() {
         addSubview(sectionHeaderLabel)
+        self.contentView.layer.addSublayer(bottomBorder)
     }
     
     // MARK: - CONSTRAINTS
     func setConstraints(){
-        let leadingConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute: .leadingMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview, attribute: .leadingMargin, multiplier: 1.0, constant: 18)
-        
-        let trailingConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute:
-            .trailingMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview,
-                             attribute: .trailingMargin, multiplier: 1.0, constant: -18)
-        
-        let topConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute: .topMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview, attribute: .topMargin, multiplier: 1.0, constant: 27)
-        
-        NSLayoutConstraint.activate([leadingConstraints, trailingConstraints, topConstraints])
+        sectionHeaderLabel.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(self.contentView).offset(18)
+            make.right.equalTo(self.contentView).offset(18)
+            make.top.equalTo(self.contentView).offset(27)
+        }
     }
-
 }
