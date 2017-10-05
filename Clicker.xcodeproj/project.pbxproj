@@ -17,6 +17,8 @@
 		C240836C1F780B0200DA98A1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */; };
 		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
+		C751CB011F85994A00121CE0 /* LiveSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C751CB001F85994A00121CE0 /* LiveSessionViewController.swift */; };
+		C751CB061F859D0400121CE0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C751CB051F859D0400121CE0 /* Constants.swift */; };
 		C7CA99901F8150600096A81B /* PastSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CA998F1F8150600096A81B /* PastSessionTableViewCell.swift */; };
 		C7CA99921F8150AE0096A81B /* PastSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CA99911F8150AE0096A81B /* PastSessionHeader.swift */; };
 		C7CA99941F8150CB0096A81B /* LiveSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CA99931F8150CB0096A81B /* LiveSessionHeader.swift */; };
@@ -52,6 +54,8 @@
 		C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Secrets/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C751CB001F85994A00121CE0 /* LiveSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionViewController.swift; sourceTree = "<group>"; };
+		C751CB051F859D0400121CE0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7CA998F1F8150600096A81B /* PastSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionTableViewCell.swift; sourceTree = "<group>"; };
 		C7CA99911F8150AE0096A81B /* PastSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionHeader.swift; sourceTree = "<group>"; };
 		C7CA99931F8150CB0096A81B /* LiveSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionHeader.swift; sourceTree = "<group>"; };
@@ -123,6 +127,14 @@
 			children = (
 			);
 			path = Views;
+		C751CB041F859CF500121CE0 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				C751CB051F859D0400121CE0 /* Constants.swift */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
 		C7CA99971F8150E30096A81B /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +182,7 @@
 				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
 				652915011F7803E500882CBB /* Session.swift */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
+				C751CB041F859CF500121CE0 /* Supporting */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
@@ -200,6 +213,7 @@
 				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
 				C28188691F7ADDF200D7E944 /* LoginViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
+				C751CB001F85994A00121CE0 /* LiveSessionViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -415,8 +429,10 @@
 				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C7CA99921F8150AE0096A81B /* PastSessionHeader.swift in Sources */,
+				C751CB011F85994A00121CE0 /* LiveSessionViewController.swift in Sources */,
 				C7CA99961F8150DB0096A81B /* LiveSessionTableViewCell.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
+				C751CB061F859D0400121CE0 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

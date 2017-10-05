@@ -7,11 +7,11 @@
 //
 
 import UIKit
+import SnapKit
 
 class LiveSessionHeader: UITableViewHeaderFooterView {
 
     // MARK: - INITIALIZATION
-    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         addViews()
@@ -23,9 +23,8 @@ class LiveSessionHeader: UITableViewHeaderFooterView {
     }
     
     // MARK: - VIEWS
-    
     let sectionHeaderLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 10, width: 180, height: 29))
+        let label = UILabel(frame: .zero)
         label.text = "Live Sessions"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
@@ -39,16 +38,11 @@ class LiveSessionHeader: UITableViewHeaderFooterView {
     }
     
     // MARK: - CONSTRAINTS
-    
     func setConstraints(){
-        let leadingConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute: .leadingMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview, attribute: .leadingMargin, multiplier: 1.0, constant: 18)
-        
-        let trailingConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute:
-            .trailingMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview,
-                             attribute: .trailingMargin, multiplier: 1.0, constant: -18)
-        
-        let topConstraints = NSLayoutConstraint(item: sectionHeaderLabel, attribute: .topMargin, relatedBy: .equal, toItem: sectionHeaderLabel.superview, attribute: .topMargin, multiplier: 1.0, constant: 18)
-        
-        NSLayoutConstraint.activate([leadingConstraints, trailingConstraints, topConstraints])
+        sectionHeaderLabel.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(self.contentView).offset(18)
+            make.right.equalTo(self.contentView).offset(18)
+            make.top.equalTo(self.contentView).offset(18)
+        }
     }
 }
