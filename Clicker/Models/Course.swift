@@ -40,7 +40,7 @@ class Course {
     func removeStudent(_ student: User) {
         for i in 0...(students.count - 1) {
             if students[i].netID == student.netID {
-                professors.remove(at: i)
+                students.remove(at: i)
             }
         }
     }
