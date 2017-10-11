@@ -10,13 +10,15 @@ import UIKit
 
 class User : NSObject {
     
+    var id: String
     var netID: String
     var name: String
     var courses: [Course] = [Course]()
     var sessions: [Session] = [Session]()
     
     
-    init(netID: String, name: String) {
+    init(id: String, netID: String, name: String) {
+        self.id = id
         self.netID = netID
         self.name = name
     }
@@ -27,7 +29,7 @@ class User : NSObject {
     
     func removeCourse(_ course: Course) {
         for i in 0...(courses.count - 1) {
-            if courses[i].courseCode == course.courseCode {
+            if courses[i].id == course.id {
                 courses.remove(at: i)
             }
         }
