@@ -1,0 +1,18 @@
+//
+//  LiveSessionViewController.swift
+//  Clicker
+//
+//  Created by Keivan Shahida on 10/13/17.
+//  Copyright © 2017 CornellAppDev. All rights reserved.
+//
+
+import UIKit
+
+class LiveSessionViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = "Live Session"
+        self.view.backgroundColor = .white
+    }
+}

@@ -9,16 +9,16 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-
+    
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let homeViewController = HomeViewController()
-        homeViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
+        homeViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
         
         let viewControllerList = [ homeViewController ]
         viewControllers = viewControllerList
-        
         viewControllers = viewControllerList.map { UINavigationController(rootViewController: $0) }
     }
 }

@@ -7,6 +7,7 @@ target 'Clicker' do
   pod 'Alamofire'
   pod 'Crashlytics'
   pod 'Fabric'
+  pod 'Google’
   pod 'GoogleSignIn'
   pod 'SnapKit'
   pod 'Socket.IO-Client-Swift'
