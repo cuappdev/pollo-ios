@@ -17,6 +17,13 @@
 		C281886F1F7ADE9200D7E944 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281886E1F7ADE9200D7E944 /* User.swift */; };
 		C28188711F7ADF4000D7E944 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188701F7ADF4000D7E944 /* Course.swift */; };
 		C28188731F7ADF4A00D7E944 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188721F7ADF4A00D7E944 /* Session.swift */; };
+		C2D057971F926AC0008F21CB /* Lecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057961F926AC0008F21CB /* Lecture.swift */; };
+		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
+		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
+		C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579C1F926C3B008F21CB /* Organization.swift */; };
+		C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579E1F926C86008F21CB /* LectureQuark.swift */; };
+		C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A01F927390008F21CB /* QuestionsQuark.swift */; };
+		C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */; };
 		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
@@ -50,6 +57,13 @@
 		C281886E1F7ADE9200D7E944 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C28188701F7ADF4000D7E944 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		C28188721F7ADF4A00D7E944 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		C2D057961F926AC0008F21CB /* Lecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
+		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
+		C2D0579C1F926C3B008F21CB /* Organization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organization.swift; sourceTree = "<group>"; };
+		C2D0579E1F926C86008F21CB /* LectureQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureQuark.swift; sourceTree = "<group>"; };
+		C2D057A01F927390008F21CB /* QuestionsQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsQuark.swift; sourceTree = "<group>"; };
+		C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationQuark.swift; sourceTree = "<group>"; };
 		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +123,9 @@
 			children = (
 				C27429E21F8C25A7006FAD31 /* UserQuark.swift */,
 				C27429E41F8C32F7006FAD31 /* CourseQuark.swift */,
+				C2D0579E1F926C86008F21CB /* LectureQuark.swift */,
+				C2D057A01F927390008F21CB /* QuestionsQuark.swift */,
+				C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */,
 			);
 			path = Quarks;
 			sourceTree = "<group>";
@@ -119,6 +136,10 @@
 				C281886E1F7ADE9200D7E944 /* User.swift */,
 				C28188701F7ADF4000D7E944 /* Course.swift */,
 				C28188721F7ADF4A00D7E944 /* Session.swift */,
+				C2D057961F926AC0008F21CB /* Lecture.swift */,
+				C2D057981F926B31008F21CB /* Question.swift */,
+				C2D0579A1F926BB4008F21CB /* Answer.swift */,
+				C2D0579C1F926C3B008F21CB /* Organization.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -383,13 +404,20 @@
 			files = (
 				C28188731F7ADF4A00D7E944 /* Session.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
+				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C28188711F7ADF4000D7E944 /* Course.swift in Sources */,
+				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
 				C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */,
+				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
 				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
+				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
+				C2D057971F926AC0008F21CB /* Lecture.swift in Sources */,
+				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C281886F1F7ADE9200D7E944 /* User.swift in Sources */,
+				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

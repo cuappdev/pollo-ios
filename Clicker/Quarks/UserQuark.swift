@@ -14,7 +14,7 @@ struct GetUser : JSONQuark {
     
     typealias ResponseType = User
     
-    let id: Int
+    let id: String
     
     var route: String {
         return "/v1/users/\(id)"
@@ -35,11 +35,11 @@ struct GetUserCourses : JSONQuark {
     
     typealias ResponseType = [Course]
     
-    let user: User
+    let id: String
     let role: String?
     
     var route: String {
-        return "/v1/users/\(user.id)/courses"
+        return "/v1/users/\(id)/courses"
     }
     var parameters: Parameters {
         if let r = role {

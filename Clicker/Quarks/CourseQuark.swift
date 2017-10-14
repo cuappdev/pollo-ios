@@ -14,7 +14,7 @@ struct GetCourse : JSONQuark {
     
     typealias ResponseType = Course
     
-    let id: Int
+    let id: String
     
     var route: String {
         return "/v1/courses/\(id)"
@@ -35,7 +35,7 @@ struct GetCourse : JSONQuark {
 struct UpdateCourse : JSONQuark {
     typealias ResponseType = Course
     
-    let id: Int
+    let id: String
     let name: String
     let term: String
     
@@ -62,7 +62,7 @@ struct UpdateCourse : JSONQuark {
 struct DeleteCourse: JSONQuark {
     typealias ResponseType = Void
     
-    let id: Int
+    let id: String
     var route : String {
         return "/v1/courses/\(id)"
     }
@@ -79,10 +79,9 @@ struct CourseAddStudents : JSONQuark {
     
     typealias ResponseType = Void
     
-    let id: Int
+    let id: String
     let studentIDs: [String]
     
-    // NOTE: Not sure if this is the correct way to pass an array in a query URL
     var route: String {
         return "/v1/courses/\(id)/students"
     }
@@ -109,10 +108,9 @@ struct CourseRemoveStudents : JSONQuark {
     
     typealias ResponseType = Void
     
-    let id: Int
+    let id: String
     let studentIDs: [String]
     
-    // NOTE: Not sure if this is the correct way to pass an array in a query URL
     var route: String {
         return "/v1/courses/\(id)/students"
     }
@@ -140,10 +138,9 @@ struct CourseAddAdmins : JSONQuark {
     
     typealias ResponseType = Void
     
-    let id: Int
+    let id: String
     let adminIDs: [String]
     
-    // NOTE: Not sure if this is the correct way to pass an array in a query URL
     var route: String {
         return "/v1/courses/\(id)/admins"
     }
@@ -170,10 +167,9 @@ struct CourseRemoveAdmins : JSONQuark {
     
     typealias ResponseType = Void
     
-    let id: Int
+    let id: String
     let adminIDs: [String]
     
-    // NOTE: Not sure if this is the correct way to pass an array in a query URL
     var route: String {
         return "/v1/courses/\(id)/admins"
     }
