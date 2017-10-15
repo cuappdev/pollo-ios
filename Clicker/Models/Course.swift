@@ -11,14 +11,16 @@ import UIKit
 
 class Course {
     
-    var courseCode: String // i.e. "CS 2110"
-    var name: String
+    var id: String
+    var name: String // i.e. "CS 2110"
+    var term: String
     var professors: [User] = [User]()
     var students: [User] = [User]()
     
-    init(courseCode: String, name: String) {
-        self.courseCode = courseCode
+    init(id: String, name: String, term: String) {
+        self.id = id
         self.name = name
+        self.term = term
     }
     
     func addProfessor(_ professor: User) {
@@ -26,10 +28,8 @@ class Course {
     }
     
     func removeProfessor(_ professor: User) {
-        for i in 0...(professors.count - 1) {
-            if professors[i].netID == professor.netID {
-                professors.remove(at: i)
-            }
+        if let index = professors.index(of: professor) {
+            professors.remove(at: index)
         }
     }
     
@@ -38,10 +38,8 @@ class Course {
     }
     
     func removeStudent(_ student: User) {
-        for i in 0...(students.count - 1) {
-            if students[i].netID == student.netID {
-                students.remove(at: i)
-            }
+        if let index = students.index(of: student) {
+            students.remove(at: index)
         }
     }
     
