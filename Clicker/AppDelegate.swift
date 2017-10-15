@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Google
 import GoogleSignIn
 import Fabric
 import Crashlytics
@@ -20,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // Initialize sign-in
-        var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
 
         GIDSignIn.sharedInstance().delegate = self
         
