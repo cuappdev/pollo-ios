@@ -26,6 +26,12 @@
 		C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */; };
 		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
+		C7C6F4991F91953000D93D83 /* LiveSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F4981F91953000D93D83 /* LiveSessionViewController.swift */; };
+		C7C6F49C1F91958F00D93D83 /* LiveSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F49B1F91958F00D93D83 /* LiveSessionTableViewCell.swift */; };
+		C7C6F49E1F9195AE00D93D83 /* PastSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F49D1F9195AE00D93D83 /* PastSessionTableViewCell.swift */; };
+		C7C6F4A21F9195E500D93D83 /* LiveSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F4A11F9195E500D93D83 /* LiveSessionHeader.swift */; };
+		C7C6F4A41F91960100D93D83 /* PastSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F4A31F91960100D93D83 /* PastSessionHeader.swift */; };
+		C7C6F4AB1F919DEE00D93D83 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6F4AA1F919DEE00D93D83 /* Constants.swift */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
@@ -66,6 +72,12 @@
 		C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationQuark.swift; sourceTree = "<group>"; };
 		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C7C6F4981F91953000D93D83 /* LiveSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionViewController.swift; sourceTree = "<group>"; };
+		C7C6F49B1F91958F00D93D83 /* LiveSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionTableViewCell.swift; sourceTree = "<group>"; };
+		C7C6F49D1F9195AE00D93D83 /* PastSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionTableViewCell.swift; sourceTree = "<group>"; };
+		C7C6F4A11F9195E500D93D83 /* LiveSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionHeader.swift; sourceTree = "<group>"; };
+		C7C6F4A31F91960100D93D83 /* PastSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionHeader.swift; sourceTree = "<group>"; };
+		C7C6F4AA1F919DEE00D93D83 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -144,11 +156,39 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		C281886D1F7ADE7500D7E944 /* Views */ = {
+		C7C6F49A1F91957A00D93D83 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C7C6F4A01F9195CC00D93D83 /* Headers */,
+				C7C6F49F1F9195C800D93D83 /* Cells */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C7C6F49F1F9195C800D93D83 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				C7C6F49B1F91958F00D93D83 /* LiveSessionTableViewCell.swift */,
+				C7C6F49D1F9195AE00D93D83 /* PastSessionTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		C7C6F4A01F9195CC00D93D83 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C7C6F4A11F9195E500D93D83 /* LiveSessionHeader.swift */,
+				C7C6F4A31F91960100D93D83 /* PastSessionHeader.swift */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		C7C6F4A91F919DC100D93D83 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				C7C6F4AA1F919DEE00D93D83 /* Constants.swift */,
+			);
+			path = Supporting;
 			sourceTree = "<group>";
 		};
 		C7F923B91F73540600B1E975 = {
@@ -177,14 +217,14 @@
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C27429E11F8C252D006FAD31 /* Quarks */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
-				C281886D1F7ADE7500D7E944 /* Views */,
+				C7C6F49A1F91957A00D93D83 /* Views */,
+				C7F923D91F73543700B1E975 /* View Controllers */,
 				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
 				652915011F7803E500882CBB /* Session.swift */,
-				C7F923D91F73543700B1E975 /* View Controllers */,
+				C7C6F4A91F919DC100D93D83 /* Supporting */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
-				C240836B1F780B0000DA98A1 /* GoogleService-Info.plist */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";
@@ -195,6 +235,7 @@
 				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
 				C28188691F7ADDF200D7E944 /* LoginViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
+				C7C6F4981F91953000D93D83 /* LiveSessionViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -294,7 +335,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */,
-				C240836C1F780B0200DA98A1 /* GoogleService-Info.plist in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,7 +357,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */ = {
@@ -403,12 +443,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C28188731F7ADF4A00D7E944 /* Session.swift in Sources */,
+				C7C6F4A21F9195E500D93D83 /* LiveSessionHeader.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C28188711F7ADF4000D7E944 /* Course.swift in Sources */,
 				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
 				C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */,
+				C7C6F4991F91953000D93D83 /* LiveSessionViewController.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
 				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
@@ -417,6 +459,10 @@
 				C2D057971F926AC0008F21CB /* Lecture.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C281886F1F7ADE9200D7E944 /* User.swift in Sources */,
+				C7C6F4A41F91960100D93D83 /* PastSessionHeader.swift in Sources */,
+				C7C6F49E1F9195AE00D93D83 /* PastSessionTableViewCell.swift in Sources */,
+				C7C6F4AB1F919DEE00D93D83 /* Constants.swift in Sources */,
+				C7C6F49C1F91958F00D93D83 /* LiveSessionTableViewCell.swift in Sources */,
 				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 			);
