@@ -10,7 +10,7 @@ import Neutron
 import SwiftyJSON
 import Alamofire
 
-struct GetCourse : JSONQuark {
+struct GetCourse : ClickerQuark {
     
     typealias ResponseType = Course
     
@@ -22,17 +22,20 @@ struct GetCourse : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> Course {
-        guard let id = response["node"]["id"].string , let name = response["node"]["name"].string, let term = response["node"]["term"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Course {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string , let name = node["name"].string, let term = node["term"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Course(id: id, name: name, term: term)
+        default: throw NeutronError.badResponseData
         }
-        return Course(id: id, name: name, term: term)
     }
-    
 }
 
 
-struct UpdateCourse : JSONQuark {
+struct UpdateCourse : ClickerQuark {
     typealias ResponseType = Course
     
     let id: String
@@ -51,15 +54,19 @@ struct UpdateCourse : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .put
     
-    func process(response: JSON) throws -> Course {
-        guard let id = response["node"]["id"].string , let name = response["node"]["name"].string, let term = response["node"]["term"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Course {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string , let name = node["name"].string, let term = node["term"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Course(id: id, name: name, term: term)
+        default: throw NeutronError.badResponseData
         }
-        return Course(id: id, name: name, term: term)
     }
 }
 
-struct DeleteCourse: JSONQuark {
+struct DeleteCourse: ClickerQuark {
     typealias ResponseType = Void
     
     let id: String
@@ -69,13 +76,13 @@ struct DeleteCourse: JSONQuark {
     let host : String = "http://localhost:3000"
     let method : HTTPMethod = .delete
     
-    func process(response: JSON) throws -> Void {
+    func process(element: Element) throws -> Void {
         return
     }
 }
     
 
-struct CourseAddStudents : JSONQuark {
+struct CourseAddStudents : ClickerQuark {
     
     typealias ResponseType = Void
     
@@ -93,18 +100,14 @@ struct CourseAddStudents : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .post
     
-    
-    func process(response: JSON) throws -> Void {
-        if let err = response["errors"].array {
-            throw NeutronError.badUrl
-        }
-        
+    func process(element: Element) throws -> Void {
+        return
     }
     
 }
 
 
-struct CourseRemoveStudents : JSONQuark {
+struct CourseRemoveStudents : ClickerQuark {
     
     typealias ResponseType = Void
     
@@ -122,19 +125,14 @@ struct CourseRemoveStudents : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .delete
     
-    
-    func process(response: JSON) throws -> Void {
-        if let err = response["errors"].array {
-            throw NeutronError.badUrl
-        }
-        
+    func process(element: Element) throws -> Void {
+        return
     }
-    
 }
 
 
 
-struct CourseAddAdmins : JSONQuark {
+struct CourseAddAdmins : ClickerQuark {
     
     typealias ResponseType = Void
     
@@ -152,18 +150,13 @@ struct CourseAddAdmins : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .put
     
-    
-    func process(response: JSON) throws -> Void {
-        if let err = response["errors"].array {
-            throw NeutronError.badUrl
-        }
-        
+    func process(element: Element) throws -> Void {
+        return
     }
-    
 }
 
 
-struct CourseRemoveAdmins : JSONQuark {
+struct CourseRemoveAdmins : ClickerQuark {
     
     typealias ResponseType = Void
     
@@ -181,13 +174,8 @@ struct CourseRemoveAdmins : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .delete
     
-    
-    func process(response: JSON) throws -> Void {
-        if let err = response["errors"].array {
-            throw NeutronError.badUrl
-        }
-        
+    func process(element: Element) throws -> Void {
+        return
     }
-    
 }
 
