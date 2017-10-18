@@ -10,7 +10,7 @@ import Neutron
 import SwiftyJSON
 import Alamofire
 
-struct GetOrganization: JSONQuark {
+struct GetOrganization: ClickerQuark {
     typealias ResponseType = Organization
     
     let id: String
@@ -21,15 +21,19 @@ struct GetOrganization: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> Organization {
-        guard let id = response["node"]["id"].string, let name = response["node"]["name"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Organization {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let name = node["name"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Organization(id, name)
+        default: throw NeutronError.badResponseData
         }
-        return Organization(id, name)
     }
 }
 
-struct CreateOrganization: JSONQuark {
+struct CreateOrganization: ClickerQuark {
     typealias ResponseType = Organization
     
     let name: String
@@ -45,15 +49,19 @@ struct CreateOrganization: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .post
     
-    func process(response: JSON) throws -> Organization {
-        guard let id = response["node"]["id"].string, let name = response["node"]["name"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Organization {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let name = node["name"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Organization(id, name)
+        default: throw NeutronError.badResponseData
         }
-        return Organization(id, name)
     }
 }
 
-struct GetCoursesInOrganization: JSONQuark {
+struct GetCoursesInOrganization: ClickerQuark {
     typealias ResponseType = [Course]
     
     let id: String
@@ -64,30 +72,22 @@ struct GetCoursesInOrganization: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> [Course] {
-        guard let coursesArray = response["edges"].array else {
-            throw NeutronError.badResponseData
-        }
-        
-        if coursesArray.count == 0 {
-            return [Course]()
-        }
-        
-        let courses: [Course]? = try coursesArray.map { json -> Course in
-            guard let id = json["node"]["id"].string, let name = json["node"]["name"].string, let term = json["node"]["name"].string else {
-                throw NeutronError.badResponseData
+    func process(element: Element) throws -> [Course] {
+        switch element {
+        case .edges(let edges):
+            let courses: [Course] = try edges.map {
+                guard let id = $0.node["id"].string, let name = $0.node["name"].string, let term = $0.node["name"].string else {
+                    throw NeutronError.badResponseData
+                }
+                return Course(id: id, name: name, term: term)
             }
-            return Course(id: id, name: name, term: term)
-        }
-        if let c = courses {
-            return c
-        } else {
-            throw NeutronError.badResponseData
+            return courses
+        default: throw NeutronError.badResponseData
         }
     }
 }
 
-struct CreateCourseInOrganization: JSONQuark {
+struct CreateCourseInOrganization: ClickerQuark {
     typealias ResponseType = Course
     
     let id: String
@@ -106,11 +106,15 @@ struct CreateCourseInOrganization: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .post
     
-    func process(response: JSON) throws -> Course {
-        guard let id = response["node"]["id"].string , let name = response["node"]["name"].string, let term = response["node"]["term"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Course {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string , let name = node["name"].string, let term = node["term"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Course(id: id, name: name, term: term)
+        default: throw NeutronError.badResponseData
         }
-        return Course(id: id, name: name, term: term)
     }
 }
 

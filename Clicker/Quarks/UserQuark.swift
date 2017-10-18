@@ -10,7 +10,7 @@ import Neutron
 import SwiftyJSON
 import Alamofire
 
-struct GetUser : JSONQuark {
+struct GetUser : ClickerQuark {
     
     typealias ResponseType = User
     
@@ -22,16 +22,19 @@ struct GetUser : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> User {
-        guard let id = response["node"]["id"].string , let name = response["node"]["name"].string, let netid = response["node"]["netid"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> User {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string , let name = node["name"].string, let netid = node["netid"].string else {
+                throw NeutronError.badResponseData
+            }
+            return User(id: id, netID: netid, name: name)
+        default: throw NeutronError.badResponseData
         }
-        return User(id: id, netID: netid, name: name)
     }
-    
 }
 
-struct GetUserCourses : JSONQuark {
+struct GetUserCourses : ClickerQuark {
     
     typealias ResponseType = [Course]
     
@@ -53,25 +56,17 @@ struct GetUserCourses : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> [Course] {
-        guard let coursesArray = response["edges"].array else {
-            throw NeutronError.badResponseData
-        }
-        
-        if coursesArray.count == 0 {
-            return [Course]()
-        }
-        
-        let courses: [Course]? = try coursesArray.map { json -> Course in
-            guard let id = json["node"]["id"].string, let name = json["node"]["name"].string, let term = json["node"]["name"].string else {
-                throw NeutronError.badResponseData
+    func process(element: Element) throws -> [Course] {
+        switch element {
+        case .edges(let edges):
+            let courses: [Course] = try edges.map {
+                guard let id = $0.node["id"].string, let name = $0.node["name"].string, let term = $0.node["name"].string else {
+                    throw NeutronError.badResponseData
+                }
+                return Course(id: id, name: name, term: term)
             }
-            return Course(id: id, name: name, term: term)
-        }
-        if let c = courses {
-            return c
-        } else {
-            throw NeutronError.badResponseData
+            return courses
+        default: throw NeutronError.badResponseData
         }
     }
     
