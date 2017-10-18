@@ -32,12 +32,6 @@ extension ClickerQuark {
             return try process(element: .edges(edgesTuples))
         }
         
-        if let errs = response["errors"].array {
-            let messages = errs.map {
-                $0["message"].stringValue
-            }
-            return try process(element: .errors(.backendError(messages: messages)))
-        }
         throw NeutronError.badResponseData
     }
 }
@@ -51,5 +45,4 @@ enum ClickerError: Error {
 enum Element {
     case node(JSON)
     case edges([Edge])
-    case errors(ClickerError)
 }
