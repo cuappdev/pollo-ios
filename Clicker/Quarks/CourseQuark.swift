@@ -101,11 +101,7 @@ struct CourseAddStudents : ClickerQuark {
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Void {
-        switch element {
-        case .errors(let clickerErr):
-            throw clickerErr
-        default: return
-        }
+        return
     }
     
 }
@@ -130,11 +126,7 @@ struct CourseRemoveStudents : ClickerQuark {
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
-        switch element {
-        case .errors(let clickerErr):
-            throw clickerErr
-        default: return
-        }
+        return
     }
 }
 
@@ -159,11 +151,7 @@ struct CourseAddAdmins : ClickerQuark {
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Void {
-        switch element {
-        case .errors(let clickerErr):
-            throw clickerErr
-        default: return
-        }
+        return
     }
 }
 
@@ -187,11 +175,7 @@ struct CourseRemoveAdmins : ClickerQuark {
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
-        switch element {
-        case .errors(let clickerErr):
-            throw clickerErr
-        default: return
-        }
+        return
     }
 }
 
