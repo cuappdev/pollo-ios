@@ -10,7 +10,7 @@ import Neutron
 import SwiftyJSON
 import Alamofire
 
-struct GetLecture: JSONQuark {
+struct GetLecture: ClickerQuark {
     typealias ResponseType = Lecture
     
     let id: String
@@ -21,15 +21,19 @@ struct GetLecture: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> Lecture {
-        guard let id = response["node"]["id"].string , let dateTime = response["node"]["dateTime"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Lecture {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string , let dateTime = node["dateTime"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Lecture(id, dateTime)
+        default: throw NeutronError.badResponseData
         }
-        return Lecture(id, dateTime)
     }
 }
 
-struct DeleteLecture: JSONQuark {
+struct DeleteLecture: ClickerQuark {
     typealias ResponseType = Void
     
     let id: String
@@ -39,12 +43,12 @@ struct DeleteLecture: JSONQuark {
     let host : String = "http://localhost:3000"
     let method : HTTPMethod = .delete
     
-    func process(response: JSON) throws -> Void {
+    func process(element: Element) throws -> Void {
         return
     }
 }
 
-struct UpdateLecture : JSONQuark {
+struct UpdateLecture : ClickerQuark {
     typealias ResponseType = Lecture
     
     let id: String
@@ -61,17 +65,21 @@ struct UpdateLecture : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .put
     
-    func process(response: JSON) throws -> Lecture {
-        guard let id = response["node"]["id"].string , let dateTime = response["node"]["dateTime"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Lecture {
+        switch element {
+        case.node(let node):
+            guard let id = node["id"].string , let dateTime = node["dateTime"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Lecture(id, dateTime)
+        default: throw NeutronError.badResponseData
         }
-        return Lecture(id, dateTime)
     }
 }
 
 // TODO: Create a question
 
-struct GetLectureQuestions : JSONQuark {
+struct GetLectureQuestions : ClickerQuark {
     typealias ResponseType = [Question]
     
     let id: String
@@ -82,25 +90,17 @@ struct GetLectureQuestions : JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> [Question] {
-        guard let questionsArray = response["edges"].array else {
-            throw NeutronError.badResponseData
-        }
-        
-        if questionsArray.count == 0 {
-            return [Question]()
-        }
-        
-        let questions: [Question]? = try questionsArray.map { json -> Question in
-            guard let id = json["node"]["id"].string, let text = json["node"]["text"].string, let type = json["node"]["type"].string, let data = json["node"]["data"].string else {
-                throw NeutronError.badResponseData
+    func process(element: Element) throws -> [Question] {
+        switch element {
+        case .edges(let edges):
+            let questions: [Question] = try edges.map {
+                guard let id = $0.node["id"].string, let text = $0.node["text"].string, let type = $0.node["type"].string, let data = $0.node["data"].string else {
+                    throw NeutronError.badResponseData
+                }
+                return Question(id, text, type, data)
             }
-            return Question(id, text, type, data)
-        }
-        if let q = questions {
-            return q
-        } else {
-            throw NeutronError.badResponseData
+            return questions
+        default: throw NeutronError.badResponseData
         }
     }
 }

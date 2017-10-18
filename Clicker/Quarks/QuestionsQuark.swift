@@ -10,7 +10,7 @@ import Neutron
 import SwiftyJSON
 import Alamofire
 
-struct GetQuestion: JSONQuark {
+struct GetQuestion: ClickerQuark {
     typealias ResponseType = Question
     
     let id: String
@@ -21,15 +21,19 @@ struct GetQuestion: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> Question {
-        guard let id = response["node"]["id"].string, let text = response["node"]["text"].string, let type = response["node"]["type"].string, let data = response["node"]["data"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Question {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let data = node["data"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Question(id, text, type, data)
+        default: throw NeutronError.badResponseData
         }
-        return Question(id, text, type, data)
     }
 }
 
-struct UpdateQuestion: JSONQuark {
+struct UpdateQuestion: ClickerQuark {
     typealias ResponseType = Question
     
     let id: String
@@ -48,15 +52,19 @@ struct UpdateQuestion: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .put
     
-    func process(response: JSON) throws -> Question {
-        guard let id = response["node"]["id"].string, let text = response["node"]["text"].string, let type = response["node"]["type"].string, let data = response["node"]["data"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Question {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let data = node["data"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Question(id, text, type, data)
+        default: throw NeutronError.badResponseData
         }
-        return Question(id, text, type, data)
     }
 }
 
-struct DeleteQuestion: JSONQuark {
+struct DeleteQuestion: ClickerQuark {
     typealias ResponseType = Void
     
     let id: String
@@ -67,12 +75,12 @@ struct DeleteQuestion: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .delete
     
-    func process(response: JSON) throws -> Void {
+    func process(element: Element) throws -> Void {
         return
     }
 }
 
-struct GetAnswersToQuestion: JSONQuark {
+struct GetAnswersToQuestion: ClickerQuark {
     typealias ResponseType = [Answer]
     
     let id: String
@@ -83,30 +91,22 @@ struct GetAnswersToQuestion: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .get
     
-    func process(response: JSON) throws -> [Answer] {
-        guard let answersArray = response["edges"].array else {
-            throw NeutronError.badResponseData
-        }
-        
-        if answersArray.count == 0 {
-            return [Answer]()
-        }
-        
-        let answers: [Answer]? = try answersArray.map { json -> Answer in
-            guard let id = json["node"]["id"].string, let question = json["node"]["question"].string, let answerer = json["node"]["answerer"].string, let type = json["node"]["type"].string, let data = json["node"]["data"].string else {
-                throw NeutronError.badResponseData
+    func process(element: Element) throws -> [Answer] {
+        switch element {
+        case .edges(let edges):
+            let answers: [Answer] = try edges.map {
+                guard let id = $0.node["id"].string, let question = $0.node["question"].string, let answerer = $0.node["answerer"].string, let type = $0.node["type"].string, let data = $0.node["data"].string else {
+                    throw NeutronError.badResponseData
+                }
+                return Answer(id, question, answerer, type, data)
             }
-            return Answer(id, question, answerer, type, data)
-        }
-        if let a = answers {
-            return a
-        } else {
-            throw NeutronError.badResponseData
+            return answers
+        default: throw NeutronError.badResponseData
         }
     }
 }
 
-struct AnswerQuestion: JSONQuark {
+struct AnswerQuestion: ClickerQuark {
     typealias ResponseType = Answer
     
     let id: String
@@ -123,10 +123,14 @@ struct AnswerQuestion: JSONQuark {
     let host: String = "http://localhost:3000"
     let method: HTTPMethod = .put
     
-    func process(response: JSON) throws -> Answer {
-        guard let id = response["node"]["id"].string, let question = response["node"]["question"].string, let answerer = response["node"]["answerer"].string, let type = response["node"]["type"].string, let data = response["node"]["data"].string else {
-            throw NeutronError.badResponseData
+    func process(element: Element) throws -> Answer {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let question = node["question"].string, let answerer = node["answerer"].string, let type = node["type"].string, let data = node["data"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Answer(id, question, answerer, type, data)
+        default: throw NeutronError.badResponseData
         }
-        return Answer(id, question, answerer, type, data)
     }
 }
