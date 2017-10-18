@@ -12,6 +12,7 @@
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
+		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188691F7ADDF200D7E944 /* LoginViewController.swift */; };
 		C281886F1F7ADE9200D7E944 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281886E1F7ADE9200D7E944 /* User.swift */; };
 		C28188711F7ADF4000D7E944 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188701F7ADF4000D7E944 /* Course.swift */; };
@@ -58,6 +59,7 @@
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
+		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28188691F7ADDF200D7E944 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C281886E1F7ADE9200D7E944 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C28188701F7ADF4000D7E944 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				C2D0579E1F926C86008F21CB /* LectureQuark.swift */,
 				C2D057A01F927390008F21CB /* QuestionsQuark.swift */,
 				C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */,
+				C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */,
 			);
 			path = Quarks;
 			sourceTree = "<group>";
@@ -343,7 +346,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */ = {
@@ -434,6 +437,7 @@
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C28188711F7ADF4000D7E944 /* Course.swift in Sources */,
+				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C7D6AF611F93DF15003ABA10 /* PastSessionTableViewCell.swift in Sources */,
 				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
 				C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */,
