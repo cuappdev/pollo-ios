@@ -28,9 +28,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window?.makeKeyAndVisible()
         window?.rootViewController = TabBarController()
         
-        let login = LoginViewController()
-        window?.rootViewController?.present(login, animated: false, completion: nil)
-        
+        if GIDSignIn.sharedInstance().hasAuthInKeychain(){
+            DispatchQueue.main.async {
+                GIDSignIn.sharedInstance().signInSilently()
+            }
+        } else {
+            let login = LoginViewController()
+            window?.rootViewController?.present(login, animated: false, completion: nil)
+        }
+       
         Fabric.with([Crashlytics.self])
         return true
     }
@@ -73,12 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                                     annotation: annotation)
     }
 
-    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
-            // Perform any operations on signed in user here.
-            let userId = user.userID                 // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
+            let userId = user.userID
+            let idToken = user.authentication.idToken
             let fullName = user.profile.name
             let givenName = user.profile.givenName
             let familyName = user.profile.familyName
@@ -94,7 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
                 withError error: NSError!) {
         // Perform any operations when the user disconnects from app here.
-        // ...
     }
 
 }
