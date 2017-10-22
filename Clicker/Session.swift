@@ -1,3 +1,11 @@
+//
+//  Session.swift
+//  Clicker
+//
+//  Created by Keivan Shahida on 10/22/17.
+//  Copyright © 2017 CornellAppDev. All rights reserved.
+//
+
 import SocketIO
 
 class Session {
@@ -19,6 +27,18 @@ class Session {
 
         socket.on(clientEvent: .disconnect) { data, ack in
             self.delegate?.sessionDisconnected()
+        }
+        
+        socket.on("beginLecture") {[weak self] data, ack in
+            self.delegate?.beginLecture()
+        }
+        
+        socket.on("postQuestion") {[weak self] data, ack in
+            self.delegate?.postQuestion()
+        }
+        
+        socket.on("endLecture") {[weak self] data, ack in
+            self.delegate?.endLecture()
         }
 
         return socket

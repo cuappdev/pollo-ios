@@ -8,13 +8,16 @@
 
 import UIKit
 
-class HomeViewController: UITableViewController {
-    
+class HomeViewController: UITableViewController, SessionDelegate {
+
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
                 
         self.title = "CliquePod"
+        
+        let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
+        navigationItem.leftBarButtonItem = signoutBarButton
         
         tableView.bounces = false
         tableView.separatorStyle = .none
@@ -98,5 +101,34 @@ class HomeViewController: UITableViewController {
         default:
             return 0
         }
+    }
+    
+    // MARK: - SESSIONS
+    
+    func sessionConnected() {
+        print("session connected")
+    }
+    
+    func sessionDisconnected() {
+        print("session disconnected")
+    }
+    
+    func beginLecture() {
+        print("YAAAS")
+    }
+    
+    func postQuestion() {
+        print("Question posted up bruh!")
+    }
+    
+    func endLecture() {
+        print("end lecture brofessor")
+    }
+    
+    // MARK: - SIGN OUT
+    @objc func signout() {
+        GIDSignIn.sharedInstance().signOut()
+        let login = LoginViewController()
+        present(login, animated: true, completion: nil)
     }
 }
