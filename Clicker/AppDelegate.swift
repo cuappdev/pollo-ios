@@ -17,14 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        // Initialize sign-in
 
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        
         GIDSignIn.sharedInstance().delegate = self
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = TabBarController()
+        
+        let login = LoginViewController()
+        window?.rootViewController?.present(login, animated: false, completion: nil)
         
         Fabric.with([Crashlytics.self])
         return true
@@ -72,14 +77,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             // Perform any operations on signed in user here.
-            let userId = user.userID                  // For client-side use only!
+            let userId = user.userID                 // For client-side use only!
             let idToken = user.authentication.idToken // Safe to send to the server
             let fullName = user.profile.name
             let givenName = user.profile.givenName
             let familyName = user.profile.familyName
             let email = user.profile.email
-            print("signing in")
-            // ...
+            User.currentUser = User(id: userId!, netID: email!, name: fullName!)
+    
+            window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")
         }
