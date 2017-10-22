@@ -13,7 +13,7 @@ class HomeViewController: UITableViewController {
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         self.title = "CliquePod"
         
         tableView.bounces = false

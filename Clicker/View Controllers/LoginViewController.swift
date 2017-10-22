@@ -16,7 +16,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
         
         GIDSignIn.sharedInstance().uiDelegate = self
@@ -30,8 +29,5 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
             make.width.equalTo(view.snp.width).multipliedBy(0.3)
             make.height.equalTo(150)
         }
-        
-        
     }
-    
 }

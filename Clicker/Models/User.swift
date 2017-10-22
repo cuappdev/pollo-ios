@@ -10,6 +10,8 @@ import UIKit
 
 class User : NSObject {
     
+    static var currentUser: User?
+    
     var id: String
     var netID: String
     var name: String
