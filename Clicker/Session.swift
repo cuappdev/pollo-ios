@@ -29,18 +29,33 @@ class Session {
             self.delegate?.sessionDisconnected()
         }
         
-        socket.on("beginLecture") {[weak self] data, ack in
-            self.delegate?.beginLecture()
+        socket.on("begin_lecture") {[weak self] data, ack in
+            guard let profId = data[0] as? Int, let date = data[1] as? String else {
+                return
+            }
+            self.delegate?.beginLecture(profId, date)
         }
         
-        socket.on("postQuestion") {[weak self] data, ack in
-            self.delegate?.postQuestion()
-        }
-        
-        socket.on("endLecture") {[weak self] data, ack in
+        socket.on("end_lecture") {[weak self] data, ack in
             self.delegate?.endLecture()
         }
-
+        
+        socket.on("begin_question") {[weak self] data, ack in
+            self.delegate?.beginQuestion()
+        }
+        
+        socket.on("end_question") {[weak self] data, ack in
+            self.delegate?.endQuestion()
+        }
+        
+        socket.on("post_responses") {[weak self] data, ack in
+            self.delegate?.postResponses()
+        }
+        
+        // socket.emit("join_lecture", lectureId)
+        
+        // socket.emit("send_response", reponse)
+        
         return socket
     }()
 }

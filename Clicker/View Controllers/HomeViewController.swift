@@ -9,7 +9,9 @@
 import UIKit
 
 class HomeViewController: UITableViewController, SessionDelegate {
-
+    
+    var lectures = [Lecture]()
+    
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +28,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionHeader.self, forHeaderFooterViewReuseIdentifier: "pastSessionHeader")
         tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
+        
     }
     
     // MARK: - CELLS
@@ -113,18 +116,36 @@ class HomeViewController: UITableViewController, SessionDelegate {
         print("session disconnected")
     }
     
-    func beginLecture() {
+    func beginLecture(_ profId: Int, _ date: String) {
         print("YAAAS")
-    }
-    
-    func postQuestion() {
-        print("Question posted up bruh!")
     }
     
     func endLecture() {
         print("end lecture brofessor")
     }
     
+    
+    func beginQuestion(_ question: Question) {
+        print("begin question")
+    }
+    
+    func endQuestion() {
+        print("end question")
+    }
+    
+    func postResponses(_ answers: [Answer]) {
+        print("post responses")
+    }
+    
+    func joinLecture(_ lectureId: String) {
+        // socket.emit("join_lecture", lectureId)
+    }
+    
+    func sendResponse(_ answer: Answer) {
+        // socket.emit("send_response", answer)
+    }
+    
+
     // MARK: - SIGN OUT
     @objc func signout() {
         GIDSignIn.sharedInstance().signOut()
