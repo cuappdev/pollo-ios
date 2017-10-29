@@ -16,7 +16,7 @@ class User : NSObject {
     var netID: String
     var name: String
     var courses: [Course] = [Course]()
-    var sessions: [Session] = [Session]()
+    var lectures: [Lecture] = [Lecture]()
     
     
     init(id: String, netID: String, name: String) {
@@ -37,9 +37,7 @@ class User : NSObject {
         }
     }
     
-    func addSession(_ session: Session) {
-        sessions.append(session)
+    func addLecture(_ lecture: Lecture) {
+        lectures.append(lecture)
     }
-    
-    
 }

@@ -10,12 +10,13 @@ import UIKit
 
 class HomeViewController: UITableViewController, SessionDelegate {
     
+    var liveLecture: Lecture?
     var lectures = [Lecture]()
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         self.title = "CliquePod"
         
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
@@ -28,7 +29,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionHeader.self, forHeaderFooterViewReuseIdentifier: "pastSessionHeader")
         tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
-        
     }
     
     // MARK: - CELLS
@@ -50,10 +50,10 @@ class HomeViewController: UITableViewController, SessionDelegate {
         switch(indexPath.section) {
         case 0:
             print("liveSession")
-            let viewController = LiveSessionViewController() //TEMP
+            let viewController = LiveSessionViewController()
+            viewController.liveLecture = liveLecture
             let navigationController = self.navigationController!
             navigationController.pushViewController(viewController, animated: true)
-            
         case 1:
             print("pastSession")
         default:
@@ -98,7 +98,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section){
         case 0:
-            return 1 //TEMP
+            return liveLecture == nil ? 0 : 1
         case 1:
             return 3 //TEMP
         default:
@@ -116,17 +116,32 @@ class HomeViewController: UITableViewController, SessionDelegate {
         print("session disconnected")
     }
     
-    func beginLecture(_ profId: Int, _ date: String) {
-        print("YAAAS")
+    func beginLecture(_ lectureId: String) {
+        print("begin lecture")
+        GetLecture(id: lectureId).make()
+            .then{ lecture -> Void in
+                self.liveLecture = lecture
+                self.tableView.reloadData()
+            }
+            .catch{ error in
+                print(error.localizedDescription)
+        }
     }
     
     func endLecture() {
-        print("end lecture brofessor")
+        print("end lecture")
+        DeleteLecture(id: (liveLecture?.id)!).make()
+            .then{ lecture -> Void in
+                self.liveLecture = nil
+                self.tableView.reloadData()
+            }
+            .catch{ error in
+                print(error.localizedDescription)
+        }
     }
     
-    
     func beginQuestion(_ question: Question) {
-        print("begin question")
+        print("begin question")        
     }
     
     func endQuestion() {
@@ -145,7 +160,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
         // socket.emit("send_response", answer)
     }
     
-
+    
     // MARK: - SIGN OUT
     @objc func signout() {
         GIDSignIn.sharedInstance().signOut()

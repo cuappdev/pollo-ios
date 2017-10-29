@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class Question {
     
@@ -20,5 +21,12 @@ class Question {
         self.text = text
         self.type = type
         self.data = data
+    }
+    
+    init(json: JSON){
+        self.id = json["id"].stringValue
+        self.text = json["text"].stringValue
+        self.type = json["type"].stringValue
+        self.data = json["data"].stringValue
     }
 }

@@ -11,13 +11,21 @@ import SocketIO
 class Session {
     let id: Int
     var delegate: SessionDelegate?
-
+    
     init(id: Int, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
     }
-
-    private lazy var socket: SocketIOClient = {
+    
+    static var socket: SocketIOClient? {
+        guard let socket = _socket else {
+            //fatalError("Error: current user doesn't exist")
+            return nil
+        }
+        return socket
+    }
+    
+    private lazy var _socket: SocketIOClient = {
         let url = URL(string: "http://localhost:8080/lecture/\(id)")!
         let socket = SocketIOClient(socketURL: url, config: [.log(true), .compress])
 
@@ -30,7 +38,7 @@ class Session {
         }
         
         socket.on("begin_lecture") {[weak self] data, ack in
-            guard let profId = data[0] as? Int, let date = data[1] as? String else {
+            guard let lectureId = data[0] as? String else {
                 return
             }
             self.delegate?.beginLecture(profId, date)
@@ -41,7 +49,11 @@ class Session {
         }
         
         socket.on("begin_question") {[weak self] data, ack in
-            self.delegate?.beginQuestion()
+            guard let questionAttrs = data[0] as? JSON else {
+                return
+            }
+            let question = Question(json: questionAttrs)
+            self.delegate?.beginQuestion(question: question)
         }
         
         socket.on("end_question") {[weak self] data, ack in
