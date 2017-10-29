@@ -16,7 +16,6 @@
 		C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188691F7ADDF200D7E944 /* LoginViewController.swift */; };
 		C281886F1F7ADE9200D7E944 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281886E1F7ADE9200D7E944 /* User.swift */; };
 		C28188711F7ADF4000D7E944 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188701F7ADF4000D7E944 /* Course.swift */; };
-		C28188731F7ADF4A00D7E944 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188721F7ADF4A00D7E944 /* Session.swift */; };
 		C2D057971F926AC0008F21CB /* Lecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057961F926AC0008F21CB /* Lecture.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
@@ -26,6 +25,8 @@
 		C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */; };
 		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
+		C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */; };
+		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
 		C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */; };
 		C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF5E1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift */; };
@@ -63,7 +64,6 @@
 		C28188691F7ADDF200D7E944 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C281886E1F7ADE9200D7E944 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C28188701F7ADF4000D7E944 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
-		C28188721F7ADF4A00D7E944 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2D057961F926AC0008F21CB /* Lecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
@@ -74,6 +74,8 @@
 		C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceViewController.swift; sourceTree = "<group>"; };
+		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionViewController.swift; sourceTree = "<group>"; };
 		C7D6AF5E1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -151,13 +153,21 @@
 			children = (
 				C281886E1F7ADE9200D7E944 /* User.swift */,
 				C28188701F7ADF4000D7E944 /* Course.swift */,
-				C28188721F7ADF4A00D7E944 /* Session.swift */,
 				C2D057961F926AC0008F21CB /* Lecture.swift */,
 				C2D057981F926B31008F21CB /* Question.swift */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
 				C2D0579C1F926C3B008F21CB /* Organization.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		C72240431FA6254B00DABA8D /* Question View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */,
+				C74587131FA62F8500AB26C6 /* PendingViewController.swift */,
+			);
+			path = "Question View Controllers";
 			sourceTree = "<group>";
 		};
 		C7D6AF571F93DE43003ABA10 /* Supporting */ = {
@@ -226,6 +236,7 @@
 				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
 				C28188691F7ADDF200D7E944 /* LoginViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
+				C72240431FA6254B00DABA8D /* Question View Controllers */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -349,7 +360,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */ = {
@@ -434,7 +445,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C28188731F7ADF4A00D7E944 /* Session.swift in Sources */,
 				C7D6AF631F93DF41003ABA10 /* LiveSessionHeader.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
@@ -445,6 +455,7 @@
 				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
 				C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */,
 				C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */,
+				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				C7D6AF651F93DF64003ABA10 /* PastSessionHeader.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
@@ -453,6 +464,7 @@
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2D057971F926AC0008F21CB /* Lecture.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
+				C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */,
 				C281886F1F7ADE9200D7E944 /* User.swift in Sources */,
 				C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */,
 				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
