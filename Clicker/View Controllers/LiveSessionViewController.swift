@@ -30,7 +30,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     func updateContainerVC(question: Question){
         switch(question.type) {
-            case "MultipleChoice":
+            case "MultipleChoiceQuestion":
                 let multipleChoiceViewController = MultipleChoiceViewController()
                 multipleChoiceViewController.question = question
                 containerViewController = multipleChoiceViewController

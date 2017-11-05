@@ -94,14 +94,16 @@ struct GetLectureQuestions : ClickerQuark {
         switch element {
         case .edges(let edges):
             let questions: [Question] = try edges.map {
-                guard let id = $0.node["id"].string, let text = $0.node["text"].string, let type = $0.node["type"].string, let data = $0.node["data"].string else {
+                guard let id = $0.node["id"].string, let text = $0.node["text"].string, let type = $0.node["type"].string else {
                     throw NeutronError.badResponseData
                 }
-                return Question(id, text, type, data)
+                return Question(id, text, type)
             }
             return questions
         default: throw NeutronError.badResponseData
         }
     }
 }
+
+
 

@@ -10,12 +10,14 @@
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
+		C23664601FAF609D0033BC49 /* AddCourseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188691F7ADDF200D7E944 /* LoginViewController.swift */; };
 		C281886F1F7ADE9200D7E944 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281886E1F7ADE9200D7E944 /* User.swift */; };
 		C28188711F7ADF4000D7E944 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188701F7ADF4000D7E944 /* Course.swift */; };
+		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
 		C2D057971F926AC0008F21CB /* Lecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057961F926AC0008F21CB /* Lecture.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
@@ -52,18 +54,19 @@
 /* Begin PBXFileReference section */
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		652914FF1F78027A00882CBB /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
-		652915011F7803E500882CBB /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
 		6529150B1F78124700882CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
+		C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseViewController.swift; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28188691F7ADDF200D7E944 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C281886E1F7ADE9200D7E944 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C28188701F7ADF4000D7E944 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2D057961F926AC0008F21CB /* Lecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
@@ -217,7 +220,7 @@
 				C27429E11F8C252D006FAD31 /* Quarks */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
 				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
-				652915011F7803E500882CBB /* Session.swift */,
+				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
@@ -236,6 +239,7 @@
 				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
 				C28188691F7ADDF200D7E944 /* LoginViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
+				C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */,
 				C72240431FA6254B00DABA8D /* Question View Controllers */,
 			);
 			path = "View Controllers";
@@ -360,7 +364,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */ = {
@@ -446,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7D6AF631F93DF41003ABA10 /* LiveSessionHeader.swift in Sources */,
+				C23664601FAF609D0033BC49 /* AddCourseViewController.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
@@ -465,6 +470,7 @@
 				C2D057971F926AC0008F21CB /* Lecture.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */,
+				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C281886F1F7ADE9200D7E944 /* User.swift in Sources */,
 				C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */,
 				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,

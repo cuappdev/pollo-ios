@@ -22,6 +22,9 @@ class HomeViewController: UITableViewController, SessionDelegate {
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton
         
+        let addCourseButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCourse))
+        navigationItem.rightBarButtonItem = addCourseButton
+        
         tableView.bounces = false
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
@@ -166,5 +169,10 @@ class HomeViewController: UITableViewController, SessionDelegate {
         GIDSignIn.sharedInstance().signOut()
         let login = LoginViewController()
         present(login, animated: true, completion: nil)
+    }
+    
+    @objc func addCourse() {
+        let addCourseVC = AddCourseViewController()
+        navigationController?.pushViewController(addCourseVC, animated: true)
     }
 }

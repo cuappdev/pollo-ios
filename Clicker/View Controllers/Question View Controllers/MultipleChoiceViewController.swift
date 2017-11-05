@@ -11,10 +11,22 @@ import UIKit
 class MultipleChoiceViewController: UIViewController, SessionDelegate {
 
     var question: Question?
+    var courseLabel: UILabel!
+    var timeLabel: UILabel!
+    var questionLabel: UILabel!
+    var submitButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
+        
+        setupSubviews()
+    }
+    
+    func setupSubviews() {
+        courseLabel = UILabel()
+        courseLabel.text = "ASTRO 1101"
+        
     }
     
     // MARK: - SESSIONS
