@@ -16,8 +16,10 @@ class HomeViewController: UITableViewController, SessionDelegate {
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         self.title = "CliquePod"
+        
+        liveLecture = Lecture("fdgasgserha", "asfgashadfh") //temp
         
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton

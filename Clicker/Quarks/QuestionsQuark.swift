@@ -24,10 +24,13 @@ struct GetQuestion: ClickerQuark {
     func process(element: Element) throws -> Question {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string else {
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            return Question(id, text, type)
+            let opt = options.map { json in
+                json.stringValue
+            }
+            return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
         }
     }
@@ -55,10 +58,14 @@ struct UpdateQuestion: ClickerQuark {
     func process(element: Element) throws -> Question {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string else {
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string,
+            let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            return Question(id, text, type)
+            let opt = options.map {
+                $0.stringValue
+            }
+            return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
         }
     }

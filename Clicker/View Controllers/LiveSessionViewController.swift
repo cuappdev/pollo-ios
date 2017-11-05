@@ -24,6 +24,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         containerView?.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(containerView!)
         setConstraints()
+        updateContainerVC(question: Question("owahetouhdfgou", "How many stars will be in our universe tomorrow?", "MultipleChoiceQuestion", options: ["1", "10", "100", "100,000,000"], answer: "100,000,000"))
     }
     
     // MARK: - CONTAINER VIEW
@@ -35,7 +36,15 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
                 multipleChoiceViewController.question = question
                 containerViewController = multipleChoiceViewController
                 addChildViewController(containerViewController!)
+                containerViewController?.view.translatesAutoresizingMaskIntoConstraints = false
                 containerView?.addSubview((containerViewController?.view)!)
+                containerViewController?.view.snp.makeConstraints { (make) -> Void in
+                    make.left.equalToSuperview()
+                    make.right.equalToSuperview()
+                    make.top.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                }
+                containerViewController?.didMove(toParentViewController: self)
             default:
                 pending()
         }
@@ -52,14 +61,12 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     // MARK: - CONSTRAINTS
     func setConstraints() {
         containerView?.snp.makeConstraints { (make) -> Void in
-            make.center.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
-    
     
     // MARK: - SESSIONS
     

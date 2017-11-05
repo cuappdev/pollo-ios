@@ -28,6 +28,8 @@
 		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */; };
+		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
+		C72CD52A1FAF7883004E68D9 /* AnswerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5291FAF7883004E68D9 /* AnswerButton.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
 		C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */; };
@@ -78,6 +80,8 @@
 		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceViewController.swift; sourceTree = "<group>"; };
+		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
+		C72CD5291FAF7883004E68D9 /* AnswerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButton.swift; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +192,7 @@
 				C7D6AF641F93DF64003ABA10 /* PastSessionHeader.swift */,
 				C7D6AF621F93DF41003ABA10 /* LiveSessionHeader.swift */,
 				C7D6AF601F93DF15003ABA10 /* PastSessionTableViewCell.swift */,
+				C72CD5291FAF7883004E68D9 /* AnswerButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -216,16 +221,17 @@
 			isa = PBXGroup;
 			children = (
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
-				C7D6AF571F93DE43003ABA10 /* Supporting */,
-				C27429E11F8C252D006FAD31 /* Quarks */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
-				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
-				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
+				C27429E11F8C252D006FAD31 /* Quarks */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
+				C7D6AF571F93DE43003ABA10 /* Supporting */,
+				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
+				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
+				C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */,
 				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
 				C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */,
 			);
@@ -364,7 +370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */ = {
@@ -455,6 +461,8 @@
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C28188711F7ADF4000D7E944 /* Course.swift in Sources */,
+				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
+				C72CD52A1FAF7883004E68D9 /* AnswerButton.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C7D6AF611F93DF15003ABA10 /* PastSessionTableViewCell.swift in Sources */,
 				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
