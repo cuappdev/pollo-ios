@@ -9,24 +9,24 @@
 import UIKit
 import SwiftyJSON
 
+
 class Question {
     
     var id: String
     var text: String
-    var type: String
-    var data: String
+    var type: String // FreeResponseQuestion | MultipleChoiceQuestion | MultipleAnswerQuestion
+    var options: String?
+    var answer: [String]?
     
-    init(_ id:String, _ text: String, _ type: String, _ data: String) {
+    init(_ id:String, _ text: String, _ type: String) {
         self.id = id
         self.text = text
         self.type = type
-        self.data = data
     }
     
     init(json: JSON){
         self.id = json["id"].stringValue
         self.text = json["text"].stringValue
         self.type = json["type"].stringValue
-        self.data = json["data"].stringValue
     }
 }
