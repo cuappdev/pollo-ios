@@ -9,16 +9,25 @@
 import UIKit
 import SwiftyJSON
 
+class Option {
+    var id: String
+    var description: String
+    
+    init(_ id: String, _ description: String) {
+        self.id = id
+        self.description = description
+    }
+}
 
 class Question {
     
     var id: String
     var text: String
     var type: String // FreeResponseQuestion | MultipleChoiceQuestion | MultipleAnswerQuestion
-    var options: [String]
+    var options: [Option]
     var answer: String?
     
-    init(_ id:String, _ text: String, _ type: String, options: [String], answer: String) {
+    init(_ id:String, _ text: String, _ type: String, options: [Option], answer: String) {
         self.id = id
         self.text = text
         self.type = type
@@ -31,7 +40,9 @@ class Question {
         self.text = json["text"].stringValue
         self.type = json["type"].stringValue
         self.options = json["options"].arrayValue.map({ json in
-            json.stringValue
+            let id = json["id"].stringValue
+            let description = json["description"].stringValue
+            return Option(id, description)
         })
         self.answer = json["answer"].stringValue
     }

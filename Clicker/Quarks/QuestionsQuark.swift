@@ -18,7 +18,7 @@ struct GetQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> Question {
@@ -27,8 +27,10 @@ struct GetQuestion: ClickerQuark {
             guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            let opt = options.map { json in
-                json.stringValue
+            let opt = options.map { json -> Option in
+                let id = json["id"].stringValue
+                let description = json["description"].stringValue
+                return Option(id, description)
             }
             return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
@@ -52,7 +54,7 @@ struct UpdateQuestion: ClickerQuark {
             "data": data
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Question {
@@ -62,8 +64,10 @@ struct UpdateQuestion: ClickerQuark {
             let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            let opt = options.map {
-                $0.stringValue
+            let opt = options.map { json -> Option in 
+                let id = json["id"].stringValue
+                let description = json["description"].stringValue
+                return Option(id, description)
             }
             return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
@@ -79,7 +83,7 @@ struct DeleteQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
@@ -95,7 +99,7 @@ struct GetAnswersToQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)/answers"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> [Answer] {
@@ -138,7 +142,7 @@ struct AnswerQuestion: ClickerQuark {
             "answer": answer
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Answer {

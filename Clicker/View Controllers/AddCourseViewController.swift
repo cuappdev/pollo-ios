@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import SnapKit
 
 class AddCourseViewController: UIViewController {
@@ -56,6 +57,7 @@ class AddCourseViewController: UIViewController {
         addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         addCourseButton.backgroundColor = .clickerBlue
         addCourseButton.layer.cornerRadius = 5
+        addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)
         view.addSubview(addCourseButton)
 
         addCourseButton.snp.makeConstraints { make in
@@ -63,6 +65,32 @@ class AddCourseViewController: UIViewController {
             make.width.equalTo(view.frame.width*0.4)
             make.height.equalTo(60)
             make.top.equalTo(courseTextField.snp.bottom).offset(40)
+        }
+    }
+    
+    @objc func addCourse() {
+        if let text = courseTextField.text {
+//            let defaults = UserDefaults.standard
+//            if defaults.value(forKey: "enrolledCourses") == nil {
+//                var enrolledCourses = [text]
+//                defaults.set(enrolledCourses, forKey: "enrolledCourses")
+//
+//            } else {
+//                var enrolledCourses = defaults.value(forKey: "enrolledCourses") as? [String]
+//                enrolledCourses?.append(text)
+//                defaults.set(enrolledCourses, forKey: "enrolledCourses")
+//            }
+            
+            // USE USER DEFAULTS???
+            
+            CourseAddStudents(id: text, studentIDs: ["1"]).make()  // TEMP: I created a user with ID 1
+                .then {
+                    print("added student")
+                } .catch { error in
+                    print(error)
+                }
+            courseTextField.text = ""
+            self.navigationController?.popViewController(animated: true)
         }
     }
 }
