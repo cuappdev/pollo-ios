@@ -6,8 +6,7 @@ protocol SessionDelegate {
     func beginLecture(_ lectureId: String)
     func endLecture()
     func beginQuestion(_ question: Question)
-    func endQuestion()
+    func endQuestion(_ question: Question)
     func postResponses(_ answers: [Answer])
-    func joinLecture(_ lectureId: String)
     func sendResponse(_ answer: Answer)
 }

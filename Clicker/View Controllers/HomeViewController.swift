@@ -10,8 +10,9 @@ import UIKit
 
 class HomeViewController: UITableViewController, SessionDelegate {
     
-    var liveLecture: Lecture?
     var lectures = [Lecture]()
+    var courseIDToCourses = [String:Course]()
+    var lectureIDToCourseID = [String:String]()
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -19,7 +20,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
                 
         self.title = "CliquePod"
         
-        liveLecture = Lecture("fdgasgserha", "asfgashadfh") //temp
+        // let session = Session(id: 4000, delegate: self)
         
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton
@@ -34,20 +35,27 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionHeader.self, forHeaderFooterViewReuseIdentifier: "pastSessionHeader")
         tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
+        
+        fetchLiveLectures()
     }
     
     // MARK: - CELLS
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = UITableViewCell()
         switch(indexPath.section) {
         case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
+            let lecture = lectures[indexPath.row]
+            let courseID = lectureIDToCourseID[lecture.id]
+            let course = courseIDToCourses[courseID!]
+            if let name = course?.name {
+                cell.sessionLabel.text = "\(name) - Lecture \(lecture.id)"
+            }
             return cell
         case 1:
-            cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
             return cell
         default:
-            return cell
+            return UITableViewCell()
         }
     }
     
@@ -56,7 +64,11 @@ class HomeViewController: UITableViewController, SessionDelegate {
         case 0:
             print("liveSession")
             let viewController = LiveSessionViewController()
-            viewController.liveLecture = liveLecture
+            let lecture = lectures[indexPath.row]
+            let courseID = lectureIDToCourseID[lecture.id]
+            let course = courseIDToCourses[courseID!]
+            viewController.liveLecture = lecture
+            viewController.course = course 
             let navigationController = self.navigationController!
             navigationController.pushViewController(viewController, animated: true)
         case 1:
@@ -103,7 +115,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section){
         case 0:
-            return liveLecture == nil ? 0 : 1
+            return lectures.count 
+            // return liveLecture == nil ? 0 : 1
         case 1:
             return 3 //TEMP
         default:
@@ -123,42 +136,22 @@ class HomeViewController: UITableViewController, SessionDelegate {
     
     func beginLecture(_ lectureId: String) {
         print("begin lecture")
-        GetLecture(id: lectureId).make()
-            .then{ lecture -> Void in
-                self.liveLecture = lecture
-                self.tableView.reloadData()
-            }
-            .catch{ error in
-                print(error.localizedDescription)
-        }
     }
     
     func endLecture() {
         print("end lecture")
-        DeleteLecture(id: (liveLecture?.id)!).make()
-            .then{ lecture -> Void in
-                self.liveLecture = nil
-                self.tableView.reloadData()
-            }
-            .catch{ error in
-                print(error.localizedDescription)
-        }
     }
     
     func beginQuestion(_ question: Question) {
         print("begin question")        
     }
     
-    func endQuestion() {
+    func endQuestion(_ question: Question) {
         print("end question")
     }
     
     func postResponses(_ answers: [Answer]) {
         print("post responses")
-    }
-    
-    func joinLecture(_ lectureId: String) {
-        // socket.emit("join_lecture", lectureId)
     }
     
     func sendResponse(_ answer: Answer) {
@@ -177,4 +170,50 @@ class HomeViewController: UITableViewController, SessionDelegate {
         let addCourseVC = AddCourseViewController()
         navigationController?.pushViewController(addCourseVC, animated: true)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        fetchLiveLectures()
+        
+    }
+    
+    func fetchLiveLectures() {
+//        lectures = [Lecture]()
+//        courseIDToCourses = [String:Course]()
+//        lectureIDToCourseID = [String:String]()
+        GetUserCourses(id: "1", role: "student").make()
+            .then { courses -> Void in
+                print("these are the courses")
+                print(courses)
+                for course in courses {
+                    let courseID = course.id
+                    if self.courseIDToCourses[courseID] == nil {
+                        GetCourse(id: courseID).make()
+                            .then { course -> Void in
+                                self.courseIDToCourses[courseID] = course
+                                self.tableView.reloadData()
+                            }.catch { error -> Void in
+                                print("error in GETTING COURSES")
+                                print(error)
+                                return
+                        }
+                    }
+                    GetCourseLectures(id: courseID).make()
+                        .then { liveLectures -> Void in
+                            for lecture in liveLectures {
+                                if self.lectureIDToCourseID[lecture.id] == nil {
+                                    self.lectures.append(lecture)
+                                    self.lectureIDToCourseID[lecture.id] = courseID
+                                }
+                            }
+                            self.tableView.reloadData()
+                        }.catch { error in
+                            print("error in GETTING courses' LECTURES")
+                            print(error)
+                    }
+                }
+                self.tableView.reloadData()
+            
+        }
+    }
+    // USE USER DEFAULTS TO STORE ENROLLED COURSES WHEN USER FIRST LOADS INTO APP???
 }

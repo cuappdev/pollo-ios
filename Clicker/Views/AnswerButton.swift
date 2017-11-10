@@ -10,11 +10,11 @@ import UIKit
 
 class AnswerButton: UIButton {
 
-    init(frame: CGRect, option: String) {
+    init(frame: CGRect, description: String) {
         super.init(frame: frame)
         
         titleEdgeInsets = UIEdgeInsetsMake(18, 43, 18, 18)
-        setTitle("\(option)", for: .normal)
+        setTitle("\(description)", for: .normal)
         setTitleColor(.black, for: .normal)
         layer.borderWidth = 1
         layer.borderColor = UIColor.clickerBorder.cgColor

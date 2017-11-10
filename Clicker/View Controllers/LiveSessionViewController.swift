@@ -11,20 +11,29 @@ import SnapKit
 
 class LiveSessionViewController: UIViewController, SessionDelegate {
     
+    var course: Course?
     var liveLecture: Lecture?
     var containerView: UIView?
     var containerViewController: UIViewController?
+    var session: Session?
+    
+    var beginQuestionBarButtonItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Live Session"
         self.view.backgroundColor = .white
         
+        fetchLiveLecturePorts()
+        
+        beginQuestionBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(professorBeginQuestion))
+        self.navigationItem.rightBarButtonItem = beginQuestionBarButtonItem
+        
         containerView = UIView()
         containerView?.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(containerView!)
         setConstraints()
-        updateContainerVC(question: Question("owahetouhdfgou", "How many stars will be in our universe tomorrow?", "MultipleChoiceQuestion", options: ["1", "10", "100", "100,000,000"], answer: "100,000,000"))
+        pending()
     }
     
     // MARK: - CONTAINER VIEW
@@ -34,6 +43,8 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             case "MultipleChoiceQuestion":
                 let multipleChoiceViewController = MultipleChoiceViewController()
                 multipleChoiceViewController.question = question
+                multipleChoiceViewController.course = course
+                multipleChoiceViewController.socket = self.session?.socket
                 containerViewController = multipleChoiceViewController
                 addChildViewController(containerViewController!)
                 containerViewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -51,11 +62,22 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func pending(){
-        containerView = UIView()
+//        containerView = UIView()
+//        let pendingViewController = PendingViewController()
+//        containerViewController = pendingViewController
+//        addChildViewController(containerViewController!)
+//        containerView?.addSubview((containerViewController?.view)!)
         let pendingViewController = PendingViewController()
         containerViewController = pendingViewController
         addChildViewController(containerViewController!)
         containerView?.addSubview((containerViewController?.view)!)
+        containerViewController?.view.snp.makeConstraints { (make) -> Void in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        containerViewController?.didMove(toParentViewController: self)
     }
     
     // MARK: - CONSTRAINTS
@@ -66,6 +88,43 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    @objc func professorBeginQuestion() {
+        let option1 = [
+            "id": "A",
+            "description": "CO2"
+        ]
+        let opt1 = Option("A", "CO2")
+        let option2 = [
+            "id": "B",
+            "description": "H2O"
+        ]
+        let opt2 = Option("B", "H2O")
+        let option3 = [
+            "id": "C",
+            "description": "NO2"
+        ]
+        let opt3 = Option("C", "NO2")
+        let option4 = [
+            "id": "D",
+            "description": "C2H6"
+        ]
+        let opt4 = Option("C", "C2H6")
+        let options = [option1, option2, option3, option4]
+        let opts = [opt1, opt2, opt3, opt4]
+        let question = Question("1", "What molecules do mammals breath out during respiration?", "MultipleChoiceQuestion", options: opts, answer: "B")
+        let data: [String:Any] = [
+            "id": "1",
+            "text": "What molecules do mammals breath out during respiration?",
+            "type": "MultipleChoiceQuestion",
+            "options": options,
+            "answer": "A",
+            "userType": "admin"
+        ]
+        updateContainerVC(question: question)
+        self.session?.socket.emit("server/question/start", with: [data])
+        print("emitted question START")
     }
     
     // MARK: - SESSIONS
@@ -99,9 +158,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         updateContainerVC(question: question)
     }
     
-    func endQuestion() {
-        print("end question")
-        //socket.emit("send_response", answer)
+    func endQuestion(_ question: Question) {
         pending()
     }
     
@@ -109,11 +166,22 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         print("post responses")
     }
     
-    func joinLecture(_ lectureId: String) {
-        // socket.emit("join_lecture", lectureId)
-    }
-    
     func sendResponse(_ answer: Answer) {
         // socket.emit("send_response", answer)
+    }
+    
+    func fetchLiveLecturePorts() {
+        guard let lid = liveLecture?.id else {
+            return
+        }
+        GetLecturePorts(id: lid).make()
+            .then { ports -> Void in
+                for p in ports {
+                    self.session = Session(id: Int(p)!, delegate: self)
+                    
+                }
+            }.catch { error -> Void in
+                print(error)
+            }
     }
 }

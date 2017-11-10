@@ -14,14 +14,23 @@ class Answer {
     var question: String
     var answerer: String
     var type: String  // SingleResponse | MultipleResponse
-    var response: [String]
+    var multipleResponse = [String]()
+    var singleResponse = ""
     
-    init(_ id: String, _ question: String, _ answerer: String, _ type: String, _ response: [String]) {
+    init(_ id: String, _ question: String, _ answerer: String, _ type: String, _ multipleResponse: [String]) {
         self.id = id
         self.question = question
         self.answerer = answerer
         self.type = type
-        self.response = response
+        self.multipleResponse = multipleResponse
+    }
+    
+    init(_ id: String, _ question: String, _ answerer: String, _ type: String, _ singleResponse: String) {
+        self.id = id
+        self.question = question
+        self.answerer = answerer
+        self.type = type
+        self.singleResponse = singleResponse
     }
     
 }

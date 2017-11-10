@@ -8,10 +8,12 @@
 
 import UIKit
 import SnapKit
+import SocketIO
 
 class MultipleChoiceViewController: UIViewController, SessionDelegate {
 
     var question: Question?
+    var course: Course?
     var courseLabel: UILabel!
     var timeLabel: UILabel!
     var questionLabel: UILabel!
@@ -19,16 +21,42 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
     var answerButtons = [AnswerButton]()
     
     var selectedIndex: Int = -1
+    var timer: Timer!
+    
+    var socket: SocketIOClient!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
+        
         setupSubviews()
+        runTimer()
+    }
+    
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTimeLabel() {
+        let colonIndex = timeLabel.text?.index(of: ":")
+        let index = timeLabel.text?.index(colonIndex!, offsetBy: 1)
+        if let i = index {
+            let sec = Int((timeLabel.text?.substring(from: i))!)
+            if sec == 0 {
+                timer.invalidate()
+            } else if sec! <= 10 {
+                timeLabel.text = "Timer 00:0\(sec! - 1)"
+            } else {
+                timeLabel.text = "Timer 00:\(sec! - 1)"
+            }
+        }
     }
     
     func setupSubviews() {
         courseLabel = UILabel()
-        courseLabel.text = "ASTRO 1101"
+        courseLabel.text = course?.name
         courseLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         courseLabel.textAlignment = .left
         view.addSubview(courseLabel)
@@ -72,7 +100,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         }
         
         for option in (question?.options)! {
-            let optionButton = AnswerButton(frame: .zero, option: option)
+            let optionButton = AnswerButton(frame: .zero, description: option.description)
             optionButton.tag = answerButtons.count
             optionButton.addTarget(self, action: #selector(optionSelected), for: .touchUpInside)
             view.addSubview(optionButton)
@@ -99,6 +127,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         submitButton.setTitle("Submit", for: .normal)
         submitButton.backgroundColor = .clickerLightGray
         submitButton.setTitleColor(.clickerDarkGray, for: .normal)
+        submitButton.addTarget(self, action: #selector(submitResponse), for: .touchUpInside)
         view.addSubview(submitButton)
         
         submitButton.snp.makeConstraints { make in
@@ -108,6 +137,37 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
             make.height.equalTo(55)
         }
         
+    }
+    
+    @objc func submitResponse() {
+        if selectedIndex != -1 {
+            var response = ""
+            switch selectedIndex {
+                case 0:
+                    response = "A"
+                case 1:
+                    response = "B"
+                case 2:
+                    response = "C"
+                case 3:
+                    response = "D"
+                default:
+                    response = ""
+            }
+            let answer = Answer("1", "tempquestion", "tempanswerer", "SingleResponse", response)
+            let data: [String:Any] = [
+                "id": "1",
+                "question": "tempquestion",
+                "answerer": "tempanswerer",
+                "type": "SingleResponse",
+                "response": response,
+                "userType": "student"
+            ]
+            // socket.emit("server/question/respond", with: [data])   NOTE: Buggy bc sometimes socket is null
+            let alert = UIAlertController(title: "Submitted", message: "Your response has been recorded.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func optionSelected(sender: UIButton) {
@@ -140,20 +200,16 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         print("begin question")
     }
     
-    func endQuestion() {
+    func endQuestion(_ question: Question) {
         print("end question")
+        submitResponse()
     }
     
     func postResponses(_ answers: [Answer]) {
         print("post responses")
     }
     
-    func joinLecture(_ lectureId: String) {
-        // socket.emit("join_lecture", lectureId)
-    }
-    
     func sendResponse(_ answer: Answer) {
-        //not letting us access Session
         // socket.emit("send_response", answer)
     }
 }
