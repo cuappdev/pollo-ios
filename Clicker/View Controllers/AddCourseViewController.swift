@@ -83,7 +83,7 @@ class AddCourseViewController: UIViewController {
             
             // USE USER DEFAULTS???
             
-            CourseAddStudents(id: text, studentIDs: ["1"]).make()  // TEMP: I created a user with ID 1
+            CourseAddStudents(id: text, studentIDs: ["1"]).make()
                 .then {
                     print("added student")
                 } .catch { error in

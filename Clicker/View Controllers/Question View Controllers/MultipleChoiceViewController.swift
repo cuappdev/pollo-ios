@@ -12,7 +12,7 @@ import SocketIO
 
 class MultipleChoiceViewController: UIViewController, SessionDelegate {
 
-    var question: Question?
+    var question: Question!
     var course: Course?
     var courseLabel: UILabel!
     var timeLabel: UILabel!
@@ -23,9 +23,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
     var selectedIndex: Int = -1
     var timer: Timer!
     
-    var socket: SocketIOClient!
-    
-    
+    var session: Session?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +50,89 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
                 timeLabel.text = "Timer 00:\(sec! - 1)"
             }
         }
+    }
+    
+    @objc func submitResponse() {
+        if selectedIndex == -1 {
+            return
+        }
+        sendingResponse()
+        let alert = UIAlertController(title: "Submitted", message: "Your response has been recorded.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func sendingResponse() {
+        if selectedIndex == -1 {
+            return
+        }
+        var response = ""
+        switch selectedIndex {
+            case 0:
+                response = "A"
+            case 1:
+                response = "B"
+            case 2:
+                response = "C"
+            case 3:
+                response = "D"
+            default:
+                response = ""
+        }
+        guard let qid = Int(question.id) else {
+            print("could not convert question id to int")
+            return
+        }
+        let data: [String:Any] = [
+            "answerer": 1,  // userID
+            "question": Int(question.id),  // questionID
+            "data": response  // the response
+        ]
+        self.session?.socket.emit("server/question/respond", with: [data])
+    }
+    
+    @objc func optionSelected(sender: UIButton) {
+        if selectedIndex != -1 {
+            answerButtons[selectedIndex].setTitleColor(.black, for: .normal)
+        }
+        selectedIndex = sender.tag
+        answerButtons[selectedIndex].setTitleColor(.clickerBlue, for: .normal)
+    }
+    
+    // MARK: - SESSIONS
+    
+    func sessionConnected() {
+        print("session connected")
+    }
+    
+    func sessionDisconnected() {
+        print("session disconnected")
+    }
+    
+    func beginLecture(_ lectureId: String) {
+        print("begin lecture")
+    }
+    
+    func endLecture() {
+        print("end lecture")
+    }
+    
+    func beginQuestion(_ question: Question) {
+        print("begin question")
+    }
+    
+    func endQuestion(_ question: Question) {
+        print("DETECTED QUESTION END IN MC CONTROLLER")
+        sendingResponse()
+        self.removeFromParentViewController()
+    }
+    
+    func postResponses(_ answers: [Answer]) {
+        print("post responses")
+    }
+    
+    func sendResponse(_ answer: Answer) {
+        // socket.emit("send_response", answer)
     }
     
     func setupSubviews() {
@@ -137,79 +218,5 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
             make.height.equalTo(55)
         }
         
-    }
-    
-    @objc func submitResponse() {
-        if selectedIndex != -1 {
-            var response = ""
-            switch selectedIndex {
-                case 0:
-                    response = "A"
-                case 1:
-                    response = "B"
-                case 2:
-                    response = "C"
-                case 3:
-                    response = "D"
-                default:
-                    response = ""
-            }
-            let answer = Answer("1", "tempquestion", "tempanswerer", "SingleResponse", response)
-            let data: [String:Any] = [
-                "id": "1",
-                "question": "tempquestion",
-                "answerer": "tempanswerer",
-                "type": "SingleResponse",
-                "response": response,
-                "userType": "student"
-            ]
-            // socket.emit("server/question/respond", with: [data])   NOTE: Buggy bc sometimes socket is null
-            let alert = UIAlertController(title: "Submitted", message: "Your response has been recorded.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    @objc func optionSelected(sender: UIButton) {
-        if selectedIndex != -1 {
-            answerButtons[selectedIndex].setTitleColor(.black, for: .normal)
-        }
-        selectedIndex = sender.tag
-        answerButtons[selectedIndex].setTitleColor(.clickerBlue, for: .normal)
-    }
-    
-    // MARK: - SESSIONS
-    
-    func sessionConnected() {
-        print("session connected")
-    }
-    
-    func sessionDisconnected() {
-        print("session disconnected")
-    }
-    
-    func beginLecture(_ lectureId: String) {
-        print("begin lecture")
-    }
-    
-    func endLecture() {
-        print("end lecture")
-    }
-    
-    func beginQuestion(_ question: Question) {
-        print("begin question")
-    }
-    
-    func endQuestion(_ question: Question) {
-        print("end question")
-        submitResponse()
-    }
-    
-    func postResponses(_ answers: [Answer]) {
-        print("post responses")
-    }
-    
-    func sendResponse(_ answer: Answer) {
-        // socket.emit("send_response", answer)
     }
 }
