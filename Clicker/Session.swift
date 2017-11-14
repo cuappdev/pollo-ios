@@ -18,7 +18,8 @@ class Session {
         self.id = id
         self.delegate = delegate
         let url = URL(string: "http://localhost:\(id)")!
-        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress])
+        print("PORT NUMBER IS \(id)")
+        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": "student"])])
         
         socket.on(clientEvent: .connect) { data, ack in
             print("SOCKET CONNECTED BALSJDLASKJDLK!")
@@ -37,20 +38,43 @@ class Session {
         
         socket.on("student/question/start") { data, ack in
             print("DETECTED QUESTION START!!!")
-            guard let questionAttrs = data[0] as? JSON else {
-                return
+//          data[0] as? [String:Any] =  ["question": {
+//                id = 4;
+//                text = "Is clique-pod the best pod in AppDev?";
+//                type = "MULTIPLE_CHOICE";
+//          }]
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
+                let questionID = questionJSON["id"] as? Int else {
+                    print("failed to convert to json")
+                    return
             }
-            print(questionAttrs)
-            let question = Question(json: questionAttrs)
-            self.delegate?.beginQuestion(question)
+            print(questionID)
+            GetQuestion(id: "\(questionID)" ).make()
+                .then { question -> Void in
+                    print("retrieved question")
+                    self.delegate?.beginQuestion(question)
+                }.catch { error in
+                    print(error)
+            }
+            
         }
         
         socket.on("student/question/end") { data, ack in
-            guard let questionAttrs = data[0] as? JSON else {
-                return
+            print("DETECTED QUESTION END")
+            print(data[0])
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
+                let questionID = questionJSON["id"] as? Int else {
+                    print("failed to convert to json")
+                    return
             }
-            let question = Question(json: questionAttrs)
-            self.delegate?.endQuestion(question)
+            print(questionID)
+            GetQuestion(id: "\(questionID)" ).make()
+                .then { question -> Void in
+                    print("retrieved question")
+                    self.delegate?.endQuestion(question)
+                }.catch { error in
+                    print(error)
+            }
         }
         socket.connect()
     }

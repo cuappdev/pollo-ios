@@ -45,8 +45,12 @@ extension ClickerQuark {
         }
         
         if let ports = response["data"]["ports"].array {
-            let portsArr = ports.map {
-                String(describing: $0.int)
+            let portsArr = ports.map { json -> String in
+                if let i = json.int {
+                    return String(describing: i)
+                } else {
+                    return "could not conver port to int"
+                }
             }
             return try process(element: .ports(portsArr))
         }

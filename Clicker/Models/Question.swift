@@ -23,7 +23,7 @@ class Question {
     
     var id: String
     var text: String
-    var type: String // FreeResponseQuestion | MultipleChoiceQuestion | MultipleAnswerQuestion
+    var type: String // FREE_RESPONSE | MULTIPLE_CHOICE | MULTIPLE_ANSWER
     var options: [Option]
     var answer: String?
     

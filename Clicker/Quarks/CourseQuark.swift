@@ -123,11 +123,8 @@ struct CourseAddStudents : ClickerQuark {
         return "/v1/courses/\(id)/students"
     }
     var parameters: Parameters {
-        print("THE PARAMETERS ARE:::")
-        print(studentIDs)
         return [
-            "students": "[1]",
-            "userType": "student"
+            "students": "[1]"
         ]
     }
     

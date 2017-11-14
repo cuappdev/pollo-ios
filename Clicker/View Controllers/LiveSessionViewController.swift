@@ -26,8 +26,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         
         fetchLiveLecturePorts()
         
-        beginQuestionBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(professorBeginQuestion))
-        self.navigationItem.rightBarButtonItem = beginQuestionBarButtonItem
         
         containerView = UIView()
         containerView?.translatesAutoresizingMaskIntoConstraints = false
@@ -40,11 +38,14 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     func updateContainerVC(question: Question){
         switch(question.type) {
-            case "MultipleChoiceQuestion":
+            case "MULTIPLE_CHOICE":
+                print("got MC Question")
+                print(question)
                 let multipleChoiceViewController = MultipleChoiceViewController()
                 multipleChoiceViewController.question = question
                 multipleChoiceViewController.course = course
-                multipleChoiceViewController.socket = self.session?.socket
+                //multipleChoiceViewController.sessionID = self.session?.id
+                multipleChoiceViewController.session = self.session
                 containerViewController = multipleChoiceViewController
                 addChildViewController(containerViewController!)
                 containerViewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -62,11 +63,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func pending(){
-//        containerView = UIView()
-//        let pendingViewController = PendingViewController()
-//        containerViewController = pendingViewController
-//        addChildViewController(containerViewController!)
-//        containerView?.addSubview((containerViewController?.view)!)
         let pendingViewController = PendingViewController()
         containerViewController = pendingViewController
         addChildViewController(containerViewController!)
@@ -88,43 +84,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-    
-    @objc func professorBeginQuestion() {
-        let option1 = [
-            "id": "A",
-            "description": "CO2"
-        ]
-        let opt1 = Option("A", "CO2")
-        let option2 = [
-            "id": "B",
-            "description": "H2O"
-        ]
-        let opt2 = Option("B", "H2O")
-        let option3 = [
-            "id": "C",
-            "description": "NO2"
-        ]
-        let opt3 = Option("C", "NO2")
-        let option4 = [
-            "id": "D",
-            "description": "C2H6"
-        ]
-        let opt4 = Option("C", "C2H6")
-        let options = [option1, option2, option3, option4]
-        let opts = [opt1, opt2, opt3, opt4]
-        let question = Question("1", "What molecules do mammals breath out during respiration?", "MultipleChoiceQuestion", options: opts, answer: "B")
-        let data: [String:Any] = [
-            "id": "1",
-            "text": "What molecules do mammals breath out during respiration?",
-            "type": "MultipleChoiceQuestion",
-            "options": options,
-            "answer": "A",
-            "userType": "admin"
-        ]
-        updateContainerVC(question: question)
-        self.session?.socket.emit("server/question/start", with: [data])
-        print("emitted question START")
     }
     
     // MARK: - SESSIONS
@@ -154,11 +113,11 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func beginQuestion(_ question: Question) {
-        print("begin question")
         updateContainerVC(question: question)
     }
     
     func endQuestion(_ question: Question) {
+        print("LIVE SESSION DETECTED END QUESTION")
         pending()
     }
     
@@ -177,11 +136,15 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         GetLecturePorts(id: lid).make()
             .then { ports -> Void in
                 for p in ports {
-                    self.session = Session(id: Int(p)!, delegate: self)
-                    
+                    if let i = Int(p) {
+                        self.session = Session(id: i, delegate: self)
+                        print("got port \(p)")
+                    } else {
+                        return
+                    }
                 }
             }.catch { error -> Void in
                 print(error)
-            }
+        }
     }
 }
