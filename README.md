@@ -120,14 +120,14 @@ We use Quarks for all of our protocol-oriented networking tasks. [Neutron](https
 
 #### Sessions
 
- * Session
+Session
  
 |   Name   |       Type      |        Description       |
 |----------|-----------------|--------------------------|
 | id       | Int             | Unique identifier.       |
 | delegate | SessionDelegate | This session's delegate. |
  
- * SessionDelegate: Protocol specifying session functionality (sessionConnected & sessionDisconnected).
+SessionDelegate: Protocol specifying session functionality (sessionConnected & sessionDisconnected).
 
 ### External Services
 
