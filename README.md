@@ -96,7 +96,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 #### Headers
 
  * LiveSessionHeader: Used in the HomeViewController as the section header for active lectures.
- * PastSessionHeader: Used in the CourseViewController as the section header for past lectures.
+ * PastSessionHeader: Used in the HomeViewController as the section header for past lectures.
 
 ### Controllers
 
