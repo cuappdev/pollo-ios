@@ -31,7 +31,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | netID    | String    | Unique, university-generated identifier for each user. |
 | name     | String    | User name (full name).                                 |
 | courses  | [[Course](#course)]  | Courses that a user is either a student/professor in.  |
-| lectures | [Lecture] | Lectures that a user has participated in.              |
+| lectures | [[Lecture](#lecture)] | Lectures that a user has participated in.              |
 
 #### Course 
 
@@ -40,8 +40,8 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id         | String | Unique identifier.                      |
 | name       | String | Course name.                            |
 | term       | String | Course term.                            |
-| professors | [User] | Professors who teach the course.        |
-| students   | [User] | Students who participate in the course. |
+| professors | [[User](#user)] | Professors who teach the course.        |
+| students   | [[User](#user)] | Students who participate in the course. |
 
 #### Lecture 
 
@@ -49,7 +49,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 |-----------|------------|-------------------------------------------------|
 | id        | String     | Unique identifier.                              |
 | dateTime  | String     | Start date and time of the lecture.             |
-| questions | [Question] | Questions asked / to be asked during a lecture. |
+| questions | [[Question](#question)] | Questions asked / to be asked during a lecture. |
 
 #### Question
 
@@ -58,7 +58,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id      | String   | Unique identifier.                                                  |
 | text    | String   | Question asked / to be asked.                                       |
 | type    | String   | Type of questions (FREE_RESPONSE, MULTIPLE_CHOICE, MULTIPLE_ANSWER) |
-| options | [Option] | Choices presented / to be presented to answer a question.           |
+| options | [[Option](#option)] | Choices presented / to be presented to answer a question.           |
 | answer  | String   | Correct answer to the question.                                     |
 
 #### Option
