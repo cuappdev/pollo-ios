@@ -134,10 +134,10 @@ SessionDelegate: Protocol specifying session functionality (sessionConnected & s
  * [AlamoFire](https://github.com/Alamofire/Alamofire): Used for HTTP networking.
  * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users. 
  * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users. 
+ * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
  * [Socket.io](https://github.com/socketio/socket.io-client-swift): Used to manage sockets.
  * [SnapKit](http://snapkit.io/docs/): Used for some AutoLayout magic.
  * [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON): Used for improved JSON parsing.
- * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
 
 Check out [Issues](https://github.com/cuappdev/clicker-ios/issues) to see what we are working on!
 
