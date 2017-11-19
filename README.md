@@ -1,7 +1,7 @@
 # Clicker iOS Client 
 [![Build Status](https://travis-ci.org/cuappdev/clicker-ios.svg?branch=master)](https://travis-ci.org/cuappdev/clicker-ios)
 
-Clicker is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is an app that seeks to extend the functionality of iClickers on a web and mobile platform.
+Clicker is one of the latest apps by [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. Clicker seeks to extend the functionality of iClickers on a web and mobile platform.
 
 ## Installation
 We use [CocoaPods](http://cocoapods.org) for our dependency manager. This should be installed before continuing.
@@ -30,7 +30,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id       | String    | Unique identifier.                                     |
 | netID    | String    | Unique, university-generated identifier for each user. |
 | name     | String    | User name (full name).                                 |
-| courses  | [Course]  | Courses that a user is either a student/professor in.  |
+| courses  | [[Course](#course)]  | Courses that a user is either a student/professor in.  |
 | lectures | [Lecture] | Lectures that a user has participated in.              |
 
 #### Course 
