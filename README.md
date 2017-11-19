@@ -88,27 +88,56 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 
 ### Views
 
- * CourseTableViewCell: Used in the HomeViewController to display a current course.
- * SessionTableViewCell: Used in the CourseViewController to display a past session. 
+#### Cells
+
+ * LiveSessionTableViewCell: Used in the HomeViewController to display active lectures.
+ * PastSessionTableViewCell: Used in the HomeViewController to display past lectures.
+
+#### Headers
+
+ * LiveSessionHeader: Used in the HomeViewController as the section header for active lectures.
+ * PastSessionHeader: Used in the CourseViewController as the section header for past lectures.
 
 ### Controllers
 
- * TabBarController: Used to implement a tab bar navigation flow.
- * LoginViewController: Used to allow users (students and professors) to login.
- * HomeViewController: Used to display all live sessions and current courses. 
- * CourseViewController: Used to display all past sessions for a given course.
+ * HomeViewController: Used to display all active lectures and past lectures. 
  * LiveSessionViewController: Used to answer questions in class. Includes question, answers, timer, submit, etc. 
+ * LoginViewController: Used to allow users (students and professors) to login.
+ * TabBarController: Used to implement a tab bar navigation flow.
 
 ### Other Classes
 
- * Lecture Socket Delegate: Incoming and outgoing lecture messages
+#### Quarks
+
+We use Quarks for all of our protocol-oriented networking tasks. [Neutron](https://github.com/dantheli/Neutron) is an awesome framework that we use to streamline all networking tasks.
+
+ * ClickerQuark
+ * CourseQuark 
+ * LectureQuark 
+ * OrganizationQuark 
+ * QuestionsQuark
+ * UserQuark
+
+#### Sessions
+
+ * Session
+ 
+|   Name   |       Type      |        Description       |
+|----------|-----------------|--------------------------|
+| id       | Int             | Unique identifier.       |
+| delegate | SessionDelegate | This session's delegate. |
+ 
+ * SessionDelegate: Protocol specifying session functionality (sessionConnected & sessionDisconnected).
 
 ### External Services
 
- * [Socket.io](https://github.com/socketio/socket.io-client-swift): Used to manage sockets.
- * [SnapKit](http://snapkit.io/docs/): Used for some AutoLayout magic.
+ * [AlamoFire](https://github.com/Alamofire/Alamofire): Used for HTTP networking.
  * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users. 
  * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users. 
+ * [Socket.io](https://github.com/socketio/socket.io-client-swift): Used to manage sockets.
+ * [SnapKit](http://snapkit.io/docs/): Used for some AutoLayout magic.
+ * [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON): Used for improved JSON parsing.
+ * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
 
 Check out [Issues](https://github.com/cuappdev/clicker-ios/issues) to see what we are working on!
 
