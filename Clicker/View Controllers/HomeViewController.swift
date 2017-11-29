@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Armchair
 
 class HomeViewController: UITableViewController, SessionDelegate {
     
@@ -86,6 +87,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
                 viewController.course = course
                 let navigationController = self.navigationController!
                 navigationController.pushViewController(viewController, animated: true)
+                Armchair.userDidSignificantEvent(true)
             }
         case 1:
             print("pastSession")

@@ -7,9 +7,10 @@
 //
 
 import UIKit
-import GoogleSignIn
-import Fabric
+import Armchair
 import Crashlytics
+import Fabric
+import GoogleSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -17,6 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        //Uncomment when App Store ID created.
+        //Armchair.appID("")
+        //Armchair.significantEventsUntilPrompt(20)
 
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
