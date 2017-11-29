@@ -1,4 +1,7 @@
 # Clicker iOS Client 
+[![GitHub release](https://img.shields.io/github/release/cuappdev/clicker-ios.svg)]()
+[![Platform](https://img.shields.io/badge/platform-ios-lightgrey.svg)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/cuappdev/clicker-ios.svg)]()
 [![Build Status](https://travis-ci.org/cuappdev/clicker-ios.svg?branch=master)](https://travis-ci.org/cuappdev/clicker-ios)
 
 Clicker is one of the latest apps by [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. Clicker seeks to extend the functionality of iClickers on a web and mobile platform.
