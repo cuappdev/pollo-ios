@@ -18,7 +18,7 @@ struct GetOrganization: ClickerQuark {
     var route: String {
         return "/v1/organizations/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> Organization {
@@ -46,7 +46,7 @@ struct CreateOrganization: ClickerQuark {
             "name": name
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Organization {
@@ -69,7 +69,7 @@ struct GetCoursesInOrganization: ClickerQuark {
     var route: String {
         return "/v1/organizations/\(id)/courses"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> [Course] {
@@ -103,7 +103,7 @@ struct CreateCourseInOrganization: ClickerQuark {
             "term": term
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Course {

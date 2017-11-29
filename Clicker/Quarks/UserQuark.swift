@@ -19,7 +19,7 @@ struct GetUser : ClickerQuark {
     var route: String {
         return "/v1/users/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> User {
@@ -50,24 +50,25 @@ struct GetUserCourses : ClickerQuark {
                 "role": r
             ]
         } else {
-            return [:]
+            return ["role": "student"] 
         }
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> [Course] {
         switch element {
-        case .edges(let edges):
-            let courses: [Course] = try edges.map {
-                guard let id = $0.node["id"].string, let name = $0.node["name"].string, let term = $0.node["name"].string else {
-                    throw NeutronError.badResponseData
+            case .nodes(let nodes):
+                let courses:[Course] = try nodes.map {
+                    guard let id = $0["id"].int, let name = $0["name"].string, let term = $0["term"].string else {
+                        print("failed to get user courses")
+                        throw NeutronError.badResponseData
+                    }
+                    return Course(id: "\(id)", name: name, term: term)
                 }
-                return Course(id: id, name: name, term: term)
-            }
-            return courses
-        default: throw NeutronError.badResponseData
+                return courses
+            default:
+                return [Course]()
         }
     }
-    
 }
