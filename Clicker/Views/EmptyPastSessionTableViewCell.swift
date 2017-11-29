@@ -10,6 +10,8 @@ import UIKit
 
 class EmptyPastSessionTableViewCell: UITableViewCell {
 
+    var cellLabel: UILabel!
+    
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,10 +26,21 @@ class EmptyPastSessionTableViewCell: UITableViewCell {
     override open func layoutSubviews() {
         super.layoutSubviews()
         
+        cellLabel = UILabel(frame: .zero)
+        cellLabel.clipsToBounds = false
+        cellLabel.textColor = .black
+        cellLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cellLabel.text = "No past sessions."
+        cellLabel.textAlignment = .center
+        contentView.addSubview(cellLabel)
+        
         setConstraints()
     }
     
     func setConstraints() {
-        
+        cellLabel.snp.makeConstraints { (make) -> Void in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
     }
 }

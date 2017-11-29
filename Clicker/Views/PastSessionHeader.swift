@@ -35,7 +35,7 @@ class PastSessionHeader: UITableViewHeaderFooterView {
     
     let bottomBorder: CALayer = {
         let border = CALayer()
-        border.frame = CGRect(x: 0.0, y: Constants.Headers.Height.pastSession, width: Constants.Screen.width, height: 0.5)
+        border.frame = CGRect(x: 0.0, y: 53.5, width: Constants.Screen.width, height: 0.5)
         border.backgroundColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1.0).cgColor
         return border
     }()
