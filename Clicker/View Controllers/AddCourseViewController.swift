@@ -14,10 +14,10 @@ class AddCourseViewController: UIViewController {
     
     var addCourseLabel: UILabel!
     var courseTextField: UITextField!
+    var errorLabel: UILabel!
     var addCourseButton: UIButton!
     
     var tapGestureRecognizer: UITapGestureRecognizer?
-    
     var panGestureRecognizer: UIPanGestureRecognizer?
     var originalPosition: CGPoint?
     var currentPositionTouched: CGPoint?
@@ -62,10 +62,24 @@ class AddCourseViewController: UIViewController {
             make.height.equalTo(60)
         }
         
+        errorLabel = UILabel()
+        errorLabel.text = "Invalid course code."
+        errorLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        errorLabel.textColor = .clickerRed
+        errorLabel.textAlignment = .center
+        errorLabel.isHidden = true
+        view.addSubview(errorLabel)
+        
+        errorLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(courseTextField.snp.bottom).offset(20)
+            make.width.equalTo(view.frame.width*0.8)
+        }
+        
         addCourseButton = UIButton()
-        addCourseButton.setTitle("Enroll", for: .normal)
+        addCourseButton.setTitle("ENROLL", for: .normal)
         addCourseButton.titleLabel?.textColor = .white
-        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         addCourseButton.backgroundColor = .clickerBlue
         addCourseButton.layer.cornerRadius = 5
         addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)
@@ -85,6 +99,7 @@ class AddCourseViewController: UIViewController {
                 .then { Void -> Void in 
                 }.catch { error in
                     print(error)
+                    self.errorLabel.isHidden = false
                 }
             courseTextField.text = ""
             self.navigationController?.dismiss(animated: true)
