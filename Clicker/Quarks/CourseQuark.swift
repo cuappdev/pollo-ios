@@ -124,7 +124,7 @@ struct CourseAddStudents : ClickerQuark {
     }
     var parameters: Parameters {
         return [
-            "students": "[1]"
+            "students": "[1]" // TEMP
         ]
     }
     

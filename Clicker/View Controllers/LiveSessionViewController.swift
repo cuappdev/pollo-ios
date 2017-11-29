@@ -39,12 +39,9 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     func updateContainerVC(question: Question){
         switch(question.type) {
             case "MULTIPLE_CHOICE":
-                print("got MC Question")
-                print(question)
                 let multipleChoiceViewController = MultipleChoiceViewController()
                 multipleChoiceViewController.question = question
                 multipleChoiceViewController.course = course
-                //multipleChoiceViewController.sessionID = self.session?.id
                 multipleChoiceViewController.session = self.session
                 containerViewController = multipleChoiceViewController
                 addChildViewController(containerViewController!)
@@ -96,28 +93,11 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         print("session disconnected")
     }
     
-    func beginLecture(_ lectureId: String) {
-        print("begin lecture")
-    }
-    
-    func endLecture() {
-        print("end lecture")
-        DeleteLecture(id: (liveLecture?.id)!).make()
-            .then{ lecture -> Void in
-                self.liveLecture = nil
-                self.navigationController?.popViewController(animated: true)
-            }
-            .catch{ error in
-                print(error.localizedDescription)
-        }
-    }
-    
     func beginQuestion(_ question: Question) {
         updateContainerVC(question: question)
     }
     
     func endQuestion(_ question: Question) {
-        print("LIVE SESSION DETECTED END QUESTION")
         pending()
     }
     
@@ -126,7 +106,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func sendResponse(_ answer: Answer) {
-        // socket.emit("send_response", answer)
+        print("send response")
     }
     
     func fetchLiveLecturePorts() {
@@ -138,7 +118,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
                 for p in ports {
                     if let i = Int(p) {
                         self.session = Session(id: i, delegate: self)
-                        print("got port \(p)")
                     } else {
                         return
                     }

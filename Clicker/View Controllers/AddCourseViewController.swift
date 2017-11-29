@@ -73,23 +73,9 @@ class AddCourseViewController: UIViewController {
     
     @objc func addCourse() {
         if let text = courseTextField.text {
-//            let defaults = UserDefaults.standard
-//            if defaults.value(forKey: "enrolledCourses") == nil {
-//                var enrolledCourses = [text]
-//                defaults.set(enrolledCourses, forKey: "enrolledCourses")
-//
-//            } else {
-//                var enrolledCourses = defaults.value(forKey: "enrolledCourses") as? [String]
-//                enrolledCourses?.append(text)
-//                defaults.set(enrolledCourses, forKey: "enrolledCourses")
-//            }
-            
-            // USE USER DEFAULTS???
-            
-            CourseAddStudents(id: text, studentIDs: ["1"]).make()
-                .then {
-                    print("added student")
-                } .catch { error in
+            CourseAddStudents(id: text, studentIDs: ["1"]).make() // TEMP: using "1" as id
+                .then { Void -> Void in 
+                }.catch { error in
                     print(error)
                 }
             courseTextField.text = ""
