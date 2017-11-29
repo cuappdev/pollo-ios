@@ -57,7 +57,7 @@ class AddCourseViewController: UIViewController {
         addCourseButton = UIButton()
         addCourseButton.setTitle("Enroll", for: .normal)
         addCourseButton.titleLabel?.textColor = .white
-        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         addCourseButton.backgroundColor = .clickerBlue
         addCourseButton.layer.cornerRadius = 5
         addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)

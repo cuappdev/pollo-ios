@@ -58,7 +58,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         }
         sendingResponse()
         let alert = UIAlertController(title: "Submitted", message: "Your response has been recorded.", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

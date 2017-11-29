@@ -25,7 +25,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
         
         // let session = Session(id: 4000, delegate: self)
         
-        let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(signout))
+        let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton
         
         let addCourseButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCourse))
@@ -161,12 +161,18 @@ class HomeViewController: UITableViewController, SessionDelegate {
         // socket.emit("send_response", answer)
     }
     
-    
     // MARK: - SIGN OUT
     @objc func signout() {
-        GIDSignIn.sharedInstance().signOut()
-        let login = LoginViewController()
-        present(login, animated: true, completion: nil)
+        
+        let alert = UIAlertController(title: "Sign out", message: "Are you sure you want to sign out?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Sign out", style: .default, handler: { (isCompleted) in
+            GIDSignIn.sharedInstance().signOut()
+            let login = LoginViewController()
+            self.present(login, animated: true, completion: nil)
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func addCourse() {
@@ -177,7 +183,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         fetchLiveLectures()
-        
     }
     
     func fetchLiveLectures() {
@@ -216,7 +221,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
                     }
                 }
                 self.tableView.reloadData()
-            
         }
     }
     // USE USER DEFAULTS TO STORE ENROLLED COURSES WHEN USER FIRST LOADS INTO APP???
