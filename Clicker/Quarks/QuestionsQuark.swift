@@ -18,16 +18,21 @@ struct GetQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> Question {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let data = node["data"].string else {
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            return Question(id, text, type, data)
+            let opt = options.map { json -> Option in
+                let id = json["id"].stringValue
+                let description = json["description"].stringValue
+                return Option(id, description)
+            }
+            return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
         }
     }
@@ -49,16 +54,22 @@ struct UpdateQuestion: ClickerQuark {
             "data": data
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Question {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string, let data = node["data"].string else {
+            guard let id = node["id"].string, let text = node["text"].string, let type = node["type"].string,
+            let options = node["options"].array, let answer = node["answer"].string else {
                 throw NeutronError.badResponseData
             }
-            return Question(id, text, type, data)
+            let opt = options.map { json -> Option in 
+                let id = json["id"].stringValue
+                let description = json["description"].stringValue
+                return Option(id, description)
+            }
+            return Question(id, text, type, options: opt, answer: answer)
         default: throw NeutronError.badResponseData
         }
     }
@@ -72,7 +83,7 @@ struct DeleteQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
@@ -88,17 +99,28 @@ struct GetAnswersToQuestion: ClickerQuark {
     var route: String {
         return "/v1/question/\(id)/answers"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> [Answer] {
         switch element {
         case .edges(let edges):
             let answers: [Answer] = try edges.map {
-                guard let id = $0.node["id"].string, let question = $0.node["question"].string, let answerer = $0.node["answerer"].string, let type = $0.node["type"].string, let data = $0.node["data"].string else {
+                guard let id = $0.node["id"].string, let question = $0.node["question"].string, let answerer = $0.node["answerer"].string, let type = $0.node["type"].string else {
                     throw NeutronError.badResponseData
                 }
-                return Answer(id, question, answerer, type, data)
+                let response = $0.node["response"]
+                switch type {
+                    case "MultipleResponse":
+                        let jsonArr = response.arrayValue
+                        let responseArr = jsonArr.map { json in
+                                json.stringValue
+                        }
+                        return Answer(id, question, answerer, type, responseArr)
+                    default:
+                        let res = response.stringValue
+                        return Answer(id, question, answerer, type, [res])
+                }
             }
             return answers
         default: throw NeutronError.badResponseData
@@ -120,16 +142,27 @@ struct AnswerQuestion: ClickerQuark {
             "answer": answer
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Answer {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let question = node["question"].string, let answerer = node["answerer"].string, let type = node["type"].string, let data = node["data"].string else {
+            guard let id = node["id"].string, let question = node["question"].string, let answerer = node["answerer"].string, let type = node["type"].string else {
                 throw NeutronError.badResponseData
             }
-            return Answer(id, question, answerer, type, data)
+            let response = node["response"]
+            switch type {
+            case "MultipleResponse":
+                let jsonArr = response.arrayValue
+                let responseArr = jsonArr.map { json in
+                    json.stringValue
+                }
+                return Answer(id, question, answerer, type, responseArr)
+            default:
+                let res = response.stringValue
+                return Answer(id, question, answerer, type, [res])
+            }
         default: throw NeutronError.badResponseData
         }
     }

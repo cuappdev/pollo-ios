@@ -21,18 +21,41 @@ extension ClickerQuark {
             throw ClickerError.backendError(messages: messages)
         }
         
-        if response["node"].exists() {
-            return try process(element: .node(response["node"]))
+        if response["data"]["node"].exists() {
+            return try process(element: .node(response["data"]["node"]))
         }
         
-        if let edges = response["edges"].array {
+        if let edges = response["data"]["edges"].array {
             let edgesTuples = edges.map {
-                ($0["cursor"].stringValue, $0["node"])
+                //($0["cursor"].stringValue, $0["node"])
+                ("", $0["node"])
             }
             return try process(element: .edges(edgesTuples))
         }
         
-        throw NeutronError.badResponseData
+        if let nodes = response["data"].array {
+            if nodes[0]["node"].exists() {
+                let nodesArr = nodes.map {
+                    $0["node"]
+                }
+                return try process(element: .nodes(nodesArr))
+            } else if nodes.count == 0 {
+                return try process(element: .nodes([JSON]()))
+            }
+        }
+        
+        if let ports = response["data"]["ports"].array {
+            let portsArr = try ports.map { json -> String in
+                if let i = json.int {
+                    return String(describing: i)
+                } else {
+                    throw ClickerError.backendError(messages: ["could not convert port to int"])
+                }
+            }
+            return try process(element: .ports(portsArr))
+        }
+        
+        return try process(element: .null) // For when no response is returned
     }
 }
 
@@ -43,6 +66,9 @@ enum ClickerError: Error {
 }
 
 enum Element {
+    case null
+    case ports([String])
     case node(JSON)
+    case nodes([JSON])
     case edges([Edge])
 }

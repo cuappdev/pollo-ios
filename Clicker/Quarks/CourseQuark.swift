@@ -19,16 +19,44 @@ struct GetCourse : ClickerQuark {
     var route: String {
         return "/v1/courses/\(id)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> Course {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string , let name = node["name"].string, let term = node["term"].string else {
+            guard let id = node["id"].int , let name = node["name"].string, let term = node["term"].string else {
                 throw NeutronError.badResponseData
             }
-            return Course(id: id, name: name, term: term)
+            return Course(id: "\(id)", name: name, term: term)
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
+
+struct GetCourseLectures : ClickerQuark {
+    
+    typealias ResponseType = [Lecture]
+    
+    let id: String
+    
+    var route: String {
+        return "/v1/courses/\(id)/lectures"
+    }
+    let host: String = "http://localhost:3000/api"
+    let method: HTTPMethod = .get
+    
+    
+    func process(element: Element) throws -> [Lecture] {
+        switch element {
+        case .edges(let edges):
+            let lectures: [Lecture] = try edges.map {
+                guard let id = $0.node["id"].int, let dateTime = $0.node["dateTime"].int else {
+                    throw NeutronError.badResponseData
+                }
+                return Lecture("\(id)", "\(dateTime)")
+            }
+            return lectures
         default: throw NeutronError.badResponseData
         }
     }
@@ -51,7 +79,7 @@ struct UpdateCourse : ClickerQuark {
             "term": term
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Course {
@@ -73,7 +101,7 @@ struct DeleteCourse: ClickerQuark {
     var route : String {
         return "/v1/courses/\(id)"
     }
-    let host : String = "http://localhost:3000"
+    let host : String = "http://localhost:3000/api"
     let method : HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
@@ -90,14 +118,17 @@ struct CourseAddStudents : ClickerQuark {
     let studentIDs: [String]
     
     var route: String {
+        print("THE ROUTE IS:::")
+        print("/v1/courses/\(id)/students")
         return "/v1/courses/\(id)/students"
     }
     var parameters: Parameters {
         return [
-            "students": studentIDs
+            "students": "[1]" // TEMP
         ]
     }
-    let host: String = "http://localhost:3000"
+    
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Void {
@@ -122,7 +153,7 @@ struct CourseRemoveStudents : ClickerQuark {
             "ids": studentIDs
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
@@ -147,7 +178,7 @@ struct CourseAddAdmins : ClickerQuark {
             "ids": adminIDs
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Void {
@@ -171,7 +202,7 @@ struct CourseRemoveAdmins : ClickerQuark {
             "ids": adminIDs
         ]
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .delete
     
     func process(element: Element) throws -> Void {
