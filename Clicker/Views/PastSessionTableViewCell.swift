@@ -14,6 +14,7 @@ class PastSessionTableViewCell: UITableViewCell {
     var sessionLabel = UILabel()
     var dateLabel = UILabel()
     var bottomBorder = CALayer()
+    var course: Course?
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -32,11 +33,12 @@ class PastSessionTableViewCell: UITableViewCell {
         sessionLabel = UILabel(frame: .zero)
         sessionLabel.clipsToBounds = false
         sessionLabel.textColor = .black
-        sessionLabel.text = "ASTRO 1101 - Lecture 7" //TEMP
+        if let name = course?.name, let term = course?.term {
+            sessionLabel.text = "\(name) - \(term)"
+        }
         sessionLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         sessionLabel.textAlignment = NSTextAlignment.left
         sessionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         
         dateLabel = UILabel(frame: .zero)
         dateLabel.clipsToBounds = false

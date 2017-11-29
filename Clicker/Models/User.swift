@@ -18,7 +18,6 @@ class User : NSObject {
     var courses: [Course] = [Course]()
     var lectures: [Lecture] = [Lecture]()
     
-    
     init(id: String, netID: String, name: String) {
         self.id = id
         self.netID = netID

@@ -13,6 +13,9 @@ class HomeViewController: UITableViewController, SessionDelegate {
     var lectures = [Lecture]()
     var courseIDToCourses = [String:Course]()
     var lectureIDToCourseID = [String:String]()
+    var pastSessions = [Course(id: "sldhflsg", name: "ASTRO 1101", term: "FALL 2017"),
+                        Course(id: "shdgouah", name: "CS 3110", term: "FALL 2017"),
+                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")]
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -53,6 +56,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
+            cell.course = pastSessions[indexPath.row]
             return cell
         default:
             return UITableViewCell()
@@ -116,9 +120,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
         switch(section){
         case 0:
             return lectures.count 
-            // return liveLecture == nil ? 0 : 1
         case 1:
-            return 3 //TEMP
+            return pastSessions.count
         default:
             return 0
         }
@@ -168,7 +171,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
     
     @objc func addCourse() {
         let addCourseVC = AddCourseViewController()
-        navigationController?.pushViewController(addCourseVC, animated: true)
+        addCourseVC.modalPresentationStyle = .overCurrentContext
+        navigationController?.present(addCourseVC, animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
