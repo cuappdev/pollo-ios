@@ -37,8 +37,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
         tableView.register(EmptyLiveSessionTableViewCell.self, forCellReuseIdentifier: "emptyLiveSessionCell")
+        tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
 
-        
         fetchLiveLectures()
     }
     
@@ -60,9 +60,14 @@ class HomeViewController: UITableViewController, SessionDelegate {
                 return cell
             }
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
-            cell.course = pastSessions[indexPath.row]
-            return cell
+            if pastSessions.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "emptyPastSessionCell") as! EmptyPastSessionTableViewCell
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
+                cell.course = pastSessions[indexPath.row]
+                return cell
+            }
         default:
             return UITableViewCell()
         }
@@ -115,9 +120,9 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch(section){
         case 0:
-            return Constants.Headers.Height.liveSession
+            return 44.5
         case 1:
-            return Constants.Headers.Height.pastSession
+            return 53.5
         default:
             return 0
         }
@@ -128,7 +133,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
         case 0:
             return lectures.count == 0 ? 1 : lectures.count
         case 1:
-            return pastSessions.count
+            return pastSessions.count == 0 ? 1 : pastSessions.count
         default:
             return 0
         }
