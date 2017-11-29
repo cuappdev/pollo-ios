@@ -23,8 +23,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
                 
         self.title = "CliquePod"
         
-        // let session = Session(id: 4000, delegate: self)
-        
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton
         
@@ -137,14 +135,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
         print("session disconnected")
     }
     
-    func beginLecture(_ lectureId: String) {
-        print("begin lecture")
-    }
-    
-    func endLecture() {
-        print("end lecture")
-    }
-    
     func beginQuestion(_ question: Question) {
         print("begin question")        
     }
@@ -158,7 +148,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
     }
     
     func sendResponse(_ answer: Answer) {
-        // socket.emit("send_response", answer)
+        print("send responses")
     }
     
     // MARK: - SIGN OUT
@@ -186,13 +176,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
     }
     
     func fetchLiveLectures() {
-//        lectures = [Lecture]()
-//        courseIDToCourses = [String:Course]()
-//        lectureIDToCourseID = [String:String]()
         GetUserCourses(id: "1", role: "student").make()
             .then { courses -> Void in
-                print("these are the courses")
-                print(courses)
                 for course in courses {
                     let courseID = course.id
                     if self.courseIDToCourses[courseID] == nil {
@@ -201,7 +186,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
                                 self.courseIDToCourses[courseID] = course
                                 self.tableView.reloadData()
                             }.catch { error -> Void in
-                                print("error in GETTING COURSES")
                                 print(error)
                                 return
                         }
@@ -216,12 +200,10 @@ class HomeViewController: UITableViewController, SessionDelegate {
                             }
                             self.tableView.reloadData()
                         }.catch { error in
-                            print("error in GETTING courses' LECTURES")
                             print(error)
                     }
                 }
                 self.tableView.reloadData()
         }
     }
-    // USE USER DEFAULTS TO STORE ENROLLED COURSES WHEN USER FIRST LOADS INTO APP???
 }

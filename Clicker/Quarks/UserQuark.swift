@@ -50,7 +50,7 @@ struct GetUserCourses : ClickerQuark {
                 "role": r
             ]
         } else {
-            return ["role": "student"]  //return [:] TEMP
+            return ["role": "student"] 
         }
     }
     let host: String = "http://localhost:3000/api"

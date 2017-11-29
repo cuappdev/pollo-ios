@@ -15,8 +15,6 @@ class User : NSObject {
     var id: String
     var netID: String
     var name: String
-    var courses: [Course] = [Course]()
-    var lectures: [Lecture] = [Lecture]()
     
     init(id: String, netID: String, name: String) {
         self.id = id
@@ -24,19 +22,4 @@ class User : NSObject {
         self.name = name
     }
     
-    func addCourse(_ course: Course) {
-        courses.append(course)
-    }
-    
-    func removeCourse(_ course: Course) {
-        for i in 0...(courses.count - 1) {
-            if courses[i].id == course.id {
-                courses.remove(at: i)
-            }
-        }
-    }
-    
-    func addLecture(_ lecture: Lecture) {
-        lectures.append(lecture)
-    }
 }
