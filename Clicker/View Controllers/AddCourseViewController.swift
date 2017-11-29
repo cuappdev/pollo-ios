@@ -16,11 +16,19 @@ class AddCourseViewController: UIViewController {
     var courseTextField: UITextField!
     var addCourseButton: UIButton!
     
+    var tapGestureRecognizer: UITapGestureRecognizer?
+    
+    var panGestureRecognizer: UIPanGestureRecognizer?
+    var originalPosition: CGPoint?
+    var currentPositionTouched: CGPoint?
     var touchLocation: CGPoint?
-
+    
     override func viewDidLoad() {
         view.backgroundColor = .white
         setupSubviews()
+        
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGestureRecognizer!)
         
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
         view.addGestureRecognizer(panGestureRecognizer!)
@@ -83,11 +91,13 @@ class AddCourseViewController: UIViewController {
         }
     }
     
-    // MARK: - PANNING temp implementation, should generalize so other vc's can easily implement
+    // MARK: - KEYBOARD
     
-    var panGestureRecognizer: UIPanGestureRecognizer?
-    var originalPosition: CGPoint?
-    var currentPositionTouched: CGPoint?
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    // MARK: - PANNING temp implementation, should generalize so other vc's can easily implement
     
     @objc func panGestureAction(_ panGesture: UIPanGestureRecognizer) {
         let translation = panGesture.translation(in: view)
