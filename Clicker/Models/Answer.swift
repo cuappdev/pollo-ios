@@ -32,5 +32,4 @@ class Answer {
         self.type = type
         self.singleResponse = singleResponse
     }
-    
 }

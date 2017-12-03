@@ -38,6 +38,7 @@ class EmptyLiveSessionTableViewCell: UITableViewCell {
         setConstraints()
     }
     
+    // MARK: - CONSTRAINTS
     func setConstraints() {
         cellLabel.snp.makeConstraints { (make) -> Void in
             make.centerX.equalToSuperview()

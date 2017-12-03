@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class EmptyPastSessionTableViewCell: UITableViewCell {
 
@@ -37,6 +38,7 @@ class EmptyPastSessionTableViewCell: UITableViewCell {
         setConstraints()
     }
     
+    // MARK: - CONSTRAINTS
     func setConstraints() {
         cellLabel.snp.makeConstraints { (make) -> Void in
             make.centerX.equalToSuperview()

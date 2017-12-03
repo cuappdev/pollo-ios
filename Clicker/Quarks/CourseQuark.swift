@@ -6,9 +6,9 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
+import Alamofire
 import Neutron
 import SwiftyJSON
-import Alamofire
 
 struct GetCourse : ClickerQuark {
     
@@ -62,7 +62,6 @@ struct GetCourseLectures : ClickerQuark {
     }
 }
 
-
 struct UpdateCourse : ClickerQuark {
     typealias ResponseType = Course
     
@@ -108,7 +107,6 @@ struct DeleteCourse: ClickerQuark {
         return
     }
 }
-    
 
 struct CourseAddStudents : ClickerQuark {
     
@@ -137,7 +135,6 @@ struct CourseAddStudents : ClickerQuark {
     
 }
 
-
 struct CourseRemoveStudents : ClickerQuark {
     
     typealias ResponseType = Void
@@ -161,8 +158,6 @@ struct CourseRemoveStudents : ClickerQuark {
     }
 }
 
-
-
 struct CourseAddAdmins : ClickerQuark {
     
     typealias ResponseType = Void
@@ -185,7 +180,6 @@ struct CourseAddAdmins : ClickerQuark {
         return
     }
 }
-
 
 struct CourseRemoveAdmins : ClickerQuark {
     

@@ -17,5 +17,4 @@ class Organization {
         self.id = id
         self.name = name 
     }
-    
 }

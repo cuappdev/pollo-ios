@@ -19,7 +19,6 @@ extension UIColor {
     @nonobjc static let clickerBorder = UIColor.colorFromCode(0xE1E1E1)
     @nonobjc static let clickerRed = UIColor.colorFromCode(0xFF8B8B)
 
-
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
         let green = CGFloat(((code & 0xFF00) >> 8)) / 255
@@ -28,4 +27,3 @@ extension UIColor {
         return UIColor(red: red, green: green, blue: blue, alpha: 1)
     }
 }
-

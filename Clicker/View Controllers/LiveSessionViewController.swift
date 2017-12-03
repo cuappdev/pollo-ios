@@ -19,13 +19,13 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     var beginQuestionBarButtonItem: UIBarButtonItem!
     
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Live Session"
         self.view.backgroundColor = .white
         
         fetchLiveLecturePorts()
-        
         
         containerView = UIView()
         containerView?.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     // MARK: - CONTAINER VIEW
-    
     func updateContainerVC(question: Question){
         switch(question.type) {
             case "MULTIPLE_CHOICE":
@@ -84,7 +83,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     // MARK: - SESSIONS
-    
     func sessionConnected() {
         print("session connected")
     }

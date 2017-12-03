@@ -59,6 +59,7 @@ class PastSessionTableViewCell: UITableViewCell {
         setConstraints()
     }
     
+    // MARK: - CONSTRAINTS
     func setConstraints() {
         sessionLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview().offset(18)

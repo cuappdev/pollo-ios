@@ -6,9 +6,9 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
+import Alamofire
 import Neutron
 import SwiftyJSON
-import Alamofire
 
 protocol ClickerQuark: JSONQuark {
     func process(element: Element) throws -> ResponseType

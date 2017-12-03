@@ -21,5 +21,4 @@ class User : NSObject {
         self.netID = netID
         self.name = name
     }
-    
 }

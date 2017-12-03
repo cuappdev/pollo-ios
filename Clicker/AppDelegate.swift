@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let login = LoginViewController()
             window?.rootViewController?.present(login, animated: false, completion: nil)
         }
-       
+        
         Fabric.with([Crashlytics.self])
         return true
     }

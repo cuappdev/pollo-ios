@@ -15,6 +15,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     var clickerLogo: UIImageView!
     var signInButton: GIDSignInButton!
     
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -24,15 +25,20 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         clickerLogo = UIImageView(image: #imageLiteral(resourceName: "clickerLogoBlue"))
         view.addSubview(clickerLogo)
         
+        signInButton = GIDSignInButton()
+        signInButton.colorScheme = .light
+        view.addSubview(signInButton)
+        
+        setConstraints()
+    }
+    
+    // MARK: - CONSTRAINTS
+    func setConstraints() {
         clickerLogo.snp.makeConstraints { (make) in
             make.center.equalTo(view.snp.center)
             make.width.equalTo(50)
             make.height.equalTo(50)
         }
-        
-        signInButton = GIDSignInButton()
-        signInButton.colorScheme = .light
-        view.addSubview(signInButton)
         
         signInButton.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview().offset(-60)

@@ -19,7 +19,6 @@ class LiveSessionTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         self.accessoryType = .disclosureIndicator
-        setupSubviews()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,7 +26,7 @@ class LiveSessionTableViewCell: UITableViewCell {
     }
     
     // MARK: - LAYOUT
-    func setupSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         sessionLabel = UILabel(frame: .zero)
@@ -44,6 +43,8 @@ class LiveSessionTableViewCell: UITableViewCell {
         
         setConstraints()
     }
+    
+    // MARK: - CONSTRAINTS
     func setConstraints() {
         sessionLabel.snp.makeConstraints { (make) -> Void in
             make.centerY.equalToSuperview()
