@@ -84,7 +84,7 @@ class AddCourseViewController: UIViewController {
         addCourseButton.layer.cornerRadius = 5
         addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)
         view.addSubview(addCourseButton)
-
+        
         addCourseButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalTo(view.frame.width*0.8)
@@ -96,11 +96,14 @@ class AddCourseViewController: UIViewController {
     @objc func addCourse() {
         if let text = courseTextField.text {
             CourseAddStudents(id: text, studentIDs: ["1"]).make() // TEMP: using "1" as id
-                .then { Void -> Void in 
+                .then { Void -> Void in
+                    if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                        UserDefaults.standard.set(significantEvents + 4, forKey:"significantEvents")
+                    }
                 }.catch { error in
                     print(error)
                     self.errorLabel.isHidden = false
-                }
+            }
             courseTextField.text = ""
             self.navigationController?.dismiss(animated: true)
         }
