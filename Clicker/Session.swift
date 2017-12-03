@@ -44,7 +44,6 @@ class Session {
                 }.catch { error in
                     print(error)
             }
-            
         }
         
         socket.on("student/question/end") { data, ack in
@@ -62,4 +61,3 @@ class Session {
         socket.connect()
     }
 }
-

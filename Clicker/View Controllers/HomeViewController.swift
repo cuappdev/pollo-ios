@@ -15,12 +15,12 @@ class HomeViewController: UITableViewController, SessionDelegate {
     var lectureIDToCourseID = [String:String]()
     var pastSessions = [Course(id: "sldhflsg", name: "ASTRO 1101", term: "FALL 2017"),
                         Course(id: "shdgouah", name: "CS 3110", term: "FALL 2017"),
-                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")]
+                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")] //TEMP
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         self.title = "Clique"
         
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(signout))
@@ -38,7 +38,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
         tableView.register(EmptyLiveSessionTableViewCell.self, forCellReuseIdentifier: "emptyLiveSessionCell")
         tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
-
+        
         fetchLiveLectures()
         
         let appDelegate = AppDelegate()
@@ -152,7 +152,6 @@ class HomeViewController: UITableViewController, SessionDelegate {
     }
     
     // MARK: - SESSIONS
-    
     func sessionConnected() {
         print("session connected")
     }

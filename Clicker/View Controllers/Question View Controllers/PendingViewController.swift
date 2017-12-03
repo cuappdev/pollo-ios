@@ -12,6 +12,7 @@ class PendingViewController: UIViewController {
 
     var pendingLabel: UILabel!
     
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
@@ -27,7 +28,4 @@ class PendingViewController: UIViewController {
             make.height.equalTo(50)
         }
     }
-    
-
-
 }

@@ -6,9 +6,9 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
+import Alamofire
 import Neutron
 import SwiftyJSON
-import Alamofire
 
 struct GetLecture: ClickerQuark {
     typealias ResponseType = Lecture
@@ -129,6 +129,3 @@ struct GetLecturePorts : ClickerQuark {
         }
     }
 }
-
-
-
