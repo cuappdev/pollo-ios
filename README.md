@@ -130,7 +130,6 @@ SessionDelegate: Protocol specifying session functionality (sessionConnected & s
 ### External Services
 
  * [AlamoFire](https://github.com/Alamofire/Alamofire): Used for HTTP networking.
- * [Armchair](https://github.com/UrbanApps/Armchair): Used for App Store Review Management.
  * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users. 
  * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users. 
  * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
