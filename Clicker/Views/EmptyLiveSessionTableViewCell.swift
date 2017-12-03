@@ -31,7 +31,7 @@ class EmptyLiveSessionTableViewCell: UITableViewCell {
         cellLabel.clipsToBounds = false
         cellLabel.textColor = .black
         cellLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cellLabel.text = "No live sessions."
+        cellLabel.text = "No live sessions 😭"
         cellLabel.textAlignment = .center
         contentView.addSubview(cellLabel)
         
