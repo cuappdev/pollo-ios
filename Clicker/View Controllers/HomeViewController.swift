@@ -40,6 +40,14 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
 
         fetchLiveLectures()
+        
+        let appDelegate = AppDelegate()
+        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+            if significantEvents > 12 {
+                appDelegate.requestReview()
+                UserDefaults.standard.set(0, forKey:"significantEvents")
+            }
+        }
     }
     
     // MARK: - CELLS
@@ -86,6 +94,10 @@ class HomeViewController: UITableViewController, SessionDelegate {
                 viewController.course = course
                 let navigationController = self.navigationController!
                 navigationController.pushViewController(viewController, animated: true)
+                
+                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
+                }
             }
         case 1:
             print("pastSession")
