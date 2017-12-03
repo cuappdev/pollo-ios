@@ -5,7 +5,6 @@ target 'Clicker' do
 
   # Pods for Clicker
   pod 'Alamofire'
-  pod 'Armchair'
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'Google/SignIn'
