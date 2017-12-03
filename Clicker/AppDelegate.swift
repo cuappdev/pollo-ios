@@ -10,6 +10,7 @@ import UIKit
 import Crashlytics
 import Fabric
 import GoogleSignIn
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -39,6 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
        
         Fabric.with([Crashlytics.self])
         return true
+    }
+    
+    func requestReview() {
+        if #available(iOS 10.3, *) {
+            SKStoreReviewController.requestReview()
+        } else {
+            
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
