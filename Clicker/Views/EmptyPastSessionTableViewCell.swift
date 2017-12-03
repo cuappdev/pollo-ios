@@ -30,7 +30,7 @@ class EmptyPastSessionTableViewCell: UITableViewCell {
         cellLabel.clipsToBounds = false
         cellLabel.textColor = .black
         cellLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cellLabel.text = "No past sessions."
+        cellLabel.text = "No past sessions 😢"
         cellLabel.textAlignment = .center
         contentView.addSubview(cellLabel)
         
