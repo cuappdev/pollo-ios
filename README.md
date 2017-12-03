@@ -33,8 +33,6 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id       | String    | Unique identifier.                                     |
 | netID    | String    | Unique, university-generated identifier for each user. |
 | name     | String    | User name (full name).                                 |
-| courses  | [[Course](#course)]  | Courses that a user is either a student/professor in.  |
-| lectures | [[Lecture](#lecture)] | Lectures that a user has participated in.              |
 
 #### Course 
 
@@ -43,8 +41,6 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id         | String | Unique identifier.                      |
 | name       | String | Course name.                            |
 | term       | String | Course term.                            |
-| professors | [[User](#user)] | Professors who teach the course.        |
-| students   | [[User](#user)] | Students who participate in the course. |
 
 #### Lecture 
 
@@ -95,6 +91,8 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 
  * LiveSessionTableViewCell: Used in the HomeViewController to display active lectures.
  * PastSessionTableViewCell: Used in the HomeViewController to display past lectures.
+ * EmptyLiveSessionTableViewCell: Used in the HomeViewController as empty state for live sessions.
+ * EmptyPastSessionTableViewCell: Used in the HomeViewController as empty state for past sessions.
 
 #### Headers
 

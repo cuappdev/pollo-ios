@@ -18,5 +18,4 @@ class Lecture {
         self.id = id
         self.dateTime = dateTime
     }
-    
 }

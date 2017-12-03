@@ -15,8 +15,8 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         
         let homeViewController = HomeViewController()
-        homeViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
-        
+        homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "clickerLogoTabBarItem"), tag: 0)
+                    
         let viewControllerList = [ homeViewController ]
         viewControllers = viewControllerList
         viewControllers = viewControllerList.map { UINavigationController(rootViewController: $0) }

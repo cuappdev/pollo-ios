@@ -14,11 +14,4 @@ struct Constants {
         static let width: CGFloat = (UIApplication.shared.keyWindow?.frame.width)!
         static let height: CGFloat = (UIApplication.shared.keyWindow?.frame.height)!
     }
-    
-    struct Headers {
-        struct Height {
-            static let liveSession: CGFloat = 44.5
-            static let pastSession: CGFloat = 53.5
-        }
-    }
 }

@@ -8,17 +8,15 @@
 
 import UIKit
 
-
 class Course {
     
     var id: String
-    var name: String // i.e. "CS 2110"
+    var name: String
     var term: String
-
+    
     init(id: String, name: String, term: String) {
         self.id = id
         self.name = name
         self.term = term
     }
-    
 }

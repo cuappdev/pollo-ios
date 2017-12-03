@@ -15,13 +15,13 @@ class HomeViewController: UITableViewController, SessionDelegate {
     var lectureIDToCourseID = [String:String]()
     var pastSessions = [Course(id: "sldhflsg", name: "ASTRO 1101", term: "FALL 2017"),
                         Course(id: "shdgouah", name: "CS 3110", term: "FALL 2017"),
-                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")]
+                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")] //TEMP
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        self.title = "CliquePod"
+        
+        self.title = "Clique"
         
         let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(signout))
         navigationItem.leftBarButtonItem = signoutBarButton
@@ -36,26 +36,46 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionHeader.self, forHeaderFooterViewReuseIdentifier: "pastSessionHeader")
         tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
+        tableView.register(EmptyLiveSessionTableViewCell.self, forCellReuseIdentifier: "emptyLiveSessionCell")
+        tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
         
         fetchLiveLectures()
+        
+        let appDelegate = AppDelegate()
+        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+            if significantEvents > 12 {
+                appDelegate.requestReview()
+                UserDefaults.standard.set(0, forKey:"significantEvents")
+            }
+        }
     }
     
     // MARK: - CELLS
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch(indexPath.section) {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
-            let lecture = lectures[indexPath.row]
-            let courseID = lectureIDToCourseID[lecture.id]
-            let course = courseIDToCourses[courseID!]
-            if let name = course?.name {
-                cell.sessionLabel.text = "\(name) - Lecture \(lecture.id)"
+            if lectures.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "emptyLiveSessionCell") as! EmptyLiveSessionTableViewCell
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
+                let lecture = lectures[indexPath.row]
+                let courseID = lectureIDToCourseID[lecture.id]
+                let course = courseIDToCourses[courseID!]
+                if let name = course?.name {
+                    cell.sessionLabel.text = "\(name) - Lecture \(lecture.id)"
+                }
+                return cell
             }
-            return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
-            cell.course = pastSessions[indexPath.row]
-            return cell
+            if pastSessions.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "emptyPastSessionCell") as! EmptyPastSessionTableViewCell
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
+                cell.course = pastSessions[indexPath.row]
+                return cell
+            }
         default:
             return UITableViewCell()
         }
@@ -64,15 +84,21 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch(indexPath.section) {
         case 0:
-            print("liveSession")
-            let viewController = LiveSessionViewController()
-            let lecture = lectures[indexPath.row]
-            let courseID = lectureIDToCourseID[lecture.id]
-            let course = courseIDToCourses[courseID!]
-            viewController.liveLecture = lecture
-            viewController.course = course 
-            let navigationController = self.navigationController!
-            navigationController.pushViewController(viewController, animated: true)
+            if lectures.count != 0 {
+                print("liveSession")
+                let viewController = LiveSessionViewController()
+                let lecture = lectures[indexPath.row]
+                let courseID = lectureIDToCourseID[lecture.id]
+                let course = courseIDToCourses[courseID!]
+                viewController.liveLecture = lecture
+                viewController.course = course
+                let navigationController = self.navigationController!
+                navigationController.pushViewController(viewController, animated: true)
+                
+                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
+                }
+            }
         case 1:
             print("pastSession")
         default:
@@ -106,9 +132,9 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch(section){
         case 0:
-            return Constants.Headers.Height.liveSession
+            return 44.5
         case 1:
-            return Constants.Headers.Height.pastSession
+            return 53.5
         default:
             return 0
         }
@@ -117,16 +143,15 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section){
         case 0:
-            return lectures.count 
+            return lectures.count == 0 ? 1 : lectures.count
         case 1:
-            return pastSessions.count
+            return pastSessions.count == 0 ? 1 : pastSessions.count
         default:
             return 0
         }
     }
     
     // MARK: - SESSIONS
-    
     func sessionConnected() {
         print("session connected")
     }
