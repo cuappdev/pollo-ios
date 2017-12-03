@@ -14,13 +14,22 @@ class AddCourseViewController: UIViewController {
     
     var addCourseLabel: UILabel!
     var courseTextField: UITextField!
+    var errorLabel: UILabel!
     var addCourseButton: UIButton!
     
+    var tapGestureRecognizer: UITapGestureRecognizer?
+    var panGestureRecognizer: UIPanGestureRecognizer?
+    var originalPosition: CGPoint?
+    var currentPositionTouched: CGPoint?
     var touchLocation: CGPoint?
-
+    
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         view.backgroundColor = .white
         setupSubviews()
+        
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGestureRecognizer!)
         
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
         view.addGestureRecognizer(panGestureRecognizer!)
@@ -34,18 +43,41 @@ class AddCourseViewController: UIViewController {
         addCourseLabel.textAlignment = .left
         view.addSubview(addCourseLabel)
         
+        courseTextField = UITextField()
+        courseTextField.backgroundColor = UIColor(red: 236/255, green: 236/255, blue: 236/255, alpha: 1.0)
+        courseTextField.layer.sublayerTransform = CATransform3DMakeTranslation(12, 0, 0)
+        courseTextField.textAlignment = .center
+        view.addSubview(courseTextField)
+        
+        errorLabel = UILabel()
+        errorLabel.text = "Invalid course code."
+        errorLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        errorLabel.textColor = .clickerRed
+        errorLabel.textAlignment = .center
+        errorLabel.isHidden = true
+        view.addSubview(errorLabel)
+        
+        addCourseButton = UIButton()
+        addCourseButton.setTitle("Enroll", for: .normal)
+        addCourseButton.titleLabel?.textColor = .white
+        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        addCourseButton.backgroundColor = .clickerBlue
+        addCourseButton.layer.cornerRadius = 5
+        addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)
+        view.addSubview(addCourseButton)
+
+        setConstraints()
+    }
+    
+    // MARK: - CONSTRAINTS
+    func setConstraints() {
+        
         addCourseLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(100)
             make.width.equalTo(view.frame.width*0.8)
             make.height.equalTo(50)
         }
-        
-        courseTextField = UITextField()
-        courseTextField.backgroundColor = UIColor(red: 236/255, green: 236/255, blue: 236/255, alpha: 1.0)
-        courseTextField.layer.sublayerTransform = CATransform3DMakeTranslation(12, 0, 0)
-        courseTextField.textAlignment = .center
-        view.addSubview(courseTextField)
         
         courseTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -54,15 +86,12 @@ class AddCourseViewController: UIViewController {
             make.height.equalTo(60)
         }
         
-        addCourseButton = UIButton()
-        addCourseButton.setTitle("Enroll", for: .normal)
-        addCourseButton.titleLabel?.textColor = .white
-        addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        addCourseButton.backgroundColor = .clickerBlue
-        addCourseButton.layer.cornerRadius = 5
-        addCourseButton.addTarget(self, action: #selector(addCourse), for: .touchUpInside)
-        view.addSubview(addCourseButton)
-
+        errorLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(courseTextField.snp.bottom).offset(20)
+            make.width.equalTo(view.frame.width*0.8)
+        }
+        
         addCourseButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalTo(view.frame.width*0.8)
@@ -70,25 +99,30 @@ class AddCourseViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-100)
         }
     }
-    
+
+    // MARK: - ADD COURSE
     @objc func addCourse() {
         if let text = courseTextField.text {
             CourseAddStudents(id: text, studentIDs: ["1"]).make() // TEMP: using "1" as id
-                .then { Void -> Void in 
+                .then { Void -> Void in
+                    if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                        UserDefaults.standard.set(significantEvents + 4, forKey:"significantEvents")
+                    }
                 }.catch { error in
                     print(error)
-                }
+                    self.errorLabel.isHidden = false
+            }
             courseTextField.text = ""
             self.navigationController?.dismiss(animated: true)
         }
     }
     
+    // MARK: - KEYBOARD
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     // MARK: - PANNING temp implementation, should generalize so other vc's can easily implement
-    
-    var panGestureRecognizer: UIPanGestureRecognizer?
-    var originalPosition: CGPoint?
-    var currentPositionTouched: CGPoint?
-    
     @objc func panGestureAction(_ panGesture: UIPanGestureRecognizer) {
         let translation = panGesture.translation(in: view)
         
