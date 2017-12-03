@@ -58,7 +58,7 @@ class AddCourseViewController: UIViewController {
         view.addSubview(errorLabel)
         
         addCourseButton = UIButton()
-        addCourseButton.setTitle("ENROLL", for: .normal)
+        addCourseButton.setTitle("Enroll", for: .normal)
         addCourseButton.titleLabel?.textColor = .white
         addCourseButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         addCourseButton.backgroundColor = .clickerBlue
