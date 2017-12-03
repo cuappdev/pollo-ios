@@ -30,8 +30,6 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id       | String    | Unique identifier.                                     |
 | netID    | String    | Unique, university-generated identifier for each user. |
 | name     | String    | User name (full name).                                 |
-| courses  | [[Course](#course)]  | Courses that a user is either a student/professor in.  |
-| lectures | [[Lecture](#lecture)] | Lectures that a user has participated in.              |
 
 #### Course 
 
@@ -40,8 +38,6 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | id         | String | Unique identifier.                      |
 | name       | String | Course name.                            |
 | term       | String | Course term.                            |
-| professors | [[User](#user)] | Professors who teach the course.        |
-| students   | [[User](#user)] | Students who participate in the course. |
 
 #### Lecture 
 
@@ -92,6 +88,8 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 
  * LiveSessionTableViewCell: Used in the HomeViewController to display active lectures.
  * PastSessionTableViewCell: Used in the HomeViewController to display past lectures.
+ * EmptyLiveSessionTableViewCell: Used in the HomeViewController as empty state for live sessions.
+ * EmptyPastSessionTableViewCell: Used in the HomeViewController as empty state for past sessions.
 
 #### Headers
 
@@ -132,6 +130,7 @@ SessionDelegate: Protocol specifying session functionality (sessionConnected & s
 ### External Services
 
  * [AlamoFire](https://github.com/Alamofire/Alamofire): Used for HTTP networking.
+ * [Armchair](https://github.com/UrbanApps/Armchair): Used for App Store Review Management.
  * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users. 
  * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users. 
  * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
