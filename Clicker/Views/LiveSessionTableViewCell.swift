@@ -11,14 +11,22 @@ import SnapKit
 
 class LiveSessionTableViewCell: UITableViewCell {
     
+
     var sessionLabel: UILabel!
     var wifiImageView: UIImageView!
+    
+    var sessionText: String! {
+        didSet {
+            sessionLabel.text = sessionText
+        }
+    }
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         self.accessoryType = .disclosureIndicator
+        layoutSubviews()
     }
     
     required init?(coder aDecoder: NSCoder) {
