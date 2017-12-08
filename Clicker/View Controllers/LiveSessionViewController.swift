@@ -11,8 +11,8 @@ import SnapKit
 
 class LiveSessionViewController: UIViewController, SessionDelegate {
     
-    var course: Course?
-    var liveLecture: Lecture?
+    var courseName: String!
+    var liveLectureId: Int!
     var containerView: UIView?
     var containerViewController: UIViewController?
     var session: Session?
@@ -40,7 +40,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             case "MULTIPLE_CHOICE":
                 let multipleChoiceViewController = MultipleChoiceViewController()
                 multipleChoiceViewController.question = question
-                multipleChoiceViewController.course = course
+                multipleChoiceViewController.courseName = courseName
                 multipleChoiceViewController.session = self.session
                 containerViewController = multipleChoiceViewController
                 addChildViewController(containerViewController!)
@@ -92,6 +92,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func beginQuestion(_ question: Question) {
+        print("got question in live session")
         updateContainerVC(question: question)
     }
     
@@ -108,10 +109,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func fetchLiveLecturePorts() {
-        guard let lid = liveLecture?.id else {
-            return
-        }
-        GetLecturePorts(id: lid).make()
+        GetLecturePorts(id: liveLectureId).make()
             .then { ports -> Void in
                 for p in ports {
                     if let i = Int(p) {

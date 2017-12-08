@@ -112,7 +112,7 @@ struct GetLecturePorts : ClickerQuark {
     
     typealias ResponseType = [String]
     
-    let id: String
+    let id: Int
     
     var route: String {
         return "/v1/lectures/\(id)/ports"
@@ -129,3 +129,33 @@ struct GetLecturePorts : ClickerQuark {
         }
     }
 }
+
+struct GetLiveLectures: ClickerQuark {
+    
+    typealias ResponseType = [[String:Any]]
+    
+    let studentId: Int
+    
+    var route: String {
+        return "/v1/users/\(studentId)/lectures"
+    }
+    
+    let host: String = "http://localhost:3000/api"
+    let method: HTTPMethod = .get
+    
+    func process(element: Element) throws -> [[String:Any]] {
+        switch element {
+        case .nodes(let nodes):
+            let n = nodes.map {
+                $0.dictionaryObject!
+            }
+            return n
+        default:
+            return [[String:Any]]()
+        }
+    }
+}
+
+
+
+

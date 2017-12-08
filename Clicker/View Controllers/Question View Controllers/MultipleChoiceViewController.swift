@@ -13,7 +13,7 @@ import SocketIO
 class MultipleChoiceViewController: UIViewController, SessionDelegate {
     
     var question: Question!
-    var course: Course?
+    var courseName: String?
     var courseLabel: UILabel!
     var timeLabel: UILabel!
     var questionLabel: UILabel!
@@ -37,7 +37,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
     // MARK: - VIEWS
     func setupSubviews() {
         courseLabel = UILabel()
-        courseLabel.text = course?.name
+        courseLabel.text = courseName
         courseLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         courseLabel.textAlignment = .left
         view.addSubview(courseLabel)
@@ -54,7 +54,7 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
             questionLabel.text = questionText
         }
         questionLabel.font = UIFont.systemFont(ofSize: 21, weight: .medium)
-        questionLabel.numberOfLines = 2
+        questionLabel.numberOfLines = 0
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         view.addSubview(questionLabel)
@@ -85,8 +85,8 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         submitButton = UIButton(frame: .zero)
         submitButton.layer.cornerRadius = 8
         submitButton.setTitle("Submit", for: .normal)
-        submitButton.backgroundColor = .clickerLightGray
-        submitButton.setTitleColor(.clickerDarkGray, for: .normal)
+        submitButton.backgroundColor = .clickerBlue
+        submitButton.setTitleColor(.white, for: .normal)
         submitButton.addTarget(self, action: #selector(submitResponse), for: .touchUpInside)
         view.addSubview(submitButton)
         
@@ -113,7 +113,8 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
         questionLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(18)
             make.top.equalTo(courseLabel.snp.bottom).offset(18)
-            make.width.equalTo(view.frame.width).multipliedBy(0.8)
+            make.right.equalToSuperview().offset(-18)
+            //make.width.equalTo(view.frame.width).multipliedBy(0.8)
             make.height.equalTo(70)
         }
         
@@ -174,7 +175,6 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
             response = ""
         }
         guard let qid = Int(question.id) else {
-            print("could not convert question id to int")
             return
         }
         let data: [String:Any] = [
@@ -215,7 +215,6 @@ class MultipleChoiceViewController: UIViewController, SessionDelegate {
     }
     
     func endQuestion(_ question: Question) {
-        print("DETECTED QUESTION END IN MC CONTROLLER")
         sendingResponse()
         self.removeFromParentViewController()
     }

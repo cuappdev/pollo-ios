@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SwiftyJSON
 import SnapKit
 
 class AddCourseViewController: UIViewController {
@@ -102,17 +103,29 @@ class AddCourseViewController: UIViewController {
 
     // MARK: - ADD COURSE
     @objc func addCourse() {
-        if let text = courseTextField.text {
-            CourseAddStudents(id: text, studentIDs: ["1"]).make() // TEMP: using "1" as id
-                .then { Void -> Void in
-                    if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                        UserDefaults.standard.set(significantEvents + 4, forKey:"significantEvents")
-                    }
-                }.catch { error in
-                    print(error)
-                    self.errorLabel.isHidden = false
+        guard let courseCode = courseTextField.text else {
+            return
+        }
+        // TODO: Figure out how to use JSONEncoding.default with Quarks
+        let parameters: Parameters = [
+            "courseCode": courseCode,
+            "students": ["1"] // TEMP
+        ]
+        Alamofire.request("http://localhost:3000/api/v1/course/register/", method: .post, parameters: parameters, encoding: JSONEncoding.default).response { response in
+            guard let data = response.data, let responseString = String(data: data, encoding: .utf8) else {
+                print("response cant be parsed into JSON")
+                return
             }
-            courseTextField.text = ""
+            let res = JSON(parseJSON: responseString)
+            if let errors = res["data"]["errors"].array {
+                self.errorLabel.isHidden = false
+            } else {
+                self.errorLabel.isHidden = true
+            }
+            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                UserDefaults.standard.set(significantEvents + 4, forKey:"significantEvents")
+            }
+            self.courseTextField.text = ""
             self.navigationController?.dismiss(animated: true)
         }
     }
