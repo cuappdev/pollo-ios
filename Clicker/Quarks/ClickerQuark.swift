@@ -16,7 +16,7 @@ protocol ClickerQuark: JSONQuark {
 
 extension ClickerQuark {
     public func process(response: JSON) throws -> ResponseType {
-        if let errors = response["errors"].array {
+        if let errors = response["data"]["errors"].array {
             let messages = errors.flatMap { $0["message"].string }
             throw ClickerError.backendError(messages: messages)
         }
@@ -34,13 +34,13 @@ extension ClickerQuark {
         }
         
         if let nodes = response["data"].array {
-            if nodes[0]["node"].exists() {
+            if nodes.count == 0 {
+                return try process(element: .nodes([JSON]()))
+            } else if nodes[0]["node"].exists() {
                 let nodesArr = nodes.map {
                     $0["node"]
                 }
                 return try process(element: .nodes(nodesArr))
-            } else if nodes.count == 0 {
-                return try process(element: .nodes([JSON]()))
             }
         }
         

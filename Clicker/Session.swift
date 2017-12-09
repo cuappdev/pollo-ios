@@ -21,6 +21,7 @@ class Session {
         self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": "student"])])
         
         socket.on(clientEvent: .connect) { data, ack in
+            print("SOCKET CONNECTED")
             self.delegate?.sessionConnected()
         }
         
@@ -34,11 +35,11 @@ class Session {
         
         socket.on("student/question/start") { data, ack in
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionID = questionJSON["id"] as? Int else {
+                let questionIDString = questionJSON["id"] as? String else {
                     return
             }
-            print(questionID)
-            GetQuestion(id: "\(questionID)" ).make()
+            let questionID = Int(questionIDString)
+            GetQuestion(id: "\(questionID!)" ).make()
                 .then { question -> Void in
                     self.delegate?.beginQuestion(question)
                 }.catch { error in
@@ -48,10 +49,11 @@ class Session {
         
         socket.on("student/question/end") { data, ack in
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionID = questionJSON["id"] as? Int else {
+                let questionIDString = questionJSON["id"] as? String else {
                     return
             }
-            GetQuestion(id: "\(questionID)" ).make()
+            let questionID = Int(questionIDString)
+            GetQuestion(id: "\(questionID!)" ).make()
                 .then { question -> Void in
                     self.delegate?.endQuestion(question)
                 }.catch { error in

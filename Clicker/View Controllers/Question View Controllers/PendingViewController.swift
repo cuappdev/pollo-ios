@@ -18,8 +18,10 @@ class PendingViewController: UIViewController {
         view.backgroundColor = .clickerBackground
         
         pendingLabel = UILabel()
-        pendingLabel.text = "Waiting for question..."
+        pendingLabel.text = "WAITING FOR QUESTION..."
         pendingLabel.textAlignment = .center
+        pendingLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        pendingLabel.textColor = .clickerBlue
         view.addSubview(pendingLabel)
         
         pendingLabel.snp.makeConstraints { make in
