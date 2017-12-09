@@ -10,12 +10,11 @@ import UIKit
 
 class HomeViewController: UITableViewController, SessionDelegate {
     
-    var lectures = [Lecture]()
-    var courseIDToCourses = [String:Course]()
-    var lectureIDToCourseID = [String:String]()
+    var liveLectures = [[String:Any]]()
     var pastSessions = [Course(id: "sldhflsg", name: "ASTRO 1101", term: "FALL 2017"),
                         Course(id: "shdgouah", name: "CS 3110", term: "FALL 2017"),
                         Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")] //TEMP
+    var refControl: UIRefreshControl!
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -29,7 +28,13 @@ class HomeViewController: UITableViewController, SessionDelegate {
         let addCourseButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCourse))
         navigationItem.rightBarButtonItem = addCourseButton
         
-        tableView.bounces = false
+        
+        refControl = UIRefreshControl()
+        refControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refControl.tintColor = .white
+        refControl.backgroundColor = .clickerBlue
+        
+        
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(LiveSessionHeader.self, forHeaderFooterViewReuseIdentifier: "liveSessionHeader")
@@ -38,6 +43,8 @@ class HomeViewController: UITableViewController, SessionDelegate {
         tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
         tableView.register(EmptyLiveSessionTableViewCell.self, forCellReuseIdentifier: "emptyLiveSessionCell")
         tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
+        tableView.addSubview(refControl)
+        
         
         fetchLiveLectures()
         
@@ -54,17 +61,14 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch(indexPath.section) {
         case 0:
-            if lectures.count == 0 {
+            if liveLectures.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "emptyLiveSessionCell") as! EmptyLiveSessionTableViewCell
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
-                let lecture = lectures[indexPath.row]
-                let courseID = lectureIDToCourseID[lecture.id]
-                let course = courseIDToCourses[courseID!]
-                if let name = course?.name {
-                    cell.sessionLabel.text = "\(name) - Lecture \(lecture.id)"
-                }
+                let name = liveLectures[indexPath.row]["courseName"] as! String
+                let lectureId = liveLectures[indexPath.row]["id"] as! Int
+                cell.sessionText = "\(name) - Lecture \(lectureId)"
                 return cell
             }
         case 1:
@@ -84,14 +88,12 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch(indexPath.section) {
         case 0:
-            if lectures.count != 0 {
+            if liveLectures.count != 0 {
                 print("liveSession")
                 let viewController = LiveSessionViewController()
-                let lecture = lectures[indexPath.row]
-                let courseID = lectureIDToCourseID[lecture.id]
-                let course = courseIDToCourses[courseID!]
-                viewController.liveLecture = lecture
-                viewController.course = course
+                let liveLecture = liveLectures[indexPath.row]
+                viewController.liveLectureId = liveLecture["id"] as! Int
+                viewController.courseName = liveLecture["courseName"] as! String
                 let navigationController = self.navigationController!
                 navigationController.pushViewController(viewController, animated: true)
                 
@@ -143,7 +145,7 @@ class HomeViewController: UITableViewController, SessionDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section){
         case 0:
-            return lectures.count == 0 ? 1 : lectures.count
+            return liveLectures.count == 0 ? 1 : liveLectures.count
         case 1:
             return pastSessions.count == 0 ? 1 : pastSessions.count
         default:
@@ -196,39 +198,27 @@ class HomeViewController: UITableViewController, SessionDelegate {
         navigationController?.present(addCourseVC, animated: true)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    
+    override func viewWillAppear(_ animated: Bool) {
         fetchLiveLectures()
     }
     
-    func fetchLiveLectures() {
-        GetUserCourses(id: "1", role: "student").make()
-            .then { courses -> Void in
-                for course in courses {
-                    let courseID = course.id
-                    if self.courseIDToCourses[courseID] == nil {
-                        GetCourse(id: courseID).make()
-                            .then { course -> Void in
-                                self.courseIDToCourses[courseID] = course
-                                self.tableView.reloadData()
-                            }.catch { error -> Void in
-                                print(error)
-                                return
-                        }
-                    }
-                    GetCourseLectures(id: courseID).make()
-                        .then { liveLectures -> Void in
-                            for lecture in liveLectures {
-                                if self.lectureIDToCourseID[lecture.id] == nil {
-                                    self.lectures.append(lecture)
-                                    self.lectureIDToCourseID[lecture.id] = courseID
-                                }
-                            }
-                            self.tableView.reloadData()
-                        }.catch { error in
-                            print(error)
-                    }
-                }
-                self.tableView.reloadData()
+    @objc func handleRefresh() {
+        fetchLiveLectures()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.refControl.endRefreshing()
         }
+    }
+    
+    @objc func fetchLiveLectures() {
+        GetLiveLectures(studentId: 1).make()
+            .then { liveLecs -> Void in
+                self.liveLectures = liveLecs
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
+            }.catch { error -> Void in
+                print(error)
+                return
+            }
     }
 }

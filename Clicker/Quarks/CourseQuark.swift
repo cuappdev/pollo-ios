@@ -108,24 +108,24 @@ struct DeleteCourse: ClickerQuark {
     }
 }
 
+// NOTE: CourseAddStudents Quark has issues sending array of strings as
+// parameters. Look at AddCourseViewController for code to add students.
 struct CourseAddStudents : ClickerQuark {
     
     typealias ResponseType = Void
     
-    let id: String
+    let courseCode: String
     let studentIDs: [String]
     
     var route: String {
-        print("THE ROUTE IS:::")
-        print("/v1/courses/\(id)/students")
-        return "/v1/courses/\(id)/students"
+        return "/v1/course/register/"
     }
     var parameters: Parameters {
         return [
-            "students": "[1]" // TEMP
+            "courseCode": courseCode,
+            "students": ["1"] // TEMP
         ]
     }
-    
     let host: String = "http://localhost:3000/api"
     let method: HTTPMethod = .post
     
