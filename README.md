@@ -9,6 +9,11 @@ Clicker is one of the latest apps by [Cornell AppDev](http://cornellappdev.com),
 ## Installation
 We use [CocoaPods](http://cocoapods.org) for our dependency manager. This should be installed before continuing.
 
+Clone the project with
+```
+git clone https://github.com/cuappdev/clicker-ios.git
+```
+
 After cloning the project, `cd` into the new directory and install dependencies with
 ```
 pod install
