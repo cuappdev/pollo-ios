@@ -27,16 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = TabBarController()
-        
-        if GIDSignIn.sharedInstance().hasAuthInKeychain(){
-            DispatchQueue.main.async {
-                GIDSignIn.sharedInstance().signInSilently()
-            }
-        } else {
-            let login = LoginViewController()
-            window?.rootViewController?.present(login, animated: false, completion: nil)
-        }
+        window?.rootViewController = HomeViewController()
         
         Fabric.with([Crashlytics.self])
         return true
