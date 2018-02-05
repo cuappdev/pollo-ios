@@ -9,15 +9,12 @@
 import UIKit
 
 extension UIColor {
-    //    UIColor.colorFromCode(0xA23A40).withAlphaComponent(0.26)
     
     @nonobjc static let clickerBlue = UIColor.colorFromCode(0x4EA0FF)
-    @nonobjc static let clickerLightGray = UIColor.colorFromCode(0xE8E8E8)
-    @nonobjc static let clickerMediumGray = UIColor.colorFromCode(0x969BA6)
-    @nonobjc static let clickerDarkGray = UIColor.colorFromCode(0x80868D)
-    @nonobjc static let clickerBackground = UIColor.colorFromCode(0xF7F9FA)
-    @nonobjc static let clickerBorder = UIColor.colorFromCode(0xE1E1E1)
-    @nonobjc static let clickerRed = UIColor.colorFromCode(0xFF8B8B)
+    @nonobjc static let clickerBackground = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
+    @nonobjc static let clickerGreen = UIColor(red: 41/255, green: 192/255, blue: 158/255, alpha: 1.0)
+    @nonobjc static let clickerMediumGray = UIColor(red: 229/255, green: 231/255, blue: 237/255, alpha: 1.0)
+    @nonobjc static let clickerDarkGray = UIColor(red: 158/255, green: 167/255, blue: 179/255, alpha: 1.0)
 
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
