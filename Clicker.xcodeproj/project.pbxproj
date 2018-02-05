@@ -14,6 +14,7 @@
 		C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588A20265838000E9B07 /* LiveResultsViewController.swift */; };
 		C205588D20265844000E9B07 /* FinalResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588C20265844000E9B07 /* FinalResultsViewController.swift */; };
 		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
+		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
@@ -61,6 +62,7 @@
 		C205588A20265838000E9B07 /* LiveResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveResultsViewController.swift; sourceTree = "<group>"; };
 		C205588C20265844000E9B07 /* FinalResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalResultsViewController.swift; sourceTree = "<group>"; };
 		C205588E2026591A000E9B07 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
+		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */,
 				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
 				C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */,
+				C212179E20281E94007395DA /* UIFont+Shared.swift */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";
@@ -229,8 +232,8 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
+				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
 				C205588820265822000E9B07 /* CreateQuestionViewController.swift */,
 				C205588A20265838000E9B07 /* LiveResultsViewController.swift */,
 				C205588C20265844000E9B07 /* FinalResultsViewController.swift */,
@@ -446,6 +449,7 @@
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C7D6AF631F93DF41003ABA10 /* LiveSessionHeader.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
+				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
