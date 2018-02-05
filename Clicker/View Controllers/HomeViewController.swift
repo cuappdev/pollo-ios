@@ -52,6 +52,18 @@ class HomeViewController: UIViewController {
         joinButton.setTitleColor(.clickerDarkGray, for: .normal)
         joinButton.backgroundColor = .clickerLightGray
         joinView.addSubview(joinButton)
+        
+        whiteView = UIView()
+        whiteView.backgroundColor = .white
+        view.addSubview(whiteView)
+        
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create New Poll", for: .normal)
+        createPollButton.setTitleColor(.white, for: .normal)
+        createPollButton.titleLabel?.font = UIFont._18MediumFont
+        createPollButton.backgroundColor = .clickerGreen
+        createPollButton.layer.cornerRadius = 8
+        whiteView.addSubview(createPollButton)
     }
     
     func setupConstraints() {
@@ -80,6 +92,18 @@ class HomeViewController: UIViewController {
             make.right.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+        
+        whiteView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(view.frame.height * 0.1364317841)
+        }
+        
+        createPollButton.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: view.frame.width * 0.904, height: view.frame.height * 0.08245877061))
         }
     }
     
