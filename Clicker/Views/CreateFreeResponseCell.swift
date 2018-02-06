@@ -1,15 +1,15 @@
 //
-//  FreeResponseCell.swift
+//  CreateFreeResponseCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/5/18.
+//  Created by Kevin Chan on 2/6/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import SnapKit
 import UIKit
 
-class FreeResponseCell: UICollectionViewCell {
+class CreateFreeResponseCell: UICollectionViewCell {
     
     var comingSoonLabel: UILabel!
     
