@@ -27,6 +27,26 @@ class HomeViewController: UIViewController {
        
     }
     
+    @objc func beganTypingCode(_ textField: UITextField) {
+        if let text = textField.text {
+            if text != "" {
+                joinButton.backgroundColor = .clickerGreen
+                joinButton.setTitleColor(.white, for: .normal)
+            } else {
+                joinButton.backgroundColor = .clickerLightGray
+                joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+            }
+        } else {
+            joinButton.backgroundColor = .clickerLightGray
+            joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+        }
+    }
+    
+    @objc func createNewPoll() {
+        let createQuestionVC = CreateQuestionViewController()
+        self.navigationController?.pushViewController(createQuestionVC, animated: true)
+    }
+    
     func setupViews() {
         joinLabel = UILabel()
         joinLabel.text = "Join A Session"
@@ -44,6 +64,7 @@ class HomeViewController: UIViewController {
         sessionAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: sessionAttributedString.length))
         sessionTextField.attributedPlaceholder = sessionAttributedString
         sessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        sessionTextField.addTarget(self, action: #selector(beganTypingCode), for: .editingChanged)
         joinView.addSubview(sessionTextField)
         
         joinButton = UIButton()
@@ -63,6 +84,7 @@ class HomeViewController: UIViewController {
         createPollButton.titleLabel?.font = UIFont._18MediumFont
         createPollButton.backgroundColor = .clickerGreen
         createPollButton.layer.cornerRadius = 8
+        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
         whiteView.addSubview(createPollButton)
     }
     
@@ -105,6 +127,18 @@ class HomeViewController: UIViewController {
             make.center.equalToSuperview()
             make.size.equalTo(CGSize(width: view.frame.width * 0.904, height: view.frame.height * 0.08245877061))
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Hide navigation bar
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Show navigation bar
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
 }
