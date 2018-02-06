@@ -101,7 +101,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func setupConstraints() {
         questionOptionsView.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: view.frame.width, height: view.frame.height * 0.06596701649))
+            make.size.equalTo(CGSize(width: view.frame.width, height: 44))
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
             make.left.equalToSuperview()
         }

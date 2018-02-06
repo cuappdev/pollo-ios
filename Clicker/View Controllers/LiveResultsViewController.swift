@@ -6,4 +6,20 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import SnapKit
+
+class LiveResultsViewController: UIViewController {
+    
+    var liveResultsLabel: UILabel!
+    var timerLabel: UILabel!
+    var editPollButton: UIButton!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .clickerBackground
+        
+    }
+    
+}
