@@ -1,0 +1,115 @@
+//
+//  CreateMultipleChoiceCell.swift
+//  Clicker
+//
+//  Created by Kevin Chan on 2/6/18.
+//  Copyright © 2018 CornellAppDev. All rights reserved.
+//
+
+import SnapKit
+import UIKit
+
+class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+    
+    var questionTextField: UITextField!
+    var optionsTableView: UITableView!
+    var startPollButton: UIButton!
+    var numOptions: Int = 2
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clickerBackground
+        
+        setupViews()
+        layoutSubviews()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath.section == numOptions - 1) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "createMultipleChoiceOptionCellID") as! CreateMultipleChoiceOptionCell
+        cell.choiceTag = indexPath.section
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return  1
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return numOptions
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return frame.height * 0.1049618321
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func setupViews() {
+        questionTextField = UITextField()
+        questionTextField.placeholder = "Add Question"
+        questionTextField.font = UIFont.systemFont(ofSize: 21)
+        questionTextField.backgroundColor = .white
+        questionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        addSubview(questionTextField)
+        
+        optionsTableView = UITableView()
+        optionsTableView.delegate = self
+        optionsTableView.dataSource = self
+        optionsTableView.register(CreateMultipleChoiceOptionCell.self, forCellReuseIdentifier: "createMultipleChoiceOptionCellID")
+        optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: "addMoreOptionCellID")
+        optionsTableView.backgroundColor = .clickerBackground
+        optionsTableView.separatorStyle = .none
+        addSubview(optionsTableView)
+        
+        startPollButton = UIButton()
+        startPollButton.backgroundColor = .clickerBlue
+        startPollButton.layer.cornerRadius = 8
+        startPollButton.setTitle("Start Poll", for: .normal)
+        startPollButton.setTitleColor(.white, for: .normal)
+        startPollButton.titleLabel?.font = UIFont._18SemiboldFont
+        addSubview(startPollButton)
+        bringSubview(toFront: startPollButton)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        questionTextField.snp.updateConstraints{ make in
+            make.size.equalTo(CGSize(width: frame.width, height: 61))
+            make.top.equalToSuperview()
+            make.left.equalToSuperview()
+        }
+        
+        optionsTableView.snp.updateConstraints { make in
+            make.width.equalTo(frame.width * 0.904)
+            make.top.equalTo(questionTextField.snp.bottom).offset(5)
+            make.bottom.equalToSuperview().offset(startPollButton.frame.height + 23)
+            make.centerX.equalToSuperview()
+        }
+        
+        startPollButton.snp.updateConstraints { make in
+            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: frame.height * 0.1049618321))
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-18)
+        }
+        
+    }
+    
+    
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+

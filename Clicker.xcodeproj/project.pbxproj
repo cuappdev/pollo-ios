@@ -16,13 +16,15 @@
 		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8D72029496100533565 /* QuestionOptionsView.swift */; };
-		C22DB8DA20294D0100533565 /* MultipleChoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8D920294D0100533565 /* MultipleChoiceCell.swift */; };
-		C22DB8DC20294D0E00533565 /* FreeResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8DB20294D0E00533565 /* FreeResponseCell.swift */; };
 		C22DB8DE2029505800533565 /* MultipleChoiceOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
+		C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */; };
+		C2B3C0C4202A6B02003A9D1C /* CreateFreeResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */; };
+		C2B3C0C6202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */; };
+		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579E1F926C86008F21CB /* LectureQuark.swift */; };
@@ -68,13 +70,15 @@
 		C205588E2026591A000E9B07 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C22DB8D72029496100533565 /* QuestionOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionOptionsView.swift; sourceTree = "<group>"; };
-		C22DB8D920294D0100533565 /* MultipleChoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceCell.swift; sourceTree = "<group>"; };
-		C22DB8DB20294D0E00533565 /* FreeResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeResponseCell.swift; sourceTree = "<group>"; };
 		C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceOptionView.swift; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMultipleChoiceCell.swift; sourceTree = "<group>"; };
+		C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFreeResponseCell.swift; sourceTree = "<group>"; };
+		C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMultipleChoiceOptionCell.swift; sourceTree = "<group>"; };
+		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2D0579E1F926C86008F21CB /* LectureQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureQuark.swift; sourceTree = "<group>"; };
@@ -192,9 +196,11 @@
 				C7A0295C1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift */,
 				C72CD5291FAF7883004E68D9 /* AnswerButton.swift */,
 				C22DB8D72029496100533565 /* QuestionOptionsView.swift */,
-				C22DB8D920294D0100533565 /* MultipleChoiceCell.swift */,
-				C22DB8DB20294D0E00533565 /* FreeResponseCell.swift */,
 				C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */,
+				C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */,
+				C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */,
+				C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */,
+				C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -465,6 +471,7 @@
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
+				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
 				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
 				C72CD52A1FAF7883004E68D9 /* AnswerButton.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
@@ -473,9 +480,8 @@
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
-				C22DB8DA20294D0100533565 /* MultipleChoiceCell.swift in Sources */,
+				C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */,
 				C7A0295D1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift in Sources */,
-				C22DB8DC20294D0E00533565 /* FreeResponseCell.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
@@ -483,7 +489,9 @@
 				C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */,
+				C2B3C0C4202A6B02003A9D1C /* CreateFreeResponseCell.swift in Sources */,
 				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
+				C2B3C0C6202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift in Sources */,
 				C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 				C22DB8DE2029505800533565 /* MultipleChoiceOptionView.swift in Sources */,

@@ -29,10 +29,10 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "multipleChoiceCellID", for: indexPath) as! MultipleChoiceCell
+            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createMultipleChoiceCellID", for: indexPath) as! CreateMultipleChoiceCell
             return cell
         }
-        let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "freeResponseCellID", for: indexPath) as! FreeResponseCell
+        let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createFreeResponseCellID", for: indexPath) as! CreateFreeResponseCell
         return cell
     }
     
@@ -91,8 +91,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.dataSource = self
         questionCollectionView.showsVerticalScrollIndicator = false
         questionCollectionView.showsHorizontalScrollIndicator = false
-        questionCollectionView.register(MultipleChoiceCell.self, forCellWithReuseIdentifier: "multipleChoiceCellID")
-        questionCollectionView.register(FreeResponseCell.self, forCellWithReuseIdentifier: "freeResponseCellID")
+        questionCollectionView.register(CreateMultipleChoiceCell.self, forCellWithReuseIdentifier: "createMultipleChoiceCellID")
+        questionCollectionView.register(CreateFreeResponseCell.self, forCellWithReuseIdentifier: "createFreeResponseCellID")
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
