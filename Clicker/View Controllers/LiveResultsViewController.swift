@@ -55,7 +55,6 @@ class LiveResultsViewController: UIViewController {
         let endSessionVC = EndSessionViewController()
         endSessionVC.dismissController = self
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
-        timer.invalidate()
     }
     
     func runTimer() {

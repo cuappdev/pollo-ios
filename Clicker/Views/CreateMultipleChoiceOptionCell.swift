@@ -9,8 +9,13 @@
 import UIKit
 import SnapKit
 
+protocol MultipleChoiceOptionProtocol {
+    func deleteOption(index: Int)
+}
+
 class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
 
+    var mcOptionDelegate: MultipleChoiceOptionProtocol!
     var choiceLabel = UILabel()
     var choiceTag: Int! {
         didSet {
@@ -41,6 +46,7 @@ class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
         trashButton = UIButton()
         trashButton.setImage(#imageLiteral(resourceName: "trash"), for: .normal)
         trashButton.backgroundColor = .clear
+        trashButton.addTarget(self, action: #selector(deleteOption), for: .touchUpInside)
         addSubview(trashButton)
         
         addOptionTextField = UITextField()
@@ -73,6 +79,11 @@ class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    @objc func deleteOption(){
+        print("delete cell \(choiceTag)")
+        mcOptionDelegate.deleteOption(index: choiceTag)
     }
     
     required init?(coder aDecoder: NSCoder) {
