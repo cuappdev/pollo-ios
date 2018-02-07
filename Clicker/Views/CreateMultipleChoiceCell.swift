@@ -11,6 +11,7 @@ import UIKit
 
 class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
+    var createQuestionVC: CreateQuestionViewController!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
@@ -22,6 +23,11 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         
         setupViews()
         layoutSubviews()
+    }
+    
+    @objc func startPoll() {
+        let liveResultsVC = LiveResultsViewController()
+        createQuestionVC.navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,6 +96,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         startPollButton.setTitle("Start Poll", for: .normal)
         startPollButton.setTitleColor(.white, for: .normal)
         startPollButton.titleLabel?.font = UIFont._18SemiboldFont
+        startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
         addSubview(startPollButton)
         bringSubview(toFront: startPollButton)
     }

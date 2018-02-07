@@ -23,6 +23,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
+        setupNavBar()
         setupViews()
         setupConstraints()
     }
@@ -30,6 +31,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createMultipleChoiceCellID", for: indexPath) as! CreateMultipleChoiceCell
+            cell.createQuestionVC = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createFreeResponseCellID", for: indexPath) as! CreateFreeResponseCell
@@ -45,7 +47,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     @objc func endSession() {
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -58,26 +60,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     func setupViews() {
-        let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: APPDEV")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
-        codeLabel.textColor = .white
-        codeLabel.backgroundColor = .clear
-        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
-        self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "End Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-        
         questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], controller: self)
         view.addSubview(questionOptionsView)
         
@@ -101,8 +83,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func setupConstraints() {
         questionOptionsView.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: view.frame.width, height: 44))
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.size.equalTo(CGSize(width: view.frame.width, height: view.frame.height * 0.06596701649))
+            make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(20)
             make.left.equalToSuperview()
         }
         
@@ -112,6 +94,28 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.bottom.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
         }
+    }
+    
+    func setupNavBar() {
+        let codeLabel = UILabel()
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: APPDEV")
+        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
+        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
+        codeLabel.attributedText = codeAttributedString
+        codeLabel.textColor = .white
+        codeLabel.backgroundColor = .clear
+        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
+        self.navigationItem.leftBarButtonItem = codeBarButtonItem
+        
+        let endSessionButton = UIButton()
+        let endSessionAttributedString = NSMutableAttributedString(string: "End Session")
+        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
+        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
+        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
+        endSessionButton.backgroundColor = .clear
+        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
+        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
+        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
 }
