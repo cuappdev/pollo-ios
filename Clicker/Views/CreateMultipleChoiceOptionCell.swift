@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class CreateMultipleChoiceOptionCell: UITableViewCell {
+class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
 
     var choiceLabel = UILabel()
     var choiceTag: Int! {
@@ -26,6 +26,7 @@ class CreateMultipleChoiceOptionCell: UITableViewCell {
         layer.cornerRadius = 8
         layer.borderColor = UIColor.clickerBorder.cgColor
         layer.borderWidth = 0.5
+        
         
         setupViews()
         layoutSubviews()
@@ -46,6 +47,8 @@ class CreateMultipleChoiceOptionCell: UITableViewCell {
         addOptionTextField.placeholder = "Add Option"
         addOptionTextField.font = UIFont._16SemiboldFont
         addOptionTextField.borderStyle = .none
+        addOptionTextField.returnKeyType = UIReturnKeyType.done
+        addOptionTextField.delegate = self
         addSubview(addOptionTextField)
     }
     
@@ -74,6 +77,12 @@ class CreateMultipleChoiceOptionCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
     
 }

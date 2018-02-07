@@ -109,7 +109,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         self.navigationItem.leftBarButtonItem = codeBarButtonItem
         
         let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "End Session")
+        let endSessionAttributedString = NSMutableAttributedString(string: "Cancel")
         endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
         endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
         endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
@@ -119,4 +119,9 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
+    // MARK: - Keyboard
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }

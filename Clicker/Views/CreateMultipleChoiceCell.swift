@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
     var questionTextField: UITextField!
@@ -78,6 +78,8 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         questionTextField.font = UIFont.systemFont(ofSize: 21)
         questionTextField.backgroundColor = .white
         questionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        questionTextField.returnKeyType = UIReturnKeyType.done
+        questionTextField.delegate = self
         addSubview(questionTextField)
         
         optionsTableView = UITableView()
@@ -128,6 +130,12 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
