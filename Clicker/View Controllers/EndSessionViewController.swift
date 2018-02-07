@@ -11,6 +11,7 @@ import SnapKit
 
 class EndSessionViewController: UIViewController {
     
+    var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!
     var sidenoteLabel: UILabel!
@@ -29,6 +30,11 @@ class EndSessionViewController: UIViewController {
     
     @objc func cancel() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func endSession() {
+        cancel()
+        self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
     
     func setupViews() {
@@ -79,6 +85,7 @@ class EndSessionViewController: UIViewController {
         endSessionButton.setTitleColor(.white, for: .normal)
         endSessionButton.backgroundColor = .clickerOrange
         endSessionButton.layer.cornerRadius = 8
+        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
         view.addSubview(endSessionButton)
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextFieldDelegate {
     
     var joinLabel: UILabel!
     var joinView: UIView!
@@ -24,7 +24,6 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .clickerBackground
         setupViews()
         setupConstraints()
-       
     }
     
     @objc func beganTypingCode(_ textField: UITextField) {
@@ -141,4 +140,9 @@ class HomeViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    // MARK: - Keyboard
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }

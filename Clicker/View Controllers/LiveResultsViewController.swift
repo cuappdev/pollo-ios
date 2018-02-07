@@ -53,6 +53,7 @@ class LiveResultsViewController: UIViewController {
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
+        endSessionVC.dismissController = self
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
         timer.invalidate()
     }
@@ -193,15 +194,11 @@ class LiveResultsViewController: UIViewController {
         codeLabel.backgroundColor = .clear
         codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
         self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "End Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
+    }
+    
+    // MARK: - Keyboard
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
