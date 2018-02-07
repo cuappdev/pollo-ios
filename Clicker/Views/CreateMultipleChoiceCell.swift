@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionProtocol {
     
     var createQuestionVC: CreateQuestionViewController!
     var questionTextField: UITextField!
@@ -38,7 +38,17 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "createMultipleChoiceOptionCellID") as! CreateMultipleChoiceOptionCell
         cell.choiceTag = indexPath.section
+        cell.mcOptionDelegate = self
         cell.selectionStyle = .none
+        
+        if numOptions <= 2 {
+            cell.trashButton.isUserInteractionEnabled = false
+            cell.trashButton.alpha = 0.0
+        } else {
+            cell.trashButton.isUserInteractionEnabled = true
+            cell.trashButton.alpha = 1.0
+        }
+        
         return cell
     }
     
@@ -47,6 +57,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
             let indexSet = NSIndexSet(index: numOptions)
             numOptions += 1
             tableView.insertSections(indexSet as IndexSet, with: .none)
+            tableView.reloadData()
         }
     }
     
@@ -127,7 +138,6 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         
     }
     
-    
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -136,6 +146,13 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func deleteOption(index: Int) {
+        numOptions -= 1
+        let indexSet = NSIndexSet(index: index)
+        optionsTableView.deleteSections(indexSet as IndexSet, with: .fade)
+        optionsTableView.reloadData()
     }
 }
 
