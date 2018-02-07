@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Presentr
 
 class LiveResultsViewController: UIViewController {
     
@@ -21,6 +22,10 @@ class LiveResultsViewController: UIViewController {
     var timer: Timer!
     var elapsedSeconds: Int = 0
     
+    var questionLabel: UILabel!
+    var optionReultsTableView: UITableView!
+    var closePollButton: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +35,26 @@ class LiveResultsViewController: UIViewController {
         setupViews()
         setupConstraints()
         runTimer()
+        
     }
     
     @objc func endSession() {
         self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc func editPoll() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func closePoll() {
+        print("close poll")
+        let presenter: Presentr = Presentr(presentationType: .bottomHalf)
+        presenter.roundCorners = false
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let endSessionVC = EndSessionViewController()
+        customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+        timer.invalidate()
     }
     
     func runTimer() {
@@ -42,18 +63,25 @@ class LiveResultsViewController: UIViewController {
     
     @objc func updateTime() {
         elapsedSeconds += 1
-        print(elapsedSeconds)
         if (elapsedSeconds < 10) {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if (elapsedSeconds < 60) {
             timerLabel.text = "00:\(elapsedSeconds)"
         } else {
-            var minutes = Int(elapsedSeconds / 60)
-            var seconds = elapsedSeconds - minutes * 60
+            let minutes = Int(elapsedSeconds / 60)
+            let seconds = elapsedSeconds - minutes * 60
             if (elapsedSeconds < 600) {
-                timerLabel.text = "0\(minutes):\(seconds)"
+                if (seconds < 10) {
+                    timerLabel.text = "0\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "0\(minutes):\(seconds)"
+                }
             } else {
-                timerLabel.text = "\(minutes):\(seconds)"
+                if (seconds < 10) {
+                    timerLabel.text = "\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "\(minutes):\(seconds)"
+                }
             }
         }
     }
@@ -70,7 +98,7 @@ class LiveResultsViewController: UIViewController {
         liveResultsLabel = UILabel()
         liveResultsLabel.text = "Live Results"
         liveResultsLabel.font = UIFont._16MediumFont
-        liveResultsLabel.textColor = UIColor(red: 31/255, green: 44/255, blue: 56/255, alpha: 1.0)
+        liveResultsLabel.textColor = .clickerBlack
         liveResultsLabel.textAlignment = .center
         headerView.addSubview(liveResultsLabel)
         
@@ -80,7 +108,30 @@ class LiveResultsViewController: UIViewController {
         timerLabel.font = UIFont._16MediumFont
         headerView.addSubview(timerLabel)
 
+        editPollButton = UIButton()
+        editPollButton.setTitle("Edit Poll", for: .normal)
+        editPollButton.setTitleColor(.clickerBlue, for: .normal)
+        editPollButton.backgroundColor = .clear
+        editPollButton.addTarget(self, action: #selector(editPoll), for: .touchUpInside)
+        headerView.addSubview(editPollButton)
         
+        questionLabel = UILabel()
+        questionLabel.text = "What is the name of Saturn's largest moon?"
+        questionLabel.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
+        questionLabel.textColor = .clickerBlack
+        questionLabel.lineBreakMode = .byWordWrapping
+        questionLabel.numberOfLines = 0
+        view.addSubview(questionLabel)
+        
+        closePollButton = UIButton()
+        closePollButton.setTitle("Close Poll", for: .normal)
+        closePollButton.setTitleColor(.white, for: .normal)
+        closePollButton.titleLabel?.font = UIFont._18SemiboldFont
+        closePollButton.backgroundColor = .clickerBlue
+        closePollButton.layer.cornerRadius = 8
+        closePollButton.addTarget(self, action: #selector(closePoll), for: .touchUpInside)
+        view.addSubview(closePollButton)
+        view.bringSubview(toFront: closePollButton)
         
     }
     
@@ -108,6 +159,25 @@ class LiveResultsViewController: UIViewController {
             make.size.equalTo(CGSize(width: view.frame.width * 0.15, height: 20))
             make.left.equalTo(liveResultsLabel.snp.right).offset(10)
             make.centerY.equalToSuperview()
+        }
+        
+        editPollButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: view.frame.width * 0.20, height: 20))
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-18)
+        }
+        
+        questionLabel.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: view.frame.width * 0.92, height: view.frame.height * 0.09))
+            make.centerX.equalToSuperview()
+            make.top.equalTo(headerView.snp.bottom).offset(18)
+        }
+        
+        closePollButton.snp.makeConstraints { make in
+            make.width.equalTo(questionLabel.snp.width)
+            make.height.equalTo(55)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-18)
         }
         
         

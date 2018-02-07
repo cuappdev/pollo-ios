@@ -25,6 +25,7 @@
 		C2B3C0C4202A6B02003A9D1C /* CreateFreeResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */; };
 		C2B3C0C6202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */; };
 		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
+		C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579E1F926C86008F21CB /* LectureQuark.swift */; };
@@ -79,6 +80,7 @@
 		C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFreeResponseCell.swift; sourceTree = "<group>"; };
 		C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMultipleChoiceOptionCell.swift; sourceTree = "<group>"; };
 		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
+		C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSessionViewController.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2D0579E1F926C86008F21CB /* LectureQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureQuark.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
 				C205588820265822000E9B07 /* CreateQuestionViewController.swift */,
 				C205588A20265838000E9B07 /* LiveResultsViewController.swift */,
+				C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */,
 				C205588C20265844000E9B07 /* FinalResultsViewController.swift */,
 				C72240431FA6254B00DABA8D /* Question View Controllers */,
 			);
@@ -394,6 +397,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Neutron/Neutron.framework",
+				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
@@ -407,6 +411,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neutron.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
@@ -481,6 +486,7 @@
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
 				C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */,
+				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
 				C7A0295D1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,

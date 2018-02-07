@@ -118,7 +118,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         }
         
         startPollButton.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: frame.height * 0.1049618321))
+            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-18)
         }
