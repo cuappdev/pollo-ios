@@ -26,6 +26,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         setupNavBar()
         setupViews()
         setupConstraints()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
