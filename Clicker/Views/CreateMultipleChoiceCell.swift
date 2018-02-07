@@ -25,13 +25,23 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.section == numOptions - 1) {
+        if (indexPath.section == numOptions) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "createMultipleChoiceOptionCellID") as! CreateMultipleChoiceOptionCell
         cell.choiceTag = indexPath.section
+        cell.selectionStyle = .none
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath.section == numOptions) {
+            let indexSet = NSIndexSet(index: numOptions)
+            numOptions += 1
+            tableView.insertSections(indexSet as IndexSet, with: .none)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,7 +49,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return numOptions
+        return numOptions + 1 // 1 extra for the "Add More" cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -70,6 +80,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         optionsTableView.register(CreateMultipleChoiceOptionCell.self, forCellReuseIdentifier: "createMultipleChoiceOptionCellID")
         optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: "addMoreOptionCellID")
         optionsTableView.backgroundColor = .clickerBackground
+        optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
         addSubview(optionsTableView)
         
@@ -95,7 +106,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         optionsTableView.snp.updateConstraints { make in
             make.width.equalTo(frame.width * 0.904)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(startPollButton.frame.height + 23)
+            make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
             make.centerX.equalToSuperview()
         }
         
