@@ -17,7 +17,6 @@ class AnswerButton: UIButton {
         setTitle("\(description)", for: .normal)
         setTitleColor(.black, for: .normal)
         layer.borderWidth = 1
-        layer.borderColor = UIColor.clickerBorder.cgColor
         contentHorizontalAlignment = .left
         backgroundColor = .white
         layer.cornerRadius = 8

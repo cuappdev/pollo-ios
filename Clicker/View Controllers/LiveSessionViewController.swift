@@ -109,17 +109,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func fetchLiveLecturePorts() {
-        GetLecturePorts(id: liveLectureId).make()
-            .then { ports -> Void in
-                for p in ports {
-                    if let i = Int(p) {
-                        self.session = Session(id: i, delegate: self)
-                    } else {
-                        return
-                    }
-                }
-            }.catch { error -> Void in
-                print(error)
-        }
+   
     }
 }

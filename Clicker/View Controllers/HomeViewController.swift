@@ -8,217 +8,142 @@
 
 import UIKit
 
-class HomeViewController: UITableViewController, SessionDelegate {
+class HomeViewController: UIViewController, UITextFieldDelegate {
     
-    var liveLectures = [[String:Any]]()
-    var pastSessions = [Course(id: "sldhflsg", name: "ASTRO 1101", term: "FALL 2017"),
-                        Course(id: "shdgouah", name: "CS 3110", term: "FALL 2017"),
-                        Course(id: "alksdfla", name: "ECE 2300", term: "FALL 2017")] //TEMP
-    var refControl: UIRefreshControl!
+    var joinLabel: UILabel!
+    var joinView: UIView!
+    var sessionTextField: UITextField!
+    var joinButton: UIButton!
+    var whiteView: UIView!
+    var createPollButton: UIButton!
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Clique"
-        
-        let signoutBarButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(signout))
-        navigationItem.leftBarButtonItem = signoutBarButton
-        
-        let addCourseButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCourse))
-        navigationItem.rightBarButtonItem = addCourseButton
-        
-        
-        refControl = UIRefreshControl()
-        refControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        refControl.tintColor = .white
-        refControl.backgroundColor = .clickerBlue
-        
-        
-        tableView.separatorStyle = .none
-        tableView.tableFooterView = UIView()
-        tableView.register(LiveSessionHeader.self, forHeaderFooterViewReuseIdentifier: "liveSessionHeader")
-        tableView.register(PastSessionHeader.self, forHeaderFooterViewReuseIdentifier: "pastSessionHeader")
-        tableView.register(LiveSessionTableViewCell.self, forCellReuseIdentifier: "liveSessionCell")
-        tableView.register(PastSessionTableViewCell.self, forCellReuseIdentifier: "pastSessionCell")
-        tableView.register(EmptyLiveSessionTableViewCell.self, forCellReuseIdentifier: "emptyLiveSessionCell")
-        tableView.register(EmptyPastSessionTableViewCell.self, forCellReuseIdentifier: "emptyPastSessionCell")
-        tableView.addSubview(refControl)
-        
-        
-        fetchLiveLectures()
-        
-        let appDelegate = AppDelegate()
-        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-            if significantEvents > 12 {
-                appDelegate.requestReview()
-                UserDefaults.standard.set(0, forKey:"significantEvents")
-            }
-        }
+        view.backgroundColor = .clickerBackground
+        setupViews()
+        setupConstraints()
     }
     
-    // MARK: - CELLS
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch(indexPath.section) {
-        case 0:
-            if liveLectures.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "emptyLiveSessionCell") as! EmptyLiveSessionTableViewCell
-                return cell
+    @objc func beganTypingCode(_ textField: UITextField) {
+        if let text = textField.text {
+            if text != "" {
+                joinButton.backgroundColor = .clickerGreen
+                joinButton.setTitleColor(.white, for: .normal)
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCell") as! LiveSessionTableViewCell
-                let name = liveLectures[indexPath.row]["courseName"] as! String
-                let lectureId = liveLectures[indexPath.row]["id"] as! Int
-                cell.sessionText = "\(name) - Lecture \(lectureId)"
-                return cell
+                joinButton.backgroundColor = .clickerLightGray
+                joinButton.setTitleColor(.clickerDarkGray, for: .normal)
             }
-        case 1:
-            if pastSessions.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "emptyPastSessionCell") as! EmptyPastSessionTableViewCell
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "pastSessionCell") as! PastSessionTableViewCell
-                cell.course = pastSessions[indexPath.row]
-                return cell
-            }
-        default:
-            return UITableViewCell()
+        } else {
+            joinButton.backgroundColor = .clickerLightGray
+            joinButton.setTitleColor(.clickerDarkGray, for: .normal)
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch(indexPath.section) {
-        case 0:
-            if liveLectures.count != 0 {
-                print("liveSession")
-                let viewController = LiveSessionViewController()
-                let liveLecture = liveLectures[indexPath.row]
-                viewController.liveLectureId = liveLecture["id"] as! Int
-                viewController.courseName = liveLecture["courseName"] as! String
-                let navigationController = self.navigationController!
-                navigationController.pushViewController(viewController, animated: true)
-                
-                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
-                }
-            }
-        case 1:
-            print("pastSession")
-        default:
-            print("default")
-        }
+    @objc func createNewPoll() {
+        let createQuestionVC = CreateQuestionViewController()
+        self.navigationController?.pushViewController(createQuestionVC, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-    
-    // MARK: - SECTIONS
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView = UITableViewHeaderFooterView()
-        switch (section) {
-        case 0:
-            headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "liveSessionHeader") as! LiveSessionHeader
-            return headerView
-        case 1:
-            headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "pastSessionHeader") as! PastSessionHeader
-            return headerView
-        default:
-            return headerView
-        }
-    }
-    
-    override  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch(section){
-        case 0:
-            return 44.5
-        case 1:
-            return 53.5
-        default:
-            return 0
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch(section){
-        case 0:
-            return liveLectures.count == 0 ? 1 : liveLectures.count
-        case 1:
-            return pastSessions.count == 0 ? 1 : pastSessions.count
-        default:
-            return 0
-        }
-    }
-    
-    // MARK: - SESSIONS
-    func sessionConnected() {
-        print("session connected")
-    }
-    
-    func sessionDisconnected() {
-        print("session disconnected")
-    }
-    
-    func beginQuestion(_ question: Question) {
-        print("begin question")        
-    }
-    
-    func endQuestion(_ question: Question) {
-        print("end question")
-    }
-    
-    func postResponses(_ answers: [Answer]) {
-        print("post responses")
-    }
-    
-    func sendResponse(_ answer: Answer) {
-        print("send responses")
-    }
-    
-    // MARK: - SIGN OUT
-    @objc func signout() {
+    func setupViews() {
+        joinLabel = UILabel()
+        joinLabel.text = "Join A Session"
+        joinLabel.font = UIFont._16SemiboldFont
+        joinLabel.textColor = .clickerMediumGray
+        view.addSubview(joinLabel)
         
-        let alert = UIAlertController(title: "Sign out", message: "Are you sure you want to sign out?", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Sign out", style: .default, handler: { (isCompleted) in
-            GIDSignIn.sharedInstance().signOut()
-            let login = LoginViewController()
-            self.present(login, animated: true, completion: nil)
-        }))
+        joinView = UIView()
+        joinView.layer.cornerRadius = 8
+        joinView.layer.masksToBounds = true
+        view.addSubview(joinView)
         
-        self.present(alert, animated: true, completion: nil)
+        sessionTextField = UITextField()
+        let sessionAttributedString = NSMutableAttributedString(string: "Enter session code")
+        sessionAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: sessionAttributedString.length))
+        sessionTextField.attributedPlaceholder = sessionAttributedString
+        sessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        sessionTextField.addTarget(self, action: #selector(beganTypingCode), for: .editingChanged)
+        sessionTextField.backgroundColor = .white
+        joinView.addSubview(sessionTextField)
+        
+        joinButton = UIButton()
+        joinButton.setTitle("Join", for: .normal)
+        joinButton.titleLabel?.font = UIFont._18MediumFont
+        joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+        joinButton.backgroundColor = .clickerLightGray
+        joinView.addSubview(joinButton)
+        
+        whiteView = UIView()
+        whiteView.backgroundColor = .white
+        view.addSubview(whiteView)
+        
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create New Poll", for: .normal)
+        createPollButton.setTitleColor(.white, for: .normal)
+        createPollButton.titleLabel?.font = UIFont._18MediumFont
+        createPollButton.backgroundColor = .clickerGreen
+        createPollButton.layer.cornerRadius = 8
+        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
+        whiteView.addSubview(createPollButton)
     }
     
-    @objc func addCourse() {
-        let addCourseVC = AddCourseViewController()
-        addCourseVC.modalPresentationStyle = .overCurrentContext
-        navigationController?.present(addCourseVC, animated: true)
+    func setupConstraints() {
+        joinLabel.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: view.frame.width * 0.8066666667, height: view.frame.height * 0.02848575712))
+            make.left.equalToSuperview().offset(view.frame.width * 0.048)
+            make.top.equalToSuperview().offset(view.frame.height * 0.1101949025)
+        }
+        
+        joinView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(view.frame.width * 0.048)
+            make.right.equalToSuperview().offset(view.frame.width * 0.048 * -1)
+            make.top.equalTo(joinLabel.snp.bottom).offset(view.frame.height * 0.01499250375)
+            make.height.equalTo(view.frame.height * 0.08245877061)
+        }
+        
+        sessionTextField.snp.makeConstraints { make in
+            make.width.equalTo(joinView.snp.width).multipliedBy(0.75)
+            make.height.equalTo(joinView.snp.height)
+            make.left.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+        
+        joinButton.snp.makeConstraints{ make in
+            make.left.equalTo(sessionTextField.snp.right)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        whiteView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(view.frame.height * 0.1364317841)
+        }
+        
+        createPollButton.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: view.frame.width * 0.904, height: view.frame.height * 0.08245877061))
+        }
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchLiveLectures()
+        super.viewWillAppear(animated)
+        // Hide navigation bar
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    @objc func handleRefresh() {
-        fetchLiveLectures()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.refControl.endRefreshing()
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Show navigation bar
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    @objc func fetchLiveLectures() {
-        GetLiveLectures(studentId: 1).make()
-            .then { liveLecs -> Void in
-                self.liveLectures = liveLecs
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            }.catch { error -> Void in
-                print(error)
-                return
-            }
+    // MARK: - Keyboard
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }

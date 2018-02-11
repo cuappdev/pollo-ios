@@ -39,12 +39,12 @@ class Session {
                     return
             }
             let questionID = Int(questionIDString)
-            GetQuestion(id: "\(questionID!)" ).make()
-                .then { question -> Void in
-                    self.delegate?.beginQuestion(question)
-                }.catch { error in
-                    print(error)
-            }
+//            GetQuestion(id: "\(questionID!)" ).make()
+//                .then { question -> Void in
+//                    self.delegate?.beginQuestion(question)
+//                }.catch { error in
+//                    print(error)
+//            }
         }
         
         socket.on("student/question/end") { data, ack in
@@ -53,12 +53,12 @@ class Session {
                     return
             }
             let questionID = Int(questionIDString)
-            GetQuestion(id: "\(questionID!)" ).make()
-                .then { question -> Void in
-                    self.delegate?.endQuestion(question)
-                }.catch { error in
-                    print(error)
-            }
+//            GetQuestion(id: "\(questionID!)" ).make()
+//                .then { question -> Void in
+//                    self.delegate?.endQuestion(question)
+//                }.catch { error in
+//                    print(error)
+//            }
         }
         socket.connect()
     }

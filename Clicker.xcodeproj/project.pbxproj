@@ -10,35 +10,37 @@
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
-		C23664601FAF609D0033BC49 /* AddCourseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */; };
+		C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588820265822000E9B07 /* CreateQuestionViewController.swift */; };
+		C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588A20265838000E9B07 /* LiveResultsViewController.swift */; };
+		C205588D20265844000E9B07 /* FinalResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588C20265844000E9B07 /* FinalResultsViewController.swift */; };
+		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
+		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
+		C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8D72029496100533565 /* QuestionOptionsView.swift */; };
+		C22DB8DE2029505800533565 /* MultipleChoiceOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
-		C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188691F7ADDF200D7E944 /* LoginViewController.swift */; };
-		C281886F1F7ADE9200D7E944 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281886E1F7ADE9200D7E944 /* User.swift */; };
-		C28188711F7ADF4000D7E944 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28188701F7ADF4000D7E944 /* Course.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
-		C2D057971F926AC0008F21CB /* Lecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057961F926AC0008F21CB /* Lecture.swift */; };
+		C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */; };
+		C2B3C0C4202A6B02003A9D1C /* CreateFreeResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */; };
+		C2B3C0C6202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */; };
+		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
+		C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
-		C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579C1F926C3B008F21CB /* Organization.swift */; };
 		C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579E1F926C86008F21CB /* LectureQuark.swift */; };
 		C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A01F927390008F21CB /* QuestionsQuark.swift */; };
 		C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */; };
-		C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C61F78011C00B4F9A1 /* TabBarController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C72CD52A1FAF7883004E68D9 /* AnswerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5291FAF7883004E68D9 /* AnswerButton.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
 		C7A0295D1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A0295C1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift */; };
-		C7A0295F1FCF3455008F4F00 /* EmptyPastSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A0295E1FCF3455008F4F00 /* EmptyPastSessionTableViewCell.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
 		C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */; };
 		C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF5E1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift */; };
-		C7D6AF611F93DF15003ABA10 /* PastSessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF601F93DF15003ABA10 /* PastSessionTableViewCell.swift */; };
 		C7D6AF631F93DF41003ABA10 /* LiveSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF621F93DF41003ABA10 /* LiveSessionHeader.swift */; };
-		C7D6AF651F93DF64003ABA10 /* PastSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF641F93DF64003ABA10 /* PastSessionHeader.swift */; };
 		C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
@@ -63,36 +65,38 @@
 		6529150B1F78124700882CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
-		C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseViewController.swift; sourceTree = "<group>"; };
+		C205588820265822000E9B07 /* CreateQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQuestionViewController.swift; sourceTree = "<group>"; };
+		C205588A20265838000E9B07 /* LiveResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveResultsViewController.swift; sourceTree = "<group>"; };
+		C205588C20265844000E9B07 /* FinalResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalResultsViewController.swift; sourceTree = "<group>"; };
+		C205588E2026591A000E9B07 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
+		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
+		C22DB8D72029496100533565 /* QuestionOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionOptionsView.swift; sourceTree = "<group>"; };
+		C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceOptionView.swift; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
-		C28188691F7ADDF200D7E944 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		C281886E1F7ADE9200D7E944 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		C28188701F7ADF4000D7E944 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		C2D057961F926AC0008F21CB /* Lecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lecture.swift; sourceTree = "<group>"; };
+		C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMultipleChoiceCell.swift; sourceTree = "<group>"; };
+		C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFreeResponseCell.swift; sourceTree = "<group>"; };
+		C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMultipleChoiceOptionCell.swift; sourceTree = "<group>"; };
+		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
+		C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSessionViewController.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
-		C2D0579C1F926C3B008F21CB /* Organization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organization.swift; sourceTree = "<group>"; };
 		C2D0579E1F926C86008F21CB /* LectureQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureQuark.swift; sourceTree = "<group>"; };
 		C2D057A01F927390008F21CB /* QuestionsQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsQuark.swift; sourceTree = "<group>"; };
 		C2D057A21F929EB1008F21CB /* OrganizationQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationQuark.swift; sourceTree = "<group>"; };
 		C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
-		C71173C61F78011C00B4F9A1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72240441FA6257300DABA8D /* MultipleChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C72CD5291FAF7883004E68D9 /* AnswerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButton.swift; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
 		C7A0295C1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyLiveSessionTableViewCell.swift; sourceTree = "<group>"; };
-		C7A0295E1FCF3455008F4F00 /* EmptyPastSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPastSessionTableViewCell.swift; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionViewController.swift; sourceTree = "<group>"; };
 		C7D6AF5E1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionTableViewCell.swift; sourceTree = "<group>"; };
-		C7D6AF601F93DF15003ABA10 /* PastSessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionTableViewCell.swift; sourceTree = "<group>"; };
 		C7D6AF621F93DF41003ABA10 /* LiveSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionHeader.swift; sourceTree = "<group>"; };
-		C7D6AF641F93DF64003ABA10 /* PastSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSessionHeader.swift; sourceTree = "<group>"; };
 		C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -162,12 +166,9 @@
 		C281886C1F7ADE6F00D7E944 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C281886E1F7ADE9200D7E944 /* User.swift */,
-				C28188701F7ADF4000D7E944 /* Course.swift */,
-				C2D057961F926AC0008F21CB /* Lecture.swift */,
 				C2D057981F926B31008F21CB /* Question.swift */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
-				C2D0579C1F926C3B008F21CB /* Organization.swift */,
+				C205588E2026591A000E9B07 /* Poll.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -193,12 +194,15 @@
 			isa = PBXGroup;
 			children = (
 				C7D6AF5E1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift */,
-				C7D6AF601F93DF15003ABA10 /* PastSessionTableViewCell.swift */,
-				C7D6AF641F93DF64003ABA10 /* PastSessionHeader.swift */,
 				C7D6AF621F93DF41003ABA10 /* LiveSessionHeader.swift */,
 				C7A0295C1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift */,
-				C7A0295E1FCF3455008F4F00 /* EmptyPastSessionTableViewCell.swift */,
 				C72CD5291FAF7883004E68D9 /* AnswerButton.swift */,
+				C22DB8D72029496100533565 /* QuestionOptionsView.swift */,
+				C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */,
+				C2B3C0C1202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift */,
+				C2B3C0C3202A6B02003A9D1C /* CreateFreeResponseCell.swift */,
+				C2B3C0C5202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift */,
+				C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -238,6 +242,7 @@
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
 				C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */,
+				C212179E20281E94007395DA /* UIFont+Shared.swift */,
 				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
 				C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */,
 			);
@@ -247,11 +252,12 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C71173C61F78011C00B4F9A1 /* TabBarController.swift */,
-				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
-				C28188691F7ADDF200D7E944 /* LoginViewController.swift */,
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
-				C236645F1FAF609D0033BC49 /* AddCourseViewController.swift */,
+				C7D6AF5B1F93DEAD003ABA10 /* LiveSessionViewController.swift */,
+				C205588820265822000E9B07 /* CreateQuestionViewController.swift */,
+				C205588A20265838000E9B07 /* LiveResultsViewController.swift */,
+				C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */,
+				C205588C20265844000E9B07 /* FinalResultsViewController.swift */,
 				C72240431FA6254B00DABA8D /* Question View Controllers */,
 			);
 			path = "View Controllers";
@@ -391,6 +397,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Neutron/Neutron.framework",
+				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
@@ -404,6 +411,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neutron.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
@@ -461,36 +469,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C7D6AF631F93DF41003ABA10 /* LiveSessionHeader.swift in Sources */,
-				C23664601FAF609D0033BC49 /* AddCourseViewController.swift in Sources */,
 				C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */,
+				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				C2D057A31F929EB1008F21CB /* OrganizationQuark.swift in Sources */,
 				C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */,
-				C28188711F7ADF4000D7E944 /* Course.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
+				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
+				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
 				C72CD52A1FAF7883004E68D9 /* AnswerButton.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
-				C7D6AF611F93DF15003ABA10 /* PastSessionTableViewCell.swift in Sources */,
-				C7A0295F1FCF3455008F4F00 /* EmptyPastSessionTableViewCell.swift in Sources */,
-				C2D0579D1F926C3B008F21CB /* Organization.swift in Sources */,
+				C205588D20265844000E9B07 /* FinalResultsViewController.swift in Sources */,
 				C7D6AF5C1F93DEAD003ABA10 /* LiveSessionViewController.swift in Sources */,
-				C281886A1F7ADDF300D7E944 /* LoginViewController.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
-				C7D6AF651F93DF64003ABA10 /* PastSessionHeader.swift in Sources */,
+				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
+				C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */,
+				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
 				C7A0295D1FCF3435008F4F00 /* EmptyLiveSessionTableViewCell.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
-				C71173C71F78011C00B4F9A1 /* TabBarController.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
-				C2D057971F926AC0008F21CB /* Lecture.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C72240451FA6257300DABA8D /* MultipleChoiceViewController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
-				C281886F1F7ADE9200D7E944 /* User.swift in Sources */,
 				C7D6AF5F1F93DEF0003ABA10 /* LiveSessionTableViewCell.swift in Sources */,
+				C2B3C0C4202A6B02003A9D1C /* CreateFreeResponseCell.swift in Sources */,
 				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
+				C2B3C0C6202A6E28003A9D1C /* CreateMultipleChoiceOptionCell.swift in Sources */,
+				C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
+				C22DB8DE2029505800533565 /* MultipleChoiceOptionView.swift in Sources */,
 				C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -663,7 +673,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				DEVELOPMENT_TEAM = CL9XQET3B9;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Clicker;
@@ -682,7 +692,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				DEVELOPMENT_TEAM = CL9XQET3B9;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Clicker;
