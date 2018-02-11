@@ -64,6 +64,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         sessionTextField.attributedPlaceholder = sessionAttributedString
         sessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
         sessionTextField.addTarget(self, action: #selector(beganTypingCode), for: .editingChanged)
+        sessionTextField.backgroundColor = .white
         joinView.addSubview(sessionTextField)
         
         joinButton = UIButton()
