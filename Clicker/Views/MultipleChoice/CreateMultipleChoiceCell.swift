@@ -27,6 +27,17 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     
     @objc func startPoll() {
         let liveResultsVC = LiveResultsViewController()
+        
+        //Pass values to LiveResultsVC
+        liveResultsVC.question = questionTextField.text
+        
+        var options: [String] = [String]()
+        for index in 0...numOptions - 1 {
+            let indexPath = IndexPath(row: 0, section: index)
+            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMultipleChoiceOptionCell
+            options.append(optionCell.addOptionTextField.text!)
+        }
+        liveResultsVC.options = options
         createQuestionVC.navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
