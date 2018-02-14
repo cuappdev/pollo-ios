@@ -9,5 +9,14 @@
 import UIKit
 
 class Poll {
+   
+    var id: String
+    var name: String
+    var code: String
     
+    init(id: String, name: String, code: String) {
+        self.id = id
+        self.name = name
+        self.code = code
+    }
 }

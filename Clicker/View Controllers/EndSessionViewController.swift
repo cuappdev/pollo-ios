@@ -33,8 +33,37 @@ class EndSessionViewController: UIViewController {
     }
     
     @objc func endSession() {
+        if let name = nameSessionTextField.text {
+            if (name != "") {
+                print("saving poll")
+                savePoll(name: name)
+            }
+        }
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    // MARK: Save poll with given name
+    func savePoll(name: String) {
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        CreatePoll(name: name, pollCode: pollCode).make()
+            .then{ Poll -> Void in
+               // Save code to user
+                self.savePollCode(code: pollCode)
+            }.catch { error -> Void in
+                print(error)
+                return
+            }
+    }
+    
+    // MARK: Save poll code to UserDefaults
+    func savePollCode(code: String) {
+        if (UserDefaults.standard.value(forKey: "savedCodes") == nil) {
+            UserDefaults.standard.set([String](), forKey: "savedCodes")
+        }
+        var codes = UserDefaults.standard.value(forKey: "savedCodes") as! [String]
+        codes.append(code)
+        UserDefaults.standard.set(codes, forKey: "savedCodes")
     }
     
     func setupViews() {

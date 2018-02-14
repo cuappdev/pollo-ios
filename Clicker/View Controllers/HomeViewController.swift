@@ -30,7 +30,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     func getNewPollCode() {
         GeneratePollCode().make()
             .then{ code -> Void in
-                UserDefaults.standard.setValue(code, forKey: "newPollCode")
+                UserDefaults.standard.setValue(code, forKey: "pollCode")
             }.catch { error -> Void in
                 print(error)
                 return
@@ -55,10 +55,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     @objc func createNewPoll() {
         // Make sure poll code exists
-        if (UserDefaults.standard.object(forKey: "newPollCode") == nil) {
+        if (UserDefaults.standard.object(forKey: "pollCode") == nil) {
             GeneratePollCode().make()
                 .then{ code -> Void in
-                    UserDefaults.standard.setValue(code, forKey: "newPollCode")
+                    UserDefaults.standard.setValue(code, forKey: "pollCode")
                     let createQuestionVC = CreateQuestionViewController()
                     self.navigationController?.pushViewController(createQuestionVC, animated: true)
                 }.catch { error -> Void in
