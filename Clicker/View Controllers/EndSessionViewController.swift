@@ -47,9 +47,9 @@ class EndSessionViewController: UIViewController {
     func savePoll(name: String) {
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
         CreatePoll(name: name, pollCode: pollCode).make()
-            .then{ Poll -> Void in
+            .then{ poll -> Void in
                // Save code to user
-                self.savePollCode(code: pollCode)
+                self.savePoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
                 return
@@ -57,13 +57,14 @@ class EndSessionViewController: UIViewController {
     }
     
     // MARK: Save poll code to UserDefaults
-    func savePollCode(code: String) {
-        if (UserDefaults.standard.value(forKey: "savedCodes") == nil) {
-            UserDefaults.standard.set([String](), forKey: "savedCodes")
+    func savePoll(poll: Poll) {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            UserDefaults.standard.set([Poll](), forKey: "savedPolls")
         }
-        var codes = UserDefaults.standard.value(forKey: "savedCodes") as! [String]
-        codes.append(code)
-        UserDefaults.standard.set(codes, forKey: "savedCodes")
+        var pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        var polls = NSKeyedArchiver.archivedData(withRootObject: pollsData)
+        polls.append(poll)
+        UserDefaults.standard.set(polls, forKey: "savedPolls")
     }
     
     func setupViews() {

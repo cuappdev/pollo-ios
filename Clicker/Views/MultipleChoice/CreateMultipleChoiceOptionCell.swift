@@ -9,13 +9,13 @@
 import UIKit
 import SnapKit
 
-protocol MultipleChoiceOptionProtocol {
+protocol MultipleChoiceOptionDelegate {
     func deleteOption(index: Int)
 }
 
 class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
 
-    var mcOptionDelegate: MultipleChoiceOptionProtocol!
+    var mcOptionDelegate: MultipleChoiceOptionDelegate!
     var choiceLabel = UILabel()
     var choiceTag: Int! {
         didSet {

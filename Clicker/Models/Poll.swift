@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Poll {
+class Poll: NSCoding {
    
     var id: String
     var name: String
@@ -18,5 +18,11 @@ class Poll {
         self.id = id
         self.name = name
         self.code = code
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: "id")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(code, forKey: "code")
     }
 }
