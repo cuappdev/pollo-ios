@@ -99,7 +99,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func setupNavBar() {
         let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: APPDEV")
+        let pollCode = UserDefaults.standard.value(forKey: "newPollCode") as! String
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
         codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
         codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
         codeLabel.attributedText = codeAttributedString

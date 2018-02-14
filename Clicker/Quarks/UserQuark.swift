@@ -11,17 +11,17 @@
 //import SwiftyJSON
 //
 //struct GetUser : ClickerQuark {
-//    
+//
 //    typealias ResponseType = User
-//    
+//
 //    let id: String
-//    
+//
 //    var route: String {
 //        return "/v1/users/\(id)"
 //    }
 //    let host: String = "http://localhost:3000/api"
 //    let method: HTTPMethod = .get
-//    
+//
 //    func process(element: Element) throws -> User {
 //        switch element {
 //        case .node(let node):
@@ -35,12 +35,12 @@
 //}
 //
 //struct GetUserCourses : ClickerQuark {
-//    
+//
 //    typealias ResponseType = [Course]
-//    
+//
 //    let id: String
 //    let role: String?
-//    
+//
 //    var route: String {
 //        return "/v1/users/\(id)/courses"
 //    }
@@ -50,12 +50,12 @@
 //                "role": r
 //            ]
 //        } else {
-//            return ["role": "student"] 
+//            return ["role": "student"]
 //        }
 //    }
 //    let host: String = "http://localhost:3000/api"
 //    let method: HTTPMethod = .get
-//    
+//
 //    func process(element: Element) throws -> [Course] {
 //        switch element {
 //            case .nodes(let nodes):
@@ -72,4 +72,4 @@
 //        }
 //    }
 //}
-
+//
