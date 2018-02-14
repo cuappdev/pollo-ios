@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Presentr
 
-class LiveResultsViewController: UIViewController {
+class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
@@ -25,6 +25,9 @@ class LiveResultsViewController: UIViewController {
     var questionLabel: UILabel!
     var optionReultsTableView: UITableView!
     var closePollButton: UIButton!
+    
+    var question: String!
+    var options: [String]!
     
     
     override func viewDidLoad() {
@@ -85,6 +88,26 @@ class LiveResultsViewController: UIViewController {
         }
     }
     
+    // MARK - Tableview methods
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
+        cell.choiceTag = indexPath.row
+        cell.optionLabel.text = options[indexPath.row]
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return options.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return view.frame.height * 0.08888888889
+    }
+    
+    
+    // MARK - Setup views
     func setupViews() {
         headerView = UIView()
         headerView.backgroundColor = .clickerBackground
@@ -115,12 +138,21 @@ class LiveResultsViewController: UIViewController {
         headerView.addSubview(editPollButton)
         
         questionLabel = UILabel()
-        questionLabel.text = "What is the name of Saturn's largest moon?"
+        questionLabel.text = question
         questionLabel.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
         questionLabel.textColor = .clickerBlack
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
+        
+        optionReultsTableView = UITableView()
+        optionReultsTableView.backgroundColor = .clear
+        optionReultsTableView.separatorStyle = .none
+        optionReultsTableView.delegate = self
+        optionReultsTableView.dataSource = self
+        optionReultsTableView.clipsToBounds = true
+        optionReultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
+        view.addSubview(optionReultsTableView)
         
         closePollButton = UIButton()
         closePollButton.setTitle("Close Poll", for: .normal)
@@ -177,6 +209,13 @@ class LiveResultsViewController: UIViewController {
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-18)
+        }
+        
+        optionReultsTableView.snp.makeConstraints { make in
+            make.width.equalTo(closePollButton.snp.width)
+            make.bottom.equalTo(closePollButton.snp.top).offset(-5)
+            make.top.equalTo(questionLabel.snp.bottom).offset(24)
+            make.centerX.equalToSuperview()
         }
         
         
