@@ -76,8 +76,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
             return false
         }
-        let codes = UserDefaults.standard.value(forKey: "savedPolls") as! [String]
-        return (codes.count >= 1)
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+        return (polls.count >= 1)
     }
     
     func setupViews() {
@@ -136,7 +137,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     // MARK - TableView methods
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let polls = UserDefaults.standard.value(forKey: "savedPolls") as! [Poll]
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
         let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
         cell.sessionText = polls[indexPath.row].name
         return cell
@@ -146,7 +148,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
             return 0
         }
-        let polls = UserDefaults.standard.value(forKey: "savedPolls") as! [Poll]
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
         return polls.count
     }
     

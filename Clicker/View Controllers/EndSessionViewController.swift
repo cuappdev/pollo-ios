@@ -59,12 +59,16 @@ class EndSessionViewController: UIViewController {
     // MARK: Save poll code to UserDefaults
     func savePoll(poll: Poll) {
         if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
-            UserDefaults.standard.set([Poll](), forKey: "savedPolls")
+            var polls: [Poll] = [poll]
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: polls)
+            UserDefaults.standard.set(encodedData, forKey: "savedPolls")
+        } else {
+            let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+            var polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+            polls.append(poll)
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: polls)
+            UserDefaults.standard.set(encodedData, forKey: "savedPolls")
         }
-        var pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        var polls = NSKeyedArchiver.archivedData(withRootObject: pollsData)
-        polls.append(poll)
-        UserDefaults.standard.set(polls, forKey: "savedPolls")
     }
     
     func setupViews() {
