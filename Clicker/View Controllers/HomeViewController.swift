@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UITextFieldDelegate {
+class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
     var joinLabel: UILabel!
     var joinView: UIView!
@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     var joinButton: UIButton!
     var whiteView: UIView!
     var createPollButton: UIButton!
+    var savedSessionsTableView: UITableView!
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -71,7 +72,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func savedPollsExist() -> Bool {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            return false
+        }
+        let codes = UserDefaults.standard.value(forKey: "savedPolls") as! [String]
+        return (codes.count >= 1)
+    }
+    
     func setupViews() {
+        
         joinLabel = UILabel()
         joinLabel.text = "Join A Session"
         joinLabel.font = UIFont._16SemiboldFont
@@ -111,9 +121,53 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         createPollButton.layer.cornerRadius = 8
         createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
         whiteView.addSubview(createPollButton)
+        
+        savedSessionsTableView = UITableView()
+        savedSessionsTableView.delegate = self
+        savedSessionsTableView.dataSource = self
+        savedSessionsTableView.separatorStyle = .none
+        savedSessionsTableView.clipsToBounds = true
+        savedSessionsTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
+        savedSessionsTableView.register(SessionTableViewCell.self, forCellReuseIdentifier: "sessionCellID")
+        savedSessionsTableView.backgroundColor = .clear
+        view.addSubview(savedSessionsTableView)
     }
     
+    // MARK - TableView methods
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let polls = UserDefaults.standard.value(forKey: "savedPolls") as! [Poll]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
+        cell.sessionText = polls[indexPath.row].name
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            return 0
+        }
+        let polls = UserDefaults.standard.value(forKey: "savedPolls") as! [Poll]
+        return polls.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
+        headerView.contentView.backgroundColor = .clickerBackground
+        headerView.backgroundColor = .clickerBackground
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    // MARK - Setup
     func setupConstraints() {
+        
         joinLabel.snp.makeConstraints { make in
             make.size.equalTo(CGSize(width: view.frame.width * 0.8066666667, height: view.frame.height * 0.02848575712))
             make.left.equalToSuperview().offset(view.frame.width * 0.048)
@@ -152,6 +206,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             make.center.equalToSuperview()
             make.size.equalTo(CGSize(width: view.frame.width * 0.904, height: view.frame.height * 0.08245877061))
         }
+        
+        savedSessionsTableView.snp.updateConstraints { make in
+            make.width.equalTo(createPollButton.snp.width)
+            make.height.equalTo(view.frame.height * 0.3028485757)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(whiteView.snp.top)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,6 +221,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         // Get new poll code if needed
         getNewPollCode()
+        // Reload TableViews
+        savedSessionsTableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

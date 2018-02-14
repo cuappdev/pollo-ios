@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionProtocol {
+class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
     var questionTextField: UITextField!
