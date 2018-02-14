@@ -26,6 +26,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         setupConstraints()
     }
     
+    // MARK: Generate poll code
+    func getNewPollCode() {
+        GeneratePollCode().make()
+            .then{ code -> Void in
+                UserDefaults.standard.setValue(code, forKey: "newPollCode")
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+        
+    }
+    
     @objc func beganTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             if text != "" {
@@ -42,8 +54,21 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func createNewPoll() {
-        let createQuestionVC = CreateQuestionViewController()
-        self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        // Make sure poll code exists
+        if (UserDefaults.standard.object(forKey: "newPollCode") == nil) {
+            GeneratePollCode().make()
+                .then{ code -> Void in
+                    UserDefaults.standard.setValue(code, forKey: "newPollCode")
+                    let createQuestionVC = CreateQuestionViewController()
+                    self.navigationController?.pushViewController(createQuestionVC, animated: true)
+                }.catch { error -> Void in
+                    print(error)
+                    return
+            }
+        } else {
+            let createQuestionVC = CreateQuestionViewController()
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        }
     }
     
     func setupViews() {
@@ -133,6 +158,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         // Hide navigation bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        // Get new poll code if needed
+        getNewPollCode()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
