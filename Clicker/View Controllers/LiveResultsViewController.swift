@@ -23,7 +23,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var elapsedSeconds: Int = 0
     
     var questionLabel: UILabel!
-    var optionReultsTableView: UITableView!
+    var optionResultsTableView: UITableView!
     var closePollButton: UIButton!
     
     var question: String!
@@ -145,14 +145,14 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionReultsTableView = UITableView()
-        optionReultsTableView.backgroundColor = .clear
-        optionReultsTableView.separatorStyle = .none
-        optionReultsTableView.delegate = self
-        optionReultsTableView.dataSource = self
-        optionReultsTableView.clipsToBounds = true
-        optionReultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
-        view.addSubview(optionReultsTableView)
+        optionResultsTableView = UITableView()
+        optionResultsTableView.backgroundColor = .clear
+        optionResultsTableView.separatorStyle = .none
+        optionResultsTableView.delegate = self
+        optionResultsTableView.dataSource = self
+        optionResultsTableView.clipsToBounds = true
+        optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
+        view.addSubview(optionResultsTableView)
         
         closePollButton = UIButton()
         closePollButton.setTitle("Close Poll", for: .normal)
@@ -211,7 +211,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.bottom.equalToSuperview().offset(-18)
         }
         
-        optionReultsTableView.snp.makeConstraints { make in
+        optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(closePollButton.snp.width)
             make.bottom.equalTo(closePollButton.snp.top).offset(-5)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)

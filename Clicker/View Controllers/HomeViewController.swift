@@ -18,7 +18,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var createPollButton: UIButton!
     var savedSessionsTableView: UITableView!
     
-    var isValidCode: Bool!
+    var isValidCode: Bool! = false
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -27,82 +27,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         view.backgroundColor = .clickerBackground
         setupViews()
         setupConstraints()
-    }
-    
-    // MARK: Generate poll code
-    func getNewPollCode() {
-        GeneratePollCode().make()
-            .then{ code -> Void in
-                UserDefaults.standard.setValue(code, forKey: "pollCode")
-            }.catch { error -> Void in
-                print(error)
-                return
-        }
-    }
-    
-    @objc func beganTypingCode(_ textField: UITextField) {
-        if let text = textField.text {
-            textField.text = text.uppercased()
-            validateCode(code: text)
-            
-            if isValidCode {
-                joinButton.backgroundColor = .clickerGreen
-                joinButton.setTitleColor(.white, for: .normal)
-            } else {
-                joinButton.backgroundColor = .clickerLightGray
-                joinButton.setTitleColor(.clickerDarkGray, for: .normal)
-            }
-        } else {
-            joinButton.backgroundColor = .clickerLightGray
-            joinButton.setTitleColor(.clickerDarkGray, for: .normal)
-        }
-    }
-    
-    func validateCode(code: String){
-        if(code.count == 6 && !code.contains(" ")){
-            isValidCode = true
-        } else {
-            isValidCode = false
-        }
-    }
-    
-    @objc func createNewPoll() {
-        // Make sure poll code exists
-        if (UserDefaults.standard.object(forKey: "pollCode") == nil) {
-            GeneratePollCode().make()
-                .then{ code -> Void in
-                    UserDefaults.standard.setValue(code, forKey: "pollCode")
-                    let createQuestionVC = CreateQuestionViewController()
-                    self.navigationController?.pushViewController(createQuestionVC, animated: true)
-                }.catch { error -> Void in
-                    print(error)
-                    return
-            }
-        } else {
-            let createQuestionVC = CreateQuestionViewController()
-            self.navigationController?.pushViewController(createQuestionVC, animated: true)
-        }
-    }
-    
-    func savedPollsExist() -> Bool {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
-            return false
-        }
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
-        return (polls.count >= 1)
-    }
-    
-    func joinSession(){
-        if isValidCode {
-            //check for live question else go to waiting screen
-            
-            
-            
-            
-            let createQuestionVC = CreateQuestionViewController()
-            self.navigationController?.pushViewController(createQuestionVC, animated: true)
-        }
     }
     
     func setupViews() {
@@ -132,7 +56,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         joinButton.titleLabel?.font = UIFont._18MediumFont
         joinButton.setTitleColor(.clickerDarkGray, for: .normal)
         joinButton.backgroundColor = .clickerLightGray
-        joinButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        joinButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
         joinView.addSubview(joinButton)
         
         whiteView = UIView()
@@ -159,41 +83,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         view.addSubview(savedSessionsTableView)
     }
     
-    // MARK - TableView methods
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
-        cell.sessionText = polls[indexPath.row].name
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
-            return 0
-        }
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
-        return polls.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
-        headerView.contentView.backgroundColor = .clickerBackground
-        headerView.backgroundColor = .clickerBackground
-        return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
-    // MARK - Setup
     func setupConstraints() {
         
         joinLabel.snp.makeConstraints { make in
@@ -259,9 +148,132 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    // MARK: - Keyboard
+    // MARK: - KEYBOARD
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    // MARK: - TABLEVIEW
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
+        cell.sessionText = polls[indexPath.row].name
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            return 0
+        }
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+        return polls.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
+        headerView.contentView.backgroundColor = .clickerBackground
+        headerView.backgroundColor = .clickerBackground
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    
+    // MARK: - SESSIONS / POLLS
+    
+    // Generate poll code
+    func getNewPollCode() {
+        GeneratePollCode().make()
+            .then{ code -> Void in
+                UserDefaults.standard.setValue(code, forKey: "pollCode")
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+    }
+    
+    //Check if question is live or not
+    func getPollStatus() -> UIViewController{
+        //TEMP ACTUALLY CHECK FOR QUESTION STATUS
+        if true {
+            let destinationVC = AnswerQuestionViewController()
+            destinationVC.pollCode = sessionTextField.text
+            return destinationVC
+        } else {
+            let destinationVC = PendingViewController()
+            return destinationVC
+        }
+    }
+    
+    @objc func beganTypingCode(_ textField: UITextField) {
+        if let text = textField.text {
+            textField.text = text.uppercased()
+            validateCode(code: text)
+            
+            if isValidCode {
+                joinButton.backgroundColor = .clickerGreen
+                joinButton.setTitleColor(.white, for: .normal)
+            } else {
+                joinButton.backgroundColor = .clickerLightGray
+                joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+            }
+        } else {
+            joinButton.backgroundColor = .clickerLightGray
+            joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+        }
+    }
+    
+    func validateCode(code: String){
+        if(code.count == 6 && !code.contains(" ")){
+            isValidCode = true
+        } else {
+            isValidCode = false
+        }
+    }
+    
+    @objc func createNewPoll() {
+        // Make sure poll code exists
+        if (UserDefaults.standard.object(forKey: "pollCode") == nil) {
+            GeneratePollCode().make()
+                .then{ code -> Void in
+                    UserDefaults.standard.setValue(code, forKey: "pollCode")
+                    let createQuestionVC = CreateQuestionViewController()
+                    self.navigationController?.pushViewController(createQuestionVC, animated: true)
+                }.catch { error -> Void in
+                    print(error)
+                    return
+            }
+        } else {
+            let createQuestionVC = CreateQuestionViewController()
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        }
+    }
+    
+    func savedPollsExist() -> Bool {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            return false
+        }
+        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+        return (polls.count >= 1)
+    }
+    
+    @objc func joinSession(){
+        if isValidCode {
+            let destinationVC = getPollStatus()
+            view.endEditing(true)
+            sessionTextField.text = ""
+            navigationController?.pushViewController(destinationVC, animated: true)
+        }
     }
 }
