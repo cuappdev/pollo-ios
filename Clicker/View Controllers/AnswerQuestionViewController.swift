@@ -14,8 +14,8 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionLabel: UILabel!
+    var submitAnswerButton: UIButton!
 
-    
     var pollCode: String!
     var question: String!
     var options: [String]!
@@ -76,6 +76,16 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         optionTableView.register(StudentMultipleChoiceCell.self, forCellReuseIdentifier: "studentMultipleChoiceCell")
         optionTableView.backgroundColor = .clear
         view.addSubview(optionTableView)
+        
+        submitAnswerButton = UIButton()
+        submitAnswerButton.backgroundColor = .clickerBlue
+        submitAnswerButton.layer.cornerRadius = 8
+        submitAnswerButton.setTitle("Submit", for: .normal)
+        submitAnswerButton.setTitleColor(.white, for: .normal)
+        submitAnswerButton.titleLabel?.font = UIFont._18SemiboldFont
+       // submitAnswerButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        view.addSubview(submitAnswerButton)
+        view.bringSubview(toFront: submitAnswerButton)
     }
     
     func setupConstraints() {
@@ -90,6 +100,13 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.height.equalTo(view.frame.height * 0.3028485757)
             make.centerX.equalToSuperview()
             make.top.equalTo(questionLabel.snp.bottom).offset(18)
+        }
+        
+        submitAnswerButton.snp.updateConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalTo(55)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-18)
         }
     }
     
@@ -107,8 +124,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
-        
-        
+        cell.choiceTag = indexPath.section
         return cell
     }
     
