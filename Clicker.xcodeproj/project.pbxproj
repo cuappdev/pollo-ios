@@ -40,6 +40,7 @@
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
 		C76968302034F2FB00E7E676 /* ResultMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C769682F2034F2FB00E7E676 /* ResultMCOptionCell.swift */; };
 		C76968322035065E00E7E676 /* AnswerQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */; };
+		C7A67065203776A30004BE8F /* StudentMultipleChoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A67064203776A30004BE8F /* StudentMultipleChoiceCell.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
 		C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
@@ -96,6 +97,7 @@
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
 		C769682F2034F2FB00E7E676 /* ResultMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMCOptionCell.swift; sourceTree = "<group>"; };
 		C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerQuestionViewController.swift; sourceTree = "<group>"; };
+		C7A67064203776A30004BE8F /* StudentMultipleChoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentMultipleChoiceCell.swift; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,6 +209,7 @@
 				C2BF44D22034027A0067505A /* FreeResponse */,
 				C2BF44D1203402540067505A /* MultipleChoice */,
 				C22DB8D72029496100533565 /* QuestionOptionsView.swift */,
+				C7A67064203776A30004BE8F /* StudentMultipleChoiceCell.swift */,
 				C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */,
 				C2BF44D3203405D60067505A /* SessionTableViewCell.swift */,
 				C2BF44D520340D5A0067505A /* SessionHeader.swift */,
@@ -489,6 +492,7 @@
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C205588D20265844000E9B07 /* FinalResultsViewController.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
+				C7A67065203776A30004BE8F /* StudentMultipleChoiceCell.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
 				C76968302034F2FB00E7E676 /* ResultMCOptionCell.swift in Sources */,
