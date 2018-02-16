@@ -18,7 +18,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
 
     var pollCode: String!
     var question: String!
-    var options: [String]!
+    var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
     
     var optionTableView: UITableView!
     
@@ -125,6 +125,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
         cell.choiceTag = indexPath.section
+        cell.optionLabel.text = options[indexPath.row]
         return cell
     }
     

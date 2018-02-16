@@ -19,6 +19,9 @@ class StudentMultipleChoiceCell: UITableViewCell {
         }
     }
     
+    var optionLabel = UILabel()
+
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -37,6 +40,10 @@ class StudentMultipleChoiceCell: UITableViewCell {
         choiceLabel.font = UIFont._16SemiboldFont
         choiceLabel.textAlignment = .center
         addSubview(choiceLabel)
+        
+        optionLabel.font = UIFont._16RegularFont
+        optionLabel.backgroundColor = .clear
+        addSubview(optionLabel)
     }
     
     override func layoutSubviews() {
@@ -48,6 +55,13 @@ class StudentMultipleChoiceCell: UITableViewCell {
             make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
             make.left.equalToSuperview().offset(18)
             make.top.equalToSuperview()
+        }
+        
+        optionLabel.snp.updateConstraints { make in
+            make.left.equalTo(choiceLabel.snp.right).offset(14)
+            make.right.equalToSuperview().offset(-14)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
     
