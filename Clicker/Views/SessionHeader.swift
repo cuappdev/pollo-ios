@@ -16,13 +16,12 @@ class SessionHeader: UITableViewHeaderFooterView {
     // MARK: - INITIALIZATION
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
+        
         
         headerLabel = UILabel()
         headerLabel.text = "Saved Sessions"
         headerLabel.font = UIFont._16SemiboldFont
         headerLabel.textColor = UIColor.clickerMediumGray
-        headerLabel.backgroundColor = .clear
         addSubview(headerLabel)
         
         layoutSubviews()

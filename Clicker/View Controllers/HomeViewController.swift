@@ -179,15 +179,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
-        headerView.contentView.backgroundColor = .clickerBackground
-        headerView.backgroundColor = .clickerBackground
+        //headerView.backgroundView?.backgroundColor = .clickerBackground
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-    
     
     // MARK: - SESSIONS / POLLS
     
