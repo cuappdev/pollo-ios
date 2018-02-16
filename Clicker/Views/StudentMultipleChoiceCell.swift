@@ -46,7 +46,7 @@ class StudentMultipleChoiceCell: UITableViewCell {
         
         choiceLabel.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
-            make.left.equalToSuperview()
+            make.left.equalToSuperview().offset(18)
             make.top.equalToSuperview()
         }
     }
