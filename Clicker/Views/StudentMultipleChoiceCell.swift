@@ -12,6 +12,13 @@ class StudentMultipleChoiceCell: UITableViewCell {
     
     var option: String!
     
+    var choiceLabel = UILabel()
+    var choiceTag: Int! {
+        didSet {
+            choiceLabel.text = String(Character(UnicodeScalar(choiceTag + Int(("A" as UnicodeScalar).value))!))
+        }
+    }
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,11 +27,28 @@ class StudentMultipleChoiceCell: UITableViewCell {
         contentView.layer.cornerRadius = 8
         contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         contentView.layer.borderWidth = 0.5
+        
+        setupViews()
+        layoutSubviews()
+    }
+    
+    func setupViews() {
+        choiceLabel.textColor = .clickerDarkGray
+        choiceLabel.font = UIFont._16SemiboldFont
+        choiceLabel.textAlignment = .center
+        addSubview(choiceLabel)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+       
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 18, 5, 18))
+        
+        choiceLabel.snp.updateConstraints { make in
+            make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
+            make.left.equalToSuperview()
+            make.top.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
