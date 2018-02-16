@@ -18,6 +18,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var createPollButton: UIButton!
     var savedSessionsTableView: UITableView!
     
+    var isValidCode: Bool!
+    
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +38,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 print(error)
                 return
         }
-        
     }
     
     @objc func beganTypingCode(_ textField: UITextField) {
         if let text = textField.text {
-            if text != "" {
+            textField.text = text.uppercased()
+            validateCode(code: text)
+            
+            if isValidCode {
                 joinButton.backgroundColor = .clickerGreen
                 joinButton.setTitleColor(.white, for: .normal)
             } else {
@@ -51,6 +55,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         } else {
             joinButton.backgroundColor = .clickerLightGray
             joinButton.setTitleColor(.clickerDarkGray, for: .normal)
+        }
+    }
+    
+    func validateCode(code: String){
+        if(code.count == 6 && !code.contains(" ")){
+            isValidCode = true
+        } else {
+            isValidCode = false
         }
     }
     
@@ -81,6 +93,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return (polls.count >= 1)
     }
     
+    func joinSession(){
+        if isValidCode {
+            //check for live question else go to waiting screen
+            
+            
+            
+            
+            let createQuestionVC = CreateQuestionViewController()
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        }
+    }
+    
     func setupViews() {
         
         joinLabel = UILabel()
@@ -108,6 +132,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         joinButton.titleLabel?.font = UIFont._18MediumFont
         joinButton.setTitleColor(.clickerDarkGray, for: .normal)
         joinButton.backgroundColor = .clickerLightGray
+        joinButton.addTarget(self, action: #selector(), for: .touchUpInside)
         joinView.addSubview(joinButton)
         
         whiteView = UIView()
