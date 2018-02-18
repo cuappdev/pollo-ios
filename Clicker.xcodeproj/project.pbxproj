@@ -17,6 +17,7 @@
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8D72029496100533565 /* QuestionOptionsView.swift */; };
 		C22DB8DE2029505800533565 /* MultipleChoiceOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */; };
+		C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259603A20390F0800C8DBA3 /* CurrentState.swift */; };
 		C27429E31F8C25A7006FAD31 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E21F8C25A7006FAD31 /* UserQuark.swift */; };
 		C27429E51F8C32F7006FAD31 /* CourseQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27429E41F8C32F7006FAD31 /* CourseQuark.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
@@ -73,6 +74,7 @@
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C22DB8D72029496100533565 /* QuestionOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionOptionsView.swift; sourceTree = "<group>"; };
 		C22DB8DD2029505800533565 /* MultipleChoiceOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceOptionView.swift; sourceTree = "<group>"; };
+		C259603A20390F0800C8DBA3 /* CurrentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentState.swift; sourceTree = "<group>"; };
 		C27429E21F8C25A7006FAD31 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C27429E41F8C32F7006FAD31 /* CourseQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseQuark.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				C2D057981F926B31008F21CB /* Question.swift */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
 				C205588E2026591A000E9B07 /* Poll.swift */,
+				C259603A20390F0800C8DBA3 /* CurrentState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				C7A67065203776A30004BE8F /* StudentMultipleChoiceCell.swift in Sources */,
 				C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
+				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
 				C76968302034F2FB00E7E676 /* ResultMCOptionCell.swift in Sources */,
 				C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */,
 				C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */,
