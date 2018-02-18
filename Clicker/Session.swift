@@ -33,33 +33,35 @@ class Session {
             self.socket.emit("student/question/start", data)
         }
         
-        socket.on("student/question/start") { data, ack in
+        socket.on("user/question/start") { data, ack in
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
                 let questionIDString = questionJSON["id"] as? String else {
                     return
             }
             let questionID = Int(questionIDString)
-//            GetQuestion(id: "\(questionID!)" ).make()
-//                .then { question -> Void in
-//                    self.delegate?.beginQuestion(question)
-//                }.catch { error in
-//                    print(error)
-//            }
+
         }
         
-        socket.on("student/question/end") { data, ack in
+        socket.on("user/question/end") { data, ack in
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
                 let questionIDString = questionJSON["id"] as? String else {
                     return
             }
             let questionID = Int(questionIDString)
-//            GetQuestion(id: "\(questionID!)" ).make()
-//                .then { question -> Void in
-//                    self.delegate?.endQuestion(question)
-//                }.catch { error in
-//                    print(error)
-//            }
         }
+        
+        socket.on("user/question/results") { data, ack in
+            
+        }
+        
+        socket.on("user/question/save") { data, ack in
+            
+        }
+        
+        socket.on("admin/question/updateTally") { data, ack in
+            
+        }
+        
         socket.connect()
     }
 }

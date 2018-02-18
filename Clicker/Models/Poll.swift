@@ -11,18 +11,18 @@ import UIKit
 // Superclass needed to save Polls to UserDefaults
 class Poll: NSObject, NSCoding {
    
-    var id: String
+    var id: Int
     var name: String
     var code: String
     
-    init(id: String, name: String, code: String) {
+    init(id: Int, name: String, code: String) {
         self.id = id
         self.name = name
         self.code = code
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let id = aDecoder.decodeObject(forKey: "id") as! String
+        let id = aDecoder.decodeObject(forKey: "id") as! Int
         let name = aDecoder.decodeObject(forKey: "name") as! String
         let code = aDecoder.decodeObject(forKey: "code") as! String
         self.init(id: id, name: name, code: code)

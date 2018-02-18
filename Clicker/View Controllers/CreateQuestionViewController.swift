@@ -16,6 +16,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionOptionsView: QuestionOptionsView!
     var questionCollectionView: UICollectionView!
+    var session: Session!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
+        startPoll()
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -33,6 +35,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createMultipleChoiceCellID", for: indexPath) as! CreateMultipleChoiceCell
             cell.createQuestionVC = self
+            cell.session = self.session
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createFreeResponseCellID", for: indexPath) as! CreateFreeResponseCell
@@ -95,6 +98,17 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.bottom.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
         }
+    }
+    
+    func startPoll() {
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        StartNewPoll(code: pollCode, name: "").make()
+            .then { port -> Void in
+                print("starting poll at \(port)")
+                self.session = Session(id: port)
+            }.catch { error -> Void in
+                print(error)
+            }
     }
     
     func setupNavBar() {
