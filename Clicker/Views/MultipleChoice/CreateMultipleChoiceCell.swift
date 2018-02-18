@@ -12,6 +12,7 @@ import UIKit
 class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
+    var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
@@ -38,6 +39,16 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
             options.append(optionCell.addOptionTextField.text!)
         }
         liveResultsVC.options = options
+        liveResultsVC.session = self.session
+        
+        // Emit socket messsage to start question
+        let question: [String:Any] = [
+            "text": questionTextField.text,
+            "type": "MULTIPLE_CHOICE",
+            "options": options
+        ]
+        session.socket.emit("server/question/start", with: [question])
+        
         createQuestionVC.navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     

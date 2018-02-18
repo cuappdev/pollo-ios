@@ -12,6 +12,7 @@ import Presentr
 
 class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var session: Session!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -52,6 +53,9 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     @objc func editPoll() {
+        // Emit socket messsage to end question
+        session.socket.emit("server/question/end", with: [])
+        // Pop to CreateQuestionVC
         self.navigationController?.popViewController(animated: true)
     }
     

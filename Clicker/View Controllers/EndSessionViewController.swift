@@ -71,6 +71,16 @@ class EndSessionViewController: UIViewController {
         }
     }
     
+    // MARK: End poll
+    func endPoll(pollId: Int, save: Bool) {
+        EndPoll(id: pollId, save: save).make()
+            .then { Void -> Void in
+                print("ended poll")
+            }.catch { error -> Void in
+                print(error)
+            }
+    }
+    
     func setupViews() {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)

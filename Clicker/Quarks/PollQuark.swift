@@ -58,7 +58,7 @@ struct CreatePoll: ClickerQuark {
             guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
-            return Poll(id: "\(id)", name: name, code: code)
+            return Poll(id: id, name: name, code: code)
         default: throw NeutronError.badResponseData
         }
     }
@@ -124,7 +124,7 @@ struct StartNewPoll: ClickerQuark {
     }
 }
 
-struct SavePoll: ClickerQuark {
+struct EndPoll: ClickerQuark {
     
     typealias ResponseType = Void
     

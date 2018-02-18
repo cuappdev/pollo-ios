@@ -11,12 +11,6 @@ import SocketIO
 protocol SessionDelegate {
     func sessionConnected()
     func sessionDisconnected()
-    // ADMIN SENDS
-    func beginQuestion(_ question: Question)
-    func endQuestion(_ question: Question)
-    func sendTally(_ answer: Answer)
-    func sendResults(_ currentState: CurrentState)
-    
     // USER RECEIVES
     func questionStarted(_ question: Question)
     func questionEnded(_ question: Question)
