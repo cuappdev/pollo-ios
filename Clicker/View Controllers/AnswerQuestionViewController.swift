@@ -16,8 +16,10 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var questionLabel: UILabel!
     var submitAnswerButton: UIButton!
 
+    var poll: Poll!
     var pollCode: String!
     var question: String!
+    var selectedOptionIndex: Int = -1
     var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
     
     var optionTableView: UITableView!
@@ -78,12 +80,12 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         view.addSubview(optionTableView)
         
         submitAnswerButton = UIButton()
-        submitAnswerButton.backgroundColor = .clickerBlue
+        submitAnswerButton.backgroundColor = .clickerLightGray
         submitAnswerButton.layer.cornerRadius = 8
         submitAnswerButton.setTitle("Submit", for: .normal)
         submitAnswerButton.setTitleColor(.white, for: .normal)
         submitAnswerButton.titleLabel?.font = UIFont._18SemiboldFont
-       // submitAnswerButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        submitAnswerButton.addTarget(self, action: #selector(submitAnswer), for: .touchUpInside)
         view.addSubview(submitAnswerButton)
         view.bringSubview(toFront: submitAnswerButton)
     }
@@ -110,6 +112,22 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
+    // MARK: Submit button pressed
+    
+    @objc func submitAnswer() {
+        if (selectedOptionIndex == -1) {
+            return
+        }
+        // Submit answer
+        
+        let alert = UIAlertController(title: "Submitted", message: "Choose a different option to resubmit", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        // Reset
+        selectedOptionIndex = -1
+        submitAnswerButton.backgroundColor = .clickerLightGray
+    }
+    
     // MARK: - KEYBOARD
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -133,6 +151,12 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         return 60
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (selectedOptionIndex == -1) {
+            submitAnswerButton.backgroundColor = .clickerBlue
+        }
+        selectedOptionIndex = indexPath.row
+    }
     
     // MARK: - SESSION
     @objc func endSession() {

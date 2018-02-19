@@ -147,6 +147,40 @@ struct EndPoll: ClickerQuark {
     }
 }
 
+struct GetLivePolls: ClickerQuark {
+    
+    typealias ResponseType = [Poll]
+    
+    let pollCodes: [String]
+    
+    var route: String {
+        return "/v1/polls/live"
+    }
+    var parameters: Parameters {
+        return [
+            "codes": ["ABCDEF"]
+        ]
+    }
+    let host: String = "http://localhost:3000/api"
+    let method: HTTPMethod = .post
+    
+    func process(element: Element) throws -> [Poll] {
+        switch element {
+        case .nodes(let nodes):
+            var polls: [Poll] = [Poll]()
+            for node in nodes {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
+                    throw NeutronError.badResponseData
+                }
+                polls.append(Poll(id: id, name: name, code: code))
+            }
+            return polls
+        default:
+            throw NeutronError.badResponseData
+        }
+    }
+}
+
 struct GetPollPorts: ClickerQuark {
     
     typealias ResponseType = Int?
