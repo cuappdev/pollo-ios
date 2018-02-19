@@ -1,5 +1,5 @@
 //
-//  SessionHeader.swift
+//  SavedSessionHeader.swift
 //  Clicker
 //
 //  Created by Kevin Chan on 2/14/18.
@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class SessionHeader: UITableViewHeaderFooterView {
+class SavedSessionHeader: UITableViewHeaderFooterView {
     
     var headerLabel: UILabel!
     
