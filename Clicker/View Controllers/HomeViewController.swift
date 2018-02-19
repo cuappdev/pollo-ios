@@ -81,8 +81,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         savedSessionsTableView.dataSource = self
         savedSessionsTableView.separatorStyle = .none
         savedSessionsTableView.clipsToBounds = true
-        savedSessionsTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
-        savedSessionsTableView.register(SessionTableViewCell.self, forCellReuseIdentifier: "sessionCellID")
+        savedSessionsTableView.register(SavedSessionHeader.self, forHeaderFooterViewReuseIdentifier: "savedSessionHeaderID")
+        savedSessionsTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
         savedSessionsTableView.backgroundColor = .clear
         view.addSubview(savedSessionsTableView)
     }
@@ -162,7 +162,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
         cell.sessionText = polls[indexPath.row].name
         return cell
     }
@@ -190,7 +190,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "savedSessionHeaderID") as! SavedSessionHeader
         headerView.backgroundView?.backgroundColor = UIColor.red
         headerView.contentView.backgroundColor = UIColor.red
         return headerView

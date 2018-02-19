@@ -1,5 +1,5 @@
 //
-//  SessionTableViewCell.swift
+//  SavedSessionCell.swift
 //  Clicker
 //
 //  Created by Kevin Chan on 2/14/18.
@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class SessionTableViewCell: UITableViewCell {
+class SavedSessionCell: UITableViewCell {
     
     var containerView: UIView!
     var sessionLabel: UILabel!

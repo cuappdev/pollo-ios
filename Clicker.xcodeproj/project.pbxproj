@@ -31,8 +31,8 @@
 		C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */; };
 		C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CD2033FA140067505A /* PollQuark.swift */; };
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
-		C2BF44D4203405D60067505A /* SessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D3203405D60067505A /* SessionTableViewCell.swift */; };
-		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
+		C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D3203405D60067505A /* SavedSessionCell.swift */; };
+		C2BF44D620340D5A0067505A /* SavedSessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SavedSessionHeader.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2D0579F1F926C86008F21CB /* LectureQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579E1F926C86008F21CB /* LectureQuark.swift */; };
@@ -90,8 +90,8 @@
 		C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSessionViewController.swift; sourceTree = "<group>"; };
 		C2BF44CD2033FA140067505A /* PollQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollQuark.swift; sourceTree = "<group>"; };
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
-		C2BF44D3203405D60067505A /* SessionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTableViewCell.swift; sourceTree = "<group>"; };
-		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
+		C2BF44D3203405D60067505A /* SavedSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSessionCell.swift; sourceTree = "<group>"; };
+		C2BF44D520340D5A0067505A /* SavedSessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSessionHeader.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2D0579E1F926C86008F21CB /* LectureQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureQuark.swift; sourceTree = "<group>"; };
@@ -202,6 +202,15 @@
 			path = FreeResponse;
 			sourceTree = "<group>";
 		};
+		C768B769203B78260062DC66 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C2BF44D3203405D60067505A /* SavedSessionCell.swift */,
+				C2BF44D520340D5A0067505A /* SavedSessionHeader.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		C7D6AF571F93DE43003ABA10 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,13 +222,12 @@
 		C7D6AF5D1F93DED9003ABA10 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C768B769203B78260062DC66 /* Home */,
 				C2BF44D22034027A0067505A /* FreeResponse */,
 				C2BF44D1203402540067505A /* MultipleChoice */,
 				C22DB8D72029496100533565 /* QuestionOptionsView.swift */,
 				C7A67064203776A30004BE8F /* StudentMultipleChoiceCell.swift */,
 				C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */,
-				C2BF44D3203405D60067505A /* SessionTableViewCell.swift */,
-				C2BF44D520340D5A0067505A /* SessionHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -507,10 +515,10 @@
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
 				C76968302034F2FB00E7E676 /* ResultMCOptionCell.swift in Sources */,
 				C2B3C0C2202A6AE2003A9D1C /* CreateMultipleChoiceCell.swift in Sources */,
-				C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */,
+				C2BF44D620340D5A0067505A /* SavedSessionHeader.swift in Sources */,
 				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
 				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
-				C2BF44D4203405D60067505A /* SessionTableViewCell.swift in Sources */,
+				C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,

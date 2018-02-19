@@ -21,8 +21,6 @@ class StudentMultipleChoiceCell: UITableViewCell {
     
     var optionLabel = UILabel()
 
-    
-    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
