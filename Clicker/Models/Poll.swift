@@ -22,7 +22,7 @@ class Poll: NSObject, NSCoding {
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let id = aDecoder.decodeObject(forKey: "id") as! Int
+        let id = aDecoder.decodeInteger(forKey: "id")
         let name = aDecoder.decodeObject(forKey: "name") as! String
         let code = aDecoder.decodeObject(forKey: "code") as! String
         self.init(id: id, name: name, code: code)

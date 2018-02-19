@@ -13,6 +13,7 @@ import Presentr
 class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var session: Session!
+    var isOldPoll: Bool!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -48,6 +49,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
+        endSessionVC.isOldPoll = isOldPoll
         endSessionVC.dismissController = self
         endSessionVC.session = self.session
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)

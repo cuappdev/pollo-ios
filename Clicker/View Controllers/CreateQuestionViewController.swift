@@ -11,12 +11,12 @@ import SnapKit
 
 class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    
+    var session: Session!
+    var oldPoll: Poll!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionOptionsView: QuestionOptionsView!
     var questionCollectionView: UICollectionView!
-    var session: Session!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +24,12 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
-        createPoll()
-        startPoll()
+        if (oldPoll == nil) {
+            createPoll()
+        } else {
+            self.encodeObjForKey(obj: oldPoll, key: "currentPoll")
+            startPoll(poll: oldPoll)
+        }
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -106,18 +110,24 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         CreatePoll(name: "", pollCode: pollCode).make()
             .then{ poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
+                print("set currentPoll to:")
+                print(poll)
+                self.startPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
                 return
         }
     }
     
-    func startPoll() {
-        let poll = decodeObjForKey(key: "currentPoll") as! Poll
+    func startPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
             .then{ port -> Void in
                 print("starting poll at \(port)")
                 self.session = Session(id: port)
+                // Reload collection view so that cell has correct session property
+                DispatchQueue.main.async {
+                     self.questionCollectionView.reloadData()
+                }
             }.catch { error -> Void in
                 print(error)
             }

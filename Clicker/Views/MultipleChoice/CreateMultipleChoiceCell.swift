@@ -40,6 +40,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         }
         liveResultsVC.options = options
         liveResultsVC.session = self.session
+        liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
         
         // Emit socket messsage to start question
         let question: [String:Any] = [
