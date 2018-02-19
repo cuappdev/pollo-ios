@@ -179,6 +179,37 @@ struct GetPollPorts: ClickerQuark {
     }
 }
 
+struct UpdatePoll: ClickerQuark {
+    
+    typealias ResponseType = Poll
+    
+    let id: Int
+    let name: String
+    
+    var route: String {
+        return "/v1/polls/\(id)"
+    }
+    var parameters: Parameters {
+        return [
+            "name": name
+        ]
+    }
+    let host: String = "http://localhost:3000/api"
+    let method: HTTPMethod = .put
+    
+    func process(element: Element) throws -> Poll {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
+                throw NeutronError.badResponseData
+            }
+            return Poll(id: id, name: name, code: code)
+        default:
+            throw NeutronError.badResponseData
+        }
+    }
+}
+
 
 
 

@@ -24,6 +24,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
+        createPoll()
         startPoll()
         setupNavBar()
         setupViews()
@@ -100,10 +101,21 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    func startPoll() {
+    func createPoll() {
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        StartNewPoll(code: pollCode, name: "").make()
-            .then { port -> Void in
+        CreatePoll(name: "", pollCode: pollCode).make()
+            .then{ poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+    }
+    
+    func startPoll() {
+        let poll = decodeObjForKey(key: "currentPoll") as! Poll
+        StartCreatedPoll(id: poll.id).make()
+            .then{ port -> Void in
                 print("starting poll at \(port)")
                 self.session = Session(id: port)
             }.catch { error -> Void in
