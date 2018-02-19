@@ -122,7 +122,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         StartCreatedPoll(id: poll.id).make()
             .then{ port -> Void in
                 print("starting poll at \(port)")
-                self.session = Session(id: port)
+                self.session = Session(id: port, userType: "admin")
                 // Reload collection view so that cell has correct session property
                 DispatchQueue.main.async {
                      self.questionCollectionView.reloadData()
