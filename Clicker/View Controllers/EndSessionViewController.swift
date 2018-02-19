@@ -11,6 +11,7 @@ import SnapKit
 
 class EndSessionViewController: UIViewController {
     
+    var session: Session!
     var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!
@@ -33,41 +34,54 @@ class EndSessionViewController: UIViewController {
     }
     
     @objc func endSession() {
+        // Emit socket messsage to end question
+        session.socket.emit("server/question/end", with: [])
+        
+        // Get current poll object
+        let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
         if let name = nameSessionTextField.text {
             if (name != "") {
                 print("saving poll")
-                savePoll(name: name)
+                // Emit socket message for users to save poll
+                session.socket.emit("server/poll/save", with: [])
+                // End poll
+                endPoll(pollId: currentPoll.id, save: true)
+                // Update poll name
+                updateSavePoll(pollId: currentPoll.id, name: name)
+            } else {
+                print("ending poll without saving")
+                // End poll
+                endPoll(pollId: currentPoll.id, save: false)
             }
+        } else {
+            print("ending poll without saving")
+            // End poll
+            endPoll(pollId: currentPoll.id, save: false)
         }
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Save poll with given name
-    func savePoll(name: String) {
-        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        CreatePoll(name: name, pollCode: pollCode).make()
-            .then{ poll -> Void in
-               // Save code to user
+    // MARK: Update poll with given name and then save it to UserDefaults
+    func updateSavePoll(pollId: Int, name: String) {
+        UpdatePoll(id: pollId, name: name).make()
+            .then { poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
                 self.savePoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
-                return
             }
     }
     
-    // MARK: Save poll code to UserDefaults
+    // MARK: Save poll to UserDefaults
     func savePoll(poll: Poll) {
         if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
             var polls: [Poll] = [poll]
-            let encodedData = NSKeyedArchiver.archivedData(withRootObject: polls)
-            UserDefaults.standard.set(encodedData, forKey: "savedPolls")
+            encodeObjForKey(obj: polls, key: "savedPolls")
         } else {
-            let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-            var polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+            var polls = decodeObjForKey(key: "savedPolls") as! [Poll]
             polls.append(poll)
-            let encodedData = NSKeyedArchiver.archivedData(withRootObject: polls)
-            UserDefaults.standard.set(encodedData, forKey: "savedPolls")
+            encodeObjForKey(obj: polls, key: "savedPolls")
         }
     }
     

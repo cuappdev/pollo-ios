@@ -49,6 +49,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
         endSessionVC.dismissController = self
+        endSessionVC.session = self.session
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
     }
     
