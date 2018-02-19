@@ -14,11 +14,11 @@ class Session {
     var delegate: SessionDelegate?
     var socket: SocketIOClient!
     
-    init(id: Int, delegate: SessionDelegate? = nil) {
+    init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
         let url = URL(string: "http://localhost:\(id)")!
-        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": "student"])])
+        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
         
         socket.on(clientEvent: .connect) { data, ack in
             print("SOCKET CONNECTED")
@@ -34,12 +34,13 @@ class Session {
         }
         
         socket.on("user/question/start") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionIDString = questionJSON["id"] as? String else {
+            print("socket user start")
+            print(data[0])
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
-            let questionID = Int(questionIDString)
-
+            let question = Question(json: questionJSON)
+            self.delegate?.questionStarted(question)
         }
         
         socket.on("user/question/end") { data, ack in

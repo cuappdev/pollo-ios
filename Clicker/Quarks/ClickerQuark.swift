@@ -45,12 +45,8 @@ extension ClickerQuark {
         }
         
         if let ports = response["data"]["ports"].array {
-            let portsArr = try ports.map { json -> String in
-                if let i = json.int {
-                    return String(describing: i)
-                } else {
-                    throw ClickerError.backendError(messages: ["could not convert port to int"])
-                }
+            let portsArr = ports.map {
+                $0.intValue
             }
             return try process(element: .ports(portsArr))
         }
@@ -71,7 +67,7 @@ enum ClickerError: Error {
 
 enum Element {
     case null
-    case ports([String])
+    case ports([Int])
     case node(JSON)
     case nodes([JSON])
     case edges([Edge])

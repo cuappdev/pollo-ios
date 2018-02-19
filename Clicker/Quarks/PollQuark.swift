@@ -194,18 +194,11 @@ struct GetPollPorts: ClickerQuark {
     
     func process(element: Element) throws -> Int? {
         switch element {
-        case .node(let node):
-            guard let ports = node["ports"].array else {
-                throw NeutronError.badResponseData
-            }
-            let intPorts = ports.map {
-                $0.int
-            }
-            // Return nil if no current ports, else return the first port
-            if (intPorts.count == 0) {
+        case .ports(let ports):
+            if (ports.count == 0) {
                 return nil
             } else {
-                return intPorts[0]
+                return ports[0]
             }
         default:
             throw NeutronError.badResponseData

@@ -19,8 +19,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var pollCode: String!
     var question: Question!
     var selectedOptionIndex: Int = -1
-    // var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
-    
+
     var optionTableView: UITableView!
     
     
@@ -61,7 +60,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     func setupViews() {
         
         questionLabel = UILabel()
-        questionLabel.text = "How did nature go from inanimate organic molecules to life?"
+        questionLabel.text = question.text
         questionLabel.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
         questionLabel.textColor = .clickerBlack
         questionLabel.lineBreakMode = .byWordWrapping

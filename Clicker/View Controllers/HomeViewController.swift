@@ -213,21 +213,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
-    //Check if question is live or not
-    func getPollStatus(poll: Poll) -> UIViewController{
-        //TEMP ACTUALLY CHECK FOR QUESTION STATUS
-        if true {
-            let destinationVC = PendingViewController()
-            destinationVC.poll = poll
-            return destinationVC
-        } else {
-            let destinationVC = AnswerQuestionViewController()
-            destinationVC.poll = poll
-            destinationVC.pollCode = sessionTextField.text
-            return destinationVC
-        }
-    }
-    
     @objc func beganTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
@@ -301,10 +286,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                                 return
                             }
                             let poll = Poll(id: id, name: name, code: code)
-                            let destinationVC = self.getPollStatus(poll: poll)
+                            let liveSessionVC = LiveSessionViewController()
+                            liveSessionVC.poll = poll
                             self.view.endEditing(true)
                             self.sessionTextField.text = ""
-                            self.navigationController?.pushViewController(destinationVC, animated: true)
+                            self.navigationController?.pushViewController(liveSessionVC, animated: true)
                         } else {
                             let alert = self.createAlert(title: "Error", message: "Bad response data")
                             self.present(alert, animated: true, completion: nil)
