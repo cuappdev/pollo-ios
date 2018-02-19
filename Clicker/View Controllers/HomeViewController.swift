@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import Neutron
 
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -216,12 +217,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     func getPollStatus(poll: Poll) -> UIViewController{
         //TEMP ACTUALLY CHECK FOR QUESTION STATUS
         if true {
+            let destinationVC = PendingViewController()
+            destinationVC.poll = poll
+            return destinationVC
+        } else {
             let destinationVC = AnswerQuestionViewController()
             destinationVC.poll = poll
             destinationVC.pollCode = sessionTextField.text
-            return destinationVC
-        } else {
-            let destinationVC = PendingViewController()
             return destinationVC
         }
     }
@@ -285,27 +287,36 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 "codes": [sessionTextField.text!]
             ]
             requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
-                print(json)
+                if let data = json["data"] as? [[String:Any]] {
+                    if (data.count == 0) {
+                        self.sessionTextField.text = ""
+                        let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        if let node = data[0]["node"] as? [String:Any] {
+                            print("node: \(node)")
+                            guard let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
+                                let alert = self.createAlert(title: "Error", message: "Bad response data")
+                                self.present(alert, animated: true, completion: nil)
+                                return
+                            }
+                            let poll = Poll(id: id, name: name, code: code)
+                            let destinationVC = self.getPollStatus(poll: poll)
+                            self.view.endEditing(true)
+                            self.sessionTextField.text = ""
+                            self.navigationController?.pushViewController(destinationVC, animated: true)
+                        } else {
+                            let alert = self.createAlert(title: "Error", message: "Bad response data")
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                    }
+                } else {
+                    let alert = self.createAlert(title: "Error", message: "Bad response data")
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
             })
-            //            GetLivePolls(pollCodes: [sessionTextField.text!]).make()
-            //                .then { polls -> Void in
-            //                    if (polls.count == 0) {
-            //                        self.sessionTextField.text = ""
-            //                        let alert = UIAlertController(title: "Error", message: "No live session detected for code entered.", preferredStyle: UIAlertControllerStyle.alert)
-            //                        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-            //                        self.present(alert, animated: true, completion: nil)
-            //                        return
-            //                    } else {
-            //                        let poll = polls[0] as! Poll
-            //                        let destinationVC = self.getPollStatus(poll: poll)
-            //                        self.view.endEditing(true)
-            //                        self.sessionTextField.text = ""
-            //                        self.navigationController?.pushViewController(destinationVC, animated: true)
-            //                    }
-            //                }.catch { error -> Void in
-            //                    print(error)
-            //                }
-            
         }
     }
 }

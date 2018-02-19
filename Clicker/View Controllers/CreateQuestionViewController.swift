@@ -22,7 +22,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBackground
-        UINavigationBar.appearance().barTintColor = .clickerGreen
         
         if (oldPoll == nil) {
             createPoll()
@@ -134,6 +133,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = .clickerGreen
+        
         let codeLabel = UILabel()
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
         let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")

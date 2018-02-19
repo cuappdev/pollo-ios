@@ -17,9 +17,9 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var submitAnswerButton: UIButton!
     var poll: Poll!
     var pollCode: String!
-    var question: String!
+    var question: Question!
     var selectedOptionIndex: Int = -1
-    var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
+    // var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
     
     var optionTableView: UITableView!
     
@@ -135,14 +135,14 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
-        // return options.count
+        // return 4
+        return question.options.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = options[indexPath.row]
+        cell.optionLabel.text = question.options[indexPath.row].description
         return cell
     }
     
