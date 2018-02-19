@@ -11,17 +11,11 @@ import Alamofire
 import SwiftyJSON
 import Neutron
 
-class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, JoinSessionCellDelegate {
     
-    var joinLabel: UILabel!
-    var joinView: UIView!
-    var sessionTextField: UITextField!
-    var joinButton: UIButton!
     var whiteView: UIView!
     var createPollButton: UIButton!
     var savedSessionsTableView: UITableView!
-    
-    var isValidCode: Bool! = false
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -35,34 +29,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func setupViews() {
         
-        joinLabel = UILabel()
-        joinLabel.text = "Join A Session"
-        joinLabel.font = UIFont._16SemiboldFont
-        joinLabel.textColor = .clickerMediumGray
-        view.addSubview(joinLabel)
-        
-        joinView = UIView()
-        joinView.layer.cornerRadius = 8
-        joinView.layer.masksToBounds = true
-        view.addSubview(joinView)
-        
-        sessionTextField = UITextField()
-        let sessionAttributedString = NSMutableAttributedString(string: "Enter session code")
-        sessionAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: sessionAttributedString.length))
-        sessionTextField.attributedPlaceholder = sessionAttributedString
-        sessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
-        sessionTextField.addTarget(self, action: #selector(beganTypingCode), for: .editingChanged)
-        sessionTextField.backgroundColor = .white
-        joinView.addSubview(sessionTextField)
-        
-        joinButton = UIButton()
-        joinButton.setTitle("Join", for: .normal)
-        joinButton.titleLabel?.font = UIFont._18MediumFont
-        joinButton.setTitleColor(.clickerDarkGray, for: .normal)
-        joinButton.backgroundColor = .clickerLightGray
-        joinButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
-        joinView.addSubview(joinButton)
-        
+        //CREATE POLL
         whiteView = UIView()
         whiteView.backgroundColor = .white
         view.addSubview(whiteView)
@@ -76,11 +43,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
         whiteView.addSubview(createPollButton)
         
+        //SAVED SESSIONS
         savedSessionsTableView = UITableView()
         savedSessionsTableView.delegate = self
         savedSessionsTableView.dataSource = self
         savedSessionsTableView.separatorStyle = .none
         savedSessionsTableView.clipsToBounds = true
+        savedSessionsTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
         savedSessionsTableView.register(SavedSessionHeader.self, forHeaderFooterViewReuseIdentifier: "savedSessionHeaderID")
         savedSessionsTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
         savedSessionsTableView.backgroundColor = .clear
@@ -88,33 +57,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func setupConstraints() {
-        
-        joinLabel.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: view.frame.width * 0.8066666667, height: view.frame.height * 0.02848575712))
-            make.left.equalToSuperview().offset(view.frame.width * 0.048)
-            make.top.equalToSuperview().offset(view.frame.height * 0.1101949025)
-        }
-        
-        joinView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(view.frame.width * 0.048)
-            make.right.equalToSuperview().offset(view.frame.width * 0.048 * -1)
-            make.top.equalTo(joinLabel.snp.bottom).offset(view.frame.height * 0.01499250375)
-            make.height.equalTo(view.frame.height * 0.08245877061)
-        }
-        
-        sessionTextField.snp.makeConstraints { make in
-            make.width.equalTo(joinView.snp.width).multipliedBy(0.75)
-            make.height.equalTo(joinView.snp.height)
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-        
-        joinButton.snp.makeConstraints{ make in
-            make.left.equalTo(sessionTextField.snp.right)
-            make.right.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
         
         whiteView.snp.makeConstraints { make in
             make.left.equalToSuperview()
@@ -129,8 +71,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
         
         savedSessionsTableView.snp.updateConstraints { make in
-            make.width.equalTo(createPollButton.snp.width)
-            make.height.equalTo(view.frame.height * 0.3028485757)
+            make.width.equalToSuperview()
+            make.top.equalToSuperview().offset(50)
             make.centerX.equalToSuperview()
             make.bottom.equalTo(whiteView.snp.top)
         }
@@ -160,44 +102,74 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     // MARK: - TABLEVIEW
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
-        cell.sessionText = polls[indexPath.row].name
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
+            cell.joinSessionCellDelegate = self
+            return cell
+        } else {
+            let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
+            cell.sessionText = polls[indexPath.row].name
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
-            return 0
+        if section == 0 {
+            return 1
+        } else {
+            if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+                return 0
+            }
+            let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+            let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+            return polls.count
         }
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
-        return polls.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
-        let selectedPoll = polls[indexPath.row]
-        UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
-        let createQuestionVC = CreateQuestionViewController()
-        createQuestionVC.oldPoll = polls[indexPath.row]
-        self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        if indexPath.section == 0 {
+            
+        } else {
+            let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            let selectedPoll = polls[indexPath.row]
+            UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
+            let createQuestionVC = CreateQuestionViewController()
+            createQuestionVC.oldPoll = polls[indexPath.row]
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        if indexPath.section == 0 {
+            return 100
+        } else {
+            return 80
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "savedSessionHeaderID") as! SavedSessionHeader
-        headerView.backgroundView?.backgroundColor = UIColor.red
-        headerView.contentView.backgroundColor = UIColor.red
-        return headerView
+        if section == 0 {
+            return UITableViewHeaderFooterView()
+        } else {
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "savedSessionHeaderID") as! SavedSessionHeader
+            headerView.backgroundView?.backgroundColor = UIColor.red
+            headerView.contentView.backgroundColor = UIColor.red
+            return headerView
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        if section == 0 {
+            return 0
+        } else {
+            return 40
+        }
     }
     
     // MARK: - SESSIONS / POLLS
@@ -210,32 +182,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }.catch { error -> Void in
                 print(error)
                 return
-        }
-    }
-    
-    @objc func beganTypingCode(_ textField: UITextField) {
-        if let text = textField.text {
-            textField.text = text.uppercased()
-            validateCode(code: text)
-            
-            if isValidCode {
-                joinButton.backgroundColor = .clickerGreen
-                joinButton.setTitleColor(.white, for: .normal)
-            } else {
-                joinButton.backgroundColor = .clickerLightGray
-                joinButton.setTitleColor(.clickerDarkGray, for: .normal)
-            }
-        } else {
-            joinButton.backgroundColor = .clickerLightGray
-            joinButton.setTitleColor(.clickerDarkGray, for: .normal)
-        }
-    }
-    
-    func validateCode(code: String){
-        if(code.count == 6 && !code.contains(" ")){
-            isValidCode = true
-        } else {
-            isValidCode = false
         }
     }
     
@@ -266,15 +212,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return (polls.count >= 1)
     }
     
-    @objc func joinSession() {
+    func joinSession(textField: UITextField, isValidCode: Bool) {
         if isValidCode {
             let parameters: Parameters = [
-                "codes": [sessionTextField.text!]
+                "codes": [textField.text!]
             ]
             requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
                 if let data = json["data"] as? [[String:Any]] {
                     if (data.count == 0) {
-                        self.sessionTextField.text = ""
+                        textField.text = ""
                         let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                         self.present(alert, animated: true, completion: nil)
                     } else {
@@ -289,7 +235,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                             let liveSessionVC = LiveSessionViewController()
                             liveSessionVC.poll = poll
                             self.view.endEditing(true)
-                            self.sessionTextField.text = ""
+                            textField.text = ""
                             self.navigationController?.pushViewController(liveSessionVC, animated: true)
                         } else {
                             let alert = self.createAlert(title: "Error", message: "Bad response data")
