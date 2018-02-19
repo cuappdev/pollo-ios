@@ -16,8 +16,7 @@ class SessionHeader: UITableViewHeaderFooterView {
     // MARK: - INITIALIZATION
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
-        
+                
         headerLabel = UILabel()
         headerLabel.text = "Saved Sessions"
         headerLabel.font = UIFont._16SemiboldFont
