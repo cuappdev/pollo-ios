@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Neutron
+import Alamofire
+import SwiftyJSON
 
 extension UIViewController {
     func encodeObjForKey(obj: Any, key: String) {
@@ -17,5 +20,14 @@ extension UIViewController {
     func decodeObjForKey(key: String) -> Any {
         let decodedData = UserDefaults.standard.value(forKey: key) as! Data
         return NSKeyedUnarchiver.unarchiveObject(with: decodedData)
+    }
+    
+    func requestJSON(route: String, method: HTTPMethod, parameters: Parameters, completion: @escaping (_ response: [String:Any]) -> Void) {
+        Alamofire.request(route, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON()
+            .then { json -> Void in
+                completion(json as! [String:Any])
+            }.catch { error -> Void in
+                print(error)
+            }
     }
 }

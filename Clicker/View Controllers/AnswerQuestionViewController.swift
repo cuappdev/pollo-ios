@@ -141,7 +141,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
-        cell.choiceTag = indexPath.section
+        cell.choiceTag = indexPath.row
         cell.optionLabel.text = options[indexPath.row]
         return cell
     }

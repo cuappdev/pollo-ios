@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -277,26 +279,33 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return (polls.count >= 1)
     }
     
-    @objc func joinSession(){
+    @objc func joinSession() {
         if isValidCode {
-            GetLivePolls(pollCodes: [sessionTextField.text!]).make()
-                .then { polls -> Void in
-                    if (polls.count == 0) {
-                        self.sessionTextField.text = ""
-                        let alert = UIAlertController(title: "Error", message: "No live session detected for code entered.", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                        return
-                    } else {
-                        let poll = polls[0] as! Poll
-                        let destinationVC = self.getPollStatus(poll: poll)
-                        self.view.endEditing(true)
-                        self.sessionTextField.text = ""
-                        self.navigationController?.pushViewController(destinationVC, animated: true)
-                    }
-                }.catch { error -> Void in
-                    print(error)
-            }
+            let parameters: Parameters = [
+                "codes": [sessionTextField.text!]
+            ]
+            requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
+                print(json)
+            })
+            //            GetLivePolls(pollCodes: [sessionTextField.text!]).make()
+            //                .then { polls -> Void in
+            //                    if (polls.count == 0) {
+            //                        self.sessionTextField.text = ""
+            //                        let alert = UIAlertController(title: "Error", message: "No live session detected for code entered.", preferredStyle: UIAlertControllerStyle.alert)
+            //                        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            //                        self.present(alert, animated: true, completion: nil)
+            //                        return
+            //                    } else {
+            //                        let poll = polls[0] as! Poll
+            //                        let destinationVC = self.getPollStatus(poll: poll)
+            //                        self.view.endEditing(true)
+            //                        self.sessionTextField.text = ""
+            //                        self.navigationController?.pushViewController(destinationVC, animated: true)
+            //                    }
+            //                }.catch { error -> Void in
+            //                    print(error)
+            //                }
+            
         }
     }
 }
