@@ -16,7 +16,6 @@ class JoinSessionCell: UITableViewCell {
     
     var joinSessionCellDelegate: JoinSessionCellDelegate!
     
-    var joinLabel: UILabel!
     var joinView: UIView!
     var sessionTextField: UITextField!
     var joinButton: UIButton!
@@ -28,12 +27,6 @@ class JoinSessionCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         backgroundColor = .clear
-        
-        joinLabel = UILabel()
-        joinLabel.text = "Join A Session"
-        joinLabel.font = UIFont._16SemiboldFont
-        joinLabel.textColor = .clickerMediumGray
-        addSubview(joinLabel)
         
         joinView = UIView()
         joinView.layer.cornerRadius = 8
@@ -63,16 +56,10 @@ class JoinSessionCell: UITableViewCell {
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        joinLabel.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: self.frame.width - 36, height: 19))
-            make.left.equalToSuperview().offset(18)
-            make.top.equalToSuperview().offset(self.frame.height * 0.1101949025)
-        }
-        
         joinView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(self.frame.width * 0.048)
             make.right.equalToSuperview().offset(self.frame.width * 0.048 * -1)
-            make.top.equalTo(joinLabel.snp.bottom).offset(10)
+            make.top.equalToSuperview().offset(10)
             make.height.equalTo(55)
         }
         
