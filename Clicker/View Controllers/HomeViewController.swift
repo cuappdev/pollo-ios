@@ -210,10 +210,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     //Check if question is live or not
-    func getPollStatus() -> UIViewController{
+    func getPollStatus(poll: Poll) -> UIViewController{
         //TEMP ACTUALLY CHECK FOR QUESTION STATUS
         if true {
             let destinationVC = AnswerQuestionViewController()
+            destinationVC.poll = poll
             destinationVC.pollCode = sessionTextField.text
             return destinationVC
         } else {
@@ -277,10 +278,24 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     @objc func joinSession(){
         if isValidCode {
-            let destinationVC = getPollStatus()
-            view.endEditing(true)
-            sessionTextField.text = ""
-            navigationController?.pushViewController(destinationVC, animated: true)
+            GetLivePolls(pollCodes: [sessionTextField.text!]).make()
+                .then { polls -> Void in
+                    if (polls.count == 0) {
+                        self.sessionTextField.text = ""
+                        let alert = UIAlertController(title: "Error", message: "No live session detected for code entered.", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    } else {
+                        let poll = polls[0] as! Poll
+                        let destinationVC = self.getPollStatus(poll: poll)
+                        self.view.endEditing(true)
+                        self.sessionTextField.text = ""
+                        self.navigationController?.pushViewController(destinationVC, animated: true)
+                    }
+                }.catch { error -> Void in
+                    print(error)
+            }
         }
     }
 }

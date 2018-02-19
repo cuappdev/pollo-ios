@@ -16,6 +16,7 @@ protocol ClickerQuark: JSONQuark {
 
 extension ClickerQuark {
     public func process(response: JSON) throws -> ResponseType {
+        print(response)
         if let errors = response["data"]["errors"].array {
             let messages = errors.flatMap { $0["message"].string }
             throw ClickerError.backendError(messages: messages)
