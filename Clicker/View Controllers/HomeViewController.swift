@@ -50,6 +50,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         savedSessionsTableView.separatorStyle = .none
         savedSessionsTableView.clipsToBounds = true
         savedSessionsTableView.backgroundColor = .clear
+        savedSessionsTableView.tableHeaderView?.backgroundColor = .clear
         
         savedSessionsTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
         savedSessionsTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
@@ -178,11 +179,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
-        headerView.backgroundView?.backgroundColor = UIColor.red
-        headerView.contentView.backgroundColor = UIColor.red
-        
         switch section {
         case 0:
              headerView.title = "Live Sessions"
@@ -193,7 +190,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         default:
             headerView.title = ""
         }
-        
        return headerView
     }
     

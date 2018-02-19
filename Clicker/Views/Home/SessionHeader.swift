@@ -22,7 +22,7 @@ class SessionHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = .clear
+        layer.backgroundColor = UIColor.clear.cgColor
         
         headerLabel = UILabel()
         headerLabel.font = UIFont._16SemiboldFont
