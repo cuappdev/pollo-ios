@@ -15,6 +15,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionLabel: UILabel!
     var submitAnswerButton: UIButton!
+    var session: Session!
     var poll: Poll!
     var pollCode: String!
     var question: Question!
@@ -116,8 +117,14 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         if (selectedOptionIndex == -1) {
             return
         }
-        // Submit answer
-        
+        // Submit answer through socket
+        let answer: [String:Any] = [
+            "deviceId": UIDevice.current.identifierForVendor?.uuidString,
+            "question": question.id,
+            "data": intToMCOption(selectedOptionIndex)
+        ]
+        session.socket.emit("server/question/tally", with: [answer])
+        // Show resubmit alert
         let alert = UIAlertController(title: "Submitted", message: "Choose a different option to resubmit", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)

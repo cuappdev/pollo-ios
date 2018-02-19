@@ -34,8 +34,6 @@ class Session {
         }
         
         socket.on("user/question/start") { data, ack in
-            print("socket user start")
-            print(data[0])
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }

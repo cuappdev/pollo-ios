@@ -12,6 +12,11 @@ import Alamofire
 import SwiftyJSON
 
 extension UIViewController {
+    
+    func intToMCOption(_ intOption: Int) -> String {
+        return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
+    }
+    
     func encodeObjForKey(obj: Any, key: String) {
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: obj)
         UserDefaults.standard.set(encodedData, forKey: key)
