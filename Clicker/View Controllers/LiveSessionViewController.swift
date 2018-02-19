@@ -35,6 +35,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     func updateContainerVC(_ question: Question){
         let answerVC = AnswerQuestionViewController()
         answerVC.question = question
+        answerVC.session = session
         containerViewController = answerVC
         addChildViewController(answerVC)
         containerView.addSubview(containerViewController.view)

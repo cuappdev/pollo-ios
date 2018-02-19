@@ -19,7 +19,7 @@ class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
     var choiceLabel = UILabel()
     var choiceTag: Int! {
         didSet {
-            choiceLabel.text = String(Character(UnicodeScalar(choiceTag + Int(("A" as UnicodeScalar).value))!))
+            choiceLabel.text = intToMCOption(choiceTag)
         }
     }
     var addOptionTextField: UITextField!
