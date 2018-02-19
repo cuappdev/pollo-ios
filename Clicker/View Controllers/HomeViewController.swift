@@ -49,10 +49,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         savedSessionsTableView.dataSource = self
         savedSessionsTableView.separatorStyle = .none
         savedSessionsTableView.clipsToBounds = true
-        savedSessionsTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
-        savedSessionsTableView.register(SavedSessionHeader.self, forHeaderFooterViewReuseIdentifier: "savedSessionHeaderID")
-        savedSessionsTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
         savedSessionsTableView.backgroundColor = .clear
+        
+        savedSessionsTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
+        savedSessionsTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
+        savedSessionsTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
+        savedSessionsTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
+        
         view.addSubview(savedSessionsTableView)
     }
     
@@ -103,73 +106,99 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     // MARK: - TABLEVIEW
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCellID", for: indexPath) as! LiveSessionCell
+            return cell
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
             cell.joinSessionCellDelegate = self
             return cell
-        } else {
+        case 2:
             let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
             cell.sessionText = polls[indexPath.row].name
             return cell
+        default:
+            return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
-        } else {
+        case 1:
+            return 1
+        case 2:
             if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
                 return 0
             }
             let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
             let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
             return polls.count
+        default:
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            
-        } else {
+        switch indexPath.section {
+        case 0:
+            print("case 0")
+        case 1:
+            print("case 1")
+        case 2:
             let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
             let selectedPoll = polls[indexPath.row]
             UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
             let createQuestionVC = CreateQuestionViewController()
             createQuestionVC.oldPoll = polls[indexPath.row]
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        default:
+            print("default")
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             return 100
-        } else {
+        case 1:
+            return 100
+        case 2:
             return 80
+        default:
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return UITableViewHeaderFooterView()
-        } else {
-            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "savedSessionHeaderID") as! SavedSessionHeader
-            headerView.backgroundView?.backgroundColor = UIColor.red
-            headerView.contentView.backgroundColor = UIColor.red
-            return headerView
+        
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
+        headerView.backgroundView?.backgroundColor = UIColor.red
+        headerView.contentView.backgroundColor = UIColor.red
+        
+        switch section {
+        case 0:
+             headerView.title = "Live Sessions"
+        case 1:
+            headerView.title = "Join A Session"
+        case 2:
+            headerView.title = "Saved Sessions"
+        default:
+            headerView.title = ""
         }
+        
+       return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 0
-        } else {
-            return 40
-        }
+        return 40
     }
     
     // MARK: - SESSIONS / POLLS

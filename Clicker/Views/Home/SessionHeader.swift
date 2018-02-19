@@ -9,9 +9,14 @@
 import UIKit
 import SnapKit
 
-class SavedSessionHeader: UITableViewHeaderFooterView {
+class SessionHeader: UITableViewHeaderFooterView {
     
     var headerLabel: UILabel!
+    var title: String! {
+        didSet {
+            headerLabel.text = title
+        }
+    }
     
     // MARK: - INITIALIZATION
     override init(reuseIdentifier: String?) {
@@ -20,7 +25,6 @@ class SavedSessionHeader: UITableViewHeaderFooterView {
         backgroundColor = .clear
         
         headerLabel = UILabel()
-        headerLabel.text = "Saved Sessions"
         headerLabel.font = UIFont._16SemiboldFont
         headerLabel.textColor = UIColor.clickerMediumGray
         addSubview(headerLabel)
