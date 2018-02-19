@@ -15,7 +15,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionLabel: UILabel!
     var submitAnswerButton: UIButton!
-
+    
     var pollCode: String!
     var question: String!
     var options: [String]! = ["Tomato", "Orange", "Rooster", "Leaf"]
@@ -83,7 +83,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         submitAnswerButton.setTitle("Submit", for: .normal)
         submitAnswerButton.setTitleColor(.white, for: .normal)
         submitAnswerButton.titleLabel?.font = UIFont._18SemiboldFont
-       // submitAnswerButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        // submitAnswerButton.addTarget(self, action: #selector(), for: .touchUpInside)
         view.addSubview(submitAnswerButton)
         view.bringSubview(toFront: submitAnswerButton)
     }
@@ -97,9 +97,9 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         
         optionTableView.snp.updateConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalTo(view.frame.height * 0.3028485757)
             make.centerX.equalToSuperview()
             make.top.equalTo(questionLabel.snp.bottom).offset(18)
+            make.bottom.equalTo(submitAnswerButton.snp.top).offset(18)
         }
         
         submitAnswerButton.snp.updateConstraints { make in
@@ -119,7 +119,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
-       // return options.count
+        // return options.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

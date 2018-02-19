@@ -188,7 +188,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
-        //headerView.backgroundView?.backgroundColor = .clickerBackground
+        headerView.backgroundView?.backgroundColor = UIColor.red
+        headerView.contentView.backgroundColor = UIColor.red
         return headerView
     }
     
