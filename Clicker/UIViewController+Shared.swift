@@ -30,4 +30,10 @@ extension UIViewController {
                 print(error)
             }
     }
+    
+    func createAlert(title: String, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        return alert
+    }
 }
