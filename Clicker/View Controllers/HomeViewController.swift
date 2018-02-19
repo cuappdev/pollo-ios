@@ -24,6 +24,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // UserDefaults.standard.set(nil, forKey: "savedPolls")
         view.backgroundColor = .clickerBackground
         setupViews()
         setupConstraints()
@@ -157,8 +158,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
-        let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+        let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
         let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCellID", for: indexPath) as! SessionTableViewCell
         cell.sessionText = polls[indexPath.row].name
         return cell
@@ -171,6 +171,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
         let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
         return polls.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+        let selectedPoll = polls[indexPath.row]
+        UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
+        let createQuestionVC = CreateQuestionViewController()
+        createQuestionVC.oldPoll = polls[indexPath.row]
+        self.navigationController?.pushViewController(createQuestionVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -12,6 +12,7 @@ import SnapKit
 class EndSessionViewController: UIViewController {
     
     var session: Session!
+    var isOldPoll: Bool!
     var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!
@@ -38,7 +39,9 @@ class EndSessionViewController: UIViewController {
         session.socket.emit("server/question/end", with: [])
         
         // Get current poll object
+        print("getting current poll")
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+        print("got current poll")
         if let name = nameSessionTextField.text {
             if (name != "") {
                 print("saving poll")
@@ -80,7 +83,20 @@ class EndSessionViewController: UIViewController {
             encodeObjForKey(obj: polls, key: "savedPolls")
         } else {
             var polls = decodeObjForKey(key: "savedPolls") as! [Poll]
-            polls.append(poll)
+            print("is old poll is: \(isOldPoll)")
+            if (isOldPoll) {
+                // Get index of old poll and update it in savedPolls array
+                var pollIndex = -1
+                for (index, p) in polls.enumerated() {
+                    if (p.code == poll.code) {
+                        pollIndex = index
+                        break
+                    }
+                }
+                polls[pollIndex] = poll
+            } else {
+                polls.append(poll)
+            }
             encodeObjForKey(obj: polls, key: "savedPolls")
         }
     }
@@ -136,6 +152,10 @@ class EndSessionViewController: UIViewController {
         nameSessionTextField.borderStyle = .none
         nameSessionTextField.backgroundColor = .clear
         nameSessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+        if (currentPoll.name != "") {
+            nameSessionTextField.text = currentPoll.name
+        }
         sessionView.addSubview(nameSessionTextField)
         
         endSessionButton = UIButton()
