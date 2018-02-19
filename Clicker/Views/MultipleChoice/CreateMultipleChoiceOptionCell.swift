@@ -16,6 +16,7 @@ protocol MultipleChoiceOptionDelegate {
 class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
 
     var mcOptionDelegate: MultipleChoiceOptionDelegate!
+    
     var choiceLabel = UILabel()
     var choiceTag: Int! {
         didSet {

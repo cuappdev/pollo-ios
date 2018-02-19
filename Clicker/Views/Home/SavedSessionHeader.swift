@@ -16,7 +16,9 @@ class SavedSessionHeader: UITableViewHeaderFooterView {
     // MARK: - INITIALIZATION
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-                
+        
+        backgroundColor = .clear
+        
         headerLabel = UILabel()
         headerLabel.text = "Saved Sessions"
         headerLabel.font = UIFont._16SemiboldFont
@@ -28,8 +30,8 @@ class SavedSessionHeader: UITableViewHeaderFooterView {
     
     override func layoutSubviews() {
         headerLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.left.equalToSuperview()
+            make.height.equalTo(19)
+            make.left.equalToSuperview().offset(18)
             make.centerY.equalToSuperview()
         }
     }
@@ -38,4 +40,3 @@ class SavedSessionHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
