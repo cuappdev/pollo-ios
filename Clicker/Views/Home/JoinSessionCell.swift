@@ -121,7 +121,5 @@ class JoinSessionCell: UITableViewCell {
     @objc func joinSession(){
         print("join session")
         joinSessionCellDelegate.joinSession(textField: sessionTextField, isValidCode: isValidCode)
-        
     }
-    
 }
