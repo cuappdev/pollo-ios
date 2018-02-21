@@ -54,11 +54,16 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
         let mcOption: String = intToMCOption(indexPath.row)
+        print("results: \(currentState.results)")
+        print("choice blah: \(currentState.results[mcOption]))")
         if let numSelected = currentState.results[mcOption] as? Int {
-            let rightOffset = CGFloat(Float(numSelected) / totalNumResults) * tableView.frame.width * -1
-            cell.highlightRightConstraint.constant = rightOffset
+            print("nonzero width")
+            let width = CGFloat(Float(numSelected) / totalNumResults)
+            print("blah: \(cell.frame.width) \(cell.layer.frame.width)")
+            cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
         } else {
-            cell.highlightRightConstraint.constant = CGFloat(tableView.frame.width * -1)
+            print("zero width")
+            cell.highlightWidthConstraint.update(offset: 0)
         }
         cell.selectionStyle = .none
         return cell

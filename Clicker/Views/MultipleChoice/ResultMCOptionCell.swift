@@ -21,7 +21,13 @@ class ResultMCOptionCell: UITableViewCell {
     var optionLabel = UILabel()
     var numberLabel = UILabel()
     var highlightView: UIView!
-    var highlightRightConstraint: NSLayoutConstraint!
+    var highlightWidthConstraint: Constraint!
+    
+//    var width: CGFloat! = 0 {
+//        didSet {
+//            layoutSubviews()
+//        }
+//    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,8 +59,6 @@ class ResultMCOptionCell: UITableViewCell {
         highlightView.backgroundColor = .clickerLightBlue
         addSubview(highlightView)
         sendSubview(toBack: highlightView)
-        highlightRightConstraint = highlightView.rightAnchor.constraint(equalTo: rightAnchor)
-        highlightRightConstraint.isActive = true
     }
     
     override func layoutSubviews() {
@@ -86,6 +90,7 @@ class ResultMCOptionCell: UITableViewCell {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview().offset(-5)
             make.left.equalToSuperview()
+            self.highlightWidthConstraint = make.width.equalTo(0).constraint
         }
     }
     
