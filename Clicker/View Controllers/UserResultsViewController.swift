@@ -20,11 +20,18 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var question: Question!
     var currentState: CurrentState!
+    var totalNumResults: Float = 0
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
+        
+        for value in currentState.results.values {
+            if let v = value as? Int {
+                totalNumResults += Float(v)
+            }
+        }
         
         setupNavBar()
         setupViews()
@@ -46,6 +53,13 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
+        let mcOption: String = intToMCOption(indexPath.row)
+        if let numSelected = currentState.results[mcOption] as? Int {
+            let rightOffset = CGFloat(Float(numSelected) / totalNumResults) * tableView.frame.width * -1
+            cell.highlightRightConstraint.constant = rightOffset
+        } else {
+            cell.highlightRightConstraint.constant = CGFloat(tableView.frame.width * -1)
+        }
         cell.selectionStyle = .none
         return cell
     }
