@@ -20,4 +20,10 @@ class CurrentState {
         self.answers = answers
     }
     
+    init(json: [String:Any]){
+        self.question = json["question"] as! Int
+        self.results = json["results"] as! [String:Any]
+        self.answers = json["answers"] as! [String:Any]
+    }
+    
 }
