@@ -59,6 +59,13 @@ class ResultMCOptionCell: UITableViewCell {
         highlightView.backgroundColor = .clickerLightBlue
         addSubview(highlightView)
         sendSubview(toBack: highlightView)
+        
+        highlightView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-5)
+            make.left.equalToSuperview()
+            self.highlightWidthConstraint = make.width.equalTo(0).constraint
+        }
     }
     
     override func layoutSubviews() {
@@ -90,7 +97,6 @@ class ResultMCOptionCell: UITableViewCell {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview().offset(-5)
             make.left.equalToSuperview()
-            self.highlightWidthConstraint = make.width.equalTo(0).constraint
         }
     }
     
