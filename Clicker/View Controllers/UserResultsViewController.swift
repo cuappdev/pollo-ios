@@ -65,6 +65,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
             print("zero width")
             cell.highlightWidthConstraint.update(offset: 0)
         }
+        cell.layoutIfNeeded()
         cell.selectionStyle = .none
         return cell
     }
