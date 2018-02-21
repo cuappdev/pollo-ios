@@ -37,19 +37,27 @@ class Session {
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
+            print("question: \(json)")
             let question = Question(json: questionJSON)
             self.delegate?.questionStarted(question)
         }
         
         socket.on("user/question/end") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionIDString = questionJSON["id"] as? String else {
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
-            let questionID = Int(questionIDString)
+            let question = Question(json: questionJSON)
+            self.delegate?.questionEnded(question)
         }
         
         socket.on("user/question/results") { data, ack in
+            print("USER GETTING RESULTS:")
+            print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let currentState = CurrentState(json: json)
+            self.delegate?.receivedResults(currentState)
             
         }
         
@@ -58,7 +66,8 @@ class Session {
         }
         
         socket.on("admin/question/updateTally") { data, ack in
-            
+            print("UPDATED TALLY:")
+            print(data)
         }
         
         socket.connect()

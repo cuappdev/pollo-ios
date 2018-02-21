@@ -64,6 +64,11 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     @objc func closePoll() {
         print("close poll")
+        // Emit socket message to share results to users
+        session.socket.emit("server/question/results", with: [])
+        // Emit socket message to end question
+        session.socket.emit("server/question/end", with: [])
+        timer.invalidate()
     }
     
     func runTimer() {

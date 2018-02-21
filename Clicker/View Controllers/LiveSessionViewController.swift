@@ -15,6 +15,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     var endSessionBarButtonItem: UIBarButtonItem!
     var containerView: UIView!
     var containerViewController: UIViewController!
+    var question: Question!
     var poll: Poll!
     var session: Session!
         
@@ -32,12 +33,20 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     // MARK: - CONTAINER VIEW
-    func updateContainerVC(_ question: Question){
-        let answerVC = AnswerQuestionViewController()
-        answerVC.question = question
-        answerVC.session = session
-        containerViewController = answerVC
-        addChildViewController(answerVC)
+    func updateContainerVC(currentState: CurrentState? = nil){
+        if let cs = currentState {
+            let userResultsVC = UserResultsViewController()
+            userResultsVC.question = question
+            userResultsVC.currentState = cs
+            containerViewController = userResultsVC
+            addChildViewController(userResultsVC)
+        } else {
+            let answerVC = AnswerQuestionViewController()
+            answerVC.question = question
+            answerVC.session = session
+            containerViewController = answerVC
+            addChildViewController(answerVC)
+        }
         containerView.addSubview(containerViewController.view)
         containerViewController.view.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview()
@@ -123,13 +132,16 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     func questionStarted(_ question: Question) {
         print("detected question: \(question)")
-        updateContainerVC(question)
+        self.question = question
+        updateContainerVC()
     }
     
     func questionEnded(_ question: Question) {
     }
     
     func receivedResults(_ currentState: CurrentState) {
+        print("detected current state: \(currentState)")
+        updateContainerVC(currentState: currentState)
     }
     
     func savePoll(_ poll: Poll) {
