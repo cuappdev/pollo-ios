@@ -10,9 +10,11 @@ import UIKit
 import SnapKit
 import Presentr
 
-class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SessionDelegate {
     
     var session: Session!
+    var currentState: CurrentState!
+    var totalNumResults: Float = 0
     var isOldPoll: Bool!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
@@ -36,6 +38,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
+        session.delegate = self
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -106,6 +109,22 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = options[indexPath.row]
+        if let currState = currentState {
+            let mcOption: String = intToMCOption(indexPath.row)
+            if let numSelected = currState.results[mcOption] as? Int {
+                print("nonzero width")
+                cell.numberLabel.text = "\(numSelected)"
+                let width = CGFloat(Float(numSelected) / totalNumResults)
+                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
+            } else {
+                print("zero width")
+                cell.numberLabel.text = "0"
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.layoutIfNeeded()
+            })
+        }
         cell.selectionStyle = .none
         return cell
     }
@@ -254,6 +273,37 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
         endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
+    }
+    
+    // MARK: - Session methods
+    func sessionConnected() {
+    }
+    
+    func sessionDisconnected() {
+    }
+    
+    func questionStarted(_ question: Question) {
+    }
+    
+    func questionEnded(_ question: Question) {
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+    }
+    
+    func savePoll(_ poll: Poll) {
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        print("UPDATING TALLY")
+        self.currentState = currentState
+        totalNumResults = 0
+        for value in currentState.results.values {
+            if let v = value as? Int {
+                totalNumResults += Float(v)
+            }
+        }
+        optionResultsTableView.reloadData()
     }
     
     // MARK: - Keyboard

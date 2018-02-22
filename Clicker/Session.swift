@@ -68,6 +68,11 @@ class Session {
         socket.on("admin/question/updateTally") { data, ack in
             print("UPDATED TALLY:")
             print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let currentState = CurrentState(json: json)
+            self.delegate?.updatedTally(currentState)
         }
         
         socket.connect()
