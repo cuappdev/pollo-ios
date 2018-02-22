@@ -34,6 +34,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     // MARK: - CONTAINER VIEW
     func updateContainerVC(currentState: CurrentState? = nil){
+        removeChildViewControllers()
         if let cs = currentState {
             let userResultsVC = UserResultsViewController()
             userResultsVC.question = question
@@ -69,6 +70,14 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             make.bottom.equalToSuperview()
         }
         containerViewController.didMove(toParentViewController: self)
+    }
+    
+    func removeChildViewControllers() {
+        for vc in childViewControllers {
+            vc.willMove(toParentViewController: nil)
+            vc.view.removeFromSuperview()
+            vc.removeFromParentViewController()
+        }
     }
     
     // MARK: - CONSTRAINTS
