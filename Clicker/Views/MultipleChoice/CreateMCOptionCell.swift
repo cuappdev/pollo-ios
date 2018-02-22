@@ -1,8 +1,8 @@
 //
-//  CreateMultipleChoiceOptionCell.swift
+//  CreateMCOptionCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/6/18.
+//  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
@@ -13,8 +13,8 @@ protocol MultipleChoiceOptionDelegate {
     func deleteOption(index: Int)
 }
 
-class CreateMultipleChoiceOptionCell: UITableViewCell, UITextFieldDelegate {
-
+class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
+    
     var mcOptionDelegate: MultipleChoiceOptionDelegate!
     
     var choiceLabel = UILabel()

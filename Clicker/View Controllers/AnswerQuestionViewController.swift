@@ -75,7 +75,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         optionTableView.separatorStyle = .none
         optionTableView.clipsToBounds = true
         optionTableView.isScrollEnabled = false
-        optionTableView.register(StudentMultipleChoiceCell.self, forCellReuseIdentifier: "studentMultipleChoiceCell")
+        optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
         optionTableView.backgroundColor = .clear
         view.addSubview(optionTableView)
         
@@ -160,7 +160,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "answerMCCellID", for: indexPath) as! AnswerMCCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row].description
         return cell

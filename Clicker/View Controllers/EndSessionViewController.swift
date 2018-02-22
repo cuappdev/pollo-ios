@@ -39,9 +39,7 @@ class EndSessionViewController: UIViewController {
         session.socket.emit("server/question/end", with: [])
         
         // Get current poll object
-        print("getting current poll")
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
-        print("got current poll")
         if let name = nameSessionTextField.text {
             if (name != "") {
                 print("saving poll")
