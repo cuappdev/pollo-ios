@@ -29,10 +29,9 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .white
-        layer.cornerRadius = 8
-        layer.borderColor = UIColor.clickerBorder.cgColor
-        layer.borderWidth = 0.5
-        
+        contentView.layer.cornerRadius = 8
+        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        contentView.layer.borderWidth = 0.5
         
         setupViews()
         layoutSubviews()
@@ -61,6 +60,8 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         choiceLabel.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
