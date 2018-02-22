@@ -34,7 +34,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         var options: [String] = [String]()
         for index in 0...numOptions - 1 {
-            let indexPath = IndexPath(row: 0, section: index)
+            let indexPath = IndexPath(row: index, section: 0)
             let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
             options.append(optionCell.addOptionTextField.text!)
         }
@@ -54,13 +54,13 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.section == numOptions) {
+        if (indexPath.row == numOptions) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "createMCOptionCellID") as! CreateMCOptionCell
-        cell.choiceTag = indexPath.section
+        cell.choiceTag = indexPath.row
         cell.mcOptionDelegate = self
         cell.selectionStyle = .none
         
@@ -76,34 +76,19 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.section == numOptions) {
-            let indexSet = NSIndexSet(index: numOptions)
+        if (indexPath.row == numOptions) {
             numOptions += 1
-            tableView.insertSections(indexSet as IndexSet, with: .none)
+            tableView.insertRows(at: [indexPath], with: .none)
             tableView.reloadData()
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  1
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
         return numOptions + 1 // 1 extra for the "Add More" cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return frame.height * 0.1049618321
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 5
     }
     
     func setupViews() {
