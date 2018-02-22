@@ -14,11 +14,11 @@ class Session {
     var delegate: SessionDelegate?
     var socket: SocketIOClient!
     
-    init(id: Int, delegate: SessionDelegate? = nil) {
+    init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
         let url = URL(string: "http://localhost:\(id)")!
-        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": "student"])])
+        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
         
         socket.on(clientEvent: .connect) { data, ack in
             print("SOCKET CONNECTED")
@@ -33,33 +33,48 @@ class Session {
             self.socket.emit("student/question/start", data)
         }
         
-        socket.on("student/question/start") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionIDString = questionJSON["id"] as? String else {
+        socket.on("user/question/start") { data, ack in
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
-            let questionID = Int(questionIDString)
-//            GetQuestion(id: "\(questionID!)" ).make()
-//                .then { question -> Void in
-//                    self.delegate?.beginQuestion(question)
-//                }.catch { error in
-//                    print(error)
-//            }
+            print("question: \(json)")
+            let question = Question(json: questionJSON)
+            self.delegate?.questionStarted(question)
         }
         
-        socket.on("student/question/end") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any],
-                let questionIDString = questionJSON["id"] as? String else {
+        socket.on("user/question/end") { data, ack in
+            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
-            let questionID = Int(questionIDString)
-//            GetQuestion(id: "\(questionID!)" ).make()
-//                .then { question -> Void in
-//                    self.delegate?.endQuestion(question)
-//                }.catch { error in
-//                    print(error)
-//            }
+            let question = Question(json: questionJSON)
+            self.delegate?.questionEnded(question)
         }
+        
+        socket.on("user/question/results") { data, ack in
+            print("USER GETTING RESULTS:")
+            print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let currentState = CurrentState(json: json)
+            self.delegate?.receivedResults(currentState)
+            
+        }
+        
+        socket.on("user/question/save") { data, ack in
+            
+        }
+        
+        socket.on("admin/question/updateTally") { data, ack in
+            print("UPDATED TALLY:")
+            print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let currentState = CurrentState(json: json)
+            self.delegate?.updatedTally(currentState)
+        }
+        
         socket.connect()
     }
 }

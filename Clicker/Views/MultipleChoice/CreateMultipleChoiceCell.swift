@@ -9,9 +9,10 @@
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionProtocol {
+class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
+    var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
@@ -27,6 +28,28 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     
     @objc func startPoll() {
         let liveResultsVC = LiveResultsViewController()
+        
+        //Pass values to LiveResultsVC
+        liveResultsVC.question = questionTextField.text
+        
+        var options: [String] = [String]()
+        for index in 0...numOptions - 1 {
+            let indexPath = IndexPath(row: 0, section: index)
+            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMultipleChoiceOptionCell
+            options.append(optionCell.addOptionTextField.text!)
+        }
+        liveResultsVC.options = options
+        liveResultsVC.session = self.session
+        liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
+        
+        // Emit socket messsage to start question
+        let question: [String:Any] = [
+            "text": questionTextField.text,
+            "type": "MULTIPLE_CHOICE",
+            "options": options
+        ]
+        session.socket.emit("server/question/start", with: [question])
+        
         createQuestionVC.navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
