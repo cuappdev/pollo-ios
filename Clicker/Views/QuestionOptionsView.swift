@@ -85,6 +85,16 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
 
 class QuestionOptionCell: UICollectionViewCell {
     
+    override var isSelected: Bool {
+        didSet {
+            if self.isSelected {
+                optionLabel.textColor = .black
+            } else {
+                optionLabel.textColor = .clickerMediumGray
+            }
+        }
+    }
+    
     let optionLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
