@@ -10,26 +10,16 @@ import UIKit
 
 class Answer {
     
-    var id: String
-    var question: String
-    var answerer: String
-    var type: String  // SingleResponse | MultipleResponse
-    var multipleResponse = [String]()
-    var singleResponse = ""
-    
-    init(_ id: String, _ question: String, _ answerer: String, _ type: String, _ multipleResponse: [String]) {
+    var id: Int
+    var deviceId: Int
+    var questionId: Int
+    var data: String  // SingleResponse | MultipleResponse
+
+    init(_ id: Int, _ deviceId: Int, _ questionId: Int, _ data: String) {
         self.id = id
-        self.question = question
-        self.answerer = answerer
-        self.type = type
-        self.multipleResponse = multipleResponse
+        self.deviceId = deviceId
+        self.questionId = questionId
+        self.data = data
     }
     
-    init(_ id: String, _ question: String, _ answerer: String, _ type: String, _ singleResponse: String) {
-        self.id = id
-        self.question = question
-        self.answerer = answerer
-        self.type = type
-        self.singleResponse = singleResponse
-    }
 }

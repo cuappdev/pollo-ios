@@ -11,7 +11,8 @@ import SnapKit
 
 class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    
+    var session: Session!
+    var oldPoll: Poll!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionOptionsView: QuestionOptionsView!
@@ -21,8 +22,13 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBackground
-        UINavigationBar.appearance().barTintColor = .clickerGreen
         
+        if (oldPoll == nil) {
+            createPoll()
+        } else {
+            self.encodeObjForKey(obj: oldPoll, key: "currentPoll")
+            startPoll(poll: oldPoll)
+        }
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -33,6 +39,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createMultipleChoiceCellID", for: indexPath) as! CreateMultipleChoiceCell
             cell.createQuestionVC = self
+            cell.session = self.session
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createFreeResponseCellID", for: indexPath) as! CreateFreeResponseCell
@@ -97,9 +104,40 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
+    func createPoll() {
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        CreatePoll(name: "", pollCode: pollCode).make()
+            .then{ poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
+                print("set currentPoll to:")
+                print(poll)
+                self.startPoll(poll: poll)
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+    }
+    
+    func startPoll(poll: Poll) {
+        StartCreatedPoll(id: poll.id).make()
+            .then{ port -> Void in
+                print("starting poll at \(port)")
+                self.session = Session(id: port, userType: "admin")
+                // Reload collection view so that cell has correct session property
+                DispatchQueue.main.async {
+                     self.questionCollectionView.reloadData()
+                }
+            }.catch { error -> Void in
+                print("here: \(error)")
+            }
+    }
+    
     func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = .clickerGreen
+        
         let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: APPDEV")
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
         codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
         codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
         codeLabel.attributedText = codeAttributedString

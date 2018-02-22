@@ -11,6 +11,8 @@ import SnapKit
 
 class EndSessionViewController: UIViewController {
     
+    var session: Session!
+    var isOldPoll: Bool!
     var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!
@@ -33,8 +35,80 @@ class EndSessionViewController: UIViewController {
     }
     
     @objc func endSession() {
+        // Emit socket messsage to end question
+        session.socket.emit("server/question/end", with: [])
+        
+        // Get current poll object
+        print("getting current poll")
+        let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+        print("got current poll")
+        if let name = nameSessionTextField.text {
+            if (name != "") {
+                print("saving poll")
+                // Emit socket message for users to save poll
+                session.socket.emit("server/poll/save", with: [])
+                // End poll
+                endPoll(pollId: currentPoll.id, save: true)
+                // Update poll name
+                updateSavePoll(pollId: currentPoll.id, name: name)
+            } else {
+                print("ending poll without saving")
+                // End poll
+                endPoll(pollId: currentPoll.id, save: false)
+            }
+        } else {
+            print("ending poll without saving")
+            // End poll
+            endPoll(pollId: currentPoll.id, save: false)
+        }
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    // MARK: Update poll with given name and then save it to UserDefaults
+    func updateSavePoll(pollId: Int, name: String) {
+        UpdatePoll(id: pollId, name: name).make()
+            .then { poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
+                self.savePoll(poll: poll)
+            }.catch { error -> Void in
+                print(error)
+            }
+    }
+    
+    // MARK: Save poll to UserDefaults
+    func savePoll(poll: Poll) {
+        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            var polls: [Poll] = [poll]
+            encodeObjForKey(obj: polls, key: "savedPolls")
+        } else {
+            var polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            print("is old poll is: \(isOldPoll)")
+            if (isOldPoll) {
+                // Get index of old poll and update it in savedPolls array
+                var pollIndex = -1
+                for (index, p) in polls.enumerated() {
+                    if (p.code == poll.code) {
+                        pollIndex = index
+                        break
+                    }
+                }
+                polls[pollIndex] = poll
+            } else {
+                polls.append(poll)
+            }
+            encodeObjForKey(obj: polls, key: "savedPolls")
+        }
+    }
+    
+    // MARK: End poll
+    func endPoll(pollId: Int, save: Bool) {
+        EndPoll(id: pollId, save: save).make()
+            .then { Void -> Void in
+                print("ended poll")
+            }.catch { error -> Void in
+                print(error)
+            }
     }
     
     func setupViews() {
@@ -78,6 +152,10 @@ class EndSessionViewController: UIViewController {
         nameSessionTextField.borderStyle = .none
         nameSessionTextField.backgroundColor = .clear
         nameSessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+        if (currentPoll.name != "") {
+            nameSessionTextField.text = currentPoll.name
+        }
         sessionView.addSubview(nameSessionTextField)
         
         endSessionButton = UIButton()

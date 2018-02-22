@@ -10,8 +10,12 @@ import UIKit
 import SnapKit
 import Presentr
 
-class LiveResultsViewController: UIViewController {
+class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SessionDelegate {
     
+    var session: Session!
+    var currentState: CurrentState!
+    var totalNumResults: Float = 0
+    var isOldPoll: Bool!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -23,14 +27,18 @@ class LiveResultsViewController: UIViewController {
     var elapsedSeconds: Int = 0
     
     var questionLabel: UILabel!
-    var optionReultsTableView: UITableView!
+    var optionResultsTableView: UITableView!
     var closePollButton: UIButton!
+    
+    var question: String!
+    var options: [String]!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
+        session.delegate = self
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -44,16 +52,26 @@ class LiveResultsViewController: UIViewController {
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
+        endSessionVC.isOldPoll = isOldPoll
         endSessionVC.dismissController = self
+        endSessionVC.session = self.session
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
     }
     
     @objc func editPoll() {
+        // Emit socket messsage to end question
+        session.socket.emit("server/question/end", with: [])
+        // Pop to CreateQuestionVC
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func closePoll() {
         print("close poll")
+        // Emit socket message to share results to users
+        session.socket.emit("server/question/results", with: [])
+        // Emit socket message to end question
+        session.socket.emit("server/question/end", with: [])
+        timer.invalidate()
     }
     
     func runTimer() {
@@ -85,6 +103,42 @@ class LiveResultsViewController: UIViewController {
         }
     }
     
+    // MARK - Tableview methods
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
+        cell.choiceTag = indexPath.row
+        cell.optionLabel.text = options[indexPath.row]
+        if let currState = currentState {
+            let mcOption: String = intToMCOption(indexPath.row)
+            if let numSelected = currState.results[mcOption] as? Int {
+                print("nonzero width")
+                cell.numberLabel.text = "\(numSelected)"
+                let width = CGFloat(Float(numSelected) / totalNumResults)
+                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
+            } else {
+                print("zero width")
+                cell.numberLabel.text = "0"
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.layoutIfNeeded()
+            })
+        }
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return options.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return view.frame.height * 0.08888888889
+    }
+    
+    
+    // MARK - Setup views
     func setupViews() {
         headerView = UIView()
         headerView.backgroundColor = .clickerBackground
@@ -115,12 +169,21 @@ class LiveResultsViewController: UIViewController {
         headerView.addSubview(editPollButton)
         
         questionLabel = UILabel()
-        questionLabel.text = "What is the name of Saturn's largest moon?"
+        questionLabel.text = question
         questionLabel.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
         questionLabel.textColor = .clickerBlack
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
+        
+        optionResultsTableView = UITableView()
+        optionResultsTableView.backgroundColor = .clear
+        optionResultsTableView.separatorStyle = .none
+        optionResultsTableView.delegate = self
+        optionResultsTableView.dataSource = self
+        optionResultsTableView.clipsToBounds = true
+        optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
+        view.addSubview(optionResultsTableView)
         
         closePollButton = UIButton()
         closePollButton.setTitle("Close Poll", for: .normal)
@@ -179,12 +242,20 @@ class LiveResultsViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-18)
         }
         
+        optionResultsTableView.snp.makeConstraints { make in
+            make.width.equalTo(closePollButton.snp.width)
+            make.bottom.equalTo(closePollButton.snp.top).offset(-5)
+            make.top.equalTo(questionLabel.snp.bottom).offset(24)
+            make.centerX.equalToSuperview()
+        }
+        
         
     }
     
     func setupNavBar() {
         let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: APPDEV")
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
         codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
         codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
         codeLabel.attributedText = codeAttributedString
@@ -202,7 +273,37 @@ class LiveResultsViewController: UIViewController {
         endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
         endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-        
+    }
+    
+    // MARK: - Session methods
+    func sessionConnected() {
+    }
+    
+    func sessionDisconnected() {
+    }
+    
+    func questionStarted(_ question: Question) {
+    }
+    
+    func questionEnded(_ question: Question) {
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+    }
+    
+    func savePoll(_ poll: Poll) {
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        print("UPDATING TALLY")
+        self.currentState = currentState
+        totalNumResults = 0
+        for value in currentState.results.values {
+            if let v = value as? Int {
+                totalNumResults += Float(v)
+            }
+        }
+        optionResultsTableView.reloadData()
     }
     
     // MARK: - Keyboard

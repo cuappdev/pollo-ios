@@ -8,8 +8,8 @@
 
 import UIKit
 
-class PendingViewController: UIViewController {
-
+class PendingViewController: UIViewController, SessionDelegate {
+    
     var pendingLabel: UILabel!
     
     // MARK: - INITIALIZATION
@@ -29,5 +29,27 @@ class PendingViewController: UIViewController {
             make.width.equalTo(view.frame.width).multipliedBy(0.7)
             make.height.equalTo(50)
         }
+    }
+    
+    // MARK - Socket methods
+    func sessionConnected() {
+    }
+    
+    func sessionDisconnected() {
+    }
+    
+    func questionStarted(_ question: Question) {
+    }
+    
+    func questionEnded(_ question: Question) {
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+    }
+    
+    func savePoll(_ poll: Poll) {
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
     }
 }
