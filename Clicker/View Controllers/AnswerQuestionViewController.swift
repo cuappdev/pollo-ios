@@ -14,6 +14,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionLabel: UILabel!
+    var answerRecordedLabel: UILabel!
     var submitAnswerButton: UIButton!
     var session: Session!
     var poll: Poll!
@@ -78,6 +79,14 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         optionTableView.backgroundColor = .clear
         view.addSubview(optionTableView)
         
+        answerRecordedLabel = UILabel()
+        answerRecordedLabel.backgroundColor = .clickerBackground
+        answerRecordedLabel.textAlignment = .center
+        answerRecordedLabel.text = "Answer recorded. Select again to edit answer."
+        answerRecordedLabel.font = UIFont.systemFont(ofSize: 14)
+        answerRecordedLabel.alpha = 0
+        view.addSubview(answerRecordedLabel)
+        
         submitAnswerButton = UIButton()
         submitAnswerButton.backgroundColor = .clickerLightGray
         submitAnswerButton.layer.cornerRadius = 8
@@ -100,11 +109,18 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
             make.top.equalTo(questionLabel.snp.bottom).offset(18)
-            make.bottom.equalTo(submitAnswerButton.snp.top).offset(18)
+            make.bottom.equalTo(answerRecordedLabel.snp.top).offset(-18)
+        }
+        
+        answerRecordedLabel.snp.updateConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalTo(19)
+            make.bottom.equalTo(submitAnswerButton.snp.top).offset(-18)
+            make.centerX.equalToSuperview()
         }
         
         submitAnswerButton.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.9)
+            make.width.equalTo(answerRecordedLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-18)
@@ -124,10 +140,8 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             "data": intToMCOption(selectedOptionIndex)
         ]
         session.socket.emit("server/question/tally", with: [answer])
-        // Show resubmit alert
-        let alert = UIAlertController(title: "Submitted", message: "Choose a different option to resubmit", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        // Show answerRecorded label
+        answerRecordedLabel.alpha = 1
         // Reset
         selectedOptionIndex = -1
         submitAnswerButton.backgroundColor = .clickerLightGray
