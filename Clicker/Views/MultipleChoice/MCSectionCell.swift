@@ -1,15 +1,15 @@
 //
-//  CreateMultipleChoiceCell.swift
+//  MCSectionCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/6/18.
+//  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
+class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
     var session: Session!
@@ -35,7 +35,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         var options: [String] = [String]()
         for index in 0...numOptions - 1 {
             let indexPath = IndexPath(row: 0, section: index)
-            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMultipleChoiceOptionCell
+            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
             options.append(optionCell.addOptionTextField.text!)
         }
         liveResultsVC.options = options
@@ -59,7 +59,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
             cell.selectionStyle = .none
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "createMultipleChoiceOptionCellID") as! CreateMultipleChoiceOptionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "createMCOptionCellID") as! CreateMCOptionCell
         cell.choiceTag = indexPath.section
         cell.mcOptionDelegate = self
         cell.selectionStyle = .none
@@ -119,7 +119,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         optionsTableView = UITableView()
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
-        optionsTableView.register(CreateMultipleChoiceOptionCell.self, forCellReuseIdentifier: "createMultipleChoiceOptionCellID")
+        optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: "createMCOptionCellID")
         optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: "addMoreOptionCellID")
         optionsTableView.backgroundColor = .clickerBackground
         optionsTableView.clipsToBounds = true
@@ -178,4 +178,5 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         optionsTableView.reloadData()
     }
 }
+
 
