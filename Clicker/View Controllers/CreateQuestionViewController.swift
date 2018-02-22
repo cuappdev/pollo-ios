@@ -128,7 +128,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
                      self.questionCollectionView.reloadData()
                 }
             }.catch { error -> Void in
-                print(error)
+                print("here: \(error)")
             }
     }
     
