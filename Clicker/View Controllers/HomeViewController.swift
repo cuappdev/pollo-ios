@@ -21,7 +21,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // UserDefaults.standard.set(nil, forKey: "savedPolls")
+        UserDefaults.standard.set(nil, forKey: "savedPolls")
+        UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         setupViews()
         setupConstraints()
@@ -120,7 +121,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             cell.joinSessionCellDelegate = self
             return cell
         case 2:
-            let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
             cell.sessionText = polls[indexPath.row].name
             return cell
@@ -136,10 +137,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         case 1:
             return 1
         case 2:
-            if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+            if (UserDefaults.standard.value(forKey: "adminSavedPolls") == nil) {
                 return 0
             }
-            let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+            let pollsData = UserDefaults.standard.value(forKey: "adminSavedPolls") as! Data
             let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
             return polls.count
         default:
@@ -154,7 +155,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         case 1:
             print("case 1")
         case 2:
-            let polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             let selectedPoll = polls[indexPath.row]
             UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
             let createQuestionVC = CreateQuestionViewController()
@@ -229,10 +230,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func savedPollsExist() -> Bool {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+        if (UserDefaults.standard.value(forKey: "adminSavedPolls") == nil) {
             return false
         }
-        let pollsData = UserDefaults.standard.value(forKey: "savedPolls") as! Data
+        let pollsData = UserDefaults.standard.value(forKey: "adminSavedPolls") as! Data
         let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
         return (polls.count >= 1)
     }

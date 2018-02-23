@@ -61,8 +61,14 @@ class Session {
             
         }
         
-        socket.on("user/question/save") { data, ack in
-            
+        socket.on("user/poll/save") { data, ack in
+            print("USER GETTING POLL")
+            print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let poll = Poll(json: json)
+            self.delegate?.savePoll(poll)
         }
         
         socket.on("admin/question/updateTally") { data, ack in
