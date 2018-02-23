@@ -100,6 +100,7 @@ class QuestionOptionCell: UICollectionViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textColor = .clickerMediumGray
         label.font = UIFont._16MediumFont
         return label
     }()
