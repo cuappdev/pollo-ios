@@ -158,8 +158,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     func deleteOption(index: Int) {
         numOptions -= 1
-        let indexSet = NSIndexSet(index: index)
-        optionsTableView.deleteSections(indexSet as IndexSet, with: .fade)
+        let indexPath = IndexPath(row: index, section: 0)
+        optionsTableView.deleteRows(at: [indexPath], with: .fade)
         optionsTableView.reloadData()
     }
 }

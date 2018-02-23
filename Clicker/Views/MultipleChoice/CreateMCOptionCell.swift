@@ -28,10 +28,11 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .white
+        backgroundColor = .clickerBackground
         contentView.layer.cornerRadius = 8
         contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         contentView.layer.borderWidth = 0.5
+        contentView.backgroundColor = .white
         
         setupViews()
         layoutSubviews()
@@ -84,7 +85,6 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     }
     
     @objc func deleteOption(){
-        print("delete cell \(choiceTag)")
         mcOptionDelegate.deleteOption(index: choiceTag)
     }
     
