@@ -15,8 +15,7 @@ class LiveSessionCell: UITableViewCell {
     var liveIcon: UIImageView!
     var rightArrowIcon: UIImageView!
     
-    var sessionTitle: String! = "Intro to iOS Development"
-    var date: String! = "Started 3 minutes ago by Dan Li"
+    // var date: String! = "Started 3 minutes ago by Dan Li"
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -37,14 +36,12 @@ class LiveSessionCell: UITableViewCell {
         sessionLabel = UILabel()
         sessionLabel.font = UIFont._18SemiboldFont
         sessionLabel.textColor = UIColor.clickerBlack
-        sessionLabel.text = sessionTitle
         sessionLabel.sizeToFit()
         addSubview(sessionLabel)
         
         dateLabel = UILabel()
         dateLabel.font = UIFont._12RegularFont
         dateLabel.textColor = UIColor.clickerDarkGray
-        dateLabel.text = date
         dateLabel.sizeToFit()
         addSubview(dateLabel)
     }

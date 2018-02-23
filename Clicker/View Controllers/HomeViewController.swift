@@ -15,15 +15,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     var whiteView: UIView!
     var createPollButton: UIButton!
-    var savedSessionsTableView: UITableView!
+    var homeTableView: UITableView!
+    var livePolls: [Poll] = [Poll]()
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UserDefaults.standard.set(nil, forKey: "savedPolls")
-        UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
+        // UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
+        lookForLivePolls()
         setupViews()
         setupConstraints()
     }
@@ -45,20 +46,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         whiteView.addSubview(createPollButton)
         
         //SAVED SESSIONS
-        savedSessionsTableView = UITableView()
-        savedSessionsTableView.delegate = self
-        savedSessionsTableView.dataSource = self
-        savedSessionsTableView.separatorStyle = .none
-        savedSessionsTableView.clipsToBounds = true
-        savedSessionsTableView.backgroundColor = .clear
-        savedSessionsTableView.tableHeaderView?.backgroundColor = .clear
+        homeTableView = UITableView()
+        homeTableView.delegate = self
+        homeTableView.dataSource = self
+        homeTableView.separatorStyle = .none
+        homeTableView.clipsToBounds = true
+        homeTableView.backgroundColor = .clear
+        homeTableView.tableHeaderView?.backgroundColor = .clear
         
-        savedSessionsTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
-        savedSessionsTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
-        savedSessionsTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
-        savedSessionsTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
+        homeTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
+        homeTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
+        homeTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
+        homeTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
         
-        view.addSubview(savedSessionsTableView)
+        view.addSubview(homeTableView)
     }
     
     func setupConstraints() {
@@ -75,7 +76,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             make.size.equalTo(CGSize(width: view.frame.width * 0.904, height: view.frame.height * 0.08245877061))
         }
         
-        savedSessionsTableView.snp.updateConstraints { make in
+        homeTableView.snp.updateConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview().offset(50)
             make.centerX.equalToSuperview()
@@ -85,12 +86,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Update live polls
+        lookForLivePolls()
         // Hide navigation bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         // Get new poll code if needed
         getNewPollCode()
         // Reload TableViews
-        savedSessionsTableView.reloadData()
+        homeTableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -115,6 +118,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCellID", for: indexPath) as! LiveSessionCell
+            cell.sessionLabel.text = livePolls[indexPath.row].name
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
@@ -133,7 +137,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return livePolls.count
         case 1:
             return 1
         case 2:
@@ -151,7 +155,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            print("case 0")
+            let polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
+            let selectedPoll = polls[indexPath.row]
+            let liveSessionVC = LiveSessionViewController()
+            liveSessionVC.poll = selectedPoll
+            self.navigationController?.pushViewController(liveSessionVC, animated: true)
         case 1:
             print("case 1")
         case 2:
@@ -199,6 +207,49 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     // MARK: - SESSIONS / POLLS
+    
+    // Get current live, subscribed polls
+    func lookForLivePolls() {
+        if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
+            return
+        }
+        let polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
+        let codes: [String] = polls.map {
+            $0.code
+        }
+        let parameters: Parameters = [
+            "codes": codes
+        ]
+        requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
+            var updatedLivePolls = [Poll]()
+            if let data = json["data"] as? [[String:Any]] {
+                if (data.count == 0) {
+                    self.livePolls = updatedLivePolls
+                } else {
+                    let nodes: [[String:Any]] = data.map {
+                        $0["node"] as! [String:Any]
+                    }
+                    for node in nodes {
+                        guard let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
+                            let alert = self.createAlert(title: "Error", message: "Bad response data")
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                        let poll = Poll(id: id, name: name, code: code)
+                        updatedLivePolls.append(poll)
+                    }
+                    self.livePolls = updatedLivePolls
+                    DispatchQueue.main.async {
+                        self.homeTableView.reloadData()
+                    }
+                }
+            } else {
+                return
+            }
+        })
+
+        
+    }
     
     // Generate poll code
     func getNewPollCode() {
@@ -277,4 +328,5 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             })
         }
     }
+        
 }
