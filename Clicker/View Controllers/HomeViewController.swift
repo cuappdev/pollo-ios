@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var whiteView: UIView!
     var createPollButton: UIButton!
     var homeTableView: UITableView!
+    var refreshControl: UIRefreshControl!
     var livePolls: [Poll] = [Poll]()
     
     // MARK: - INITIALIZATION
@@ -45,6 +46,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
         whiteView.addSubview(createPollButton)
         
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
+        
         //SAVED SESSIONS
         homeTableView = UITableView()
         homeTableView.delegate = self
@@ -53,11 +57,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         homeTableView.clipsToBounds = true
         homeTableView.backgroundColor = .clear
         homeTableView.tableHeaderView?.backgroundColor = .clear
+        homeTableView.refreshControl = refreshControl
         
         homeTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
         homeTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
         homeTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
         homeTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
+        
         
         view.addSubview(homeTableView)
     }
@@ -207,6 +213,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     // MARK: - SESSIONS / POLLS
+    
+    // Refresh control was pulled
+    @objc func refreshPulled() {
+        lookForLivePolls()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.refreshControl.endRefreshing()
+        }
+    }
     
     // Get current live, subscribed polls
     func lookForLivePolls() {
