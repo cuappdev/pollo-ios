@@ -21,6 +21,12 @@ class Poll: NSObject, NSCoding {
         self.code = code
     }
     
+    init(json: [String:Any]) {
+        self.id = json["id"] as! Int
+        self.name = json["name"] as! String
+        self.code = json["code"] as! String
+    }
+    
     required convenience init?(coder aDecoder: NSCoder) {
         let id = aDecoder.decodeInteger(forKey: "id")
         let name = aDecoder.decodeObject(forKey: "name") as! String

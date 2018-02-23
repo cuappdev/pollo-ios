@@ -147,6 +147,30 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
+    // MARK: Save poll to adminSavedPolls in UserDefaults
+    func saveUserPoll(poll: Poll) {
+        if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
+            var polls: [Poll] = [poll]
+            encodeObjForKey(obj: polls, key: "userSavedPolls")
+        } else {
+            var polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
+            // Check if poll has already been saved before
+            var pollIndex = -1
+            for (index, p) in polls.enumerated() {
+                if (p.code == poll.code) {
+                    pollIndex = index
+                    break
+                }
+            }
+            if (pollIndex != -1) {
+                polls[pollIndex] = poll
+            } else {
+                polls.append(poll)
+            }
+            encodeObjForKey(obj: polls, key: "userSavedPolls")
+        }
+    }
+    
     // MARK - Socket methods
     func sessionConnected() {
     }
@@ -169,6 +193,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func savePoll(_ poll: Poll) {
+        saveUserPoll(poll: poll)
     }
     
     func updatedTally(_ currentState: CurrentState) {

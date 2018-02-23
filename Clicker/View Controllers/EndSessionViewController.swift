@@ -44,7 +44,7 @@ class EndSessionViewController: UIViewController {
             if (name != "") {
                 print("saving poll")
                 // Emit socket message for users to save poll
-                session.socket.emit("server/poll/save", with: [])
+                self.session.socket.emit("server/poll/save", with: [])
                 // End poll
                 endPoll(pollId: currentPoll.id, save: true)
                 // Update poll name
@@ -68,19 +68,19 @@ class EndSessionViewController: UIViewController {
         UpdatePoll(id: pollId, name: name).make()
             .then { poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
-                self.savePoll(poll: poll)
+                self.saveAdminPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
             }
     }
     
-    // MARK: Save poll to UserDefaults
-    func savePoll(poll: Poll) {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
+    // MARK: Save poll to adminSavedPolls in UserDefaults
+    func saveAdminPoll(poll: Poll) {
+        if (UserDefaults.standard.value(forKey: "adminSavedPolls") == nil) {
             var polls: [Poll] = [poll]
-            encodeObjForKey(obj: polls, key: "savedPolls")
+            encodeObjForKey(obj: polls, key: "adminSavedPolls")
         } else {
-            var polls = decodeObjForKey(key: "savedPolls") as! [Poll]
+            var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             print("is old poll is: \(isOldPoll)")
             if (isOldPoll) {
                 // Get index of old poll and update it in savedPolls array
@@ -95,7 +95,7 @@ class EndSessionViewController: UIViewController {
             } else {
                 polls.append(poll)
             }
-            encodeObjForKey(obj: polls, key: "savedPolls")
+            encodeObjForKey(obj: polls, key: "adminSavedPolls")
         }
     }
     
