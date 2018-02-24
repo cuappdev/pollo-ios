@@ -23,6 +23,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Handle keyboard dismiss
+        self.hideKeyboardWhenTappedAround()
+
         // UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         lookForLivePolls()
@@ -348,5 +351,4 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             })
         }
     }
-        
 }
