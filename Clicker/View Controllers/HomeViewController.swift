@@ -238,8 +238,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             var updatedLivePolls = [Poll]()
             if let data = json["data"] as? [[String:Any]] {
                 if (data.count == 0) {
+                    print("no live polls")
                     self.livePolls = updatedLivePolls
                 } else {
+                    print("live polls exist")
                     let nodes: [[String:Any]] = data.map {
                         $0["node"] as! [String:Any]
                     }
@@ -253,9 +255,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                         updatedLivePolls.append(poll)
                     }
                     self.livePolls = updatedLivePolls
-                    DispatchQueue.main.async {
-                        self.homeTableView.reloadData()
-                    }
+                }
+                DispatchQueue.main.async {
+                    self.homeTableView.reloadData()
                 }
             } else {
                 return

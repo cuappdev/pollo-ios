@@ -59,6 +59,17 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     @objc func endSession() {
+        // End poll
+        if let sess = session {
+           sess.socket.disconnect()
+        }
+        let poll = decodeObjForKey(key: "currentPoll") as! Poll
+        EndPoll(id: poll.id, save: false).make()
+            .then { Void -> Void in
+                print("ended poll")
+            }.catch { error -> Void in
+                print(error)
+        }
         self.navigationController?.popToRootViewController(animated: true)
     }
     
