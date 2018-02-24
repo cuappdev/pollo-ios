@@ -144,6 +144,8 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     // MARK: - SESSION
     @objc func endSession() {
+        // Disconnect user from socket
+        session.socket.disconnect()
         self.navigationController?.popToRootViewController(animated: true)
     }
     
