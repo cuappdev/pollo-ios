@@ -124,16 +124,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "liveSessionCellID", for: indexPath) as! LiveSessionCell
-            cell.sessionLabel.text = livePolls[indexPath.row].name
+            let livePoll = livePolls[indexPath.row]
+            cell.sessionLabel.text = livePoll.name
+            cell.codeLabel.text = "Session Code: \(livePoll.code)"
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
             cell.joinSessionCellDelegate = self
             return cell
         case 2:
-            let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
-            cell.sessionText = polls[indexPath.row].name
+            let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
+            let poll = polls[indexPath.row]
+            cell.sessionLabel.text = poll.name
+            cell.codeLabel.text = "Session Code: \(poll.code)"            
             return cell
         default:
             return UITableViewCell()

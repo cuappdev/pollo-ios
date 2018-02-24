@@ -11,34 +11,35 @@ import SnapKit
 
 class SavedSessionCell: UITableViewCell {
     
-    var containerView: UIView!
     var sessionLabel: UILabel!
-    var sessionText: String! {
-        didSet {
-            print(sessionText)
-            sessionLabel.text = sessionText
-        }
-    }
-    var emptyView: UIView!
+//    var sessionText: String! {
+//        didSet {
+//            print(sessionText)
+//            sessionLabel.text = sessionText
+//        }
+//    }
+    var codeLabel: UILabel!
+    
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
-        backgroundColor = .clear
+        backgroundColor = .clickerBackground
+        contentView.layer.cornerRadius = 8
+        contentView.layer.backgroundColor = UIColor.white.cgColor
+        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        contentView.layer.borderWidth = 0.5
         
-        containerView = UIView()
-        containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 8
-        addSubview(containerView)
-        
-        sessionLabel = UILabel(frame: .zero)
+        sessionLabel = UILabel()
         sessionLabel.font = UIFont._18RegularFont
-        containerView.addSubview(sessionLabel)
+        addSubview(sessionLabel)
         
-        emptyView = UIView()
-        emptyView.backgroundColor = .clear
-        addSubview(emptyView)
+        codeLabel = UILabel()
+        codeLabel.font = UIFont._12RegularFont
+        codeLabel.textColor = UIColor.clickerDarkGray
+        codeLabel.sizeToFit()
+        addSubview(codeLabel)
         
         layoutSubviews()
     }
@@ -47,24 +48,22 @@ class SavedSessionCell: UITableViewCell {
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        containerView.snp.updateConstraints { make in
-            print(frame.height)
-            make.width.equalToSuperview()
-            make.height.equalTo(frame.height - 5)
-            make.top.equalToSuperview()
-        }
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         sessionLabel.snp.updateConstraints { make in
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview().offset(18)
+            make.height.equalTo(22)
             make.left.equalToSuperview().offset(38.5)
             make.right.equalToSuperview()
         }
         
-        emptyView.snp.updateConstraints{ make in
-            make.width.equalToSuperview()
-            make.height.equalTo(5)
-            make.bottom.equalToSuperview()
+        codeLabel.snp.updateConstraints { make in
+            make.left.equalTo(sessionLabel.snp.left)
+            make.top.equalTo(sessionLabel.snp.bottom).offset(4)
+            make.height.equalTo(15)
+            make.width.equalToSuperview().multipliedBy(0.7641791045)
         }
+        
         
     }
     
