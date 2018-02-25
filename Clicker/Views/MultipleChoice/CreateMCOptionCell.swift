@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 
 protocol MultipleChoiceOptionDelegate {
+    func tappedTextField(index: Int)
+     func updatedTextField(index: Int, text: String)
     func deleteOption(index: Int)
 }
 
@@ -55,6 +57,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         addOptionTextField.font = UIFont._16SemiboldFont
         addOptionTextField.borderStyle = .none
         addOptionTextField.returnKeyType = UIReturnKeyType.done
+        addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addOptionTextField.delegate = self
         addSubview(addOptionTextField)
     }
@@ -88,14 +91,25 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         mcOptionDelegate.deleteOption(index: choiceTag)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    // MARK: - TextField delegate methods
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        mcOptionDelegate.tappedTextField(index: choiceTag)
+    }
+    
+    @objc func textFieldDidChange() {
+        if let text = addOptionTextField.text {
+            print("UPDATING TEXTFIELD: \(text)")
+            mcOptionDelegate.updatedTextField(index: choiceTag, text: text)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

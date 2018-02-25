@@ -21,6 +21,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.hideKeyboardWhenTappedAround()
         view.backgroundColor = .clickerBackground
         
         if (oldPoll == nil) {
