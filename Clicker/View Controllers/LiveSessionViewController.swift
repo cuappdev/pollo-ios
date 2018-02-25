@@ -126,7 +126,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
                 }
                 print("got poll port: \(port)")
             }.catch { error -> Void in
-                print(error)
                 print("failed to get poll port")
             }
     }
@@ -139,7 +138,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
                 self.updateContainerVC()
             }.catch {error -> Void in
                 self.pending()
-                print(error)
+                print("CHECK QUESTION ERROR: \(error)")
             }
     }
     
