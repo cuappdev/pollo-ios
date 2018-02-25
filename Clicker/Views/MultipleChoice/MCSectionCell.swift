@@ -16,11 +16,20 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
+    var pollButtonBottomConstraint: Constraint!
+    var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
+        
+        // Initialize values for option dictionary
+        for i in 0...numOptions - 1 {
+            optionsDict[i] = ""
+        }
         
         setupViews()
         layoutSubviews()
@@ -31,13 +40,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         //Pass values to LiveResultsVC
         liveResultsVC.question = questionTextField.text
-        
-        var options: [String] = [String]()
-        for index in 0...numOptions - 1 {
-            let indexPath = IndexPath(row: index, section: 0)
-            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
-            options.append(optionCell.addOptionTextField.text!)
-        }
+        let keys = optionsDict.keys.sorted()
+        let options: [String] = keys.map { optionsDict[$0]! }
         liveResultsVC.options = options
         liveResultsVC.session = self.session
         liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
@@ -62,6 +66,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: "createMCOptionCellID") as! CreateMCOptionCell
         cell.choiceTag = indexPath.row
         cell.mcOptionDelegate = self
+        cell.addOptionTextField.text = optionsDict[indexPath.row]
         cell.selectionStyle = .none
         
         if numOptions <= 2 {
@@ -78,13 +83,17 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == numOptions) {
             numOptions += 1
+            optionsDict[numOptions - 1] = ""
+            tableView.beginUpdates()
             tableView.insertRows(at: [indexPath], with: .none)
             tableView.reloadData()
+            tableView.endUpdates()
+            
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numOptions + 1 // 1 extra for the "Add More" cell
+        return numOptions + 1 // 1 extra for the "Add More" cell plus 5 empty cells
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -120,6 +129,14 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
         addSubview(startPollButton)
         bringSubview(toFront: startPollButton)
+        
+        startPollButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
+            make.centerX.equalToSuperview()
+            self.pollButtonBottomConstraint = make.bottom.equalTo(0).constraint
+        }
+        pollButtonBottomConstraint.update(offset: -18)
+        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -141,7 +158,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         startPollButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
         }
         
     }
@@ -159,8 +175,58 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     func deleteOption(index: Int) {
         numOptions -= 1
         let indexPath = IndexPath(row: index, section: 0)
+        optionsDict.removeValue(forKey: index)
+        for (key, value) in optionsDict {
+            if (key > index) {
+                optionsDict.removeValue(forKey: key)
+                optionsDict[key - 1] = value
+            }
+        }
+        let deleteCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
+        deleteCell.addOptionTextField.text = ""
+        optionsTableView.beginUpdates()
         optionsTableView.deleteRows(at: [indexPath], with: .fade)
         optionsTableView.reloadData()
+        optionsTableView.endUpdates()
+        
+    }
+    
+    func tappedTextField(index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+        // optionsTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
+    
+    func updatedTextField(index: Int, text: String) {
+        optionsDict[index] = text
+    }
+    
+    // MARK: - Keyboard showing
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets:UIEdgeInsets!
+            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
+            {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0)
+            }
+            else
+            {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
+            }
+            self.optionsTableView.contentInset = contentInsets;
+            self.optionsTableView.scrollIndicatorInsets = contentInsets;
+            
+            pollButtonBottomConstraint.update(offset: (keyboardSize.height + 18) * -1)
+            layoutIfNeeded()
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.optionsTableView.contentInset = UIEdgeInsets.zero;
+            self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
+            pollButtonBottomConstraint.update(offset: -18)
+            layoutIfNeeded()
+        }
     }
 }
 
