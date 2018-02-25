@@ -117,6 +117,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     // MARK: - Get port
     func getPollPort() {
+        print("poll id: \(poll.id), \(poll.code)")
         GetPollPorts(id: poll.id).make()
             .then { port -> Void in
                 if let p = port {

@@ -18,7 +18,7 @@ struct GetQuestionAtPort: ClickerQuark {
     var route: String {
         return "/api/v1/polls/question/\(port)"
     }
-    let host: String = "http://localhost:3000"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> Question {

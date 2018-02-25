@@ -21,11 +21,15 @@ class EndSessionViewController: UIViewController {
     var nameSessionTextField: UITextField!
     var saveButton: UIButton!
     var endSessionButton: UIButton!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
+        view.backgroundColor = .white
         setupViews()
         setupConstraints()
     }
@@ -71,7 +75,7 @@ class EndSessionViewController: UIViewController {
                 self.saveAdminPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
-            }
+        }
     }
     
     // MARK: Save poll to adminSavedPolls in UserDefaults
@@ -106,7 +110,7 @@ class EndSessionViewController: UIViewController {
                 print("ended poll")
             }.catch { error -> Void in
                 print(error)
-            }
+        }
     }
     
     func setupViews() {
@@ -213,4 +217,21 @@ class EndSessionViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
+    
+    // MARK: - Keyboard handling
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.origin.y -= keyboardSize.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y = view.frame.height
+            }
+        }
+    }
+    
 }

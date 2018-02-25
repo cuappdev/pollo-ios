@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         // Handle keyboard dismiss
         self.hideKeyboardWhenTappedAround()
-
+        
         // UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         lookForLivePolls()
@@ -168,10 +168,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            let polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
-            let selectedPoll = polls[indexPath.row]
+            let livePoll = livePolls[indexPath.row]
             let liveSessionVC = LiveSessionViewController()
-            liveSessionVC.poll = selectedPoll
+            liveSessionVC.poll = livePoll
             self.navigationController?.pushViewController(liveSessionVC, animated: true)
         case 1:
             print("case 1")
@@ -241,7 +240,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let parameters: Parameters = [
             "codes": codes
         ]
-        requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
+        requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
             var updatedLivePolls = [Poll]()
             if let data = json["data"] as? [[String:Any]] {
                 if (data.count == 0) {
@@ -317,7 +316,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let parameters: Parameters = [
                 "codes": [textField.text!]
             ]
-            requestJSON(route: "http://localhost:3000/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
+            requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
                 if let data = json["data"] as? [[String:Any]] {
                     if (data.count == 0) {
                         textField.text = ""
