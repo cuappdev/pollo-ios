@@ -17,7 +17,7 @@ class Session {
     init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
-        let url = URL(string: "http://localhost:\(id)")!
+        let url = URL(string: "http://34.226.150.242:\(id)")!
         self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
         
         socket.on(clientEvent: .connect) { data, ack in

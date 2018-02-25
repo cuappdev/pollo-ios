@@ -36,8 +36,8 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerBackground
         
+        view.backgroundColor = .clickerBackground
         session.delegate = self
         setupNavBar()
         setupViews()
@@ -311,4 +311,5 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    
 }
