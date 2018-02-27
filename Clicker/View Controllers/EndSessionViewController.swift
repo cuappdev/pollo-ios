@@ -42,27 +42,19 @@ class EndSessionViewController: UIViewController {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
         
-        // Get current poll object
+        // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
-        if let name = nameSessionTextField.text {
-            if (name != "") {
-                print("saving poll")
-                // Emit socket message for users to save poll
-                self.session.socket.emit("server/poll/save", with: [])
-                // End poll
-                endPoll(pollId: currentPoll.id, save: true)
-                // Update poll name
-                updateSavePoll(pollId: currentPoll.id, name: name)
-            } else {
-                print("ending poll without saving")
-                // End poll
-                endPoll(pollId: currentPoll.id, save: false)
-            }
-        } else {
-            print("ending poll without saving")
+        if nameSessionTextField.text?.isEmpty {
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
+        } else {
+            // Emit socket message for users to save poll
+            self.session.socket.emit("server/poll/save", with: [])
+            endPoll(pollId: currentPoll.id, save: true)
+            updateSavePoll(pollId: currentPoll.id, name: name)
         }
+        
+        // Return to HomeVC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
@@ -80,27 +72,27 @@ class EndSessionViewController: UIViewController {
     
     // MARK: Save poll to adminSavedPolls in UserDefaults
     func saveAdminPoll(poll: Poll) {
-        if (UserDefaults.standard.value(forKey: "adminSavedPolls") == nil) {
-            var polls: [Poll] = [poll]
-            encodeObjForKey(obj: polls, key: "adminSavedPolls")
-        } else {
-            var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
-            print("is old poll is: \(isOldPoll)")
-            if (isOldPoll) {
-                // Get index of old poll and update it in savedPolls array
-                var pollIndex = -1
-                for (index, p) in polls.enumerated() {
-                    if (p.code == poll.code) {
-                        pollIndex = index
-                        break
-                    }
-                }
-                polls[pollIndex] = poll
-            } else {
-                polls.append(poll)
-            }
-            encodeObjForKey(obj: polls, key: "adminSavedPolls")
+        // Check if any adminSavedPolls exist
+        guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
+            encodeObjForKey(obj: [poll], key: "adminSavedPolls")
+            return
         }
+        
+        var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
+        // Check if poll has been saved already
+        if (isOldPoll) {
+            var pollIndex = -1
+            for (index, p) in polls.enumerated() {
+                if (p.code == poll.code) {
+                    pollIndex = index
+                    break
+                }
+            }
+            polls[pollIndex] = poll
+        } else {
+            polls.append(poll)
+        }
+        encodeObjForKey(obj: polls, key: "adminSavedPolls")
     }
     
     // MARK: End poll
@@ -113,6 +105,7 @@ class EndSessionViewController: UIViewController {
         }
     }
     
+    // MARK: - Setup/layout views
     func setupViews() {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
