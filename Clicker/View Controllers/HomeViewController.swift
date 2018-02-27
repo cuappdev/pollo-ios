@@ -33,86 +33,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         setupConstraints()
     }
     
-    func setupViews() {
-        
-        //CREATE POLL
-        whiteView = UIView()
-        whiteView.backgroundColor = .white
-        view.addSubview(whiteView)
-        
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create New Poll", for: .normal)
-        createPollButton.setTitleColor(.white, for: .normal)
-        createPollButton.titleLabel?.font = UIFont._18MediumFont
-        createPollButton.backgroundColor = .clickerGreen
-        createPollButton.layer.cornerRadius = 8
-        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
-        whiteView.addSubview(createPollButton)
-        
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
-        
-        homeTableView = UITableView()
-        homeTableView.delegate = self
-        homeTableView.dataSource = self
-        homeTableView.separatorStyle = .none
-        homeTableView.clipsToBounds = true
-        homeTableView.backgroundColor = .clear
-        homeTableView.tableHeaderView?.backgroundColor = .clear
-        homeTableView.refreshControl = refreshControl
-        
-        homeTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
-        homeTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
-        homeTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
-        homeTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
-        
-        
-        view.addSubview(homeTableView)
-    }
-    
-    func setupConstraints() {
-        
-        whiteView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(view.frame.height * 0.13)
-        }
-        
-        createPollButton.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: view.frame.height * 0.082))
-        }
-        
-        homeTableView.snp.updateConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalToSuperview().offset(50)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(whiteView.snp.top)
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Update live polls
-        lookForLivePolls()
-        
-        // Hide navigation bar
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        
-        // Get new poll code if needed
-        getNewPollCode(completion: nil)
-        
-        // Reload TableViews
-        homeTableView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Show navigation bar
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
     // MARK: - KEYBOARD
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -350,5 +270,86 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             self.view.endEditing(true)
             self.navigationController?.pushViewController(liveSessionVC, animated: true)
         })
+    }
+    
+    // MARK: - Setup/layout views
+    func setupViews() {
+        
+        //CREATE POLL
+        whiteView = UIView()
+        whiteView.backgroundColor = .white
+        view.addSubview(whiteView)
+        
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create New Poll", for: .normal)
+        createPollButton.setTitleColor(.white, for: .normal)
+        createPollButton.titleLabel?.font = UIFont._18MediumFont
+        createPollButton.backgroundColor = .clickerGreen
+        createPollButton.layer.cornerRadius = 8
+        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
+        whiteView.addSubview(createPollButton)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
+        
+        homeTableView = UITableView()
+        homeTableView.delegate = self
+        homeTableView.dataSource = self
+        homeTableView.separatorStyle = .none
+        homeTableView.clipsToBounds = true
+        homeTableView.backgroundColor = .clear
+        homeTableView.tableHeaderView?.backgroundColor = .clear
+        homeTableView.refreshControl = refreshControl
+        
+        homeTableView.register(LiveSessionCell.self, forCellReuseIdentifier: "liveSessionCellID")
+        homeTableView.register(JoinSessionCell.self, forCellReuseIdentifier: "joinSessionCellID")
+        homeTableView.register(SessionHeader.self, forHeaderFooterViewReuseIdentifier: "sessionHeaderID")
+        homeTableView.register(SavedSessionCell.self, forCellReuseIdentifier: "savedSessionCellID")
+        
+        
+        view.addSubview(homeTableView)
+    }
+    
+    func setupConstraints() {
+        
+        whiteView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(view.frame.height * 0.13)
+        }
+        
+        createPollButton.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: view.frame.height * 0.082))
+        }
+        
+        homeTableView.snp.updateConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalToSuperview().offset(50)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(whiteView.snp.top)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Update live polls
+        lookForLivePolls()
+        
+        // Hide navigation bar
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        
+        // Get new poll code if needed
+        getNewPollCode(completion: {})
+        
+        // Reload TableViews
+        homeTableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Show navigation bar
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 }
