@@ -33,9 +33,9 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         setupNavBar()
         setupViews()
         setupConstraints()
-        
     }
     
+    // MARK: - Collection view methods
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
@@ -59,21 +59,45 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         return CGSize(width: questionCollectionView.frame.width, height: questionCollectionView.frame.height)
     }
     
+    // End current session
     @objc func endSession() {
-        // End poll
+        // Disconnect socket
         if let sess = session {
            sess.socket.disconnect()
         }
         let poll = decodeObjForKey(key: "currentPoll") as! Poll
         EndPoll(id: poll.id, save: false).make()
-            .then { Void -> Void in
-                print("ended poll")
-            }.catch { error -> Void in
-                print(error)
-        }
         self.navigationController?.popToRootViewController(animated: true)
     }
     
+    // Create a poll
+    func createPoll() {
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        CreatePoll(name: "", pollCode: pollCode).make()
+            .then{ poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
+                self.startPoll(poll: poll)
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+    }
+    
+    // Start a poll
+    func startPoll(poll: Poll) {
+        StartCreatedPoll(id: poll.id).make()
+            .then{ port -> Void in
+                self.session = Session(id: port, userType: "admin")
+                // Reload collection view so that cell has correct session property
+                DispatchQueue.main.async {
+                    self.questionCollectionView.reloadData()
+                }
+            }.catch { error -> Void in
+                print("error")
+        }
+    }
+    
+    // MARK: - SliderView methods
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
     }
@@ -83,6 +107,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
+    // MARK: - Setup/layout views
     func setupViews() {
         questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], controller: self)
         view.addSubview(questionOptionsView)
@@ -102,7 +127,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
-        
     }
     
     func setupConstraints() {
@@ -118,34 +142,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.bottom.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
         }
-    }
-    
-    func createPoll() {
-        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        CreatePoll(name: "", pollCode: pollCode).make()
-            .then{ poll -> Void in
-                self.encodeObjForKey(obj: poll, key: "currentPoll")
-                print("set currentPoll to:")
-                print(poll)
-                self.startPoll(poll: poll)
-            }.catch { error -> Void in
-                print(error)
-                return
-        }
-    }
-    
-    func startPoll(poll: Poll) {
-        StartCreatedPoll(id: poll.id).make()
-            .then{ port -> Void in
-                print("starting poll at \(port)")
-                self.session = Session(id: port, userType: "admin")
-                // Reload collection view so that cell has correct session property
-                DispatchQueue.main.async {
-                     self.questionCollectionView.reloadData()
-                }
-            }.catch { error -> Void in
-                print("here: \(error)")
-            }
     }
     
     func setupNavBar() {
@@ -174,7 +170,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     // MARK: - Keyboard
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
