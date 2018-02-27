@@ -311,39 +311,44 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return false
     }
     
+    // Join a session with the code entered
     func joinSession(textField: UITextField, isValidCode: Bool) {
-        if isValidCode {
-            let parameters: Parameters = [
-                "codes": [textField.text!]
-            ]
-            requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
-                guard let data = json["data"] as? [[String:Any]] else {
-                    return
-                }
-                
-                // Clear textfield input
-                textField.text = ""
-                //Check if live session exists for code
-                if (data.isEmpty) {
-                    let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                // Make sure response data represents a valid Poll
-                guard let node = data[0]["node"] as? [String:Any], let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
-                    let alert = self.createAlert(title: "Error", message: "Bad response data")
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                // Push LiveSessionVC
-                let poll = Poll(id: id, name: name, code: code)
-                let liveSessionVC = LiveSessionViewController()
-                liveSessionVC.poll = poll
-                self.view.endEditing(true)
-                self.navigationController?.pushViewController(liveSessionVC, animated: true)
-            })
+        // Check if code is valid
+        if !(isValidCode) {
+            return
         }
+        
+        // Make POST request to join session
+        let parameters: Parameters = [
+            "codes": [textField.text!]
+        ]
+        requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
+            guard let data = json["data"] as? [[String:Any]] else {
+                return
+            }
+            
+            // Clear textfield input
+            textField.text = ""
+            //Check if live session exists for code
+            if (data.isEmpty) {
+                let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            // Make sure response data represents a valid Poll
+            guard let node = data[0]["node"] as? [String:Any], let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
+                let alert = self.createAlert(title: "Error", message: "Bad response data")
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            // Push LiveSessionVC
+            let poll = Poll(id: id, name: name, code: code)
+            let liveSessionVC = LiveSessionViewController()
+            liveSessionVC.poll = poll
+            self.view.endEditing(true)
+            self.navigationController?.pushViewController(liveSessionVC, animated: true)
+        })
     }
 }
