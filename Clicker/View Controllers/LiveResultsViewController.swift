@@ -46,6 +46,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
     }
     
+    // End session
     @objc func endSession() {
         let presenter: Presentr = Presentr(presentationType: .bottomHalf)
         presenter.roundCorners = false
@@ -58,6 +59,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
     }
     
+    // Edit poll
     @objc func editPoll() {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
@@ -65,6 +67,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.popViewController(animated: true)
     }
     
+    // Close poll -> Share results
     @objc func closePoll() {
         print("close poll")
         // Emit socket message to share results to users
@@ -74,10 +77,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         timer.invalidate()
     }
     
+    // Start timer
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
+    // Update timer label
     @objc func updateTime() {
         elapsedSeconds += 1
         if (elapsedSeconds < 10) {
@@ -138,7 +143,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
-    // MARK - Setup views
+    // MARK - Setup/layout views
     func setupViews() {
         headerView = UIView()
         headerView.backgroundColor = .clickerBackground
@@ -295,7 +300,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func updatedTally(_ currentState: CurrentState) {
-        print("UPDATING TALLY")
         self.currentState = currentState
         totalNumResults = 0
         for value in currentState.results.values {
