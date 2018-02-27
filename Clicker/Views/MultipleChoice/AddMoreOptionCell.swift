@@ -46,7 +46,7 @@ class AddMoreOptionCell: UITableViewCell {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         plusLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
+            make.size.equalTo(CGSize(width: frame.width * 0.12, height: frame.height))
             make.left.equalToSuperview()
             make.top.equalToSuperview()
         }

@@ -50,14 +50,14 @@ class AnswerMCCell: UITableViewCell {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 18, 5, 18))
         
         choiceLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
+            make.size.equalTo(CGSize(width: frame.width * 0.12, height: frame.height))
             make.left.equalToSuperview().offset(18)
             make.top.equalToSuperview()
         }
         
         optionLabel.snp.updateConstraints { make in
             make.left.equalTo(choiceLabel.snp.right).offset(14)
-            make.right.equalToSuperview().offset(-14)
+            make.right.equalToSuperview().offset(14).multipliedBy(-1)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }

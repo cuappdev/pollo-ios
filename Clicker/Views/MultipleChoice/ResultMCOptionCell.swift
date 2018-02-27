@@ -70,7 +70,7 @@ class ResultMCOptionCell: UITableViewCell {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         choiceLabel.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.1268436578)
+            make.width.equalToSuperview().multipliedBy(0.12)
             make.height.equalToSuperview()
             make.left.equalToSuperview()
             make.top.equalToSuperview()
@@ -87,12 +87,6 @@ class ResultMCOptionCell: UITableViewCell {
             make.right.equalTo(numberLabel.snp.left)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-        }
-        
-        highlightView.snp.updateConstraints { make in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-5)
-            make.left.equalToSuperview()
         }
     }
     

@@ -12,12 +12,6 @@ import SnapKit
 class SavedSessionCell: UITableViewCell {
     
     var sessionLabel: UILabel!
-//    var sessionText: String! {
-//        didSet {
-//            print(sessionText)
-//            sessionLabel.text = sessionText
-//        }
-//    }
     var codeLabel: UILabel!
     
     
@@ -61,7 +55,7 @@ class SavedSessionCell: UITableViewCell {
             make.left.equalTo(sessionLabel.snp.left)
             make.top.equalTo(sessionLabel.snp.bottom).offset(4)
             make.height.equalTo(15)
-            make.width.equalToSuperview().multipliedBy(0.7641791045)
+            make.width.equalToSuperview().multipliedBy(0.76)
         }
         
         

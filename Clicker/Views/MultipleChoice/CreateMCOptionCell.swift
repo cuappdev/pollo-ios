@@ -10,8 +10,7 @@ import UIKit
 import SnapKit
 
 protocol MultipleChoiceOptionDelegate {
-    func tappedTextField(index: Int)
-     func updatedTextField(index: Int, text: String)
+    func updatedTextField(index: Int, text: String)
     func deleteOption(index: Int)
 }
 
@@ -68,7 +67,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         choiceLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
+            make.size.equalTo(CGSize(width: frame.width * 0.12, height: frame.height))
             make.left.equalToSuperview()
             make.top.equalToSuperview()
         }
@@ -87,25 +86,21 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
+    // MARK: - MultipleChoiceOption Delegeate methods
     @objc func deleteOption(){
         mcOptionDelegate.deleteOption(index: choiceTag)
+    }
+    
+    @objc func textFieldDidChange() {
+        if let text = addOptionTextField.text {
+            mcOptionDelegate.updatedTextField(index: choiceTag, text: text)
+        }
     }
     
     // MARK: - TextField delegate methods
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        mcOptionDelegate.tappedTextField(index: choiceTag)
-    }
-    
-    @objc func textFieldDidChange() {
-        if let text = addOptionTextField.text {
-            print("UPDATING TEXTFIELD: \(text)")
-            mcOptionDelegate.updatedTextField(index: choiceTag, text: text)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
