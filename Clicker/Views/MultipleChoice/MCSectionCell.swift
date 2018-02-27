@@ -22,11 +22,12 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
         
-        // Initialize values for option dictionary
+        // Initialize key, values for optionsDict
         for i in 0...numOptions - 1 {
             optionsDict[i] = ""
         }
@@ -149,9 +150,9 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         }
         
         optionsTableView.snp.updateConstraints { make in
-            make.width.equalTo(frame.width * 0.904)
+            make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
+            make.bottom.equalToSuperview().offset(startPollButton.frame.height + 23).multipliedBy(-1)
             make.centerX.equalToSuperview()
         }
         
@@ -159,19 +160,20 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.centerX.equalToSuperview()
         }
-        
     }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Textfield handling
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true
     }
     
+    // Handler for deleting an option
     func deleteOption(index: Int) {
         numOptions -= 1
         let indexPath = IndexPath(row: index, section: 0)
@@ -191,16 +193,12 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
     }
     
-    func tappedTextField(index: Int) {
-        let indexPath = IndexPath(row: index, section: 0)
-        // optionsTableView.scrollToRow(at: indexPath, at: .top, animated: true)
-    }
-    
+    // Update optionsDict with text inside selected TextField
     func updatedTextField(index: Int, text: String) {
         optionsDict[index] = text
     }
     
-    // MARK: - Keyboard showing
+    // MARK: - Keyboard showing/hiding
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!

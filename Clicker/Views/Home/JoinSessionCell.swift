@@ -59,8 +59,8 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
         super.layoutSubviews()
         
         joinView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(self.frame.width * 0.048)
-            make.right.equalToSuperview().offset(self.frame.width * 0.048 * -1)
+            make.left.equalToSuperview().offset(self.frame.width).multipliedBy(0.048)
+            make.right.equalToSuperview().offset(self.frame.width).multipliedBy(-0.048)
             make.top.equalToSuperview().offset(10)
             make.height.equalTo(55)
         }

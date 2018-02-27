@@ -69,14 +69,14 @@ class LiveSessionCell: UITableViewCell {
             make.left.equalTo(liveIcon.snp.right).offset(10)
             make.top.equalToSuperview().offset(18)
             make.height.equalTo(22)
-            make.width.equalToSuperview().multipliedBy(0.7641791045)
+            make.width.equalToSuperview().multipliedBy(0.76)
         }
         
         codeLabel.snp.updateConstraints { make in
             make.left.equalTo(liveIcon.snp.right).offset(10)
             make.top.equalTo(sessionLabel.snp.bottom).offset(4)
             make.height.equalTo(15)
-            make.width.equalToSuperview().multipliedBy(0.7641791045)
+            make.width.equalToSuperview().multipliedBy(0.76)
         }
     }
     
