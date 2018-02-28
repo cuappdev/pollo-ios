@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
+class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
     var session: Session!
@@ -46,6 +46,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         liveResultsVC.options = options
         liveResultsVC.session = self.session
         liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
+        liveResultsVC.newQuestionDelegate = self
         
         // Emit socket messsage to start question
         let question: [String:Any] = [
@@ -173,6 +174,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         return true
     }
     
+    // MARK: - MCOptionDelegate methods
+    
     // Handler for deleting an option
     func deleteOption(index: Int) {
         numOptions -= 1
@@ -196,6 +199,14 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     // Update optionsDict with text inside selected TextField
     func updatedTextField(index: Int, text: String) {
         optionsDict[index] = text
+    }
+    
+    // MARK: - NewQuestionDelegate methods
+    
+    // Admin wants to create new question
+    func creatingNewQuestion() {
+        questionTextField.text = ""
+        optionsTableView.reloadData()
     }
     
     // MARK: - Keyboard showing/hiding
