@@ -26,7 +26,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         // Handle keyboard dismiss
         self.hideKeyboardWhenTappedAround()
         
-        // UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
+        //UserDefaults.standard.set(nil, forKey: "userSavedPolls")
+        //UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         lookForLivePolls()
         setupViews()

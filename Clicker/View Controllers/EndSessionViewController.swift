@@ -44,14 +44,14 @@ class EndSessionViewController: UIViewController {
         
         // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
-        if nameSessionTextField.text?.isEmpty {
+        if (nameSessionTextField.text?.isEmpty ?? true) {
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
         } else {
             // Emit socket message for users to save poll
             self.session.socket.emit("server/poll/save", with: [])
             endPoll(pollId: currentPoll.id, save: true)
-            updateSavePoll(pollId: currentPoll.id, name: name)
+            updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
         
         // Return to HomeVC
