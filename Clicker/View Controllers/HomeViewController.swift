@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Neutron
+import Crashlytics
 
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, JoinSessionCellDelegate {
     
@@ -234,6 +235,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         // Push CreateQuestionVC
         let createQuestionVC = CreateQuestionViewController()
         self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
     }
     
     // Returns whether there are any admin saved polls
@@ -284,6 +286,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             liveSessionVC.poll = poll
             self.view.endEditing(true)
             self.navigationController?.pushViewController(liveSessionVC, animated: true)
+            Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
         })
     }
     
