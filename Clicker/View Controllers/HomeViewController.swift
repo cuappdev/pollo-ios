@@ -198,10 +198,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     // Generate poll code
     func getNewPollCode(completion: @escaping (() -> Void)) {
         GeneratePollCode().make()
-            .then{ code in
+            .then{ code -> Void in
                 UserDefaults.standard.setValue(code, forKey: "pollCode")
                 completion()
-            }.catch { error in
+            }.catch { error -> Void in
                 print(error)
                 return
         }
@@ -215,6 +215,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 let createQuestionVC = CreateQuestionViewController()
                 self.navigationController?.pushViewController(createQuestionVC, animated: true)
             }
+            return
         }
         // Push CreateQuestionVC
         let createQuestionVC = CreateQuestionViewController()
