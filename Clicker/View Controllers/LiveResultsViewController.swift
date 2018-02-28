@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import Presentr
 
+protocol NewQuestionDelegate {
+    func creatingNewQuestion()
+}
+
 class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SessionDelegate {
     
     var session: Session!
@@ -28,10 +32,13 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var questionLabel: UILabel!
     var optionResultsTableView: UITableView!
-    var closePollButton: UIButton!
+    var shareResultsButton: UIButton!
+    var newQuestionButton: UIButton!
     
     var question: String!
     var options: [String]!
+    
+    var newQuestionDelegate: NewQuestionDelegate!
     
     
     override func viewDidLoad() {
@@ -74,7 +81,20 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         session.socket.emit("server/question/results", with: [])
         // Emit socket message to end question
         session.socket.emit("server/question/end", with: [])
+        // Cannot Edit Poll anymore
+        editPollButton.alpha = 0
+        editPollButton.isUserInteractionEnabled = false
         timer.invalidate()
+    }
+    
+    // Create a followup question
+    @objc func createNewQuestion() {
+        // Emit socket messsage to end question
+        session.socket.emit("server/question/end", with: [])
+        // Tell delegate that we want to create a new question
+        newQuestionDelegate.creatingNewQuestion()
+        // Pop to CreateQuestionVC
+        self.navigationController?.popViewController(animated: true)
     }
     
     // Start timer
@@ -190,15 +210,23 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
         view.addSubview(optionResultsTableView)
         
-        closePollButton = UIButton()
-        closePollButton.setTitle("Close Poll", for: .normal)
-        closePollButton.setTitleColor(.white, for: .normal)
-        closePollButton.titleLabel?.font = UIFont._18SemiboldFont
-        closePollButton.backgroundColor = .clickerBlue
-        closePollButton.layer.cornerRadius = 8
-        closePollButton.addTarget(self, action: #selector(closePoll), for: .touchUpInside)
-        view.addSubview(closePollButton)
-        view.bringSubview(toFront: closePollButton)
+        shareResultsButton = UIButton()
+        shareResultsButton.backgroundColor = .clickerBackground
+        shareResultsButton.titleLabel?.font = UIFont._18SemiboldFont
+        shareResultsButton.setTitle("Share Results", for: .normal)
+        shareResultsButton.setTitleColor(.clickerBlue, for: .normal)
+        shareResultsButton.addTarget(self, action: #selector(closePoll), for: .touchUpInside)
+        view.addSubview(shareResultsButton)
+        
+        newQuestionButton = UIButton()
+        newQuestionButton.setTitle("New Question", for: .normal)
+        newQuestionButton.setTitleColor(.white, for: .normal)
+        newQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
+        newQuestionButton.backgroundColor = .clickerBlue
+        newQuestionButton.layer.cornerRadius = 8
+        newQuestionButton.addTarget(self, action: #selector(createNewQuestion), for: .touchUpInside)
+        view.addSubview(newQuestionButton)
+        view.bringSubview(toFront: newQuestionButton)
         
     }
     
@@ -240,16 +268,23 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.top.equalTo(headerView.snp.bottom).offset(18)
         }
         
-        closePollButton.snp.makeConstraints { make in
+        newQuestionButton.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-18)
         }
         
+        shareResultsButton.snp.makeConstraints { make in
+            make.width.equalTo(newQuestionButton.snp.width)
+            make.height.equalTo(22)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(newQuestionButton.snp.top).offset(-24)
+        }
+        
         optionResultsTableView.snp.makeConstraints { make in
-            make.width.equalTo(closePollButton.snp.width)
-            make.bottom.equalTo(closePollButton.snp.top).offset(-5)
+            make.width.equalTo(newQuestionButton.snp.width)
+            make.bottom.equalTo(shareResultsButton.snp.top).offset(-8)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
