@@ -81,14 +81,8 @@ class EndSessionViewController: UIViewController {
         var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
         // Check if poll has been saved already
         if (isOldPoll) {
-            var pollIndex = -1
-            for (index, p) in polls.enumerated() {
-                if (p.code == poll.code) {
-                    pollIndex = index
-                    break
-                }
-            }
-            polls[pollIndex] = poll
+            let pollCodes = polls.map { $0.code }
+            polls[pollCodes.index(of: poll.code)!] = poll
         } else {
             polls.append(poll)
         }
