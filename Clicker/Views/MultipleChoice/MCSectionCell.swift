@@ -152,7 +152,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(startPollButton.frame.height + 23).multipliedBy(-1)
+            make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
             make.centerX.equalToSuperview()
         }
         

@@ -162,7 +162,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "answerMCCellID", for: indexPath) as! AnswerMCCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = question.options[indexPath.row].description
+        cell.optionLabel.text = question.options[indexPath.row]
         return cell
     }
     
