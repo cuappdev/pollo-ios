@@ -126,7 +126,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sessionHeaderID") as! SessionHeader
         switch section {
         case 0:
-             headerView.title = "Live Sessions"
+            headerView.title = "Live Sessions"
         case 1:
             headerView.title = "Join A Session"
         case 2:
@@ -134,11 +134,24 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         default:
             headerView.title = ""
         }
-       return headerView
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        switch section {
+        case 0:
+            return (livePolls.count == 0) ? 0 : 40
+        case 1:
+            return 40
+        case 2:
+            if let pollsData = UserDefaults.standard.value(forKey: "adminSavedPolls") as? Data {
+                let polls = NSKeyedUnarchiver.unarchiveObject(with: pollsData) as! [Poll]
+                return (polls.count == 0) ? 0 : 40
+            }
+            return 0
+        default:
+            return 0
+        }
     }
     
     // MARK: - SESSIONS / POLLS
