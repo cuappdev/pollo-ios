@@ -55,7 +55,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         }
     }
     
-    // MARK: - Collectionview methods
+    // MARK: - CollectionView
     func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         return options.count
     }
