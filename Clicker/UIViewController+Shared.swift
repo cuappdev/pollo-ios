@@ -12,11 +12,12 @@ import Alamofire
 import SwiftyJSON
 
 extension UIViewController {
-    
+    // Convert integers to Multiple Choice Options, i.e. A, B, ...
     func intToMCOption(_ intOption: Int) -> String {
         return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
     }
     
+    // User Defaults
     func encodeObjForKey(obj: Any, key: String) {
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: obj)
         UserDefaults.standard.set(encodedData, forKey: key)
@@ -27,6 +28,7 @@ extension UIViewController {
         return NSKeyedUnarchiver.unarchiveObject(with: decodedData)
     }
     
+    // Sending arrays through requests
     func requestJSON(route: String, method: HTTPMethod, parameters: Parameters, completion: @escaping (_ response: [String:Any]) -> Void) {
         Alamofire.request(route, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON()
             .then { json -> Void in
@@ -40,5 +42,16 @@ extension UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         return alert
+    }
+    
+    // Handle keyboard
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

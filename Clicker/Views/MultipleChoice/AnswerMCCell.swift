@@ -1,14 +1,14 @@
 //
-//  StudentMultipleChoiceCell.swift
+//  AnswerMCCell.swift
 //  Clicker
 //
-//  Created by Keivan Shahida on 2/16/18.
+//  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class StudentMultipleChoiceCell: UITableViewCell {
+class AnswerMCCell: UITableViewCell {
     
     var option: String!
     
@@ -20,7 +20,7 @@ class StudentMultipleChoiceCell: UITableViewCell {
     }
     
     var optionLabel = UILabel()
-
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -46,11 +46,11 @@ class StudentMultipleChoiceCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-       
+        
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 18, 5, 18))
         
         choiceLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.1268436578, height: frame.height))
+            make.size.equalTo(CGSize(width: frame.width * 0.13, height: frame.height))
             make.left.equalToSuperview().offset(18)
             make.top.equalToSuperview()
         }
