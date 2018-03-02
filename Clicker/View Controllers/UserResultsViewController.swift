@@ -53,6 +53,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
+        print("setting option to: \(question.options[indexPath.row])")
         let mcOption: String = intToMCOption(indexPath.row)
         if let numSelected = currentState.results[mcOption] as? Int {
             print("nonzero width")
@@ -103,7 +104,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func setupConstraints() {
         questionLabel.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: view.frame.width * 0.92, height: view.frame.height * 0.09))
+            make.size.equalTo(CGSize(width: view.frame.width * 0.93, height: view.frame.height * 0.09))
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(100)
         }

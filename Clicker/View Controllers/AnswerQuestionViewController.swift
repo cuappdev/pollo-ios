@@ -37,28 +37,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         setupConstraints()
     }
     
-    func setupNavBar() {
-        let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode ?? "------")")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
-        codeLabel.textColor = .white
-        codeLabel.backgroundColor = .clear
-        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
-        self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "Exit Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-    }
-    
+    // MARK: - Setup/layout views
     func setupViews() {
         
         questionLabel = UILabel()
@@ -75,7 +54,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         optionTableView.separatorStyle = .none
         optionTableView.clipsToBounds = true
         optionTableView.isScrollEnabled = false
-        optionTableView.register(StudentMultipleChoiceCell.self, forCellReuseIdentifier: "studentMultipleChoiceCell")
+        optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
         optionTableView.backgroundColor = .clear
         view.addSubview(optionTableView)
         
@@ -127,8 +106,29 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
-    // MARK: Submit button pressed
+    func setupNavBar() {
+        let codeLabel = UILabel()
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode ?? "------")")
+        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
+        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
+        codeLabel.attributedText = codeAttributedString
+        codeLabel.textColor = .white
+        codeLabel.backgroundColor = .clear
+        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
+        self.navigationItem.leftBarButtonItem = codeBarButtonItem
+        
+        let endSessionButton = UIButton()
+        let endSessionAttributedString = NSMutableAttributedString(string: "Exit Session")
+        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
+        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
+        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
+        endSessionButton.backgroundColor = .clear
+        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
+        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
+        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
+    }
     
+    // Submit button pressed
     @objc func submitAnswer() {
         if (selectedOptionIndex == -1) {
             return
@@ -160,9 +160,9 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "studentMultipleChoiceCell", for: indexPath) as! StudentMultipleChoiceCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "answerMCCellID", for: indexPath) as! AnswerMCCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = question.options[indexPath.row].description
+        cell.optionLabel.text = question.options[indexPath.row]
         return cell
     }
     

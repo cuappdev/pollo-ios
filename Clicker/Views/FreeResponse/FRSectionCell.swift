@@ -1,15 +1,15 @@
 //
-//  CreateFreeResponseCell.swift
+//  FRSectionCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/6/18.
+//  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import SnapKit
 import UIKit
 
-class CreateFreeResponseCell: UICollectionViewCell {
+class FRSectionCell: UICollectionViewCell {
     
     var comingSoonLabel: UILabel!
     
@@ -40,3 +40,4 @@ class CreateFreeResponseCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

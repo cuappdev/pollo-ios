@@ -15,9 +15,9 @@ struct GeneratePollCode : ClickerQuark {
     typealias ResponseType = String
     
     var route: String {
-        return "/v1/generate/code"
+        return "/api/v1/generate/code"
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> String {
@@ -41,7 +41,7 @@ struct CreatePoll: ClickerQuark {
     let pollCode: String
     
     var route: String {
-        return "/v1/polls"
+        return "/api/v1/polls"
     }
     var parameters: Parameters {
         return [
@@ -49,7 +49,7 @@ struct CreatePoll: ClickerQuark {
             "code": pollCode
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Poll {
@@ -71,14 +71,14 @@ struct StartCreatedPoll: ClickerQuark {
     let id: Int
     
     var route: String {
-        return "/v1/start/poll"
+        return "/api/v1/start/poll"
     }
     var parameters: Parameters {
         return [
             "id": id
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Int {
@@ -101,7 +101,7 @@ struct StartNewPoll: ClickerQuark {
     let name: String
     
     var route: String {
-        return "/v1/start/poll"
+        return "/api/v1/start/poll"
     }
     var parameters: Parameters {
         return [
@@ -109,7 +109,7 @@ struct StartNewPoll: ClickerQuark {
             "name": name
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Int {
@@ -132,18 +132,17 @@ struct EndPoll: ClickerQuark {
     let save: Bool
     
     var route: String {
-        return "/v1/polls/\(id)/end"
+        return "/api/v1/polls/\(id)/end"
     }
     var parameters: Parameters {
         return [
             "save": save
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Void {
-        print("saved poll")
     }
 }
 
@@ -154,14 +153,14 @@ struct GetLivePolls: ClickerQuark {
     let pollCodes: [String]
     
     var route: String {
-        return "/v1/polls/live"
+        return "/api/v1/polls/live"
     }
     var parameters: Parameters {
         return [
             "codes": ["ABCDEF"]
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> [Poll] {
@@ -187,9 +186,9 @@ struct GetPollPorts: ClickerQuark {
     
     let id: Int
     var route: String {
-        return "/v1/polls/\(id)/ports/"
+        return "/api/v1/polls/\(id)/ports/"
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> Int? {
@@ -214,14 +213,14 @@ struct UpdatePoll: ClickerQuark {
     let name: String
     
     var route: String {
-        return "/v1/polls/\(id)"
+        return "/api/v1/polls/\(id)"
     }
     var parameters: Parameters {
         return [
             "name": name
         ]
     }
-    let host: String = "http://localhost:3000/api"
+    let host: String = "http://34.226.150.242"
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Poll {

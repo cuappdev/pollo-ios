@@ -31,6 +31,7 @@ class ResultMCOptionCell: UITableViewCell {
         contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         contentView.layer.borderWidth = 0.5
         contentView.clipsToBounds = true
+        clipsToBounds = true
         
         setupViews()
         layoutSubviews()
@@ -70,7 +71,7 @@ class ResultMCOptionCell: UITableViewCell {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         choiceLabel.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.1268436578)
+            make.width.equalToSuperview().multipliedBy(0.13)
             make.height.equalToSuperview()
             make.left.equalToSuperview()
             make.top.equalToSuperview()

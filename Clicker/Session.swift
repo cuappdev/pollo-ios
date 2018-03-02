@@ -17,7 +17,7 @@ class Session {
     init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
-        let url = URL(string: "http://localhost:\(id)")!
+        let url = URL(string: "http://34.226.150.242:\(id)")!
         self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
         
         socket.on(clientEvent: .connect) { data, ack in
@@ -61,8 +61,14 @@ class Session {
             
         }
         
-        socket.on("user/question/save") { data, ack in
-            
+        socket.on("user/poll/save") { data, ack in
+            print("USER GETTING POLL")
+            print(data)
+            guard let json = data[0] as? [String:Any] else {
+                return
+            }
+            let poll = Poll(json: json)
+            self.delegate?.savePoll(poll)
         }
         
         socket.on("admin/question/updateTally") { data, ack in
