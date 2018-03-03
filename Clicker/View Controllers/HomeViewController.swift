@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         super.viewDidLoad()
         
         // Handle keyboard dismiss
-        self.hideKeyboardWhenTappedAround()
+        hideKeyboardWhenTappedAround()
         
         //UserDefaults.standard.set(nil, forKey: "userSavedPolls")
         //UserDefaults.standard.set(nil, forKey: "adminSavedPolls")

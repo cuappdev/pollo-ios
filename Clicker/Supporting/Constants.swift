@@ -9,4 +9,4 @@
 import Foundation
 import UIKit
 
-let hostURL = "http://52.91.3.72"
+let hostURL = "http://34.226.150.242"
