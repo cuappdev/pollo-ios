@@ -9,6 +9,8 @@
 import SocketIO
 import SwiftyJSON
 
+fileprivate let host = "http://localhost:3000"
+
 class Session {
     let id: Int
     var delegate: SessionDelegate?
@@ -17,8 +19,9 @@ class Session {
     init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
-        let url = URL(string: "http://localhost:\(id)")!
-        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
+
+        let url = URL(string: host)!
+        socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType]), .nsp("/\(id)")])
         
         socket.on(clientEvent: .connect) { data, ack in
             print("SOCKET CONNECTED")

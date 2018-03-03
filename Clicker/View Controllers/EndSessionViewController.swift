@@ -61,6 +61,9 @@ class EndSessionViewController: UIViewController {
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
         }
+
+        session.socket.disconnect()
+
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
