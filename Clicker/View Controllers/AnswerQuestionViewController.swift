@@ -20,7 +20,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var poll: Poll!
     var pollCode: String!
     var question: Question!
-    var selectedOptionIndex: Int = -1
+    var selectedOptionIndex: Int?
 
     var optionTableView: UITableView!
     
@@ -130,20 +130,19 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     
     // Submit button pressed
     @objc func submitAnswer() {
-        if (selectedOptionIndex == -1) {
-            return
-        }
+        guard let index = selectedOptionIndex else { return }
+
         // Submit answer through socket
         let answer: [String:Any] = [
-            "deviceId": UIDevice.current.identifierForVendor?.uuidString,
+            "deviceId": UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString,
             "question": question.id,
-            "data": intToMCOption(selectedOptionIndex)
+            "data": intToMCOption(index)
         ]
         session.socket.emit("server/question/tally", with: [answer])
         // Show answerRecorded label
         answerRecordedLabel.alpha = 1
         // Reset
-        selectedOptionIndex = -1
+        selectedOptionIndex = nil
         submitAnswerButton.backgroundColor = .clickerLightGray
     }
     
