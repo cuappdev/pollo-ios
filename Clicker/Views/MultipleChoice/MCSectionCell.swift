@@ -1,26 +1,36 @@
 //
-//  CreateMultipleChoiceCell.swift
+//  MCSectionCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/6/18.
+//  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import SnapKit
 import UIKit
 
-class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate {
+class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
     var createQuestionVC: CreateQuestionViewController!
     var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
+    var pollButtonBottomConstraint: Constraint!
+    var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        // Add Keyboard Handlers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
+        
+        // Initialize key, values for optionsDict
+        for i in 0...numOptions - 1 {
+            optionsDict[i] = ""
+        }
         
         setupViews()
         layoutSubviews()
@@ -31,16 +41,12 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         
         //Pass values to LiveResultsVC
         liveResultsVC.question = questionTextField.text
-        
-        var options: [String] = [String]()
-        for index in 0...numOptions - 1 {
-            let indexPath = IndexPath(row: 0, section: index)
-            let optionCell = optionsTableView.cellForRow(at: indexPath) as! CreateMultipleChoiceOptionCell
-            options.append(optionCell.addOptionTextField.text!)
-        }
+        let keys = optionsDict.keys.sorted()
+        let options: [String] = keys.map { optionsDict[$0]! }
         liveResultsVC.options = options
         liveResultsVC.session = self.session
         liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
+        liveResultsVC.newQuestionDelegate = self
         
         // Emit socket messsage to start question
         let question: [String:Any] = [
@@ -54,14 +60,15 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.section == numOptions) {
+        if (indexPath.row == numOptions) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "createMultipleChoiceOptionCellID") as! CreateMultipleChoiceOptionCell
-        cell.choiceTag = indexPath.section
+        let cell = tableView.dequeueReusableCell(withIdentifier: "createMCOptionCellID") as! CreateMCOptionCell
+        cell.choiceTag = indexPath.row
         cell.mcOptionDelegate = self
+        cell.addOptionTextField.text = optionsDict[indexPath.row]
         cell.selectionStyle = .none
         
         if numOptions <= 2 {
@@ -76,34 +83,23 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.section == numOptions) {
-            let indexSet = NSIndexSet(index: numOptions)
+        if (indexPath.row == numOptions) {
             numOptions += 1
-            tableView.insertSections(indexSet as IndexSet, with: .none)
+            optionsDict[numOptions - 1] = ""
+            tableView.beginUpdates()
+            tableView.insertRows(at: [indexPath], with: .none)
             tableView.reloadData()
+            tableView.endUpdates()
+            
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  1
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return numOptions + 1 // 1 extra for the "Add More" cell
+        return numOptions + 1 // 1 extra for the "Add More" cell plus 5 empty cells
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return frame.height * 0.1049618321
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 5
     }
     
     func setupViews() {
@@ -119,7 +115,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         optionsTableView = UITableView()
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
-        optionsTableView.register(CreateMultipleChoiceOptionCell.self, forCellReuseIdentifier: "createMultipleChoiceOptionCellID")
+        optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: "createMCOptionCellID")
         optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: "addMoreOptionCellID")
         optionsTableView.backgroundColor = .clickerBackground
         optionsTableView.clipsToBounds = true
@@ -135,6 +131,14 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
         addSubview(startPollButton)
         bringSubview(toFront: startPollButton)
+        
+        startPollButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
+            make.centerX.equalToSuperview()
+            self.pollButtonBottomConstraint = make.bottom.equalTo(0).constraint
+        }
+        pollButtonBottomConstraint.update(offset: -18)
+        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -147,7 +151,7 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         }
         
         optionsTableView.snp.updateConstraints { make in
-            make.width.equalTo(frame.width * 0.904)
+            make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
             make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
             make.centerX.equalToSuperview()
@@ -156,26 +160,83 @@ class CreateMultipleChoiceCell: UICollectionViewCell, UITableViewDelegate, UITab
         startPollButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
         }
-        
     }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Textfield handling
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true
     }
     
+    // MARK: - MCOptionDelegate methods
+    
+    // Handler for deleting an option
     func deleteOption(index: Int) {
         numOptions -= 1
-        let indexSet = NSIndexSet(index: index)
-        optionsTableView.deleteSections(indexSet as IndexSet, with: .fade)
+        let indexPath = IndexPath(row: index, section: 0)
+        optionsDict.removeValue(forKey: index)
+        for (key, value) in optionsDict {
+            if (key > index) {
+                optionsDict.removeValue(forKey: key)
+                optionsDict[key - 1] = value
+            }
+        }
+        let deleteCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
+        deleteCell.addOptionTextField.text = ""
+        optionsTableView.beginUpdates()
+        optionsTableView.deleteRows(at: [indexPath], with: .fade)
+        optionsTableView.reloadData()
+        optionsTableView.endUpdates()
+        
+    }
+    
+    // Update optionsDict with text inside selected TextField
+    func updatedTextField(index: Int, text: String) {
+        optionsDict[index] = text
+    }
+    
+    // MARK: - NewQuestionDelegate methods
+    
+    // Admin wants to create new question
+    func creatingNewQuestion() {
+        questionTextField.text = ""
         optionsTableView.reloadData()
     }
+    
+    // MARK: - Keyboard showing/hiding
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets:UIEdgeInsets!
+            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
+            {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0)
+            }
+            else
+            {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
+            }
+            self.optionsTableView.contentInset = contentInsets;
+            self.optionsTableView.scrollIndicatorInsets = contentInsets;
+            
+            pollButtonBottomConstraint.update(offset: (keyboardSize.height + 18) * -1)
+            layoutIfNeeded()
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.optionsTableView.contentInset = UIEdgeInsets.zero;
+            self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
+            pollButtonBottomConstraint.update(offset: -18)
+            layoutIfNeeded()
+        }
+    }
 }
+
 

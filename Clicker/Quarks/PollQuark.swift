@@ -96,6 +96,7 @@ struct StartNewPoll: ClickerQuark {
     var route: String {
         return "/start/poll"
     }
+
     var parameters: Parameters {
         return [
             "code": code,
@@ -137,7 +138,6 @@ struct EndPoll: ClickerQuark {
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Void {
-        print("saved poll")
     }
 }
 
@@ -150,6 +150,7 @@ struct GetLivePolls: ClickerQuark {
     var route: String {
         return "/polls/live"
     }
+
     var parameters: Parameters {
         return [
             "codes": ["ABCDEF"]
@@ -169,31 +170,6 @@ struct GetLivePolls: ClickerQuark {
                 polls.append(Poll(id: id, name: name, code: code))
             }
             return polls
-        default:
-            throw NeutronError.badResponseData
-        }
-    }
-}
-
-struct GetPollPorts: ClickerQuark {
-    
-    typealias ResponseType = Int?
-    
-    let id: Int
-    var route: String {
-        return "/polls/\(id)/ports/"
-    }
-
-    let method: HTTPMethod = .get
-    
-    func process(element: Element) throws -> Int? {
-        switch element {
-        case .ports(let ports):
-            if (ports.count == 0) {
-                return nil
-            } else {
-                return ports[0]
-            }
         default:
             throw NeutronError.badResponseData
         }

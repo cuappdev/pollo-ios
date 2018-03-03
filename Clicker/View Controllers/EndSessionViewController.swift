@@ -21,11 +21,15 @@ class EndSessionViewController: UIViewController {
     var nameSessionTextField: UITextField!
     var saveButton: UIButton!
     var endSessionButton: UIButton!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
+        view.backgroundColor = .white
         setupViews()
         setupConstraints()
     }
@@ -38,32 +42,21 @@ class EndSessionViewController: UIViewController {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
         
-        // Get current poll object
-        print("getting current poll")
+        // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
-        print("got current poll")
-        if let name = nameSessionTextField.text {
-            if (name != "") {
-                print("saving poll")
-                // Emit socket message for users to save poll
-                session.socket.emit("server/poll/save", with: [])
-                // End poll
-                endPoll(pollId: currentPoll.id, save: true)
-                // Update poll name
-                updateSavePoll(pollId: currentPoll.id, name: name)
-            } else {
-                print("ending poll without saving")
-                // End poll
-                endPoll(pollId: currentPoll.id, save: false)
-            }
-        } else {
-            print("ending poll without saving")
+        if (nameSessionTextField.text?.isEmpty ?? true) {
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
+        } else {
+            // Emit socket message for users to save poll
+            self.session.socket.emit("server/poll/save", with: [])
+            endPoll(pollId: currentPoll.id, save: true)
+            updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
-
+        
         session.socket.disconnect()
-
+        
+        // Return to HomeVC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
@@ -71,49 +64,44 @@ class EndSessionViewController: UIViewController {
     // MARK: Update poll with given name and then save it to UserDefaults
     func updateSavePoll(pollId: Int, name: String) {
         UpdatePoll(id: pollId, name: name).make()
-            .then { poll -> Void in
+            .done { poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
-                self.savePoll(poll: poll)
+                self.saveAdminPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
-            }
+        }
     }
     
-    // MARK: Save poll to UserDefaults
-    func savePoll(poll: Poll) {
-        if (UserDefaults.standard.value(forKey: "savedPolls") == nil) {
-            var polls: [Poll] = [poll]
-            encodeObjForKey(obj: polls, key: "savedPolls")
-        } else {
-            var polls = decodeObjForKey(key: "savedPolls") as! [Poll]
-            print("is old poll is: \(isOldPoll)")
-            if (isOldPoll) {
-                // Get index of old poll and update it in savedPolls array
-                var pollIndex = -1
-                for (index, p) in polls.enumerated() {
-                    if (p.code == poll.code) {
-                        pollIndex = index
-                        break
-                    }
-                }
-                polls[pollIndex] = poll
-            } else {
-                polls.append(poll)
-            }
-            encodeObjForKey(obj: polls, key: "savedPolls")
+    // MARK: Save poll to adminSavedPolls in UserDefaults
+    func saveAdminPoll(poll: Poll) {
+        // Check if any adminSavedPolls exist
+        guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
+            encodeObjForKey(obj: [poll], key: "adminSavedPolls")
+            return
         }
+        
+        var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
+        // Check if poll has been saved already
+        if (isOldPoll) {
+            let pollCodes = polls.map { $0.code }
+            polls[pollCodes.index(of: poll.code)!] = poll
+        } else {
+            polls.append(poll)
+        }
+        encodeObjForKey(obj: polls, key: "adminSavedPolls")
     }
     
     // MARK: End poll
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
-            .then { Void -> Void in
+            .done { Void -> Void in
                 print("ended poll")
             }.catch { error -> Void in
                 print(error)
-            }
+        }
     }
     
+    // MARK: - Setup/layout views
     func setupViews() {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
@@ -218,4 +206,21 @@ class EndSessionViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
+    
+    // MARK: - Keyboard handling
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.origin.y -= keyboardSize.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y = view.frame.height
+            }
+        }
+    }
+    
 }

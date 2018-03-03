@@ -12,7 +12,7 @@ protocol JoinSessionCellDelegate {
     func joinSession(textField:UITextField, isValidCode: Bool)
 }
 
-class JoinSessionCell: UITableViewCell {
+class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
     
     var joinSessionCellDelegate: JoinSessionCellDelegate!
     
@@ -39,6 +39,8 @@ class JoinSessionCell: UITableViewCell {
         sessionTextField.attributedPlaceholder = sessionAttributedString
         sessionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
         sessionTextField.addTarget(self, action: #selector(beganTypingCode), for: .editingChanged)
+        sessionTextField.returnKeyType = .done
+        sessionTextField.delegate = self
         sessionTextField.backgroundColor = .white
         joinView.addSubview(sessionTextField)
         
@@ -58,7 +60,7 @@ class JoinSessionCell: UITableViewCell {
         
         joinView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(self.frame.width * 0.048)
-            make.right.equalToSuperview().offset(self.frame.width * 0.048 * -1)
+            make.right.equalToSuperview().offset(self.frame.width * -0.048)
             make.top.equalToSuperview().offset(10)
             make.height.equalTo(55)
         }
@@ -121,5 +123,11 @@ class JoinSessionCell: UITableViewCell {
     @objc func joinSession(){
         print("join session")
         joinSessionCellDelegate.joinSession(textField: sessionTextField, isValidCode: isValidCode)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
 }
