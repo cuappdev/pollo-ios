@@ -1,48 +1,57 @@
 PODS:
-  - Alamofire (4.5.1)
-  - Crashlytics (3.8.6):
-    - Fabric (~> 1.6.3)
-  - Fabric (1.6.13)
-  - Neutron (0.3.0):
+  - Alamofire (4.6.0)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.5)
+  - Neutron (0.4.0):
     - Alamofire
     - PromiseKit/Alamofire
     - SwiftyJSON
   - Presentr (1.3)
-  - PromiseKit/Alamofire (4.4.0):
+  - PromiseKit/Alamofire (6.2.0):
     - Alamofire (~> 4.0)
     - PromiseKit/CorePromise
-  - PromiseKit/CorePromise (4.4.0)
+  - PromiseKit/CorePromise (6.2.0)
   - SnapKit (4.0.0)
-  - Socket.IO-Client-Swift (12.0.0):
-    - StarscreamSocketIO (~> 8.0.7)
-  - StarscreamSocketIO (8.0.7)
-  - SwiftLint (0.22.0)
-  - SwiftyJSON (3.1.4)
+  - Socket.IO-Client-Swift (13.1.1):
+    - Starscream (~> 3.0.2)
+  - Starscream (3.0.4)
+  - SwiftLint (0.25.0)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Alamofire
   - Crashlytics
   - Fabric
-  - Neutron
+  - Neutron (from `https://github.com/dantheli/Neutron.git`)
   - Presentr
   - SnapKit
   - Socket.IO-Client-Swift
   - SwiftLint
   - SwiftyJSON
 
-SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
-  Fabric: 2fb5676bc811af011a04513451f463dac6803206
-  Neutron: fd503561f7733dc6b66a72d41ce7cea7aabbd63f
-  Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
-  PromiseKit: ecf5fe92275d57ee77c9ede858af47a162e9b97e
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  Socket.IO-Client-Swift: 5b0154b42b3892bfb4c44fa138cbeb8afec4f6ef
-  StarscreamSocketIO: 00b54e4208481ca5cef089545353aaf126bae16d
-  SwiftLint: 1134786caedd2caab0560d2f36b76414a5a56808
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+EXTERNAL SOURCES:
+  Neutron:
+    :git: https://github.com/dantheli/Neutron.git
 
-PODFILE CHECKSUM: 0c24884755c841a9d7852a88c3a692f49470a001
+CHECKOUT OPTIONS:
+  Neutron:
+    :commit: 7131748e5146c61d02effae1446ed643e351a1c5
+    :git: https://github.com/dantheli/Neutron.git
+
+SPEC CHECKSUMS:
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
+  Neutron: d554b11bd8fe9daccb68a062c2f2fe16e0dfead6
+  Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
+  PromiseKit: ea9a155e1fd98a926ccfaf633c0fbd69851f0e7b
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  Socket.IO-Client-Swift: f22222913f29801e30ae0df712db663ec096edc2
+  Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
+  SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+
+PODFILE CHECKSUM: 5f6d870941b168a475f0efb30801cd49eb422b65
 
 COCOAPODS: 1.3.1

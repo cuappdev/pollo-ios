@@ -16,7 +16,7 @@ protocol ClickerQuark: JSONQuark {
 
 extension ClickerQuark {
     var host: String {
-        return "http://localhost:3000/api"
+        return hostURL + "/api"
     }
 
     var api: APIVersion { return .versioned(1) }

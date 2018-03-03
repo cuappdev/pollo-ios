@@ -21,6 +21,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.hideKeyboardWhenTappedAround()
         view.backgroundColor = .clickerBackground
         
         if (oldPoll == nil) {
@@ -32,18 +33,22 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         setupNavBar()
         setupViews()
         setupConstraints()
-        
     }
     
+    // MARK: - Collection view methods
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createMultipleChoiceCellID", for: indexPath) as! CreateMultipleChoiceCell
+            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
             cell.createQuestionVC = self
             cell.session = self.session
             return cell
         }
-        let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "createFreeResponseCellID", for: indexPath) as! CreateFreeResponseCell
+        let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        questionOptionsView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -54,11 +59,45 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         return CGSize(width: questionCollectionView.frame.width, height: questionCollectionView.frame.height)
     }
     
+    // End current session
     @objc func endSession() {
-        session.socket.disconnect()
+        // Disconnect socket
+        if let sess = session {
+           sess.socket.disconnect()
+        }
+        let poll = decodeObjForKey(key: "currentPoll") as! Poll
+        EndPoll(id: poll.id, save: false).make()
         navigationController?.popToRootViewController(animated: true)
     }
     
+    // Create a poll
+    func createPoll() {
+        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
+        CreatePoll(name: "", pollCode: pollCode).make()
+            .done { poll -> Void in
+                self.encodeObjForKey(obj: poll, key: "currentPoll")
+                self.startPoll(poll: poll)
+            }.catch { error -> Void in
+                print(error)
+                return
+        }
+    }
+    
+    // Start a poll
+    func startPoll(poll: Poll) {
+        StartCreatedPoll(id: poll.id).make()
+            .done { port -> Void in
+                self.session = Session(id: poll.id, userType: "admin")
+                // Reload collection view so that cell has correct session property
+                DispatchQueue.main.async {
+                    self.questionCollectionView.reloadData()
+                }
+            }.catch { error -> Void in
+                print("error")
+        }
+    }
+    
+    // MARK: - SliderView methods
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
     }
@@ -68,6 +107,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
+    // MARK: - Setup/layout views
     func setupViews() {
         questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], controller: self)
         view.addSubview(questionOptionsView)
@@ -82,12 +122,11 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.dataSource = self
         questionCollectionView.showsVerticalScrollIndicator = false
         questionCollectionView.showsHorizontalScrollIndicator = false
-        questionCollectionView.register(CreateMultipleChoiceCell.self, forCellWithReuseIdentifier: "createMultipleChoiceCellID")
-        questionCollectionView.register(CreateFreeResponseCell.self, forCellWithReuseIdentifier: "createFreeResponseCellID")
+        questionCollectionView.register(MCSectionCell.self, forCellWithReuseIdentifier: "mcSectionCell")
+        questionCollectionView.register(FRSectionCell.self, forCellWithReuseIdentifier: "frSectionCellID")
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
-        
     }
     
     func setupConstraints() {
@@ -104,36 +143,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.top.equalTo(questionOptionsView.snp.bottom)
         }
     }
-    
-    func createPoll() {
-        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        let request = CreatePoll(name: "", pollCode: pollCode)
-        request.make()
-            .then{ poll -> Void in
-                self.encodeObjForKey(obj: poll, key: "currentPoll")
-                print("set currentPoll to:")
-                print(poll)
-                self.startPoll(poll: poll)
-            }.catch { error -> Void in
-                print(error)
-                print(request)
-                return
-        }
-    }
-    
-    func startPoll(poll: Poll) {
-        StartCreatedPoll(id: poll.id).make()
-            .then { Void -> Void in
-                self.session = Session(id: poll.id, userType: "admin")
-                // Reload collection view so that cell has correct session property
-                DispatchQueue.main.async {
-                     self.questionCollectionView.reloadData()
-                }
-            }.catch { error -> Void in
-                print("here: \(error)")
-            }
-    }
-    
+
     func setupNavBar() {
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
@@ -160,7 +170,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     // MARK: - Keyboard
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }

@@ -11,17 +11,15 @@ import UIKit
 class LiveSessionCell: UITableViewCell {
     
     var sessionLabel: UILabel!
-    var dateLabel: UILabel!
+    var codeLabel: UILabel!
     var liveIcon: UIImageView!
     var rightArrowIcon: UIImageView!
     
-    var sessionTitle: String! = "Intro to iOS Development"
-    var date: String! = "Started 3 minutes ago by Dan Li"
+    // var date: String! = "Started 3 minutes ago by Dan Li"
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         backgroundColor = .clickerBackground
         contentView.layer.cornerRadius = 8
         contentView.layer.backgroundColor = UIColor.white.cgColor
@@ -37,16 +35,14 @@ class LiveSessionCell: UITableViewCell {
         sessionLabel = UILabel()
         sessionLabel.font = UIFont._18SemiboldFont
         sessionLabel.textColor = UIColor.clickerBlack
-        sessionLabel.text = sessionTitle
         sessionLabel.sizeToFit()
         addSubview(sessionLabel)
         
-        dateLabel = UILabel()
-        dateLabel.font = UIFont._12RegularFont
-        dateLabel.textColor = UIColor.clickerDarkGray
-        dateLabel.text = date
-        dateLabel.sizeToFit()
-        addSubview(dateLabel)
+        codeLabel = UILabel()
+        codeLabel.font = UIFont._12RegularFont
+        codeLabel.textColor = UIColor.clickerDarkGray
+        codeLabel.sizeToFit()
+        addSubview(codeLabel)
     }
     
     // MARK: - LAYOUT
@@ -73,14 +69,14 @@ class LiveSessionCell: UITableViewCell {
             make.left.equalTo(liveIcon.snp.right).offset(10)
             make.top.equalToSuperview().offset(18)
             make.height.equalTo(22)
-            make.width.equalToSuperview().multipliedBy(0.7641791045)
+            make.width.equalToSuperview().multipliedBy(0.76)
         }
         
-        dateLabel.snp.updateConstraints { make in
+        codeLabel.snp.updateConstraints { make in
             make.left.equalTo(liveIcon.snp.right).offset(10)
             make.top.equalTo(sessionLabel.snp.bottom).offset(4)
             make.height.equalTo(15)
-            make.width.equalToSuperview().multipliedBy(0.7641791045)
+            make.width.equalToSuperview().multipliedBy(0.76)
         }
     }
     
