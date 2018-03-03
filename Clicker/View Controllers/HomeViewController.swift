@@ -228,24 +228,21 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     // Join a session with the code entered
-    func joinSession(textField: UITextField, isValidCode: Bool) {
-        // Check if code is valid
-        if !(isValidCode) {
-            return
-        }
+    func joinSession(with code: String) {
         // Clear textfield input
-        textField.text = ""
-        let pollCodes = [textField.text]
-        GetLivePolls(pollCodes: pollCodes as! [String]).make()
+        GetLivePolls(pollCodes: [code]).make()
             .done { polls in
-                if polls.count == 0 {
+                guard let poll = polls.first else {
                     let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                     self.present(alert, animated: true, completion: nil)
+                    return
                 }
+
                 let liveSessionVC = LiveSessionViewController()
-                liveSessionVC.poll = polls[0]
+                liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
+
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")

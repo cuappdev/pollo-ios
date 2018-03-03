@@ -9,7 +9,7 @@
 import UIKit
 
 protocol JoinSessionCellDelegate {
-    func joinSession(textField:UITextField, isValidCode: Bool)
+    func joinSession(with code: String)
 }
 
 class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
@@ -19,8 +19,6 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
     var joinView: UIView!
     var sessionTextField: UITextField!
     var joinButton: UIButton!
-    
-    var isValidCode: Bool! = false
     
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -95,9 +93,8 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
     @objc func beganTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            validateCode(code: text)
-            
-            if isValidCode {
+
+            if validate(code: text) {
                 joinButton.backgroundColor = .clickerGreen
                 joinButton.setTitleColor(.white, for: .normal)
             } else {
@@ -110,19 +107,20 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
-    func validateCode(code: String){
-        if(code.count == 6 && !code.contains(" ")){
-            isValidCode = true
+    func validate(code: String) -> Bool {
+        if (code.count == 6 && !code.contains(" ")) {
+            return true
         } else {
-            isValidCode = false
+            return false
         }
     }
     
     // MARK: - DELEGATION
     
     @objc func joinSession(){
-        print("join session")
-        joinSessionCellDelegate.joinSession(textField: sessionTextField, isValidCode: isValidCode)
+        if let code = sessionTextField.text {
+            joinSessionCellDelegate.joinSession(with: code)
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool

@@ -158,6 +158,10 @@ struct GetLivePolls: ClickerQuark {
     }
 
     let method: HTTPMethod = .post
+
+    var encoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
     
     func process(element: Element) throws -> [Poll] {
         switch element {
