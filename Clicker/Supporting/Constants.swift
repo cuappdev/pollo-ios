@@ -9,12 +9,4 @@
 import Foundation
 import UIKit
 
-//let hostURL = "http://34.226.150.242"
-let hostURL = "http://localhost:3000"
-
-struct Constants {
-    struct Screen {
-        static let width: CGFloat = (UIApplication.shared.keyWindow?.frame.width)!
-        static let height: CGFloat = (UIApplication.shared.keyWindow?.frame.height)!
-    }
-}
+let hostURL = "http://52.91.3.72"
