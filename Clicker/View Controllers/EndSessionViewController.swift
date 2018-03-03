@@ -54,6 +54,8 @@ class EndSessionViewController: UIViewController {
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
         
+        session.socket.disconnect()
+        
         // Return to HomeVC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
@@ -62,7 +64,7 @@ class EndSessionViewController: UIViewController {
     // MARK: Update poll with given name and then save it to UserDefaults
     func updateSavePoll(pollId: Int, name: String) {
         UpdatePoll(id: pollId, name: name).make()
-            .then { poll -> Void in
+            .done { poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
                 self.saveAdminPoll(poll: poll)
             }.catch { error -> Void in
@@ -92,7 +94,7 @@ class EndSessionViewController: UIViewController {
     // MARK: End poll
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
-            .then { Void -> Void in
+            .done { Void -> Void in
                 print("ended poll")
             }.catch { error -> Void in
                 print(error)

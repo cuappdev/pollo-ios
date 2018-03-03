@@ -67,14 +67,14 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
         let poll = decodeObjForKey(key: "currentPoll") as! Poll
         EndPoll(id: poll.id, save: false).make()
-        self.navigationController?.popToRootViewController(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     // Create a poll
     func createPoll() {
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
         CreatePoll(name: "", pollCode: pollCode).make()
-            .then{ poll -> Void in
+            .done { poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
                 self.startPoll(poll: poll)
             }.catch { error -> Void in
@@ -86,8 +86,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     // Start a poll
     func startPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
-            .then{ port -> Void in
-                self.session = Session(id: port, userType: "admin")
+            .done { port -> Void in
+                self.session = Session(id: poll.id, userType: "admin")
                 // Reload collection view so that cell has correct session property
                 DispatchQueue.main.async {
                     self.questionCollectionView.reloadData()
@@ -143,7 +143,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.top.equalTo(questionOptionsView.snp.bottom)
         }
     }
-    
+
     func setupNavBar() {
         UINavigationBar.appearance().barTintColor = .clickerGreen
         

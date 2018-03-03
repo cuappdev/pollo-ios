@@ -33,7 +33,6 @@
 		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
-		C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057A01F927390008F21CB /* QuestionsQuark.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
@@ -89,8 +88,6 @@
 		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
-		C2D057A01F927390008F21CB /* QuestionsQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsQuark.swift; sourceTree = "<group>"; };
-		C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
@@ -155,7 +152,6 @@
 		C27429E11F8C252D006FAD31 /* Quarks */ = {
 			isa = PBXGroup;
 			children = (
-				C2D057A01F927390008F21CB /* QuestionsQuark.swift */,
 				C2BF44CD2033FA140067505A /* PollQuark.swift */,
 				C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */,
 			);
@@ -261,7 +257,6 @@
 				C212179E20281E94007395DA /* UIFont+Shared.swift */,
 				C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */,
 				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
-				C703E18B1F9CDF780055E995 /* Clicker-Bridging-Header.h */,
 				C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */,
 			);
 			path = Clicker;
@@ -412,29 +407,23 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Neutron/Neutron.framework",
 				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
-				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO/StarscreamSocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neutron.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,7 +501,6 @@
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
-				C2D057A11F927390008F21CB /* QuestionsQuark.swift in Sources */,
 				C22DB8D82029496100533565 /* QuestionOptionsView.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
@@ -698,7 +686,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Clicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Clicker/Clicker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -717,7 +704,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Clicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Clicker/Clicker-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -15,10 +15,15 @@ protocol ClickerQuark: JSONQuark {
 }
 
 extension ClickerQuark {
+    var host: String {
+        return hostURL + "/api"
+    }
+
+    var api: APIVersion { return .versioned(1) }
+    
     public func process(response: JSON) throws -> ResponseType {
-        if let errors = response["data"]["errors"].array {
-            let messages = errors.flatMap { $0["message"].string }
-            throw ClickerError.backendError(messages: messages)
+        if let errors = response["data"]["errors"].array?.flatMap({ $0.string }) {
+            throw ClickerError.backendError(messages: errors)
         }
         
         if response["data"]["node"].exists() {
@@ -51,8 +56,8 @@ extension ClickerQuark {
             return try process(element: .ports(portsArr))
         }
         
-        if let data = response["data"] as? JSON {
-            return try process(element: .node(data))
+        if response["data"].exists() {
+            return try process(element: .node(response["data"]))
         }
         
         return try process(element: .null) // For when no response is returned

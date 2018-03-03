@@ -15,9 +15,9 @@ struct GeneratePollCode : ClickerQuark {
     typealias ResponseType = String
     
     var route: String {
-        return "/api/v1/generate/code"
+        return "/generate/code"
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> String {
@@ -41,15 +41,16 @@ struct CreatePoll: ClickerQuark {
     let pollCode: String
     
     var route: String {
-        return "/api/v1/polls"
+        return "/polls"
     }
+
     var parameters: Parameters {
         return [
             "name": name,
             "code": pollCode
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Poll {
@@ -65,31 +66,23 @@ struct CreatePoll: ClickerQuark {
 }
 
 struct StartCreatedPoll: ClickerQuark {
-    
-    typealias ResponseType = Int
-    
+    typealias ResponseType = Void
+
     let id: Int
     
     var route: String {
-        return "/api/v1/start/poll"
+        return "/start/poll"
     }
     var parameters: Parameters {
         return [
             "id": id
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .post
     
-    func process(element: Element) throws -> Int {
-        switch element {
-        case .node(let node):
-            guard let port = node["port"].int else {
-                throw NeutronError.badResponseData
-            }
-            return port
-        default: throw NeutronError.badResponseData
-        }
+    func process(element: Element) throws {
+        return
     }
 }
 
@@ -101,15 +94,16 @@ struct StartNewPoll: ClickerQuark {
     let name: String
     
     var route: String {
-        return "/api/v1/start/poll"
+        return "/start/poll"
     }
+
     var parameters: Parameters {
         return [
             "code": code,
             "name": name
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Int {
@@ -132,14 +126,15 @@ struct EndPoll: ClickerQuark {
     let save: Bool
     
     var route: String {
-        return "/api/v1/polls/\(id)/end"
+        return "/polls/\(id)/end"
     }
+
     var parameters: Parameters {
         return [
             "save": save
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Void {
@@ -153,14 +148,15 @@ struct GetLivePolls: ClickerQuark {
     let pollCodes: [String]
     
     var route: String {
-        return "/api/v1/polls/live"
+        return "/polls/live"
     }
+
     var parameters: Parameters {
         return [
-            "codes": ["ABCDEF"]
+            "codes": pollCodes
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> [Poll] {
@@ -180,31 +176,6 @@ struct GetLivePolls: ClickerQuark {
     }
 }
 
-struct GetPollPorts: ClickerQuark {
-    
-    typealias ResponseType = Int?
-    
-    let id: Int
-    var route: String {
-        return "/api/v1/polls/\(id)/ports/"
-    }
-    let host: String = "http://34.226.150.242"
-    let method: HTTPMethod = .get
-    
-    func process(element: Element) throws -> Int? {
-        switch element {
-        case .ports(let ports):
-            if (ports.count == 0) {
-                return nil
-            } else {
-                return ports[0]
-            }
-        default:
-            throw NeutronError.badResponseData
-        }
-    }
-}
-
 struct UpdatePoll: ClickerQuark {
     
     typealias ResponseType = Poll
@@ -213,14 +184,15 @@ struct UpdatePoll: ClickerQuark {
     let name: String
     
     var route: String {
-        return "/api/v1/polls/\(id)"
+        return "/polls/\(id)"
     }
+    
     var parameters: Parameters {
         return [
             "name": name
         ]
     }
-    let host: String = "http://34.226.150.242"
+
     let method: HTTPMethod = .put
     
     func process(element: Element) throws -> Poll {

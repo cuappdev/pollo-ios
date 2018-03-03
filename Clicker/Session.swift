@@ -12,14 +12,18 @@ import SwiftyJSON
 class Session {
     let id: Int
     var delegate: SessionDelegate?
-    var socket: SocketIOClient!
+    var socket: SocketIOClient
+    var manager: SocketManager
     
     init(id: Int, userType: String, delegate: SessionDelegate? = nil) {
         self.id = id
         self.delegate = delegate
-        let url = URL(string: "http://34.226.150.242:\(id)")!
-        self.socket = SocketIOClient(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
-        
+
+        let url = URL(string: hostURL)!
+        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
+
+        socket = manager.socket(forNamespace: "/\(id)")
+
         socket.on(clientEvent: .connect) { data, ack in
             print("SOCKET CONNECTED")
             self.delegate?.sessionConnected()
