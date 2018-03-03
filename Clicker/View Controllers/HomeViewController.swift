@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         super.viewDidLoad()
         
         // Handle keyboard dismiss
-        self.hideKeyboardWhenTappedAround()
+        hideKeyboardWhenTappedAround()
         
         //UserDefaults.standard.set(nil, forKey: "userSavedPolls")
         //UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
@@ -174,46 +174,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let codes: [String] = polls.map {
             $0.code
         }
-        // Make POST request to get Live Polls
-        let parameters: Parameters = [
-            "codes": codes
-        ]
-        requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
-            guard let data = json["data"] as? [[String:Any]] else {
-                return
-            }
-            var updatedLivePolls = [Poll]()
-            
-            // Return if there are no live polls
-            if (data.isEmpty) {
-                self.livePolls = updatedLivePolls
-                return
-            }
-            
-            // Create and append Poll objects
-            let nodes: [[String:Any]] = data.map { $0["node"] as! [String:Any]}
-            for node in nodes {
-                guard let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
-                    // Present Alert Controller
-                    let alert = self.createAlert(title: "Error", message: "Bad response data")
-                    self.present(alert, animated: true, completion: nil)
-                    return
+
+        GetLivePolls(pollCodes: codes as! [String]).make()
+            .done { polls in
+                // Reload tableview with updatedLivePolls
+                self.livePolls = polls
+                DispatchQueue.main.async {
+                    self.homeTableView.reloadData()
                 }
-                let poll = Poll(id: id, name: name, code: code)
-                updatedLivePolls.append(poll)
-            }
-            // Reload tableview with updatedLivePolls
-            self.livePolls = updatedLivePolls
-            DispatchQueue.main.async {
-                self.homeTableView.reloadData()
-            }
-        })
+            }.catch { error -> Void in
+                let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
+                self.present(alert, animated: true, completion: nil)
+                print(error)
+        }
     }
     
     // Generate poll code
     func getNewPollCode(completion: @escaping (() -> Void)) {
         GeneratePollCode().make()
-            .then{ code -> Void in
+            .done { code -> Void in
                 UserDefaults.standard.setValue(code, forKey: "pollCode")
                 completion()
             }.catch { error -> Void in
@@ -254,40 +233,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         if !(isValidCode) {
             return
         }
-        
-        // Make POST request to join session
-        let parameters: Parameters = [
-            "codes": [textField.text!]
-        ]
-        requestJSON(route: "http://34.226.150.242/api/v1/polls/live/", method: .post, parameters: parameters, completion: { json in
-            guard let data = json["data"] as? [[String:Any]] else {
-                return
-            }
-            
-            // Clear textfield input
-            textField.text = ""
-            //Check if live session exists for code
-            if (data.isEmpty) {
+        // Clear textfield input
+        textField.text = ""
+        let pollCodes = [textField.text]
+        GetLivePolls(pollCodes: pollCodes as! [String]).make()
+            .done { polls in
+                if polls.count == 0 {
+                    let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
+                    self.present(alert, animated: true, completion: nil)
+                }
+                let liveSessionVC = LiveSessionViewController()
+                liveSessionVC.poll = polls[0]
+                self.view.endEditing(true)
+                self.navigationController?.pushViewController(liveSessionVC, animated: true)
+                Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
+            }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
-                return
+                print(error)
             }
-            
-            // Make sure response data represents a valid Poll
-            guard let node = data[0]["node"] as? [String:Any], let id = node["id"] as? Int, let name = node["name"] as? String, let code = node["code"] as? String else {
-                let alert = self.createAlert(title: "Error", message: "Bad response data")
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            
-            // Push LiveSessionVC
-            let poll = Poll(id: id, name: name, code: code)
-            let liveSessionVC = LiveSessionViewController()
-            liveSessionVC.poll = poll
-            self.view.endEditing(true)
-            self.navigationController?.pushViewController(liveSessionVC, animated: true)
-            Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
-        })
     }
     
     // MARK: - Setup/layout views

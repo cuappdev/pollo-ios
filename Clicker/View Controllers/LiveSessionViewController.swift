@@ -26,10 +26,9 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         
         containerView = UIView()
         view.addSubview(containerView)
-        getPollPort()
+        session = Session(id: poll.id, userType: "user", delegate: self)
         setupNavBar()
         setConstraints()
-        // pending()
     }
     
     // MARK: - CONTAINER VIEW
@@ -80,30 +79,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             vc.view.removeFromSuperview()
             vc.removeFromParentViewController()
         }
-    }
-    
-    // MARK: - Get port
-    func getPollPort() {
-        GetPollPorts(id: poll.id).make()
-            .then { port -> Void in
-                if let p = port {
-                    self.session = Session(id: p, userType: "user", delegate: self)
-                    self.checkQuestionAtPort(port: p)
-                }
-            }.catch { error -> Void in
-                print("failed to get poll port")
-            }
-    }
-    
-    // MARK: - Check for live question at port
-    func checkQuestionAtPort(port: Int) {
-        GetQuestionAtPort(port: port).make()
-            .then { question -> Void in
-                self.question = question
-                self.updateContainerVC()
-            }.catch {error -> Void in
-                self.pending()
-            }
     }
     
     // MARK: - SESSION

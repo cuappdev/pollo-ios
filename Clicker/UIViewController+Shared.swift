@@ -31,7 +31,7 @@ extension UIViewController {
     // Sending arrays through requests
     func requestJSON(route: String, method: HTTPMethod, parameters: Parameters, completion: @escaping (_ response: [String:Any]) -> Void) {
         Alamofire.request(route, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON()
-            .then { json -> Void in
+            .done { json in
                 completion(json as! [String:Any])
             }.catch { error -> Void in
                 print(error)
