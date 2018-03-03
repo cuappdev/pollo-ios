@@ -55,7 +55,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     @objc func endSession() {
-        self.navigationController?.popToRootViewController(animated: true)
+        session.socket.disconnect()
+        navigationController?.popToRootViewController(animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -106,7 +107,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func createPoll() {
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        CreatePoll(name: "", pollCode: pollCode).make()
+        let request = CreatePoll(name: "", pollCode: pollCode)
+        request.make()
             .then{ poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
                 print("set currentPoll to:")
@@ -114,15 +116,15 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
                 self.startPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
+                print(request)
                 return
         }
     }
     
     func startPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
-            .then{ port -> Void in
-                print("starting poll at \(port)")
-                self.session = Session(id: port, userType: "admin")
+            .then { Void -> Void in
+                self.session = Session(id: poll.id, userType: "admin")
                 // Reload collection view so that cell has correct session property
                 DispatchQueue.main.async {
                      self.questionCollectionView.reloadData()
