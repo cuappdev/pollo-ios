@@ -153,7 +153,7 @@ struct GetLivePolls: ClickerQuark {
 
     var parameters: Parameters {
         return [
-            "codes": ["ABCDEF"]
+            "codes": pollCodes
         ]
     }
 
