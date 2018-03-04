@@ -47,14 +47,15 @@ class EndSessionViewController: UIViewController {
         if (nameSessionTextField.text?.isEmpty ?? true) {
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
-            // Disconnect from socket
-            self.session.socket.disconnect()
         } else {
             // Emit socket message for users to save poll and disconnect
             self.session.socket.emit("server/poll/save", with: [])
             endPoll(pollId: currentPoll.id, save: true)
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
+        
+        // Disconnect from socket
+        self.session.socket.disconnect()
         
         // Return to HomeVC
         cancel()
