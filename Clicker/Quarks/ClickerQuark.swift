@@ -32,7 +32,6 @@ extension ClickerQuark {
         
         if let edges = response["data"]["edges"].array {
             let edgesTuples = edges.map {
-                //($0["cursor"].stringValue, $0["node"])
                 ("", $0["node"])
             }
             return try process(element: .edges(edgesTuples))
@@ -60,7 +59,7 @@ extension ClickerQuark {
             return try process(element: .node(response["data"]))
         }
         
-        return try process(element: .null) // For when no response is returned
+        return try process(element: .null)
     }
 }
 

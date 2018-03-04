@@ -6,8 +6,6 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-
 class CurrentState {
     
     var question: Int
@@ -25,5 +23,4 @@ class CurrentState {
         self.results = json["results"] as! [String:Any]
         self.answers = json["answers"] as! [String:Any]
     }
-    
 }

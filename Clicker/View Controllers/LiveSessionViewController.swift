@@ -32,7 +32,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         setConstraints()
     }
     
-    // MARK: - CONTAINER VIEW
+    // MARK: - CONTAINERVIEW
     func updateContainerVC(currentState: CurrentState? = nil, pending: Bool = false){
         removeChildViewControllers()
         if let cs = currentState {
@@ -79,7 +79,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Save poll to adminSavedPolls in UserDefaults
     func saveUserPoll(poll: Poll) {
         print("SAVING POLL")
         guard let userSavedPolls = UserDefaults.standard.value(forKey: "userSavedPolls") else {
@@ -100,9 +99,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         encodeObjForKey(obj: polls, key: "userSavedPolls")
     }
     
-    // MARK - Socket methods
-    func sessionConnected() {
-    }
+    func sessionConnected() {}
     
     func sessionDisconnected() {
         print("popping user VC")
@@ -132,7 +129,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     func updatedTally(_ currentState: CurrentState) {
     }
     
-    // MARK - Setup/layout views
+    // MARK - LAYOUT
     func setConstraints() {
         containerView.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview()

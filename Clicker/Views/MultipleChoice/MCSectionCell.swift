@@ -24,6 +24,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
     
+    //MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Add Keyboard Handlers
@@ -40,6 +41,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         layoutSubviews()
     }
     
+    //MARK: - POLLING
     @objc func startPoll() {
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
@@ -50,6 +52,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         }
     }
     
+    //MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.row == numOptions) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
@@ -93,6 +96,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         return frame.height * 0.1049618321
     }
     
+    //MARK: - LAYOUT
     func setupViews() {
         questionTextField = UITextField()
         questionTextField.placeholder = "Add Question"
@@ -158,16 +162,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Textfield handling
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
-        textField.resignFirstResponder()
-        return true
-    }
+    // MARK: - MCOptionDelegate
     
-    // MARK: - MCOptionDelegate methods
-    
-    // Handler for deleting an option
     func deleteOption(index: Int) {
         numOptions -= 1
         let indexPath = IndexPath(row: index, section: 0)
@@ -187,20 +183,18 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
     }
     
-    // Update optionsDict with text inside selected TextField
     func updatedTextField(index: Int, text: String) {
         optionsDict[index] = text
     }
     
-    // MARK: - NewQuestionDelegate methods
+    // MARK: - NewQuestionDelegate
     
-    // Admin wants to create new question
     func creatingNewQuestion() {
         questionTextField.text = ""
         optionsTableView.reloadData()
     }
     
-    // MARK: - Keyboard showing/hiding
+    // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
@@ -227,6 +221,12 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             pollButtonBottomConstraint.update(offset: -18)
             layoutIfNeeded()
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

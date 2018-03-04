@@ -24,25 +24,27 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Handle keyboard dismiss
         hideKeyboardWhenTappedAround()
-        
-        //UserDefaults.standard.set(nil, forKey: "userSavedPolls")
-        //UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         lookForLivePolls()
         setupViews()
         setupConstraints()
+        
+        let appDelegate = AppDelegate()
+        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+            if significantEvents > 20 {
+                appDelegate.requestReview()
+                UserDefaults.standard.set(0, forKey:"significantEvents")
+            }
+        }
     }
     
     // MARK: - KEYBOARD
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
     // MARK: - TABLEVIEW
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -54,17 +56,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let livePoll = livePolls[indexPath.row]
             cell.sessionLabel.text = livePoll.name
             cell.codeLabel.text = "Session Code: \(livePoll.code)"
+            cell.selectionStyle = .none
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
             cell.joinSessionCellDelegate = self
+            cell.selectionStyle = .none
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
             let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             let poll = polls[indexPath.row]
             cell.sessionLabel.text = poll.name
-            cell.codeLabel.text = "Session Code: \(poll.code)"            
+            cell.codeLabel.text = "Session Code: \(poll.code)"
+            cell.selectionStyle = .none
             return cell
         default:
             return UITableViewCell()
@@ -176,7 +181,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let codes: [String] = polls.map {
             $0.code
         }
-
+        
         GetLivePolls(pollCodes: codes).make()
             .done { polls in
                 // Reload tableview with updatedLivePolls
@@ -212,6 +217,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             createQuestionVC.pollCode = code
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
             Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
+            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
+            }
         }
     }
     
@@ -235,21 +243,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
-
+                
                 let liveSessionVC = LiveSessionViewController()
                 liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
-
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
+                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
+                }
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
                 print(error)
-            }
+        }
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - LAYOUT
     func setupViews() {
         
         //CREATE POLL
