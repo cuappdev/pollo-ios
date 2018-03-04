@@ -45,17 +45,11 @@ class EndSessionViewController: UIViewController {
         // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
         if (nameSessionTextField.text?.isEmpty ?? true) {
-            // End poll
             endPoll(pollId: currentPoll.id, save: false)
         } else {
-            // Emit socket message for users to save poll and disconnect
-            self.session.socket.emit("server/poll/save", with: [])
             endPoll(pollId: currentPoll.id, save: true)
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
-        
-        // Disconnect from socket
-        self.session.socket.disconnect()
         
         // Return to HomeVC
         cancel()
@@ -96,7 +90,8 @@ class EndSessionViewController: UIViewController {
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
             .done { Void -> Void in
-                print("ended poll")
+                // Disconnect from socket
+                self.session.socket.disconnect()
             }.catch { error -> Void in
                 print(error)
         }
