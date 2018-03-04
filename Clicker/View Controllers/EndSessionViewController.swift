@@ -54,11 +54,14 @@ class EndSessionViewController: UIViewController {
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
         
-        session.socket.disconnect()
-        
         // Return to HomeVC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
+        // Wait a little before disconnecting socket so that server
+        // has time to emit "user/poll/save" if necessary
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.session.socket.disconnect()
+        }
     }
     
     // MARK: Update poll with given name and then save it to UserDefaults
