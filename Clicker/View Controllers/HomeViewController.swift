@@ -168,7 +168,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     // Get current live, subscribed polls
     func lookForLivePolls() {
-        print("Looking")
         if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
             print("no user saved polls")
             return
@@ -182,7 +181,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             .done { polls in
                 // Reload tableview with updatedLivePolls
                 self.livePolls = polls
-                print("got polls \(self.livePolls)")
                 DispatchQueue.main.async {
                     self.homeTableView.reloadData()
                 }
