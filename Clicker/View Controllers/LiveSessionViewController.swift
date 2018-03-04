@@ -105,6 +105,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func sessionDisconnected() {
+        print("popping user VC")
         endSession()
     }
     
