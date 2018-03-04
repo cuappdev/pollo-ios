@@ -14,6 +14,8 @@ class AddMoreOptionCell: UITableViewCell {
     var plusLabel: UILabel!
     var addMoreLabel: UILabel!
     
+    
+    //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clickerBackground
@@ -25,6 +27,7 @@ class AddMoreOptionCell: UITableViewCell {
         layoutSubviews()
     }
     
+    //MARK: - LAYOUT
     func setupViews() {
         plusLabel = UILabel()
         plusLabel.text = "+"
@@ -62,5 +65,4 @@ class AddMoreOptionCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

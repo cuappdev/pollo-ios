@@ -21,8 +21,8 @@ class EndSessionViewController: UIViewController {
     var nameSessionTextField: UITextField!
     var saveButton: UIButton!
     var endSessionButton: UIButton!
-
     
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,6 +38,7 @@ class EndSessionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - SESSION
     @objc func endSession() {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
@@ -56,7 +57,7 @@ class EndSessionViewController: UIViewController {
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Update poll with given name and then save it to UserDefaults
+    // MARK: - POLLING
     func updateSavePoll(pollId: Int, name: String) {
         UpdatePoll(id: pollId, name: name).make()
             .done { poll -> Void in
@@ -67,7 +68,6 @@ class EndSessionViewController: UIViewController {
         }
     }
     
-    // MARK: Save poll to adminSavedPolls in UserDefaults
     func saveAdminPoll(poll: Poll) {
         // Check if any adminSavedPolls exist
         guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
@@ -86,7 +86,6 @@ class EndSessionViewController: UIViewController {
         encodeObjForKey(obj: polls, key: "adminSavedPolls")
     }
     
-    // MARK: End poll
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
             .done { Void -> Void in
@@ -97,7 +96,7 @@ class EndSessionViewController: UIViewController {
         }
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - LAYOUT
     func setupViews() {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
@@ -203,7 +202,7 @@ class EndSessionViewController: UIViewController {
         }
     }
     
-    // MARK: - Keyboard handling
+    // MARK: - KEYBOARD
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

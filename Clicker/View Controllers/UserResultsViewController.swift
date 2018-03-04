@@ -23,7 +23,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var questionLabel: UILabel!
     var optionResultsTableView: UITableView!
     
-    
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
@@ -37,18 +37,16 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         setupNavBar()
         setupViews()
         setupConstraints()
-        
     }
     
-    @objc func endSession() {
-        
-    }
+    // MARK: - SESSION
+    @objc func endSession() { }
     
     @objc func closePoll() {
         print("close poll")
     }
     
-    // MARK - Tableview methods
+    // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
@@ -80,7 +78,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
-    // MARK - Setup views
+    // MARK - LAYOUT
     func setupViews() {
 
         questionLabel = UILabel()
@@ -99,8 +97,6 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView.clipsToBounds = true
         optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
         view.addSubview(optionResultsTableView)
-    
-        
     }
     
     func setupConstraints() {
@@ -110,15 +106,12 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.top.equalToSuperview().offset(100)
         }
         
-        
         optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
             make.bottom.equalToSuperview().offset(-5)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
-        
-        
     }
     
     func setupNavBar() {
@@ -143,8 +136,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
-    // MARK: - Keyboard
-    
+    // MARK: - KEYBOARD
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }

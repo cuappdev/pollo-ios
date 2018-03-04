@@ -99,7 +99,7 @@
 		C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,8 +152,8 @@
 		C27429E11F8C252D006FAD31 /* Quarks */ = {
 			isa = PBXGroup;
 			children = (
-				C2BF44CD2033FA140067505A /* PollQuark.swift */,
 				C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */,
+				C2BF44CD2033FA140067505A /* PollQuark.swift */,
 			);
 			path = Quarks;
 			sourceTree = "<group>";
@@ -161,10 +161,12 @@
 		C281886C1F7ADE6F00D7E944 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C2D057981F926B31008F21CB /* Question.swift */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
-				C205588E2026591A000E9B07 /* Poll.swift */,
 				C259603A20390F0800C8DBA3 /* CurrentState.swift */,
+				C205588E2026591A000E9B07 /* Poll.swift */,
+				C2D057981F926B31008F21CB /* Question.swift */,
+				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
+				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,11 +174,11 @@
 		C2BF44D1203402540067505A /* MultipleChoice */ = {
 			isa = PBXGroup;
 			children = (
-				C769682F2034F2FB00E7E676 /* ResultMCOptionCell.swift */,
-				C25F21E3203F75CB001F540E /* MCSectionCell.swift */,
-				C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */,
 				C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */,
 				C25F21E9203F77FA001F540E /* AnswerMCCell.swift */,
+				C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */,
+				C25F21E3203F75CB001F540E /* MCSectionCell.swift */,
+				C769682F2034F2FB00E7E676 /* ResultMCOptionCell.swift */,
 			);
 			path = MultipleChoice;
 			sourceTree = "<group>";
@@ -189,11 +191,22 @@
 			path = FreeResponse;
 			sourceTree = "<group>";
 		};
+		C7441389204C653D00E446CF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */,
+				C212179E20281E94007395DA /* UIFont+Shared.swift */,
+				C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */,
+				C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C768B769203B78260062DC66 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				C768B76E203B89010062DC66 /* LiveSessionCell.swift */,
 				C768B76A203B7A2F0062DC66 /* JoinSessionCell.swift */,
+				C768B76E203B89010062DC66 /* LiveSessionCell.swift */,
 				C2BF44D3203405D60067505A /* SavedSessionCell.swift */,
 				C2BF44D520340D5A0067505A /* SessionHeader.swift */,
 			);
@@ -203,6 +216,8 @@
 		C7D6AF571F93DE43003ABA10 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
+				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7D6AF581F93DE4E003ABA10 /* Constants.swift */,
 			);
 			path = Supporting;
@@ -248,16 +263,9 @@
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
 				C7D6AF571F93DE43003ABA10 /* Supporting */,
-				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
-				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
-				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
-				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
+				C7441389204C653D00E446CF /* Extensions */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
-				C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */,
-				C212179E20281E94007395DA /* UIFont+Shared.swift */,
-				C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */,
 				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
-				C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";

@@ -15,7 +15,6 @@ protocol JoinSessionCellDelegate {
 class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
     
     var joinSessionCellDelegate: JoinSessionCellDelegate!
-    
     var joinView: UIView!
     var sessionTextField: UITextField!
     var joinButton: UIButton!
@@ -49,7 +48,6 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
         joinButton.backgroundColor = .clickerLightGray
         joinButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
         joinView.addSubview(joinButton)
-        
     }
     
     // MARK: - LAYOUT
@@ -78,18 +76,11 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - VALIDATION
     @objc func beganTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
@@ -116,13 +107,13 @@ class JoinSessionCell: UITableViewCell, UITextFieldDelegate {
     }
     
     // MARK: - DELEGATION
-    
     @objc func joinSession(){
         if let code = sessionTextField.text {
             joinSessionCellDelegate.joinSession(with: code)
         }
     }
     
+    // MARK: - KEYBOARD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()

@@ -41,7 +41,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var newQuestionDelegate: NewQuestionDelegate!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,7 +50,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         setupViews()
         setupConstraints()
         runTimer()
-        
     }
     
     // End session
@@ -126,7 +124,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    // MARK - Tableview methods
+    // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
@@ -161,7 +159,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
-    // MARK - Setup/layout views
+    // MARK - LAYOUT
     func setupViews() {
         headerView = UIView()
         headerView.backgroundColor = .clickerBackground
@@ -314,24 +312,13 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
-    // MARK: - Session methods
-    func sessionConnected() {
-    }
-    
-    func sessionDisconnected() {
-    }
-    
-    func questionStarted(_ question: Question) {
-    }
-    
-    func questionEnded(_ question: Question) {
-    }
-    
-    func receivedResults(_ currentState: CurrentState) {
-    }
-    
-    func savePoll(_ poll: Poll) {
-    }
+    // MARK: - SESSION
+    func sessionConnected() {}
+    func sessionDisconnected() {}
+    func questionStarted(_ question: Question) {}
+    func questionEnded(_ question: Question) {}
+    func receivedResults(_ currentState: CurrentState) {}
+    func savePoll(_ poll: Poll) {}
     
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
@@ -344,10 +331,9 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView.reloadData()
     }
     
-    // MARK: - Keyboard
+    // MARK: - KEYBOARD
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
 }

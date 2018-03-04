@@ -31,25 +31,12 @@ class PendingViewController: UIViewController, SessionDelegate {
         }
     }
     
-    // MARK - Socket methods
-    func sessionConnected() {
-    }
-    
-    func sessionDisconnected() {
-    }
-    
-    func questionStarted(_ question: Question) {
-    }
-    
-    func questionEnded(_ question: Question) {
-    }
-    
-    func receivedResults(_ currentState: CurrentState) {
-    }
-    
-    func savePoll(_ poll: Poll) {
-    }
-    
-    func updatedTally(_ currentState: CurrentState) {
-    }
+    // MARK - SESSIONS
+    func sessionConnected() {}
+    func sessionDisconnected() {}
+    func questionStarted(_ question: Question) {}
+    func questionEnded(_ question: Question) {}
+    func receivedResults(_ currentState: CurrentState) {}
+    func savePoll(_ poll: Poll) {}
+    func updatedTally(_ currentState: CurrentState) {}
 }

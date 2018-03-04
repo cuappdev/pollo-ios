@@ -27,6 +27,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     var addOptionTextField: UITextField!
     var trashButton: UIButton!
     
+    //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clickerBackground
@@ -39,6 +40,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         layoutSubviews()
     }
     
+    //MARK: - LAYOUT
     func setupViews() {
         choiceLabel.textColor = .clickerDarkGray
         choiceLabel.font = UIFont._16SemiboldFont
@@ -86,7 +88,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
-    // MARK: - MultipleChoiceOption Delegeate methods
+    // MARK: - MultipleChoiceOptionDelegate
     @objc func deleteOption(){
         mcOptionDelegate.deleteOption(index: choiceTag)
     }
@@ -97,7 +99,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
-    // MARK: - TextField delegate methods
+    // MARK: - KEYBOARD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -106,5 +108,4 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
