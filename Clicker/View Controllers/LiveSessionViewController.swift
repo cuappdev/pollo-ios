@@ -83,6 +83,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     func saveUserPoll(poll: Poll) {
         print("SAVING POLL")
         guard let userSavedPolls = UserDefaults.standard.value(forKey: "userSavedPolls") else {
+            print("CREATING FIRST USER SAVED POLLS")
             encodeObjForKey(obj: [poll], key: "userSavedPolls")
             return
         }
@@ -95,6 +96,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         } else {
             polls.append(poll)
         }
+        print("ADDED TO USER SAVED POLLS")
         encodeObjForKey(obj: polls, key: "userSavedPolls")
     }
     

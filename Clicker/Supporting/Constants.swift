@@ -10,3 +10,4 @@ import Foundation
 import UIKit
 
 let hostURL = "http://34.226.150.242"
+
