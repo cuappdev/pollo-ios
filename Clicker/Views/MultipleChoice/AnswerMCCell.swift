@@ -21,6 +21,7 @@ class AnswerMCCell: UITableViewCell {
     
     var optionLabel = UILabel()
     
+    //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -33,6 +34,7 @@ class AnswerMCCell: UITableViewCell {
         layoutSubviews()
     }
     
+    //MARK: - LAYOUT
     func setupViews() {
         choiceLabel.textColor = .clickerDarkGray
         choiceLabel.font = UIFont._16SemiboldFont

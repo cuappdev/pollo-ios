@@ -25,6 +25,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
     var sliderBarLeftConstraint: NSLayoutConstraint!
     var controller: CreateQuestionViewController!
     
+    //MARK: - INITIALIZATION
     init(frame: CGRect, options: [String], controller: CreateQuestionViewController) {
         super.init(frame: frame)
         self.options = options
@@ -37,6 +38,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         layoutSubviews()
     }
     
+    //MARK: - LAYOUT
     func setupSliderBar() {
         sliderBar.backgroundColor = UIColor(red: 0 / 255.0, green: 0 / 255.0, blue: 0 / 255.0, alpha: 1.0)
         addSubview(sliderBar)
@@ -55,7 +57,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         }
     }
     
-    // MARK: - CollectionView
+    // MARK: - COLLECTIONVIEW
     func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         return options.count
     }

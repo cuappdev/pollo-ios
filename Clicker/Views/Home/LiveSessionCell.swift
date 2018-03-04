@@ -15,8 +15,6 @@ class LiveSessionCell: UITableViewCell {
     var liveIcon: UIImageView!
     var rightArrowIcon: UIImageView!
     
-    // var date: String! = "Started 3 minutes ago by Dan Li"
-    
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -78,14 +76,6 @@ class LiveSessionCell: UITableViewCell {
             make.height.equalTo(15)
             make.width.equalToSuperview().multipliedBy(0.76)
         }
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

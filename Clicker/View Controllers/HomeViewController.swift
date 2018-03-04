@@ -24,25 +24,27 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Handle keyboard dismiss
         hideKeyboardWhenTappedAround()
-        
-        //UserDefaults.standard.set(nil, forKey: "userSavedPolls")
-        //UserDefaults.standard.set(nil, forKey: "adminSavedPolls")
         view.backgroundColor = .clickerBackground
         lookForLivePolls()
         setupViews()
         setupConstraints()
+        
+        let appDelegate = AppDelegate()
+        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+            if significantEvents > 20 {
+                appDelegate.requestReview()
+                UserDefaults.standard.set(0, forKey:"significantEvents")
+            }
+        }
     }
     
     // MARK: - KEYBOARD
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
     // MARK: - TABLEVIEW
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -54,17 +56,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let livePoll = livePolls[indexPath.row]
             cell.sessionLabel.text = livePoll.name
             cell.codeLabel.text = "Session Code: \(livePoll.code)"
+            cell.selectionStyle = .none
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "joinSessionCellID", for: indexPath) as! JoinSessionCell
             cell.joinSessionCellDelegate = self
+            cell.selectionStyle = .none
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedSessionCellID", for: indexPath) as! SavedSessionCell
             let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
             let poll = polls[indexPath.row]
             cell.sessionLabel.text = poll.name
-            cell.codeLabel.text = "Session Code: \(poll.code)"            
+            cell.codeLabel.text = "Session Code: \(poll.code)"
+            cell.selectionStyle = .none
             return cell
         default:
             return UITableViewCell()
@@ -103,6 +108,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let selectedPoll = polls[indexPath.row]
             UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
             let createQuestionVC = CreateQuestionViewController()
+            createQuestionVC.pollCode = selectedPoll.code
             createQuestionVC.oldPoll = polls[indexPath.row]
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
         default:
@@ -168,14 +174,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     // Get current live, subscribed polls
     func lookForLivePolls() {
         if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
+            print("no user saved polls")
             return
         }
         let polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
         let codes: [String] = polls.map {
             $0.code
         }
-
-        GetLivePolls(pollCodes: codes as! [String]).make()
+        
+        GetLivePolls(pollCodes: codes).make()
             .done { polls in
                 // Reload tableview with updatedLivePolls
                 self.livePolls = polls
@@ -190,31 +197,30 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     // Generate poll code
-    func getNewPollCode(completion: @escaping (() -> Void)) {
+    func getNewPollCode(completion: @escaping ((String) -> Void)) {
         GeneratePollCode().make()
             .done { code -> Void in
                 UserDefaults.standard.setValue(code, forKey: "pollCode")
-                completion()
+                completion(code)
             }.catch { error -> Void in
-                print(error)
-                return
+                let alert = self.createAlert(title: "Error", message: "Error generating new poll code.")
+                self.present(alert, animated: true, completion: nil)
         }
     }
     
     // Create New Poll
     @objc func createNewPoll() {
         // Generate poll code if none exists
-        guard let pollCode = UserDefaults.standard.object(forKey: "pollCode") else {
-            getNewPollCode {
-                let createQuestionVC = CreateQuestionViewController()
-                self.navigationController?.pushViewController(createQuestionVC, animated: true)
+        getNewPollCode { code in
+            // Push CreateQuestionVC
+            let createQuestionVC = CreateQuestionViewController()
+            createQuestionVC.pollCode = code
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+            Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
+            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
             }
-            return
         }
-        // Push CreateQuestionVC
-        let createQuestionVC = CreateQuestionViewController()
-        self.navigationController?.pushViewController(createQuestionVC, animated: true)
-        Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
     }
     
     // Returns whether there are any admin saved polls
@@ -237,21 +243,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
-
+                
                 let liveSessionVC = LiveSessionViewController()
                 liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
-
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
+                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
+                }
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
                 print(error)
-            }
+        }
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - LAYOUT
     func setupViews() {
         
         //CREATE POLL
@@ -318,9 +326,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         // Hide navigation bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        
-        // Get new poll code if needed
-        getNewPollCode(completion: {})
         
         // Reload TableViews
         homeTableView.reloadData()

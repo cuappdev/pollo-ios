@@ -8,7 +8,6 @@
 
 import UIKit
 
-// Superclass needed to save Polls to UserDefaults
 class Poll: NSObject, NSCoding {
    
     var id: Int

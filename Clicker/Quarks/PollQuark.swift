@@ -23,7 +23,6 @@ struct GeneratePollCode : ClickerQuark {
     func process(element: Element) throws -> String {
         switch element {
         case .node(let node):
-            print(node)
             guard let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
@@ -36,7 +35,6 @@ struct GeneratePollCode : ClickerQuark {
 struct CreatePoll: ClickerQuark {
     
     typealias ResponseType = Poll
-    
     let name: String
     let pollCode: String
     
@@ -66,8 +64,8 @@ struct CreatePoll: ClickerQuark {
 }
 
 struct StartCreatedPoll: ClickerQuark {
+    
     typealias ResponseType = Void
-
     let id: Int
     
     var route: String {
@@ -211,10 +209,3 @@ struct UpdatePoll: ClickerQuark {
         }
     }
 }
-
-
-
-
-
-
-

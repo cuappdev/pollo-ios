@@ -26,20 +26,26 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         
         containerView = UIView()
         view.addSubview(containerView)
+        updateContainerVC(currentState: nil, pending: true)
         session = Session(id: poll.id, userType: "user", delegate: self)
         setupNavBar()
         setConstraints()
     }
     
-    // MARK: - CONTAINER VIEW
-    func updateContainerVC(currentState: CurrentState? = nil){
+    // MARK: - CONTAINERVIEW
+    func updateContainerVC(currentState: CurrentState? = nil, pending: Bool = false){
         removeChildViewControllers()
         if let cs = currentState {
             let userResultsVC = UserResultsViewController()
+            userResultsVC.pollCode = poll.code
             userResultsVC.question = question
             userResultsVC.currentState = cs
             containerViewController = userResultsVC
             addChildViewController(userResultsVC)
+        } else if pending {
+            let pendingViewController = PendingViewController()
+            containerViewController = pendingViewController
+            addChildViewController(containerViewController)
         } else {
             let answerVC = AnswerQuestionViewController()
             answerVC.question = question
@@ -47,21 +53,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
             containerViewController = answerVC
             addChildViewController(answerVC)
         }
-        containerView.addSubview(containerViewController.view)
-        containerViewController.view.snp.makeConstraints { (make) -> Void in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        containerViewController.didMove(toParentViewController: self)
-    }
-    
-    // Show PendingVC
-    func pending(){
-        let pendingViewController = PendingViewController()
-        containerViewController = pendingViewController
-        addChildViewController(containerViewController)
         containerView.addSubview(containerViewController.view)
         containerViewController.view.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview()
@@ -88,9 +79,10 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Save poll to adminSavedPolls in UserDefaults
     func saveUserPoll(poll: Poll) {
+        print("SAVING POLL")
         guard let userSavedPolls = UserDefaults.standard.value(forKey: "userSavedPolls") else {
+            print("CREATING FIRST USER SAVED POLLS")
             encodeObjForKey(obj: [poll], key: "userSavedPolls")
             return
         }
@@ -103,14 +95,15 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         } else {
             polls.append(poll)
         }
+        print("ADDED TO USER SAVED POLLS")
         encodeObjForKey(obj: polls, key: "userSavedPolls")
     }
     
-    // MARK - Socket methods
-    func sessionConnected() {
-    }
+    func sessionConnected() {}
     
     func sessionDisconnected() {
+        print("popping user VC")
+        endSession()
     }
     
     func questionStarted(_ question: Question) {
@@ -120,6 +113,8 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func questionEnded(_ question: Question) {
+        removeChildViewControllers()
+        updateContainerVC(currentState: nil, pending: true)
     }
     
     func receivedResults(_ currentState: CurrentState) {
@@ -134,7 +129,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     func updatedTally(_ currentState: CurrentState) {
     }
     
-    // MARK - Setup/layout views
+    // MARK - LAYOUT
     func setConstraints() {
         containerView.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview()

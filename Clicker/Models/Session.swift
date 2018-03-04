@@ -7,7 +7,6 @@
 //
 
 import SocketIO
-import SwiftyJSON
 
 class Session {
     let id: Int
@@ -25,7 +24,6 @@ class Session {
         socket = manager.socket(forNamespace: "/\(id)")
 
         socket.on(clientEvent: .connect) { data, ack in
-            print("SOCKET CONNECTED")
             self.delegate?.sessionConnected()
         }
         
@@ -41,7 +39,6 @@ class Session {
             guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
                     return
             }
-            print("question: \(json)")
             let question = Question(json: questionJSON)
             self.delegate?.questionStarted(question)
         }
@@ -55,8 +52,6 @@ class Session {
         }
         
         socket.on("user/question/results") { data, ack in
-            print("USER GETTING RESULTS:")
-            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }
@@ -66,8 +61,6 @@ class Session {
         }
         
         socket.on("user/poll/save") { data, ack in
-            print("USER GETTING POLL")
-            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }
@@ -76,8 +69,6 @@ class Session {
         }
         
         socket.on("admin/question/updateTally") { data, ack in
-            print("UPDATED TALLY:")
-            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }
