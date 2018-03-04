@@ -17,6 +17,7 @@ protocol NewQuestionDelegate {
 class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SessionDelegate {
     
     var session: Session!
+    var pollCode: String!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
     var isOldPoll: Bool!
@@ -74,13 +75,10 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.popViewController(animated: true)
     }
     
-    // Close poll -> Share results
-    @objc func closePoll() {
-        print("close poll")
+    // Share results with users
+    @objc func shareResults() {
         // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
-        // Emit socket message to end question
-        session.socket.emit("server/question/end", with: [])
         // Cannot Edit Poll anymore
         editPollButton.alpha = 0
         editPollButton.isUserInteractionEnabled = false
@@ -215,7 +213,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         shareResultsButton.titleLabel?.font = UIFont._18SemiboldFont
         shareResultsButton.setTitle("Share Results", for: .normal)
         shareResultsButton.setTitleColor(.clickerBlue, for: .normal)
-        shareResultsButton.addTarget(self, action: #selector(closePoll), for: .touchUpInside)
+        shareResultsButton.addTarget(self, action: #selector(shareResults), for: .touchUpInside)
         view.addSubview(shareResultsButton)
         
         newQuestionButton = UIButton()
@@ -294,11 +292,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func setupNavBar() {
         let codeLabel = UILabel()
-        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
+        if let code = pollCode {
+            let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(code)")
+            codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
+            codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
+            codeLabel.attributedText = codeAttributedString
+        }
         codeLabel.textColor = .white
         codeLabel.backgroundColor = .clear
         codeBarButtonItem = UIBarButtonItem(customView: codeLabel)

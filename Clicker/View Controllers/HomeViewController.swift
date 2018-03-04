@@ -103,6 +103,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let selectedPoll = polls[indexPath.row]
             UserDefaults.standard.set(selectedPoll.code, forKey: "pollCode")
             let createQuestionVC = CreateQuestionViewController()
+            createQuestionVC.pollCode = selectedPoll.code
             createQuestionVC.oldPoll = polls[indexPath.row]
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
         default:
@@ -167,7 +168,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     // Get current live, subscribed polls
     func lookForLivePolls() {
+        print("Looking")
         if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
+            print("no user saved polls")
             return
         }
         let polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
@@ -175,10 +178,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             $0.code
         }
 
-        GetLivePolls(pollCodes: codes as! [String]).make()
+        GetLivePolls(pollCodes: codes).make()
             .done { polls in
                 // Reload tableview with updatedLivePolls
                 self.livePolls = polls
+                print("got polls \(self.livePolls)")
                 DispatchQueue.main.async {
                     self.homeTableView.reloadData()
                 }
@@ -190,31 +194,27 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     // Generate poll code
-    func getNewPollCode(completion: @escaping (() -> Void)) {
+    func getNewPollCode(completion: @escaping ((String) -> Void)) {
         GeneratePollCode().make()
             .done { code -> Void in
                 UserDefaults.standard.setValue(code, forKey: "pollCode")
-                completion()
+                completion(code)
             }.catch { error -> Void in
-                print(error)
-                return
+                let alert = self.createAlert(title: "Error", message: "Error generating new poll code.")
+                self.present(alert, animated: true, completion: nil)
         }
     }
     
     // Create New Poll
     @objc func createNewPoll() {
         // Generate poll code if none exists
-        guard let pollCode = UserDefaults.standard.object(forKey: "pollCode") else {
-            getNewPollCode {
-                let createQuestionVC = CreateQuestionViewController()
-                self.navigationController?.pushViewController(createQuestionVC, animated: true)
-            }
-            return
+        getNewPollCode { code in
+            // Push CreateQuestionVC
+            let createQuestionVC = CreateQuestionViewController()
+            createQuestionVC.pollCode = code
+            self.navigationController?.pushViewController(createQuestionVC, animated: true)
+            Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
         }
-        // Push CreateQuestionVC
-        let createQuestionVC = CreateQuestionViewController()
-        self.navigationController?.pushViewController(createQuestionVC, animated: true)
-        Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
     }
     
     // Returns whether there are any admin saved polls
@@ -318,9 +318,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         // Hide navigation bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        
-        // Get new poll code if needed
-        getNewPollCode(completion: {})
         
         // Reload TableViews
         homeTableView.reloadData()

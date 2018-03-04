@@ -170,7 +170,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (selectedOptionIndex == -1) {
+        if (selectedOptionIndex == nil) {
             submitAnswerButton.backgroundColor = .clickerBlue
         }
         selectedOptionIndex = indexPath.row

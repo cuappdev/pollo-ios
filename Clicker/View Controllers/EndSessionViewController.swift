@@ -45,9 +45,11 @@ class EndSessionViewController: UIViewController {
         // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
         if (nameSessionTextField.text?.isEmpty ?? true) {
+            print("ending no saving")
             // End poll
             endPoll(pollId: currentPoll.id, save: false)
         } else {
+            print("emitting saving, name: \(nameSessionTextField.text)")
             // Emit socket message for users to save poll
             self.session.socket.emit("server/poll/save", with: [])
             endPoll(pollId: currentPoll.id, save: true)

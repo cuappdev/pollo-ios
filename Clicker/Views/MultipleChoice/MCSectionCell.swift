@@ -9,9 +9,13 @@
 import SnapKit
 import UIKit
 
+protocol StartPollDelegate {
+    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
+}
+
 class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var createQuestionVC: CreateQuestionViewController!
+    var startPollDelegate: StartPollDelegate!
     var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
@@ -37,26 +41,13 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     @objc func startPoll() {
-        let liveResultsVC = LiveResultsViewController()
-        
-        //Pass values to LiveResultsVC
-        liveResultsVC.question = questionTextField.text
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
-        liveResultsVC.options = options
-        liveResultsVC.session = self.session
-        liveResultsVC.isOldPoll = (createQuestionVC.oldPoll != nil)
-        liveResultsVC.newQuestionDelegate = self
-        
-        // Emit socket messsage to start question
-        let question: [String:Any] = [
-            "text": questionTextField.text,
-            "type": "MULTIPLE_CHOICE",
-            "options": options
-        ]
-        session.socket.emit("server/question/start", with: [question])
-        
-        createQuestionVC.navigationController?.pushViewController(liveResultsVC, animated: true)
+        if let question = questionTextField.text {
+            startPollDelegate.startPoll(question: question, options: options, newQuestionDelegate: self)
+        } else {
+            startPollDelegate.startPoll(question: "", options: options, newQuestionDelegate: self)
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
