@@ -9,9 +9,10 @@
 import UIKit
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartPollDelegate {
     
     var session: Session!
+    var pollCode: String!
     var oldPoll: Poll!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
@@ -28,7 +29,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             createPoll()
         } else {
             self.encodeObjForKey(obj: oldPoll, key: "currentPoll")
-            startPoll(poll: oldPoll)
+            startCreatedPoll(poll: oldPoll)
         }
         setupNavBar()
         setupViews()
@@ -39,8 +40,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
-            cell.createQuestionVC = self
-            cell.session = self.session
+            cell.startPollDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
@@ -76,15 +76,15 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         CreatePoll(name: "", pollCode: pollCode).make()
             .done { poll -> Void in
                 self.encodeObjForKey(obj: poll, key: "currentPoll")
-                self.startPoll(poll: poll)
+                self.startCreatedPoll(poll: poll)
             }.catch { error -> Void in
                 print(error)
                 return
         }
     }
     
-    // Start a poll
-    func startPoll(poll: Poll) {
+    // Start a created poll
+    func startCreatedPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
             .done { port -> Void in
                 self.session = Session(id: poll.id, userType: "admin")
@@ -95,6 +95,29 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             }.catch { error -> Void in
                 print("error")
         }
+    }
+    
+    // StartPollDelegate method
+    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+        let liveResultsVC = LiveResultsViewController()
+        
+        //Pass values to LiveResultsVC
+        liveResultsVC.question = question
+        liveResultsVC.options = options
+        liveResultsVC.session = session
+        liveResultsVC.pollCode = pollCode
+        liveResultsVC.isOldPoll = (oldPoll != nil)
+        liveResultsVC.newQuestionDelegate = newQuestionDelegate
+        
+        // Emit socket messsage to start question
+        let question: [String:Any] = [
+            "text": question,
+            "type": "MULTIPLE_CHOICE",
+            "options": options
+        ]
+        session.socket.emit("server/question/start", with: [question])
+        
+        navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
     // MARK: - SliderView methods
@@ -148,11 +171,12 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
         let codeLabel = UILabel()
-        let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
+        if let code = pollCode {
+            let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(code)")
+            codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
+            codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
+            codeLabel.attributedText = codeAttributedString
+        }
         codeLabel.textColor = .white
         codeLabel.backgroundColor = .clear
         codeBarButtonItem = UIBarButtonItem(customView: codeLabel)

@@ -6,11 +6,10 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import SocketIO
-
 protocol SessionDelegate {
     func sessionConnected()
     func sessionDisconnected()
+    
     // USER RECEIVES
     func questionStarted(_ question: Question)
     func questionEnded(_ question: Question)

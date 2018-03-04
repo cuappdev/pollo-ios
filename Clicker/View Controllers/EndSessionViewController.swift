@@ -21,8 +21,8 @@ class EndSessionViewController: UIViewController {
     var nameSessionTextField: UITextField!
     var saveButton: UIButton!
     var endSessionButton: UIButton!
-
     
+    // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,6 +38,7 @@ class EndSessionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - SESSION
     @objc func endSession() {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
@@ -45,23 +46,18 @@ class EndSessionViewController: UIViewController {
         // End poll and update if necessary
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
         if (nameSessionTextField.text?.isEmpty ?? true) {
-            // End poll
             endPoll(pollId: currentPoll.id, save: false)
         } else {
-            // Emit socket message for users to save poll
-            self.session.socket.emit("server/poll/save", with: [])
             endPoll(pollId: currentPoll.id, save: true)
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
-        
-        session.socket.disconnect()
         
         // Return to HomeVC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Update poll with given name and then save it to UserDefaults
+    // MARK: - POLLING
     func updateSavePoll(pollId: Int, name: String) {
         UpdatePoll(id: pollId, name: name).make()
             .done { poll -> Void in
@@ -72,7 +68,6 @@ class EndSessionViewController: UIViewController {
         }
     }
     
-    // MARK: Save poll to adminSavedPolls in UserDefaults
     func saveAdminPoll(poll: Poll) {
         // Check if any adminSavedPolls exist
         guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
@@ -91,17 +86,17 @@ class EndSessionViewController: UIViewController {
         encodeObjForKey(obj: polls, key: "adminSavedPolls")
     }
     
-    // MARK: End poll
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
             .done { Void -> Void in
-                print("ended poll")
+                // Disconnect from socket
+                self.session.socket.disconnect()
             }.catch { error -> Void in
                 print(error)
         }
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - LAYOUT
     func setupViews() {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
@@ -207,7 +202,7 @@ class EndSessionViewController: UIViewController {
         }
     }
     
-    // MARK: - Keyboard handling
+    // MARK: - KEYBOARD
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

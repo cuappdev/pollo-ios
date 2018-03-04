@@ -6,8 +6,6 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-
 class Answer {
     
     var id: Int
@@ -21,5 +19,4 @@ class Answer {
         self.questionId = questionId
         self.data = data
     }
-    
 }

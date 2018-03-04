@@ -37,7 +37,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         setupConstraints()
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - LAYOUT
     func setupViews() {
         
         questionLabel = UILabel()
@@ -128,7 +128,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
-    // Submit button pressed
+    // MARK: - SUBMIT
     @objc func submitAnswer() {
         guard let index = selectedOptionIndex else { return }
 
@@ -170,7 +170,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (selectedOptionIndex == -1) {
+        if (selectedOptionIndex == nil) {
             submitAnswerButton.backgroundColor = .clickerBlue
         }
         selectedOptionIndex = indexPath.row

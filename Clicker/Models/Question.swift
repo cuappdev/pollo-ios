@@ -6,9 +6,6 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-import SwiftyJSON
-
 class Question {
     
     var id: Int

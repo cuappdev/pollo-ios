@@ -23,20 +23,20 @@ class ResultMCOptionCell: UITableViewCell {
     var highlightView: UIView!
     var highlightWidthConstraint: Constraint!
     
-    
+    //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clickerBackground
         contentView.layer.cornerRadius = 8
         contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         contentView.layer.borderWidth = 0.5
-        contentView.clipsToBounds = true
         clipsToBounds = true
         
         setupViews()
         layoutSubviews()
     }
     
+    //MARK: - LAYOUT
     func setupViews() {
         choiceLabel.textColor = .clickerDarkGray
         choiceLabel.font = UIFont._16SemiboldFont
@@ -54,6 +54,7 @@ class ResultMCOptionCell: UITableViewCell {
         
         highlightView = UIView()
         highlightView.backgroundColor = .clickerLightBlue
+        highlightView.layer.cornerRadius = 8
         addSubview(highlightView)
         sendSubview(toBack: highlightView)
         

@@ -14,7 +14,6 @@ class SavedSessionCell: UITableViewCell {
     var sessionLabel: UILabel!
     var codeLabel: UILabel!
     
-    
     // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,12 +56,9 @@ class SavedSessionCell: UITableViewCell {
             make.height.equalTo(15)
             make.width.equalToSuperview().multipliedBy(0.76)
         }
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
