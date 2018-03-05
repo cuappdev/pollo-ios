@@ -279,7 +279,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
         
-        homeTableView = UITableView()
+        homeTableView = UITableView(frame: .zero, style: .grouped)
         homeTableView.delegate = self
         homeTableView.dataSource = self
         homeTableView.separatorStyle = .none
