@@ -77,9 +77,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func shareResults() {
         // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
-        // Cannot Edit Poll anymore
+        // Update views
+        shareResultsButton.alpha = 0
+        shareResultsButton.isUserInteractionEnabled = false
         editPollButton.alpha = 0
         editPollButton.isUserInteractionEnabled = false
+        liveResultsLabel.text = "Final Results"
         timer.invalidate()
     }
     
@@ -185,6 +188,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         editPollButton = UIButton()
         editPollButton.setTitle("Edit Poll", for: .normal)
         editPollButton.setTitleColor(.clickerBlue, for: .normal)
+        editPollButton.titleLabel?.font = UIFont._16MediumFont
         editPollButton.backgroundColor = .clear
         editPollButton.addTarget(self, action: #selector(editPoll), for: .touchUpInside)
         headerView.addSubview(editPollButton)
