@@ -106,7 +106,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         liveResultsVC.options = options
         liveResultsVC.session = session
         liveResultsVC.pollCode = pollCode
-        liveResultsVC.isOldPoll = (oldPoll != nil)
         liveResultsVC.newQuestionDelegate = newQuestionDelegate
         
         // Emit socket messsage to start question

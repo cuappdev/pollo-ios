@@ -20,7 +20,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var pollCode: String!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
-    var isOldPoll: Bool!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -59,7 +58,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
-        endSessionVC.isOldPoll = isOldPoll
         endSessionVC.dismissController = self
         endSessionVC.session = self.session
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
