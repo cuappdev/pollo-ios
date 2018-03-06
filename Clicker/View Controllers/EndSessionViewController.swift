@@ -12,7 +12,6 @@ import SnapKit
 class EndSessionViewController: UIViewController {
     
     var session: Session!
-    var isOldPoll: Bool!
     var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!
@@ -68,6 +67,12 @@ class EndSessionViewController: UIViewController {
         }
     }
     
+    func getPollIndex(poll: Poll) -> Int? {
+        let polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
+        let pollCodes = polls.map { $0.code }
+        return pollCodes.index(of: poll.code)
+    }
+    
     func saveAdminPoll(poll: Poll) {
         // Check if any adminSavedPolls exist
         guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
@@ -77,9 +82,8 @@ class EndSessionViewController: UIViewController {
         
         var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
         // Check if poll has been saved already
-        if (isOldPoll) {
-            let pollCodes = polls.map { $0.code }
-            polls[pollCodes.index(of: poll.code)!] = poll
+        if let pollIndex = getPollIndex(poll: poll) {
+            polls[pollIndex] = poll
         } else {
             polls.append(poll)
         }
