@@ -20,7 +20,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startPollButton: UIButton!
-    var pollButtonBottomConstraint: Constraint!
+    var grayView: UIView!
+    var grayViewBottomConstraint: Constraint!
     var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
     
@@ -120,6 +121,11 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.separatorStyle = .none
         addSubview(optionsTableView)
         
+        grayView = UIView()
+        grayView.backgroundColor = .clickerBackground
+        addSubview(grayView)
+        bringSubview(toFront: grayView)
+        
         startPollButton = UIButton()
         startPollButton.backgroundColor = .clickerBlue
         startPollButton.layer.cornerRadius = 8
@@ -127,15 +133,14 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         startPollButton.setTitleColor(.white, for: .normal)
         startPollButton.titleLabel?.font = UIFont._18SemiboldFont
         startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
-        addSubview(startPollButton)
-        bringSubview(toFront: startPollButton)
+        grayView.addSubview(startPollButton)
         
-        startPollButton.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
+        grayView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(91)
             make.centerX.equalToSuperview()
-            self.pollButtonBottomConstraint = make.bottom.equalTo(0).constraint
+            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
         }
-        pollButtonBottomConstraint.update(offset: -18)
         layoutIfNeeded()
     }
     
@@ -157,7 +162,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         startPollButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            make.centerX.equalToSuperview()
+            make.center.equalToSuperview()
         }
     }
     
@@ -204,7 +209,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
             {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0)
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 12), 0.0)
             }
             else
             {
@@ -213,7 +218,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
             
-            pollButtonBottomConstraint.update(offset: (keyboardSize.height + 18) * -1)
+            grayViewBottomConstraint.update(offset: -keyboardSize.height)
             layoutIfNeeded()
         }
     }
@@ -222,7 +227,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            pollButtonBottomConstraint.update(offset: -18)
+            //pollButtonBottomConstraint.update(offset: -18)
+            grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
     }

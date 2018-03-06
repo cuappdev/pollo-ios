@@ -15,7 +15,7 @@ import Crashlytics
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, JoinSessionCellDelegate {
     
     var whiteView: UIView!
-    var createPollButton: UIButton!
+    var createSessionButton: UIButton!
     var homeTableView: UITableView!
     var refreshControl: UIRefreshControl!
     var livePolls: [Poll] = [Poll]()
@@ -267,14 +267,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         whiteView.backgroundColor = .white
         view.addSubview(whiteView)
         
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create New Poll", for: .normal)
-        createPollButton.setTitleColor(.white, for: .normal)
-        createPollButton.titleLabel?.font = UIFont._18MediumFont
-        createPollButton.backgroundColor = .clickerGreen
-        createPollButton.layer.cornerRadius = 8
-        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
-        whiteView.addSubview(createPollButton)
+        createSessionButton = UIButton()
+        createSessionButton.setTitle("Create New Session", for: .normal)
+        createSessionButton.setTitleColor(.white, for: .normal)
+        createSessionButton.titleLabel?.font = UIFont._18MediumFont
+        createSessionButton.backgroundColor = .clickerGreen
+        createSessionButton.layer.cornerRadius = 8
+        createSessionButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
+        whiteView.addSubview(createSessionButton)
         
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
@@ -303,12 +303,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             make.left.equalToSuperview()
             make.bottom.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(view.frame.height * 0.13)
+            make.height.equalTo(91)
         }
         
-        createPollButton.snp.makeConstraints { make in
+        createSessionButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: view.frame.height * 0.082))
+            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: 55))
         }
         
         homeTableView.snp.updateConstraints { make in
