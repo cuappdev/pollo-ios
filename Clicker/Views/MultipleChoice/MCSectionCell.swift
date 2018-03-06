@@ -32,11 +32,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
         
-        // Initialize key, values for optionsDict
-        for i in 0...numOptions - 1 {
-            optionsDict[i] = ""
-        }
-        
+        clearOptionsDict()
         setupViews()
         layoutSubviews()
     }
@@ -49,6 +45,13 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             startPollDelegate.startPoll(question: question, options: options, newQuestionDelegate: self)
         } else {
             startPollDelegate.startPoll(question: "", options: options, newQuestionDelegate: self)
+        }
+    }
+    
+    func clearOptionsDict() {
+        optionsDict.removeAll()
+        for i in 0...numOptions - 1 {
+            optionsDict[i] = ""
         }
     }
     
@@ -191,6 +194,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     func creatingNewQuestion() {
         questionTextField.text = ""
+        clearOptionsDict()
         optionsTableView.reloadData()
     }
     
