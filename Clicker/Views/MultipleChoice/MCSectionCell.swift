@@ -13,9 +13,14 @@ protocol StartQuestionDelegate {
     func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
 }
 
+protocol FollowUpQuestionDelegate {
+    func inFollowUpQuestion()
+}
+
 class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
     var startQuestionDelegate: StartQuestionDelegate!
+    var followUpQuestionDelegate: FollowUpQuestionDelegate!
     var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
@@ -198,6 +203,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     // MARK: - NewQuestionDelegate
     
     func creatingNewQuestion() {
+        // Notify that we are in a Follow Up question
+        followUpQuestionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
         clearOptionsDict()
         optionsTableView.reloadData()

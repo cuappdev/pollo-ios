@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Presentr
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartQuestionDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartQuestionDelegate, FollowUpQuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -18,6 +19,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionOptionsView: QuestionOptionsView!
     var questionCollectionView: UICollectionView!
+    
+    var isFollowUpQuestion: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +44,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
             cell.startQuestionDelegate = self
+            cell.followUpQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
@@ -61,12 +65,27 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     // End current session
     @objc func endSession() {
-        // Disconnect socket
+        // Allow admin to save session if this is follow-up question
+        if (isFollowUpQuestion) {
+            let presenter: Presentr = Presentr(presentationType: .bottomHalf)
+            presenter.roundCorners = false
+            presenter.dismissOnSwipe = true
+            presenter.dismissOnSwipeDirection = .bottom
+            let endSessionVC = EndSessionViewController()
+            endSessionVC.dismissController = self
+            endSessionVC.session = self.session
+            customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+            return
+        }
+        // End poll/Disconnect socket
         if let sess = session {
            sess.socket.disconnect()
         }
         let poll = decodeObjForKey(key: "currentPoll") as! Poll
         EndPoll(id: poll.id, save: false).make()
+            .catch { error -> Void in
+                print(error)
+            }
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -97,7 +116,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    // StartQuestionDelegate method
+    // MARK: - DELEGATES
+    
     func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
         let liveResultsVC = LiveResultsViewController()
         
@@ -117,6 +137,10 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         session.socket.emit("server/question/start", with: [question])
         
         navigationController?.pushViewController(liveResultsVC, animated: true)
+    }
+    
+    func inFollowUpQuestion() {
+        isFollowUpQuestion = true
     }
     
     // MARK: - SliderView methods
