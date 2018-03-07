@@ -44,7 +44,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     //MARK: - POLLING
-    @objc func startPoll() {
+    @objc func startQuestion() {
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
         if let question = questionTextField.text {
@@ -137,7 +137,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         startQuestionButton.setTitle("Start Question", for: .normal)
         startQuestionButton.setTitleColor(.white, for: .normal)
         startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
-        startQuestionButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
+        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
         grayView.addSubview(startQuestionButton)
         
         grayView.snp.makeConstraints { make in
@@ -169,10 +169,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.center.equalToSuperview()
         }
-    }
-    
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - MCOptionDelegate
@@ -214,12 +210,10 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
-            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
-            {
+            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 12), 0.0)
             }
-            else
-            {
+            else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }
             self.optionsTableView.contentInset = contentInsets;
@@ -231,19 +225,21 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            //pollButtonBottomConstraint.update(offset: -18)
             grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

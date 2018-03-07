@@ -28,16 +28,6 @@ extension UIViewController {
         return NSKeyedUnarchiver.unarchiveObject(with: decodedData)
     }
     
-    // Sending arrays through requests
-    func requestJSON(route: String, method: HTTPMethod, parameters: Parameters, completion: @escaping (_ response: [String:Any]) -> Void) {
-        Alamofire.request(route, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON()
-            .done { json in
-                completion(json as! [String:Any])
-            }.catch { error -> Void in
-                print(error)
-            }
-    }
-    
     func createAlert(title: String, message: String) -> UIAlertController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
