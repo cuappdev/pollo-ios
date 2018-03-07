@@ -186,6 +186,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                 let window = UIApplication.shared.keyWindow
                 let safeBottomPadding = window?.safeAreaInsets.bottom
                 let bottomOffset = (grayView.frame.height - safeBottomPadding! - 55) / 2
+                print("BLAH \(bottomOffset)")
                 make.bottom.equalToSuperview().offset(-(safeBottomPadding! + bottomOffset))
             } else {
                 make.centerY.equalToSuperview()
