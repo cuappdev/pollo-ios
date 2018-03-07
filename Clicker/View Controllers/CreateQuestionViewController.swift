@@ -10,7 +10,7 @@ import UIKit
 import Presentr
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartQuestionDelegate, FollowUpQuestionDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, StartQuestionDelegate, FollowUpQuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -143,19 +143,26 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         isFollowUpQuestion = true
     }
     
-    // MARK: - SliderView methods
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
-    }
-    
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
+    // MARK: - SLIDERVIEW
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        print("ENDED DRAGGING")
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+    }
+    
     // MARK: - Setup/layout views
     func setupViews() {
-        questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], controller: self)
+        questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
         view.addSubview(questionOptionsView)
         
         let layout = UICollectionViewFlowLayout()

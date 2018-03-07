@@ -9,37 +9,41 @@
 import SnapKit
 import UIKit
 
+protocol SliderBarDelegate {
+    func scrollToIndex(index: Int)
+}
+
 class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
-        cv.dataSource = self
-        cv.delegate = self
-        return cv
-    }()
-    
+    var collectionView: UICollectionView!
     var options: [String]!
     let sliderBar = UIView()
     var sliderBarLeftConstraint: NSLayoutConstraint!
-    var controller: CreateQuestionViewController!
+    var sliderBarDelegate: SliderBarDelegate!
     
     //MARK: - INITIALIZATION
-    init(frame: CGRect, options: [String], controller: CreateQuestionViewController) {
+    init(frame: CGRect, options: [String], sliderBarDelegate: SliderBarDelegate) {
         super.init(frame: frame)
         self.options = options
-        self.controller = controller
-        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: "questionOptionCellId")
-        addSubview(collectionView)
-        let selectedIndexPath = IndexPath(item: 0, section: 0)
-        collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
-        setupSliderBar()
+        self.sliderBarDelegate = sliderBarDelegate
+        
+        setupViews()
         layoutSubviews()
     }
     
     //MARK: - LAYOUT
-    func setupSliderBar() {
+    func setupViews() {
+        let layout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: "questionOptionCellId")
+        addSubview(collectionView)
+        
+        let selectedIndexPath = IndexPath(item: 0, section: 0)
+        collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+        
         sliderBar.backgroundColor = UIColor(red: 0 / 255.0, green: 0 / 255.0, blue: 0 / 255.0, alpha: 1.0)
         addSubview(sliderBar)
         sliderBarLeftConstraint = sliderBar.leftAnchor.constraint(equalTo: leftAnchor)
@@ -65,6 +69,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "questionOptionCellId", for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
+        cell.tintColor = .clickerMediumGray
         return cell
     }
     
@@ -77,7 +82,17 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        controller.scrollToIndex(index: indexPath.item)
+        sliderBarDelegate.scrollToIndex(index: indexPath.item)
+        let selectedCell = collectionView.cellForItem(at: indexPath) as! QuestionOptionCell
+        selectedCell.optionLabel.textColor = .black
+        let unselectedIndexPath: IndexPath
+        if (indexPath.row == 0) {
+            unselectedIndexPath = IndexPath(item: 1, section: 0)
+        } else {
+            unselectedIndexPath = IndexPath(item: 0, section: 0)
+        }
+        let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
+        unselectedCell.optionLabel.textColor = .clickerMediumGray
     }
     
     required init?(coder _: NSCoder) {
@@ -86,14 +101,10 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
 }
 
 class QuestionOptionCell: UICollectionViewCell {
-    
+
     override var isSelected: Bool {
         didSet {
-            if self.isSelected {
-                optionLabel.textColor = .black
-            } else {
-                optionLabel.textColor = .clickerMediumGray
-            }
+            optionLabel.textColor = isSelected ? .black : .clickerMediumGray
         }
     }
     
