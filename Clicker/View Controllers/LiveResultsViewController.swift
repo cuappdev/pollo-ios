@@ -202,6 +202,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView = UITableView()
         optionResultsTableView.backgroundColor = .clear
         optionResultsTableView.separatorStyle = .none
+        optionResultsTableView.showsVerticalScrollIndicator = false
         optionResultsTableView.delegate = self
         optionResultsTableView.dataSource = self
         optionResultsTableView.clipsToBounds = true
@@ -282,7 +283,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(newQuestionButton.snp.width)
-            make.bottom.equalTo(shareResultsButton.snp.top).offset(-8)
+            make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
