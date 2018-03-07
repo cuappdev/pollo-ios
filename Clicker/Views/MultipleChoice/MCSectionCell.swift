@@ -63,7 +63,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     //MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row == numOptions) {
+        if (indexPath.row == numOptions && numOptions <= 25) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
@@ -86,19 +86,28 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.row == numOptions) {
+        if (indexPath.row == numOptions && numOptions <= 25) {
             numOptions += 1
             optionsDict[numOptions - 1] = ""
-            tableView.beginUpdates()
-            tableView.insertRows(at: [indexPath], with: .none)
-            tableView.reloadData()
-            tableView.endUpdates()
-            
+            if (numOptions < 26) {
+                tableView.beginUpdates()
+                tableView.insertRows(at: [indexPath], with: .none)
+                tableView.reloadData()
+                tableView.endUpdates()
+                let bottomIndexPath: IndexPath
+                bottomIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
+                tableView.scrollToRow(at: bottomIndexPath, at: .bottom, animated: false)
+            } else {
+                tableView.reloadData()
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numOptions + 1 // 1 extra for the "Add More" cell plus 5 empty cells
+        if (numOptions <= 25) {
+            return numOptions + 1
+        }
+        return numOptions
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
