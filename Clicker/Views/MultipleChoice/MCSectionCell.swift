@@ -151,7 +151,13 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         grayView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalTo(91)
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                make.height.equalTo(safeBottomPadding! + 91)
+            } else {
+                make.height.equalTo(91)
+            }
             make.centerX.equalToSuperview()
             self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
         }
@@ -176,7 +182,15 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         startQuestionButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            make.center.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                let bottomOffset = (grayView.frame.height - safeBottomPadding! - 55) / 2
+                make.bottom.equalToSuperview().offset(-(safeBottomPadding! + bottomOffset))
+            } else {
+                make.centerY.equalToSuperview()
+            }
+            make.centerX.equalToSuperview()
         }
     }
     

@@ -301,7 +301,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         whiteView.snp.makeConstraints { make in
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
             make.right.equalToSuperview()
             make.height.equalTo(91)
         }

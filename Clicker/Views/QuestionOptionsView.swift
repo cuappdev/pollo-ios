@@ -56,7 +56,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
             make.center.equalToSuperview()
         }
         sliderBar.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.5, height: 1.0))
+            make.size.equalTo(CGSize(width: frame.width * 0.5, height: 2.0))
             make.bottom.equalToSuperview()
         }
     }

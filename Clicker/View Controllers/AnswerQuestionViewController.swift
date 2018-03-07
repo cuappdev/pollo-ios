@@ -102,7 +102,11 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.width.equalTo(answerRecordedLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top).offset(-18)
+            }
         }
     }
     
