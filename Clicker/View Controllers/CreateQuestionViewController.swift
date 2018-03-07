@@ -25,7 +25,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.hideKeyboardWhenTappedAround()
         view.backgroundColor = .clickerBackground
         
         if (oldPoll == nil) {
@@ -154,7 +153,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("ENDED DRAGGING")
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
         questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
