@@ -9,17 +9,17 @@
 import SnapKit
 import UIKit
 
-protocol StartPollDelegate {
-    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
+protocol StartQuestionDelegate {
+    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
 }
 
 class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var startPollDelegate: StartPollDelegate!
+    var startQuestionDelegate: StartQuestionDelegate!
     var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
-    var startPollButton: UIButton!
+    var startQuestionButton: UIButton!
     var grayView: UIView!
     var grayViewBottomConstraint: Constraint!
     var optionsDict: [Int:String] = [Int:String]()
@@ -43,9 +43,9 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
         if let question = questionTextField.text {
-            startPollDelegate.startPoll(question: question, options: options, newQuestionDelegate: self)
+            startQuestionDelegate.startQuestion(question: question, options: options, newQuestionDelegate: self)
         } else {
-            startPollDelegate.startPoll(question: "", options: options, newQuestionDelegate: self)
+            startQuestionDelegate.startQuestion(question: "", options: options, newQuestionDelegate: self)
         }
     }
     
@@ -126,14 +126,14 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         addSubview(grayView)
         bringSubview(toFront: grayView)
         
-        startPollButton = UIButton()
-        startPollButton.backgroundColor = .clickerBlue
-        startPollButton.layer.cornerRadius = 8
-        startPollButton.setTitle("Start Poll", for: .normal)
-        startPollButton.setTitleColor(.white, for: .normal)
-        startPollButton.titleLabel?.font = UIFont._18SemiboldFont
-        startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
-        grayView.addSubview(startPollButton)
+        startQuestionButton = UIButton()
+        startQuestionButton.backgroundColor = .clickerBlue
+        startQuestionButton.layer.cornerRadius = 8
+        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitleColor(.white, for: .normal)
+        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
+        startQuestionButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
+        grayView.addSubview(startQuestionButton)
         
         grayView.snp.makeConstraints { make in
             make.width.equalToSuperview()
@@ -156,11 +156,11 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
+            make.bottom.equalToSuperview().offset(-(startQuestionButton.frame.height + 23))
             make.centerX.equalToSuperview()
         }
         
-        startPollButton.snp.updateConstraints { make in
+        startQuestionButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
             make.center.equalToSuperview()
         }
