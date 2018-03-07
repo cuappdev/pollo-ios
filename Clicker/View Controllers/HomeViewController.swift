@@ -15,6 +15,7 @@ import Crashlytics
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, JoinSessionCellDelegate {
     
     var whiteView: UIView!
+    var bottomView: UIView!
     var createSessionButton: UIButton!
     var homeTableView: UITableView!
     var refreshControl: UIRefreshControl!
@@ -267,6 +268,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         whiteView.backgroundColor = .white
         view.addSubview(whiteView)
         
+        bottomView = UIView()
+        bottomView.backgroundColor = .white
+        view.addSubview(bottomView)
+        
         createSessionButton = UIButton()
         createSessionButton.setTitle("Create New Session", for: .normal)
         createSessionButton.setTitleColor(.white, for: .normal)
@@ -301,18 +306,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         whiteView.snp.makeConstraints { make in
             make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(91)
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
                 make.bottom.equalTo(bottomLayoutGuide.snp.top)
             }
+        }
+        
+        bottomView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(91)
+            make.bottom.equalToSuperview()
+            make.top.equalTo(whiteView.snp.bottom)
         }
         
         createSessionButton.snp.makeConstraints { make in
-            make.center.equalToSuperview()
             make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: 55))
+            make.center.equalToSuperview()
         }
         
         homeTableView.snp.updateConstraints { make in
