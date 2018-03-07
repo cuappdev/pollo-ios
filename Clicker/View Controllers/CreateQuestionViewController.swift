@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartPollDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartQuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -40,7 +40,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
-            cell.startPollDelegate = self
+            cell.startQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
@@ -97,8 +97,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    // StartPollDelegate method
-    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+    // StartQuestionDelegate method
+    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
         let liveResultsVC = LiveResultsViewController()
         
         //Pass values to LiveResultsVC
