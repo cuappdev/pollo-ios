@@ -69,15 +69,15 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
         
         choiceLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.12, height: frame.height))
+            make.size.equalTo(CGSize(width: frame.width * 0.12, height: 21.5))
             make.left.equalToSuperview()
-            make.top.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
         trashButton.snp.updateConstraints { make in
             make.size.equalTo(choiceLabel.snp.size)
             make.right.equalToSuperview()
-            make.top.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
         addOptionTextField.snp.updateConstraints { make in
