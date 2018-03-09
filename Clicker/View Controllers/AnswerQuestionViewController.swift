@@ -140,7 +140,8 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         let answer: [String:Any] = [
             "deviceId": UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString,
             "question": question.id,
-            "data": intToMCOption(index)
+            "choice": intToMCOption(index),
+            "text": question.options[index]
         ]
         session.socket.emit("server/question/tally", with: [answer])
         // Show answerRecorded label
