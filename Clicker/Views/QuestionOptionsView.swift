@@ -18,6 +18,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
     var collectionView: UICollectionView!
     var options: [String]!
     let sliderBar = UIView()
+    var grayBar: UIView!
     var sliderBarLeftConstraint: NSLayoutConstraint!
     var sliderBarDelegate: SliderBarDelegate!
     
@@ -46,8 +47,13 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         
         sliderBar.backgroundColor = UIColor(red: 0 / 255.0, green: 0 / 255.0, blue: 0 / 255.0, alpha: 1.0)
         addSubview(sliderBar)
+        bringSubview(toFront: sliderBar)
         sliderBarLeftConstraint = sliderBar.leftAnchor.constraint(equalTo: leftAnchor)
         sliderBarLeftConstraint.isActive = true
+        
+        grayBar = UIView()
+        grayBar.backgroundColor = .clickerMediumGray
+        addSubview(grayBar)
     }
     
     override func layoutSubviews() {
@@ -57,6 +63,11 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         }
         sliderBar.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.5, height: 2.0))
+            make.bottom.equalToSuperview()
+        }
+        grayBar.snp.updateConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(0.5)
             make.bottom.equalToSuperview()
         }
     }
