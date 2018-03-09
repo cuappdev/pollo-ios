@@ -11,12 +11,14 @@ class Answer {
     var id: Int
     var deviceId: Int
     var questionId: Int
-    var data: String  // SingleResponse | MultipleResponse
+    var choice: String!
+    var text: String!
 
-    init(_ id: Int, _ deviceId: Int, _ questionId: Int, _ data: String) {
+    init(_ id: Int, _ deviceId: Int, _ questionId: Int, _ choice: String, _ text: String) {
         self.id = id
         self.deviceId = deviceId
         self.questionId = questionId
-        self.data = data
+        self.choice = choice
+        self.text = text
     }
 }
