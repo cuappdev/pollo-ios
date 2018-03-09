@@ -151,13 +151,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         grayView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                let window = UIApplication.shared.keyWindow
-                let safeBottomPadding = window?.safeAreaInsets.bottom
-                make.height.equalTo(safeBottomPadding! + 91)
-            } else {
-                make.height.equalTo(91)
-            }
+            make.height.equalTo(91)
             make.centerX.equalToSuperview()
             self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
         }
@@ -182,16 +176,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         startQuestionButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            if #available(iOS 11.0, *) {
-                let window = UIApplication.shared.keyWindow
-                let safeBottomPadding = window?.safeAreaInsets.bottom
-                let bottomOffset = (grayView.frame.height - safeBottomPadding! - 55) / 2
-                print("BLAH \(bottomOffset)")
-                make.bottom.equalToSuperview().offset(-(safeBottomPadding! + bottomOffset))
-            } else {
-                make.centerY.equalToSuperview()
-            }
-            make.centerX.equalToSuperview()
+            make.center.equalToSuperview()
         }
     }
     
@@ -235,15 +220,20 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 12), 0.0)
-            }
-            else {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
+            } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
             
-            grayViewBottomConstraint.update(offset: -keyboardSize.height)
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
+            } else {
+                grayViewBottomConstraint.update(offset: -keyboardSize.height)
+            }
             layoutIfNeeded()
         }
     }

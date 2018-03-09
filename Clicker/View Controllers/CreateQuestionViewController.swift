@@ -190,8 +190,12 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.snp.updateConstraints { make in
             make.width.equalToSuperview()
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
         }
     }
 

@@ -108,7 +108,11 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
-            make.bottom.equalToSuperview().offset(-5)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top).offset(-5)
+            }
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
