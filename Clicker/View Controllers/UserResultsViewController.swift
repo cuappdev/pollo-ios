@@ -28,11 +28,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
-        for value in currentState.results.values {
-            if let v = value as? Int {
-                totalNumResults += Float(v)
-            }
-        }
+        totalNumResults = Float(currentState.getCountFromResults())
         
         setupNavBar()
         setupViews()
@@ -52,16 +48,15 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
-        print("setting option to: \(question.options[indexPath.row])")
         let mcOption: String = intToMCOption(indexPath.row)
-        if let numSelected = currentState.results[mcOption] as? Int {
-            print("nonzero width")
-            cell.numberLabel.text = "\(numSelected)"
-            let width = CGFloat(Float(numSelected) / totalNumResults)
+        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+            return cell
+        }
+        cell.numberLabel.text = "\(count)"
+        if (totalNumResults > 0) {
+            let width = CGFloat(Float(count) / totalNumResults)
             cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
         } else {
-            print("zero width")
-            cell.numberLabel.text = "0"
             cell.highlightWidthConstraint.update(offset: 0)
         }
         cell.layoutIfNeeded()

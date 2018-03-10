@@ -138,7 +138,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
 
         // Submit answer through socket
         let answer: [String:Any] = [
-            "deviceId": UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString,
+            "deviceId": deviceId,
             "question": question.id,
             "choice": intToMCOption(index),
             "text": question.options[index]

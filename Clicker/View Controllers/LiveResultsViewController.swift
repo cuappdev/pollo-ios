@@ -138,7 +138,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         }
         
-        print(currState.results)
         let mcOption: String = intToMCOption(indexPath.row)
         guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
@@ -150,16 +149,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             cell.highlightWidthConstraint.update(offset: 0)
         }
-        //            if let numSelected = currState.results[mcOption] as? Int {
-        //                print("nonzero width")
-        //                cell.numberLabel.text = "\(numSelected)"
-        //                let width = CGFloat(Float(numSelected) / totalNumResults)
-        //                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
-        //            } else {
-        //                print("zero width")
-        //                cell.numberLabel.text = "0"
-        //                cell.highlightWidthConstraint.update(offset: 0)
-        //            }
         UIView.animate(withDuration: 0.5, animations: {
             cell.layoutIfNeeded()
         })
@@ -344,13 +333,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
-        totalNumResults = 0
-        for value in currentState.results.values {
-            guard let info = value as? [String:Int] else {
-                return
-            }
-            totalNumResults += Float(info["count"]!)
-        }
+        totalNumResults = Float(currentState.getCountFromResults())
         optionResultsTableView.reloadData()
     }
     
