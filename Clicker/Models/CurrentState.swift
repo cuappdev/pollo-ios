@@ -23,4 +23,15 @@ class CurrentState {
         self.results = json["results"] as! [String:Any]
         self.answers = json["answers"] as! [String:Any]
     }
+    
+    // Returns total answers submitted from [results]
+    func getCountFromResults() -> Int {
+        var counter = 0
+        for dict in results.values {
+            if let d = dict as? [String:Any], let val = d["count"] as? Int {
+                counter += val
+            }
+        }
+        return counter
+    }
 }
