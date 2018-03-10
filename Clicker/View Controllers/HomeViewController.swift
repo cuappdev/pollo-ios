@@ -15,7 +15,8 @@ import Crashlytics
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, JoinSessionCellDelegate {
     
     var whiteView: UIView!
-    var createPollButton: UIButton!
+    var bottomView: UIView!
+    var createSessionButton: UIButton!
     var homeTableView: UITableView!
     var refreshControl: UIRefreshControl!
     var livePolls: [Poll] = [Poll]()
@@ -31,12 +32,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         setupConstraints()
         
         let appDelegate = AppDelegate()
-        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-            if significantEvents > 20 {
-                appDelegate.requestReview()
-                UserDefaults.standard.set(0, forKey:"significantEvents")
-            }
+        let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+        if significantEvents > 20 {
+            appDelegate.requestReview()
+            UserDefaults.standard.set(0, forKey:"significantEvents")
         }
+        
     }
     
     // MARK: - KEYBOARD
@@ -216,10 +217,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let createQuestionVC = CreateQuestionViewController()
             createQuestionVC.pollCode = code
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
+            // Log significant event
             Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
-            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
-            }
+            let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+            UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
         }
     }
     
@@ -248,10 +249,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
+                // Log significant event
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
-                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
-                }
+                let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+                UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
@@ -267,19 +268,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         whiteView.backgroundColor = .white
         view.addSubview(whiteView)
         
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create New Poll", for: .normal)
-        createPollButton.setTitleColor(.white, for: .normal)
-        createPollButton.titleLabel?.font = UIFont._18MediumFont
-        createPollButton.backgroundColor = .clickerGreen
-        createPollButton.layer.cornerRadius = 8
-        createPollButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
-        whiteView.addSubview(createPollButton)
+        bottomView = UIView()
+        bottomView.backgroundColor = .white
+        view.addSubview(bottomView)
+        
+        createSessionButton = UIButton()
+        createSessionButton.setTitle("Create New Session", for: .normal)
+        createSessionButton.setTitleColor(.white, for: .normal)
+        createSessionButton.titleLabel?.font = UIFont._18MediumFont
+        createSessionButton.backgroundColor = .clickerGreen
+        createSessionButton.layer.cornerRadius = 8
+        createSessionButton.addTarget(self, action: #selector(createNewPoll), for: .touchUpInside)
+        whiteView.addSubview(createSessionButton)
         
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
         
-        homeTableView = UITableView()
+        homeTableView = UITableView(frame: .zero, style: .grouped)
         homeTableView.delegate = self
         homeTableView.dataSource = self
         homeTableView.separatorStyle = .none
@@ -301,14 +306,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         whiteView.snp.makeConstraints { make in
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(view.frame.height * 0.13)
+            make.height.equalTo(91)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
         }
         
-        createPollButton.snp.makeConstraints { make in
+        bottomView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.top.equalTo(whiteView.snp.bottom)
+        }
+        
+        createSessionButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: 55))
             make.center.equalToSuperview()
-            make.size.equalTo(CGSize(width: view.frame.width * 0.90, height: view.frame.height * 0.082))
         }
         
         homeTableView.snp.updateConstraints { make in

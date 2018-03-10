@@ -52,6 +52,8 @@ class Session {
         }
         
         socket.on("user/question/results") { data, ack in
+            print("USER RESULTS")
+            print(data[0])
             guard let json = data[0] as? [String:Any] else {
                 return
             }
@@ -69,6 +71,8 @@ class Session {
         }
         
         socket.on("admin/question/updateTally") { data, ack in
+            print("ADMIN UPDATE TALLY")
+            print(data[0])
             guard let json = data[0] as? [String:Any] else {
                 return
             }
