@@ -75,7 +75,7 @@ class EndSessionViewController: UIViewController {
     
     func saveAdminPoll(poll: Poll) {
         // Check if any adminSavedPolls exist
-        guard let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") else {
+        if UserDefaults.standard.value(forKey: "adminSavedPolls") == nil {
             encodeObjForKey(obj: [poll], key: "adminSavedPolls")
             return
         }
