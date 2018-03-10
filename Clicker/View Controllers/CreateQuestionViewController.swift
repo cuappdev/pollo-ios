@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Presentr
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, StartPollDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, StartQuestionDelegate, FollowUpQuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -19,10 +20,11 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     var questionOptionsView: QuestionOptionsView!
     var questionCollectionView: UICollectionView!
     
+    var isFollowUpQuestion: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.hideKeyboardWhenTappedAround()
         view.backgroundColor = .clickerBackground
         
         if (oldPoll == nil) {
@@ -40,7 +42,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
-            cell.startPollDelegate = self
+            cell.startQuestionDelegate = self
+            cell.followUpQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
@@ -61,12 +64,27 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     // End current session
     @objc func endSession() {
-        // Disconnect socket
+        // Allow admin to save session if this is follow-up question
+        if (isFollowUpQuestion) {
+            let presenter: Presentr = Presentr(presentationType: .bottomHalf)
+            presenter.roundCorners = false
+            presenter.dismissOnSwipe = true
+            presenter.dismissOnSwipeDirection = .bottom
+            let endSessionVC = EndSessionViewController()
+            endSessionVC.dismissController = self
+            endSessionVC.session = self.session
+            customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+            return
+        }
+        // End poll/Disconnect socket
         if let sess = session {
            sess.socket.disconnect()
         }
         let poll = decodeObjForKey(key: "currentPoll") as! Poll
         EndPoll(id: poll.id, save: false).make()
+            .catch { error -> Void in
+                print(error)
+            }
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -97,8 +115,9 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    // StartPollDelegate method
-    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+    // MARK: - DELEGATES
+    
+    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
         let liveResultsVC = LiveResultsViewController()
         
         //Pass values to LiveResultsVC
@@ -106,7 +125,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         liveResultsVC.options = options
         liveResultsVC.session = session
         liveResultsVC.pollCode = pollCode
-        liveResultsVC.isOldPoll = (oldPoll != nil)
         liveResultsVC.newQuestionDelegate = newQuestionDelegate
         
         // Emit socket messsage to start question
@@ -120,9 +138,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
-    // MARK: - SliderView methods
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+    func inFollowUpQuestion() {
+        isFollowUpQuestion = true
     }
     
     func scrollToIndex(index: Int) {
@@ -130,9 +147,20 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
+    // MARK: - SLIDERVIEW
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+    }
+    
     // MARK: - Setup/layout views
     func setupViews() {
-        questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], controller: self)
+        questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
         view.addSubview(questionOptionsView)
         
         let layout = UICollectionViewFlowLayout()
@@ -162,8 +190,12 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.snp.updateConstraints { make in
             make.width.equalToSuperview()
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
         }
     }
 

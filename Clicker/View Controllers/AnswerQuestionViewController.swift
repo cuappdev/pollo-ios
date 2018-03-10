@@ -102,7 +102,11 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.width.equalTo(answerRecordedLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top).offset(-18)
+            }
         }
     }
     
@@ -134,9 +138,10 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
 
         // Submit answer through socket
         let answer: [String:Any] = [
-            "deviceId": UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString,
+            "deviceId": deviceId,
             "question": question.id,
-            "data": intToMCOption(index)
+            "choice": intToMCOption(index),
+            "text": question.options[index]
         ]
         session.socket.emit("server/question/tally", with: [answer])
         // Show answerRecorded label

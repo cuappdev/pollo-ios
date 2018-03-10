@@ -25,17 +25,7 @@ extension UIViewController {
     
     func decodeObjForKey(key: String) -> Any {
         let decodedData = UserDefaults.standard.value(forKey: key) as! Data
-        return NSKeyedUnarchiver.unarchiveObject(with: decodedData)
-    }
-    
-    // Sending arrays through requests
-    func requestJSON(route: String, method: HTTPMethod, parameters: Parameters, completion: @escaping (_ response: [String:Any]) -> Void) {
-        Alamofire.request(route, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON()
-            .done { json in
-                completion(json as! [String:Any])
-            }.catch { error -> Void in
-                print(error)
-            }
+        return NSKeyedUnarchiver.unarchiveObject(with: decodedData)!
     }
     
     func createAlert(title: String, message: String) -> UIAlertController {

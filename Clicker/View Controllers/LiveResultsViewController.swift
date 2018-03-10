@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SwiftyJSON
 import Presentr
 
 protocol NewQuestionDelegate {
@@ -20,7 +21,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var pollCode: String!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
-    var isOldPoll: Bool!
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -59,7 +59,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         let endSessionVC = EndSessionViewController()
-        endSessionVC.isOldPoll = isOldPoll
         endSessionVC.dismissController = self
         endSessionVC.session = self.session
         customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
@@ -77,9 +76,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func shareResults() {
         // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
-        // Cannot Edit Poll anymore
+        // Update views
+        shareResultsButton.alpha = 0
+        shareResultsButton.isUserInteractionEnabled = false
         editPollButton.alpha = 0
         editPollButton.isUserInteractionEnabled = false
+        liveResultsLabel.text = "Final Results"
         timer.invalidate()
     }
     
@@ -130,23 +132,26 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = options[indexPath.row]
-        if let currState = currentState {
-            let mcOption: String = intToMCOption(indexPath.row)
-            if let numSelected = currState.results[mcOption] as? Int {
-                print("nonzero width")
-                cell.numberLabel.text = "\(numSelected)"
-                let width = CGFloat(Float(numSelected) / totalNumResults)
-                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
-            } else {
-                print("zero width")
-                cell.numberLabel.text = "0"
-                cell.highlightWidthConstraint.update(offset: 0)
-            }
-            UIView.animate(withDuration: 0.5, animations: {
-                cell.layoutIfNeeded()
-            })
-        }
         cell.selectionStyle = .none
+        
+        guard let currState = currentState else {
+            return cell
+        }
+        
+        let mcOption: String = intToMCOption(indexPath.row)
+        guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+            return cell
+        }
+        cell.numberLabel.text = "\(count)"
+        if (totalNumResults > 0) {
+            let width = CGFloat(Float(count) / totalNumResults)
+            cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
+        } else {
+            cell.highlightWidthConstraint.update(offset: 0)
+        }
+        UIView.animate(withDuration: 0.5, animations: {
+            cell.layoutIfNeeded()
+        })
         return cell
     }
     
@@ -185,6 +190,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         editPollButton = UIButton()
         editPollButton.setTitle("Edit Poll", for: .normal)
         editPollButton.setTitleColor(.clickerBlue, for: .normal)
+        editPollButton.titleLabel?.font = UIFont._16MediumFont
         editPollButton.backgroundColor = .clear
         editPollButton.addTarget(self, action: #selector(editPoll), for: .touchUpInside)
         headerView.addSubview(editPollButton)
@@ -200,6 +206,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView = UITableView()
         optionResultsTableView.backgroundColor = .clear
         optionResultsTableView.separatorStyle = .none
+        optionResultsTableView.showsVerticalScrollIndicator = false
         optionResultsTableView.delegate = self
         optionResultsTableView.dataSource = self
         optionResultsTableView.clipsToBounds = true
@@ -268,7 +275,11 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.width.equalTo(questionLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-18)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top).offset(-18)
+            }
         }
         
         shareResultsButton.snp.makeConstraints { make in
@@ -280,7 +291,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(newQuestionButton.snp.width)
-            make.bottom.equalTo(shareResultsButton.snp.top).offset(-8)
+            make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
@@ -322,12 +333,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
-        totalNumResults = 0
-        for value in currentState.results.values {
-            if let v = value as? Int {
-                totalNumResults += Float(v)
-            }
-        }
+        totalNumResults = Float(currentState.getCountFromResults())
         optionResultsTableView.reloadData()
     }
     

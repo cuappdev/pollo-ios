@@ -28,22 +28,10 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
-        for value in currentState.results.values {
-            if let v = value as? Int {
-                totalNumResults += Float(v)
-            }
-        }
+        totalNumResults = Float(currentState.getCountFromResults())
         
-        setupNavBar()
         setupViews()
         setupConstraints()
-    }
-    
-    // MARK: - SESSION
-    @objc func endSession() { }
-    
-    @objc func closePoll() {
-        print("close poll")
     }
     
     // MARK - TABLEVIEW
@@ -52,16 +40,15 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
-        print("setting option to: \(question.options[indexPath.row])")
         let mcOption: String = intToMCOption(indexPath.row)
-        if let numSelected = currentState.results[mcOption] as? Int {
-            print("nonzero width")
-            cell.numberLabel.text = "\(numSelected)"
-            let width = CGFloat(Float(numSelected) / totalNumResults)
+        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+            return cell
+        }
+        cell.numberLabel.text = "\(count)"
+        if (totalNumResults > 0) {
+            let width = CGFloat(Float(count) / totalNumResults)
             cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
         } else {
-            print("zero width")
-            cell.numberLabel.text = "0"
             cell.highlightWidthConstraint.update(offset: 0)
         }
         cell.layoutIfNeeded()
@@ -108,32 +95,14 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         optionResultsTableView.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
-            make.bottom.equalToSuperview().offset(-5)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top).offset(-5)
+            }
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
         }
-    }
-    
-    func setupNavBar() {
-        let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode)")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
-        codeLabel.textColor = .white
-        codeLabel.backgroundColor = .clear
-        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
-        self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "End Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
     // MARK: - KEYBOARD

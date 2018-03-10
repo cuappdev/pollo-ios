@@ -45,7 +45,8 @@ struct CreatePoll: ClickerQuark {
     var parameters: Parameters {
         return [
             "name": name,
-            "code": pollCode
+            "code": pollCode,
+            "deviceId": deviceId
         ]
     }
 
@@ -191,7 +192,8 @@ struct UpdatePoll: ClickerQuark {
     
     var parameters: Parameters {
         return [
-            "name": name
+            "name": name,
+            "deviceId": deviceId
         ]
     }
 

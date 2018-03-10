@@ -9,18 +9,24 @@
 import SnapKit
 import UIKit
 
-protocol StartPollDelegate {
-    func startPoll(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
+protocol StartQuestionDelegate {
+    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
+}
+
+protocol FollowUpQuestionDelegate {
+    func inFollowUpQuestion()
 }
 
 class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var startPollDelegate: StartPollDelegate!
+    var startQuestionDelegate: StartQuestionDelegate!
+    var followUpQuestionDelegate: FollowUpQuestionDelegate!
     var session: Session!
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
-    var startPollButton: UIButton!
-    var pollButtonBottomConstraint: Constraint!
+    var startQuestionButton: UIButton!
+    var grayView: UIView!
+    var grayViewBottomConstraint: Constraint!
     var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
     
@@ -32,29 +38,32 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
         
-        // Initialize key, values for optionsDict
-        for i in 0...numOptions - 1 {
-            optionsDict[i] = ""
-        }
-        
+        clearOptionsDict()
         setupViews()
         layoutSubviews()
     }
     
     //MARK: - POLLING
-    @objc func startPoll() {
+    @objc func startQuestion() {
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
         if let question = questionTextField.text {
-            startPollDelegate.startPoll(question: question, options: options, newQuestionDelegate: self)
+            startQuestionDelegate.startQuestion(question: question, options: options, newQuestionDelegate: self)
         } else {
-            startPollDelegate.startPoll(question: "", options: options, newQuestionDelegate: self)
+            startQuestionDelegate.startQuestion(question: "", options: options, newQuestionDelegate: self)
+        }
+    }
+    
+    func clearOptionsDict() {
+        optionsDict.removeAll()
+        for i in 0...numOptions - 1 {
+            optionsDict[i] = ""
         }
     }
     
     //MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row == numOptions) {
+        if (indexPath.row == numOptions && numOptions <= 25) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
@@ -77,19 +86,28 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.row == numOptions) {
+        if (indexPath.row == numOptions && numOptions <= 25) {
             numOptions += 1
             optionsDict[numOptions - 1] = ""
-            tableView.beginUpdates()
-            tableView.insertRows(at: [indexPath], with: .none)
-            tableView.reloadData()
-            tableView.endUpdates()
-            
+            if (numOptions < 26) {
+                tableView.beginUpdates()
+                tableView.insertRows(at: [indexPath], with: .none)
+                tableView.reloadData()
+                tableView.endUpdates()
+                let bottomIndexPath: IndexPath
+                bottomIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
+                tableView.scrollToRow(at: bottomIndexPath, at: .bottom, animated: false)
+            } else {
+                tableView.reloadData()
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numOptions + 1 // 1 extra for the "Add More" cell plus 5 empty cells
+        if (numOptions <= 25) {
+            return numOptions + 1
+        }
+        return numOptions
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -117,22 +135,26 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.separatorStyle = .none
         addSubview(optionsTableView)
         
-        startPollButton = UIButton()
-        startPollButton.backgroundColor = .clickerBlue
-        startPollButton.layer.cornerRadius = 8
-        startPollButton.setTitle("Start Poll", for: .normal)
-        startPollButton.setTitleColor(.white, for: .normal)
-        startPollButton.titleLabel?.font = UIFont._18SemiboldFont
-        startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
-        addSubview(startPollButton)
-        bringSubview(toFront: startPollButton)
+        grayView = UIView()
+        grayView.backgroundColor = .clickerBackground
+        addSubview(grayView)
+        bringSubview(toFront: grayView)
         
-        startPollButton.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
+        startQuestionButton = UIButton()
+        startQuestionButton.backgroundColor = .clickerBlue
+        startQuestionButton.layer.cornerRadius = 8
+        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitleColor(.white, for: .normal)
+        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
+        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
+        grayView.addSubview(startQuestionButton)
+        
+        grayView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(91)
             make.centerX.equalToSuperview()
-            self.pollButtonBottomConstraint = make.bottom.equalTo(0).constraint
+            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
         }
-        pollButtonBottomConstraint.update(offset: -18)
         layoutIfNeeded()
     }
     
@@ -148,18 +170,14 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-(startPollButton.frame.height + 23))
+            make.bottom.equalToSuperview().offset(-(startQuestionButton.frame.height + 23))
             make.centerX.equalToSuperview()
         }
         
-        startPollButton.snp.updateConstraints { make in
+        startQuestionButton.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            make.centerX.equalToSuperview()
+            make.center.equalToSuperview()
         }
-    }
-    
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - MCOptionDelegate
@@ -190,7 +208,10 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     // MARK: - NewQuestionDelegate
     
     func creatingNewQuestion() {
+        // Notify that we are in a Follow Up question
+        followUpQuestionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
+        clearOptionsDict()
         optionsTableView.reloadData()
     }
     
@@ -198,35 +219,41 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
-            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
-            {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0)
-            }
-            else
-            {
+            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
+            } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
             
-            pollButtonBottomConstraint.update(offset: (keyboardSize.height + 18) * -1)
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
+            } else {
+                grayViewBottomConstraint.update(offset: -keyboardSize.height)
+            }
             layoutIfNeeded()
         }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            pollButtonBottomConstraint.update(offset: -18)
+            grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
