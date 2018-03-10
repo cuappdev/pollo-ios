@@ -32,12 +32,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         setupConstraints()
         
         let appDelegate = AppDelegate()
-        if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-            if significantEvents > 20 {
-                appDelegate.requestReview()
-                UserDefaults.standard.set(0, forKey:"significantEvents")
-            }
+        let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+        if significantEvents > 20 {
+            appDelegate.requestReview()
+            UserDefaults.standard.set(0, forKey:"significantEvents")
         }
+        
     }
     
     // MARK: - KEYBOARD
@@ -217,10 +217,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             let createQuestionVC = CreateQuestionViewController()
             createQuestionVC.pollCode = code
             self.navigationController?.pushViewController(createQuestionVC, animated: true)
+            // Log significant event
             Answers.logCustomEvent(withName: "Created New Poll", customAttributes: nil)
-            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
-            }
+            let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+            UserDefaults.standard.set(significantEvents + 5, forKey:"significantEvents")
         }
     }
     
@@ -249,10 +249,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
+                // Log significant event
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
-                if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                    UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
-                }
+                let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
+                UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)

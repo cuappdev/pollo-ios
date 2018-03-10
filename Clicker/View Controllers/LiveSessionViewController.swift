@@ -81,7 +81,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     func saveUserPoll(poll: Poll) {
         print("SAVING POLL")
-        guard let userSavedPolls = UserDefaults.standard.value(forKey: "userSavedPolls") else {
+        if UserDefaults.standard.value(forKey: "userSavedPolls") == nil {
             print("CREATING FIRST USER SAVED POLLS")
             encodeObjForKey(obj: [poll], key: "userSavedPolls")
             return
@@ -143,7 +143,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
         let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(poll.code ?? "------")")
+        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(poll.code)")
         codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
         codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
         codeLabel.attributedText = codeAttributedString

@@ -25,7 +25,7 @@ extension UIViewController {
     
     func decodeObjForKey(key: String) -> Any {
         let decodedData = UserDefaults.standard.value(forKey: key) as! Data
-        return NSKeyedUnarchiver.unarchiveObject(with: decodedData)
+        return NSKeyedUnarchiver.unarchiveObject(with: decodedData)!
     }
     
     func createAlert(title: String, message: String) -> UIAlertController {
