@@ -90,14 +90,15 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         if (endedQuestion) {
             // START NEW QUESTION
             
-            // Emit socket messsage to end question
-            session.socket.emit("server/question/end", with: [])
             // Tell delegate that we want to create a new question
             newQuestionDelegate.creatingNewQuestion()
             // Pop to CreateQuestionVC
             self.navigationController?.popViewController(animated: true)
         } else {
             // END QUESTION
+            
+            // Emit socket messsage to end question
+            session.socket.emit("server/question/end", with: [])
             
             questionButton.setTitle("New Question", for: .normal)
             shareResultsButton.alpha = 1
