@@ -10,6 +10,7 @@ import UIKit
 import Fabric
 import Crashlytics
 import StoreKit
+import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,7 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: HomeViewController())
         navigationController.navigationBar.barStyle = .black
         window?.rootViewController = navigationController
-                
+        
+        let siren = Siren.shared
+        siren.alertType = .force
+        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
+        siren.checkVersion(checkType: .immediately)
+        
         Fabric.with([Crashlytics.self])
         return true
     }

@@ -8,6 +8,7 @@ target 'Clicker' do
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'Presentr'
+  pod 'Siren'
   pod 'SnapKit'
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
