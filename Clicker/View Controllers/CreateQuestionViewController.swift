@@ -98,7 +98,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             }.catch { error -> Void in
                 print(error)
                 return
-        }
+            }
     }
     
     // Start a created poll
