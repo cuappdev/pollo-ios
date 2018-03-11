@@ -21,6 +21,11 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var pollCode: String!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
+    var timer: Timer!
+    var elapsedSeconds: Int = 0
+    var endedQuestion: Bool = false
+    
+    
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -28,13 +33,11 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var liveResultsLabel: UILabel!
     var timerLabel: UILabel!
     var editPollButton: UIButton!
-    var timer: Timer!
-    var elapsedSeconds: Int = 0
     
     var questionLabel: UILabel!
     var optionResultsTableView: UITableView!
     var shareResultsButton: UIButton!
-    var newQuestionButton: UIButton!
+    var questionButton: UIButton!
     
     var question: String!
     var options: [String]!
@@ -79,20 +82,31 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         // Update views
         shareResultsButton.alpha = 0
         shareResultsButton.isUserInteractionEnabled = false
-        editPollButton.alpha = 0
-        editPollButton.isUserInteractionEnabled = false
-        liveResultsLabel.text = "Final Results"
         timer.invalidate()
     }
     
-    // Create a followup question
-    @objc func createNewQuestion() {
-        // Emit socket messsage to end question
-        session.socket.emit("server/question/end", with: [])
-        // Tell delegate that we want to create a new question
-        newQuestionDelegate.creatingNewQuestion()
-        // Pop to CreateQuestionVC
-        self.navigationController?.popViewController(animated: true)
+    // Either end a question or start a new question
+    @objc func questionBtnClicked() {
+        if (endedQuestion) {
+            // START NEW QUESTION
+            
+            // Emit socket messsage to end question
+            session.socket.emit("server/question/end", with: [])
+            // Tell delegate that we want to create a new question
+            newQuestionDelegate.creatingNewQuestion()
+            // Pop to CreateQuestionVC
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            // END QUESTION
+            
+            questionButton.setTitle("New Question", for: .normal)
+            shareResultsButton.alpha = 1
+            shareResultsButton.isUserInteractionEnabled = true
+            editPollButton.alpha = 0
+            editPollButton.isUserInteractionEnabled = false
+            liveResultsLabel.text = "Final Results"
+            endedQuestion = true
+        }
     }
     
     // Start timer
@@ -219,17 +233,19 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         shareResultsButton.setTitle("Share Results", for: .normal)
         shareResultsButton.setTitleColor(.clickerBlue, for: .normal)
         shareResultsButton.addTarget(self, action: #selector(shareResults), for: .touchUpInside)
+        shareResultsButton.alpha = 0
+        shareResultsButton.isUserInteractionEnabled = false
         view.addSubview(shareResultsButton)
         
-        newQuestionButton = UIButton()
-        newQuestionButton.setTitle("New Question", for: .normal)
-        newQuestionButton.setTitleColor(.white, for: .normal)
-        newQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
-        newQuestionButton.backgroundColor = .clickerBlue
-        newQuestionButton.layer.cornerRadius = 8
-        newQuestionButton.addTarget(self, action: #selector(createNewQuestion), for: .touchUpInside)
-        view.addSubview(newQuestionButton)
-        view.bringSubview(toFront: newQuestionButton)
+        questionButton = UIButton()
+        questionButton.setTitle("End Question", for: .normal)
+        questionButton.setTitleColor(.white, for: .normal)
+        questionButton.titleLabel?.font = UIFont._18SemiboldFont
+        questionButton.backgroundColor = .clickerBlue
+        questionButton.layer.cornerRadius = 8
+        questionButton.addTarget(self, action: #selector(questionBtnClicked), for: .touchUpInside)
+        view.addSubview(questionButton)
+        view.bringSubview(toFront: questionButton)
         
     }
     
@@ -271,7 +287,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.top.equalTo(headerView.snp.bottom).offset(18)
         }
         
-        newQuestionButton.snp.makeConstraints { make in
+        questionButton.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
@@ -283,14 +299,14 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         shareResultsButton.snp.makeConstraints { make in
-            make.width.equalTo(newQuestionButton.snp.width)
+            make.width.equalTo(questionButton.snp.width)
             make.height.equalTo(22)
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(newQuestionButton.snp.top).offset(-24)
+            make.bottom.equalTo(questionButton.snp.top).offset(-24)
         }
         
         optionResultsTableView.snp.makeConstraints { make in
-            make.width.equalTo(newQuestionButton.snp.width)
+            make.width.equalTo(questionButton.snp.width)
             make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
