@@ -162,6 +162,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return (indexPath.section == 2)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            // Delete admin saved poll
+            var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
+            let deletedPoll = polls[indexPath.row]
+            polls.remove(at: indexPath.row)
+            encodeObjForKey(obj: polls, key: "adminSavedPolls")
+            DeletePoll(id: deletedPoll.id).make()
+                .catch { error -> Void in
+                    print("error deleting poll")
+                }
+            tableView.reloadData()
+        }
+    }
+    
     // MARK: - SESSIONS / POLLS
     
     // Refresh control was pulled
