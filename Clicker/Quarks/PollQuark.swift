@@ -211,3 +211,19 @@ struct UpdatePoll: ClickerQuark {
         }
     }
 }
+
+struct DeletePoll: ClickerQuark {
+    
+    typealias ResponseType = Void
+    
+    let id: Int
+    
+    var route: String {
+        return "/polls/\(id)/\(deviceId)"
+    }
+    
+    let method: HTTPMethod = .delete
+    
+    func process(element: Element) {
+    }
+}
