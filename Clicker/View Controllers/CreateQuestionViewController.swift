@@ -10,7 +10,7 @@ import UIKit
 import Presentr
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, StartQuestionDelegate, FollowUpQuestionDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, StartMCQuestionDelegate, StartFRQuestionDelegate, FollowUpQuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -42,12 +42,12 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
-            cell.startQuestionDelegate = self
+            cell.startMCQuestionDelegate = self
             cell.followUpQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
-        cell.startQuestionDelegate = self
+        cell.startFRQuestionDelegate = self
         cell.followUpQuestionDelegate = self
         return cell
     }
@@ -119,7 +119,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - DELEGATES
     
-    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
         let liveResultsVC = LiveResultsViewController()
         
         //Pass values to LiveResultsVC
@@ -130,14 +130,32 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         liveResultsVC.newQuestionDelegate = newQuestionDelegate
         
         // Emit socket messsage to start question
-        var question: [String:Any] = [
+        let question: [String:Any] = [
             "text": question,
             "type": "MULTIPLE_CHOICE",
             "options": options
         ]
-        if options.count == 0{
-            question["type"] = "FREE_RESPONSE"
-        }
+        session.socket.emit("server/question/start", with: [question])
+        
+        navigationController?.pushViewController(liveResultsVC, animated: true)
+    }
+    
+    func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate) {
+        let liveResultsVC = LiveResultsViewController()
+        
+        //Pass values to LiveResultsVC
+        liveResultsVC.question = question
+        liveResultsVC.options = []
+        liveResultsVC.session = session
+        liveResultsVC.pollCode = pollCode
+        liveResultsVC.newQuestionDelegate = newQuestionDelegate
+        
+        // Emit socket messsage to start question
+        let question: [String:Any] = [
+            "text": question,
+            "type": "FREE_RESPONSE",
+            "options": []
+        ]
         session.socket.emit("server/question/start", with: [question])
         
         navigationController?.pushViewController(liveResultsVC, animated: true)
