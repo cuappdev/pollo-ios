@@ -1,8 +1,8 @@
 //
-//  MCSectionCell.swift
+//  FRSectionCell.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 2/22/18.
+//  Created by Jack Schluger on 3/15/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
  
