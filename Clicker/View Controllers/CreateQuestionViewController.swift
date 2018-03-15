@@ -47,6 +47,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
+        cell.startQuestionDelegate = self
+        cell.followUpQuestionDelegate = self
         return cell
     }
     
@@ -128,11 +130,14 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         liveResultsVC.newQuestionDelegate = newQuestionDelegate
         
         // Emit socket messsage to start question
-        let question: [String:Any] = [
+        var question: [String:Any] = [
             "text": question,
             "type": "MULTIPLE_CHOICE",
             "options": options
         ]
+        if options.count == 0{
+            question["type"] = "FREE_RESPONSE"
+        }
         session.socket.emit("server/question/start", with: [question])
         
         navigationController?.pushViewController(liveResultsVC, animated: true)

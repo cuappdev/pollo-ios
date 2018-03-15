@@ -1,5 +1,5 @@
 //
-//  FRSectionCell.swift
+//  MCSectionCell.swift
 //  Clicker
 //
 //  Created by Kevin Chan on 2/22/18.
@@ -9,35 +9,133 @@
 import SnapKit
 import UIKit
 
-class FRSectionCell: UICollectionViewCell {
+class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDelegate {
     
-    var comingSoonLabel: UILabel!
+    var session: Session!
+    var questionTextField: UITextField!
+    var startQuestionButton: UIButton!
+    var grayView: UIView!
+    var grayViewBottomConstraint: Constraint!
+    var startQuestionDelegate: StartQuestionDelegate!
+    var followUpQuestionDelegate: FollowUpQuestionDelegate!
+
     
+    //MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
+        // Add Keyboard Handlers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
         
-        comingSoonLabel = UILabel()
-        comingSoonLabel.text = "Coming Soon!"
-        comingSoonLabel.textColor = .clickerMediumGray
-        comingSoonLabel.textAlignment = .center
-        comingSoonLabel.font = UIFont._18MediumFont
-        addSubview(comingSoonLabel)
-        
+        setupViews()
         layoutSubviews()
+    }
+    
+    //MARK: - POLLING
+    @objc func startQuestion() {
+        if let question = questionTextField.text {
+            startQuestionDelegate.startQuestion(question: question, options: [], newQuestionDelegate: self)
+        } else {
+            startQuestionDelegate.startQuestion(question: "", options: [], newQuestionDelegate: self)
+            }
+    }
+    
+    //MARK: - LAYOUT
+    func setupViews() {
+        questionTextField = UITextField()
+        questionTextField.placeholder = "Add Question"
+        questionTextField.font = UIFont.systemFont(ofSize: 21)
+        questionTextField.backgroundColor = .white
+        questionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+        questionTextField.returnKeyType = UIReturnKeyType.done
+        questionTextField.delegate = self
+        addSubview(questionTextField)
+        
+        grayView = UIView()
+        grayView.backgroundColor = .clickerBackground
+        addSubview(grayView)
+        bringSubview(toFront: grayView)
+        
+        startQuestionButton = UIButton()
+        startQuestionButton.backgroundColor = .clickerBlue
+        startQuestionButton.layer.cornerRadius = 8
+        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitleColor(.white, for: .normal)
+        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
+        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
+        grayView.addSubview(startQuestionButton)
+        
+        grayView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(91)
+            make.centerX.equalToSuperview()
+            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
+        }
+        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        comingSoonLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: 200, height: 100))
+        questionTextField.snp.updateConstraints{ make in
+            make.size.equalTo(CGSize(width: frame.width, height: 61))
+            make.top.equalToSuperview()
+            make.left.equalToSuperview()
+        }
+        
+        startQuestionButton.snp.updateConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.90)
+            make.height.equalTo(55)
             make.center.equalToSuperview()
         }
+    }
+    
+    
+    // MARK: - NewQuestionDelegate
+    
+    func creatingNewQuestion() {
+        // Notify that we are in a Follow Up question
+        //followUpQuestionDelegate.inFollowUpQuestion()
+        questionTextField.text = ""
+    }
+    
+    // MARK: - KEYBOARD
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets:UIEdgeInsets!
+            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
+            } else {
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
+            }
+            
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
+            } else {
+                grayViewBottomConstraint.update(offset: -keyboardSize.height)
+            }
+            layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            grayViewBottomConstraint.update(offset: 0)
+            layoutIfNeeded()
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
 
