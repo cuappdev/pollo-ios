@@ -5,9 +5,13 @@
 //  Created by Kevin Chan on 2/22/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-
+ 
 import SnapKit
 import UIKit
+
+protocol StartFRQuestionDelegate {
+    func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate)
+}
 
 class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDelegate {
     
@@ -16,9 +20,8 @@ class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDeleg
     var startQuestionButton: UIButton!
     var grayView: UIView!
     var grayViewBottomConstraint: Constraint!
-    var startQuestionDelegate: StartQuestionDelegate!
+    var startFRQuestionDelegate: StartFRQuestionDelegate!
     var followUpQuestionDelegate: FollowUpQuestionDelegate!
-
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -35,9 +38,9 @@ class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDeleg
     //MARK: - POLLING
     @objc func startQuestion() {
         if let question = questionTextField.text {
-            startQuestionDelegate.startQuestion(question: question, options: [], newQuestionDelegate: self)
+            startFRQuestionDelegate.startFRQuestion(question: question, newQuestionDelegate: self)
         } else {
-            startQuestionDelegate.startQuestion(question: "", options: [], newQuestionDelegate: self)
+            startFRQuestionDelegate.startFRQuestion(question: "", newQuestionDelegate: self)
             }
     }
     
@@ -103,13 +106,6 @@ class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDeleg
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let contentInsets:UIEdgeInsets!
-            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
-            } else {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
-            }
-            
             if #available(iOS 11.0, *) {
                 let window = UIApplication.shared.keyWindow
                 let safeBottomPadding = window?.safeAreaInsets.bottom
