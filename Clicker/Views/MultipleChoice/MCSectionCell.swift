@@ -9,8 +9,8 @@
 import SnapKit
 import UIKit
 
-protocol StartQuestionDelegate {
-    func startQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
+protocol StartMCQuestionDelegate {
+    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
 }
 
 protocol FollowUpQuestionDelegate {
@@ -19,7 +19,7 @@ protocol FollowUpQuestionDelegate {
 
 class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var startQuestionDelegate: StartQuestionDelegate!
+    var startMCQuestionDelegate: StartMCQuestionDelegate!
     var followUpQuestionDelegate: FollowUpQuestionDelegate!
     var session: Session!
     var questionTextField: UITextField!
@@ -48,9 +48,9 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
         if let question = questionTextField.text {
-            startQuestionDelegate.startQuestion(question: question, options: options, newQuestionDelegate: self)
+            startMCQuestionDelegate.startMCQuestion(question: question, options: options, newQuestionDelegate: self)
         } else {
-            startQuestionDelegate.startQuestion(question: "", options: options, newQuestionDelegate: self)
+            startMCQuestionDelegate.startMCQuestion(question: "", options: options, newQuestionDelegate: self)
         }
     }
     
