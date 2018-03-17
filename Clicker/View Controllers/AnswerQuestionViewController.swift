@@ -34,9 +34,45 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
-        setupNavBar()
         setupViews()
         setupConstraints()
+    }
+    
+    // MARK: - SUBMIT
+    @objc func submitAnswer() {
+        if (question.options.count == 0 && freeResponseTextField.text != nil && freeResponseTextField.text != "") {
+            // FR QUESTION
+            // SHOW ANSWER RECORDED LABEL
+            answerRecordedLabel.alpha = 1
+            submitAnswerButton.backgroundColor = .clickerLightGray
+            
+            // TODO EMIT SOCKET ANSWER
+        }
+        
+        guard let index = selectedOptionIndex else { return }
+        
+        // SUBMIT ANSWER
+        let answer: [String:Any] = [
+            "deviceId": deviceId,
+            "question": question.id,
+            "choice": intToMCOption(index),
+            "text": question.options[index]
+        ]
+        session.socket.emit("server/question/tally", with: [answer])
+        // SHOW ANSWER RECORDED LABEL
+        answerRecordedLabel.alpha = 1
+        // RESET
+        selectedOptionIndex = nil
+        submitAnswerButton.backgroundColor = .clickerLightGray
+    }
+    
+    // MARK: - TEXTFIELD
+    @objc func beganTypingResponse(_ textField: UITextField) {
+        if (textField.text != nil && textField.text != "") {
+            submitAnswerButton.backgroundColor = .clickerBlue
+        } else {
+            submitAnswerButton.backgroundColor = .clickerLightGray
+        }
     }
     
     // MARK: - LAYOUT
@@ -68,6 +104,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             freeResponseTextField.placeholder = "Type response..."
             freeResponseTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
             freeResponseTextField.backgroundColor = .white
+            freeResponseTextField.addTarget(self, action: #selector(beganTypingResponse), for: .editingChanged)
             view.addSubview(freeResponseTextField)
         }
         
@@ -132,48 +169,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
     }
-    
-    func setupNavBar() {
-        let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode ?? "------")")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
-        codeLabel.textColor = .white
-        codeLabel.backgroundColor = .clear
-        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
-        self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "Exit Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-    }
-    
-    // MARK: - SUBMIT
-    @objc func submitAnswer() {
-        guard let index = selectedOptionIndex else { return }
-
-        // SUBMIT ANSWER
-        let answer: [String:Any] = [
-            "deviceId": deviceId,
-            "question": question.id,
-            "choice": intToMCOption(index),
-            "text": question.options[index]
-        ]
-        session.socket.emit("server/question/tally", with: [answer])
-        // SHOW ANSWER RECORDED LABEL
-        answerRecordedLabel.alpha = 1
-        // RESET
-        selectedOptionIndex = nil
-        submitAnswerButton.backgroundColor = .clickerLightGray
-    }
-    
+ 
     // MARK: - KEYBOARD
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
