@@ -28,10 +28,6 @@ class ResultMCCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clickerBackground
-//        contentView.layer.cornerRadius = 8
-//        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-//        contentView.layer.borderWidth = 0.5
-//        clipsToBounds = true
         
         setupViews()
         layoutSubviews()
