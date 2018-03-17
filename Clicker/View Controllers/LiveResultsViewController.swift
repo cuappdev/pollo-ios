@@ -61,9 +61,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     // End session
     @objc func endSession() {
-        // END QUESTION
-        session.socket.emit("server/question/end", with: [])
-        
         if (!isOldPoll) {
             let presenter: Presentr = Presentr(presentationType: .bottomHalf)
             presenter.roundCorners = false
@@ -74,6 +71,9 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             endSessionVC.session = self.session
             customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
         } else {
+            // END QUESTION
+            session.socket.emit("server/question/end", with: [])
+            
             let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
             endPoll(pollId: currentPoll.id, save: true)
             navigationController?.popToRootViewController(animated: true)
@@ -183,8 +183,9 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             }
             cell.numberLabel.text = "\(count)"
             if (totalNumResults > 0) {
-                let width = CGFloat(Float(count) / totalNumResults)
-                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
+                let percentWidth = CGFloat(Float(count) / totalNumResults)
+                let totalWidth = cell.frame.width - 36
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
             } else {
                 cell.highlightWidthConstraint.update(offset: 0)
             }
@@ -198,6 +199,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         } else { // FREE RESPONSE
             let cell = tableView.dequeueReusableCell(withIdentifier: "resultFRCellID", for: indexPath) as! ResultFRCell
             cell.freeResponseLabel.text = freeResponses[indexPath.row]
+            cell.selectionStyle = .none
             return cell
         }
     }
@@ -217,7 +219,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             // CALCULATE CELL HEIGHT FOR FR
             let text = freeResponses[indexPath.row]
             let frameForMessage = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width, height: 2000) , options: NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin), attributes: [NSAttributedStringKey.font: UIFont._16RegularFont], context: nil)
-            let height = frameForMessage.height + 20
+            let height = frameForMessage.height + 40
             return height
         }
     }
@@ -233,7 +235,11 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
         totalNumResults = Float(currentState.getTotalCount()) // FOR MC QUESTIONS
-        freeResponses = currentState.getResponses() // FOR FR QUESTIONS
+        let updatedResponses = currentState.getResponses() // FOR FR QUESTIONS
+        let newResponse = updatedResponses.first { (res) -> Bool in !freeResponses.contains(res) }
+        if let response = newResponse {
+            freeResponses.append(response)
+        }
         resultsTableView.reloadData()
     }
     
@@ -366,7 +372,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         resultsTableView.snp.makeConstraints { make in
-            make.width.equalTo(questionButton.snp.width)
+            make.width.equalToSuperview()
             make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()

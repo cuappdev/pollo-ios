@@ -12,6 +12,7 @@ import SnapKit
 
 class ResultMCCell: UITableViewCell {
     
+    var containerView: UIView!
     var choiceLabel = UILabel()
     var choiceTag: Int! {
         didSet {
@@ -27,10 +28,10 @@ class ResultMCCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clickerBackground
-        contentView.layer.cornerRadius = 8
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-        contentView.layer.borderWidth = 0.5
-        clipsToBounds = true
+//        contentView.layer.cornerRadius = 8
+//        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+//        contentView.layer.borderWidth = 0.5
+//        clipsToBounds = true
         
         setupViews()
         layoutSubviews()
@@ -38,29 +39,37 @@ class ResultMCCell: UITableViewCell {
     
     //MARK: - LAYOUT
     func setupViews() {
+        containerView = UIView()
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 8
+        containerView.layer.borderColor = UIColor.clickerBorder.cgColor
+        containerView.layer.borderWidth = 0.5
+        containerView.clipsToBounds = true
+        addSubview(containerView)
+        
         choiceLabel.textColor = .clickerDarkGray
         choiceLabel.font = UIFont._16SemiboldFont
         choiceLabel.textAlignment = .center
-        addSubview(choiceLabel)
+        containerView.addSubview(choiceLabel)
         
         optionLabel.font = UIFont._16SemiboldFont
         optionLabel.backgroundColor = .clear
-        addSubview(optionLabel)
+        containerView.addSubview(optionLabel)
         
         numberLabel.font = ._16RegularFont
         numberLabel.backgroundColor = .clear
         numberLabel.text = "0"
-        addSubview(numberLabel)
+        containerView.addSubview(numberLabel)
         
         highlightView = UIView()
         highlightView.backgroundColor = .clickerLightBlue
         highlightView.layer.cornerRadius = 8
-        addSubview(highlightView)
-        sendSubview(toBack: highlightView)
+        containerView.addSubview(highlightView)
+        containerView.sendSubview(toBack: highlightView)
         
         highlightView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             self.highlightWidthConstraint = make.width.equalTo(0).constraint
         }
@@ -70,6 +79,13 @@ class ResultMCCell: UITableViewCell {
         super.layoutSubviews()
         
         contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
+        
+        containerView.snp.updateConstraints { make in
+            make.width.equalToSuperview().offset(-36)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-5)
+        }
         
         choiceLabel.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.13)
@@ -93,7 +109,7 @@ class ResultMCCell: UITableViewCell {
         
         highlightView.snp.updateConstraints { make in
             make.top.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview()
             make.left.equalToSuperview()
         }
     }
