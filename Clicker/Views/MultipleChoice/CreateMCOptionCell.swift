@@ -88,7 +88,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
-    // MARK: - MultipleChoiceOptionDelegate
+    // MARK: - MC OPTION DELEGATE
     @objc func deleteOption(){
         mcOptionDelegate.deleteOption(index: choiceTag)
     }

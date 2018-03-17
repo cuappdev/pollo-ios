@@ -48,7 +48,7 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
     }
     
     
-    // MARK: - NewQuestionDelegate
+    // MARK: - NEW QUESTION DELEGATE
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question

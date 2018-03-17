@@ -88,7 +88,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
     }
     
-    // End current session
+    // END SESSION
     @objc func endSession() {
         if (isFollowUpQuestion && oldPoll == nil) {
             // SHOW SAVE SESSION OPTION
@@ -106,15 +106,21 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
                 sess.socket.disconnect()
             }
             let poll = decodeObjForKey(key: "currentPoll") as! Poll
-            EndPoll(id: poll.id, save: false).make()
-                .catch { error -> Void in
-                    print(error)
-            }
+            let save = (oldPoll != nil)
+            endPoll(poll: poll, save: save)
             navigationController?.popViewController(animated: true)
         }
     }
     
-    // Create a poll
+    // END POLL
+    func endPoll(poll: Poll, save: Bool) {
+        EndPoll(id: poll.id, save: save).make()
+            .catch { error -> Void in
+                print(error)
+        }
+    }
+    
+    // CREATE POLL
     func createPoll() {
         let pollCode = UserDefaults.standard.value(forKey: "pollCode") as! String
         CreatePoll(name: "", pollCode: pollCode).make()
@@ -127,7 +133,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             }
     }
     
-    // Start a created poll
+    // START CREATED POLL
     func startCreatedPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
             .done { port -> Void in

@@ -39,10 +39,10 @@ class EndSessionViewController: UIViewController {
     
     // MARK: - SESSION
     @objc func endSession() {
-        // Emit socket messsage to end question
+        // END QUESTION
         session.socket.emit("server/question/end", with: [])
         
-        // End poll and update if necessary
+        // END POLL
         let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
         if (nameSessionTextField.text?.isEmpty ?? true) {
             endPoll(pollId: currentPoll.id, save: false)
@@ -51,7 +51,7 @@ class EndSessionViewController: UIViewController {
             updateSavePoll(pollId: currentPoll.id, name: nameSessionTextField.text!)
         }
         
-        // Return to HomeVC
+        // POP TO HOME VC
         cancel()
         self.dismissController.navigationController?.popToRootViewController(animated: true)
     }
@@ -74,14 +74,14 @@ class EndSessionViewController: UIViewController {
     }
     
     func saveAdminPoll(poll: Poll) {
-        // Check if any adminSavedPolls exist
+        // CHECK FOR ADMIN SAVED POLLS
         if UserDefaults.standard.value(forKey: "adminSavedPolls") == nil {
             encodeObjForKey(obj: [poll], key: "adminSavedPolls")
             return
         }
         
         var polls = decodeObjForKey(key: "adminSavedPolls") as! [Poll]
-        // Check if poll has been saved already
+        // CHECK IF POLL HAS BEEN SAVED BEFORE
         if let pollIndex = getPollIndex(poll: poll) {
             polls[pollIndex] = poll
         } else {
@@ -93,7 +93,7 @@ class EndSessionViewController: UIViewController {
     func endPoll(pollId: Int, save: Bool) {
         EndPoll(id: pollId, save: save).make()
             .done { Void -> Void in
-                // Disconnect from socket
+                // DISCONNECT SOCKET
                 self.session.socket.disconnect()
             }.catch { error -> Void in
                 print(error)

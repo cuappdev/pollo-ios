@@ -133,7 +133,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         
     }
     
-    // MARK: - MCOptionDelegate
+    // MARK: - MC OPTION DELEGATE
     
     func deleteOption(index: Int) {
         numOptions -= 1
@@ -158,7 +158,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         optionsDict[index] = text
     }
     
-    // MARK: - NEWQUESTIONDELEGATE
+    // MARK: - NEW QUESTION DELEGATE
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question
