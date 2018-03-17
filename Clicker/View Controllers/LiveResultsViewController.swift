@@ -36,7 +36,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var editPollButton: UIButton!
     
     var questionLabel: UILabel!
-    var optionResultsTableView: UITableView!
+    var resultsTableView: UITableView!
     var shareResultsButton: UIButton!
     var questionButton: UIButton!
     
@@ -238,15 +238,15 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionResultsTableView = UITableView()
-        optionResultsTableView.backgroundColor = .clear
-        optionResultsTableView.separatorStyle = .none
-        optionResultsTableView.showsVerticalScrollIndicator = false
-        optionResultsTableView.delegate = self
-        optionResultsTableView.dataSource = self
-        optionResultsTableView.clipsToBounds = true
-        optionResultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
-        view.addSubview(optionResultsTableView)
+        resultsTableView = UITableView()
+        resultsTableView.backgroundColor = .clear
+        resultsTableView.separatorStyle = .none
+        resultsTableView.showsVerticalScrollIndicator = false
+        resultsTableView.delegate = self
+        resultsTableView.dataSource = self
+        resultsTableView.clipsToBounds = true
+        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
+        view.addSubview(resultsTableView)
         
         shareResultsButton = UIButton()
         shareResultsButton.backgroundColor = .clickerBackground
@@ -326,7 +326,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.bottom.equalTo(questionButton.snp.top).offset(-24)
         }
         
-        optionResultsTableView.snp.makeConstraints { make in
+        resultsTableView.snp.makeConstraints { make in
             make.width.equalTo(questionButton.snp.width)
             make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
@@ -371,7 +371,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
         totalNumResults = Float(currentState.getCountFromResults())
-        optionResultsTableView.reloadData()
+        resultsTableView.reloadData()
     }
     
     // MARK: - KEYBOARD
