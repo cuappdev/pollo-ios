@@ -37,7 +37,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
         let mcOption: String = intToMCOption(indexPath.row)
@@ -82,7 +82,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView.delegate = self
         optionResultsTableView.dataSource = self
         optionResultsTableView.clipsToBounds = true
-        optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
+        optionResultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
         view.addSubview(optionResultsTableView)
     }
     

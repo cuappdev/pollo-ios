@@ -164,7 +164,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = options[indexPath.row]
         cell.selectionStyle = .none
@@ -245,7 +245,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         optionResultsTableView.delegate = self
         optionResultsTableView.dataSource = self
         optionResultsTableView.clipsToBounds = true
-        optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
+        optionResultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
         view.addSubview(optionResultsTableView)
         
         shareResultsButton = UIButton()
