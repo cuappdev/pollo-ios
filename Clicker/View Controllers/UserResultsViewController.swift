@@ -28,7 +28,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
-        totalNumResults = Float(currentState.getCountFromResults())
+        totalNumResults = Float(currentState.getTotalCount())
         
         setupViews()
         setupConstraints()

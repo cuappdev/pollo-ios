@@ -26,7 +26,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var elapsedSeconds: Int = 0
     var endedQuestion: Bool = false
     
-    
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var headerView: UIView!
@@ -42,6 +41,8 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var question: String!
     var options: [String]!
+    var freeResponses: [String] = [String]()
+    var isMCQuestion: Bool!
     
     var newQuestionDelegate: NewQuestionDelegate!
     
@@ -50,6 +51,8 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         view.backgroundColor = .clickerBackground
         session.delegate = self
+        isMCQuestion = (options.count > 0)
+        
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -162,40 +165,77 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
-        cell.choiceTag = indexPath.row
-        cell.optionLabel.text = options[indexPath.row]
-        cell.selectionStyle = .none
-        
-        guard let currState = currentState else {
+        if (isMCQuestion) { // MULTIPLE CHOICE
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
+            cell.choiceTag = indexPath.row
+            cell.optionLabel.text = options[indexPath.row]
+            cell.selectionStyle = .none
+            
+            guard let currState = currentState else {
+                return cell
+            }
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+                return cell
+            }
+            cell.numberLabel.text = "\(count)"
+            if (totalNumResults > 0) {
+                let width = CGFloat(Float(count) / totalNumResults)
+                cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            
+            // ANIMATE CHANGE
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.layoutIfNeeded()
+            })
+            return cell
+            
+        } else { // FREE RESPONSE
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultFRCellID", for: indexPath) as! ResultFRCell
+            cell.freeResponseLabel.text = freeResponses[indexPath.row]
             return cell
         }
-        
-        let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
-            return cell
-        }
-        cell.numberLabel.text = "\(count)"
-        if (totalNumResults > 0) {
-            let width = CGFloat(Float(count) / totalNumResults)
-            cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
-        } else {
-            cell.highlightWidthConstraint.update(offset: 0)
-        }
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
-        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return options.count
+        if (isMCQuestion) { // MULTIPLE CHOICE
+            return options.count
+        } else { // FREE RESPONSE
+            return freeResponses.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height * 0.08888888889
+        if (isMCQuestion) {
+            return view.frame.height * 0.089
+        } else {
+            // CALCULATE CELL HEIGHT FOR FR
+            let text = freeResponses[indexPath.row]
+            let frameForMessage = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width, height: 2000) , options: NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin), attributes: [NSAttributedStringKey.font: UIFont._16RegularFont], context: nil)
+            let height = frameForMessage.height + 20
+            return height
+        }
     }
     
+    // MARK: - SESSION
+    func sessionConnected() {}
+    func sessionDisconnected() {}
+    func questionStarted(_ question: Question) {}
+    func questionEnded(_ question: Question) {}
+    func receivedResults(_ currentState: CurrentState) {}
+    func savePoll(_ poll: Poll) {}
+    
+    func updatedTally(_ currentState: CurrentState) {
+        self.currentState = currentState
+        totalNumResults = Float(currentState.getTotalCount()) // FOR MC QUESTIONS
+        freeResponses = currentState.getResponses() // FOR FR QUESTIONS
+        resultsTableView.reloadData()
+    }
     
     // MARK - LAYOUT
     func setupViews() {
@@ -244,6 +284,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         resultsTableView.dataSource = self
         resultsTableView.clipsToBounds = true
         resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
+        resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: "resultFRCellID")
         view.addSubview(resultsTableView)
         
         shareResultsButton = UIButton()
@@ -356,20 +397,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
         endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-    }
-    
-    // MARK: - SESSION
-    func sessionConnected() {}
-    func sessionDisconnected() {}
-    func questionStarted(_ question: Question) {}
-    func questionEnded(_ question: Question) {}
-    func receivedResults(_ currentState: CurrentState) {}
-    func savePoll(_ poll: Poll) {}
-    
-    func updatedTally(_ currentState: CurrentState) {
-        self.currentState = currentState
-        totalNumResults = Float(currentState.getCountFromResults())
-        resultsTableView.reloadData()
     }
     
     // MARK: - KEYBOARD

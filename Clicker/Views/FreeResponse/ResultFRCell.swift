@@ -38,7 +38,7 @@ class ResultFRCell: UITableViewCell {
         freeResponseLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.85)
-            make.height.equalTo(20)
+            make.height.equalTo(contentView.snp.height)
         }
         
     }
