@@ -6,4 +6,45 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import SnapKit
+
+class ResultFRCell: UITableViewCell {
+    
+    var freeResponseLabel: UILabel!
+    
+    //MARK: - INITIALIZATION
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .white
+        clipsToBounds = true
+        
+        setupViews()
+        layoutSubviews()
+    }
+    
+    //MARK: - LAYOUT
+    func setupViews() {
+        freeResponseLabel = UILabel()
+        freeResponseLabel.font = UIFont._16RegularFont
+        addSubview(freeResponseLabel)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
+        
+        freeResponseLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.85)
+            make.height.equalTo(20)
+        }
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
