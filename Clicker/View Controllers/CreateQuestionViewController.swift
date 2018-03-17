@@ -16,7 +16,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     var session: Session!
     var pollCode: String!
     var oldPoll: Poll!
-    var currentIndexPath: IndexPath = IndexPath(item: 0, section: 0)
     var isFollowUpQuestion: Bool = false
     var grayViewBottomConstraint: Constraint!
     
@@ -68,14 +67,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: questionCollectionView.frame.width, height: questionCollectionView.frame.height)
-    }
-    
-    // MARK: - SCROLLVIEW
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        for cell in questionCollectionView.visibleCells {
-            currentIndexPath = questionCollectionView.indexPath(for: cell)!
-            break
-        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -153,6 +144,8 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         liveResultsVC.session = session
         liveResultsVC.pollCode = pollCode
         liveResultsVC.isOldPoll = (oldPoll != nil)
+        
+        let currentIndexPath = questionCollectionView.indexPathsForVisibleItems.first!
         
         // MULTIPLE CHOICE
         if (currentIndexPath.item == 0) {

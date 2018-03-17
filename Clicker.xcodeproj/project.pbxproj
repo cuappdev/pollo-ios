@@ -281,11 +281,11 @@
 			children = (
 				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
 				C205588820265822000E9B07 /* CreateQuestionViewController.swift */,
-				C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */,
 				C205588A20265838000E9B07 /* LiveResultsViewController.swift */,
 				C2B3C0C9202AB08B003A9D1C /* EndSessionViewController.swift */,
-				C74587131FA62F8500AB26C6 /* PendingViewController.swift */,
 				C23B3D8B203B5618006AD046 /* LiveSessionViewController.swift */,
+				C74587131FA62F8500AB26C6 /* PendingViewController.swift */,
+				C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */,
 				C224740C203DCD14005D21FF /* UserResultsViewController.swift */,
 			);
 			path = "View Controllers";
