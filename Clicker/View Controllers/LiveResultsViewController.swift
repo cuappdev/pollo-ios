@@ -19,6 +19,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var session: Session!
     var pollCode: String!
+    var isOldPoll: Bool!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
     var timer: Timer!
@@ -57,14 +58,33 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     // End session
     @objc func endSession() {
-        let presenter: Presentr = Presentr(presentationType: .bottomHalf)
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        let endSessionVC = EndSessionViewController()
-        endSessionVC.dismissController = self
-        endSessionVC.session = self.session
-        customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+        // END QUESTION
+        session.socket.emit("server/question/end", with: [])
+        
+        if (!isOldPoll) {
+            let presenter: Presentr = Presentr(presentationType: .bottomHalf)
+            presenter.roundCorners = false
+            presenter.dismissOnSwipe = true
+            presenter.dismissOnSwipeDirection = .bottom
+            let endSessionVC = EndSessionViewController()
+            endSessionVC.dismissController = self
+            endSessionVC.session = self.session
+            customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+        } else {
+            let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+            endPoll(pollId: currentPoll.id, save: true)
+            navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
+    func endPoll(pollId: Int, save: Bool) {
+        EndPoll(id: pollId, save: save).make()
+            .done { Void -> Void in
+                // DISCONNECT SOCKET
+                self.session.socket.disconnect()
+            }.catch { error -> Void in
+                print(error)
+        }
     }
     
     // Edit poll
