@@ -20,9 +20,11 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var poll: Poll!
     var pollCode: String!
     var question: Question!
+    
     var selectedOptionIndex: Int?
-
     var optionTableView: UITableView!
+    
+    var freeResponseTextField: UITextField!
     
     
     //MARK: - INITIALIZATION
@@ -48,15 +50,26 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionTableView = UITableView()
-        optionTableView.delegate = self
-        optionTableView.dataSource = self
-        optionTableView.separatorStyle = .none
-        optionTableView.clipsToBounds = true
-        optionTableView.isScrollEnabled = false
-        optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
-        optionTableView.backgroundColor = .clear
-        view.addSubview(optionTableView)
+        if (question.options.count > 0) {
+            // MC QUESTION
+            optionTableView = UITableView()
+            optionTableView.delegate = self
+            optionTableView.dataSource = self
+            optionTableView.separatorStyle = .none
+            optionTableView.clipsToBounds = true
+            optionTableView.isScrollEnabled = false
+            optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
+            optionTableView.backgroundColor = .clear
+            view.addSubview(optionTableView)
+        } else {
+            // FR QUESTION
+            freeResponseTextField = UITextField()
+            freeResponseTextField.font = UIFont._16RegularFont
+            freeResponseTextField.placeholder = "Type response..."
+            freeResponseTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+            freeResponseTextField.backgroundColor = .white
+            view.addSubview(freeResponseTextField)
+        }
         
         answerRecordedLabel = UILabel()
         answerRecordedLabel.backgroundColor = .clickerBackground
@@ -84,11 +97,21 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(18)
         }
         
-        optionTableView.snp.updateConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.top.equalTo(questionLabel.snp.bottom).offset(18)
-            make.bottom.equalTo(answerRecordedLabel.snp.top).offset(-18)
+        if (question.options.count > 0) {
+            // MC QUESTION
+            optionTableView.snp.updateConstraints { make in
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.top.equalTo(questionLabel.snp.bottom).offset(18)
+                make.bottom.equalTo(answerRecordedLabel.snp.top).offset(-18)
+            }
+        } else {
+            // FR QUESTION
+            freeResponseTextField.snp.makeConstraints { make in
+                make.width.equalToSuperview()
+                make.height.equalTo(54)
+                make.top.equalTo(questionLabel.snp.bottom).offset(18)
+            }
         }
         
         answerRecordedLabel.snp.updateConstraints { make in
@@ -159,7 +182,6 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // return 4
         return question.options.count
     }
     

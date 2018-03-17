@@ -89,17 +89,16 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     // EDIT POLL
     @objc func editPoll() {
-        // Emit socket messsage to end question
+        // END QUESTION
         session.socket.emit("server/question/end", with: [])
-        // Pop to CreateQuestionVC
+        // POP TO CREATE QUESTION VC
         self.navigationController?.popViewController(animated: true)
     }
     
     // SHARE RESULTS TO USERS
     @objc func shareResults() {
-        // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
-        // Update views
+        // UPDATE VIEWS
         shareResultsButton.alpha = 0
         shareResultsButton.isUserInteractionEnabled = false
         timer.invalidate()
@@ -117,7 +116,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             // END QUESTION
             
-            // Emit socket messsage to end question
             session.socket.emit("server/question/end", with: [])
             
             questionButton.setTitle("New Question", for: .normal)
