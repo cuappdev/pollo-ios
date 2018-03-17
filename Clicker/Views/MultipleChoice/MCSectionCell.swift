@@ -158,7 +158,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         optionsDict[index] = text
     }
     
-    // MARK: - NewQuestionDelegate
+    // MARK: - NEWQUESTIONDELEGATE
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question

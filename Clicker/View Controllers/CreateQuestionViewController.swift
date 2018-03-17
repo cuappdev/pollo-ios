@@ -78,10 +78,20 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+    }
+    
     // End current session
     @objc func endSession() {
-        // Allow admin to save session if this is follow-up question
-        if (isFollowUpQuestion) {
+        if (isFollowUpQuestion && oldPoll == nil) {
+            // SHOW SAVE SESSION OPTION
             let presenter: Presentr = Presentr(presentationType: .bottomHalf)
             presenter.roundCorners = false
             presenter.dismissOnSwipe = true
@@ -90,18 +100,18 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             endSessionVC.dismissController = self
             endSessionVC.session = self.session
             customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
-            return
-        }
-        // End poll/Disconnect socket
-        if let sess = session {
-           sess.socket.disconnect()
-        }
-        let poll = decodeObjForKey(key: "currentPoll") as! Poll
-        EndPoll(id: poll.id, save: false).make()
-            .catch { error -> Void in
-                print(error)
+        } else {
+            // END POLL
+            if let sess = session {
+                sess.socket.disconnect()
             }
-        navigationController?.popToRootViewController(animated: true)
+            let poll = decodeObjForKey(key: "currentPoll") as! Poll
+            EndPoll(id: poll.id, save: false).make()
+                .catch { error -> Void in
+                    print(error)
+            }
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     // Create a poll
@@ -136,6 +146,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         let liveResultsVC = LiveResultsViewController()
         liveResultsVC.session = session
         liveResultsVC.pollCode = pollCode
+        liveResultsVC.isOldPoll = (oldPoll != nil)
         
         // MULTIPLE CHOICE
         if (currentIndexPath.item == 0) {
@@ -174,48 +185,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - DELEGATES
     
-    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
-//        let liveResultsVC = LiveResultsViewController()
-//
-//        //Pass values to LiveResultsVC
-//        liveResultsVC.question = question
-//        liveResultsVC.options = options
-//        liveResultsVC.session = session
-//        liveResultsVC.pollCode = pollCode
-//        liveResultsVC.newQuestionDelegate = newQuestionDelegate
-//
-//        // Emit socket messsage to start question
-//        let question: [String:Any] = [
-//            "text": question,
-//            "type": "MULTIPLE_CHOICE",
-//            "options": options
-//        ]
-//        session.socket.emit("server/question/start", with: [question])
-//
-//        navigationController?.pushViewController(liveResultsVC, animated: true)
-    }
-    
-    func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate) {
-//        let liveResultsVC = LiveResultsViewController()
-//
-//        //Pass values to LiveResultsVC
-//        liveResultsVC.question = question
-//        liveResultsVC.options = []
-//        liveResultsVC.session = session
-//        liveResultsVC.pollCode = pollCode
-//        liveResultsVC.newQuestionDelegate = newQuestionDelegate
-//
-//        // Emit socket messsage to start question
-//        let question: [String:Any] = [
-//            "text": question,
-//            "type": "FREE_RESPONSE",
-//            "options": []
-//        ]
-//        session.socket.emit("server/question/start", with: [question])
-//
-//        navigationController?.pushViewController(liveResultsVC, animated: true)
-    }
-    
     func inFollowUpQuestion() {
         isFollowUpQuestion = true
     }
@@ -223,17 +192,6 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
-    }
-    
-    // MARK: - SLIDERVIEW
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        questionOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let index = targetContentOffset.pointee.x / view.frame.width
-        let indexPath = IndexPath(item: Int(index), section: 0)
-        questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
     }
     
     // MARK: - SETUP VIEWS
