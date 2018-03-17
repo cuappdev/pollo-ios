@@ -46,12 +46,20 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             answerRecordedLabel.alpha = 1
             submitAnswerButton.backgroundColor = .clickerLightGray
             
-            // TODO EMIT SOCKET ANSWER
+            // SUBMIT FR ANSWER
+            let answer: [String:Any] = [
+                "deviceId": deviceId,
+                "question": question.id,
+                "choice": freeResponseTextField.text!,
+                "text": freeResponseTextField.text!
+            ]
+            session.socket.emit("server/question/tally", with: [answer])
+            
         }
         
         guard let index = selectedOptionIndex else { return }
         
-        // SUBMIT ANSWER
+        // SUBMIT MC ANSWER
         let answer: [String:Any] = [
             "deviceId": deviceId,
             "question": question.id,
