@@ -1,8 +1,8 @@
 //
-//  ResultMCOptionCell.swift
+//  ResultMCCell.swift
 //  Clicker
 //
-//  Created by Keivan Shahida on 2/14/18.
+//  Created by Kevin Chan on 3/17/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 
-class ResultMCOptionCell: UITableViewCell {
+class ResultMCCell: UITableViewCell {
     
     var choiceLabel = UILabel()
     var choiceTag: Int! {
