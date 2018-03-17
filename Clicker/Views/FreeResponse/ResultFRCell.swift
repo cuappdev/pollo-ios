@@ -16,7 +16,8 @@ class ResultFRCell: UITableViewCell {
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .white
+        backgroundColor = .clickerBackground
+        contentView.backgroundColor = .white
         clipsToBounds = true
         
         setupViews()
@@ -27,6 +28,9 @@ class ResultFRCell: UITableViewCell {
     func setupViews() {
         freeResponseLabel = UILabel()
         freeResponseLabel.font = UIFont._16RegularFont
+        freeResponseLabel.backgroundColor = .white
+        freeResponseLabel.lineBreakMode = .byWordWrapping
+        freeResponseLabel.numberOfLines = 0
         addSubview(freeResponseLabel)
     }
     
