@@ -9,26 +9,18 @@
 import SnapKit
 import UIKit
 
-protocol StartMCQuestionDelegate {
-    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
-}
-
-protocol FollowUpQuestionDelegate {
-    func inFollowUpQuestion()
-}
-
-class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
+class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var startMCQuestionDelegate: StartMCQuestionDelegate!
-    var followUpQuestionDelegate: FollowUpQuestionDelegate!
+    var questionDelegate: QuestionDelegate!
     var session: Session!
+    var grayViewBottomConstraint: Constraint!
+    var optionsDict: [Int:String] = [Int:String]()
+    var numOptions: Int = 2
+    
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     var startQuestionButton: UIButton!
     var grayView: UIView!
-    var grayViewBottomConstraint: Constraint!
-    var optionsDict: [Int:String] = [Int:String]()
-    var numOptions: Int = 2
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -36,7 +28,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        backgroundColor = .clickerBackground
         
         clearOptionsDict()
         setupViews()
@@ -48,9 +39,9 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         let keys = optionsDict.keys.sorted()
         let options: [String] = keys.map { optionsDict[$0]! }
         if let question = questionTextField.text {
-            startMCQuestionDelegate.startMCQuestion(question: question, options: options, newQuestionDelegate: self)
+            questionDelegate.startMCQuestion(question: question, options: options, newQuestionDelegate: self)
         } else {
-            startMCQuestionDelegate.startMCQuestion(question: "", options: options, newQuestionDelegate: self)
+            questionDelegate.startMCQuestion(question: "", options: options, newQuestionDelegate: self)
         }
     }
     
@@ -209,7 +200,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question
-        followUpQuestionDelegate.inFollowUpQuestion()
+        questionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
         clearOptionsDict()
         optionsTableView.reloadData()
@@ -245,11 +236,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     required init?(coder _: NSCoder) {
