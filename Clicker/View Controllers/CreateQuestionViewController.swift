@@ -10,7 +10,7 @@ import UIKit
 import Presentr
 import SnapKit
 
-class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, StartMCQuestionDelegate, StartFRQuestionDelegate, FollowUpQuestionDelegate {
+class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, QuestionDelegate {
     
     var session: Session!
     var pollCode: String!
@@ -42,13 +42,15 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
-            cell.startMCQuestionDelegate = self
-            cell.followUpQuestionDelegate = self
+            cell.questionDelegate = self
+//            cell.startMCQuestionDelegate = self
+//            cell.followUpQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
-        cell.startFRQuestionDelegate = self
-        cell.followUpQuestionDelegate = self
+        cell.questionDelegate = self
+//        cell.startFRQuestionDelegate = self
+//        cell.followUpQuestionDelegate = self
         return cell
     }
     

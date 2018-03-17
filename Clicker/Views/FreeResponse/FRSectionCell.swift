@@ -9,26 +9,23 @@
 import SnapKit
 import UIKit
 
-protocol StartFRQuestionDelegate {
-    func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate)
-}
 
-class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDelegate {
+class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
     
     var session: Session!
+    var grayViewBottomConstraint: Constraint!
+    var questionDelegate: QuestionDelegate!
+    
     var questionTextField: UITextField!
     var startQuestionButton: UIButton!
     var grayView: UIView!
-    var grayViewBottomConstraint: Constraint!
-    var startFRQuestionDelegate: StartFRQuestionDelegate!
-    var followUpQuestionDelegate: FollowUpQuestionDelegate!
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Add Keyboard Handlers
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         backgroundColor = .clickerBackground
         
         setupViews()
@@ -38,9 +35,9 @@ class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDeleg
     //MARK: - POLLING
     @objc func startQuestion() {
         if let question = questionTextField.text {
-            startFRQuestionDelegate.startFRQuestion(question: question, newQuestionDelegate: self)
+            questionDelegate.startFRQuestion(question: question, newQuestionDelegate: self)
         } else {
-            startFRQuestionDelegate.startFRQuestion(question: "", newQuestionDelegate: self)
+            questionDelegate.startFRQuestion(question: "", newQuestionDelegate: self)
             }
     }
     
@@ -99,35 +96,30 @@ class FRSectionCell: UICollectionViewCell, UITextFieldDelegate, NewQuestionDeleg
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question
-        //followUpQuestionDelegate.inFollowUpQuestion()
+        questionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
     }
     
-    // MARK: - KEYBOARD
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if #available(iOS 11.0, *) {
-                let window = UIApplication.shared.keyWindow
-                let safeBottomPadding = window?.safeAreaInsets.bottom
-                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
-            } else {
-                grayViewBottomConstraint.update(offset: -keyboardSize.height)
-            }
-            layoutIfNeeded()
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            grayViewBottomConstraint.update(offset: 0)
-            layoutIfNeeded()
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+//    // MARK: - KEYBOARD
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            if #available(iOS 11.0, *) {
+//                let window = UIApplication.shared.keyWindow
+//                let safeBottomPadding = window?.safeAreaInsets.bottom
+//                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
+//            } else {
+//                grayViewBottomConstraint.update(offset: -keyboardSize.height)
+//            }
+//            layoutIfNeeded()
+//        }
+//    }
+//
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            grayViewBottomConstraint.update(offset: 0)
+//            layoutIfNeeded()
+//        }
+//    }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
