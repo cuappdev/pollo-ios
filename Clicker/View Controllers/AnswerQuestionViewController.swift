@@ -136,7 +136,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     @objc func submitAnswer() {
         guard let index = selectedOptionIndex else { return }
 
-        // Submit answer through socket
+        // SUBMIT ANSWER
         let answer: [String:Any] = [
             "deviceId": deviceId,
             "question": question.id,
@@ -144,9 +144,9 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             "text": question.options[index]
         ]
         session.socket.emit("server/question/tally", with: [answer])
-        // Show answerRecorded label
+        // SHOW ANSWER RECORDED LABEL
         answerRecordedLabel.alpha = 1
-        // Reset
+        // RESET
         selectedOptionIndex = nil
         submitAnswerButton.backgroundColor = .clickerLightGray
     }

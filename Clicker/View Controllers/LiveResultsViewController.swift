@@ -87,7 +87,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    // Edit poll
+    // EDIT POLL
     @objc func editPoll() {
         // Emit socket messsage to end question
         session.socket.emit("server/question/end", with: [])
@@ -95,7 +95,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.popViewController(animated: true)
     }
     
-    // Share results with users
+    // SHARE RESULTS TO USERS
     @objc func shareResults() {
         // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
@@ -105,7 +105,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         timer.invalidate()
     }
     
-    // Either end a question or start a new question
+    // EITHER END QUESTION / START NEW QUESTION
     @objc func questionBtnClicked() {
         if (endedQuestion) {
             // START NEW QUESTION
@@ -130,12 +130,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    // Start timer
+    // START TIMER
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
-    // Update timer label
+    // UPDATE TIMER LABEL
     @objc func updateTime() {
         elapsedSeconds += 1
         if (elapsedSeconds < 10) {
