@@ -12,20 +12,27 @@ import SnapKit
 
 class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, QuestionDelegate {
     
+    
     var session: Session!
     var pollCode: String!
     var oldPoll: Poll!
+    var currentIndexPath: IndexPath = IndexPath(item: 0, section: 0)
+    var isFollowUpQuestion: Bool = false
+    var grayViewBottomConstraint: Constraint!
+    
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
     var questionOptionsView: QuestionOptionsView!
     var questionCollectionView: UICollectionView!
-    
-    var isFollowUpQuestion: Bool = false
+    var grayView: UIView!
+    var startQuestionButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerBackground
+        // Add Keyboard Handlers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         if (oldPoll == nil) {
             createPoll()
@@ -33,24 +40,21 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             self.encodeObjForKey(obj: oldPoll, key: "currentPoll")
             startCreatedPoll(poll: oldPoll)
         }
+        view.backgroundColor = .clickerBackground
         setupNavBar()
         setupViews()
         setupConstraints()
     }
     
-    // MARK: - Collection view methods
+    // MARK: - COLLECTION VIEW
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
             cell.questionDelegate = self
-//            cell.startMCQuestionDelegate = self
-//            cell.followUpQuestionDelegate = self
             return cell
         }
         let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
         cell.questionDelegate = self
-//        cell.startFRQuestionDelegate = self
-//        cell.followUpQuestionDelegate = self
         return cell
     }
     
@@ -64,6 +68,14 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: questionCollectionView.frame.width, height: questionCollectionView.frame.height)
+    }
+    
+    // MARK: - SCROLLVIEW
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        for cell in questionCollectionView.visibleCells {
+            currentIndexPath = questionCollectionView.indexPath(for: cell)!
+            break
+        }
     }
     
     // End current session
@@ -119,48 +131,89 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    // MARK: - DELEGATES
-    
-    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+    // START QUESTION
+    @objc func startQuestion() {
         let liveResultsVC = LiveResultsViewController()
-        
-        //Pass values to LiveResultsVC
-        liveResultsVC.question = question
-        liveResultsVC.options = options
         liveResultsVC.session = session
         liveResultsVC.pollCode = pollCode
-        liveResultsVC.newQuestionDelegate = newQuestionDelegate
         
-        // Emit socket messsage to start question
-        let question: [String:Any] = [
-            "text": question,
-            "type": "MULTIPLE_CHOICE",
-            "options": options
-        ]
-        session.socket.emit("server/question/start", with: [question])
+        // MULTIPLE CHOICE
+        if (currentIndexPath.item == 0) {
+            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! MCSectionCell
+            let question = cell.questionTextField.text
+            let options = cell.optionsDict.keys.sorted().map { cell.optionsDict[$0]! }
+            liveResultsVC.question = question
+            liveResultsVC.options = options
+            liveResultsVC.newQuestionDelegate = cell
+            
+            // EMIT START QUESTION
+            let socketQuestion: [String:Any] = [
+                "text": question,
+                "type": "MULTIPLE_CHOICE",
+                "options": options
+            ]
+            session.socket.emit("server/question/start", with: [socketQuestion])
+        } else { // FREE RESPONSE
+            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! FRSectionCell
+            let question = cell.questionTextField.text
+            liveResultsVC.question = question
+            liveResultsVC.options = []
+            liveResultsVC.newQuestionDelegate = cell
+            
+            // EMIT START QUESTION
+            let socketQuestion: [String:Any] = [
+                "text": question,
+                "type": "FREE_RESPONSE",
+                "options": []
+            ]
+            session.socket.emit("server/question/start", with: [socketQuestion])
+        }
         
         navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
+    // MARK: - DELEGATES
+    
+    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate) {
+//        let liveResultsVC = LiveResultsViewController()
+//
+//        //Pass values to LiveResultsVC
+//        liveResultsVC.question = question
+//        liveResultsVC.options = options
+//        liveResultsVC.session = session
+//        liveResultsVC.pollCode = pollCode
+//        liveResultsVC.newQuestionDelegate = newQuestionDelegate
+//
+//        // Emit socket messsage to start question
+//        let question: [String:Any] = [
+//            "text": question,
+//            "type": "MULTIPLE_CHOICE",
+//            "options": options
+//        ]
+//        session.socket.emit("server/question/start", with: [question])
+//
+//        navigationController?.pushViewController(liveResultsVC, animated: true)
+    }
+    
     func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate) {
-        let liveResultsVC = LiveResultsViewController()
-        
-        //Pass values to LiveResultsVC
-        liveResultsVC.question = question
-        liveResultsVC.options = []
-        liveResultsVC.session = session
-        liveResultsVC.pollCode = pollCode
-        liveResultsVC.newQuestionDelegate = newQuestionDelegate
-        
-        // Emit socket messsage to start question
-        let question: [String:Any] = [
-            "text": question,
-            "type": "FREE_RESPONSE",
-            "options": []
-        ]
-        session.socket.emit("server/question/start", with: [question])
-        
-        navigationController?.pushViewController(liveResultsVC, animated: true)
+//        let liveResultsVC = LiveResultsViewController()
+//
+//        //Pass values to LiveResultsVC
+//        liveResultsVC.question = question
+//        liveResultsVC.options = []
+//        liveResultsVC.session = session
+//        liveResultsVC.pollCode = pollCode
+//        liveResultsVC.newQuestionDelegate = newQuestionDelegate
+//
+//        // Emit socket messsage to start question
+//        let question: [String:Any] = [
+//            "text": question,
+//            "type": "FREE_RESPONSE",
+//            "options": []
+//        ]
+//        session.socket.emit("server/question/start", with: [question])
+//
+//        navigationController?.pushViewController(liveResultsVC, animated: true)
     }
     
     func inFollowUpQuestion() {
@@ -183,7 +236,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
     }
     
-    // MARK: - Setup/layout views
+    // MARK: - SETUP VIEWS
     func setupViews() {
         questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
         view.addSubview(questionOptionsView)
@@ -203,6 +256,20 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
+        
+        grayView = UIView()
+        grayView.backgroundColor = .clickerBackground
+        view.addSubview(grayView)
+        view.bringSubview(toFront: grayView)
+        
+        startQuestionButton = UIButton()
+        startQuestionButton.backgroundColor = .clickerBlue
+        startQuestionButton.layer.cornerRadius = 8
+        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitleColor(.white, for: .normal)
+        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
+        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
+        grayView.addSubview(startQuestionButton)
     }
     
     func setupConstraints() {
@@ -216,12 +283,26 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
             make.width.equalToSuperview()
             make.left.equalToSuperview()
             make.top.equalTo(questionOptionsView.snp.bottom)
+            make.height.equalToSuperview().multipliedBy(0.63)
+        }
+        
+        grayView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(92)
+            make.centerX.equalToSuperview()
             if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                self.grayViewBottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).constraint
             } else {
-                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+                self.grayViewBottomConstraint = make.bottom.equalTo(bottomLayoutGuide.snp.top).constraint
             }
         }
+        
+        startQuestionButton.snp.updateConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalTo(55)
+            make.center.equalToSuperview()
+        }
+        
     }
 
     func setupNavBar() {
@@ -250,7 +331,27 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
     }
     
-    // MARK: - Keyboard
+    // MARK: - KEYBOARD
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if #available(iOS 11.0, *) {
+                let window = UIApplication.shared.keyWindow
+                let safeBottomPadding = window?.safeAreaInsets.bottom
+                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
+            } else {
+                grayViewBottomConstraint.update(offset: -keyboardSize.height)
+            }
+            view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            grayViewBottomConstraint.update(offset: 0)
+            view.layoutIfNeeded()
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }

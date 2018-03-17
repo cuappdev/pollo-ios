@@ -19,8 +19,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
-    var startQuestionButton: UIButton!
-    var grayView: UIView!
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -35,16 +33,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     }
     
     //MARK: - POLLING
-    @objc func startQuestion() {
-        let keys = optionsDict.keys.sorted()
-        let options: [String] = keys.map { optionsDict[$0]! }
-        if let question = questionTextField.text {
-            questionDelegate.startMCQuestion(question: question, options: options, newQuestionDelegate: self)
-        } else {
-            questionDelegate.startMCQuestion(question: "", options: options, newQuestionDelegate: self)
-        }
-    }
-    
     func clearOptionsDict() {
         optionsDict.removeAll()
         for i in 0...numOptions - 1 {
@@ -102,7 +90,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return frame.height * 0.1049618321
+        return 60
     }
     
     //MARK: - LAYOUT
@@ -125,28 +113,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
         addSubview(optionsTableView)
-        
-        grayView = UIView()
-        grayView.backgroundColor = .clickerBackground
-        addSubview(grayView)
-        bringSubview(toFront: grayView)
-        
-        startQuestionButton = UIButton()
-        startQuestionButton.backgroundColor = .clickerBlue
-        startQuestionButton.layer.cornerRadius = 8
-        startQuestionButton.setTitle("Start Question", for: .normal)
-        startQuestionButton.setTitleColor(.white, for: .normal)
-        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
-        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
-        grayView.addSubview(startQuestionButton)
-        
-        grayView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(91)
-            make.centerX.equalToSuperview()
-            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
-        }
-        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -161,14 +127,10 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         optionsTableView.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-(startQuestionButton.frame.height + 23))
+            make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-        startQuestionButton.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            make.center.equalToSuperview()
-        }
     }
     
     // MARK: - MCOptionDelegate
@@ -211,20 +173,12 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 6), 0.0)
             } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
-            
-            if #available(iOS 11.0, *) {
-                let window = UIApplication.shared.keyWindow
-                let safeBottomPadding = window?.safeAreaInsets.bottom
-                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
-            } else {
-                grayViewBottomConstraint.update(offset: -keyboardSize.height)
-            }
             layoutIfNeeded()
         }
     }
@@ -233,7 +187,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
     }
