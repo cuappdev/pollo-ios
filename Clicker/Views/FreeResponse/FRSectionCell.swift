@@ -17,28 +17,12 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
     var questionDelegate: QuestionDelegate!
     
     var questionTextField: UITextField!
-    var startQuestionButton: UIButton!
-    var grayView: UIView!
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // Add Keyboard Handlers
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        backgroundColor = .clickerBackground
-        
         setupViews()
         layoutSubviews()
-    }
-    
-    //MARK: - POLLING
-    @objc func startQuestion() {
-        if let question = questionTextField.text {
-            questionDelegate.startFRQuestion(question: question, newQuestionDelegate: self)
-        } else {
-            questionDelegate.startFRQuestion(question: "", newQuestionDelegate: self)
-            }
     }
     
     //MARK: - LAYOUT
@@ -51,28 +35,6 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
         questionTextField.returnKeyType = UIReturnKeyType.done
         questionTextField.delegate = self
         addSubview(questionTextField)
-        
-        grayView = UIView()
-        grayView.backgroundColor = .clickerBackground
-        addSubview(grayView)
-        bringSubview(toFront: grayView)
-        
-        startQuestionButton = UIButton()
-        startQuestionButton.backgroundColor = .clickerBlue
-        startQuestionButton.layer.cornerRadius = 8
-        startQuestionButton.setTitle("Start Question", for: .normal)
-        startQuestionButton.setTitleColor(.white, for: .normal)
-        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
-        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
-        grayView.addSubview(startQuestionButton)
-        
-        grayView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(91)
-            make.centerX.equalToSuperview()
-            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
-        }
-        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -82,12 +44,6 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
             make.size.equalTo(CGSize(width: frame.width, height: 61))
             make.top.equalToSuperview()
             make.left.equalToSuperview()
-        }
-        
-        startQuestionButton.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.90)
-            make.height.equalTo(55)
-            make.center.equalToSuperview()
         }
     }
     
@@ -99,27 +55,6 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
         questionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
     }
-    
-//    // MARK: - KEYBOARD
-//    @objc func keyboardWillShow(notification: NSNotification) {
-//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            if #available(iOS 11.0, *) {
-//                let window = UIApplication.shared.keyWindow
-//                let safeBottomPadding = window?.safeAreaInsets.bottom
-//                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
-//            } else {
-//                grayViewBottomConstraint.update(offset: -keyboardSize.height)
-//            }
-//            layoutIfNeeded()
-//        }
-//    }
-//
-//    @objc func keyboardWillHide(notification: NSNotification) {
-//        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            grayViewBottomConstraint.update(offset: 0)
-//            layoutIfNeeded()
-//        }
-//    }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")

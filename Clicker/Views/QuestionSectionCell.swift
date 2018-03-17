@@ -10,8 +10,6 @@ import SnapKit
 import UIKit
 
 protocol QuestionDelegate {
-    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
-    func startFRQuestion(question: String, newQuestionDelegate: NewQuestionDelegate)
     func inFollowUpQuestion()
 }
 
