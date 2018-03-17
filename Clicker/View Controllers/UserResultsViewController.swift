@@ -16,19 +16,24 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var question: Question!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
+    var freeResponses: [String]!
+    var isMCQuestion: Bool!
     
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
 
     var questionLabel: UILabel!
-    var optionResultsTableView: UITableView!
+    var resultsTableView: UITableView!
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
         
+        // PREPROCESS CURRENT STATE DATA
+        isMCQuestion = (question.options.count > 0)
         totalNumResults = Float(currentState.getTotalCount())
+        freeResponses = currentState.getResponses()
         
         setupViews()
         setupConstraints()
@@ -37,31 +42,63 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
-        cell.choiceTag = indexPath.row
-        cell.optionLabel.text = question.options[indexPath.row]
-        let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+        if (isMCQuestion) { // MULTIPLE CHOICE
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
+            cell.choiceTag = indexPath.row
+            cell.optionLabel.text = question.options[indexPath.row]
+            cell.selectionStyle = .none
+            
+            guard let currState = currentState else {
+                return cell
+            }
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+                return cell
+            }
+            cell.numberLabel.text = "\(count)"
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / totalNumResults)
+                let totalWidth = cell.frame.width - 36
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            
+            // ANIMATE CHANGE
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.layoutIfNeeded()
+            })
+            return cell
+            
+        } else { // FREE RESPONSE
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultFRCellID", for: indexPath) as! ResultFRCell
+            cell.freeResponseLabel.text = freeResponses[indexPath.row]
+            cell.selectionStyle = .none
             return cell
         }
-        cell.numberLabel.text = "\(count)"
-        if (totalNumResults > 0) {
-            let width = CGFloat(Float(count) / totalNumResults)
-            cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
-        } else {
-            cell.highlightWidthConstraint.update(offset: 0)
-        }
-        cell.layoutIfNeeded()
-        cell.selectionStyle = .none
-        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        if (isMCQuestion) {
+            return question.options.count
+        } else {
+            return freeResponses.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height * 0.08888888889
+        if (isMCQuestion) {
+            return view.frame.height * 0.089
+        } else {
+            // CALCULATE CELL HEIGHT FOR FR
+            let text = freeResponses[indexPath.row]
+            let frameForMessage = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width, height: 2000) , options: NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin), attributes: [NSAttributedStringKey.font: UIFont._16RegularFont], context: nil)
+            let height = frameForMessage.height + 40
+            return height
+        }
     }
     
     
@@ -76,14 +113,15 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionResultsTableView = UITableView()
-        optionResultsTableView.backgroundColor = .clear
-        optionResultsTableView.separatorStyle = .none
-        optionResultsTableView.delegate = self
-        optionResultsTableView.dataSource = self
-        optionResultsTableView.clipsToBounds = true
-        optionResultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
-        view.addSubview(optionResultsTableView)
+        resultsTableView = UITableView()
+        resultsTableView.backgroundColor = .clear
+        resultsTableView.separatorStyle = .none
+        resultsTableView.delegate = self
+        resultsTableView.dataSource = self
+        resultsTableView.clipsToBounds = true
+        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
+        resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: "resultFRCellID")
+        view.addSubview(resultsTableView)
     }
     
     func setupConstraints() {
@@ -93,7 +131,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.top.equalToSuperview().offset(100)
         }
         
-        optionResultsTableView.snp.makeConstraints { make in
+        resultsTableView.snp.makeConstraints { make in
             make.width.equalTo(questionLabel.snp.width)
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
