@@ -183,7 +183,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     // MARK: - SESSIONS / POLLS
     
-    // Refresh control was pulled
+    // REFRESH CONTROL PULLED
     @objc func refreshPulled() {
         lookForLivePolls()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -191,7 +191,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
-    // Get current live, subscribed polls
+    // GET LIVE POLLS
     func lookForLivePolls() {
         if (UserDefaults.standard.value(forKey: "userSavedPolls") == nil) {
             print("no user saved polls")
@@ -216,7 +216,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
-    // Generate poll code
+    // GENERATE POLL CODE
     func getNewPollCode(completion: @escaping ((String) -> Void)) {
         GeneratePollCode().make()
             .done { code -> Void in
@@ -228,7 +228,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }
     }
     
-    // Create New Poll
+    // CREATE NEW POLL
     @objc func createNewPoll() {
         // Generate poll code if none exists
         getNewPollCode { code in
@@ -243,7 +243,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
-    // Returns whether there are any admin saved polls
+    // RETURNS [true] IF SAVED POLLS EXIST, [false] OTHERWISE
     func savedPollsExist() -> Bool {
         if let adminSavedPolls = UserDefaults.standard.value(forKey: "adminSavedPolls") {
             let pollsData = adminSavedPolls as! Data
@@ -253,9 +253,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return false
     }
     
-    // Join a session with the code entered
+    // JOIN SESSION
     func joinSession(with code: String) {
-        // Clear textfield input
+        // CLEAR TEXTFIELD
         GetLivePolls(pollCodes: [code]).make()
             .done { polls in
                 guard let poll = polls.first else {
@@ -268,7 +268,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 liveSessionVC.poll = poll
                 self.view.endEditing(true)
                 self.navigationController?.pushViewController(liveSessionVC, animated: true)
-                // Log significant event
+                // LOG SIGNIFICANT EVENT
                 Answers.logCustomEvent(withName: "Joined Poll", customAttributes: nil)
                 let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents")
                 UserDefaults.standard.set(significantEvents + 1, forKey:"significantEvents")
@@ -356,19 +356,19 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Update live polls
+        // UPDATE LIVE POLLS
         lookForLivePolls()
         
-        // Hide navigation bar
+        // HIDE NAV BAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         
-        // Reload TableViews
+        // RELOAD
         homeTableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Show navigation bar
+        // SHOW NAV BAR
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 }

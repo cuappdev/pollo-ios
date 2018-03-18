@@ -9,26 +9,16 @@
 import SnapKit
 import UIKit
 
-protocol StartMCQuestionDelegate {
-    func startMCQuestion(question: String, options: [String], newQuestionDelegate: NewQuestionDelegate)
-}
-
-protocol FollowUpQuestionDelegate {
-    func inFollowUpQuestion()
-}
-
-class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceOptionDelegate, NewQuestionDelegate {
+class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, NewQuestionDelegate {
     
-    var startMCQuestionDelegate: StartMCQuestionDelegate!
-    var followUpQuestionDelegate: FollowUpQuestionDelegate!
+    var questionDelegate: QuestionDelegate!
     var session: Session!
-    var questionTextField: UITextField!
-    var optionsTableView: UITableView!
-    var startQuestionButton: UIButton!
-    var grayView: UIView!
     var grayViewBottomConstraint: Constraint!
     var optionsDict: [Int:String] = [Int:String]()
     var numOptions: Int = 2
+    
+    var questionTextField: UITextField!
+    var optionsTableView: UITableView!
     
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -36,7 +26,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        backgroundColor = .clickerBackground
         
         clearOptionsDict()
         setupViews()
@@ -44,16 +33,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     //MARK: - POLLING
-    @objc func startQuestion() {
-        let keys = optionsDict.keys.sorted()
-        let options: [String] = keys.map { optionsDict[$0]! }
-        if let question = questionTextField.text {
-            startMCQuestionDelegate.startMCQuestion(question: question, options: options, newQuestionDelegate: self)
-        } else {
-            startMCQuestionDelegate.startMCQuestion(question: "", options: options, newQuestionDelegate: self)
-        }
-    }
-    
     func clearOptionsDict() {
         optionsDict.removeAll()
         for i in 0...numOptions - 1 {
@@ -111,7 +90,7 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return frame.height * 0.1049618321
+        return 60
     }
     
     //MARK: - LAYOUT
@@ -134,28 +113,6 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
         addSubview(optionsTableView)
-        
-        grayView = UIView()
-        grayView.backgroundColor = .clickerBackground
-        addSubview(grayView)
-        bringSubview(toFront: grayView)
-        
-        startQuestionButton = UIButton()
-        startQuestionButton.backgroundColor = .clickerBlue
-        startQuestionButton.layer.cornerRadius = 8
-        startQuestionButton.setTitle("Start Question", for: .normal)
-        startQuestionButton.setTitleColor(.white, for: .normal)
-        startQuestionButton.titleLabel?.font = UIFont._18SemiboldFont
-        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
-        grayView.addSubview(startQuestionButton)
-        
-        grayView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(91)
-            make.centerX.equalToSuperview()
-            self.grayViewBottomConstraint = make.bottom.equalTo(0).constraint
-        }
-        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -170,17 +127,13 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsTableView.snp.updateConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.90)
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-(startQuestionButton.frame.height + 23))
+            make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-        startQuestionButton.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: optionsTableView.frame.width, height: 55))
-            make.center.equalToSuperview()
-        }
     }
     
-    // MARK: - MCOptionDelegate
+    // MARK: - MC OPTION DELEGATE
     
     func deleteOption(index: Int) {
         numOptions -= 1
@@ -205,11 +158,11 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         optionsDict[index] = text
     }
     
-    // MARK: - NewQuestionDelegate
+    // MARK: - NEW QUESTION DELEGATE
     
     func creatingNewQuestion() {
         // Notify that we are in a Follow Up question
-        followUpQuestionDelegate.inFollowUpQuestion()
+        questionDelegate.inFollowUpQuestion()
         questionTextField.text = ""
         clearOptionsDict()
         optionsTableView.reloadData()
@@ -220,20 +173,12 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height + 6), 0.0)
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 6), 0.0)
             } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
-            
-            if #available(iOS 11.0, *) {
-                let window = UIApplication.shared.keyWindow
-                let safeBottomPadding = window?.safeAreaInsets.bottom
-                grayViewBottomConstraint.update(offset: safeBottomPadding! - keyboardSize.height)
-            } else {
-                grayViewBottomConstraint.update(offset: -keyboardSize.height)
-            }
             layoutIfNeeded()
         }
     }
@@ -242,14 +187,8 @@ class MCSectionCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            grayViewBottomConstraint.update(offset: 0)
             layoutIfNeeded()
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     required init?(coder _: NSCoder) {

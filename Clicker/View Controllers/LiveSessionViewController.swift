@@ -63,7 +63,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         containerViewController.didMove(toParentViewController: self)
     }
     
-    // Clear ChildViewControllers
+    // CLEAR CHILD VC'S
     func removeChildViewControllers() {
         for vc in childViewControllers {
             vc.willMove(toParentViewController: nil)
@@ -74,40 +74,35 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     
     // MARK: - SESSION
     @objc func endSession() {
-        // Disconnect user from socket
+        // DISCONNECT SOCKET
         session.socket.disconnect()
         self.navigationController?.popToRootViewController(animated: true)
     }
     
     func saveUserPoll(poll: Poll) {
-        print("SAVING POLL")
         if UserDefaults.standard.value(forKey: "userSavedPolls") == nil {
-            print("CREATING FIRST USER SAVED POLLS")
             encodeObjForKey(obj: [poll], key: "userSavedPolls")
             return
         }
         
         var polls = decodeObjForKey(key: "userSavedPolls") as! [Poll]
-        // Check if poll has already been saved before
+        // CHECK IF POLL HAS BEEN SAVED BEFORE
         let pollCodes = polls.map { $0.code }
         if (pollCodes.contains(poll.code)) {
             polls[pollCodes.index(of: poll.code)!] = poll
         } else {
             polls.append(poll)
         }
-        print("ADDED TO USER SAVED POLLS")
         encodeObjForKey(obj: polls, key: "userSavedPolls")
     }
     
     func sessionConnected() {}
     
     func sessionDisconnected() {
-        print("popping user VC")
         endSession()
     }
     
     func questionStarted(_ question: Question) {
-        print("detected question: \(question)")
         self.question = question
         updateContainerVC()
     }
@@ -118,7 +113,6 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        print("detected current state: \(currentState)")
         updateContainerVC(currentState: currentState)
     }
     

@@ -20,9 +20,11 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var poll: Poll!
     var pollCode: String!
     var question: Question!
+    
     var selectedOptionIndex: Int?
-
     var optionTableView: UITableView!
+    
+    var freeResponseTextField: UITextField!
     
     
     //MARK: - INITIALIZATION
@@ -32,9 +34,53 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         view.backgroundColor = .clickerBackground
         UINavigationBar.appearance().barTintColor = .clickerGreen
         
-        setupNavBar()
         setupViews()
         setupConstraints()
+    }
+    
+    // MARK: - SUBMIT
+    @objc func submitAnswer() {
+        if (question.options.count == 0 && freeResponseTextField.text != nil && freeResponseTextField.text != "") {
+            // FR QUESTION
+            // SHOW ANSWER RECORDED LABEL
+            answerRecordedLabel.alpha = 1
+            submitAnswerButton.backgroundColor = .clickerLightGray
+            
+            // SUBMIT FR ANSWER
+            let answer: [String:Any] = [
+                "deviceId": deviceId,
+                "question": question.id,
+                "choice": freeResponseTextField.text!,
+                "text": freeResponseTextField.text!
+            ]
+            session.socket.emit("server/question/tally", with: [answer])
+            
+        }
+        
+        guard let index = selectedOptionIndex else { return }
+        
+        // SUBMIT MC ANSWER
+        let answer: [String:Any] = [
+            "deviceId": deviceId,
+            "question": question.id,
+            "choice": intToMCOption(index),
+            "text": question.options[index]
+        ]
+        session.socket.emit("server/question/tally", with: [answer])
+        // SHOW ANSWER RECORDED LABEL
+        answerRecordedLabel.alpha = 1
+        // RESET
+        selectedOptionIndex = nil
+        submitAnswerButton.backgroundColor = .clickerLightGray
+    }
+    
+    // MARK: - TEXTFIELD
+    @objc func beganTypingResponse(_ textField: UITextField) {
+        if (textField.text != nil && textField.text != "") {
+            submitAnswerButton.backgroundColor = .clickerBlue
+        } else {
+            submitAnswerButton.backgroundColor = .clickerLightGray
+        }
     }
     
     // MARK: - LAYOUT
@@ -48,15 +94,27 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionTableView = UITableView()
-        optionTableView.delegate = self
-        optionTableView.dataSource = self
-        optionTableView.separatorStyle = .none
-        optionTableView.clipsToBounds = true
-        optionTableView.isScrollEnabled = false
-        optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
-        optionTableView.backgroundColor = .clear
-        view.addSubview(optionTableView)
+        if (question.options.count > 0) {
+            // MC QUESTION
+            optionTableView = UITableView()
+            optionTableView.delegate = self
+            optionTableView.dataSource = self
+            optionTableView.separatorStyle = .none
+            optionTableView.clipsToBounds = true
+            optionTableView.isScrollEnabled = false
+            optionTableView.register(AnswerMCCell.self, forCellReuseIdentifier: "answerMCCellID")
+            optionTableView.backgroundColor = .clear
+            view.addSubview(optionTableView)
+        } else {
+            // FR QUESTION
+            freeResponseTextField = UITextField()
+            freeResponseTextField.font = UIFont._16RegularFont
+            freeResponseTextField.placeholder = "Type response..."
+            freeResponseTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
+            freeResponseTextField.backgroundColor = .white
+            freeResponseTextField.addTarget(self, action: #selector(beganTypingResponse), for: .editingChanged)
+            view.addSubview(freeResponseTextField)
+        }
         
         answerRecordedLabel = UILabel()
         answerRecordedLabel.backgroundColor = .clickerBackground
@@ -84,11 +142,21 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(18)
         }
         
-        optionTableView.snp.updateConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.top.equalTo(questionLabel.snp.bottom).offset(18)
-            make.bottom.equalTo(answerRecordedLabel.snp.top).offset(-18)
+        if (question.options.count > 0) {
+            // MC QUESTION
+            optionTableView.snp.updateConstraints { make in
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.top.equalTo(questionLabel.snp.bottom).offset(18)
+                make.bottom.equalTo(answerRecordedLabel.snp.top).offset(-18)
+            }
+        } else {
+            // FR QUESTION
+            freeResponseTextField.snp.makeConstraints { make in
+                make.width.equalToSuperview()
+                make.height.equalTo(54)
+                make.top.equalTo(questionLabel.snp.bottom).offset(18)
+            }
         }
         
         answerRecordedLabel.snp.updateConstraints { make in
@@ -109,48 +177,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
     }
-    
-    func setupNavBar() {
-        let codeLabel = UILabel()
-        let codeAttributedString = NSMutableAttributedString(string: "SESSION CODE: \(pollCode ?? "------")")
-        codeAttributedString.addAttribute(.font, value: UIFont._16RegularFont, range: NSRange(location: 0, length: 13))
-        codeAttributedString.addAttribute(.font, value: UIFont._16MediumFont, range: NSRange(location: 13, length: codeAttributedString.length - 13))
-        codeLabel.attributedText = codeAttributedString
-        codeLabel.textColor = .white
-        codeLabel.backgroundColor = .clear
-        codeBarButtonItem = UIBarButtonItem(customView: codeLabel)
-        self.navigationItem.leftBarButtonItem = codeBarButtonItem
-        
-        let endSessionButton = UIButton()
-        let endSessionAttributedString = NSMutableAttributedString(string: "Exit Session")
-        endSessionAttributedString.addAttribute(.font, value: UIFont._16SemiboldFont, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionAttributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: endSessionAttributedString.length))
-        endSessionButton.setAttributedTitle(endSessionAttributedString, for: .normal)
-        endSessionButton.backgroundColor = .clear
-        endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
-        endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
-        self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-    }
-    
-    // MARK: - SUBMIT
-    @objc func submitAnswer() {
-        guard let index = selectedOptionIndex else { return }
-
-        // Submit answer through socket
-        let answer: [String:Any] = [
-            "deviceId": deviceId,
-            "question": question.id,
-            "choice": intToMCOption(index),
-            "text": question.options[index]
-        ]
-        session.socket.emit("server/question/tally", with: [answer])
-        // Show answerRecorded label
-        answerRecordedLabel.alpha = 1
-        // Reset
-        selectedOptionIndex = nil
-        submitAnswerButton.backgroundColor = .clickerLightGray
-    }
-    
+ 
     // MARK: - KEYBOARD
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -159,7 +186,6 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // return 4
         return question.options.count
     }
     
