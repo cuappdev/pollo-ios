@@ -29,6 +29,7 @@ class AnswerMCCell: UITableViewCell {
         contentView.layer.cornerRadius = 8
         contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         contentView.layer.borderWidth = 0.5
+        contentView.backgroundColor = .white
         
         setupViews()
         layoutSubviews()

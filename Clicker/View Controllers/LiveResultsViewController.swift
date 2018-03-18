@@ -19,12 +19,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     var session: Session!
     var pollCode: String!
+    var isOldPoll: Bool!
     var currentState: CurrentState!
     var totalNumResults: Float = 0
     var timer: Timer!
     var elapsedSeconds: Int = 0
     var endedQuestion: Bool = false
-    
     
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
@@ -35,12 +35,14 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     var editPollButton: UIButton!
     
     var questionLabel: UILabel!
-    var optionResultsTableView: UITableView!
+    var resultsTableView: UITableView!
     var shareResultsButton: UIButton!
     var questionButton: UIButton!
     
     var question: String!
     var options: [String]!
+    var freeResponses: [String] = [String]()
+    var isMCQuestion: Bool!
     
     var newQuestionDelegate: NewQuestionDelegate!
     
@@ -49,6 +51,8 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         
         view.backgroundColor = .clickerBackground
         session.delegate = self
+        isMCQuestion = (options.count > 0)
+        
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -57,35 +61,53 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     
     // End session
     @objc func endSession() {
-        let presenter: Presentr = Presentr(presentationType: .bottomHalf)
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        let endSessionVC = EndSessionViewController()
-        endSessionVC.dismissController = self
-        endSessionVC.session = self.session
-        customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+        if (!isOldPoll) {
+            let presenter: Presentr = Presentr(presentationType: .bottomHalf)
+            presenter.roundCorners = false
+            presenter.dismissOnSwipe = true
+            presenter.dismissOnSwipeDirection = .bottom
+            let endSessionVC = EndSessionViewController()
+            endSessionVC.dismissController = self
+            endSessionVC.session = self.session
+            customPresentViewController(presenter, viewController: endSessionVC, animated: true, completion: nil)
+        } else {
+            // END QUESTION
+            session.socket.emit("server/question/end", with: [])
+            
+            let currentPoll = decodeObjForKey(key: "currentPoll") as! Poll
+            endPoll(pollId: currentPoll.id, save: true)
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
     
-    // Edit poll
+    func endPoll(pollId: Int, save: Bool) {
+        EndPoll(id: pollId, save: save).make()
+            .done { Void -> Void in
+                // DISCONNECT SOCKET
+                self.session.socket.disconnect()
+            }.catch { error -> Void in
+                print(error)
+        }
+    }
+    
+    // EDIT POLL
     @objc func editPoll() {
-        // Emit socket messsage to end question
+        // END QUESTION
         session.socket.emit("server/question/end", with: [])
-        // Pop to CreateQuestionVC
+        // POP TO CREATE QUESTION VC
         self.navigationController?.popViewController(animated: true)
     }
     
-    // Share results with users
+    // SHARE RESULTS TO USERS
     @objc func shareResults() {
-        // Emit socket message to share results to users
         session.socket.emit("server/question/results", with: [])
-        // Update views
+        // UPDATE VIEWS
         shareResultsButton.alpha = 0
         shareResultsButton.isUserInteractionEnabled = false
         timer.invalidate()
     }
     
-    // Either end a question or start a new question
+    // EITHER END QUESTION / START NEW QUESTION
     @objc func questionBtnClicked() {
         if (endedQuestion) {
             // START NEW QUESTION
@@ -97,7 +119,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             // END QUESTION
             
-            // Emit socket messsage to end question
             session.socket.emit("server/question/end", with: [])
             
             questionButton.setTitle("New Question", for: .normal)
@@ -110,12 +131,12 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    // Start timer
+    // START TIMER
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
-    // Update timer label
+    // UPDATE TIMER LABEL
     @objc func updateTime() {
         elapsedSeconds += 1
         if (elapsedSeconds < 10) {
@@ -144,40 +165,83 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCOptionCellID", for: indexPath) as! ResultMCOptionCell
-        cell.choiceTag = indexPath.row
-        cell.optionLabel.text = options[indexPath.row]
-        cell.selectionStyle = .none
-        
-        guard let currState = currentState else {
+        if (isMCQuestion) { // MULTIPLE CHOICE
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultMCCellID", for: indexPath) as! ResultMCCell
+            cell.choiceTag = indexPath.row
+            cell.optionLabel.text = options[indexPath.row]
+            cell.selectionStyle = .none
+            
+            guard let currState = currentState else {
+                return cell
+            }
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+                return cell
+            }
+            cell.numberLabel.text = "\(count)"
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / totalNumResults)
+                let totalWidth = cell.frame.width - 36
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            
+            // ANIMATE CHANGE
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.layoutIfNeeded()
+            })
+            return cell
+            
+        } else { // FREE RESPONSE
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultFRCellID", for: indexPath) as! ResultFRCell
+            cell.freeResponseLabel.text = freeResponses[indexPath.row]
+            cell.selectionStyle = .none
             return cell
         }
-        
-        let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
-            return cell
-        }
-        cell.numberLabel.text = "\(count)"
-        if (totalNumResults > 0) {
-            let width = CGFloat(Float(count) / totalNumResults)
-            cell.highlightWidthConstraint.update(offset: width * cell.frame.width)
-        } else {
-            cell.highlightWidthConstraint.update(offset: 0)
-        }
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
-        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return options.count
+        if (isMCQuestion) { // MULTIPLE CHOICE
+            return options.count
+        } else { // FREE RESPONSE
+            return freeResponses.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height * 0.08888888889
+        if (isMCQuestion) {
+            return view.frame.height * 0.089
+        } else {
+            // CALCULATE CELL HEIGHT FOR FR
+            let text = freeResponses[indexPath.row]
+            let frameForMessage = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width, height: 2000) , options: NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin), attributes: [NSAttributedStringKey.font: UIFont._16RegularFont], context: nil)
+            let height = frameForMessage.height + 40
+            return height
+        }
     }
     
+    // MARK: - SESSION
+    func sessionConnected() {}
+    func sessionDisconnected() {}
+    func questionStarted(_ question: Question) {}
+    func questionEnded(_ question: Question) {}
+    func receivedResults(_ currentState: CurrentState) {}
+    func savePoll(_ poll: Poll) {}
+    
+    func updatedTally(_ currentState: CurrentState) {
+        self.currentState = currentState
+        totalNumResults = Float(currentState.getTotalCount()) // FOR MC QUESTIONS
+        let updatedResponses = currentState.getResponses() // FOR FR QUESTIONS
+        let newResponse = updatedResponses.first { (res) -> Bool in !freeResponses.contains(res) }
+        if let response = newResponse {
+            freeResponses.append(response)
+        }
+        resultsTableView.reloadData()
+    }
     
     // MARK - LAYOUT
     func setupViews() {
@@ -218,15 +282,16 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         questionLabel.numberOfLines = 0
         view.addSubview(questionLabel)
         
-        optionResultsTableView = UITableView()
-        optionResultsTableView.backgroundColor = .clear
-        optionResultsTableView.separatorStyle = .none
-        optionResultsTableView.showsVerticalScrollIndicator = false
-        optionResultsTableView.delegate = self
-        optionResultsTableView.dataSource = self
-        optionResultsTableView.clipsToBounds = true
-        optionResultsTableView.register(ResultMCOptionCell.self, forCellReuseIdentifier: "resultMCOptionCellID")
-        view.addSubview(optionResultsTableView)
+        resultsTableView = UITableView()
+        resultsTableView.backgroundColor = .clear
+        resultsTableView.separatorStyle = .none
+        resultsTableView.showsVerticalScrollIndicator = false
+        resultsTableView.delegate = self
+        resultsTableView.dataSource = self
+        resultsTableView.clipsToBounds = true
+        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: "resultMCCellID")
+        resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: "resultFRCellID")
+        view.addSubview(resultsTableView)
         
         shareResultsButton = UIButton()
         shareResultsButton.backgroundColor = .clickerBackground
@@ -306,8 +371,8 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             make.bottom.equalTo(questionButton.snp.top).offset(-24)
         }
         
-        optionResultsTableView.snp.makeConstraints { make in
-            make.width.equalTo(questionButton.snp.width)
+        resultsTableView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
             make.bottom.equalTo(shareResultsButton.snp.top).offset(-16)
             make.top.equalTo(questionLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
@@ -338,20 +403,6 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
         endSessionButton.addTarget(self, action: #selector(endSession), for: .touchUpInside)
         endSessionBarButtonItem = UIBarButtonItem(customView: endSessionButton)
         self.navigationItem.rightBarButtonItem = endSessionBarButtonItem
-    }
-    
-    // MARK: - SESSION
-    func sessionConnected() {}
-    func sessionDisconnected() {}
-    func questionStarted(_ question: Question) {}
-    func questionEnded(_ question: Question) {}
-    func receivedResults(_ currentState: CurrentState) {}
-    func savePoll(_ poll: Poll) {}
-    
-    func updatedTally(_ currentState: CurrentState) {
-        self.currentState = currentState
-        totalNumResults = Float(currentState.getCountFromResults())
-        optionResultsTableView.reloadData()
     }
     
     // MARK: - KEYBOARD

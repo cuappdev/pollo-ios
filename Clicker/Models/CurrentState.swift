@@ -24,8 +24,8 @@ class CurrentState {
         self.answers = json["answers"] as! [String:Any]
     }
     
-    // Returns total answers submitted from [results]
-    func getCountFromResults() -> Int {
+    // GET TOTAL ANSWERS SUBMITTED
+    func getTotalCount() -> Int {
         var counter = 0
         for dict in results.values {
             if let d = dict as? [String:Any], let val = d["count"] as? Int {
@@ -34,4 +34,10 @@ class CurrentState {
         }
         return counter
     }
+    
+    // GET LIST OF SUBMITTED RESPONSES
+    func getResponses() -> [String] {
+        return results.map { key, value in key }
+    }
+    
 }
