@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
+		63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */; };
+		63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDB205ECADC001C45BA /* DateCell.swift */; };
+		63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */; };
+		63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */; };
 		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588820265822000E9B07 /* CreateQuestionViewController.swift */; };
@@ -61,6 +65,10 @@
 
 /* Begin PBXFileReference section */
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
+		63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomeViewController.swift; sourceTree = "<group>"; };
+		63EB7CDB205ECADC001C45BA /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
+		63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastQuestionCell.swift; sourceTree = "<group>"; };
+		63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupCell.swift; sourceTree = "<group>"; };
 		652914FF1F78027A00882CBB /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
@@ -133,6 +141,16 @@
 				79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		63EB7CDA205ECABB001C45BA /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				63EB7CDB205ECADC001C45BA /* DateCell.swift */,
+				63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */,
+				63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */,
+			);
+			path = Groups;
 			sourceTree = "<group>";
 		};
 		652915081F78124700882CBB /* ClickerTests */ = {
@@ -231,6 +249,7 @@
 		C7D6AF5D1F93DED9003ABA10 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				63EB7CDA205ECABB001C45BA /* Groups */,
 				C768B769203B78260062DC66 /* Home */,
 				C2BF44D22034027A0067505A /* FreeResponse */,
 				C2BF44D1203402540067505A /* MultipleChoice */,
@@ -287,6 +306,7 @@
 				C74587131FA62F8500AB26C6 /* PendingViewController.swift */,
 				C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */,
 				C224740C203DCD14005D21FF /* UserResultsViewController.swift */,
+				63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -496,13 +516,17 @@
 				C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
+				63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */,
 				C224740D203DCD14005D21FF /* UserResultsViewController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
+				63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */,
 				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				C768B76B203B7A2F0062DC66 /* JoinSessionCell.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
+				63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */,
 				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
+				63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
