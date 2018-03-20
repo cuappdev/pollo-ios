@@ -9,6 +9,6 @@
 import Foundation
 import UIKit
 
-let hostURL = "http://34.226.150.242"
+let hostURL = "http://52.200.214.100"
 // let hostURL = "http://localhost:3000"
 let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString

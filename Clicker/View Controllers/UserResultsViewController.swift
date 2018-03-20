@@ -66,11 +66,6 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
             } else {
                 cell.highlightWidthConstraint.update(offset: 0)
             }
-            
-            // ANIMATE CHANGE
-            UIView.animate(withDuration: 0.5, animations: {
-                cell.layoutIfNeeded()
-            })
             return cell
             
         } else { // FREE RESPONSE
@@ -132,7 +127,7 @@ class UserResultsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         resultsTableView.snp.makeConstraints { make in
-            make.width.equalTo(questionLabel.snp.width)
+            make.width.equalToSuperview()
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
             } else {
