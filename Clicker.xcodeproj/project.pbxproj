@@ -40,6 +40,7 @@
 		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
+		C2FC182A20673DB800066B90 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FC182920673DB800066B90 /* FeedbackViewController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
@@ -101,6 +102,7 @@
 		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
+		C2FC182920673DB800066B90 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */,
 				C224740C203DCD14005D21FF /* UserResultsViewController.swift */,
 				63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */,
+				C2FC182920673DB800066B90 /* FeedbackViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
+				C2FC182A20673DB800066B90 /* FeedbackViewController.swift in Sources */,
 				63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */,
 				C224740D203DCD14005D21FF /* UserResultsViewController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
