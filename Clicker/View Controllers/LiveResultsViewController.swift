@@ -127,6 +127,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
             editPollButton.alpha = 0
             editPollButton.isUserInteractionEnabled = false
             liveResultsLabel.text = "Final Results"
+            timer.invalidate()
             endedQuestion = true
         }
     }
