@@ -236,11 +236,7 @@ class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableV
     func updatedTally(_ currentState: CurrentState) {
         self.currentState = currentState
         totalNumResults = Float(currentState.getTotalCount()) // FOR MC QUESTIONS
-        let updatedResponses = currentState.getResponses() // FOR FR QUESTIONS
-        let newResponse = updatedResponses.first { (res) -> Bool in !freeResponses.contains(res) }
-        if let response = newResponse {
-            freeResponses.append(response)
-        }
+        freeResponses = currentState.getResponses()
         resultsTableView.reloadData()
     }
     
