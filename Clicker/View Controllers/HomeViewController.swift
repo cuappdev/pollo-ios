@@ -212,7 +212,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
-                print(error)
         }
     }
     
