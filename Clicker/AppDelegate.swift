@@ -30,6 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         siren.checkVersion(checkType: .immediately)
 
         #if DEBUG
+            print("[Running Clicker in debug configuration]")
+        #else
+            print("[Running Clicker in release configuration]")
             Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
         #endif
         return true
