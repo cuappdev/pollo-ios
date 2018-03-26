@@ -48,7 +48,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             
             // SUBMIT FR ANSWER
             let answer: [String:Any] = [
-                "deviceId": deviceId,
+                "deviceId": Device.id,
                 "question": question.id,
                 "choice": freeResponseTextField.text!,
                 "text": freeResponseTextField.text!
@@ -61,7 +61,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         
         // SUBMIT MC ANSWER
         let answer: [String:Any] = [
-            "deviceId": deviceId,
+            "deviceId": Device.id,
             "question": question.id,
             "choice": intToMCOption(index),
             "text": question.options[index]

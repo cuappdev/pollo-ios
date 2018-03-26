@@ -18,7 +18,7 @@ class Session {
         self.id = id
         self.delegate = delegate
 
-        let url = URL(string: hostURL)!
+        let url = URL(string: Keys.apiURL)!
         manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
 
         socket = manager.socket(forNamespace: "/\(id)")

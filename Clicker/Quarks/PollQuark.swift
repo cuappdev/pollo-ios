@@ -46,7 +46,7 @@ struct CreatePoll: ClickerQuark {
         return [
             "name": name,
             "code": pollCode,
-            "deviceId": deviceId
+            "deviceId": Device.id
         ]
     }
 
@@ -193,7 +193,7 @@ struct UpdatePoll: ClickerQuark {
     var parameters: Parameters {
         return [
             "name": name,
-            "deviceId": deviceId
+            "deviceId": Device.id
         ]
     }
 
@@ -219,7 +219,7 @@ struct DeletePoll: ClickerQuark {
     let id: Int
     
     var route: String {
-        return "/polls/\(id)/\(deviceId)"
+        return "/polls/\(id)/\(Device.id)"
     }
     
     let method: HTTPMethod = .delete
