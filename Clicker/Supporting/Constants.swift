@@ -1,14 +1,41 @@
-//
-//  Constants.swift
-//  Clicker
-//
-//  Created by Keivan Shahida on 10/15/17.
-//  Copyright © 2017 CornellAppDev. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-// let hostURL = "http://clicker-backend.cornellappdev.com"
-let hostURL = "http://localhost:3000"
-let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
+struct Keys {
+    static var apiURL: String {
+        #if DEV_SERVER
+            return stringValue(for: "api-dev-url")
+        #endif
+
+        return stringValue(for: "api-url")
+    }
+
+    static var fabricAPIKey: String {
+        return stringValue(for: "fabric-api-key")
+    }
+
+    private init() {}
+
+    private static let keyDict: NSDictionary = {
+        guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
+            let dict = NSDictionary(contentsOfFile: path) else { return [:] }
+        return dict
+    }()
+
+    private static func stringValue(for key: String) -> String {
+        return keyDict[key] as? String ?? ""
+    }
+}
+
+struct Device {
+    static let id: String = {
+        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+            return deviceId
+        } else {
+            return UUID().uuidString
+        }
+    }()
+
+    private init() {}
+}
+

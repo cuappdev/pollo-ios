@@ -28,8 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         siren.alertType = .option
         siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
         siren.checkVersion(checkType: .immediately)
-        
-        Fabric.with([Crashlytics.self])
+
+        #if DEBUG
+            Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
+        #endif
         return true
     }
     

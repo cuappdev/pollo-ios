@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D3FE9FADC8AEDFE4D9DC9D0A1E80A78D"
-               BuildableName = "Pods_Clicker.framework"
-               BlueprintName = "Pods-Clicker"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               BlueprintIdentifier = "C7F923C11F73540600B1E975"
+               BuildableName = "Clicker.app"
+               BlueprintName = "Clicker"
+               ReferencedContainer = "container:Clicker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,31 +29,21 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "652915061F78124700882CBB"
-               BuildableName = "ClickerTests.xctest"
-               BlueprintName = "ClickerTests"
-               ReferencedContainer = "container:Clicker.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3FE9FADC8AEDFE4D9DC9D0A1E80A78D"
-            BuildableName = "Pods_Clicker.framework"
-            BlueprintName = "Pods-Clicker"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "C7F923C11F73540600B1E975"
+            BuildableName = "Clicker.app"
+            BlueprintName = "Clicker"
+            ReferencedContainer = "container:Clicker.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Debug Dev Server"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
@@ -63,15 +53,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3FE9FADC8AEDFE4D9DC9D0A1E80A78D"
-            BuildableName = "Pods_Clicker.framework"
-            BlueprintName = "Pods-Clicker"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "C7F923C11F73540600B1E975"
+            BuildableName = "Clicker.app"
+            BlueprintName = "Clicker"
+            ReferencedContainer = "container:Clicker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -81,15 +72,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3FE9FADC8AEDFE4D9DC9D0A1E80A78D"
-            BuildableName = "Pods_Clicker.framework"
-            BlueprintName = "Pods-Clicker"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "C7F923C11F73540600B1E975"
+            BuildableName = "Clicker.app"
+            BlueprintName = "Clicker"
+            ReferencedContainer = "container:Clicker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
