@@ -1,4 +1,4 @@
-# Clicker iOS Client 
+# Clicker iOS Client
 [![GitHub release](https://img.shields.io/github/release/cuappdev/clicker-ios.svg)]()
 [![Platform](https://img.shields.io/badge/platform-ios-lightgrey.svg)]()
 [![GitHub contributors](https://img.shields.io/github/contributors/cuappdev/clicker-ios.svg)]()
@@ -9,20 +9,35 @@ Clicker is one of the latest apps by [Cornell AppDev](http://cornellappdev.com),
 ## Installation
 We use [CocoaPods](http://cocoapods.org) for our dependency manager. This should be installed before continuing.
 
-Clone the project with
-```
-git clone https://github.com/cuappdev/clicker-ios.git
-```
+Clone the project with `git clone https://github.com/cuappdev/clicker-ios.git`
 
-After cloning the project, `cd` into the new directory and install dependencies with
-```
-pod install
-```
+After cloning the project, `cd` into the new directory and install dependencies with `pod install`.
+
 Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
+
+## Configuration
+Create a `/Secrets/Keys.plist` plist file in the project directory with the following template:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>api-url</key>
+	<string>http://example.server.com</string>
+	<key>api-dev-url</key>
+	<string>http://localhost:3000</string>
+	<key>fabric-api-key</key>
+	<string>FABRIC_API_KEY</string>
+	<key>fabric-build-secret</key>
+	<string>FABRIC_BUILD_SECRET</string>
+</dict>
+</plist>
+```
+Replace `http://example.server.com` under `api-url` with the host of your backend server (clone ours [here](https://github.com/cuappdev/clicker-ios.git)!) and fill in Fabric-related strings for Fabric analytics integration.
 
 ---
 
-## Development 
+## Development
   * [Models](#models)
   * [Views](#views)
   * [Controllers](#controllers)
@@ -39,7 +54,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | netID    | String    | Unique, university-generated identifier for each user. |
 | name     | String    | User name (full name).                                 |
 
-#### Course 
+#### Course
 
 | Name       | Type   | Description                             |
 |------------|--------|-----------------------------------------|
@@ -47,7 +62,7 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 | name       | String | Course name.                            |
 | term       | String | Course term.                            |
 
-#### Lecture 
+#### Lecture
 
 | Name      | Type       | Description                                     |
 |-----------|------------|-------------------------------------------------|
@@ -106,8 +121,8 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 
 ### Controllers
 
- * HomeViewController: Used to display all active lectures and past lectures. 
- * LiveSessionViewController: Used to answer questions in class. Includes question, answers, timer, submit, etc. 
+ * HomeViewController: Used to display all active lectures and past lectures.
+ * LiveSessionViewController: Used to answer questions in class. Includes question, answers, timer, submit, etc.
  * LoginViewController: Used to allow users (students and professors) to login.
  * TabBarController: Used to implement a tab bar navigation flow.
 
@@ -118,28 +133,28 @@ Open the Clicker Xcode workspace, `Clicker.xcworkspace`, and enjoy!
 We use Quarks for all of our protocol-oriented networking tasks. [Neutron](https://github.com/dantheli/Neutron) is an awesome framework that we use to streamline all networking tasks.
 
  * ClickerQuark
- * CourseQuark 
- * LectureQuark 
- * OrganizationQuark 
+ * CourseQuark
+ * LectureQuark
+ * OrganizationQuark
  * QuestionsQuark
  * UserQuark
 
 #### Sessions
 
 Session
- 
+
 |   Name   |       Type      |        Description       |
 |----------|-----------------|--------------------------|
 | id       | Int             | Unique identifier.       |
 | delegate | SessionDelegate | This session's delegate. |
- 
+
 SessionDelegate: Protocol specifying session functionality (sessionConnected & sessionDisconnected).
 
 ### External Services
 
  * [AlamoFire](https://github.com/Alamofire/Alamofire): Used for HTTP networking.
- * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users. 
- * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users. 
+ * [Fabric](https://get.fabric.io/?utm_campaign=discover&utm_medium=natural): Used to track every move of our users.
+ * [Google Sign In](https://developers.google.com/identity/sign-in/ios/): Used to seamlessly sign in users.
  * [Neutron](https://github.com/dantheli/Neutron): Used for protocol-oriented networking.
  * [Socket.io](https://github.com/socketio/socket.io-client-swift): Used to manage sockets.
  * [SnapKit](http://snapkit.io/docs/): Used for some AutoLayout magic.
