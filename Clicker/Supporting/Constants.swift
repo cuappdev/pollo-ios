@@ -1,30 +1,29 @@
 import Foundation
 import UIKit
 
-struct Keys {
-    static var apiURL: String {
+/* hidden Keys.plist for sensitive information */
+enum Keys: String {
+    case apiURL = "api-url"
+    case apiDevURL = "api-dev-url"
+    case fabricAPIKey = "fabric-api-key"
+
+    var value: String {
+        return Keys.keyDict[rawValue] as! String
+    }
+
+    static var hostURL: Keys {
         #if DEV_SERVER
-            return stringValue(for: "api-dev-url")
+            return Keys.apiDevURL
+        #else
+            return Keys.apiURL
         #endif
-
-        return stringValue(for: "api-url")
     }
-
-    static var fabricAPIKey: String {
-        return stringValue(for: "fabric-api-key")
-    }
-
-    private init() {}
 
     private static let keyDict: NSDictionary = {
         guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
             let dict = NSDictionary(contentsOfFile: path) else { return [:] }
         return dict
     }()
-
-    private static func stringValue(for key: String) -> String {
-        return keyDict[key] as? String ?? ""
-    }
 }
 
 struct Device {
