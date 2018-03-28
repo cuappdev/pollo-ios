@@ -13,11 +13,11 @@ protocol SliderBarDelegate {
     func scrollToIndex(index: Int)
 }
 
-class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
     var options: [String]!
-    let sliderBar = UIView()
+    var sliderBar: UIView!
     var grayBar: UIView!
     var sliderBarLeftConstraint: NSLayoutConstraint!
     var sliderBarDelegate: SliderBarDelegate!
@@ -45,6 +45,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
         
+        sliderBar = UIView()
         sliderBar.backgroundColor = UIColor(red: 0 / 255.0, green: 0 / 255.0, blue: 0 / 255.0, alpha: 1.0)
         addSubview(sliderBar)
         bringSubview(toFront: sliderBar)
@@ -112,7 +113,7 @@ class QuestionOptionsView: UIView, UICollectionViewDataSource, UICollectionViewD
 }
 
 class QuestionOptionCell: UICollectionViewCell {
-
+    
     override var isSelected: Bool {
         didSet {
             optionLabel.textColor = isSelected ? .black : .clickerMediumGray
@@ -142,11 +143,12 @@ class QuestionOptionCell: UICollectionViewCell {
             make.center.equalToSuperview()
         }
     }
-
+    
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
 
 
 

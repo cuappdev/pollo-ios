@@ -21,7 +21,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
-    var questionOptionsView: QuestionOptionsView!
+    var questionOptionsView: OptionsView!
     var questionCollectionView: UICollectionView!
     var grayView: UIView!
     var startQuestionButton: UIButton!
@@ -195,7 +195,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - SETUP VIEWS
     func setupViews() {
-        questionOptionsView = QuestionOptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
+        questionOptionsView = OptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
         view.addSubview(questionOptionsView)
         
         let layout = UICollectionViewFlowLayout()
