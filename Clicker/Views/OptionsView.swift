@@ -81,7 +81,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "questionOptionCellId", for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
-        cell.tintColor = .clickerMediumGray
+        cell.backgroundColor = .clickerNavBarLightGrey
         return cell
     }
     
@@ -105,6 +105,11 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         }
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
         unselectedCell.optionLabel.textColor = .clickerMediumGray
+    }
+    
+    // BACKGROUND COLOR
+    func setBackgroundColor(color: UIColor) {
+        collectionView.backgroundColor = color
     }
     
     required init?(coder _: NSCoder) {
