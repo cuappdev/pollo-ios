@@ -16,6 +16,7 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Groups"
+        view.backgroundColor = .white
         
         setupNavBar()
         setupViews()
@@ -42,6 +43,7 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     // MARK: - LAYOUT
     func setupViews() {
         groupOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
+        groupOptionsView.setBackgroundColor(color: .clickerNavBarGrey)
         view.addSubview(groupOptionsView)
         
         let layout = UICollectionViewFlowLayout()
@@ -85,8 +87,10 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func setupNavBar() {
-        UINavigationBar.appearance().barTintColor = .clickerBackground
-        self.navigationController?.navigationBar.isTranslucent = false
+        UINavigationBar.appearance().barTintColor = .clickerNavBarLightGrey
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
     }
     
 }
