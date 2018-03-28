@@ -39,6 +39,8 @@
 		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
 		C2BF9829206BE0210048468E /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF9828206BE0210048468E /* GroupViewController.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
+		C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982C206BE44C0048468E /* CreatedCell.swift */; };
+		C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982E206BE4560048468E /* JoinedCell.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
@@ -101,6 +103,8 @@
 		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
 		C2BF9828206BE0210048468E /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
+		C2BF982C206BE44C0048468E /* CreatedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedCell.swift; sourceTree = "<group>"; };
+		C2BF982E206BE4560048468E /* JoinedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedCell.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 				63EB7CDB205ECADC001C45BA /* DateCell.swift */,
 				63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */,
 				63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */,
+				C2BF982C206BE44C0048468E /* CreatedCell.swift */,
+				C2BF982E206BE4560048468E /* JoinedCell.swift */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -214,6 +220,13 @@
 				C28AD562205CD3840053AD62 /* ResultFRCell.swift */,
 			);
 			path = FreeResponse;
+			sourceTree = "<group>";
+		};
+		C2BF9830206BE4D60048468E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		C7441389204C653D00E446CF /* Extensions */ = {
@@ -289,6 +302,7 @@
 				C27429E11F8C252D006FAD31 /* Quarks */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
+				C2BF9830206BE4D60048468E /* Helpers */,
 				C7D6AF571F93DE43003ABA10 /* Supporting */,
 				C7441389204C653D00E446CF /* Extensions */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
@@ -536,6 +550,7 @@
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
+				C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */,
 				C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */,
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
 				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
@@ -546,6 +561,7 @@
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
+				C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GroupViewController: UIViewController {
+class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SliderBarDelegate {
     
     var groupOptionsView: OptionsView!
     var groupCollectionView: UICollectionView!
@@ -17,13 +17,31 @@ class GroupViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Groups"
         
+        setupNavBar()
         setupViews()
         setupConstraints()
     }
     
+    // MARK: - COLLECTIONVIEW
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "createdCellID", for: indexPath)
+        return cell
+    }
+    
+    
+    // MARK: - SLIDERBAR DELEGATE
+    func scrollToIndex(index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        groupCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
+    }
+    
     // MARK: - LAYOUT
     func setupViews() {
-        groupOptionsView = OptionsView(frame: .zero, options: ["Multiple Choice", "Free Response"], sliderBarDelegate: self)
+        groupOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
         view.addSubview(groupOptionsView)
         
         let layout = UICollectionViewFlowLayout()
@@ -34,17 +52,41 @@ class GroupViewController: UIViewController {
         groupCollectionView.alwaysBounceHorizontal = true
         groupCollectionView.delegate = self
         groupCollectionView.dataSource = self
+        groupCollectionView.register(CreatedCell.self, forCellWithReuseIdentifier: "createdCellID")
+        groupCollectionView.register(JoinedCell.self, forCellWithReuseIdentifier: "joinedCellID")
         groupCollectionView.showsVerticalScrollIndicator = false
         groupCollectionView.showsHorizontalScrollIndicator = false
-        groupCollectionView.register(MCSectionCell.self, forCellWithReuseIdentifier: "mcSectionCell")
-        groupCollectionView.register(FRSectionCell.self, forCellWithReuseIdentifier: "frSectionCellID")
         groupCollectionView.backgroundColor = .clickerBackground
         groupCollectionView.isPagingEnabled = true
         view.addSubview(groupCollectionView)
     }
     
     func setupConstraints() {
+        groupOptionsView.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            } else {
+                make.top.equalTo(topLayoutGuide.snp.bottom)
+            }
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
         
+        groupCollectionView.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
+            make.top.equalTo(groupOptionsView.snp.bottom)
+        }
+    }
+    
+    func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = .clickerBackground
+        self.navigationController?.navigationBar.isTranslucent = false
     }
     
 }
