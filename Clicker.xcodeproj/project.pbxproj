@@ -27,6 +27,7 @@
 		C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */; };
 		C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E9203F77FA001F540E /* AnswerMCCell.swift */; };
 		C26D14A9207E6F86008C3F48 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D14A8207E6F86008C3F48 /* GroupCell.swift */; };
+		C26D14AB207E744A008C3F48 /* NewGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */; };
 		C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD562205CD3840053AD62 /* ResultFRCell.swift */; };
@@ -92,6 +93,7 @@
 		C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMCOptionCell.swift; sourceTree = "<group>"; };
 		C25F21E9203F77FA001F540E /* AnswerMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMCCell.swift; sourceTree = "<group>"; };
 		C26D14A8207E6F86008C3F48 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
+		C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupHeader.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionSectionCell.swift; sourceTree = "<group>"; };
 		C28AD562205CD3840053AD62 /* ResultFRCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultFRCell.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				C2BF982C206BE44C0048468E /* CreatedCell.swift */,
 				C2BF982E206BE4560048468E /* JoinedCell.swift */,
 				C26D14A8207E6F86008C3F48 /* GroupCell.swift */,
+				C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
+				C26D14AB207E744A008C3F48 /* NewGroupHeader.swift in Sources */,
 				C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */,
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,

@@ -12,6 +12,7 @@ import UIKit
 class GroupCell: UITableViewCell {
     
     var nameLabel: UILabel!
+    var rightArrowIcon: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,6 +25,9 @@ class GroupCell: UITableViewCell {
         nameLabel = UILabel()
         nameLabel.font = UIFont._18RegularFont
         addSubview(nameLabel)
+        
+        rightArrowIcon = UIImageView(image: #imageLiteral(resourceName: "backArrow"))
+        addSubview(rightArrowIcon)
     }
     
     override func layoutSubviews() {
@@ -34,6 +38,13 @@ class GroupCell: UITableViewCell {
             make.height.equalTo(24)
             make.top.equalToSuperview().offset(18)
             make.left.equalToSuperview().offset(18)
+        }
+        
+        rightArrowIcon.snp.updateConstraints { make in
+            make.right.equalToSuperview().offset(-12)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(13)
+            make.width.equalTo(8)
         }
     }
     
