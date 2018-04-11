@@ -9,6 +9,6 @@
 import Foundation
 import UIKit
 
-// let hostURL = "http://clicker-backend.cornellappdev.com"
-let hostURL = "http://localhost:3000"
+let hostURL = "http://clicker-backend.cornellappdev.com"
+// let hostURL = "http://localhost:3000"
 let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString

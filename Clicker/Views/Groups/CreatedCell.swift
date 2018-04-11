@@ -8,10 +8,30 @@
 
 import UIKit
 
-class CreatedCell: UICollectionViewCell {
+class CreatedCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+    
+    var groupsTableView: UITableView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        setupViews()
+        setupConstraints()
+    }
+    
+    // MARK: - LAYOUT
+    func setupViews() {
+        groupsTableView = UITableView()
+        groupsTableView.delegate = self
+        groupsTableView.dataSource = self
+        groupsTableView.register(GroupCell.self, forCellReuseIdentifier: "groupCellID")
+        addSubview(groupsTableView)
+    }
+    
+    func setupConstraints() {
+        groupsTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
