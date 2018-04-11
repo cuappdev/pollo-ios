@@ -11,12 +11,24 @@ import UIKit
 class CreatedCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var groupsTableView: UITableView!
+    var groups: [String] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setupViews()
         setupConstraints()
+    }
+    
+    // MARK: - TABLEVIEW
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "groupCellID", for: indexPath) as! GroupCell
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return groups.count
     }
     
     // MARK: - LAYOUT
