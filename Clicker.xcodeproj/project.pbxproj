@@ -14,6 +14,8 @@
 		63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */; };
 		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
+		65FE842A20698614003ADDA5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65FE842820698614003ADDA5 /* GoogleService-Info.plist */; };
+		65FE842B20698614003ADDA5 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65FE842920698614003ADDA5 /* Keys.plist */; };
 		C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588820265822000E9B07 /* CreateQuestionViewController.swift */; };
 		C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588A20265838000E9B07 /* LiveResultsViewController.swift */; };
 		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
@@ -48,7 +50,6 @@
 		C768B76F203B89010062DC66 /* LiveSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C768B76E203B89010062DC66 /* LiveSessionCell.swift */; };
 		C76968322035065E00E7E676 /* AnswerQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
-		C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
@@ -74,6 +75,9 @@
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
 		6529150B1F78124700882CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		65FE842820698614003ADDA5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Secrets/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		65FE842920698614003ADDA5 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Keys.plist; path = Secrets/Keys.plist; sourceTree = SOURCE_ROOT; };
+		6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug dev server.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug dev server.xcconfig"; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
 		C205588820265822000E9B07 /* CreateQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQuestionViewController.swift; sourceTree = "<group>"; };
@@ -110,7 +114,6 @@
 		C768B76E203B89010062DC66 /* LiveSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSessionCell.swift; sourceTree = "<group>"; };
 		C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerQuestionViewController.swift; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
@@ -169,6 +172,7 @@
 			children = (
 				7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */,
 				47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */,
+				6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -292,7 +296,8 @@
 				C7D6AF571F93DE43003ABA10 /* Supporting */,
 				C7441389204C653D00E446CF /* Extensions */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
-				C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */,
+				65FE842820698614003ADDA5 /* GoogleService-Info.plist */,
+				65FE842920698614003ADDA5 /* Keys.plist */,
 			);
 			path = Clicker;
 			sourceTree = "<group>";
@@ -409,9 +414,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65FE842B20698614003ADDA5 /* Keys.plist in Resources */,
 				C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
-				C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */,
+				65FE842A20698614003ADDA5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,7 +488,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "FABRIC_API_KEY=$(sed -n '1p' < Secrets/fabric.txt)\nFABRIC_BUILD_SECRET=$(sed -n '2p' < Secrets/fabric.txt)\n\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET";
+			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -613,6 +619,101 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Clicker.app/Clicker";
 			};
 			name = Release;
+		};
+		65FE842D20698C5D003ADDA5 /* Debug Dev Server */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug Dev Server";
+		};
+		65FE842E20698C5D003ADDA5 /* Debug Dev Server */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				INFOPLIST_FILE = Clicker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEV_SERVER\"";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug Dev Server";
+		};
+		65FE842F20698C5D003ADDA5 /* Debug Dev Server */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				INFOPLIST_FILE = ClickerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cuappdev.ClickerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Clicker.app/Clicker";
+			};
+			name = "Debug Dev Server";
 		};
 		C7F923D21F73540600B1E975 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -769,6 +870,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6529150E1F78124700882CBB /* Debug */,
+				65FE842F20698C5D003ADDA5 /* Debug Dev Server */,
 				6529150F1F78124700882CBB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -778,6 +880,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C7F923D21F73540600B1E975 /* Debug */,
+				65FE842D20698C5D003ADDA5 /* Debug Dev Server */,
 				C7F923D31F73540600B1E975 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -787,6 +890,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C7F923D51F73540600B1E975 /* Debug */,
+				65FE842E20698C5D003ADDA5 /* Debug Dev Server */,
 				C7F923D61F73540600B1E975 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
