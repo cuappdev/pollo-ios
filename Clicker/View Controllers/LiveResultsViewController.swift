@@ -15,9 +15,9 @@ protocol NewQuestionDelegate {
     func creatingNewQuestion()
 }
 
-class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SessionDelegate {
+class LiveResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
-    var session: Session!
+    var session: Socket!
     var pollCode: String!
     var isOldPoll: Bool!
     var currentState: CurrentState!

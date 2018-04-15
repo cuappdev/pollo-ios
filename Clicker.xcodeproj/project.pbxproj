@@ -12,7 +12,6 @@
 		63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDB205ECADC001C45BA /* DateCell.swift */; };
 		63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */; };
 		63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */; };
-		652915001F78027A00882CBB /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652914FF1F78027A00882CBB /* SessionDelegate.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588820265822000E9B07 /* CreateQuestionViewController.swift */; };
 		C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588A20265838000E9B07 /* LiveResultsViewController.swift */; };
@@ -45,6 +44,10 @@
 		C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982E206BE4560048468E /* JoinedCell.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
+		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
+		C2F48EB5208302BE0022FE6B /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB4208302BE0022FE6B /* Group.swift */; };
+		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
+		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
@@ -74,7 +77,6 @@
 		63EB7CDB205ECADC001C45BA /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastQuestionCell.swift; sourceTree = "<group>"; };
 		63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupCell.swift; sourceTree = "<group>"; };
-		652914FF1F78027A00882CBB /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
 		6529150B1F78124700882CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,6 +113,10 @@
 		C2BF982E206BE4560048468E /* JoinedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedCell.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
+		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
+		C2F48EB4208302BE0022FE6B /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
@@ -202,7 +208,10 @@
 				C205588E2026591A000E9B07 /* Poll.swift */,
 				C2D057981F926B31008F21CB /* Question.swift */,
 				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
-				652914FF1F78027A00882CBB /* SessionDelegate.swift */,
+				C2F48EB2208302AE0022FE6B /* Draft.swift */,
+				C2F48EB4208302BE0022FE6B /* Group.swift */,
+				C2F48EB6208302F90022FE6B /* Socket.swift */,
+				C2F48EB8208303020022FE6B /* SocketDelegate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -226,13 +235,6 @@
 				C28AD562205CD3840053AD62 /* ResultFRCell.swift */,
 			);
 			path = FreeResponse;
-			sourceTree = "<group>";
-		};
-		C2BF9830206BE4D60048468E /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		C7441389204C653D00E446CF /* Extensions */ = {
@@ -308,7 +310,6 @@
 				C27429E11F8C252D006FAD31 /* Quarks */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* View Controllers */,
-				C2BF9830206BE4D60048468E /* Helpers */,
 				C7D6AF571F93DE43003ABA10 /* Supporting */,
 				C7441389204C653D00E446CF /* Extensions */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
@@ -551,9 +552,12 @@
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
 				63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */,
 				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
+				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
 				63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */,
+				C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */,
+				C2F48EB5208302BE0022FE6B /* Group.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
@@ -561,10 +565,10 @@
 				C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */,
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
 				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
-				652915001F78027A00882CBB /* SessionDelegate.swift in Sources */,
 				C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */,
 				C2BF9829206BE0210048468E /* GroupViewController.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
+				C2F48EB7208302F90022FE6B /* Socket.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,

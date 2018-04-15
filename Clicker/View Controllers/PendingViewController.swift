@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PendingViewController: UIViewController, SessionDelegate {
+class PendingViewController: UIViewController, SocketDelegate {
     
     var pendingLabel: UILabel!
     

@@ -1,14 +1,14 @@
 //
-//  Session.swift
+//  Group.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 10/30/17.
-//  Copyright © 2017 CornellAppDev. All rights reserved.
+//  Created by Kevin Chan on 4/14/18.
+//  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import Foundation
 
-class Session {
+class Group {
     
     var id: String
     var name: String
