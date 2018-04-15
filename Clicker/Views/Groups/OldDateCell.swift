@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DateCell: UICollectionViewCell {
+class OldDateCell: UICollectionViewCell {
     
     var dateLabel: UILabel!
     var lineView: UIView!
