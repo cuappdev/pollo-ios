@@ -66,7 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let givenName = user.profile.givenName
             let familyName = user.profile.familyName
             let email = user.profile.email
-            User.currentUser = User(id: Int(userId!)!, name: "\(givenName) \(familyName)", netId: email!)
+            let netId = email?.substring(to: (email?.index(of: "@"))!)
+            User.currentUser = User(id: Float(userId!)!, name: "\(givenName) \(familyName)", netId: netId!)
             
             if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
                 UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
