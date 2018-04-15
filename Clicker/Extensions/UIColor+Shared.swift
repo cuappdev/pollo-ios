@@ -5,7 +5,6 @@
 //  Created by Keivan Shahida on 11/5/17.
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 
 extension UIColor {
@@ -16,6 +15,7 @@ extension UIColor {
     @nonobjc static let clickerMediumGray = UIColor(red: 158/255, green: 167/255, blue: 179/255, alpha: 1.0)
     @nonobjc static let clickerDarkGray = UIColor(red: 122/255, green: 129/255, blue: 139/255, alpha: 1.0)
     @nonobjc static let clickerBlack = UIColor(red: 31/255, green: 44/255, blue: 56/255, alpha: 1.0)
+    @nonobjc static let clickerDeepBlack = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1.0)
     @nonobjc static let clickerLightBlue = UIColor(red: 220/255, green: 238/255, blue: 252/255, alpha: 1.0)
     @nonobjc static let clickerBlue = UIColor(red: 73/255, green: 157/255, blue: 255/255, alpha: 1.0)
     @nonobjc static let clickerGreen = UIColor(red: 41/255, green: 192/255, blue: 158/255, alpha: 1.0)
@@ -23,7 +23,7 @@ extension UIColor {
     @nonobjc static let clickerNavBarGrey = UIColor(red: 246/255, green: 246/255, blue: 248/255, alpha: 1.0)
     @nonobjc static let clickerNavBarLightGrey = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 1.0)
     
-
+    
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
         let green = CGFloat(((code & 0xFF00) >> 8)) / 255
