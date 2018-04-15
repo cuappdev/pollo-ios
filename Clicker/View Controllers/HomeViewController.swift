@@ -5,7 +5,6 @@
 //  Created by Keivan Shahida on 9/24/17.
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 import Alamofire
 import SwiftyJSON
@@ -176,7 +175,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             DeletePoll(id: deletedPoll.id).make()
                 .catch { error -> Void in
                     print("error deleting poll")
-                }
+            }
             tableView.reloadData()
         }
     }
@@ -212,7 +211,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "No live session detected for code entered.")
                 self.present(alert, animated: true, completion: nil)
-                print(error)
         }
     }
     
@@ -225,7 +223,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }.catch { error -> Void in
                 let alert = self.createAlert(title: "Error", message: "Error generating new poll code.")
                 self.present(alert, animated: true, completion: nil)
-            }
+        }
     }
     
     // CREATE NEW POLL

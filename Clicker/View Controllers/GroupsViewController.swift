@@ -5,20 +5,19 @@
 //  Created by Kevin Chan on 3/28/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 
-class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SliderBarDelegate {
+class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SliderBarDelegate {
     
     var groupOptionsView: OptionsView!
     var groupCollectionView: UICollectionView!
+    var titleLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Groups"
         view.backgroundColor = .clickerBackground
         
-        setupNavBar()
         setupViews()
         setupConstraints()
     }
@@ -42,9 +41,15 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     // MARK: - LAYOUT
     func setupViews() {
+        titleLabel = UILabel()
+        titleLabel.text = "Groups"
+        titleLabel.font = ._30SemiboldFont
+        titleLabel.textColor = .clickerDeepBlack
+        view.addSubview(titleLabel)
+        
         groupOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
         groupOptionsView.setBackgroundColor(color: .clickerNavBarGrey)
-         view.addSubview(groupOptionsView)
+        view.addSubview(groupOptionsView)
         
         let layout = UICollectionViewFlowLayout()
         groupCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -60,16 +65,22 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         groupCollectionView.showsHorizontalScrollIndicator = false
         groupCollectionView.backgroundColor = .clickerBackground
         groupCollectionView.isPagingEnabled = true
-         view.addSubview(groupCollectionView)
+        view.addSubview(groupCollectionView)
     }
     
     func setupConstraints() {
-        groupOptionsView.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
             } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom)
+                make.top.equalTo(topLayoutGuide.snp.bottom).offset(90)
             }
+            make.centerX.equalToSuperview()
+            make.height.equalTo(35.5)
+        }
+        
+        groupOptionsView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.width.equalToSuperview()
             make.height.equalTo(40)
         }
@@ -86,8 +97,5 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    func setupNavBar() {
-        UINavigationBar.appearance().barTintColor = .clickerGreen
-    }
     
 }
