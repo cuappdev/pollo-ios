@@ -11,7 +11,7 @@ import SnapKit
 
 class EndSessionViewController: UIViewController {
     
-    var session: Session!
+    var session: Socket!
     var dismissController: UIViewController!
     var cancelButton: UIButton!
     var confirmationLabel: UILabel!

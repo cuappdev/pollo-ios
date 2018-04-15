@@ -13,7 +13,7 @@ import SnapKit
 class CreateQuestionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SliderBarDelegate, QuestionDelegate {
     
     
-    var session: Session!
+    var session: Socket!
     var pollCode: String!
     var oldPoll: Poll!
     var isFollowUpQuestion: Bool = false
@@ -128,7 +128,7 @@ class CreateQuestionViewController: UIViewController, UICollectionViewDataSource
     func startCreatedPoll(poll: Poll) {
         StartCreatedPoll(id: poll.id).make()
             .done { port -> Void in
-                self.session = Session(id: poll.id, userType: "admin")
+                self.session = Socket(id: poll.id, userType: "admin")
                 // Reload collection view so that cell has correct session property
                 DispatchQueue.main.async {
                     self.questionCollectionView.reloadData()

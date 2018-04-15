@@ -9,7 +9,7 @@
 import UIKit
 
 class Poll: NSObject, NSCoding {
-   
+    
     var id: Int
     var name: String
     var code: String
@@ -39,3 +39,17 @@ class Poll: NSObject, NSCoding {
         aCoder.encode(code, forKey: "code")
     }
 }
+
+//class Poll {
+//
+//    var id: Int
+//    var text: String
+//    var results: [String:Any]
+//
+//    init(id: Int, text: String, results: [String:Any]) {
+//        self.id = id
+//        self.text = text
+//        self.results = results
+//    }
+//
+//}

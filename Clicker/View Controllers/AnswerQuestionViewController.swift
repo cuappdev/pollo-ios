@@ -16,7 +16,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
     var questionLabel: UILabel!
     var answerRecordedLabel: UILabel!
     var submitAnswerButton: UIButton!
-    var session: Session!
+    var session: Socket!
     var poll: Poll!
     var pollCode: String!
     var question: Question!

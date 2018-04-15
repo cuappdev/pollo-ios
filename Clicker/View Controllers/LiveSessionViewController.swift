@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class LiveSessionViewController: UIViewController, SessionDelegate {
+class LiveSessionViewController: UIViewController, SocketDelegate {
     
     var codeBarButtonItem: UIBarButtonItem!
     var endSessionBarButtonItem: UIBarButtonItem!
@@ -17,7 +17,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
     var containerViewController: UIViewController!
     var question: Question!
     var poll: Poll!
-    var session: Session!
+    var session: Socket!
         
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class LiveSessionViewController: UIViewController, SessionDelegate {
         containerView = UIView()
         view.addSubview(containerView)
         updateContainerVC(currentState: nil, pending: true)
-        session = Session(id: poll.id, userType: "user", delegate: self)
+        session = Socket(id: poll.id, userType: "user", delegate: self)
         setupNavBar()
         setConstraints()
     }

@@ -1,12 +1,12 @@
 //
-//  SessionDelegate.swift
+//  SocketDelegate.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 10/30/17.
-//  Copyright © 2017 CornellAppDev. All rights reserved.
+//  Created by Kevin Chan on 4/14/18.
+//  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-protocol SessionDelegate {
+protocol SocketDelegate {
     func sessionConnected()
     func sessionDisconnected()
     
