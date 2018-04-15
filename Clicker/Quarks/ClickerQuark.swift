@@ -18,6 +18,11 @@ extension ClickerQuark {
     var host: String {
         return hostURL + "/api"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
 
     var api: APIVersion { return .versioned(1) }
     

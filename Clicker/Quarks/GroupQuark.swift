@@ -114,7 +114,57 @@
 //
 //}
 //
-//// TODO: GetGroupMembers, GetGroupAdmins
+//struct GetGroupMembers: ClickerQuark {
+//    typealias ResponseType = [User]
+//    let id: String
+//
+//    var route: String {
+//        return "/groups/\(id)/members"
+//    }
+//
+//    let method: HTTPMethod = .get
+//
+//    func process(element: Element) throws -> [User] {
+//        switch element {
+//        case .nodes(let nodes):
+//            var users: [User] = []
+//            for node in nodes {
+//                guard let id = node["id"].int, let name = node["name"].string, let netId = node["netId"].string else {
+//                    throw NeutronError.badResponseData
+//                }
+//                users.append(User(id: id, name: name, netId: netId))
+//            }
+//            return users
+//        default: throw NeutronError.badResponseData
+//        }
+//    }
+//}
+//
+//struct GetGroupAdmins: ClickerQuark {
+//    typealias ResponseType = [User]
+//    let id: String
+//
+//    var route: String {
+//        return "/groups/\(id)/admins"
+//    }
+//
+//    let method: HTTPMethod = .get
+//
+//    func process(element: Element) throws -> [User] {
+//        switch element {
+//        case .nodes(let nodes):
+//            var users: [User] = []
+//            for node in nodes {
+//                guard let id = node["id"].int, let name = node["name"].string, let netId = node["netId"].string else {
+//                    throw NeutronError.badResponseData
+//                }
+//                users.append(User(id: id, name: name, netId: netId))
+//            }
+//            return users
+//        default: throw NeutronError.badResponseData
+//        }
+//    }
+//}
 //
 //struct AddGroupMembers: ClickerQuark {
 //
