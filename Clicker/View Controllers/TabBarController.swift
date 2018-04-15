@@ -32,7 +32,7 @@ class TabBarController: UITabBarController {
         let groupsTabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "groups"), selectedImage: selectedGroupImage)
         groupsTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
         groupViewController.tabBarItem = groupsTabBarItem
-                
+        
         let viewControllerList = [pollsViewController, joinViewController, groupViewController]
         viewControllers = viewControllerList
     }
