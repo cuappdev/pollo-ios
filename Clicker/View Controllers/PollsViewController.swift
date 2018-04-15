@@ -9,9 +9,12 @@ import UIKit
 
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
     
+//    var pollsNavigationController: UINavigationController!
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
+    var newPollButton: UIButton!
+    var testCard: PastQuestionCard!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +87,15 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         pollsCollectionView.backgroundColor = .clickerBackground
         pollsCollectionView.isPagingEnabled = true
         view.addSubview(pollsCollectionView)
+        
+        newPollButton = UIButton()
+        newPollButton.setTitle("New Poll", for: .normal)
+        newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
+        newPollButton.setTitleColor(.clickerBlack, for: .normal)
+        view.addSubview(newPollButton)
+        
+        testCard = PastQuestionCard()
+        view.addSubview(testCard)
     }
     
     func setupConstraints() {
@@ -104,7 +116,8 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.height.equalTo(40)
         }
         
-        pollsCollectionView.snp.makeConstraints { make in
+        //pollsCollectionView.snp.makeConstraints { make in
+        testCard.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
@@ -114,6 +127,25 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.width.equalToSuperview()
             make.top.equalTo(pollsOptionsView.snp.bottom)
         }
+        
+        newPollButton.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
+            } else {
+                make.top.equalTo(topLayoutGuide.snp.bottom).offset(15)
+            }
+            make.width.equalTo(50)
+            make.right.equalToSuperview().offset(-15)
+        }
+        
+        
+    }
+    
+    // MARK - actions
+    @objc func newPollAction() {
+        let blackViewController = BlackViewController()
+        navigationController?.pushViewController(blackViewController, animated: true)
+        print(navigationController!)
     }
     
     
