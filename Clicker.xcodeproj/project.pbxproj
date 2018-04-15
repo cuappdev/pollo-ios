@@ -47,11 +47,9 @@
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
-		C2F48EB5208302BE0022FE6B /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB4208302BE0022FE6B /* Group.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
 		C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBA2083045A0022FE6B /* DraftQuark.swift */; };
-		C2F48EBD208304730022FE6B /* GroupQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBC208304730022FE6B /* GroupQuark.swift */; };
 		C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBE208304980022FE6B /* SessionQuark.swift */; };
 		C2F48EC1208304D80022FE6B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC0208304D80022FE6B /* TabBarController.swift */; };
 		C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC22083051A0022FE6B /* PollsViewController.swift */; };
@@ -126,11 +124,9 @@
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
-		C2F48EB4208302BE0022FE6B /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
 		C2F48EBA2083045A0022FE6B /* DraftQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftQuark.swift; sourceTree = "<group>"; };
-		C2F48EBC208304730022FE6B /* GroupQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupQuark.swift; sourceTree = "<group>"; };
 		C2F48EBE208304980022FE6B /* SessionQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionQuark.swift; sourceTree = "<group>"; };
 		C2F48EC0208304D80022FE6B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C2F48EC22083051A0022FE6B /* PollsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsViewController.swift; sourceTree = "<group>"; };
@@ -217,7 +213,6 @@
 				C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */,
 				C2BF44CD2033FA140067505A /* PollQuark.swift */,
 				C2F48EBA2083045A0022FE6B /* DraftQuark.swift */,
-				C2F48EBC208304730022FE6B /* GroupQuark.swift */,
 				C2F48EBE208304980022FE6B /* SessionQuark.swift */,
 				C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */,
 			);
@@ -233,7 +228,6 @@
 				C2D057981F926B31008F21CB /* Question.swift */,
 				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
 				C2F48EB2208302AE0022FE6B /* Draft.swift */,
-				C2F48EB4208302BE0022FE6B /* Group.swift */,
 				C2F48EB6208302F90022FE6B /* Socket.swift */,
 				C2F48EB8208303020022FE6B /* SocketDelegate.swift */,
 				C2CA3A27208309F800E0BDC5 /* User.swift */,
@@ -597,7 +591,6 @@
 				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
 				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */,
-				C2F48EB5208302BE0022FE6B /* Group.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
 				C205588B20265838000E9B07 /* LiveResultsViewController.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
@@ -612,7 +605,6 @@
 				C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
-				C2F48EBD208304730022FE6B /* GroupQuark.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,

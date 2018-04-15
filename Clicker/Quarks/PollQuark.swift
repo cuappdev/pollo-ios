@@ -311,6 +311,12 @@ struct DeletePoll: ClickerQuark {
 //    }
 //}
 //
+
+
+// TODO: GET ALL POLLS SORTED BY DATE QUARK
+
+
+
 //struct UpdatePoll: ClickerQuark {
 //
 //    typealias ResponseType = Poll

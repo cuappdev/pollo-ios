@@ -66,7 +66,7 @@
 //
 //}
 //
-//struct GetLivePolls: ClickerQuark {
+//struct GetLiveSessions: ClickerQuark {
 //
 //    typealias ResponseType = [Session]
 //
@@ -152,3 +152,135 @@
 //    func process(element: Element) { }
 //}
 //
+
+//struct GetMembers: ClickerQuark {
+//    typealias ResponseType = [User]
+//    let id: String
+//
+//    var route: String {
+//        return "/sessions/\(id)/members"
+//    }
+//
+//    let method: HTTPMethod = .get
+//
+//    func process(element: Element) throws -> [User] {
+//        switch element {
+//        case .nodes(let nodes):
+//            var users: [User] = []
+//            for node in nodes {
+//                guard let id = node["id"].int, let name = node["name"].string, let netId = node["netId"].string else {
+//                    throw NeutronError.badResponseData
+//                }
+//                users.append(User(id: id, name: name, netId: netId))
+//            }
+//            return users
+//        default: throw NeutronError.badResponseData
+//        }
+//    }
+//}
+
+//struct GetAdmins: ClickerQuark {
+//    typealias ResponseType = [User]
+//    let id: String
+//
+//    var route: String {
+//        return "/sessions/\(id)/admins"
+//    }
+//
+//    let method: HTTPMethod = .get
+//
+//    func process(element: Element) throws -> [User] {
+//        switch element {
+//        case .nodes(let nodes):
+//            var users: [User] = []
+//            for node in nodes {
+//                guard let id = node["id"].int, let name = node["name"].string, let netId = node["netId"].string else {
+//                    throw NeutronError.badResponseData
+//                }
+//                users.append(User(id: id, name: name, netId: netId))
+//            }
+//            return users
+//        default: throw NeutronError.badResponseData
+//        }
+//    }
+//}
+
+//struct AddMembers: ClickerQuark {
+//
+//    typealias ResponseType = Void
+//    let id: String
+//    let memberIds: [Int]
+//
+//    var route: String {
+//        return "/sessions/\(id)/members"
+//    }
+//    var parameters: Parameters {
+//        return [
+//            "memberIds": memberIds
+//        ]
+//    }
+//    let method: HTTPMethod = .post
+//
+//    func process(element: Element) throws -> Void { }
+//}
+
+//struct RemoveMembers: ClickerQuark {
+//
+//    typealias ResponseType = Void
+//    let id: String
+//    let memberIds: [Int]
+//
+//    var route: String {
+//        return "/sessions/\(id)/members"
+//    }
+//    var parameters: Parameters {
+//        return [
+//            "memberIds": memberIds
+//        ]
+//    }
+//
+//    let method: HTTPMethod = .delete
+//
+//    func process(element: Element) throws -> Void { }
+//
+//}
+
+//struct AddAdmins: ClickerQuark {
+//
+//    typealias ResponseType = Void
+//    let id: String
+//    let adminIds: [Int]
+//
+//    var route: String {
+//        return "/sessions/\(id)/admins"
+//    }
+//    var parameters: Parameters {
+//        return [
+//            "adminIds": adminIds
+//        ]
+//    }
+//    let method: HTTPMethod = .post
+//
+//    func process(element: Element) throws -> Void { }
+//}
+
+//struct DeleteAdmins: ClickerQuark {
+//
+//    typealias ResponseType = Void
+//    let id: String
+//    let adminIds: [Int]
+//
+//    var route: String {
+//        return "/groups/\(id)/admins"
+//    }
+//    var parameters: Parameters {
+//        return [
+//            "adminIds": adminIds
+//        ]
+//    }
+//
+//    let method: HTTPMethod = .delete
+//
+//    func process(element: Element) throws -> Void { }
+//
+//}
