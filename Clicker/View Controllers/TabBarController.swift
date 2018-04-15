@@ -21,7 +21,7 @@ class TabBarController: UITabBarController {
         let joinViewController = JoinViewController()
         joinViewController.tabBarItem = UITabBarItem(title: "Join", image: nil, tag: 1)
         
-        let groupViewController = GroupViewController()
+        let groupViewController = GroupsViewController()
         groupViewController.tabBarItem = UITabBarItem(title: "Groups", image: nil, tag: 2)
         
         

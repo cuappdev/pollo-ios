@@ -5,7 +5,6 @@
 //  Created by Keivan Shahida on 2/14/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 import SnapKit
 
@@ -48,7 +47,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             
             // SUBMIT FR ANSWER
             let answer: [String:Any] = [
-                "deviceId": deviceId,
+                "deviceId": Device.id,
                 "question": question.id,
                 "choice": freeResponseTextField.text!,
                 "text": freeResponseTextField.text!
@@ -61,7 +60,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         
         // SUBMIT MC ANSWER
         let answer: [String:Any] = [
-            "deviceId": deviceId,
+            "deviceId": Device.id,
             "question": question.id,
             "choice": intToMCOption(index),
             "text": question.options[index]
@@ -177,7 +176,7 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
     }
- 
+    
     // MARK: - KEYBOARD
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -212,4 +211,3 @@ class AnswerQuestionViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationController?.popToRootViewController(animated: true)
     }
 }
-
