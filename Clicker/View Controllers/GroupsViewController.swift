@@ -15,7 +15,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Groups"
+        // self.title = "Groups"
         view.backgroundColor = .clickerBackground
         
         setupViews()

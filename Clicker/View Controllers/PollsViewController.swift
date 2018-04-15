@@ -18,7 +18,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Polls"
+        // self.title = "Polls"
         view.backgroundColor = .clickerNavBarLightGrey
         
         setupViews()

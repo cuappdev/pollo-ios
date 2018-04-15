@@ -46,5 +46,11 @@ struct Device {
     private init() {}
 }
 
+struct Google {
+    static let googleClientID = "43978214891-pk0scb60nvn2ofa5acccd58k79n4llkg.apps.googleusercontent.com"
+    
+    private init() {}
+}
+
 let hostURL = "http://clicker-backend.cornellappdev.com"
 // let hostURL = "http://localhost:3000"
