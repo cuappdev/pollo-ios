@@ -10,13 +10,14 @@ import Foundation
 
 class User {
     
+    static var currentUser: User?
     static var userSession: UserSession?
     
-    var id: Int
+    var id: Float
     var name: String
     var netId: String
     
-    init(id: Int, name: String, netId: String) {
+    init(id: Float, name: String, netId: String) {
         self.id = id
         self.name = name
         self.netId = netId

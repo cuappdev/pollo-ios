@@ -23,6 +23,7 @@ class TabBarController: UITabBarController {
         
         UITabBar.appearance().barTintColor = .clickerDeepBlack
         
+//<<<<<<< HEAD
         setupViewControllers()
         setupNavagationControllers()
         let viewControllerList: [UIViewController] = [pollsNavigationController, joinViewController, groupNavigationController]
@@ -31,13 +32,23 @@ class TabBarController: UITabBarController {
     
     func setupViewControllers() {
         pollsViewController = PollsViewController()
-        pollsViewController.tabBarItem = UITabBarItem(title: "Polls", image: nil, tag: 0)
+        let selectedPollsImage = UIImage(named: "polls_selected")?.withRenderingMode(.alwaysOriginal)
+        let pollsTabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "polls"), selectedImage: selectedPollsImage)
+        pollsTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
+        pollsViewController.tabBarItem = pollsTabBarItem
         
         joinViewController = JoinViewController()
-        joinViewController.tabBarItem = UITabBarItem(title: "Join", image: nil, tag: 1)
+        let joinImage = UIImage(named: "join")?.withRenderingMode(.alwaysOriginal)
+        let joinTabBarItem = UITabBarItem(title: "", image: joinImage, tag: 1)
+        joinTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
+        joinViewController.tabBarItem = joinTabBarItem
         
         groupViewController = GroupsViewController()
-        groupViewController.tabBarItem = UITabBarItem(title: "Groups", image: nil, tag: 2)
+        let selectedGroupImage = UIImage(named: "groups_selected")?.withRenderingMode(.alwaysOriginal)
+        let groupsTabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "groups"), selectedImage: selectedGroupImage)
+        groupsTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
+        groupViewController.tabBarItem = groupsTabBarItem
+
     }
     
     func setupNavagationControllers() {
@@ -49,4 +60,5 @@ class TabBarController: UITabBarController {
         groupViewController.hidesBottomBarWhenPushed = true
         groupNavigationController.setNavigationBarHidden(true, animated: false)
     }
+
 }
