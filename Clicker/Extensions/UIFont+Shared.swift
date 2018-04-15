@@ -5,7 +5,6 @@
 //  Created by Kevin Chan on 2/5/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 
 extension UIFont {
@@ -20,5 +19,6 @@ extension UIFont {
     static let _16SemiboldFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
     static let _18SemiboldFont = UIFont.systemFont(ofSize: 18, weight: .semibold)
     static let _21SemiboldFont = UIFont.systemFont(ofSize: 21, weight: .semibold)
+    static let _30SemiboldFont = UIFont.systemFont(ofSize: 30, weight: .semibold)
     
 }
