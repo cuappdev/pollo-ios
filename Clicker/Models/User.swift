@@ -10,6 +10,7 @@ import Foundation
 
 class User {
     
+    static var currentUser: User?
     static var userSession: UserSession?
     
     var id: Int
