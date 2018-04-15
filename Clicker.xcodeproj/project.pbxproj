@@ -38,7 +38,6 @@
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
 		C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D3203405D60067505A /* SavedSessionCell.swift */; };
 		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
-		C2BF9829206BE0210048468E /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF9828206BE0210048468E /* GroupViewController.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
 		C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982C206BE44C0048468E /* CreatedCell.swift */; };
 		C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982E206BE4560048468E /* JoinedCell.swift */; };
@@ -51,6 +50,11 @@
 		C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBA2083045A0022FE6B /* DraftQuark.swift */; };
 		C2F48EBD208304730022FE6B /* GroupQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBC208304730022FE6B /* GroupQuark.swift */; };
 		C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBE208304980022FE6B /* SessionQuark.swift */; };
+		C2F48EC1208304D80022FE6B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC0208304D80022FE6B /* TabBarController.swift */; };
+		C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC22083051A0022FE6B /* PollsViewController.swift */; };
+		C2F48EC5208305300022FE6B /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC4208305300022FE6B /* GroupsViewController.swift */; };
+		C2F48EC72083056D0022FE6B /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC62083056D0022FE6B /* FeedbackViewController.swift */; };
+		C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC9208305C90022FE6B /* JoinViewController.swift */; };
 		C71173C91F7801BD00B4F9A1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74587131FA62F8500AB26C6 /* PendingViewController.swift */; };
@@ -110,7 +114,6 @@
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
 		C2BF44D3203405D60067505A /* SavedSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSessionCell.swift; sourceTree = "<group>"; };
 		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
-		C2BF9828206BE0210048468E /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		C2BF982C206BE44C0048468E /* CreatedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedCell.swift; sourceTree = "<group>"; };
 		C2BF982E206BE4560048468E /* JoinedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedCell.swift; sourceTree = "<group>"; };
@@ -123,6 +126,11 @@
 		C2F48EBA2083045A0022FE6B /* DraftQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftQuark.swift; sourceTree = "<group>"; };
 		C2F48EBC208304730022FE6B /* GroupQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupQuark.swift; sourceTree = "<group>"; };
 		C2F48EBE208304980022FE6B /* SessionQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionQuark.swift; sourceTree = "<group>"; };
+		C2F48EC0208304D80022FE6B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		C2F48EC22083051A0022FE6B /* PollsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsViewController.swift; sourceTree = "<group>"; };
+		C2F48EC4208305300022FE6B /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
+		C2F48EC62083056D0022FE6B /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		C2F48EC9208305C90022FE6B /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C74587131FA62F8500AB26C6 /* PendingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingViewController.swift; sourceTree = "<group>"; };
@@ -339,7 +347,11 @@
 				C76968312035065E00E7E676 /* AnswerQuestionViewController.swift */,
 				C224740C203DCD14005D21FF /* UserResultsViewController.swift */,
 				63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */,
-				C2BF9828206BE0210048468E /* GroupViewController.swift */,
+				C2F48EC0208304D80022FE6B /* TabBarController.swift */,
+				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
+				C2F48EC4208305300022FE6B /* GroupsViewController.swift */,
+				C2F48EC62083056D0022FE6B /* FeedbackViewController.swift */,
+				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -552,6 +564,7 @@
 				63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */,
 				C224740D203DCD14005D21FF /* UserResultsViewController.swift in Sources */,
 				C26D14A9207E6F86008C3F48 /* GroupCell.swift in Sources */,
+				C2F48EC1208304D80022FE6B /* TabBarController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
 				63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */,
@@ -561,11 +574,13 @@
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
 				63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */,
 				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
+				C2F48EC5208305300022FE6B /* GroupsViewController.swift in Sources */,
 				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
 				63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */,
 				C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
+				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */,
 				C2F48EB5208302BE0022FE6B /* Group.swift in Sources */,
 				C74587141FA62F8500AB26C6 /* PendingViewController.swift in Sources */,
@@ -576,7 +591,6 @@
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
 				C2B3C0CA202AB08B003A9D1C /* EndSessionViewController.swift in Sources */,
 				C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */,
-				C2BF9829206BE0210048468E /* GroupViewController.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C2F48EB7208302F90022FE6B /* Socket.swift in Sources */,
 				C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */,
@@ -584,6 +598,7 @@
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
 				C2F48EBD208304730022FE6B /* GroupQuark.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
+				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
@@ -592,6 +607,7 @@
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,
 				C768B76F203B89010062DC66 /* LiveSessionCell.swift in Sources */,
+				C2F48EC72083056D0022FE6B /* FeedbackViewController.swift in Sources */,
 				C23B3D8C203B5618006AD046 /* LiveSessionViewController.swift in Sources */,
 				C76968322035065E00E7E676 /* AnswerQuestionViewController.swift in Sources */,
 				C25F21E6203F763D001F540E /* FRSectionCell.swift in Sources */,
