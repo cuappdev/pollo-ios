@@ -23,7 +23,6 @@ class TabBarController: UITabBarController {
         
         UITabBar.appearance().barTintColor = .clickerDeepBlack
         
-//<<<<<<< HEAD
         setupViewControllers()
         setupNavagationControllers()
         let viewControllerList: [UIViewController] = [pollsNavigationController, joinViewController, groupNavigationController]

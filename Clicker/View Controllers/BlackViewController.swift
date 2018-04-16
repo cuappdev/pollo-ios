@@ -15,7 +15,7 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerBlack
+        view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
         setupViews()
