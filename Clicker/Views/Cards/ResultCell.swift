@@ -52,6 +52,11 @@ class ResultCell: UITableViewCell {
         highlightView = UIView()
         highlightView.backgroundColor = .clickerMint
         highlightView.layer.cornerRadius = 8
+        if #available(iOS 11.0, *) {
+            highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        } else {
+            // Fallback on earlier versions
+        }
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
         

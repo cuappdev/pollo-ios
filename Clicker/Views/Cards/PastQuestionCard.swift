@@ -12,14 +12,16 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     var question: Question!
     var currentState: CurrentState!
-    var totalNumResults: Float!
+    var totalNumResults: Int!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
+    
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
-    var hideResultsButton: UIButton!
+    var shareResultsButton: UIButton!
+    var totalResultsLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,7 +39,7 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         question = staticQuestion
         currentState = staticCurrentState
         
-        totalNumResults = Float(currentState.getTotalCount())
+        totalNumResults = Int(currentState.getTotalCount())
         
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
@@ -69,18 +71,27 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
-        visibiltyLabel.text = "Visible to Everyone"
+        visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
         addSubview(visibiltyLabel)
         
-        hideResultsButton = UIButton()
-        hideResultsButton.setTitleColor(.clickerBlue, for: .normal)
-        hideResultsButton.setTitle("Hide Results", for: .normal)
-        hideResultsButton.titleLabel?.font = ._12SemiboldFont
-        hideResultsButton.titleLabel?.textAlignment = .right
-        addSubview(hideResultsButton)
+        shareResultsButton = UIButton()
+        shareResultsButton.setTitleColor(.clickerBorder, for: .normal)
+        shareResultsButton.backgroundColor = .clickerGreen
+        shareResultsButton.setTitle("Share Results", for: .normal)
+        shareResultsButton.titleLabel?.font = ._16SemiboldFont
+        shareResultsButton.titleLabel?.textAlignment = .center
+        shareResultsButton.layer.cornerRadius = 25.5
+        addSubview(shareResultsButton)
+        
+        totalResultsLabel = UILabel()
+        totalResultsLabel.text = "\(totalNumResults!) votes"
+        totalResultsLabel.font = ._12MediumFont
+        totalResultsLabel.textAlignment = .right
+        totalResultsLabel.textColor = .clickerMediumGray
+        addSubview(totalResultsLabel)
         
     }
     
@@ -100,17 +111,24 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         }
         
         visibiltyLabel.snp.updateConstraints{ make in
-            make.left.equalToSuperview().offset(41)
-            make.width.equalTo(120)
-            make.top.equalTo(resultsTableView.snp.bottom).offset(19)
-            make.height.equalTo(15)
+            make.left.equalToSuperview().offset(46)
+            make.width.equalTo(200)
+            make.bottom.equalTo(shareResultsButton.snp.top).offset(-17)
+            make.height.equalTo(14.5)
         }
         
-        hideResultsButton.snp.updateConstraints{ make in
-            make.right.equalToSuperview().offset(-18)
+        shareResultsButton.snp.updateConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-24)
+            make.height.equalTo(47)
+            make.width.equalTo(292.5)
+        }
+        
+        totalResultsLabel.snp.updateConstraints{ make in
+            make.right.equalToSuperview().offset(-22.5)
+            make.width.equalTo(50)
             make.top.equalTo(visibiltyLabel.snp.top)
-            make.height.equalTo(15)
-            make.width.equalTo(75)
+            make.height.equalTo(14.5)
         }
         
     }
@@ -131,7 +149,7 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         cell.numberLabel.text = "\(count)"
         print("totalNumResults: \(totalNumResults)")
         if (totalNumResults > 0) {
-            let percentWidth = CGFloat(Float(count) / totalNumResults)
+            let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
             cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
         } else {
