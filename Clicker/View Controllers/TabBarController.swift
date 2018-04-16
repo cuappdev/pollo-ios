@@ -54,10 +54,12 @@ class TabBarController: UITabBarController {
         pollsNavigationController = UINavigationController(rootViewController: pollsViewController)
         pollsViewController.hidesBottomBarWhenPushed = true
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
 
         groupNavigationController = UINavigationController(rootViewController: groupViewController)
         groupViewController.hidesBottomBarWhenPushed = true
         groupNavigationController.setNavigationBarHidden(true, animated: false)
+        groupNavigationController.navigationBar.barTintColor = .clickerDeepBlack
     }
 
 }
