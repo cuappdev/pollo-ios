@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PastQuestionCard: UIView, UITableViewDelegate, UITableViewDataSource {
+class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var question: Question!
     var currentState: CurrentState!
@@ -86,11 +86,6 @@ class PastQuestionCard: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func layoutViews() {
         
-        self.snp.updateConstraints { make in
-            make.height.equalTo(415)
-            //make.width.equalTo(339)
-        }
-        
         questionLabel.snp.updateConstraints{ make in
             make.top.equalToSuperview().offset(18)
             make.left.equalToSuperview().offset(18)
@@ -124,6 +119,8 @@ class PastQuestionCard: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
+        cell.choiceTag = indexPath.row
+        cell.optionLabel.text = question.options[indexPath.row]
         cell.selectionStyle = .none
         
         // UPDATE HIGHLIGHT VIEW WIDTH
@@ -131,7 +128,6 @@ class PastQuestionCard: UIView, UITableViewDelegate, UITableViewDataSource {
         guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
         }
-        cell.choiceLabel.text = "\(currentState.answers)"
         cell.numberLabel.text = "\(count)"
         print("totalNumResults: \(totalNumResults)")
         if (totalNumResults > 0) {

@@ -13,10 +13,11 @@ import SnapKit
 class ResultCell: UITableViewCell {
     
     var containerView: UIView!
-    var choiceLabel = UILabel()
-    var numberLabel = UILabel()
+    var optionLabel: UILabel!
+    var numberLabel: UILabel!
     var highlightView: UIView!
     var highlightWidthConstraint: Constraint!
+    var choiceTag: Int!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -34,17 +35,18 @@ class ResultCell: UITableViewCell {
         containerView.layer.cornerRadius = 8
         containerView.clipsToBounds = true
         addSubview(containerView)
+
+        optionLabel = UILabel()
+        optionLabel.font = UIFont._16SemiboldFont
+        optionLabel.backgroundColor = .clear
         
-        choiceLabel.textColor = .clickerDarkGray
-        choiceLabel.font = UIFont._16MediumFont
-        choiceLabel.textAlignment = .center
+        containerView.addSubview(optionLabel)
         
-        containerView.addSubview(choiceLabel)
-        
+        numberLabel = UILabel()
         numberLabel.font = ._16MediumFont
         numberLabel.backgroundColor = .clear
         numberLabel.text = "0"
-        numberLabel.textColor = .clickerLightGray
+        numberLabel.textColor = .clickerMediumGray
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()
@@ -73,15 +75,15 @@ class ResultCell: UITableViewCell {
             make.bottom.equalToSuperview().offset(-5)
         }
         
-        choiceLabel.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.13)
-            make.height.equalToSuperview()
-            make.left.equalToSuperview()
+        optionLabel.snp.updateConstraints { make in
+            make.left.equalToSuperview().offset(15.5)
+            make.right.equalTo(numberLabel.snp.left)
             make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         
         numberLabel.snp.updateConstraints { make in
-            make.size.equalTo(choiceLabel.snp.size)
+            make.height.equalTo(optionLabel.snp.height)
             make.top.equalToSuperview()
             make.right.equalToSuperview()
         }

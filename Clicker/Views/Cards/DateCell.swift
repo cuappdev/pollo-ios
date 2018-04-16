@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DateCell: UICollectionViewCell, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
     var dateLabel: UILabel!
@@ -31,22 +31,19 @@ class DateCell: UICollectionViewCell, UIPageViewControllerDataSource, UIPageView
         dateLabel.textColor = .clickerMediumGray
         addSubview(dateLabel)
         
-        /*let layout = UICollectionViewFlowLayout()
+        let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        pollsCollectionView = UICollectionView
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 18
         layout.scrollDirection = .horizontal
-        pollsCollectionView.alwaysBounceHorizontal = true
-        pollsCollectionView.delegate = self
-        pollsCollectionView.dataSource = self
-        pollsCollectionView.register(CreatedCell.self, forCellWithReuseIdentifier: "createdCellID")
-        pollsCollectionView.register(JoinedCell.self, forCellWithReuseIdentifier: "joinedCellID")
-        pollsCollectionView.showsVerticalScrollIndicator = false
-        pollsCollectionView.showsHorizontalScrollIndicator = false
-        pollsCollectionView.backgroundColor = .clickerBackground
-        pollsCollectionView.isPagingEnabled = true
-        view.addSubview(pollsCollectionView)*/
+        //collectionView.alwaysBounceHorizontal = true
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(PastQuestionCard.self, forCellWithReuseIdentifier: "pastQuestionCardID")
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
+        addSubview(collectionView)
     }
     
     func setupConstraints() {
@@ -55,32 +52,28 @@ class DateCell: UICollectionViewCell, UIPageViewControllerDataSource, UIPageView
             make.centerX.equalToSuperview()
         }
         
-        /*pageViewController.view.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom).offset(11)
             make.width.equalToSuperview()
             make.height.equalTo(444)
             make.centerX.equalToSuperview()
-        }*/
+        }
     }
     
-    // MARK - page data source
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return cards[0]
+    // MARK: - COLLECTIONVIEW
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return cards[0]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastQuestionCardID", for: indexPath) as! PastQuestionCard
+        return cell
     }
     
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-     return 3
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 339, height: 415)
     }
     
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 0
-    }
-
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
