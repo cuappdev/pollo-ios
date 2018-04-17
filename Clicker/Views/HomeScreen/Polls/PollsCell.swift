@@ -8,13 +8,22 @@
 
 import UIKit
 
+enum PollType {
+    case created
+    case joined
+}
+
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var pollsTableView: UITableView!
     
+    var polls: [Any] = []
+    var pollType: PollType!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        getPolls()
         setupViews()
         setupConstraints()
     }
@@ -47,6 +56,21 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     func setupConstraints() {
         pollsTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+    }
+    
+    // GET POLLS
+    func getPolls() {
+        if (pollType == .created) {
+            // TODO
+        } else {
+            GetJoinedSessions().make()
+                .done { sess in
+                    self.polls = sess
+                    DispatchQueue.main.async { self.pollsTableView.reloadData() }
+                } .catch { error in
+                    print(error)
+                }
         }
     }
     

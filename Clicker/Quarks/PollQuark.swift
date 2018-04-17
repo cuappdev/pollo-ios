@@ -9,153 +9,73 @@ import Alamofire
 import Neutron
 import SwiftyJSON
 
-struct GenerateCode : ClickerQuark {
-    
-    typealias ResponseType = String
-    
-    var route: String {
-        return "/generate/code"
-    }
-    
-    let method: HTTPMethod = .get
-    
-    func process(element: Element) throws -> String {
-        switch element {
-        case .node(let node):
-            guard let code = node["code"].string else {
-                throw NeutronError.badResponseData
-            }
-            return code
-        default: throw NeutronError.badResponseData
-        }
-    }
-}
-
 struct CreatePoll: ClickerQuark {
-    
+
     typealias ResponseType = Poll
-    let name: String
-    let pollCode: String
-    
+    let id: Int
+    let text: String
+    let results: [String:Any]
+
     var route: String {
-        return "/polls"
+        return "/sessions/\(id)/polls"
     }
-    
+
     var parameters: Parameters {
         return [
-            "name": name,
-            "code": pollCode,
-            "deviceId": Device.id
+            "text": text,
+            "results": results
         ]
     }
-    
     let method: HTTPMethod = .post
-    
+    var encoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
+
     func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
+            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
                 throw NeutronError.badResponseData
             }
-            return Poll(id: id, name: name, code: code)
+            return Poll(id: id, text: text, results: results)
         default: throw NeutronError.badResponseData
         }
     }
 }
 
-struct StartCreatedPoll: ClickerQuark {
-    
-    typealias ResponseType = Void
-    let id: Int
-    
-    var route: String {
-        return "/start/poll"
-    }
-    var parameters: Parameters {
-        return [
-            "id": id
-        ]
-    }
-    
-    let method: HTTPMethod = .post
-    
-    func process(element: Element) throws {
-        return
-    }
-}
+struct GetPoll: ClickerQuark {
 
-struct StartNewPoll: ClickerQuark {
-    
-    typealias ResponseType = Int
-    
-    let code: String
-    let name: String
-    
+    typealias ResponseType = Poll
+    let id: Int
+
     var route: String {
-        return "/start/poll"
+        return "/polls/\(id)"
     }
-    
-    var parameters: Parameters {
-        return [
-            "code": code,
-            "name": name
-        ]
-    }
-    
-    let method: HTTPMethod = .post
-    
-    func process(element: Element) throws -> Int {
+
+    let method: HTTPMethod = .get
+
+    func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let port = node["port"].int else {
+            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
                 throw NeutronError.badResponseData
             }
-            return port
+            return Poll(id: id, text: text, results: results)
         default: throw NeutronError.badResponseData
         }
     }
 }
 
-struct EndPoll: ClickerQuark {
-    
-    typealias ResponseType = Void
-    
-    let id: Int
-    let save: Bool
-    
-    var route: String {
-        return "/polls/\(id)/end"
-    }
-    
-    var parameters: Parameters {
-        return [
-            "save": save
-        ]
-    }
-    
-    let method: HTTPMethod = .post
-    
-    func process(element: Element) throws -> Void {
-    }
-}
-
-struct GetLivePolls: ClickerQuark {
-    
+struct GetSortedPolls: ClickerQuark {
     typealias ResponseType = [Poll]
     
-    let pollCodes: [String]
+    let id: String
     
     var route: String {
-        return "/polls/live"
+        return "/sessions/\(id)/polls"
     }
     
-    var parameters: Parameters {
-        return [
-            "codes": pollCodes
-        ]
-    }
-    
-    let method: HTTPMethod = .post
+    let method: HTTPMethod = .get
     
     var encoding: ParameterEncoding {
         return JSONEncoding.default
@@ -163,13 +83,17 @@ struct GetLivePolls: ClickerQuark {
     
     func process(element: Element) throws -> [Poll] {
         switch element {
-        case .nodes(let nodes):
+        case .node(let node):
             var polls: [Poll] = [Poll]()
-            for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
-                    throw NeutronError.badResponseData
+            for (date, pollsArr) in node {
+                for poll in pollsArr {
+                    guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
+                        throw NeutronError.badResponseData
+                    }
+                    let p = Poll(id: id, text: text, results: results)
+                    p.date = date
+                    polls.append(p)
                 }
-                polls.append(Poll(id: id, name: name, code: code))
             }
             return polls
         default:
@@ -178,186 +102,74 @@ struct GetLivePolls: ClickerQuark {
     }
 }
 
-struct UpdatePoll: ClickerQuark {
-    
-    typealias ResponseType = Poll
-    
+struct GetPollsForSession: ClickerQuark {
+
+    typealias ResponseType = [Poll]
     let id: Int
-    let name: String
-    
+
+    var route: String {
+        return "/sessions/\(id)/polls"
+    }
+    let method: HTTPMethod = .get
+
+    func process(element: Element) throws -> [Poll] {
+        switch element {
+        case .nodes(let nodes):
+            var polls: [Poll] = []
+            for node in nodes {
+                guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
+                    throw NeutronError.badResponseData
+                }
+                polls.append(Poll(id: id, text: text, results: results))
+            }
+            return polls
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
+
+
+struct UpdatePoll: ClickerQuark {
+
+    typealias ResponseType = Poll
+    let id: Int
+    let text: String
+    let results: [String:Any]
+
     var route: String {
         return "/polls/\(id)"
     }
-    
+
     var parameters: Parameters {
         return [
-            "name": name,
-            "deviceId": Device.id
+            "text": text,
+            "results": results
         ]
     }
-    
     let method: HTTPMethod = .put
-    
+
     func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
+            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
                 throw NeutronError.badResponseData
             }
-            return Poll(id: id, name: name, code: code)
-        default:
-            throw NeutronError.badResponseData
+            return Poll(id: id, text: text, results: results)
+        default: throw NeutronError.badResponseData
         }
     }
 }
 
 struct DeletePoll: ClickerQuark {
-    
+
     typealias ResponseType = Void
-    
     let id: Int
-    
+
     var route: String {
-        return "/polls/\(id)/\(Device.id)"
+        return "/polls/\(id)"
     }
-    
+
     let method: HTTPMethod = .delete
-    
-    func process(element: Element) {
-    }
+
+    func process(element: Element) { }
 }
-
-//  *** DO NOT DELETE BELOW ***
-//struct CreatePoll: ClickerQuark {
-//
-//    typealias ResponseType = Poll
-//    let id: Int
-//    let text: String
-//    let results: [String:Any]
-//
-//    var route: String {
-//        return "/sessions/\(id)/polls"
-//    }
-//
-//    var parameters: Parameters {
-//        return [
-//            "text": text,
-//            "results": results
-//        ]
-//    }
-//    let method: HTTPMethod = .post
-//    var encoding: ParameterEncoding {
-//        return JSONEncoding.default
-//    }
-//
-//    func process(element: Element) throws -> Poll {
-//        switch element {
-//        case .node(let node):
-//            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
-//                throw NeutronError.badResponseData
-//            }
-//            return Poll(id: id, text: text, results: results)
-//        default: throw NeutronError.badResponseData
-//        }
-//    }
-//}
-//
-//struct GetPoll: ClickerQuark {
-//
-//    typealias ResponseType = Poll
-//    let id: Int
-//
-//    var route: String {
-//        return "/polls/\(id)"
-//    }
-//
-//    let method: HTTPMethod = .get
-//
-//    func process(element: Element) throws -> Poll {
-//        switch element {
-//        case .node(let node):
-//            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
-//                throw NeutronError.badResponseData
-//            }
-//            return Poll(id: id, text: text, results: results)
-//        default: throw NeutronError.badResponseData
-//        }
-//    }
-//}
-//
-//struct GetPollsForSession: ClickerQuark {
-//
-//    typealias ResponseType = [Poll]
-//    let id: Int
-//
-//    var route: String {
-//        return "/sessions/\(id)/polls"
-//    }
-//    let method: HTTPMethod = .get
-//
-//    func process(element: Element) throws -> [Poll] {
-//        switch element {
-//        case .nodes(let nodes):
-//            var polls: [Poll] = []
-//            for node in nodes {
-//                guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
-//                    throw NeutronError.badResponseData
-//                }
-//                polls.append(Poll(id: id, text: text, results: results))
-//            }
-//            return polls
-//        default: throw NeutronError.badResponseData
-//        }
-//    }
-//}
-//
-
-
-// TODO: GET ALL POLLS SORTED BY DATE QUARK
-
-
-
-//struct UpdatePoll: ClickerQuark {
-//
-//    typealias ResponseType = Poll
-//    let id: Int
-//    let text: String
-//    let results: [String:Any]
-//
-//    var route: String {
-//        return "/polls/\(id)"
-//    }
-//
-//    var parameters: Parameters {
-//        return [
-//            "text": text,
-//            "results": results
-//        ]
-//    }
-//    let method: HTTPMethod = .put
-//
-//    func process(element: Element) throws -> Poll {
-//        switch element {
-//        case .node(let node):
-//            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
-//                throw NeutronError.badResponseData
-//            }
-//            return Poll(id: id, text: text, results: results)
-//        default: throw NeutronError.badResponseData
-//        }
-//    }
-//}
-//
-//struct DeletePoll: ClickerQuark {
-//
-//    typealias ResponseType = Void
-//    let id: Int
-//
-//    var route: String {
-//        return "/polls/\(id)"
-//    }
-//
-//    let method: HTTPMethod = .delete
-//
-//    func process(element: Element) { }
-//}

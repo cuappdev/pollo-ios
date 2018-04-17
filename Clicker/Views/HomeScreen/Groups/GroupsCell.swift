@@ -71,7 +71,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    // GET JOINED SESSIONS
+    // GET SESSIONS
     func getSessions() {
         if (groupType == .created) {
             // TODO
