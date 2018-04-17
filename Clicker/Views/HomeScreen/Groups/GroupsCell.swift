@@ -9,14 +9,14 @@
 import UIKit
 
 enum GroupType {
-    case .created
-    case .joined
+    case created
+    case joined
 }
 
 class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var groupsTableView: UITableView!
-    var sessions = [] // JOINED: [[Session]], CREATED: [Session]
+    var sessions: [Any] = [] // JOINED: [[Session]], CREATED: [Session]
     
     var groupType: GroupType!
     
@@ -39,7 +39,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         if let joinedSessions = sessions as? [[Session]] {
             // JOINED SESSIONS
             if (joinedSessions.count == 2) {
-                return joinSessions[0].count + joinedSessions[1].count
+                return joinedSessions[0].count + joinedSessions[1].count
             } else {
                 return 0
             }
@@ -79,7 +79,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
             GetJoinedSessions().make()
                 .done { sess in
                     self.sessions = sess
-                    DispatchQueue.main.async { groupsTableView.reloadData() }
+                    DispatchQueue.main.async { self.groupsTableView.reloadData() }
                 } .catch { error in
                     print(error)
             }
