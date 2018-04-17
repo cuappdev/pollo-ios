@@ -9,12 +9,11 @@ import UIKit
 
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
     
-//    var pollsNavigationController: UINavigationController!
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerNavBarLightGrey

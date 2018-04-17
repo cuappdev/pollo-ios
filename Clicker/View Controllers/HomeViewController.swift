@@ -216,7 +216,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     // GENERATE POLL CODE
     func getNewPollCode(completion: @escaping ((String) -> Void)) {
-        GeneratePollCode().make()
+        GenerateCode().make()
             .done { code -> Void in
                 UserDefaults.standard.setValue(code, forKey: "pollCode")
                 completion(code)

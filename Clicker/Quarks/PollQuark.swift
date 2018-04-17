@@ -9,7 +9,7 @@ import Alamofire
 import Neutron
 import SwiftyJSON
 
-struct GeneratePollCode : ClickerQuark {
+struct GenerateCode : ClickerQuark {
     
     typealias ResponseType = String
     

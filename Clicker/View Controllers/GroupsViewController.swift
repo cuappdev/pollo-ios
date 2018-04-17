@@ -28,7 +28,12 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupsCellID", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupsCellID", for: indexPath) as! GroupsCell
+        if (indexPath.item == 0) {
+            cell.groupType = .created
+        } else {
+            cell.groupType = .joined
+        }
         return cell
     }
     
