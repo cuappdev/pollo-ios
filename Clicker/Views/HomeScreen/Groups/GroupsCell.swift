@@ -8,13 +8,22 @@
 
 import UIKit
 
+enum GroupType {
+    case .created
+    case .joined
+}
+
 class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var groupsTableView: UITableView!
+    var sessions = [] // JOINED: [[Session]], CREATED: [Session]
+    
+    var groupType: GroupType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        getSessions()
         setupViews()
         setupConstraints()
     }
@@ -27,7 +36,18 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if let joinedSessions = sessions as? [[Session]] {
+            // JOINED SESSIONS
+            if (joinedSessions.count == 2) {
+                return joinSessions[0].count + joinedSessions[1].count
+            } else {
+                return 0
+            }
+        } else {
+            // CREATED SESSIONS
+            return sessions.count
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -48,6 +68,21 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     func setupConstraints() {
         groupsTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+    }
+    
+    // GET JOINED SESSIONS
+    func getSessions() {
+        if (groupType == .created) {
+            // TODO
+        } else {
+            GetJoinedSessions().make()
+                .done { sess in
+                    self.sessions = sess
+                    DispatchQueue.main.async { groupsTableView.reloadData() }
+                } .catch { error in
+                    print(error)
+            }
         }
     }
     
