@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
-		63EB7CDC205ECADC001C45BA /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDB205ECADC001C45BA /* DateCell.swift */; };
 		6315A4C32083D19D00EEEDDD /* BlackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6315A4C22083D19D00EEEDDD /* BlackViewController.swift */; };
 		6315A4C52083DC9F00EEEDDD /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6315A4C42083DC9F00EEEDDD /* DateCell.swift */; };
 		638406D52083CC1400483645 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638406D42083CC1400483645 /* ResultCell.swift */; };
@@ -19,7 +18,6 @@
 		6389C954208597F400F78003 /* GroupPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C953208597F400F78003 /* GroupPreviewCell.swift */; };
 		6389C9582085B27100F78003 /* PastQAskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9572085B27100F78003 /* PastQAskedCard.swift */; };
 		6389C95A2085B28F00F78003 /* PastQAskedSharedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9592085B28F00F78003 /* PastQAskedSharedCard.swift */; };
-		63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */; };
 		63EB7CDC205ECADC001C45BA /* OldDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDB205ECADC001C45BA /* OldDateCell.swift */; };
 		63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */; };
 		63EB7CE0205ECB37001C45BA /* NewGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */; };
@@ -77,7 +75,7 @@
 		C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7D6AF671F93E01F003ABA10 /* GoogleService-Info.plist */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
-		C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
+		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,7 +90,6 @@
 
 /* Begin PBXFileReference section */
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
-		63EB7CDB205ECADC001C45BA /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		6315A4C22083D19D00EEEDDD /* BlackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackViewController.swift; sourceTree = "<group>"; };
 		6315A4C42083DC9F00EEEDDD /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		638406D42083CC1400483645 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
@@ -103,7 +100,6 @@
 		6389C953208597F400F78003 /* GroupPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPreviewCell.swift; sourceTree = "<group>"; };
 		6389C9572085B27100F78003 /* PastQAskedCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastQAskedCard.swift; sourceTree = "<group>"; };
 		6389C9592085B28F00F78003 /* PastQAskedSharedCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastQAskedSharedCard.swift; sourceTree = "<group>"; };
-		63EB7CD8205EC3C2001C45BA /* GroupHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomeViewController.swift; sourceTree = "<group>"; };
 		63EB7CDB205ECADC001C45BA /* OldDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldDateCell.swift; sourceTree = "<group>"; };
 		63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastQuestionCell.swift; sourceTree = "<group>"; };
 		63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupCell.swift; sourceTree = "<group>"; };
@@ -356,6 +352,7 @@
 				C7F923C31F73540600B1E975 /* Products */,
 				A2D67F102058E16CFF6D7701 /* Pods */,
 				2B4C2EA7BDB8502F608CE492 /* Frameworks */,
+				D1C6FEF42086AF6B00B8B6E7 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -404,6 +401,13 @@
 				C21D98802083D32000191103 /* LoginViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		D1C6FEF42086AF6B00B8B6E7 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -501,7 +505,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7F923D01F73540600B1E975 /* LaunchScreen.storyboard in Resources */,
+				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 				C7D6AF681F93E01F003ABA10 /* GoogleService-Info.plist in Resources */,
 			);
@@ -592,7 +596,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -632,7 +636,6 @@
 				6389C9522085953F00F78003 /* PollsCell.swift in Sources */,
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
 				6389C954208597F400F78003 /* GroupPreviewCell.swift in Sources */,
-				63EB7CD9205EC3C2001C45BA /* GroupHomeViewController.swift in Sources */,
 				C205588920265822000E9B07 /* CreateQuestionViewController.swift in Sources */,
 				C2F48EC5208305300022FE6B /* GroupsViewController.swift in Sources */,
 				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
