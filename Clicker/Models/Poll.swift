@@ -8,48 +8,18 @@
 
 import UIKit
 
-class Poll: NSObject, NSCoding {
-    
-    var id: Int
-    var name: String
-    var code: String
-    
-    init(id: Int, name: String, code: String) {
-        self.id = id
-        self.name = name
-        self.code = code
-    }
-    
-    init(json: [String:Any]) {
-        self.id = json["id"] as! Int
-        self.name = json["name"] as! String
-        self.code = json["code"] as! String
-    }
-    
-    required convenience init?(coder aDecoder: NSCoder) {
-        let id = aDecoder.decodeInteger(forKey: "id")
-        let name = aDecoder.decodeObject(forKey: "name") as! String
-        let code = aDecoder.decodeObject(forKey: "code") as! String
-        self.init(id: id, name: name, code: code)
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(id, forKey: "id")
-        aCoder.encode(name, forKey: "name")
-        aCoder.encode(code, forKey: "code")
-    }
-}
+class Poll {
 
-//class Poll {
-//
-//    var id: Int
-//    var text: String
-//    var results: [String:Any]
-//
-//    init(id: Int, text: String, results: [String:Any]) {
-//        self.id = id
-//        self.text = text
-//        self.results = results
-//    }
-//
-//}
+    var id: Int
+    var text: String
+    var results: [String:Any]
+    var date: String?
+
+
+    init(id: Int, text: String, results: [String:Any]) {
+        self.id = id
+        self.text = text
+        self.results = results
+    }
+
+}
