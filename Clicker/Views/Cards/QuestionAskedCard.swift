@@ -1,14 +1,14 @@
 //
-//  PastQuestionCard.swift
+//  LiveQuestionAskedCard.swift
 //  Clicker
 //
-//  Created by eoin on 4/14/18.
+//  Created by eoin on 4/16/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class QuestionAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var question: Question!
     var currentState: CurrentState!
@@ -16,6 +16,7 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
+    var cellColors: UIColor!
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
@@ -53,6 +54,8 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         self.layer.shadowRadius = 2.5
         self.layer.cornerRadius = 15
         
+        cellColors = .clickerHalfGreen
+        
         questionLabel = UILabel()
         questionLabel.text = question.text
         questionLabel.font = ._22SemiboldFont
@@ -79,12 +82,15 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         addSubview(visibiltyLabel)
         
         shareResultsButton = UIButton()
-        shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
-        shareResultsButton.backgroundColor = .clickerGreen
-        shareResultsButton.setTitle("Share Results", for: .normal)
+        shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
+        shareResultsButton.backgroundColor = .clear
+        shareResultsButton.setTitle("End Question", for: .normal)
         shareResultsButton.titleLabel?.font = ._16SemiboldFont
         shareResultsButton.titleLabel?.textAlignment = .center
         shareResultsButton.layer.cornerRadius = 25.5
+        shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+        shareResultsButton.layer.borderWidth = 1.5
+        shareResultsButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
         addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
@@ -95,40 +101,39 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        addSubview(eyeView)
-        
+        addSubview(eyeView)        
     }
     
     func layoutViews() {
         
-        questionLabel.snp.updateConstraints { make in
+        questionLabel.snp.updateConstraints{ make in
             make.top.equalToSuperview().offset(18)
             make.left.equalToSuperview().offset(18)
             make.right.equalToSuperview().offset(-18)
         }
         
-        resultsTableView.snp.updateConstraints { make in
+        resultsTableView.snp.updateConstraints{ make in
             make.top.equalTo(questionLabel.snp.bottom).offset(17)
             make.left.equalToSuperview()//.offset(18)
             make.right.equalToSuperview()//.offset(-18)
             make.bottom.equalToSuperview().offset(-51)
         }
         
-        visibiltyLabel.snp.updateConstraints { make in
+        visibiltyLabel.snp.updateConstraints{ make in
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.bottom.equalTo(shareResultsButton.snp.top).offset(-17)
+            make.top.equalTo(shareResultsButton.snp.top).offset(-17)
             make.height.equalTo(14.5)
         }
         
-        shareResultsButton.snp.updateConstraints { make in
+        shareResultsButton.snp.updateConstraints{ make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-24)
             make.height.equalTo(47)
             make.width.equalTo(292.5)
         }
         
-        totalResultsLabel.snp.updateConstraints { make in
+        totalResultsLabel.snp.updateConstraints{ make in
             make.right.equalToSuperview().offset(-22.5)
             make.width.equalTo(50)
             make.top.equalTo(visibiltyLabel.snp.top)
@@ -151,14 +156,15 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         cell.choiceTag = indexPath.row
         cell.optionLabel.text = question.options[indexPath.row]
         cell.selectionStyle = .none
-        cell.highlightView.backgroundColor = .clickerMint
-        
+        cell.highlightView.backgroundColor = cellColors
+
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
         guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
         }
         cell.numberLabel.text = "\(count)"
+        
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
@@ -168,9 +174,9 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         }
         
         // ANIMATE CHANGE
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
+        //UIView.animate(withDuration: 0.5, animations: {
+          //  cell.layoutIfNeeded()
+       // })
         
         return cell
     }
@@ -181,6 +187,32 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 47
+    }
+    
+    // MARK  - ACTIONS
+    @objc func endQuestionAction() {
+        shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
+        shareResultsButton.backgroundColor = .clickerGreen
+        shareResultsButton.setTitle("Share Results", for: .normal)
+        shareResultsButton.titleLabel?.font = ._16SemiboldFont
+        shareResultsButton.layer.borderWidth = 0
+        
+        cellColors = .clickerMint
+        resultsTableView.reloadData()
+        
+        shareResultsButton.removeTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
+        shareResultsButton.addTarget(self, action: #selector(shareQuestionAction), for: .touchUpInside)
+    }
+    
+    @objc func shareQuestionAction() {
+        shareResultsButton.removeFromSuperview()
+        eyeView.image = #imageLiteral(resourceName: "results_shared")
+        visibiltyLabel.text = "Shared with group"
+        visibiltyLabel.textColor = .clickerGreen
+        visibiltyLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-23.5)
+        }
+        
     }
     
     

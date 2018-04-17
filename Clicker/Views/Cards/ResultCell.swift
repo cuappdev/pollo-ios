@@ -18,7 +18,7 @@ class ResultCell: UITableViewCell {
     var highlightView: UIView!
     var highlightWidthConstraint: Constraint!
     var choiceTag: Int!
-    var displayColor: UIColor!
+
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -35,6 +35,8 @@ class ResultCell: UITableViewCell {
         containerView.backgroundColor = .clear
         containerView.layer.cornerRadius = 8
         containerView.clipsToBounds = true
+        containerView.layer.borderWidth = 0.5
+        containerView.layer.borderColor = UIColor.clickerBorder.cgColor
         addSubview(containerView)
 
         optionLabel = UILabel()
@@ -51,7 +53,7 @@ class ResultCell: UITableViewCell {
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()
-        highlightView.backgroundColor = displayColor
+        //highlightView.backgroundColor =
         highlightView.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -91,7 +93,7 @@ class ResultCell: UITableViewCell {
         numberLabel.snp.updateConstraints { make in
             make.height.equalTo(optionLabel.snp.height)
             make.top.equalToSuperview()
-            make.right.equalToSuperview()
+            make.right.equalToSuperview().offset(15)
         }
         
         highlightView.snp.updateConstraints { make in
