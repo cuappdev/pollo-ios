@@ -9,32 +9,56 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
+    var pollsViewController: PollsViewController!
+    var joinViewController: JoinViewController!
+    var groupViewController: GroupsViewController!
+    
+    var pollsNavigationController: UINavigationController!
+    var groupNavigationController: UINavigationController!
+    
+
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("\n\n!!!tab bar did load!!!\n\n")
         UITabBar.appearance().barTintColor = .clickerDeepBlack
         
-        let pollsViewController = PollsViewController()
+        setupViewControllers()
+        setupNavagationControllers()
+        let viewControllerList: [UIViewController] = [pollsNavigationController, joinViewController, groupNavigationController]
+        viewControllers = viewControllerList
+    }
+    
+    func setupViewControllers() {
+        pollsViewController = PollsViewController()
         let selectedPollsImage = UIImage(named: "polls_selected")?.withRenderingMode(.alwaysOriginal)
         let pollsTabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "polls"), selectedImage: selectedPollsImage)
         pollsTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
         pollsViewController.tabBarItem = pollsTabBarItem
         
-        let joinViewController = JoinViewController()
+        joinViewController = JoinViewController()
         let joinImage = UIImage(named: "join")?.withRenderingMode(.alwaysOriginal)
         let joinTabBarItem = UITabBarItem(title: "", image: joinImage, tag: 1)
         joinTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
         joinViewController.tabBarItem = joinTabBarItem
         
-        let groupViewController = GroupsViewController()
+        groupViewController = GroupsViewController()
         let selectedGroupImage = UIImage(named: "groups_selected")?.withRenderingMode(.alwaysOriginal)
         let groupsTabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "groups"), selectedImage: selectedGroupImage)
         groupsTabBarItem.imageInsets = UIEdgeInsets(top: 9, left: 0, bottom: -9, right: 0)
         groupViewController.tabBarItem = groupsTabBarItem
-        
-        let viewControllerList = [pollsViewController, joinViewController, groupViewController]
-        viewControllers = viewControllerList
+    }
+    
+    func setupNavagationControllers() {
+        pollsNavigationController = UINavigationController(rootViewController: pollsViewController)
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        pollsNavigationController.navigationBar.isTranslucent = false
+
+        groupNavigationController = UINavigationController(rootViewController: groupViewController)
+        groupNavigationController.setNavigationBarHidden(true, animated: false)
+        groupNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        groupNavigationController.navigationBar.isTranslucent = false
     }
 
 }
