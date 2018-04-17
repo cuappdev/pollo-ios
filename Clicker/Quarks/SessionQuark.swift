@@ -84,26 +84,17 @@ struct GetJoinedSessions: ClickerQuark {
 }
 
 
-struct GetLiveSessions: ClickerQuark {
+struct GetPollSessions: ClickerQuark {
 
     typealias ResponseType = [Session]
-
-    let pollCodes: [String]
+    
+    let role: String
 
     var route: String {
-        return "/sessions/live"
+        return "/sessions/\(role)"
     }
 
-    var parameters: Parameters {
-        return [
-            "codes": pollCodes
-        ]
-    }
-
-    let method: HTTPMethod = .post
-    var encoding: ParameterEncoding {
-        return JSONEncoding.default
-    }
+    let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [Session] {
         switch element {
@@ -114,6 +105,35 @@ struct GetLiveSessions: ClickerQuark {
                     throw NeutronError.badResponseData
                 }
                 sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup))
+            }
+            return sessions
+        default:
+            throw NeutronError.badResponseData
+        }
+    }
+}
+
+struct GetGroupSessions: ClickerQuark {
+    
+    typealias ResponseType = [Session]
+    
+    let role: String
+    
+    var route: String {
+        return "/groups/\(role)"
+    }
+    
+    let method: HTTPMethod = .get
+    
+    func process(element: Element) throws -> [Session] {
+        switch element {
+        case .nodes(let nodes):
+            var sessions: [Session] = [Session]()
+            for node in nodes {
+                guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool, let isLive = node["isLive"].bool else {
+                    throw NeutronError.badResponseData
+                }
+                sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup, isLive: isLive))
             }
             return sessions
         default:

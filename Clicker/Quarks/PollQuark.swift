@@ -90,9 +90,7 @@ struct GetSortedPolls: ClickerQuark {
                     guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject else {
                         throw NeutronError.badResponseData
                     }
-                    let p = Poll(id: id, text: text, results: results)
-                    p.date = date
-                    polls.append(p)
+                    polls.append(Poll(id: id, text: text, results: results, date: date))
                 }
             }
             return polls

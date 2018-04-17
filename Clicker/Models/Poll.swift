@@ -21,5 +21,12 @@ class Poll {
         self.text = text
         self.results = results
     }
+    
+    init(id: Int, text: String, results: [String:Any], date: String) {
+        self.id = id
+        self.text = text
+        self.results = results
+        self.date = date
+    }
 
 }

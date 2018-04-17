@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, NewQuestionDelegate {
+class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate {
     
     var questionDelegate: QuestionDelegate!
     var session: Session!
@@ -156,16 +156,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     
     func updatedTextField(index: Int, text: String) {
         optionsDict[index] = text
-    }
-    
-    // MARK: - NEW QUESTION DELEGATE
-    
-    func creatingNewQuestion() {
-        // Notify that we are in a Follow Up question
-        questionDelegate.inFollowUpQuestion()
-        questionTextField.text = ""
-        clearOptionsDict()
-        optionsTableView.reloadData()
     }
     
     // MARK: - KEYBOARD
