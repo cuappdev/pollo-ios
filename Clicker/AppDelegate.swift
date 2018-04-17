@@ -38,11 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             window?.rootViewController?.present(login, animated: false, completion: nil)
         }
         
-        // SIREN
-        let siren = Siren.shared
-        siren.alertType = .option
-        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
-        siren.checkVersion(checkType: .immediately)
+//        // SIREN
+//        let siren = Siren.shared
+//        siren.alertType = .option
+//        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
+//        siren.checkVersion(checkType: .immediately)
         
         // FABRIC
         #if DEBUG

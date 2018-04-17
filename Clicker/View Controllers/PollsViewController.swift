@@ -143,5 +143,16 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         blackViewController.setupAdminGroup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // SHOW NAV BAR, HIDE TAB BAR
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
     
 }
