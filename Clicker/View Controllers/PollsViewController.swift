@@ -14,7 +14,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-    var testCard: PastQuestionCard!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +30,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "createdCellID", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pollsCellID", for: indexPath)
         return cell
     }
     
@@ -80,8 +79,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         pollsCollectionView.alwaysBounceHorizontal = true
         pollsCollectionView.delegate = self
         pollsCollectionView.dataSource = self
-        pollsCollectionView.register(CreatedCell.self, forCellWithReuseIdentifier: "createdCellID")
-        pollsCollectionView.register(JoinedCell.self, forCellWithReuseIdentifier: "joinedCellID")
+        pollsCollectionView.register(PollsCell.self, forCellWithReuseIdentifier: "pollsCellID")
         pollsCollectionView.showsVerticalScrollIndicator = false
         pollsCollectionView.showsHorizontalScrollIndicator = false
         pollsCollectionView.backgroundColor = .clickerBackground
@@ -89,14 +87,11 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         view.addSubview(pollsCollectionView)
         
         newPollButton = UIButton()
-        newPollButton.setTitle("New Poll", for: .normal)
+        newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
-        newPollButton.setTitleColor(.clickerBlack, for: .normal)
         view.addSubview(newPollButton)
         
-        testCard = PastQuestionCard()
-        view.addSubview(testCard)
-    }
+        }
     
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
@@ -116,8 +111,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.height.equalTo(40)
         }
         
-        //pollsCollectionView.snp.makeConstraints { make in
-        testCard.snp.makeConstraints { make in
+        pollsCollectionView.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
@@ -134,7 +128,8 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             } else {
                 make.top.equalTo(topLayoutGuide.snp.bottom).offset(15)
             }
-            make.width.equalTo(50)
+            make.width.equalTo(19)
+            make.height.equalTo(19)
             make.right.equalToSuperview().offset(-15)
         }
         
@@ -145,7 +140,8 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     @objc func newPollAction() {
         let blackViewController = BlackViewController()
         navigationController?.pushViewController(blackViewController, animated: true)
-        print(navigationController!)
+        //blackViewController.setupEmptyStudentPoll()
+        blackViewController.setupAdminGroup()
     }
     
     

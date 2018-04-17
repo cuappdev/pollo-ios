@@ -18,6 +18,7 @@ class ResultCell: UITableViewCell {
     var highlightView: UIView!
     var highlightWidthConstraint: Constraint!
     var choiceTag: Int!
+    var displayColor: UIColor!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -50,7 +51,7 @@ class ResultCell: UITableViewCell {
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()
-        highlightView.backgroundColor = .clickerMint
+        highlightView.backgroundColor = displayColor
         highlightView.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]

@@ -38,7 +38,8 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         //collectionView.alwaysBounceHorizontal = true
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(PastQuestionCard.self, forCellWithReuseIdentifier: "pastQuestionCardID")
+        collectionView.register(PastQAskedCard.self, forCellWithReuseIdentifier: "pastQAskedCardID")
+        collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: "liveQAskedCardID")
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
@@ -62,11 +63,16 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastQuestionCardID", for: indexPath) as! PastQuestionCard
+        var cell: UICollectionViewCell
+        if indexPath.row == 1 {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastQAskedCardID", for: indexPath) as! PastQAskedCard
+        } else {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
+        }
         return cell
     }
     

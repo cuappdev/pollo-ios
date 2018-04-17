@@ -10,6 +10,12 @@ import UIKit
 
 class BlackViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    // empty student vars
+    var monkeyView: UIImageView!
+    var nothingToSeeLabel: UILabel!
+    var waitingLabel: UILabel!
+    
+    // admin group vars
     var mainCollectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -18,8 +24,6 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
         view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        setupViews()
-        setupConstraints()
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,7 +31,60 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
         // Dispose of any resources that can be recreated.
     }
     
-    func setupViews() {
+    func setupEmptyStudentPoll() {
+        setupEmptyStudentPollViews()
+        setupEmptyStudentPollConstraints()
+    }
+    
+    func setupEmptyStudentPollViews() {
+        monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
+        view.addSubview(monkeyView)
+        
+        nothingToSeeLabel = UILabel()
+        nothingToSeeLabel.text = "Nothing to see yet."
+        nothingToSeeLabel.font = ._16SemiboldFont
+        nothingToSeeLabel.textColor = .clickerBorder
+        nothingToSeeLabel.textAlignment = .center
+        view.addSubview(nothingToSeeLabel)
+        
+        waitingLabel = UILabel()
+        waitingLabel.text = "Waiting for the host to post a poll"
+        waitingLabel.font = ._14MediumFont
+        waitingLabel.textColor = .clickerMediumGray
+        waitingLabel.textAlignment = .center
+        view.addSubview(waitingLabel)
+        
+    }
+    
+    func setupEmptyStudentPollConstraints() {
+        monkeyView.snp.makeConstraints { make in
+            make.width.equalTo(31)
+            make.height.equalTo(34)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(142)
+        }
+        
+        nothingToSeeLabel.snp.makeConstraints { make in
+            make.width.equalTo(200)
+            make.height.equalTo(19)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(monkeyView.snp.bottom).offset(21)
+        }
+        
+        waitingLabel.snp.makeConstraints { make in
+            make.width.equalTo(220)
+            make.height.equalTo(17)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
+        }
+    }
+    
+    func setupAdminGroup() {
+        setupAdminGroupViews()
+        setupAdminGroupConstraints()
+    }
+    
+    func setupAdminGroupViews() {
         let layout = UICollectionViewFlowLayout()
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 10
@@ -43,7 +100,7 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
         view.addSubview(mainCollectionView)
     }
 
-    func setupConstraints() {
+    func setupAdminGroupConstraints() {
         mainCollectionView.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top)

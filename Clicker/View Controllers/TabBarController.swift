@@ -20,7 +20,7 @@ class TabBarController: UITabBarController {
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("\n\n!!!tab bar did load!!!\n\n")
         UITabBar.appearance().barTintColor = .clickerDeepBlack
         
         setupViewControllers()
@@ -52,14 +52,14 @@ class TabBarController: UITabBarController {
     
     func setupNavagationControllers() {
         pollsNavigationController = UINavigationController(rootViewController: pollsViewController)
-        pollsViewController.hidesBottomBarWhenPushed = true
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
         pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        pollsNavigationController.navigationBar.isTranslucent = false
 
         groupNavigationController = UINavigationController(rootViewController: groupViewController)
-        groupViewController.hidesBottomBarWhenPushed = true
         groupNavigationController.setNavigationBarHidden(true, animated: false)
         groupNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        groupNavigationController.navigationBar.isTranslucent = false
     }
 
 }
