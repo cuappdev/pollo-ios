@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let netId = email?.substring(to: (email?.index(of: "@"))!)
             User.currentUser = User(id: Float(userId!)!, name: "\(givenName) \(familyName)", netId: netId!)
             
-            if let significantEvents : Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+            if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
                 UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
             }
             
