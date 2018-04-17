@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var question: Question!
     var currentState: CurrentState!
@@ -147,7 +147,7 @@ class PastQuestionCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
             return cell
         }
         cell.numberLabel.text = "\(count)"
-        print("totalNumResults: \(totalNumResults)")
+        cell.displayColor = .clickerMint
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
