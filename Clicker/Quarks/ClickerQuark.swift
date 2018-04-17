@@ -19,12 +19,16 @@ extension ClickerQuark {
         return hostURL + "/api"
     }
     var headers: HTTPHeaders {
-        return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
-        ]
+        if let userSession = User.userSession {
+            return [
+                "Authorization": "Bearer \(userSession.accessToken)"
+            ]
+        } else {
+            return [:]
+        }
     }
 
-    var api: APIVersion { return .versioned(1) }
+    var api: APIVersion { return .versioned(2) }
     
     public func process(response: JSON) throws -> ResponseType {
         if let errors = response["data"]["errors"].array?.flatMap({ $0.string }) {
