@@ -52,16 +52,20 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         codeTextField.leftViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._16MediumFont])
         view.addSubview(codeTextField)
-
-        joinButton = UIButton(frame: CGRect(x: codeTextField.frame.size.width - joinButtonSize.width - textFieldPadding, y: textFieldPadding, width: joinButtonSize.width, height: joinButtonSize.height))
+        
+        let joinButtonView = UIView(frame: CGRect(x: 0, y: 0, width: joinButtonSize.width + textFieldPadding * 2, height: joinButtonSize.height + textFieldPadding * 2))
+        joinButton = UIButton(frame: CGRect(x: textFieldPadding, y: textFieldPadding, width: joinButtonSize.width, height: joinButtonSize.height))
         joinButton.setTitle("Join", for: .normal)
         joinButton.setTitleColor(.white, for: .normal)
         joinButton.titleLabel?.font = ._16SemiboldFont
         joinButton.titleLabel?.textAlignment = .center
         joinButton.backgroundColor = .clickerGreen
         joinButton.layer.cornerRadius = joinButtonSize.height / 2
-        joinButton.addTarget(self, action: #selector(join), for: .touchUpInside)
-        codeTextField.addSubview(joinButton)
+        joinButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
+        joinButtonView.addSubview(joinButton)
+        
+        codeTextField.rightView = joinButtonView
+        codeTextField.rightViewMode = .always
 
         exitButton = UIButton(frame: CGRect(x: 0, y: popupHeight - bottomPadding - exitButtonHeight, width: exitButtonHeight, height: exitButtonHeight))
         exitButton.center.x = view.center.x
@@ -71,13 +75,13 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(exitButton)
     }
     
-    @objc func join() {
+    @objc func joinSession() {
         if let code = codeTextField.text {
             if code != "" {
                 StartSession(code: code).make()
                     .done { session in
-                        let socket = Socket(id: Int(session.id)!, userType: "user")
-                        print(socket)
+                        // TODO: join session
+                        print("session joined")
                     }.catch { error in
                         print(error)
                 }
@@ -114,4 +118,5 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         // Hide keyboard when user taps outside of text field on popup view
         codeTextField.resignFirstResponder()
     }
+    
 }
