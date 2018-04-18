@@ -137,13 +137,20 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     // MARK - actions
     @objc func newPollAction() {
-        let blackViewController = BlackViewController()
-        blackViewController.tabController = self.tabBarController
-        navigationController?.pushViewController(blackViewController, animated: true)
+        let blackAskController = BlackAnswerController()
+        navigationController?.pushViewController(blackAskController, animated: true)
+        /*blackAskController.socket = Socket(id: 1234, userType: "student", delegate: blackAskController)
+        var code = ""
+        StartSession(code: code).make()
+            .done { session in
+                
+        } .catch { error in
+            print(error)
+        }
+        */
+        
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = true
-        //blackViewController.setupEmptyStudentPoll()
-        blackViewController.setupAdminGroup()
     }
     
 }

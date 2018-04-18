@@ -389,18 +389,20 @@ struct StartSession: ClickerQuark {
     
     typealias ResponseType = Session
     let code: String
-    
+
     var route: String {
         return "/start/session"
     }
     var headers: HTTPHeaders {
         return [
         "Authorization": "Bearer \(User.userSession!.accessToken)"
+
         ]
     }
     var parameters: Parameters {
         return [
         "code" : code
+
         ]
     }
     let method: HTTPMethod = .post
