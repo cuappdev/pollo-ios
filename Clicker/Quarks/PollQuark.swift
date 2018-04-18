@@ -77,7 +77,7 @@ struct GetSortedPolls: ClickerQuark {
     let id: String
     
     var route: String {
-        return "/sessions/\(id)/polls"
+        return "/sessions/\(id)/polls/date"
     }
     var headers: HTTPHeaders {
         return [
@@ -102,8 +102,10 @@ struct GetSortedPolls: ClickerQuark {
                     datePollsDict[date] = pollsArr
                 }
             }
+            print(datePollsDict)
             return datePollsDict
         default:
+            print(element)
             throw NeutronError.badResponseData
         }
     }

@@ -442,10 +442,11 @@ struct StartSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].string else {
+            print(node)
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: (isGroup == "1"))
+            return Session(id: id, name: name, code: code, isGroup: isGroup)
         default: throw NeutronError.badResponseData
         }
     }

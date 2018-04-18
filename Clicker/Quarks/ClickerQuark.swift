@@ -25,7 +25,7 @@ extension ClickerQuark {
         if let errors = response["data"]["errors"].array?.flatMap({ $0.string }) {
             throw ClickerError.backendError(messages: errors)
         }
-        
+        print(response)
         if response["data"]["node"].exists() {
             return try process(element: .node(response["data"]["node"]))
         }
