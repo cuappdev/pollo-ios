@@ -30,7 +30,12 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pollsCellID", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pollsCellID", for: indexPath) as! PollsCell
+        if (indexPath.item == 0) {
+            cell.pollType = .created
+        } else {
+            cell.pollType = .joined
+        }
         return cell
     }
     
