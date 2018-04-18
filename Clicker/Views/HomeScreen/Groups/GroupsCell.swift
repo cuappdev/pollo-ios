@@ -16,7 +16,7 @@ enum GroupType {
 class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var groupsTableView: UITableView!
-    var sessions: [Any] = [] // JOINED: [[Session]], CREATED: [Session]
+    var sessions: [Session] = [] // JOINED: [[Session]], CREATED: [Session]
     
     var groupType: GroupType!
     
@@ -36,18 +36,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let joinedSessions = sessions as? [[Session]] {
-            // JOINED SESSIONS
-            if (joinedSessions.count == 2) {
-                return joinedSessions[0].count + joinedSessions[1].count
-            } else {
-                return 0
-            }
-        } else {
-            // CREATED SESSIONS
-            return sessions.count
-        }
-        
+        return sessions.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -73,17 +62,19 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     
     // GET SESSIONS
     func getSessions() {
+        let role: UserRole
         if (groupType == .created) {
-            // TODO
+            role = .admin
         } else {
-            GetJoinedSessions().make()
-                .done { sess in
-                    self.sessions = sess
-                    DispatchQueue.main.async { self.groupsTableView.reloadData() }
-                } .catch { error in
-                    print(error)
-            }
+            role = .member
         }
+        GetGroupSessions(role: String(describing: role)).make()
+            .done { sessions in
+                self.sessions = sessions
+                DispatchQueue.main.async { self.groupsTableView.reloadData() }
+            } .catch { error in
+                print(error)
+            }
     }
     
     required init?(coder aDecoder: NSCoder) {

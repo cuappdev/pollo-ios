@@ -50,6 +50,7 @@
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2DDE00C208699C900A85094 /* GroupPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DDE00B208699C900A85094 /* GroupPreviewCell.swift */; };
+		C2DDE0102086CECC00A85094 /* GoogleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DDE00F2086CECB00A85094 /* GoogleManager.swift */; };
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
@@ -128,6 +129,7 @@
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2DDE00B208699C900A85094 /* GroupPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPreviewCell.swift; sourceTree = "<group>"; };
+		C2DDE00F2086CECB00A85094 /* GoogleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleManager.swift; sourceTree = "<group>"; };
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7D6AF581F93DE4E003ABA10 /* Constants.swift */,
+				C2DDE00F2086CECB00A85094 /* GoogleManager.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 				C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */,
 				6389C9582085B27100F78003 /* PastQAskedCard.swift in Sources */,
 				6389C95020858D6300F78003 /* GroupsCell.swift in Sources */,
+				C2DDE0102086CECC00A85094 /* GoogleManager.swift in Sources */,
 				6315A4C52083DC9F00EEEDDD /* DateCell.swift in Sources */,
 				C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */,
 				C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */,

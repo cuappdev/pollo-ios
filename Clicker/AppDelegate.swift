@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = TabBarController()
@@ -67,15 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let familyName = user.profile.familyName
             let email = user.profile.email
             let netId = email?.substring(to: (email?.index(of: "@"))!)
-            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!)
-            
-            UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
-                .done { userSession in
-                    print(userSession)
-                    User.userSession = userSession
-                } .catch { error in
-                    print(error)
-                }
+            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
             
             
             if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
@@ -91,7 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
     }
-
     
     func requestReview() {
         if #available(iOS 10.3, *) {

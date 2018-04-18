@@ -20,7 +20,11 @@ struct CreateSession: ClickerQuark {
     var route: String {
         return "/sessions"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "id": id,
@@ -51,6 +55,11 @@ struct GetSession: ClickerQuark {
     var route: String {
         return "/sessions/\(id)"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> Session {
@@ -75,6 +84,11 @@ struct GetJoinedSessions: ClickerQuark {
     var route: String {
         return "/sessions/"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [[Session]] {
@@ -93,7 +107,15 @@ struct GetPollSessions: ClickerQuark {
     var route: String {
         return "/sessions/\(role)"
     }
-
+    var headers: HTTPHeaders {
+        if let userSession = User.userSession {
+            return [
+                 "Authorization": "Bearer \(userSession.accessToken)"
+            ]
+        } else {
+            return [:]
+        }
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [Session] {
@@ -122,7 +144,11 @@ struct GetGroupSessions: ClickerQuark {
     var route: String {
         return "/groups/\(role)"
     }
-    
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> [Session] {
@@ -152,7 +178,11 @@ struct UpdateSession: ClickerQuark {
     var route: String {
         return "/sessions/\(id)"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "id": id,
@@ -184,7 +214,11 @@ struct DeleteSession: ClickerQuark {
     var route: String {
         return "/sessions/\(id)"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .delete
 
     func process(element: Element) { }
@@ -198,7 +232,11 @@ struct GetMembers: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/members"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [User] {
@@ -224,7 +262,11 @@ struct GetAdmins: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/admins"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [User] {
@@ -252,6 +294,11 @@ struct AddMembers: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/members"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "memberIds": memberIds
@@ -270,6 +317,11 @@ struct RemoveMembers: ClickerQuark {
 
     var route: String {
         return "/sessions/\(id)/members"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
     }
     var parameters: Parameters {
         return [
@@ -292,6 +344,11 @@ struct AddAdmins: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/admins"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "adminIds": adminIds
@@ -310,6 +367,11 @@ struct DeleteAdmins: ClickerQuark {
 
     var route: String {
         return "/groups/\(id)/admins"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
     }
     var parameters: Parameters {
         return [
