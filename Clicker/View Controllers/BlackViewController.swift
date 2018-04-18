@@ -11,13 +11,14 @@ import UIKit
 class BlackViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     // empty student vars
-    var tabController: UITabBarController!
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     
     // admin group vars
     var mainCollectionView: UICollectionView!
+    
+    var tabController: UITabBarController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
