@@ -101,7 +101,7 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width * 0.9, height: frame.height * 0.6)
+        return CGSize(width: frame.width * 0.9, height: 415)
     }
     
     required init?(coder aDecoder: NSCoder) {
