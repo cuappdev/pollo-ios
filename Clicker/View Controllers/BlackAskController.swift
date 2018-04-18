@@ -160,11 +160,10 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         mainCollectionView.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
                 make.top.equalTo(topLayoutGuide.snp.bottom)
-                make.bottom.equalTo(topLayoutGuide.snp.bottom)
             }
+            make.bottom.equalTo(createPollButton.snp.top).offset(-12)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -270,6 +269,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     @objc func goBack() {
+        socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
     }
     

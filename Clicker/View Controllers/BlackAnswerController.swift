@@ -219,6 +219,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func goBack() {
+        socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
     }
     

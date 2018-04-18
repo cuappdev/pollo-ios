@@ -107,9 +107,6 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
             "choice": intToMCOption(choice),
             "text": question.options[choice]
         ]
-        print(answer)
-        print(question.id)
-        print(question)
         socket.socket.emit("server/poll/tally", answer)
         self.choice = choice
         resultsTableView.reloadData()
