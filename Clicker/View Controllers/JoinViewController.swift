@@ -9,10 +9,12 @@ import UIKit
 
 class JoinViewController: UITabBarController {
     
+    var joinTextField: UITextField!
+    var joinButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Join"
-        view.backgroundColor = .clickerNavBarLightGrey
+        view.backgroundColor = .clickerDeepBlack
         
         setupViews()
         setupConstraints()
@@ -24,12 +26,38 @@ class JoinViewController: UITabBarController {
         // Dispose of any resources that can be recreated.
     }
     
+    // JOIN BUTTON PRESSED
+    @objc func joinBtnPressed() {
+        if let text = joinTextField.text {
+            if text != "" {
+                
+            }
+        }
+    }
+    
+    // MARK: - LAYOUT
     func setupViews() {
+        joinTextField = UITextField()
+        joinTextField.backgroundColor = .white
+        view.addSubview(joinTextField)
         
+        joinButton = UIButton()
+        joinButton.setTitle("Join", for: .normal)
+        joinButton.addTarget(self, action: #selector(joinBtnPressed), for: .touchUpInside)
+        view.addSubview(joinButton)
     }
     
     func setupConstraints() {
+        joinTextField.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: 300, height: 50))
+            make.center.equalToSuperview()
+        }
         
+        joinButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: 75, height: 50))
+            make.top.equalTo(joinTextField.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+        }
     }
     
 }

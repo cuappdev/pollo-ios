@@ -384,3 +384,35 @@ struct DeleteAdmins: ClickerQuark {
     func process(element: Element) throws -> Void { }
 
 }
+
+struct StartSession: ClickerQuark {
+    
+    typealias ResponseType = Session
+    let code: String
+    
+    var route: String {
+        return "/start/session"
+    }
+    var headers: HTTPHeaders {
+        return [
+        "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
+    var parameters: Parameters {
+        return [
+        "code" : code
+        ]
+    }
+    let method: HTTPMethod = .post
+    
+    func process(element: Element) throws -> Session {
+        switch element {
+        case .node(let node):
+            guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+                throw NeutronError.badResponseData
+            }
+            return Session(id: id, name: name, code: code, isGroup: isGroup)
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
