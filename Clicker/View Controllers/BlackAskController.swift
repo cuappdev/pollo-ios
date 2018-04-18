@@ -14,6 +14,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
+    var downArrowImageView: UIImageView!
+    var createPollButton: UIButton!
     
     // admin group vars
     var mainCollectionView: UICollectionView!
@@ -27,6 +29,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         view.backgroundColor = .clickerDeepBlack
         setupNavBar()
+        setupEmptyStudentPoll()
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,22 +44,37 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func setupEmptyStudentPollViews() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
+        monkeyView.contentMode = .scaleAspectFit
         view.addSubview(monkeyView)
         
         nothingToSeeLabel = UILabel()
-        nothingToSeeLabel.text = "Nothing to see yet."
+        nothingToSeeLabel.text = "Nothing to see here."
         nothingToSeeLabel.font = ._16SemiboldFont
         nothingToSeeLabel.textColor = .clickerBorder
         nothingToSeeLabel.textAlignment = .center
         view.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
-        waitingLabel.text = "Waiting for the host to post a poll"
+        waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
         waitingLabel.font = ._14MediumFont
         waitingLabel.textColor = .clickerMediumGray
         waitingLabel.textAlignment = .center
+        waitingLabel.lineBreakMode = .byWordWrapping
+        waitingLabel.numberOfLines = 0
         view.addSubview(waitingLabel)
         
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create a poll", for: .normal)
+        createPollButton.backgroundColor = .clear
+        createPollButton.layer.cornerRadius = 24
+        createPollButton.layer.borderWidth = 1
+        createPollButton.layer.borderColor = UIColor.white.cgColor
+        view.addSubview(createPollButton)
+        
+        
+        downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
+        downArrowImageView.contentMode = .scaleAspectFit
+        view.addSubview(downArrowImageView)
     }
     
     func setupEmptyStudentPollConstraints() {
@@ -76,9 +94,23 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         waitingLabel.snp.makeConstraints { make in
             make.width.equalTo(220)
-            make.height.equalTo(17)
+            make.height.equalTo(36)
             make.centerX.equalToSuperview()
             make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
+        }
+        
+        createPollButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.45)
+            make.height.equalToSuperview().multipliedBy(0.08)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-22)
+        }
+        
+        downArrowImageView.snp.makeConstraints { make in
+            make.width.equalTo(30)
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(createPollButton.snp.top).offset(-20)
         }
     }
     
