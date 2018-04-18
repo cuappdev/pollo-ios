@@ -13,6 +13,8 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
     let dropdownArrowHeight: CGFloat = 5.5
+    let buttonsViewHeight: CGFloat = 67.5
+    let buttonHeight: CGFloat = 47.5
     
     var dismissController: UIViewController!
     
@@ -24,8 +26,12 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var questionCollectionView: UICollectionView!
     
-     var isFollowUpQuestion: Bool = false
-
+    var isFollowUpQuestion: Bool = false
+    
+    var buttonsView: UIView!
+    var saveDraftButton: UIButton!
+    var startQuestionButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,6 +88,36 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
+        
+        buttonsView = UIView(frame: CGRect(x: 0, y: view.frame.height - buttonsViewHeight, width: view.frame.width, height: buttonsViewHeight))
+        buttonsView.backgroundColor = .white
+        view.addSubview(buttonsView)
+        
+        let divider = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1.5))
+        divider.backgroundColor = .clickerBorder
+        buttonsView.addSubview(divider)
+        
+        let buttonWidth = (view.frame.width - (edgePadding * 3)) / 2
+        saveDraftButton = UIButton(frame: CGRect(x: edgePadding, y: 0, width: buttonWidth, height: buttonHeight))
+        saveDraftButton.center.y = buttonsViewHeight / 2
+        saveDraftButton.setTitle("Save as draft", for: .normal)
+        saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
+        saveDraftButton.titleLabel?.font = ._16SemiboldFont
+        saveDraftButton.layer.cornerRadius = buttonHeight / 2
+        saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
+        saveDraftButton.layer.borderWidth = 1.5
+        saveDraftButton.addTarget(self, action: #selector(saveAsDraft), for: .touchUpInside)
+        buttonsView.addSubview(saveDraftButton)
+        
+        startQuestionButton = UIButton(frame: CGRect(x: buttonWidth + edgePadding * 2, y: 0, width: buttonWidth, height: buttonHeight))
+        startQuestionButton.center.y = buttonsViewHeight / 2
+        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitleColor(.white, for: .normal)
+        startQuestionButton.titleLabel?.font = ._16SemiboldFont
+        startQuestionButton.backgroundColor = .clickerGreen
+        startQuestionButton.layer.cornerRadius = buttonHeight / 2
+        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
+        buttonsView.addSubview(startQuestionButton)
     }
     
     func scrollToIndex(index: Int) {
@@ -95,6 +131,16 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     // MARK - ACTIONS
+    
+    @objc func saveAsDraft() {
+        // TODO: Save question as draft
+        print("save as draft")
+    }
+    
+    @objc func startQuestion() {
+        // TODO: Start question session
+        print("start question")
+    }
     
     // TODO: Show a dropdown of question types
     @objc func toggleQuestionType() {
@@ -130,10 +176,12 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if questionType == "MULTIPLE_CHOICE" {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
+            cell.questionTextField.becomeFirstResponder()
             cell.questionDelegate = self
             return cell
         } else if questionType == "FREE_RESPONSE" {
             let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
+            cell.questionTextField.becomeFirstResponder()
             cell.questionDelegate = self
             return cell
         }
@@ -153,18 +201,14 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            view.layoutIfNeeded()
+            buttonsView.frame.origin.y = view.frame.height - keyboardSize.height - buttonsViewHeight
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            view.layoutIfNeeded()
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            buttonsView.frame.origin.y += keyboardSize.height
         }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 
 }
