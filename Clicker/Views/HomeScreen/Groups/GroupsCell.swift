@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 enum GroupType {
     case created
     case joined
 }
 
-class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, GIDSignInDelegate {
     
     var groupsTableView: UITableView!
     var sessions: [Session] = [] // JOINED: [[Session]], CREATED: [Session]
@@ -23,7 +24,8 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        getSessions()
+        GIDSignIn.sharedInstance().delegate = self
+        getGroupSessions()
         setupViews()
         setupConstraints()
     }
@@ -60,8 +62,11 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    // GET SESSIONS
-    func getSessions() {
+    // GET GROUP SESSIONS
+    func getGroupSessions() {
+        guard let _ = User.userSession else {
+            return
+        }
         let role: UserRole
         if (groupType == .created) {
             role = .admin
@@ -75,6 +80,36 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
             } .catch { error in
                 print(error)
             }
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if (error == nil) {
+            let userId = user.userID // For client-side use only!
+            let idToken = user.authentication.idToken // Safe to send to the server
+            let fullName = user.profile.name
+            let givenName = user.profile.givenName
+            let familyName = user.profile.familyName
+            let email = user.profile.email
+            let netId = email?.substring(to: (email?.index(of: "@"))!)
+            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
+            
+            UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
+                .done { userSession in
+                    print(userSession)
+                    User.userSession = userSession
+                    self.getGroupSessions()
+                } .catch { error in
+                    print(error)
+            }
+            
+            if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
+                UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
+            }
+            
+            window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
+        } else {
+            print("\(error.localizedDescription)")
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

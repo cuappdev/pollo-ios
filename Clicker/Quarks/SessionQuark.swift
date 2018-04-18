@@ -105,7 +105,7 @@ struct GetPollSessions: ClickerQuark {
     let role: String
 
     var route: String {
-        return "/sessions/\(role)"
+        return "/sessions/all/\(role)"
     }
     var headers: HTTPHeaders {
         if let userSession = User.userSession {
@@ -142,7 +142,7 @@ struct GetGroupSessions: ClickerQuark {
     let role: String
     
     var route: String {
-        return "/groups/\(role)"
+        return "/groups/all/\(role)"
     }
     var headers: HTTPHeaders {
         return [

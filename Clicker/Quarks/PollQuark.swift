@@ -31,9 +31,6 @@ struct CreatePoll: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .post
-    var encoding: ParameterEncoding {
-        return JSONEncoding.default
-    }
 
     func process(element: Element) throws -> Poll {
         switch element {
@@ -88,10 +85,6 @@ struct GetSortedPolls: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .get
-    
-    var encoding: ParameterEncoding {
-        return JSONEncoding.default
-    }
     
     func process(element: Element) throws -> [Poll] {
         switch element {
