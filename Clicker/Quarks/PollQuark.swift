@@ -19,7 +19,11 @@ struct CreatePoll: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/polls"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "text": text,
@@ -51,7 +55,11 @@ struct GetPoll: ClickerQuark {
     var route: String {
         return "/polls/\(id)"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> Poll {
@@ -74,7 +82,11 @@ struct GetSortedPolls: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/polls"
     }
-    
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
     
     var encoding: ParameterEncoding {
@@ -108,6 +120,11 @@ struct GetPollsForSession: ClickerQuark {
     var route: String {
         return "/sessions/\(id)/polls"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
 
     func process(element: Element) throws -> [Poll] {
@@ -137,7 +154,11 @@ struct UpdatePoll: ClickerQuark {
     var route: String {
         return "/polls/\(id)"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     var parameters: Parameters {
         return [
             "text": text,
@@ -166,7 +187,11 @@ struct DeletePoll: ClickerQuark {
     var route: String {
         return "/polls/\(id)"
     }
-
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .delete
 
     func process(element: Element) { }

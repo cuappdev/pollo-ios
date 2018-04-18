@@ -18,15 +18,6 @@ extension ClickerQuark {
     var host: String {
         return hostURL + "/api"
     }
-    var headers: HTTPHeaders {
-        if let userSession = User.userSession {
-            return [
-                "Authorization": "Bearer \(userSession.accessToken)"
-            ]
-        } else {
-            return [:]
-        }
-    }
 
     var api: APIVersion { return .versioned(2) }
     
