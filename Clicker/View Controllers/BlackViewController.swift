@@ -11,6 +11,7 @@ import UIKit
 class BlackViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     // empty student vars
+    var tabController: UITabBarController!
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
@@ -126,6 +127,13 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: mainCollectionView.frame.width, height: 505)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        tabController?.tabBar.isHidden = false
     }
     
 }
