@@ -43,6 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 //        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
 //        siren.checkVersion(checkType: .immediately)
         
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        UINavigationBar.appearance().backIndicatorImage = backImage
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
+        
         // FABRIC
         #if DEBUG
         print("[Running Clicker in debug configuration]")

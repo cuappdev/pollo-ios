@@ -37,7 +37,6 @@
 		C25F21E6203F763D001F540E /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E5203F763D001F540E /* FRSectionCell.swift */; };
 		C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */; };
 		C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E9203F77FA001F540E /* AnswerMCCell.swift */; };
-		C26D14A9207E6F86008C3F48 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D14A8207E6F86008C3F48 /* GroupCell.swift */; };
 		C26D14AB207E744A008C3F48 /* NewGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */; };
@@ -50,8 +49,6 @@
 		C2BF44D4203405D60067505A /* SavedSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D3203405D60067505A /* SavedSessionCell.swift */; };
 		C2BF44D620340D5A0067505A /* SessionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44D520340D5A0067505A /* SessionHeader.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
-		C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982C206BE44C0048468E /* CreatedCell.swift */; };
-		C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982E206BE4560048468E /* JoinedCell.swift */; };
 		C2CA3A28208309F800E0BDC5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CA3A27208309F800E0BDC5 /* User.swift */; };
 		C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
@@ -122,7 +119,6 @@
 		C25F21E5203F763D001F540E /* FRSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
 		C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMCOptionCell.swift; sourceTree = "<group>"; };
 		C25F21E9203F77FA001F540E /* AnswerMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMCCell.swift; sourceTree = "<group>"; };
-		C26D14A8207E6F86008C3F48 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupHeader.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionSectionCell.swift; sourceTree = "<group>"; };
@@ -135,8 +131,6 @@
 		C2BF44D3203405D60067505A /* SavedSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSessionCell.swift; sourceTree = "<group>"; };
 		C2BF44D520340D5A0067505A /* SessionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHeader.swift; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
-		C2BF982C206BE44C0048468E /* CreatedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedCell.swift; sourceTree = "<group>"; };
-		C2BF982E206BE4560048468E /* JoinedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedCell.swift; sourceTree = "<group>"; };
 		C2CA3A27208309F800E0BDC5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -224,9 +218,6 @@
 				63EB7CDB205ECADC001C45BA /* OldDateCell.swift */,
 				63EB7CDD205ECB18001C45BA /* PastQuestionCell.swift */,
 				63EB7CDF205ECB37001C45BA /* NewGroupCell.swift */,
-				C2BF982C206BE44C0048468E /* CreatedCell.swift */,
-				C2BF982E206BE4560048468E /* JoinedCell.swift */,
-				C26D14A8207E6F86008C3F48 /* GroupCell.swift */,
 				C26D14AA207E744A008C3F48 /* NewGroupHeader.swift */,
 			);
 			path = Groups;
@@ -627,7 +618,6 @@
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				63EB7CDE205ECB18001C45BA /* PastQuestionCell.swift in Sources */,
-				C26D14A9207E6F86008C3F48 /* GroupCell.swift in Sources */,
 				C2F48EC1208304D80022FE6B /* TabBarController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
@@ -651,9 +641,7 @@
 				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				C28AD563205CD3840053AD62 /* ResultFRCell.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
-				C2BF982F206BE4560048468E /* JoinedCell.swift in Sources */,
 				6389C95020858D6300F78003 /* GroupsCell.swift in Sources */,
-				C2DDE0102086CECC00A85094 /* GoogleManager.swift in Sources */,
 				6353FD3A2086DDC900E16EB2 /* BlackAskController.swift in Sources */,
 				6315A4C52083DC9F00EEEDDD /* DateCell.swift in Sources */,
 				C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */,
@@ -669,7 +657,6 @@
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				633381332086D07D008BD455 /* BlackAnswerController.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
-				C2BF982D206BE44C0048468E /* CreatedCell.swift in Sources */,
 				6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */,
 				C2D057991F926B31008F21CB /* Question.swift in Sources */,
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,

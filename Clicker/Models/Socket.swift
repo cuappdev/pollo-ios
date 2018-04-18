@@ -9,12 +9,12 @@
 import SocketIO
 
 class Socket {
-    let id: Int
+    let id: String
     var delegate: SocketDelegate?
     var socket: SocketIOClient
     var manager: SocketManager
     
-    init(id: Int, userType: String, delegate: SocketDelegate? = nil) {
+    init(id: String, userType: String, delegate: SocketDelegate? = nil) {
         self.id = id
         self.delegate = delegate
         
