@@ -78,7 +78,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
     @objc func joinSession() {
         if let code = codeTextField.text {
             if code != "" {
-                StartSession(code: code).make()
+                StartSession(code: code, name: nil, isGroup: nil).make()
                     .done { session in
                         // TODO: join session
                         print("session joined")
