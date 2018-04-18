@@ -20,7 +20,6 @@ class TabBarController: UITabBarController {
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("\n\n!!!tab bar did load!!!\n\n")
         UITabBar.appearance().barTintColor = .clickerDeepBlack
         
         setupViewControllers()
