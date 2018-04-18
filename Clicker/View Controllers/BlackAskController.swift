@@ -23,13 +23,16 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var tabController: UITabBarController!
     var socket: Socket!
     var code: String!
+    var datePollsDict: [String:[Poll]]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
         setupNavBar()
-        setupEmptyStudentPoll()
+        if (datePollsDict.count == 0) {
+            setupEmptyStudentPoll()
+        }
     }
 
     override func didReceiveMemoryWarning() {
