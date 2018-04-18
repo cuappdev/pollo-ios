@@ -158,4 +158,12 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
             }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.parent is UINavigationController {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            self.tabBarController?.tabBar.isHidden = false
+        }
+    }
+    
 }

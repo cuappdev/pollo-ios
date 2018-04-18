@@ -10,11 +10,15 @@ import UIKit
 
 class BlackAnswerController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
     
+    var mainCollectionView: UICollectionView!
+    var monkeyView: UIImageView!
+    var nothingToSeeLabel: UILabel!
+    var waitingLabel: UILabel!
+    
     var tabController: UITabBarController!
     var socket: Socket!
     var code: String!
-    
-    var mainCollectionView: UICollectionView!
+    var datePollsDict: [String:[Poll]]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +26,12 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        setupViews()
-        setupConstraints()
+        if (datePollsDict.count == 0) {
+            setupEmpty()
+        } else {
+            setupViews()
+            setupConstraints()
+        }
         setupNavBar()
     }
     
@@ -32,6 +40,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - LAYOUT
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -60,6 +69,56 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
             }
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
+        }
+    }
+    
+    func setupEmpty() {
+        setupEmptyViews()
+        setupEmptyConstraints()
+    }
+    
+    func setupEmptyViews() {
+        monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
+        monkeyView.contentMode = .scaleAspectFit
+        view.addSubview(monkeyView)
+        
+        nothingToSeeLabel = UILabel()
+        nothingToSeeLabel.text = "Nothing to see yet."
+        nothingToSeeLabel.font = ._16SemiboldFont
+        nothingToSeeLabel.textColor = .clickerBorder
+        nothingToSeeLabel.textAlignment = .center
+        view.addSubview(nothingToSeeLabel)
+        
+        waitingLabel = UILabel()
+        waitingLabel.text = "Waiting for the host to post a poll."
+        waitingLabel.font = ._14MediumFont
+        waitingLabel.textColor = .clickerMediumGray
+        waitingLabel.textAlignment = .center
+        waitingLabel.lineBreakMode = .byWordWrapping
+        waitingLabel.numberOfLines = 0
+        view.addSubview(waitingLabel)
+    }
+    
+    func setupEmptyConstraints() {
+        monkeyView.snp.makeConstraints { make in
+            make.width.equalTo(31)
+            make.height.equalTo(34)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(142)
+        }
+        
+        nothingToSeeLabel.snp.makeConstraints { make in
+            make.width.equalTo(200)
+            make.height.equalTo(19)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(monkeyView.snp.bottom).offset(21)
+        }
+        
+        waitingLabel.snp.makeConstraints { make in
+            make.width.equalTo(220)
+            make.height.equalTo(36)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
         }
     }
     
