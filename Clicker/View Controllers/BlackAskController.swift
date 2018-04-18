@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Presentr
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, SocketDelegate {
     
     // empty student vars
     var monkeyView: UIImageView!
@@ -22,8 +23,10 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var tabController: UITabBarController!
     var socket: Socket!
+    var sessionId: Int!
     var code: String!
     var datePollsDict: [String:[Poll]]!
+    var datePollsArr: [(String, [Poll])] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,15 +37,30 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             setupEmptyStudentPoll()
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @objc func createPollBtnPressed() {
+        let presenter = Presentr(presentationType: .fullScreen)
+        presenter.backgroundOpacity = 0.6
+        presenter.roundCorners = true
+        presenter.cornerRadius = 15
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let pollBuilderVC = PollBuilderViewController()
+        pollBuilderVC.startPollDelegate = self
+        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
     }
     
     func setupEmptyStudentPoll() {
         setupEmptyStudentPollViews()
         setupEmptyStudentPollConstraints()
+    }
+    
+    func removeEmptyStudentPoll() {
+        monkeyView.removeFromSuperview()
+        nothingToSeeLabel.removeFromSuperview()
+        waitingLabel.removeFromSuperview()
+        downArrowImageView.removeFromSuperview()
+        createPollButton.removeFromSuperview()
     }
     
     func setupEmptyStudentPollViews() {
@@ -72,6 +90,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         createPollButton.layer.cornerRadius = 24
         createPollButton.layer.borderWidth = 1
         createPollButton.layer.borderColor = UIColor.white.cgColor
+        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
         view.addSubview(createPollButton)
         
         
@@ -154,11 +173,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return datePollsArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+        cell.polls = datePollsArr[indexPath.item].1
         return cell
     }
     
@@ -171,6 +191,21 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         tabController?.tabBar.isHidden = false
+    }
+    
+    func updateSortedPollsArr() {
+        GetSortedPolls(id: "\(sessionId)").make()
+            .done { datePollsDict in
+                self.datePollsDict = datePollsDict
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM/dd/yyyy"
+                self.datePollsArr = datePollsDict.map { (formatter.date(from: $0)!, $0, $1) }
+                    .sorted() { ($0.0 as Date).compare($1.0 as Date) == .orderedAscending }
+                    .map() { (_, dateString, dayTotal) in (dateString, dayTotal) }
+                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+            }.catch { error in
+                print(error)
+        }
     }
     
     // MARK - SOCKET DELEGATE
@@ -203,6 +238,37 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
+    // MARK: - START POLL DELEGATE
+    func startPoll(text: String, type: String, options: [String]) {
+        // EMIT START QUESTION
+        let socketQuestion: [String:Any] = [
+            "text": text,
+            "type": type,
+            "options": options
+        ]
+        socket.socket.emit("server/question/start", with: [socketQuestion])
+        var results: [String:Any] = [:]
+        for (index, option) in options.enumerated() {
+            let mcOption = intToMCOption(index)
+            results[mcOption] = ["text": option, "count": 0]
+        }
+        let createdPoll = Poll(id: -1, text: text, results: results, isLive: true)
+        if (datePollsArr.count == 0) {
+            self.datePollsArr.append((getTodaysDate(), [createdPoll]))
+            removeEmptyStudentPoll()
+            setupAdminGroup()
+        } else {
+            self.datePollsArr[datePollsArr.count - 1].1.append(createdPoll)
+        }
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    }
+    
+    func getTodaysDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter.string(from: Date())
+    }
+    
     func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
@@ -226,6 +292,11 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @objc func goBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 
 }

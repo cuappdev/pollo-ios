@@ -87,7 +87,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                                 blackAnswerVC.tabController = self.tabBarController
                                 blackAnswerVC.socket = socket
                                 blackAnswerVC.code = code
-                                blackAnswerVC.datePollsDict = [:]
+                                blackAnswerVC.datePollsDict = datePollsDict
                                 self.dismiss(animated: true, completion: {
                                     if let tabController = self.dismissController as? UITabBarController {
                                         if let navVC = tabController.selectedViewController as? UINavigationController {

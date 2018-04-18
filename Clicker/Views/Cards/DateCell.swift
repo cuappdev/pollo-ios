@@ -12,7 +12,9 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     var collectionView: UICollectionView!
     var dateLabel: UILabel!
-    var cards: [UIViewController]!
+    var polls: [Poll]!
+    
+    let cardWidth = 399
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +37,9 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 18
         layout.scrollDirection = .horizontal
-        //collectionView.alwaysBounceHorizontal = true
+        collectionView.alwaysBounceHorizontal = true
+        let inset = (frame.width - CGFloat(cardWidth)) / 2.0
+        collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: "liveQAskedCardID")
@@ -67,30 +71,24 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return polls.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell: UICollectionViewCell
-        switch indexPath.row {
-        case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAnswerCardID", for: indexPath) as! LiveQAnswerCard
-        case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredCardID", for: indexPath) as! ClosedQAnsweredCard
-        case 2:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredSharedCardID", for: indexPath) as! ClosedQAnsweredSharedCard
-        case 3:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
-        case 4:
-             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAskedCardID", for: indexPath) as! ClosedQAskedCard
-        default:
-           cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAskedSharedCardID", for: indexPath) as! ClosedQAskedSharedCard
+        let poll = polls[indexPath.item]
+        if (poll.isLive) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
+            cell.poll = poll
+            cell.questionLabel.text = poll.text
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredCardID", for: indexPath) as! ClosedQAnsweredCard
+            return cell
         }
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 339, height: 415)
+        return CGSize(width: cardWidth, height: 415)
     }
     
     required init?(coder aDecoder: NSCoder) {
