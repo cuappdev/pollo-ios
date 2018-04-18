@@ -10,6 +10,7 @@ import UIKit
 
 class BlackAnswerController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
     
+    var tabController: UITabBarController!
     var socket: Socket!
     
     var mainCollectionView: UICollectionView!
@@ -110,6 +111,13 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func updatedTally(_ currentState: CurrentState) {
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        tabController?.tabBar.isHidden = false
     }
 }
 
