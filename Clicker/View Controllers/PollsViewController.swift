@@ -139,8 +139,17 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     // MARK - actions
     @objc func newPollAction() {
-        let blackAnswerController = BlackAnswerController()
-        navigationController?.pushViewController(blackAnswerController, animated: true)
+        let blackAskController = BlackAnswerController()
+        navigationController?.pushViewController(blackAskController, animated: true)
+        /*blackAskController.socket = Socket(id: 1234, userType: "student", delegate: blackAskController)
+        var code = ""
+        StartSession(code: code).make()
+            .done { session in
+                
+        } .catch { error in
+            print(error)
+        }
+        */
     }
     
     override func viewWillAppear(_ animated: Bool) {
