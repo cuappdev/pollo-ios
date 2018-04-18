@@ -17,6 +17,13 @@ extension UIViewController {
         return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
     }
     
+    // GET MM/DD/YYYY OF TODAY
+    func getTodaysDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter.string(from: Date())
+    }
+    
     // USER DEFAULTS
     func encodeObjForKey(obj: Any, key: String) {
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: obj)

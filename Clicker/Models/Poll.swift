@@ -36,5 +36,15 @@ class Poll {
         self.results = results
         self.date = date
     }
+    
+    func getTotalResults() -> Int {
+        var counter = 0
+        for (key, value) in results {
+            if let choiceJSON = value as? [String:Any] {
+                counter += choiceJSON["count"] as! Int
+            }
+        }
+        return counter
+    }
 
 }

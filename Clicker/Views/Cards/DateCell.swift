@@ -12,9 +12,9 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     var collectionView: UICollectionView!
     var dateLabel: UILabel!
+    var socket: Socket!
     var polls: [Poll]!
-    
-    let cardWidth = 399
+    var liveQuestion: Question! // FOR USERS
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +38,7 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         layout.minimumInteritemSpacing = 18
         layout.scrollDirection = .horizontal
         collectionView.alwaysBounceHorizontal = true
-        let inset = (frame.width - CGFloat(cardWidth)) / 2.0
+        let inset = (frame.width - CGFloat(frame.width * 0.9)) / 2.0
         collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -71,13 +71,26 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return polls.count
+        if let _ = liveQuestion {
+            return polls.count + 1
+        } else {
+            return polls.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath.item == polls.count) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAnswerCardID", for: indexPath) as! LiveQAnswerCard
+            cell.question = liveQuestion
+            cell.questionLabel.text = liveQuestion.text
+            cell.socket = socket
+            return cell
+        }
         let poll = polls[indexPath.item]
         if (poll.isLive) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
+            cell.socket = socket
+            socket.delegate = cell
             cell.poll = poll
             cell.questionLabel.text = poll.text
             return cell
@@ -88,7 +101,7 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cardWidth, height: 415)
+        return CGSize(width: frame.width * 0.9, height: frame.height * 0.6)
     }
     
     required init?(coder aDecoder: NSCoder) {

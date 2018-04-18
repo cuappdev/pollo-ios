@@ -18,7 +18,9 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var tabController: UITabBarController!
     var socket: Socket!
     var code: String!
-    var datePollsDict: [String:[Poll]]!
+    var sessionId: Int!
+    var datePollsArr: [(String, [Poll])] = []
+    var liveQuestion: Question!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,8 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        if (datePollsDict.count == 0) {
+        socket.delegate = self
+        if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
             setupViews()
@@ -77,6 +80,12 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         setupEmptyConstraints()
     }
     
+    func removeEmpty() {
+        monkeyView.removeFromSuperview()
+        nothingToSeeLabel.removeFromSuperview()
+        waitingLabel.removeFromSuperview()
+    }
+    
     func setupEmptyViews() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
         monkeyView.contentMode = .scaleAspectFit
@@ -124,19 +133,23 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return datePollsArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell: UICollectionViewCell
         switch indexPath.row {
-        case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
-
+        case datePollsArr.count - 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+            cell.liveQuestion = liveQuestion
+            cell.polls = datePollsArr[indexPath.item].1
+            cell.socket = socket
+            return cell
         default:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emptyAnswerCellID", for: indexPath) as! EmptyAnswerCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+            cell.polls = datePollsArr[indexPath.item].1
+            cell.socket = socket
+            return cell
         }
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -146,39 +159,42 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK - SOCKET DELAGATE
     
-    func sessionConnected() {
-        
-    }
+    func sessionConnected() { }
     
-    func sessionDisconnected() {
-        
-    }
+    func sessionDisconnected() { }
     
     func questionStarted(_ question: Question) {
-        
+        if (datePollsArr.count == 0) {
+            removeEmpty()
+            setupViews()
+            setupConstraints()
+            datePollsArr.append((getTodaysDate(), []))
+        }
+        liveQuestion = question
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func questionEnded(_ question: Question) {
-        
+        liveQuestion = nil
+        updateDatePollsArr()
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        
+        updateDatePollsArr()
     }
     
-    func savePoll(_ poll: Poll) {
-        
-    }
+    func saveSession(_ session: Session) { }
     
-    func updatedTally(_ currentState: CurrentState) {
-        
-    }
+    func updatedTally(_ currentState: CurrentState) { }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
+    func updateDatePollsArr() {
+        GetSortedPolls(id: "\(sessionId)").make()
+            .done { datePollsArr in
+                self.datePollsArr = datePollsArr
+                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+            }.catch { error in
+                print(error)
+        }
     }
     
     func setupNavBar() {
@@ -204,6 +220,13 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc func goBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        tabController?.tabBar.isHidden = false
     }
 }
 

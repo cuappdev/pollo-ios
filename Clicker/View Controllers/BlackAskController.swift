@@ -25,15 +25,15 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var socket: Socket!
     var sessionId: Int!
     var code: String!
-    var datePollsDict: [String:[Poll]]!
     var datePollsArr: [(String, [Poll])] = []
+    var livePoll: Poll!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
         setupNavBar()
-        if (datePollsDict.count == 0) {
+        if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
     }
@@ -60,7 +60,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         nothingToSeeLabel.removeFromSuperview()
         waitingLabel.removeFromSuperview()
         downArrowImageView.removeFromSuperview()
-        createPollButton.removeFromSuperview()
     }
     
     func setupEmptyStudentPollViews() {
@@ -179,6 +178,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
         cell.polls = datePollsArr[indexPath.item].1
+        cell.socket = socket
         return cell
     }
     
@@ -186,22 +186,10 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         return CGSize(width: mainCollectionView.frame.width, height: 505)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
-    }
-    
-    func updateSortedPollsArr() {
+    func updateDatePollsArr() {
         GetSortedPolls(id: "\(sessionId)").make()
-            .done { datePollsDict in
-                self.datePollsDict = datePollsDict
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MM/dd/yyyy"
-                self.datePollsArr = datePollsDict.map { (formatter.date(from: $0)!, $0, $1) }
-                    .sorted() { ($0.0 as Date).compare($1.0 as Date) == .orderedAscending }
-                    .map() { (_, dateString, dayTotal) in (dateString, dayTotal) }
+            .done { datePollsArr in
+                self.datePollsArr = datePollsArr
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
             }.catch { error in
                 print(error)
@@ -210,32 +198,28 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // MARK - SOCKET DELEGATE
     
-    func sessionConnected() {
-        
-    }
+    func sessionConnected() { }
     
-    func sessionDisconnected() {
-        
-    }
+    func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) {
+    func questionStarted(_ question: Question) { }
     
-    }
-    
-    func questionEnded(_ question: Question) {
-        
-    }
+    func questionEnded(_ question: Question) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        
+        livePoll.id = currentState.pollId
+        livePoll.results = currentState.results
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
-    func savePoll(_ poll: Poll) {
-        
-    }
+    func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        
+        livePoll.id = currentState.pollId
+        livePoll.results = currentState.results
+        print(datePollsArr[0].1[0])
+        print(print(datePollsArr[0].1[0].results))
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     // MARK: - START POLL DELEGATE
@@ -246,27 +230,22 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.socket.emit("server/question/start", with: [socketQuestion])
+        socket.delegate = self
+        socket.socket.emit("server/poll/start", with: [socketQuestion])
         var results: [String:Any] = [:]
         for (index, option) in options.enumerated() {
             let mcOption = intToMCOption(index)
             results[mcOption] = ["text": option, "count": 0]
         }
-        let createdPoll = Poll(id: -1, text: text, results: results, isLive: true)
+        livePoll = Poll(id: -1, text: text, results: results, isLive: true)
         if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [createdPoll]))
+            self.datePollsArr.append((getTodaysDate(), [livePoll]))
             removeEmptyStudentPoll()
             setupAdminGroup()
         } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(createdPoll)
+            self.datePollsArr[datePollsArr.count - 1].1.append(livePoll)
         }
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
-    }
-    
-    func getTodaysDate() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        return formatter.string(from: Date())
     }
     
     func setupNavBar() {
@@ -292,6 +271,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @objc func goBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        tabController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
