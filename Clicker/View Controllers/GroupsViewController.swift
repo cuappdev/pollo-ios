@@ -17,7 +17,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerBackground
-        
+        self.navigationController?.navigationBar.backItem?.title = ""
         setupViews()
         setupConstraints()
     }
@@ -137,11 +137,24 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // MARK - actions
     @objc func newGroupAction() {
-        let blackViewController = BlackAskController()
-        blackViewController.tabController = self.tabBarController
-        navigationController?.pushViewController(blackViewController, animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = true
+        GenerateCode().make()
+            .done { code in
+                StartSession(code: code, name: code, isGroup: true).make()
+                    .done { session in
+                        let socket = Socket(id: "\(session.id)", userType: "admin")
+                        let blackAskVC = BlackAskController()
+                        blackAskVC.tabController = self.tabBarController
+                        blackAskVC.socket = socket
+                        blackAskVC.code = code
+                        self.navigationController?.pushViewController(blackAskVC, animated: true)
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        self.tabBarController?.tabBar.isHidden = true
+                    }.catch { error in
+                        print(error)
+                    }
+            }.catch { error in
+                print(error)
+            }
     }
     
 }

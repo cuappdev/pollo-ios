@@ -10,12 +10,38 @@ import Alamofire
 import Neutron
 import SwiftyJSON
 
+struct GenerateCode : ClickerQuark {
+    
+    typealias ResponseType = String
+    
+    var route: String {
+        return "/generate/code"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
+    let method: HTTPMethod = .get
+    
+    func process(element: Element) throws -> String {
+        switch element {
+        case .node(let node):
+            guard let code = node["code"].string else {
+                throw NeutronError.badResponseData
+            }
+            return code
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
+
 struct CreateSession: ClickerQuark {
 
     typealias ResponseType = Session
-    let id: String
     let name: String
     let code: String
+    let isGroup: Bool
 
     var route: String {
         return "/sessions"
@@ -27,9 +53,9 @@ struct CreateSession: ClickerQuark {
     }
     var parameters: Parameters {
         return [
-            "id": id,
             "name": name,
-            "code": code
+            "code": code,
+            "isGroup": isGroup
         ]
     }
     let method: HTTPMethod = .post
@@ -37,7 +63,7 @@ struct CreateSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
                 throw NeutronError.badResponseData
             }
             return Session(id: id, name: name, code: code, isGroup: isGroup)
@@ -65,7 +91,7 @@ struct GetSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
                 throw NeutronError.badResponseData
             }
             return Session(id: id, name: name, code: code, isGroup: isGroup)
@@ -123,7 +149,7 @@ struct GetPollSessions: ClickerQuark {
         case .nodes(let nodes):
             var sessions: [Session] = [Session]()
             for node in nodes {
-                guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
                     throw NeutronError.badResponseData
                 }
                 sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup))
@@ -156,10 +182,13 @@ struct GetGroupSessions: ClickerQuark {
         case .nodes(let nodes):
             var sessions: [Session] = [Session]()
             for node in nodes {
-                guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool, let isLive = node["isLive"].bool else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool, let isLive = node["isLive"].bool else {
                     throw NeutronError.badResponseData
                 }
                 sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup, isLive: isLive))
+            }
+            sessions.sort { (s1, s2) in
+                return s1.isLive! && !(s2.isLive!)
             }
             return sessions
         default:
@@ -196,7 +225,7 @@ struct UpdateSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
                 throw NeutronError.badResponseData
             }
             return Session(id: id, name: name, code: code, isGroup: isGroup)
@@ -389,31 +418,34 @@ struct StartSession: ClickerQuark {
     
     typealias ResponseType = Session
     let code: String
-
+    let name: String?
+    let isGroup: Bool?
+    
     var route: String {
         return "/start/session"
     }
     var headers: HTTPHeaders {
         return [
-        "Authorization": "Bearer \(User.userSession!.accessToken)"
-
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
         ]
     }
     var parameters: Parameters {
-        return [
-        "code" : code
-
-        ]
+        var params: Parameters = ["code": code]
+        if let n = name, let g = isGroup {
+            params["name"] = n
+            params["isGroup"] = g
+        }
+        return params
     }
     let method: HTTPMethod = .post
     
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].string, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].string else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: isGroup)
+            return Session(id: id, name: name, code: code, isGroup: (isGroup == "1"))
         default: throw NeutronError.badResponseData
         }
     }

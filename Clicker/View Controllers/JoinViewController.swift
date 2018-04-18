@@ -30,9 +30,9 @@ class JoinViewController: UITabBarController {
     @objc func joinBtnPressed() {
         if let code = joinTextField.text {
             if code != "" {
-                StartSession(code: code).make()
+                StartSession(code: code, name: nil, isGroup: nil).make()
                     .done { session in
-                        let socket = Socket(id: Int(session.id)!, userType: "user")
+                        let socket = Socket(id: "\(session.id)", userType: "user")
                         let blackAskVC = BlackAskController()
                         self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
