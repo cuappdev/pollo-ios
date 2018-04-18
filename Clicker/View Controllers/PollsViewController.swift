@@ -7,6 +7,7 @@
 //
 import UIKit
 import GoogleSignIn
+import Presentr
 
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
     
@@ -89,8 +90,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
-        
-        }
+    }
     
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
@@ -131,8 +131,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.height.equalTo(19)
             make.right.equalToSuperview().offset(-15)
         }
-        
-        
     }
     
     // MARK - actions
@@ -164,6 +162,27 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             self.navigationController?.setNavigationBarHidden(true, animated: true)
             self.tabBarController?.tabBar.isHidden = false
         }
+    }
+    
+    // TODO: Move this function to where it will be used
+    @objc func createPoll() {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: Float(view.frame.size.height - statusBarHeight))
+        let originY = statusBarHeight
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        
+        let presenter: Presentr = Presentr(presentationType: customType)
+        presenter.backgroundColor = .black
+        presenter.roundCorners = true
+        presenter.cornerRadius = 15
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        
+        let pollBuilderVC = PollBuilderViewController()
+        pollBuilderVC.dismissController = self
+        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
     }
     
 }
