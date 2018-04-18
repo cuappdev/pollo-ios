@@ -30,4 +30,11 @@ class Session {
         self.isGroup = isGroup
         self.isLive = isLive
     }
+    
+    init(json: [String:Any]){
+        self.id = json["id"] as! Int
+        self.name = json["name"] as! String
+        self.code = json["code"] as! String
+        self.isGroup = json["isGroup"] as! Bool
+    }
 }

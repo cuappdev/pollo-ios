@@ -144,7 +144,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                         blackAskVC.tabController = self.tabBarController
                         blackAskVC.socket = socket
                         blackAskVC.code = code
-                        blackAskVC.datePollsDict = [:]
+                        blackAskVC.sessionId = session.id
                         self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                         self.tabBarController?.tabBar.isHidden = true

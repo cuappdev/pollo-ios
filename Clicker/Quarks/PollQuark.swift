@@ -72,7 +72,7 @@ struct GetPoll: ClickerQuark {
 }
 
 struct GetSortedPolls: ClickerQuark {
-    typealias ResponseType = [String:[Poll]]
+    typealias ResponseType = [(String, [Poll])]
     
     let id: String
     
@@ -86,12 +86,11 @@ struct GetSortedPolls: ClickerQuark {
     }
     let method: HTTPMethod = .get
     
-    func process(element: Element) throws -> [String:[Poll]] {
+    func process(element: Element) throws -> [(String, [Poll])] {
         switch element {
         case .node(let node):
             var datePollsDict: [String:[Poll]] = [:]
             for (date, pollsJSON) in node {
-                var polls: [Poll] = []
                 if let pollsArray = pollsJSON.array {
                     let pollsArr: [Poll] = try pollsArray.map {
                         guard let id = $0["id"].int, let text = $0["text"].string, let results = $0["results"].dictionaryObject else {
@@ -102,10 +101,12 @@ struct GetSortedPolls: ClickerQuark {
                     datePollsDict[date] = pollsArr
                 }
             }
-            print(datePollsDict)
-            return datePollsDict
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            return datePollsDict.map { (formatter.date(from: $0)!, $0, $1) }
+                .sorted() { ($0.0 as Date).compare($1.0 as Date) == .orderedAscending }
+                .map() { (_, dateString, dayTotal) in (dateString, dayTotal) }
         default:
-            print(element)
             throw NeutronError.badResponseData
         }
     }

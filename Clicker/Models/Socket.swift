@@ -31,44 +31,42 @@ class Socket {
             self.delegate?.sessionDisconnected()
         }
         
-        socket.on("server/question/start") { data, ack  in
-            self.socket.emit("student/question/start", data)
-        }
-        
-        socket.on("user/question/start") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
+        socket.on("user/poll/start") { data, ack in
+            print(data)
+            guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
                 return
             }
             let question = Question(json: questionJSON)
             self.delegate?.questionStarted(question)
         }
         
-        socket.on("user/question/end") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["question"] as? [String:Any] else {
+        socket.on("user/poll/end") { data, ack in
+            guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
                 return
             }
             let question = Question(json: questionJSON)
             self.delegate?.questionEnded(question)
         }
         
-        socket.on("user/question/results") { data, ack in
+        socket.on("user/poll/results") { data, ack in
+            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }
             let currentState = CurrentState(json: json)
             self.delegate?.receivedResults(currentState)
-            
         }
         
-        socket.on("user/poll/save") { data, ack in
+        socket.on("user/session/save") { data, ack in
             guard let json = data[0] as? [String:Any] else {
                 return
             }
-//            let poll = Poll(json: json)
-//            self.delegate?.savePoll(poll)
+            let session = Session(json: json)
+            self.delegate?.saveSession(session)
         }
         
-        socket.on("admin/question/updateTally") { data, ack in
+        socket.on("admin/poll/updateTally") { data, ack in
+            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }

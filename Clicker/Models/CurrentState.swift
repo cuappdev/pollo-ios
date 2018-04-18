@@ -8,18 +8,18 @@
 
 class CurrentState {
     
-    var question: Int
+    var pollId: Int
     var results: [String:Any]
     var answers: [String:Any]
     
-    init(_ question: Int, _ results: [String:Any], _ answers: [String:Any]) {
-        self.question = question
+    init(_ pollId: Int, _ results: [String:Any], _ answers: [String:Any]) {
+        self.pollId = pollId
         self.results = results
         self.answers = answers
     }
     
     init(json: [String:Any]){
-        self.question = json["question"] as! Int
+        self.pollId = json["poll"] as! Int
         self.results = json["results"] as! [String:Any]
         self.answers = json["answers"] as! [String:Any]
     }

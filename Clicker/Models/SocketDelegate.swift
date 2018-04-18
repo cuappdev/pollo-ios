@@ -14,7 +14,7 @@ protocol SocketDelegate {
     func questionStarted(_ question: Question)
     func questionEnded(_ question: Question)
     func receivedResults(_ currentState: CurrentState)
-    func savePoll(_ poll: Poll)
+    func saveSession(_ session: Session)
     
     // ADMIN RECEIVES
     func updatedTally(_ currentState: CurrentState)

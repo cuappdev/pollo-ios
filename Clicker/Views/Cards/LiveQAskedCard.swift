@@ -8,12 +8,13 @@
 
 import UIKit
 
-class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
+    var socket: Socket!
     var poll: Poll!
     var question: Question!
     var currentState: CurrentState!
-    var totalNumResults: Int!
+    var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
@@ -42,7 +43,9 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         question = staticQuestion
         currentState = staticCurrentState
         
-        totalNumResults = Int(currentState.getTotalCount())
+        if let s = socket {
+            s.delegate = self
+        }
         
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
@@ -94,7 +97,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults!) votes"
+        totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
@@ -176,9 +179,9 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         }
         
         // ANIMATE CHANGE
-        //UIView.animate(withDuration: 0.5, animations: {
-          //  cell.layoutIfNeeded()
-       // })
+        UIView.animate(withDuration: 0.5, animations: {
+            cell.layoutIfNeeded()
+        })
         
         return cell
     }
@@ -191,8 +194,35 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         return 47
     }
     
+    func sessionConnected() {
+        
+    }
+    
+    func sessionDisconnected() {
+        
+    }
+    
+    func questionStarted(_ question: Question) {
+    }
+    
+    func questionEnded(_ question: Question) {
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+    }
+    
+    func saveSession(_ session: Session) {
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        totalNumResults = currentState.getTotalCount()
+        poll.results = currentState.results
+        self.resultsTableView.reloadData()
+    }
+    
     // MARK  - ACTIONS
     @objc func endQuestionAction() {
+        socket.socket.emit("server/poll/end", [])
         shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
         shareResultsButton.backgroundColor = .clickerGreen
         shareResultsButton.setTitle("Share Results", for: .normal)
@@ -207,6 +237,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     }
     
     @objc func shareQuestionAction() {
+        socket.socket.emit("server/poll/results", [])
         shareResultsButton.removeFromSuperview()
         eyeView.image = #imageLiteral(resourceName: "results_shared")
         visibiltyLabel.text = "Shared with group"
@@ -216,7 +247,6 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         }
         
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {
