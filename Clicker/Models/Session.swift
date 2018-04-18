@@ -13,11 +13,21 @@ class Session {
     var id: String
     var name: String
     var code: String
+    var isGroup: Bool
+    var isLive: Bool?
     
-    init(id: String, name: String, code: String) {
+    init(id: String, name: String, code: String, isGroup: Bool) {
         self.id = id
         self.name = name
         self.code = code
+        self.isGroup = isGroup
     }
     
+    init(id: String, name: String, code: String, isGroup: Bool, isLive: Bool) {
+        self.id = id
+        self.name = name
+        self.code = code
+        self.isGroup = isGroup
+        self.isLive = isLive
+    }
 }

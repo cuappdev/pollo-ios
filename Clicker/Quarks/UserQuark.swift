@@ -17,6 +17,11 @@ struct GetMe: ClickerQuark {
     var route: String {
         return "/users"
     }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> User {
@@ -44,7 +49,6 @@ struct UserAuthenticate: ClickerQuark {
     var route: String {
         return "/auth/mobile"
     }
-
     var parameters: Parameters {
         return [
             "userId": userId,
@@ -76,7 +80,11 @@ struct UserRefreshSession: ClickerQuark {
     var route: String {
         return "/auth/refresh"
     }
-    
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession!.accessToken)"
+        ]
+    }
     let method: HTTPMethod = .get
     
     func process(element: Element) throws -> UserSession {
