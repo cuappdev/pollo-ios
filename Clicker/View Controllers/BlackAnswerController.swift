@@ -8,7 +8,9 @@
 
 import UIKit
 
-class BlackAnswerController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class BlackAnswerController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
+    
+    var socket: Socket!
     
     var mainCollectionView: UICollectionView!
     
@@ -79,5 +81,35 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         return CGSize(width: mainCollectionView.frame.width, height: 505)
     }
     
+    
+    // MARK - SOCKET DELAGATE
+    
+    func sessionConnected() {
+        
+    }
+    
+    func sessionDisconnected() {
+        
+    }
+    
+    func questionStarted(_ question: Question) {
+        
+    }
+    
+    func questionEnded(_ question: Question) {
+        
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+        
+    }
+    
+    func savePoll(_ poll: Poll) {
+        
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        
+    }
 }
 

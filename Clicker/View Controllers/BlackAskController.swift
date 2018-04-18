@@ -8,8 +8,10 @@
 
 import UIKit
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
+    
+    var socket: Socket!
+    
     // empty student vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
@@ -128,4 +130,33 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         return CGSize(width: mainCollectionView.frame.width, height: 505)
     }
     
+    // MARK - SOCKET DELEGATE
+    
+    func sessionConnected() {
+        
+    }
+    
+    func sessionDisconnected() {
+        
+    }
+    
+    func questionStarted(_ question: Question) {
+    
+    }
+    
+    func questionEnded(_ question: Question) {
+        
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+        
+    }
+    
+    func savePoll(_ poll: Poll) {
+        
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        
+    }
 }
