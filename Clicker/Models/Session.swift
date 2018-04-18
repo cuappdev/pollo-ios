@@ -10,20 +10,20 @@ import Foundation
 
 class Session {
     
-    var id: String
+    var id: Int
     var name: String
     var code: String
     var isGroup: Bool
     var isLive: Bool?
     
-    init(id: String, name: String, code: String, isGroup: Bool) {
+    init(id: Int, name: String, code: String, isGroup: Bool) {
         self.id = id
         self.name = name
         self.code = code
         self.isGroup = isGroup
     }
     
-    init(id: String, name: String, code: String, isGroup: Bool, isLive: Bool) {
+    init(id: Int, name: String, code: String, isGroup: Bool, isLive: Bool) {
         self.id = id
         self.name = name
         self.code = code

@@ -20,13 +20,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var tabController: UITabBarController!
     var socket: Socket!
+    var code: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        
+        setupNavBar()
     }
 
     override func didReceiveMemoryWarning() {
@@ -166,6 +166,31 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func updatedTally(_ currentState: CurrentState) {
         
+    }
+    
+    func setupNavBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // REMOVE BOTTOM SHADOW
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        let codeLabel = UILabel()
+        if let c = code {
+            codeLabel.text = "Code: \(c)"
+        }
+        codeLabel.textColor = .white
+        codeLabel.font = UIFont._16SemiboldFont
+        codeLabel.textAlignment = .center
+        self.navigationItem.titleView = codeLabel
+        
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(popViewController))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+    }
+    
+    @objc func popViewController() {
+        self.navigationController?.popViewController(animated: true)
     }
 
 }
