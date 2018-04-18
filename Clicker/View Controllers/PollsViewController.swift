@@ -6,19 +6,21 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 import UIKit
+import GoogleSignIn
 
-class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
+class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate, GoogleManagerDelegate {
     
-//    var pollsNavigationController: UINavigationController!
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerNavBarLightGrey
         
+        let googleManager = GoogleManager()
+        googleManager.delegate = self
         setupViews()
         setupConstraints()
     }
@@ -141,5 +143,21 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         navigationController?.pushViewController(blackAnswerController, animated: true)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // SHOW NAV BAR, HIDE TAB BAR
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    // GOOGLE MANAGER DELEGATE
+    func receiveResponse(user: GIDGoogleUser) {
+        pollsCollectionView.reloadData()
+    }
     
 }

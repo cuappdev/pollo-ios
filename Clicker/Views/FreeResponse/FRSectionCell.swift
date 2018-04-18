@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 
 
-class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
+class FRSectionCell: QuestionSectionCell {
     
     var session: Session!
     var grayViewBottomConstraint: Constraint!
@@ -45,15 +45,6 @@ class FRSectionCell: QuestionSectionCell, NewQuestionDelegate {
             make.top.equalToSuperview()
             make.left.equalToSuperview()
         }
-    }
-    
-    
-    // MARK: - NEW QUESTION DELEGATE
-    
-    func creatingNewQuestion() {
-        // Notify that we are in a Follow Up question
-        questionDelegate.inFollowUpQuestion()
-        questionTextField.text = ""
     }
     
     required init?(coder _: NSCoder) {

@@ -64,8 +64,8 @@ class Socket {
             guard let json = data[0] as? [String:Any] else {
                 return
             }
-            let poll = Poll(json: json)
-            self.delegate?.savePoll(poll)
+//            let poll = Poll(json: json)
+//            self.delegate?.savePoll(poll)
         }
         
         socket.on("admin/question/updateTally") { data, ack in
