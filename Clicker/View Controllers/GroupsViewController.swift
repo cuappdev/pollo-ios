@@ -28,7 +28,12 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupsCellID", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupsCellID", for: indexPath) as! GroupsCell
+        if (indexPath.item == 0) {
+            cell.groupType = .created
+        } else {
+            cell.groupType = .joined
+        }
         return cell
     }
     
@@ -137,5 +142,16 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
         print(navigationController!)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        // HIDE NAV BAR, SHOW TABBAR
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // SHOW NAV BAR, HIDE TAB BAR
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
     
 }
