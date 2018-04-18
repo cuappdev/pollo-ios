@@ -38,9 +38,12 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         //collectionView.alwaysBounceHorizontal = true
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(PastQAskedCard.self, forCellWithReuseIdentifier: "pastQAskedCardID")
-        collectionView.register(PastQAskedSharedCard.self, forCellWithReuseIdentifier: "pastQAskedSharedCardID")
-        collectionView.register(QuestionAskedCard.self, forCellWithReuseIdentifier: "questionAskedCardID")
+        collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: "liveQAskedCardID")
+        collectionView.register(ClosedQAskedCard.self, forCellWithReuseIdentifier: "closedQAskedCardID")
+        collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: "closedQAskedSharedCardID")
+        collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: "liveQAnswerCardID")
+        collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: "closedQAnsweredCardID")
+        collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: "closedQAnsweredSharedCardID")
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
@@ -64,18 +67,24 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 6
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell: UICollectionViewCell
         switch indexPath.row {
         case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "questionAskedCardID", for: indexPath) as! QuestionAskedCard
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAnswerCardID", for: indexPath) as! LiveQAnswerCard
         case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastQAskedSharedCardID", for: indexPath) as! PastQAskedSharedCard
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredCardID", for: indexPath) as! ClosedQAnsweredCard
+        case 2:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredSharedCardID", for: indexPath) as! ClosedQAnsweredSharedCard
+        case 3:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
+        case 4:
+             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAskedCardID", for: indexPath) as! ClosedQAskedCard
         default:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastQAskedCardID", for: indexPath) as! PastQAskedCard
+           cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAskedSharedCardID", for: indexPath) as! ClosedQAskedSharedCard
         }
         return cell
     }
