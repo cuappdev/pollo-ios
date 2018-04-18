@@ -146,6 +146,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
                         blackAskVC.tabController = self.tabBarController
                         blackAskVC.socket = socket
                         blackAskVC.code = code
+                        blackAskVC.sessionId = session.id
                         blackAskVC.datePollsDict = [:]
                         self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)

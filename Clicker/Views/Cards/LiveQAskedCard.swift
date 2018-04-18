@@ -10,6 +10,7 @@ import UIKit
 
 class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
+    var poll: Poll!
     var question: Question!
     var currentState: CurrentState!
     var totalNumResults: Int!
@@ -57,7 +58,6 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         cellColors = .clickerHalfGreen
         
         questionLabel = UILabel()
-        questionLabel.text = question.text
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -154,16 +154,18 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = question.options[indexPath.row]
         cell.selectionStyle = .none
         cell.highlightView.backgroundColor = cellColors
 
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
-            return cell
+        var count: Int = 0
+        print(poll.results)
+        if let choiceInfo = poll.results[mcOption] as? [String:Any] {
+            cell.optionLabel.text = choiceInfo["text"] as! String
+            count = choiceInfo["count"] as! Int
+            cell.numberLabel.text = "\(count)"
         }
-        cell.numberLabel.text = "\(count)"
         
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))

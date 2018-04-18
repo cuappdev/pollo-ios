@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol StartPollDelegate {
+    func startPoll(text: String, type: String, options: [String])
+}
+
 class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuestionDelegate {
     
     let edgePadding: CGFloat = 18
@@ -25,7 +29,7 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     var questionType: String!
     
     var questionCollectionView: UICollectionView!
-    
+    var startPollDelegate: StartPollDelegate!
     var isFollowUpQuestion: Bool = false
     
     var buttonsView: UIView!
@@ -135,11 +139,31 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     @objc func saveAsDraft() {
         // TODO: Save question as draft
         print("save as draft")
+        
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func startQuestion() {
         // TODO: Start question session
         print("start question")
+        let currentIndexPath = questionCollectionView.indexPathsForVisibleItems.first!
+        
+        // MULTIPLE CHOICE
+        if (currentIndexPath.item == 0) {
+            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! MCSectionCell
+            let question = cell.questionTextField.text
+            let options = cell.optionsDict.keys.sorted().map { cell.optionsDict[$0]! }
+            print(options)
+            
+            startPollDelegate.startPoll(text: question!, type: "MULTIPLE_CHOICE", options: options)
+        } else { // FREE RESPONSE
+            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! FRSectionCell
+            let question = cell.questionTextField.text
+            
+            startPollDelegate.startPoll(text: question!, type: "FREE_RESPONSE", options: [])
+        }
+        
+        self.dismiss(animated: true, completion: nil)
     }
     
     // TODO: Show a dropdown of question types

@@ -443,10 +443,16 @@ struct StartSession: ClickerQuark {
         switch element {
         case .node(let node):
             print(node)
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: isGroup)
+            if let isGroup = node["isGroup"].bool {
+                return Session(id: id, name: name, code: code, isGroup: isGroup)
+            } else if let isGroup = node["isGroup"].string {
+                return Session(id: id, name: name, code: code, isGroup: (isGroup == "1"))
+            } else {
+                throw NeutronError.badResponseData
+            }
         default: throw NeutronError.badResponseData
         }
     }
