@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BlackViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     // empty student vars
     var monkeyView: UIImageView!

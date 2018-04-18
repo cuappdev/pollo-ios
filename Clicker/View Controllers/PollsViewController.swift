@@ -137,10 +137,8 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     // MARK - actions
     @objc func newPollAction() {
-        let blackViewController = BlackViewController()
-        navigationController?.pushViewController(blackViewController, animated: true)
-        //blackViewController.setupEmptyStudentPoll()
-        blackViewController.setupAdminGroup()
+        let blackAnswerController = BlackAnswerController()
+        navigationController?.pushViewController(blackAnswerController, animated: true)
     }
     
     

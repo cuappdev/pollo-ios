@@ -132,9 +132,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // MARK - actions
     @objc func newGroupAction() {
-        let blackViewController = BlackViewController()
-        navigationController?.pushViewController(blackViewController, animated: true)
-        print(navigationController!)
+        print("new group")
     }
     
     

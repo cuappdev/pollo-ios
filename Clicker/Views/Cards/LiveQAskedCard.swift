@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuestionAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var question: Question!
     var currentState: CurrentState!
