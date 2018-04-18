@@ -19,7 +19,7 @@ class Socket {
         self.delegate = delegate
         
         let url = URL(string: hostURL)!
-        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
+        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": User.currentUser?.id])])
         
         socket = manager.socket(forNamespace: "/\(id)")
         

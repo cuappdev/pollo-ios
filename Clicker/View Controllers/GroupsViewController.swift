@@ -142,7 +142,6 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
         navigationController?.pushViewController(blackViewController, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = true
-        print(navigationController!)
     }
     
 }
