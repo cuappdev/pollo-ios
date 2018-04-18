@@ -138,20 +138,11 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     // MARK - actions
     @objc func newGroupAction() {
         let blackViewController = BlackViewController()
+        blackViewController.tabController = self.tabBarController
         navigationController?.pushViewController(blackViewController, animated: true)
-        print(navigationController!)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // HIDE NAV BAR, SHOW TABBAR
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        self.tabBarController?.tabBar.isHidden = false
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        // SHOW NAV BAR, HIDE TAB BAR
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = true
+        print(navigationController!)
     }
     
 }
