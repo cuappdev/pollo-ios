@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = TabBarController()
@@ -38,11 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             window?.rootViewController?.present(login, animated: false, completion: nil)
         }
         
-        // SIREN
-        let siren = Siren.shared
-        siren.alertType = .option
-        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
-        siren.checkVersion(checkType: .immediately)
+//        // SIREN
+//        let siren = Siren.shared
+//        siren.alertType = .option
+//        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
+//        siren.checkVersion(checkType: .immediately)
         
         // FABRIC
         #if DEBUG
@@ -67,7 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let familyName = user.profile.familyName
             let email = user.profile.email
             let netId = email?.substring(to: (email?.index(of: "@"))!)
-            User.currentUser = User(id: Float(userId!)!, name: "\(givenName) \(familyName)", netId: netId!)
+            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
+            
             
             if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
                 UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
@@ -82,7 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
     }
-
     
     func requestReview() {
         if #available(iOS 10.3, *) {
