@@ -137,20 +137,24 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     // MARK - actions
     @objc func newPollAction() {
-        let blackAskController = BlackAnswerController()
-        navigationController?.pushViewController(blackAskController, animated: true)
-        /*blackAskController.socket = Socket(id: 1234, userType: "student", delegate: blackAskController)
-        var code = ""
-        StartSession(code: code).make()
-            .done { session in
-                
-        } .catch { error in
-            print(error)
+        GenerateCode().make()
+            .done { code in
+                StartSession(code: code, name: code, isGroup: false).make()
+                    .done { session in
+                        let socket = Socket(id: "\(session.id)", userType: "admin")
+                        let blackAskVC = BlackAskController()
+                        blackAskVC.tabController = self.tabBarController
+                        blackAskVC.socket = socket
+                        blackAskVC.code = code
+                        self.navigationController?.pushViewController(blackAskVC, animated: true)
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        self.tabBarController?.tabBar.isHidden = true
+                    }.catch { error in
+                        print(error)
+                }
+            }.catch { error in
+                print(error)
         }
-        */
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = true
     }
     
 }

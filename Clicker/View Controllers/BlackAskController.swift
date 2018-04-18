@@ -185,11 +185,11 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(popViewController))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
     }
     
-    @objc func popViewController() {
+    @objc func goBack() {
         self.navigationController?.popViewController(animated: true)
     }
 

@@ -12,6 +12,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     var tabController: UITabBarController!
     var socket: Socket!
+    var code: String!
     
     var mainCollectionView: UICollectionView!
     
@@ -23,6 +24,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         
         setupViews()
         setupConstraints()
+        setupNavBar()
     }
     
     override func didReceiveMemoryWarning() {
@@ -118,6 +120,31 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         tabController?.tabBar.isHidden = false
+    }
+    
+    func setupNavBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // REMOVE BOTTOM SHADOW
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        let codeLabel = UILabel()
+        if let c = code {
+            codeLabel.text = "Code: \(c)"
+        }
+        codeLabel.textColor = .white
+        codeLabel.font = UIFont._16SemiboldFont
+        codeLabel.textAlignment = .center
+        self.navigationItem.titleView = codeLabel
+        
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+    }
+    
+    @objc func goBack() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
