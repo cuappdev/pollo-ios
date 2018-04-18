@@ -72,6 +72,7 @@
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
+		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +157,7 @@
 		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,6 +404,7 @@
 				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
 				633381322086D07D008BD455 /* BlackAnswerController.swift */,
 				C21D98802083D32000191103 /* LoginViewController.swift */,
+				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -664,6 +667,7 @@
 				C26D14AB207E744A008C3F48 /* NewGroupHeader.swift in Sources */,
 				633381352086D18B008BD455 /* EmptyAnswerCell.swift in Sources */,
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
+				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
 				6353FD382086DD9E00E16EB2 /* ClosedQAskedSharedCard.swift in Sources */,
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,

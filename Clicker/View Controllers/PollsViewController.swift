@@ -7,6 +7,7 @@
 //
 import UIKit
 import GoogleSignIn
+import Presentr
 
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
     
@@ -14,6 +15,9 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
+    
+    // FIX: test button to go to poll builder
+    var testButton: UIButton!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +94,12 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
         
-        }
+        // FIX: test button
+        testButton = UIButton()
+        testButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+        testButton.addTarget(self, action: #selector(testPoll), for: .touchUpInside)
+        view.addSubview(testButton)
+    }
     
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
@@ -132,6 +141,18 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.right.equalToSuperview().offset(-15)
         }
         
+        // FIX: test button
+        testButton.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
+            } else {
+                make.top.equalTo(topLayoutGuide.snp.bottom).offset(15)
+            }
+            make.width.equalTo(19)
+            make.height.equalTo(19)
+            make.left.equalToSuperview().offset(15)
+        }
+        
         
     }
     
@@ -155,6 +176,27 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             }.catch { error in
                 print(error)
         }
+    }
+    
+    // FIX: test poll
+    @objc func testPoll() {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: Float(view.frame.size.height - statusBarHeight))
+        let originY = statusBarHeight
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        
+        let presenter: Presentr = Presentr(presentationType: customType)
+        presenter.backgroundColor = .black
+        presenter.roundCorners = true
+        presenter.cornerRadius = 15
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        
+        let pollBuilderVC = PollBuilderViewController()
+        pollBuilderVC.dismissController = self
+        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
     }
     
 }
