@@ -18,21 +18,19 @@ class FRSectionCell: QuestionSectionCell {
     
     var questionTextField: UITextField!
     
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         layoutSubviews()
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
         questionTextField = UITextField()
-        questionTextField.placeholder = "Add Question"
-        questionTextField.font = UIFont.systemFont(ofSize: 21)
-        questionTextField.backgroundColor = .white
-        questionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
-        questionTextField.returnKeyType = UIReturnKeyType.done
+        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._18RegularFont])
+        questionTextField.font = ._18RegularFont
+        questionTextField.returnKeyType = .done
         questionTextField.delegate = self
         addSubview(questionTextField)
     }
@@ -41,7 +39,7 @@ class FRSectionCell: QuestionSectionCell {
         super.layoutSubviews()
         
         questionTextField.snp.updateConstraints{ make in
-            make.size.equalTo(CGSize(width: frame.width, height: 61))
+            make.size.equalTo(CGSize(width: frame.width, height: 48))
             make.top.equalToSuperview()
             make.left.equalToSuperview()
         }
