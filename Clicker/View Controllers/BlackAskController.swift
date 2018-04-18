@@ -8,8 +8,10 @@
 
 import UIKit
 
-class BlackViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
+    
+    var socket: Socket!
+    
     // empty student vars
     var tabController: UITabBarController!
     var monkeyView: UIImageView!
@@ -136,4 +138,34 @@ class BlackViewController: UIViewController, UICollectionViewDelegate, UICollect
         tabController?.tabBar.isHidden = false
     }
     
+    // MARK - SOCKET DELEGATE
+    
+    func sessionConnected() {
+        
+    }
+    
+    func sessionDisconnected() {
+        
+    }
+    
+    func questionStarted(_ question: Question) {
+    
+    }
+    
+    func questionEnded(_ question: Question) {
+        
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+        
+    }
+    
+    func savePoll(_ poll: Poll) {
+        
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        
+    }
+
 }

@@ -137,7 +137,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // MARK - actions
     @objc func newGroupAction() {
-        let blackViewController = BlackViewController()
+        let blackViewController = BlackAskController()
         blackViewController.tabController = self.tabBarController
         navigationController?.pushViewController(blackViewController, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)

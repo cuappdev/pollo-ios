@@ -1,14 +1,14 @@
 //
-//  PastQuestionCard.swift
+//  PastQAskedShared.swift
 //  Clicker
 //
-//  Created by eoin on 4/14/18.
+//  Created by eoin on 4/17/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var question: Question!
     var currentState: CurrentState!
@@ -20,9 +20,8 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
-    var shareResultsButton: UIButton!
     var totalResultsLabel: UILabel!
-    var eyeView: UIImageView!
+    var worldView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -72,20 +71,12 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
-        visibiltyLabel.text = "Only you can see these results"
+        visibiltyLabel.text = "Shared with group"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
         addSubview(visibiltyLabel)
-        
-        shareResultsButton = UIButton()
-        shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
-        shareResultsButton.backgroundColor = .clickerGreen
-        shareResultsButton.setTitle("Share Results", for: .normal)
-        shareResultsButton.titleLabel?.font = ._16SemiboldFont
-        shareResultsButton.titleLabel?.textAlignment = .center
-        shareResultsButton.layer.cornerRadius = 25.5
-        addSubview(shareResultsButton)
+
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults!) votes"
@@ -94,8 +85,8 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
         
-        eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        addSubview(eyeView)
+        worldView = UIImageView(image: #imageLiteral(resourceName: "results_shared"))
+        addSubview(worldView)
         
     }
     
@@ -117,15 +108,8 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         visibiltyLabel.snp.updateConstraints { make in
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.bottom.equalTo(shareResultsButton.snp.top).offset(-17)
+            make.bottom.equalToSuperview().offset(-23.5)
             make.height.equalTo(14.5)
-        }
-        
-        shareResultsButton.snp.updateConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-24)
-            make.height.equalTo(47)
-            make.width.equalTo(292.5)
         }
         
         totalResultsLabel.snp.updateConstraints { make in
@@ -135,7 +119,7 @@ class PastQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
             make.height.equalTo(14.5)
         }
         
-        eyeView.snp.makeConstraints { make in
+        worldView.snp.makeConstraints { make in
             make.height.equalTo(14.5)
             make.width.equalTo(14.5)
             make.top.equalTo(visibiltyLabel.snp.top)
