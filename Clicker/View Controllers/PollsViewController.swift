@@ -15,9 +15,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     var pollsCollectionView: UICollectionView!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-    
-    // FIX: test button to go to poll builder
-    var testButton: UIButton!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,12 +90,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
-        
-        // FIX: test button
-        testButton = UIButton()
-        testButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
-        testButton.addTarget(self, action: #selector(testPoll), for: .touchUpInside)
-        view.addSubview(testButton)
     }
     
     func setupConstraints() {
@@ -140,20 +131,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.height.equalTo(19)
             make.right.equalToSuperview().offset(-15)
         }
-        
-        // FIX: test button
-        testButton.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom).offset(15)
-            }
-            make.width.equalTo(19)
-            make.height.equalTo(19)
-            make.left.equalToSuperview().offset(15)
-        }
-        
-        
     }
     
     // MARK - actions
@@ -178,8 +155,8 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    // FIX: test poll
-    @objc func testPoll() {
+    // TODO: Move this function to where it will be used
+    @objc func createPoll() {
         let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
         let width = ModalSize.full
         let height = ModalSize.custom(size: Float(view.frame.size.height - statusBarHeight))
