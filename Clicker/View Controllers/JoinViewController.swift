@@ -33,8 +33,8 @@ class JoinViewController: UITabBarController {
                 StartSession(code: code).make()
                     .done { session in
                         let socket = Socket(id: Int(session.id)!, userType: "user")
-                        let blackVC = BlackViewController()
-                        self.navigationController?.pushViewController(blackVC, animated: true)
+                        let blackAskVC = BlackAskController()
+                        self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                         self.tabBarController?.tabBar.isHidden = true
                     }.catch { error in

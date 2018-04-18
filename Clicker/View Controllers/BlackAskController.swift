@@ -10,8 +10,6 @@ import UIKit
 
 class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SocketDelegate {
     
-    var socket: Socket!
-    
     // empty student vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
@@ -21,6 +19,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var mainCollectionView: UICollectionView!
     
     var tabController: UITabBarController!
+    var socket: Socket!
     
     override func viewDidLoad() {
         super.viewDidLoad()
