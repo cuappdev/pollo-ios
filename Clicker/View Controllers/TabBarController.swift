@@ -99,6 +99,7 @@ class TabBarController: UITabBarController {
         let customType = PresentationType.custom(width: width, height: height, center: center)
         
         let presenter: Presentr = Presentr(presentationType: customType)
+        presenter.backgroundColor = .clickerWhite
         presenter.backgroundOpacity = 0.6
         presenter.roundCorners = false
         presenter.dismissOnSwipe = true
