@@ -11,6 +11,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     var groupOptionsView: OptionsView!
     var groupCollectionView: UICollectionView!
+    let groupsIdentifier = "groupsCellID"
     var titleLabel: UILabel!
     var newGroupButton: UIButton!
     
@@ -28,7 +29,7 @@ class GroupsViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupsCellID", for: indexPath) as! GroupsCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: groupsIdentifier, for: indexPath) as! GroupsCell
         if (indexPath.item == 0) {
             cell.groupType = .created
         } else {

@@ -11,6 +11,12 @@ import UIKit
 class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
+    let liveQAskedIdenfitifer = "liveQAskedCardID"
+    let closedQAskedIdentifier = "closedQAskedCardID"
+    let closedQAskedSharedIdentifier = "closedQAskedSharedCardID"
+    let liveQAnswerIdentifier = "liveQAnswerCardID"
+    let closedQAnswerIdentifier = "closedQAnsweredCardID"
+    let closedQAnswerSharedIdentifier = "closedQAnsweredSharedCardID"
     var dateLabel: UILabel!
     var socket: Socket!
     var polls: [Poll]!
@@ -42,12 +48,12 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: "liveQAskedCardID")
-        collectionView.register(ClosedQAskedCard.self, forCellWithReuseIdentifier: "closedQAskedCardID")
-        collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: "closedQAskedSharedCardID")
-        collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: "liveQAnswerCardID")
-        collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: "closedQAnsweredCardID")
-        collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: "closedQAnsweredSharedCardID")
+        collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: liveQAskedIdenfitifer)
+        collectionView.register(ClosedQAskedCard.self, forCellWithReuseIdentifier: closedQAskedIdentifier)
+        collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: closedQAskedSharedIdentifier)
+        collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: liveQAnswerIdentifier)
+        collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
+        collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: closedQAnswerSharedIdentifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
@@ -80,7 +86,7 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.item == polls.count) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAnswerCardID", for: indexPath) as! LiveQAnswerCard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
             cell.question = liveQuestion
             cell.questionLabel.text = liveQuestion.text
             cell.socket = socket
@@ -88,14 +94,14 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         }
         let poll = polls[indexPath.item]
         if (poll.isLive) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "liveQAskedCardID", for: indexPath) as! LiveQAskedCard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
             cell.socket = socket
             socket.delegate = cell
             cell.poll = poll
             cell.questionLabel.text = poll.text
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "closedQAnsweredCardID", for: indexPath) as! ClosedQAnsweredCard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerIdentifier, for: indexPath) as! ClosedQAnsweredCard
             return cell
         }
     }

@@ -29,6 +29,8 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     var questionType: String!
     
     var questionCollectionView: UICollectionView!
+    let mcSectionIdentifier = "mcSectionCellID"
+    let frSectionIdentifier = "frSectionCellID"
     var startPollDelegate: StartPollDelegate!
     var isFollowUpQuestion: Bool = false
     
@@ -87,8 +89,8 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         questionCollectionView.dataSource = self
         questionCollectionView.showsVerticalScrollIndicator = false
         questionCollectionView.showsHorizontalScrollIndicator = false
-        questionCollectionView.register(MCSectionCell.self, forCellWithReuseIdentifier: "mcSectionCell")
-        questionCollectionView.register(FRSectionCell.self, forCellWithReuseIdentifier: "frSectionCellID")
+        questionCollectionView.register(MCSectionCell.self, forCellWithReuseIdentifier: mcSectionIdentifier)
+        questionCollectionView.register(FRSectionCell.self, forCellWithReuseIdentifier: frSectionIdentifier)
         questionCollectionView.backgroundColor = .clickerBackground
         questionCollectionView.isPagingEnabled = true
         view.addSubview(questionCollectionView)
@@ -199,12 +201,12 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     // MARK: - COLLECTION VIEW
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if questionType == "MULTIPLE_CHOICE" {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "mcSectionCell", for: indexPath) as! MCSectionCell
+            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: mcSectionIdentifier, for: indexPath) as! MCSectionCell
             cell.questionTextField.becomeFirstResponder()
             cell.questionDelegate = self
             return cell
         } else if questionType == "FREE_RESPONSE" {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: "frSectionCellID", for: indexPath) as! FRSectionCell
+            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: frSectionIdentifier, for: indexPath) as! FRSectionCell
             cell.questionTextField.becomeFirstResponder()
             cell.questionDelegate = self
             return cell

@@ -13,6 +13,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
+    let pollsIdentifier = "pollsCellID"
     var titleLabel: UILabel!
     var newPollButton: UIButton!
         
@@ -30,7 +31,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pollsCellID", for: indexPath) as! PollsCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: pollsIdentifier, for: indexPath) as! PollsCell
         if (indexPath.item == 0) {
             cell.pollType = .created
         } else {
@@ -84,7 +85,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         pollsCollectionView.alwaysBounceHorizontal = true
         pollsCollectionView.delegate = self
         pollsCollectionView.dataSource = self
-        pollsCollectionView.register(PollsCell.self, forCellWithReuseIdentifier: "pollsCellID")
+        pollsCollectionView.register(PollsCell.self, forCellWithReuseIdentifier: pollsIdentifier)
         pollsCollectionView.showsVerticalScrollIndicator = false
         pollsCollectionView.showsHorizontalScrollIndicator = false
         pollsCollectionView.backgroundColor = .clickerBackground
