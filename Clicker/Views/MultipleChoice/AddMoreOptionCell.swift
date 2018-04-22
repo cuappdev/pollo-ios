@@ -11,54 +11,56 @@ import SnapKit
 
 class AddMoreOptionCell: UITableViewCell {
     
+    let edgePadding: CGFloat = 18
+    let bottomPadding: CGFloat = 6
+    
     var plusLabel: UILabel!
     var addMoreLabel: UILabel!
     
-    
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
-        contentView.layer.cornerRadius = 8
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        backgroundColor = .clear
+        contentView.layer.cornerRadius = 5
         contentView.layer.borderWidth = 0.5
+        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
         
         setupViews()
         layoutSubviews()
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
         plusLabel = UILabel()
         plusLabel.text = "+"
-        plusLabel.textColor = .clickerDarkGray
+        plusLabel.textColor = .clickerMediumGray
         plusLabel.textAlignment = .center
-        plusLabel.font = UIFont.systemFont(ofSize: 20.5, weight: .semibold)
+        plusLabel.font = ._20MediumFont
         addSubview(plusLabel)
         
         addMoreLabel = UILabel()
-        addMoreLabel.text = "Add More"
-        addMoreLabel.textColor = UIColor(red: 209/255, green: 212/255, blue: 223/255, alpha: 1.0)
-        addMoreLabel.font = UIFont.systemFont(ofSize: 16)
+        addMoreLabel.text = "Add Option"
+        addMoreLabel.textColor = .clickerMediumGray
+        addMoreLabel.font = ._16RegularFont
         addSubview(addMoreLabel)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, bottomPadding, 0))
         
         plusLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.12, height: frame.height))
-            make.left.equalToSuperview()
+            make.size.equalTo(CGSize(width: 13, height: frame.height - bottomPadding))
+            make.left.equalToSuperview().offset(edgePadding)
             make.top.equalToSuperview()
         }
         
         addMoreLabel.snp.updateConstraints { make in
-            make.left.equalTo(plusLabel.snp.right)
+            make.left.equalTo(plusLabel.snp.right).offset(6.5)
             make.top.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-bottomPadding)
         }
     }
     
