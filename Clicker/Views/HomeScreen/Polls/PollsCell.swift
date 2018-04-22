@@ -17,7 +17,7 @@ enum PollType {
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, GIDSignInDelegate {
     
     var pollsTableView: UITableView!
-    
+    let pollPreviewIdentifier = "pollPreviewCellID"
     var sessions: [Session] = []
     var pollType: PollType!
     
@@ -33,7 +33,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "pollPreviewCellID", for: indexPath) as! PollPreviewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
         return cell
     }
     
@@ -50,7 +50,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         pollsTableView = UITableView()
         pollsTableView.delegate = self
         pollsTableView.dataSource = self
-        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: "pollPreviewCellID")
+        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: pollPreviewIdentifier)
         pollsTableView.separatorStyle = .none
         addSubview(pollsTableView)
     }
@@ -84,13 +84,12 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             let userId = user.userID // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
             let fullName = user.profile.name
             let givenName = user.profile.givenName
             let familyName = user.profile.familyName
             let email = user.profile.email
-            let netId = email?.substring(to: (email?.index(of: "@"))!)
-            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
+            let netId = email?.split(separator: "@")[0]
+            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: String(netId!), givenName: givenName!, familyName: familyName!, email: email!)
             
             UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
                 .done { userSession in
@@ -101,10 +100,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
                     print(error)
             }
             
-            if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
-            }
-            
+            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: "significantEvents") + 2, forKey:"significantEvents")
             window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")

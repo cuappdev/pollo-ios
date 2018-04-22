@@ -17,6 +17,7 @@ enum GroupType {
 class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, GIDSignInDelegate {
     
     var groupsTableView: UITableView!
+    let groupPreviewIdenfitifer = "groupPreviewCellID"
     var sessions: [Session] = [] // JOINED: [[Session]], CREATED: [Session]
     
     var groupType: GroupType!
@@ -33,7 +34,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "groupPreviewCellID", for: indexPath) as! GroupPreviewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: groupPreviewIdenfitifer, for: indexPath) as! GroupPreviewCell
         return cell
     }
     
@@ -51,7 +52,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         groupsTableView = UITableView()
         groupsTableView.delegate = self
         groupsTableView.dataSource = self
-        groupsTableView.register(GroupPreviewCell.self, forCellReuseIdentifier: "groupPreviewCellID")
+        groupsTableView.register(GroupPreviewCell.self, forCellReuseIdentifier: groupPreviewIdenfitifer)
         groupsTableView.separatorStyle = .none
         addSubview(groupsTableView)
     }
@@ -64,9 +65,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     
     // GET GROUP SESSIONS
     func getGroupSessions() {
-        guard let _ = User.userSession else {
-            return
-        }
+        guard let _ = User.userSession else { return }
         let role: UserRole
         if (groupType == .created) {
             role = .admin
@@ -85,13 +84,12 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             let userId = user.userID // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
             let fullName = user.profile.name
             let givenName = user.profile.givenName
             let familyName = user.profile.familyName
             let email = user.profile.email
-            let netId = email?.substring(to: (email?.index(of: "@"))!)
-            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
+            let netId = email?.split(separator: "@")[0]
+            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: String(netId!), givenName: givenName!, familyName: familyName!, email: email!)
             
             UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
                 .done { userSession in
@@ -102,10 +100,7 @@ class GroupsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
                     print(error)
             }
             
-            if let significantEvents: Int = UserDefaults.standard.integer(forKey: "significantEvents"){
-                UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
-            }
-            
+            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: "significantEvents") + 2, forKey:"significantEvents")
             window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")
