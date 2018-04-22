@@ -41,6 +41,7 @@
 		C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B91808208CE3A80030822F /* FRSectionCell.swift */; };
 		C2B9180B208CE3D40030822F /* ResultFRCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9180A208CE3D40030822F /* ResultFRCell.swift */; };
 		C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9180C208CE7320030822F /* FeedbackViewController.swift */; };
+		C2B91813208CEB2B0030822F /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2B91812208CEB2B0030822F /* Keys.plist */; };
 		C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CD2033FA140067505A /* PollQuark.swift */; };
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
@@ -116,6 +117,7 @@
 		C2B91808208CE3A80030822F /* FRSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
 		C2B9180A208CE3D40030822F /* ResultFRCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultFRCell.swift; sourceTree = "<group>"; };
 		C2B9180C208CE7320030822F /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		C2B91812208CEB2B0030822F /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		C2BF44CD2033FA140067505A /* PollQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollQuark.swift; sourceTree = "<group>"; };
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
@@ -245,6 +247,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		C2B91811208CEB180030822F /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+				C2B91812208CEB2B0030822F /* Keys.plist */,
+			);
+			path = Secrets;
+			sourceTree = "<group>";
+		};
 		C2BF44D1203402540067505A /* MultipleChoice */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +331,7 @@
 		C7F923B91F73540600B1E975 = {
 			isa = PBXGroup;
 			children = (
+				C2B91811208CEB180030822F /* Secrets */,
 				C7F923C41F73540600B1E975 /* Clicker */,
 				652915081F78124700882CBB /* ClickerTests */,
 				C7F923C31F73540600B1E975 /* Products */,
@@ -465,6 +476,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2B91813208CEB2B0030822F /* Keys.plist in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
@@ -750,6 +762,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -916,6 +929,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
