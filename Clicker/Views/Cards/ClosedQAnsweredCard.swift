@@ -106,8 +106,8 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         
         resultsTableView.snp.updateConstraints { make in
             make.top.equalTo(questionLabel.snp.bottom).offset(17)
-            make.left.equalToSuperview()//.offset(18)
-            make.right.equalToSuperview()//.offset(-18)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
             make.bottom.equalToSuperview().offset(-51)
         }
         

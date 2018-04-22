@@ -117,8 +117,8 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         
         resultsTableView.snp.updateConstraints{ make in
             make.top.equalTo(questionLabel.snp.bottom).offset(17)
-            make.left.equalToSuperview()//.offset(18)
-            make.right.equalToSuperview()//.offset(-18)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
             make.bottom.equalToSuperview().offset(-51)
         }
         
@@ -165,7 +165,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         var count: Int = 0
         print(poll.results)
         if let choiceInfo = poll.results[mcOption] as? [String:Any] {
-            cell.optionLabel.text = choiceInfo["text"] as! String
+            cell.optionLabel.text = choiceInfo["text"] as? String
             count = choiceInfo["count"] as! Int
             cell.numberLabel.text = "\(count)"
         }
