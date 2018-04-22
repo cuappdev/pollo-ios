@@ -1,3 +1,4 @@
+
 //
 //  UIViewController+Shared.swift
 //  Clicker
@@ -5,7 +6,6 @@
 //  Created by Kevin Chan on 2/13/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-
 import UIKit
 import Neutron
 import Alamofire
@@ -15,6 +15,13 @@ extension UIViewController {
     // CONVERT INT TO MC OPTIONS
     func intToMCOption(_ intOption: Int) -> String {
         return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
+    }
+    
+    // GET MM/DD/YYYY OF TODAY
+    func getTodaysDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter.string(from: Date())
     }
     
     // USER DEFAULTS

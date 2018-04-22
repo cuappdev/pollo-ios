@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, NewQuestionDelegate {
+class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate {
     
     var questionDelegate: QuestionDelegate!
     var session: Session!
@@ -20,7 +20,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
     
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Add Keyboard Handlers
@@ -32,7 +32,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         layoutSubviews()
     }
     
-    //MARK: - POLLING
+    // MARK: - POLLING
     func clearOptionsDict() {
         optionsDict.removeAll()
         for i in 0...numOptions - 1 {
@@ -40,7 +40,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    //MARK: - TABLEVIEW
+    // MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.row == numOptions && numOptions <= 25) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addMoreOptionCellID") as! AddMoreOptionCell
@@ -90,17 +90,15 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 53
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
         questionTextField = UITextField()
-        questionTextField.placeholder = "Add Question"
-        questionTextField.font = UIFont.systemFont(ofSize: 21)
-        questionTextField.backgroundColor = .white
-        questionTextField.layer.sublayerTransform = CATransform3DMakeTranslation(18, 0, 0)
-        questionTextField.returnKeyType = UIReturnKeyType.done
+        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._18RegularFont])
+        questionTextField.font = ._18RegularFont
+        questionTextField.returnKeyType = .done
         questionTextField.delegate = self
         addSubview(questionTextField)
         
@@ -109,9 +107,10 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         optionsTableView.dataSource = self
         optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: "createMCOptionCellID")
         optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: "addMoreOptionCellID")
-        optionsTableView.backgroundColor = .clickerBackground
+        optionsTableView.backgroundColor = .clickerWhite
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
+        
         addSubview(optionsTableView)
     }
     
@@ -119,18 +118,17 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         super.layoutSubviews()
         
         questionTextField.snp.updateConstraints{ make in
-            make.size.equalTo(CGSize(width: frame.width, height: 61))
+            make.size.equalTo(CGSize(width: frame.width, height: 48))
             make.top.equalToSuperview()
             make.left.equalToSuperview()
         }
         
         optionsTableView.snp.updateConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.90)
+            make.width.equalToSuperview()
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
             make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        
     }
     
     // MARK: - MC OPTION DELEGATE
@@ -156,16 +154,6 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     
     func updatedTextField(index: Int, text: String) {
         optionsDict[index] = text
-    }
-    
-    // MARK: - NEW QUESTION DELEGATE
-    
-    func creatingNewQuestion() {
-        // Notify that we are in a Follow Up question
-        questionDelegate.inFollowUpQuestion()
-        questionTextField.text = ""
-        clearOptionsDict()
-        optionsTableView.reloadData()
     }
     
     // MARK: - KEYBOARD

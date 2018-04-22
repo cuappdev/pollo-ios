@@ -16,79 +16,79 @@ protocol MultipleChoiceOptionDelegate {
 
 class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     
-    var mcOptionDelegate: MultipleChoiceOptionDelegate!
+    let trashIconHeight: CGFloat = 21.5
+    let edgePadding: CGFloat = 18
+    let bottomPadding: CGFloat = 6
     
-    var choiceLabel = UILabel()
+    var mcOptionDelegate: MultipleChoiceOptionDelegate!
+    var mcOption: String!
     var choiceTag: Int! {
         didSet {
-            choiceLabel.text = intToMCOption(choiceTag)
+            mcOption = intToMCOption(choiceTag)
         }
     }
     var addOptionTextField: UITextField!
     var trashButton: UIButton!
     
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
-        contentView.layer.cornerRadius = 8
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-        contentView.layer.borderWidth = 0.5
-        contentView.backgroundColor = .white
+        backgroundColor = .clear
         
         setupViews()
         layoutSubviews()
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
-        choiceLabel.textColor = .clickerDarkGray
-        choiceLabel.font = UIFont._16SemiboldFont
-        choiceLabel.textAlignment = .center
-        addSubview(choiceLabel)
-        
-        trashButton = UIButton()
-        trashButton.setImage(#imageLiteral(resourceName: "trash"), for: .normal)
-        trashButton.backgroundColor = .clear
-        trashButton.addTarget(self, action: #selector(deleteOption), for: .touchUpInside)
-        addSubview(trashButton)
         
         addOptionTextField = UITextField()
-        addOptionTextField.placeholder = "Add Option"
-        addOptionTextField.font = UIFont._16SemiboldFont
+        addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Add Option", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._16RegularFont])
+        addOptionTextField.font = UIFont._16RegularFont
+        addOptionTextField.layer.cornerRadius = 5
         addOptionTextField.borderStyle = .none
-        addOptionTextField.returnKeyType = UIReturnKeyType.done
+        addOptionTextField.backgroundColor = .clickerOptionGrey
+        addOptionTextField.returnKeyType = .done
         addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addOptionTextField.delegate = self
+        
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: contentView.frame.height))
+        addOptionTextField.leftView = leftPaddingView
+        addOptionTextField.leftViewMode = .always
+        
+        trashButton = UIButton()
+        trashButton.setImage(#imageLiteral(resourceName: "TrashIcon"), for: .normal)
+        trashButton.addTarget(self, action: #selector(deleteOption), for: .touchUpInside)
+        
+        let rightTrashView = UIView(frame: CGRect(x: 0, y: 0, width: trashIconHeight + 13, height: contentView.frame.height))
+        addOptionTextField.rightView = rightTrashView
+        addOptionTextField.rightViewMode = .always
+        rightTrashView.addSubview(trashButton)
+        
         addSubview(addOptionTextField)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
-        
-        choiceLabel.snp.updateConstraints { make in
-            make.size.equalTo(CGSize(width: frame.width * 0.12, height: 21.5))
+        addOptionTextField.snp.updateConstraints { make in
             make.left.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-bottomPadding)
         }
         
         trashButton.snp.updateConstraints { make in
-            make.size.equalTo(choiceLabel.snp.size)
-            make.right.equalToSuperview()
+            make.left.equalToSuperview()
             make.centerY.equalToSuperview()
+            make.width.equalTo(trashIconHeight)
+            make.height.equalTo(trashIconHeight)
         }
-        
-        addOptionTextField.snp.updateConstraints { make in
-            make.left.equalTo(choiceLabel.snp.right)
-            make.right.equalTo(trashButton.snp.left)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
+
     }
     
     // MARK: - MC OPTION DELEGATE
+    
     @objc func deleteOption(){
         mcOptionDelegate.deleteOption(index: choiceTag)
     }
@@ -100,6 +100,7 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     }
     
     // MARK: - KEYBOARD
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

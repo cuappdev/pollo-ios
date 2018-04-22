@@ -8,34 +8,44 @@
 
 import UIKit
 
-class Poll: NSObject, NSCoding {
-   
+class Poll {
+
     var id: Int
-    var name: String
-    var code: String
-    
-    init(id: Int, name: String, code: String) {
+    var text: String
+    var results: [String:Any]
+    var date: String?
+    var isLive: Bool = false
+
+
+    init(id: Int, text: String, results: [String:Any]) {
         self.id = id
-        self.name = name
-        self.code = code
+        self.text = text
+        self.results = results
     }
     
-    init(json: [String:Any]) {
-        self.id = json["id"] as! Int
-        self.name = json["name"] as! String
-        self.code = json["code"] as! String
+    init(id: Int, text: String, results: [String:Any], isLive: Bool) {
+        self.id = id
+        self.text = text
+        self.results = results
+        self.isLive = isLive
     }
     
-    required convenience init?(coder aDecoder: NSCoder) {
-        let id = aDecoder.decodeInteger(forKey: "id")
-        let name = aDecoder.decodeObject(forKey: "name") as! String
-        let code = aDecoder.decodeObject(forKey: "code") as! String
-        self.init(id: id, name: name, code: code)
+    init(id: Int, text: String, results: [String:Any], date: String) {
+        self.id = id
+        self.text = text
+        self.results = results
+        self.date = date
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(id, forKey: "id")
-        aCoder.encode(name, forKey: "name")
-        aCoder.encode(code, forKey: "code")
+    func getTotalResults() -> Int {
+        return results.reduce(0) { (res, arg1) -> Int in
+            let (key, value) = arg1
+            if let choiceJSON = value as? [String:Any] {
+                return res + (choiceJSON["count"] as! Int)
+            } else {
+                return 0
+            }
+        }
     }
+
 }
