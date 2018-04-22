@@ -26,7 +26,7 @@ enum Keys: String {
         return Keys.apiURL
         #endif
     }
-    
+
     private static let keyDict: NSDictionary = {
         guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
             let dict = NSDictionary(contentsOfFile: path) else { return [:] }

@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 
-
 class ResultMCCell: UITableViewCell {
     
     var containerView: UIView!
