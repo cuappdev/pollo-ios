@@ -163,6 +163,7 @@ struct UpdatePoll: ClickerQuark {
         return [
             "text": text,
             "results": results
+
         ]
     }
     let method: HTTPMethod = .put

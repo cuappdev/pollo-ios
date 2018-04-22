@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         #else
         print("[Running Clicker in release configuration]")
         Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
+
         #endif
         return true
     }
