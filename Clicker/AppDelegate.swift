@@ -17,13 +17,18 @@ import Siren
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     var window: UIWindow?
+    var pollsNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.tintColor = .clickerGreen
         window?.makeKeyAndVisible()
-        window?.rootViewController = TabBarController()
+        pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        pollsNavigationController.navigationBar.isTranslucent = false
+        window?.rootViewController = pollsNavigationController
         
         // GOOGLE SIGN IN
         GIDSignIn.sharedInstance().clientID = Google.googleClientID
@@ -35,7 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
         } else {
             let login = LoginViewController()
-            window?.rootViewController?.present(login, animated: false, completion: nil)
+            pollsNavigationController.pushViewController(login, animated: false)
+            //window?.rootViewController?.present(login, animated: false, completion: nil)
         }
         
 //        // SIREN
@@ -79,7 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
             }
             
-            window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
+            pollsNavigationController.popToRootViewController(animated: false)
+            
         } else {
             print("\(error.localizedDescription)")
         }

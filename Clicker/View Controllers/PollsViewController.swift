@@ -11,12 +11,16 @@ import Presentr
 
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
     
+    let popupViewHeight: CGFloat = 140
+    
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
     let pollsIdentifier = "pollsCellID"
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-        
+    var bottomBarView: UIView!
+    var joinSessionButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerNavBarLightGrey
@@ -96,6 +100,17 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
+        
+        bottomBarView = UIView()
+        bottomBarView.backgroundColor = .clickerDeepBlack
+        view.addSubview(bottomBarView)
+        
+        joinSessionButton = UIButton()
+        joinSessionButton.backgroundColor = .clear
+        joinSessionButton.addTarget(self, action: #selector(showJoinSessionPopup), for: .touchUpInside)
+        joinSessionButton.setImage(UIImage(named: "JoinTabBarIcon"), for: .normal)
+        view.addSubview(joinSessionButton)
+        
     }
     
     func setupConstraints() {
@@ -116,12 +131,19 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.height.equalTo(40)
         }
         
-        pollsCollectionView.snp.makeConstraints { make in
+        bottomBarView.snp.makeConstraints { make in
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
                 make.bottom.equalTo(bottomLayoutGuide.snp.top)
             }
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(54)
+        }
+        
+        pollsCollectionView.snp.makeConstraints { make in
+            make.bottom.equalTo(bottomBarView.snp.top)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.top.equalTo(pollsOptionsView.snp.bottom)
@@ -136,6 +158,13 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             make.width.equalTo(19)
             make.height.equalTo(19)
             make.right.equalToSuperview().offset(-15)
+        }
+        
+        joinSessionButton.snp.makeConstraints { make in
+            make.centerX.equalTo(bottomBarView.snp.centerX)
+            make.width.equalTo(bottomBarView.snp.height)
+            make.height.equalTo(bottomBarView.snp.height)
+            make.centerY.equalTo(bottomBarView.snp.centerY)
         }
     }
     
@@ -160,6 +189,25 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             }.catch { error in
                 print(error)
         }
+    }
+    
+    @objc func showJoinSessionPopup() {
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: Float(popupViewHeight))
+        let originY = view.frame.height - popupViewHeight
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        
+        let presenter: Presentr = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.roundCorners = false
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        
+        let joinSessionVC = JoinViewController()
+        joinSessionVC.dismissController = self
+        joinSessionVC.popupHeight = popupViewHeight
+        customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
