@@ -13,6 +13,7 @@ import SnapKit
 class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     var signInButton: GIDSignInButton!
+    var continueButton: UIButton!
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
@@ -25,16 +26,31 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         signInButton.colorScheme = .light
         view.addSubview(signInButton)
         
+        continueButton = UIButton()
+        continueButton.setTitle("Continue", for: .normal)
+        continueButton.addTarget(self, action: #selector(continueAction), for: .touchUpInside)
+        view.addSubview(continueButton)
+        
         setupConstraints()
     }
     
     // MARK: - CONSTRAINTS
     func setupConstraints() {
-        signInButton.snp.makeConstraints { (make) in
+        signInButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-60)
             make.centerX.equalToSuperview()
             make.width.equalTo(view.snp.width).multipliedBy(0.3)
             make.height.equalTo(150)
         }
+        
+        continueButton.snp.makeConstraints { make in
+            make.height.equalTo(75)
+            make.width.equalTo(300)
+            make.center.equalToSuperview()
+        }
+    }
+    
+    @objc func continueAction() {
+        navigationController?.popToRootViewController(animated: true)
     }
 }

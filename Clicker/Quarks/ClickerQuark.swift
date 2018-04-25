@@ -23,7 +23,7 @@ extension ClickerQuark {
     var api: APIVersion { return .versioned(2) }
     
     public func process(response: JSON) throws -> ResponseType {
-        if let errors = response["data"]["errors"].array?.flatMap({ $0.string }) {
+        if let errors = response["data"]["errors"].array?.compactMap({ $0.string }) {
             throw ClickerError.backendError(messages: errors)
         }
         print(response)

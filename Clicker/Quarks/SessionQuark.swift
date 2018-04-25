@@ -18,6 +18,7 @@ struct GenerateCode : ClickerQuark {
         return "/generate/code"
     }
     var headers: HTTPHeaders {
+        print("user session: ", User.currentUser)
         return [
             "Authorization": "Bearer \(User.userSession!.accessToken)"
         ]
