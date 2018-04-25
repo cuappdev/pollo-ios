@@ -23,7 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.tintColor = .clickerGreen
         window?.makeKeyAndVisible()
-        window?.rootViewController = TabBarController()
+        let pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+        pollsNavigationController.navigationBar.isTranslucent = false
+        window?.rootViewController = pollsNavigationController
         
         // GOOGLE SIGN IN
         GIDSignIn.sharedInstance().clientID = Google.googleClientID
