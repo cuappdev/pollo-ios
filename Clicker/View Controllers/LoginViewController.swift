@@ -30,11 +30,12 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     // MARK: - CONSTRAINTS
     func setupConstraints() {
-        signInButton.snp.makeConstraints { (make) in
+        signInButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-60)
             make.centerX.equalToSuperview()
             make.width.equalTo(view.snp.width).multipliedBy(0.3)
             make.height.equalTo(150)
         }
+        
     }
 }
