@@ -184,7 +184,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                         self.tabBarController?.tabBar.isHidden = true
                     }.catch { error in
-                        print(error)
+                        print("error: ", error)
                 }
             }.catch { error in
                 print(error)

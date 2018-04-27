@@ -18,7 +18,6 @@ struct GenerateCode : ClickerQuark {
         return "/generate/code"
     }
     var headers: HTTPHeaders {
-        print("user session: ", User.currentUser)
         return [
             "Authorization": "Bearer \(User.userSession!.accessToken)"
         ]
@@ -64,10 +63,10 @@ struct CreateSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: isGroup)
+            return Session(id: id, name: name, code: code)
         default: throw NeutronError.badResponseData
         }
     }
@@ -92,10 +91,10 @@ struct GetSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: isGroup)
+            return Session(id: id, name: name, code: code)
         default: throw NeutronError.badResponseData
         }
     }
@@ -150,10 +149,10 @@ struct GetPollSessions: ClickerQuark {
         case .nodes(let nodes):
             var sessions: [Session] = [Session]()
             for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                     throw NeutronError.badResponseData
                 }
-                sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup))
+                sessions.append(Session(id: id, name: name, code: code))
             }
             return sessions
         default:
@@ -183,10 +182,10 @@ struct GetGroupSessions: ClickerQuark {
         case .nodes(let nodes):
             var sessions: [Session] = [Session]()
             for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool, let isLive = node["isLive"].bool else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isLive = node["isLive"].bool else {
                     throw NeutronError.badResponseData
                 }
-                sessions.append(Session(id: id, name: name, code: code, isGroup: isGroup, isLive: isLive))
+                sessions.append(Session(id: id, name: name, code: code, isLive: isLive))
             }
             sessions.sort { (s1, s2) in
                 return s1.isLive! && !(s2.isLive!)
@@ -226,10 +225,10 @@ struct UpdateSession: ClickerQuark {
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isGroup = node["isGroup"].bool else {
+            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
                 throw NeutronError.badResponseData
             }
-            return Session(id: id, name: name, code: code, isGroup: isGroup)
+            return Session(id: id, name: name, code: code)
         default: throw NeutronError.badResponseData
         }
     }
@@ -444,13 +443,8 @@ struct StartSession: ClickerQuark {
         switch element {
         case .node(let node):
             print(node)
-            guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
-                throw NeutronError.badResponseData
-            }
-            if let isGroup = node["isGroup"].bool {
-                return Session(id: id, name: name, code: code, isGroup: isGroup)
-            } else if let isGroup = node["isGroup"].string {
-                return Session(id: id, name: name, code: code, isGroup: (isGroup == "1"))
+            if let id = node["id"].int, let name = node["name"].string, let code = node["code"].string {
+                return Session(id: id, name: name, code: code)
             } else {
                 throw NeutronError.badResponseData
             }
