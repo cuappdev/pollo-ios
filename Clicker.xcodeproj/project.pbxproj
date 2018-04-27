@@ -22,7 +22,6 @@
 		638406D52083CC1400483645 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638406D42083CC1400483645 /* ResultCell.swift */; };
 		6389C94B208583BD00F78003 /* LiveQAskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94A208583BD00F78003 /* LiveQAskedCard.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
-		6389C95020858D6300F78003 /* GroupsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94F20858D6300F78003 /* GroupsCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
 		63D19CC3208D72E40041C774 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63D19CC2208D72E40041C774 /* Keys.plist */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
@@ -49,7 +48,6 @@
 		C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */; };
 		C2D057991F926B31008F21CB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D057981F926B31008F21CB /* Question.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
-		C2DDE00C208699C900A85094 /* GroupPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DDE00B208699C900A85094 /* GroupPreviewCell.swift */; };
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
@@ -91,7 +89,6 @@
 		638406D42083CC1400483645 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		6389C94A208583BD00F78003 /* LiveQAskedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQAskedCard.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
-		6389C94F20858D6300F78003 /* GroupsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsCell.swift; sourceTree = "<group>"; };
 		6389C9512085953F00F78003 /* PollsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsCell.swift; sourceTree = "<group>"; };
 		63D19CC2208D72E40041C774 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Keys.plist; path = Secrets/Keys.plist; sourceTree = SOURCE_ROOT; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,7 +120,6 @@
 		C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C2D057981F926B31008F21CB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
-		C2DDE00B208699C900A85094 /* GroupPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPreviewCell.swift; sourceTree = "<group>"; };
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
@@ -191,7 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				C2DDE00E20869A0300A85094 /* Polls */,
-				C2DDE00D208699FA00A85094 /* Groups */,
 			);
 			path = HomeScreen;
 			sourceTree = "<group>";
@@ -270,15 +265,6 @@
 				C2B9180A208CE3D40030822F /* ResultFRCell.swift */,
 			);
 			path = FreeResponse;
-			sourceTree = "<group>";
-		};
-		C2DDE00D208699FA00A85094 /* Groups */ = {
-			isa = PBXGroup;
-			children = (
-				6389C94F20858D6300F78003 /* GroupsCell.swift */,
-				C2DDE00B208699C900A85094 /* GroupPreviewCell.swift */,
-			);
-			path = Groups;
 			sourceTree = "<group>";
 		};
 		C2DDE00E20869A0300A85094 /* Polls */ = {
@@ -563,7 +549,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -590,7 +576,6 @@
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
-				C2DDE00C208699C900A85094 /* GroupPreviewCell.swift in Sources */,
 				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				6389C94B208583BD00F78003 /* LiveQAskedCard.swift in Sources */,
 				C2B9180B208CE3D40030822F /* ResultFRCell.swift in Sources */,
@@ -606,7 +591,6 @@
 				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
 				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
-				6389C95020858D6300F78003 /* GroupsCell.swift in Sources */,
 				6353FD3A2086DDC900E16EB2 /* BlackAskController.swift in Sources */,
 				6315A4C52083DC9F00EEEDDD /* DateCell.swift in Sources */,
 				C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */,
