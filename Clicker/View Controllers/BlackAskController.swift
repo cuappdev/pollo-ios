@@ -9,7 +9,11 @@
 import UIKit
 import Presentr
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, SocketDelegate {
+protocol EndPollDelegate {
+    func endedPoll()
+}
+
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
     
     // empty student vars
     var monkeyView: UIImageView!
@@ -181,6 +185,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
         cell.pollRole = .ask
+        cell.endPollDelegate = self
+        cell.collectionView.reloadData()
         return cell
     }
     
@@ -238,7 +244,17 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         } else {
             self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
         }
+        // HIDE CREATE POLL BUTTON
+        createPollButton.alpha = 0
+        createPollButton.isUserInteractionEnabled = false
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    }
+    
+    // MARK: ENDED POLL DELEGATE
+    func endedPoll() {
+        // SHOW CREATE POLL BUTTON
+        createPollButton.alpha = 1
+        createPollButton.isUserInteractionEnabled = true
     }
     
     func setupNavBar() {

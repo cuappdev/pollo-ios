@@ -44,7 +44,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
         mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
