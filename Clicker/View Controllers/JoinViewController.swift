@@ -84,19 +84,13 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                             .done { datePollsArr in
                                 let socket = Socket(id: "\(session.id)", userType: "user")
                                 let blackAnswerVC = BlackAnswerController()
-                                blackAnswerVC.tabController = self.tabBarController
                                 blackAnswerVC.socket = socket
                                 blackAnswerVC.code = code
                                 blackAnswerVC.datePollsArr = datePollsArr
                                 blackAnswerVC.sessionId = session.id
                                 self.dismiss(animated: true, completion: {
-                                    if let tabController = self.dismissController as? UITabBarController {
-                                        if let navVC = tabController.selectedViewController as? UINavigationController {
-                                            navVC.pushViewController(blackAnswerVC, animated: true)
-                                            navVC.setNavigationBarHidden(false, animated: true)
-                                            tabController.tabBar.isHidden = true
-                                        }
-                                    }
+                                    self.dismissController.navigationController?.pushViewController(blackAnswerVC, animated: true)
+                                    self.dismissController.navigationController?.setNavigationBarHidden(false, animated: true)
                                 })
                             }.catch { error in
                                 print(error)

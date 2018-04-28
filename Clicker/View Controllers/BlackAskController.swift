@@ -21,7 +21,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var mainCollectionView: UICollectionView!
     
-    var tabController: UITabBarController!
     var socket: Socket!
     var sessionId: Int!
     var code: String!
@@ -277,7 +276,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
