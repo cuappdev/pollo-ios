@@ -15,6 +15,7 @@ class Poll {
     var options: [String]?
     var results: [String:Any]?
     var isLive: Bool = false
+    var isShared: Bool = false
 
     // MARK: SORTED BY DATE POLL INITIALIZER
     init(id: Int, text: String, results: [String:Any]) {

@@ -84,6 +84,11 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell
+            } else if (poll.isShared)  {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedSharedIdentifier, for: indexPath) as! ClosedQAskedSharedCard
+                cell.poll = poll
+                cell.questionLabel.text = poll.text
+                return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedIdentifier, for: indexPath) as! ClosedQAskedCard
                 cell.poll = poll
@@ -91,10 +96,15 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 return cell
             }
         default: // ANSWER
-            if (poll.isLive) {
+            if (poll.isLive) { // LIVE
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
                 cell.socket = socket
                 socket.addDelegate(cell)
+                cell.poll = poll
+                cell.questionLabel.text = poll.text
+                return cell
+            } else if (poll.isShared) { // SHARED
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerSharedIdentifier, for: indexPath) as! ClosedQAnsweredSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell

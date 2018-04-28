@@ -10,18 +10,15 @@ import UIKit
 
 class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    var currentState: CurrentState!
     var poll: Poll!
-    var totalNumResults: Int!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
-    var visibiltyLabel: UILabel!
+    var closedLabel: UILabel!
     var totalResultsLabel: UILabel!
-    var worldView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,17 +27,6 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
     
     func setupCell() {
         isMCQuestion = true
-//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
-        let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
-                                                                   "B": ["text": "Jason", "count": 5],
-                                                                   "C": ["text": "George", "count": 3],
-                                                                   "D": ["text": "Jimmy", "count": 7]],
-                                                            ["1": "A"])
-//        question = staticQuestion
-        currentState = staticCurrentState
-        
-        totalNumResults = Int(currentState.getTotalCount())
-        
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
@@ -53,7 +39,6 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
         self.layer.cornerRadius = 15
         
         questionLabel = UILabel()
-        questionLabel.text = "QUESTION"
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -70,23 +55,19 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
         addSubview(resultsTableView)
         
-        visibiltyLabel = UILabel()
-        visibiltyLabel.text = "Shared with group"
-        visibiltyLabel.font = ._12MediumFont
-        visibiltyLabel.textAlignment = .left
-        visibiltyLabel.textColor = .clickerMediumGray
-        addSubview(visibiltyLabel)
-        
+        closedLabel = UILabel()
+        closedLabel.text = "Poll has closed"
+        closedLabel.font = ._12SemiboldFont
+        closedLabel.textColor = .clickerDeepBlack
+        closedLabel.textAlignment = .left
+        addSubview(closedLabel)
         
         totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults!) votes"
+        totalResultsLabel.text = "17 votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
-        
-        worldView = UIImageView(image: #imageLiteral(resourceName: "results_shared"))
-        addSubview(worldView)
         
     }
     
@@ -105,8 +86,9 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
             make.bottom.equalToSuperview().offset(-51)
         }
         
-        visibiltyLabel.snp.updateConstraints { make in
-            make.left.equalToSuperview().offset(46)
+        
+        closedLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(18)
             make.width.equalTo(200)
             make.bottom.equalToSuperview().offset(-23.5)
             make.height.equalTo(14.5)
@@ -115,15 +97,8 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
         totalResultsLabel.snp.updateConstraints { make in
             make.right.equalToSuperview().offset(-22.5)
             make.width.equalTo(50)
-            make.top.equalTo(visibiltyLabel.snp.top)
+            make.top.equalTo(closedLabel.snp.top)
             make.height.equalTo(14.5)
-        }
-        
-        worldView.snp.makeConstraints { make in
-            make.height.equalTo(14.5)
-            make.width.equalTo(14.5)
-            make.top.equalTo(visibiltyLabel.snp.top)
-            make.left.equalToSuperview().offset(25)
         }
         
     }
@@ -139,10 +114,11 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
         
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+        guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
         }
         cell.numberLabel.text = "\(count)"
+        let totalNumResults = poll.getTotalResults()
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
@@ -150,12 +126,6 @@ class ClosedQAnsweredSharedCard: UICollectionViewCell, UITableViewDelegate, UITa
         } else {
             cell.highlightWidthConstraint.update(offset: 0)
         }
-        
-        // ANIMATE CHANGE
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
-        
         return cell
     }
     

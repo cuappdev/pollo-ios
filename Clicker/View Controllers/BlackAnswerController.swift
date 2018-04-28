@@ -162,11 +162,13 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func pollEnded(_ poll: Poll) {
         self.datePollsArr.last?.1.last?.isLive = false
-         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateDatePollsArr()
+        self.datePollsArr.last?.1.last?.isShared = true
+        self.datePollsArr.last?.1.last?.results = currentState.results
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }

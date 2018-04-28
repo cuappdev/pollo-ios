@@ -10,9 +10,7 @@ import UIKit
 
 class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    var currentState: CurrentState!
     var poll: Poll!
-    var totalNumResults: Int!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
@@ -30,17 +28,6 @@ class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITable
     
     func setupCell() {
         isMCQuestion = true
-//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
-        let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
-                                                                   "B": ["text": "Jason", "count": 5],
-                                                                   "C": ["text": "George", "count": 3],
-                                                                   "D": ["text": "Jimmy", "count": 7]],
-                                                            ["1": "A"])
-//        question = staticQuestion
-        currentState = staticCurrentState
-        
-        totalNumResults = Int(currentState.getTotalCount())
-        
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
@@ -53,7 +40,6 @@ class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITable
         self.layer.cornerRadius = 15
         
         questionLabel = UILabel()
-        questionLabel.text = "QUESTION"
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -79,7 +65,7 @@ class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITable
 
         
         totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults!) votes"
+        totalResultsLabel.text = "17 votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
@@ -139,10 +125,11 @@ class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITable
         
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+        guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
         }
         cell.numberLabel.text = "\(count)"
+        let totalNumResults = poll.getTotalResults()
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
