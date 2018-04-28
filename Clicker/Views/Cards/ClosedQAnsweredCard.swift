@@ -62,7 +62,6 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         self.layer.cornerRadius = 15
         
         questionLabel = UILabel()
-        questionLabel.text = "QUESTION"
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left

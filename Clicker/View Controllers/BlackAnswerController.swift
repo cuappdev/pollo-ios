@@ -135,6 +135,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
         cell.pollRole = .answer
+        cell.collectionView.reloadData()
         return cell
     }
     
@@ -160,7 +161,8 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func pollEnded(_ poll: Poll) {
-        updateDatePollsArr()
+        self.datePollsArr.last?.1.last?.isLive = false
+         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func receivedResults(_ currentState: CurrentState) {

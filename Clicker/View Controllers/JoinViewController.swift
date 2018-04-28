@@ -48,6 +48,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         codeTextField.borderStyle = .none
         codeTextField.font = ._16MediumFont
         codeTextField.backgroundColor = .white
+        codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._16MediumFont])
@@ -99,6 +100,12 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                         print(error)
                 }
             }
+        }
+    }
+    
+    @objc func didStartTyping(_ textField: UITextField) {
+        if let text = textField.text {
+            textField.text = text.uppercased()
         }
     }
     
