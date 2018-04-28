@@ -15,7 +15,6 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     
-    var tabController: UITabBarController!
     var socket: Socket!
     var code: String!
     var sessionId: Int!
@@ -227,7 +226,6 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewWillAppear(animated)
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
     }
 }
 
