@@ -50,16 +50,16 @@ class ClosedOptionCell: UITableViewCell {
         }
     }
     
-    func setColors() {
-        if chosen {
-            questionLabel.backgroundColor = .clickerMint
-            questionLabel.textColor = .clickerWhite
-        }
-        else {
-            questionLabel.backgroundColor = .clickerWhite
-            questionLabel.textColor = .clickerMint
-        }
-    }
+//    func setColors() {
+//        if chosen {
+//            questionLabel.backgroundColor = .clickerMint
+//            questionLabel.textColor = .clickerWhite
+//        }
+//        else {
+//            questionLabel.backgroundColor = .clickerWhite
+//            questionLabel.textColor = .clickerMint
+//        }
+//    }
     
 
     
