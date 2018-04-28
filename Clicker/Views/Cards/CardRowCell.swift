@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum PollRole {
+    case ask
+    case answer
+}
+
 class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
@@ -17,9 +22,9 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     let liveQAnswerIdentifier = "liveQAnswerCardID"
     let closedQAnswerIdentifier = "closedQAnsweredCardID"
     let closedQAnswerSharedIdentifier = "closedQAnsweredSharedCardID"
-    var dateLabel: UILabel!
     var socket: Socket!
     var polls: [Poll]!
+    var pollRole: PollRole!
     var liveQuestion: Question! // FOR USERS
     
     override init(frame: CGRect) {
@@ -33,12 +38,6 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     
     
     func setupViews() {
-        dateLabel = UILabel()
-        dateLabel.text = "TODAY"
-        dateLabel.font = ._16SemiboldFont
-        dateLabel.textColor = .clickerMediumGray
-        addSubview(dateLabel)
-        
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 18
@@ -62,13 +61,8 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     }
     
     func setupConstraints() {
-        dateLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(35)
-            make.centerX.equalToSuperview()
-        }
-        
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(11)
+            make.top.equalToSuperview().offset(35)
             make.width.equalToSuperview()
             make.height.equalTo(444)
             make.centerX.equalToSuperview()
@@ -93,16 +87,31 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             return cell
         }
         let poll = polls[indexPath.item]
-        if (poll.isLive) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
-            cell.socket = socket
-            socket.addDelegate(cell)
-            cell.poll = poll
-            cell.questionLabel.text = poll.text
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerIdentifier, for: indexPath) as! ClosedQAnsweredCard
-            return cell
+        switch (pollRole) {
+        case .ask: // ASK
+            if (poll.isLive) {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
+                cell.socket = socket
+                socket.addDelegate(cell)
+                cell.poll = poll
+                cell.questionLabel.text = poll.text
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedIdentifier, for: indexPath) as! ClosedQAskedCard
+                return cell
+            }
+        default: // ANSWER
+            if (poll.isLive) {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
+                cell.socket = socket
+                socket.addDelegate(cell)
+                cell.poll = poll
+                cell.questionLabel.text = poll.text
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerIdentifier, for: indexPath) as! ClosedQAnsweredCard
+                return cell
+            }
         }
     }
     

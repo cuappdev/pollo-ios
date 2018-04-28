@@ -135,6 +135,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
+        cell.pollRole = .ask
         return cell
     }
     

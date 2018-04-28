@@ -8,18 +8,18 @@
 
 import UIKit
 
-class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate {
+class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
     
     var question: Question!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var totalResultsLabel: UILabel!
     
     var choice: Int?
+    var poll: Poll!
     var socket: Socket!
     
     override init(frame: CGRect) {
@@ -100,7 +100,6 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     // MARK - OptionViewDelegate
     func choose(_ choice: Int) {
-        print("reloding Data")
         let answer: [String:Any] = [
             "googleId": User.currentUser?.id,
             "poll": question.id,
@@ -111,6 +110,21 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
         self.choice = choice
         resultsTableView.reloadData()
     }
+    
+    // MARK: SOCKET DELEGATE
+    func sessionConnected() { }
+    
+    func sessionDisconnected() { }
+    
+    func questionStarted(_ question: Question) { }
+    
+    func questionEnded(_ question: Question) { }
+    
+    func receivedResults(_ currentState: CurrentState) { }
+    
+    func saveSession(_ session: Session) { }
+    
+    func updatedTally(_ currentState: CurrentState) { }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
