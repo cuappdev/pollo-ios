@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
     let liveQAskedIdenfitifer = "liveQAskedCardID"
@@ -96,7 +96,7 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
         if (poll.isLive) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
             cell.socket = socket
-            socket.delegate = cell
+            socket.addDelegate(cell)
             cell.poll = poll
             cell.questionLabel.text = poll.text
             return cell
@@ -113,5 +113,5 @@ class DateCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionVi
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

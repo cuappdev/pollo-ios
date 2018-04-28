@@ -42,10 +42,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
                                                             ["1": "A"])
         question = staticQuestion
         currentState = staticCurrentState
-        
-        if let s = socket {
-            s.delegate = self
-        }
+        socket?.addDelegate(self)
         
         backgroundColor = .clickerNavBarLightGrey
         setupViews()

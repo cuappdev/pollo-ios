@@ -21,13 +21,15 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var datePollsArr: [(String, [Poll])] = []
     var liveQuestion: Question!
     
+    let cardRowCellIdentifier = "cardRowCellID"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        socket.delegate = self
+        socket.addDelegate(self)
         if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
@@ -35,11 +37,6 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
             setupConstraints()
         }
         setupNavBar()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - LAYOUT
@@ -136,19 +133,10 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.row {
-        case datePollsArr.count - 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
-            cell.liveQuestion = liveQuestion
-            cell.polls = datePollsArr[indexPath.item].1
-            cell.socket = socket
-            return cell
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
-            cell.polls = datePollsArr[indexPath.item].1
-            cell.socket = socket
-            return cell
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
+        cell.polls = datePollsArr[indexPath.item].1
+        cell.socket = socket
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -193,7 +181,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
             }.catch { error in
                 print(error)
-        }
+            }
     }
     
     func setupNavBar() {
