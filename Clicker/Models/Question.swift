@@ -1,33 +1,33 @@
+////
+////  Question.swift
+////  Clicker
+////
+////  Created by Kevin Chan on 10/14/17.
+////  Copyright © 2017 CornellAppDev. All rights reserved.
+////
 //
-//  Question.swift
-//  Clicker
+//class Question {
 //
-//  Created by Kevin Chan on 10/14/17.
-//  Copyright © 2017 CornellAppDev. All rights reserved.
+//    var id: Int
+//    var text: String
+//    var type: String // FREE_RESPONSE | MULTIPLE_CHOICE | MULTIPLE_ANSWER
+//    var options: [String]
 //
-
-class Question {
-    
-    var id: Int
-    var text: String
-    var type: String // FREE_RESPONSE | MULTIPLE_CHOICE | MULTIPLE_ANSWER
-    var options: [String]
-    
-    init(_ id: Int, _ text: String, _ type: String, options: [String]) {
-        self.id = id
-        self.text = text
-        self.type = type
-        self.options = options
-    }
-    
-    init(json: [String:Any]){
-        self.id = json["id"] as! Int
-        self.text = json["text"] as! String
-        self.type = json["type"] as! String
-        if let options = json["options"] as? [String] {
-            self.options = options
-        } else {
-            self.options = []
-        }
-    }
-}
+//    init(_ id: Int, _ text: String, _ type: String, options: [String]) {
+//        self.id = id
+//        self.text = text
+//        self.type = type
+//        self.options = options
+//    }
+//
+//    init(json: [String:Any]){
+//        self.id = json["id"] as! Int
+//        self.text = json["text"] as! String
+//        self.type = json["type"] as! String
+//        if let options = json["options"] as? [String] {
+//            self.options = options
+//        } else {
+//            self.options = []
+//        }
+//    }
+//}

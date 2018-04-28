@@ -10,7 +10,6 @@ import UIKit
 
 class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
     
-    var question: Question!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
@@ -82,7 +81,7 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "optionCellID", for: indexPath) as! LiveOptionCell
-        cell.buttonView.setTitle(question.options[indexPath.row], for: .normal)
+        cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
         cell.delegate = self
         cell.index = indexPath.row
         cell.chosen = (choice == indexPath.row)
@@ -91,7 +90,7 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        return poll.options!.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -102,9 +101,9 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     func choose(_ choice: Int) {
         let answer: [String:Any] = [
             "googleId": User.currentUser?.id,
-            "poll": question.id,
+            "poll": poll.id,
             "choice": intToMCOption(choice),
-            "text": question.options[choice]
+            "text": poll.options![choice]
         ]
         socket.socket.emit("server/poll/tally", answer)
         self.choice = choice
@@ -116,9 +115,9 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) { }
+    func pollStarted(_ poll: Poll) { }
     
-    func questionEnded(_ question: Question) { }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) { }
     

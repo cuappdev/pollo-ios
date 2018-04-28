@@ -172,11 +172,11 @@
 				6389C94A208583BD00F78003 /* LiveQAskedCard.swift */,
 				6353FD352086DD9D00E16EB2 /* ClosedQAskedCard.swift */,
 				6353FD362086DD9D00E16EB2 /* ClosedQAskedSharedCard.swift */,
-				638406D42083CC1400483645 /* ResultCell.swift */,
 				633381282086B269008BD455 /* LiveQAnswerCard.swift */,
-				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812C2086C16B008BD455 /* ClosedQAnsweredCard.swift */,
 				633381302086CDD6008BD455 /* ClosedQAnsweredSharedCard.swift */,
+				638406D42083CC1400483645 /* ResultCell.swift */,
+				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */,
 			);
 			path = Cards;

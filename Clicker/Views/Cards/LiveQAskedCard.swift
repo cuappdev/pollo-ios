@@ -12,7 +12,6 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     
     var socket: Socket!
     var poll: Poll!
-    var question: Question!
     var currentState: CurrentState!
     var totalNumResults: Int = 0
     var freeResponses: [String]!
@@ -34,13 +33,13 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     
     func setupCell() {
         isMCQuestion = true
-        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
+//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
         let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
                                                                    "B": ["text": "Jason", "count": 5],
                                                                    "C": ["text": "George", "count": 3],
                                                                    "D": ["text": "Jimmy", "count": 7]],
                                                             ["1": "A"])
-        question = staticQuestion
+//        question = staticQuestion
         currentState = staticCurrentState
         socket?.addDelegate(self)
         
@@ -161,7 +160,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         let mcOption: String = intToMCOption(indexPath.row)
         var count: Int = 0
         print(poll.results)
-        if let choiceInfo = poll.results[mcOption] as? [String:Any] {
+        if let choiceInfo = poll.results![mcOption] as? [String:Any] {
             cell.optionLabel.text = choiceInfo["text"] as? String
             count = choiceInfo["count"] as! Int
             cell.numberLabel.text = "\(count)"
@@ -184,7 +183,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        return poll.options!.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -199,10 +198,10 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         
     }
     
-    func questionStarted(_ question: Question) {
+    func pollStarted(_ poll: Poll) {
     }
     
-    func questionEnded(_ question: Question) {
+    func pollEnded(_ poll: Poll) {
     }
     
     func receivedResults(_ currentState: CurrentState) {

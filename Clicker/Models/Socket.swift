@@ -35,16 +35,16 @@ class Socket {
             guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
                 return
             }
-            let question = Question(json: questionJSON)
-            self.delegates.forEach { $0.questionStarted(question) }
+            let poll = Poll(json: json)
+            self.delegates.forEach { $0.pollStarted(poll) }
         }
         
         socket.on("user/poll/end") { data, ack in
             guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
                 return
             }
-            let question = Question(json: questionJSON)
-            self.delegates.forEach { $0.questionEnded(question) }
+            let poll = Poll(json: json)
+            self.delegates.forEach { $0.pollEnded(poll) }
         }
         
         socket.on("user/poll/results") { data, ack in
