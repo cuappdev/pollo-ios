@@ -48,8 +48,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         layout.scrollDirection = .vertical
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(DateCell.self, forCellWithReuseIdentifier: "dateCellID")
-        mainCollectionView.register(EmptyAnswerCell.self, forCellWithReuseIdentifier: "emptyAnswerCellID")
+        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -212,7 +211,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
+        // HIDE NAV BAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 }

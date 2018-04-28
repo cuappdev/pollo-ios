@@ -27,6 +27,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
     
+    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
+    let cardRowCellIdentifier = "cardRowCellID"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -147,7 +150,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         layout.scrollDirection = .vertical
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(DateCell.self, forCellWithReuseIdentifier: "dateCellID")
+        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -174,7 +177,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
         return cell
