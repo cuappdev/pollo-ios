@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
-		633381292086B269008BD455 /* LiveQAnswerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633381282086B269008BD455 /* LiveQAnswerCard.swift */; };
 		6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812A2086B645008BD455 /* LiveOptionCell.swift */; };
 		6333812D2086C16B008BD455 /* ClosedQAnsweredCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812C2086C16B008BD455 /* ClosedQAnsweredCard.swift */; };
 		6333812F2086C8D1008BD455 /* ClosedOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */; };
@@ -42,6 +41,7 @@
 		C2BB14BB2094DB1D0081C35D /* LiveOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812A2086B645008BD455 /* LiveOptionCell.swift */; };
 		C2BB14BD2094DD400081C35D /* AskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14BC2094DD400081C35D /* AskedCard.swift */; };
 		C2BB14BF2094DDDB0081C35D /* AskedSharedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */; };
+		C2BB14C12094DE930081C35D /* AnswerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14C02094DE930081C35D /* AnswerCard.swift */; };
 		C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CD2033FA140067505A /* PollQuark.swift */; };
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
@@ -75,7 +75,6 @@
 
 /* Begin PBXFileReference section */
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
-		633381282086B269008BD455 /* LiveQAnswerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQAnswerCard.swift; sourceTree = "<group>"; };
 		6333812A2086B645008BD455 /* LiveOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveOptionCell.swift; sourceTree = "<group>"; };
 		6333812C2086C16B008BD455 /* ClosedQAnsweredCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedQAnsweredCard.swift; sourceTree = "<group>"; };
 		6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedOptionCell.swift; sourceTree = "<group>"; };
@@ -113,6 +112,7 @@
 		C2BB14B9209469CD0081C35D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C2BB14BC2094DD400081C35D /* AskedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskedCard.swift; sourceTree = "<group>"; };
 		C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskedSharedCard.swift; sourceTree = "<group>"; };
+		C2BB14C02094DE930081C35D /* AnswerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerCard.swift; sourceTree = "<group>"; };
 		C2BF44CD2033FA140067505A /* PollQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollQuark.swift; sourceTree = "<group>"; };
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
-				633381282086B269008BD455 /* LiveQAnswerCard.swift */,
+				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				6333812C2086C16B008BD455 /* ClosedQAnsweredCard.swift */,
 				633381302086CDD6008BD455 /* ClosedQAnsweredSharedCard.swift */,
 				638406D42083CC1400483645 /* ResultCell.swift */,
@@ -612,9 +612,9 @@
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
 				C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */,
-				633381292086B269008BD455 /* LiveQAnswerCard.swift in Sources */,
 				6333812D2086C16B008BD455 /* ClosedQAnsweredCard.swift in Sources */,
 				C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */,
+				C2BB14C12094DE930081C35D /* AnswerCard.swift in Sources */,
 				C2BB14BF2094DDDB0081C35D /* AskedSharedCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

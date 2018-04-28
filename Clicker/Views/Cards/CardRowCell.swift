@@ -19,7 +19,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     let askedIdenfitifer = "askedCardID"
     let closedQAskedIdentifier = "closedQAskedCardID"
     let askedSharedIdentifier = "askedSharedCardID"
-    let liveQAnswerIdentifier = "liveQAnswerCardID"
+    let answerIdentifier = "answerCardID"
     let closedQAnswerIdentifier = "closedQAnsweredCardID"
     let closedQAnswerSharedIdentifier = "closedQAnsweredSharedCardID"
     var socket: Socket!
@@ -49,7 +49,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.dataSource = self
         collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdenfitifer)
         collectionView.register(AskedSharedCard.self, forCellWithReuseIdentifier: askedSharedIdentifier)
-        collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: liveQAnswerIdentifier)
+        collectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
         collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: closedQAnswerSharedIdentifier)
         collectionView.showsVerticalScrollIndicator = false
@@ -98,7 +98,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 cell.questionLabel.text = poll.text
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerIdentifier, for: indexPath) as! AnswerCard
                 cell.socket = socket
                 socket.addDelegate(cell)
                 cell.poll = poll

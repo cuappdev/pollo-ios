@@ -1,5 +1,5 @@
 //
-//  CollectionViewCell.swift
+//  AnswerCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/17/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
+class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
     
     var freeResponses: [String]!
     var isMCQuestion: Bool!
