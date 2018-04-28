@@ -224,7 +224,6 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     // MARK: - KEYBOARD
-    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             buttonsView.frame.origin.y = view.frame.height - keyboardSize.height - buttonsViewHeight

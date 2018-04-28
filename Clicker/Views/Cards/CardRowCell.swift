@@ -86,6 +86,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedIdentifier, for: indexPath) as! ClosedQAskedCard
+                cell.poll = poll
                 return cell
             }
         default: // ANSWER
@@ -98,6 +99,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerIdentifier, for: indexPath) as! ClosedQAnsweredCard
+                cell.poll = poll
                 return cell
             }
         }
