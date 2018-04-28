@@ -17,11 +17,9 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     
     var collectionView: UICollectionView!
     let askedIdenfitifer = "askedCardID"
-    let closedQAskedIdentifier = "closedQAskedCardID"
     let askedSharedIdentifier = "askedSharedCardID"
     let answerIdentifier = "answerCardID"
-    let closedQAnswerIdentifier = "closedQAnsweredCardID"
-    let closedQAnswerSharedIdentifier = "closedQAnsweredSharedCardID"
+    let answerSharedIdentifier = "answerSharedCardID"
     var socket: Socket!
     var polls: [Poll]!
     var pollRole: PollRole!
@@ -50,8 +48,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdenfitifer)
         collectionView.register(AskedSharedCard.self, forCellWithReuseIdentifier: askedSharedIdentifier)
         collectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
-        collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
-        collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: closedQAnswerSharedIdentifier)
+        collectionView.register(AnswerSharedCard.self, forCellWithReuseIdentifier: answerSharedIdentifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
@@ -93,7 +90,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             }
         default: // ANSWER
             if (poll.isShared) { // SHARED
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerSharedIdentifier, for: indexPath) as! ClosedQAnsweredSharedCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerSharedIdentifier, for: indexPath) as! AnswerSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell

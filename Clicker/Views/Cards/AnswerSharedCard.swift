@@ -1,13 +1,5 @@
 //
-//  PastQAnsweredCard.swift
-//  Clicker
-//
-//  Created by eoin on 4/17/18.
-//  Copyright © 2018 CornellAppDev. All rights reserved.
-//
-
-//
-//  CollectionViewCell.swift
+//  AnswerSharedCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/17/18.
@@ -16,21 +8,17 @@
 
 import UIKit
 
-class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class AnswerSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    var currentState: CurrentState!
     var poll: Poll!
-    var totalNumResults: Int!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
-    var totalResultsLabel: UILabel!
     var closedLabel: UILabel!
-    
-    var choice: Int?
+    var totalResultsLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,17 +27,6 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
     
     func setupCell() {
         isMCQuestion = true
-//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
-        let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
-                                                                   "B": ["text": "Jason", "count": 5],
-                                                                   "C": ["text": "George", "count": 3],
-                                                                   "D": ["text": "Jimmy", "count": 7]],
-                                                            ["1": "A"])
-//        question = staticQuestion
-        currentState = staticCurrentState
-        
-        totalNumResults = Int(currentState.getTotalCount())
-        
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
@@ -75,16 +52,8 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         resultsTableView.dataSource = self
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
-        resultsTableView.register(ClosedOptionCell.self, forCellReuseIdentifier: "closedOptionCellID")
+        resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
         addSubview(resultsTableView)
-        
-        
-        totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults!) votes"
-        totalResultsLabel.font = ._12MediumFont
-        totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
-        addSubview(totalResultsLabel)
         
         closedLabel = UILabel()
         closedLabel.text = "Poll has closed"
@@ -92,6 +61,13 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         closedLabel.textColor = .clickerDeepBlack
         closedLabel.textAlignment = .left
         addSubview(closedLabel)
+        
+        totalResultsLabel = UILabel()
+        totalResultsLabel.text = "17 votes"
+        totalResultsLabel.font = ._12MediumFont
+        totalResultsLabel.textAlignment = .right
+        totalResultsLabel.textColor = .clickerMediumGray
+        addSubview(totalResultsLabel)
         
     }
     
@@ -105,23 +81,24 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         
         resultsTableView.snp.updateConstraints { make in
             make.top.equalTo(questionLabel.snp.bottom).offset(17)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.equalToSuperview()//.offset(18)
+            make.right.equalToSuperview()//.offset(-18)
             make.bottom.equalToSuperview().offset(-51)
+        }
+        
+        
+        closedLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(18)
+            make.width.equalTo(200)
+            make.bottom.equalToSuperview().offset(-23.5)
+            make.height.equalTo(14.5)
         }
         
         totalResultsLabel.snp.updateConstraints { make in
             make.right.equalToSuperview().offset(-22.5)
             make.width.equalTo(50)
-            make.bottom.equalToSuperview().offset(-22)
+            make.top.equalTo(closedLabel.snp.top)
             make.height.equalTo(14.5)
-        }
-        
-        closedLabel.snp.makeConstraints { make in
-            make.height.equalTo(14.5)
-            make.width.equalToSuperview().dividedBy(2)
-            make.top.equalTo(totalResultsLabel.snp.top)
-            make.left.equalToSuperview().offset(25)
         }
         
     }
@@ -129,10 +106,26 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "closedOptionCellID", for: indexPath) as! ClosedOptionCell
-        cell.questionLabel.text = poll.options?[indexPath.row]
-        cell.index = indexPath.row
-        cell.chosen = (yourChoice() == indexPath.row)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
+        cell.choiceTag = indexPath.row
+        cell.optionLabel.text = poll.options?[indexPath.row]
+        cell.selectionStyle = .none
+        cell.highlightView.backgroundColor = .clickerMint
+        
+        // UPDATE HIGHLIGHT VIEW WIDTH
+        let mcOption: String = intToMCOption(indexPath.row)
+        guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
+            return cell
+        }
+        cell.numberLabel.text = "\(count)"
+        let totalNumResults = poll.getTotalResults()
+        if (totalNumResults > 0) {
+            let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
+            let totalWidth = cell.frame.width
+            cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+        } else {
+            cell.highlightWidthConstraint.update(offset: 0)
+        }
         return cell
     }
     
@@ -144,9 +137,7 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         return 47
     }
     
-    func yourChoice() -> Int {
-        return 1
-    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
