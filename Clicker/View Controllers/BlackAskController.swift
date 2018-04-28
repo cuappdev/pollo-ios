@@ -228,7 +228,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.delegate = self
+        socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
         var results: [String:Any] = [:]
         for (index, option) in options.enumerated() {
