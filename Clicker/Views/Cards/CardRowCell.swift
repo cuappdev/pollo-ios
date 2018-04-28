@@ -16,7 +16,7 @@ enum PollRole {
 class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
-    let liveQAskedIdenfitifer = "liveQAskedCardID"
+    let askedIdenfitifer = "askedCardID"
     let closedQAskedIdentifier = "closedQAskedCardID"
     let closedQAskedSharedIdentifier = "closedQAskedSharedCardID"
     let liveQAnswerIdentifier = "liveQAnswerCardID"
@@ -47,7 +47,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: liveQAskedIdenfitifer)
+        collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdenfitifer)
         collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: closedQAskedSharedIdentifier)
         collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: liveQAnswerIdentifier)
         collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
@@ -83,7 +83,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 cell.questionLabel.text = poll.text
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdenfitifer, for: indexPath) as! AskedCard
                 cell.socket = socket
                 socket.addDelegate(cell)
                 cell.poll = poll

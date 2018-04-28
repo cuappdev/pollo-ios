@@ -1,5 +1,5 @@
 //
-//  LiveQuestionAskedCard.swift
+//  AskedCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/16/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
+class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
@@ -34,13 +34,11 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     
     func setupCell() {
         isMCQuestion = true
-//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
         let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
                                                                    "B": ["text": "Jason", "count": 5],
                                                                    "C": ["text": "George", "count": 3],
                                                                    "D": ["text": "Jimmy", "count": 7]],
                                                             ["1": "A"])
-//        question = staticQuestion
         currentState = staticCurrentState
         socket?.addDelegate(self)
         
@@ -101,7 +99,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        addSubview(eyeView)        
+        addSubview(eyeView)
     }
     
     func layoutViews() {
@@ -156,7 +154,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         cell.choiceTag = indexPath.row
         cell.selectionStyle = .none
         cell.highlightView.backgroundColor = cellColors
-
+        
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
         var count: Int = 0
