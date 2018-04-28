@@ -24,9 +24,15 @@ class Poll {
     }
     
     // MARK: SEND START POLL INITIALIZER
-    init(text: String, options: [String]) {
+    init(text: String, options: [String], isLive: Bool) {
         self.text = text
         self.options = options
+        self.isLive = isLive
+        self.results = [:]
+        for (index, option) in options.enumerated() {
+            let mcOption = intToMCOption(index)
+            results![mcOption] = ["text": option, "count": 0]
+        }
     }
     
     // MARK: RECEIVE START POLL INITIALIZER

@@ -41,6 +41,7 @@
 		C2B9180B208CE3D40030822F /* ResultFRCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9180A208CE3D40030822F /* ResultFRCell.swift */; };
 		C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9180C208CE7320030822F /* FeedbackViewController.swift */; };
 		C2BB14B8209449390081C35D /* CardRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14B7209449390081C35D /* CardRowCell.swift */; };
+		C2BB14BA209469CD0081C35D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14B9209469CD0081C35D /* Utils.swift */; };
 		C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CD2033FA140067505A /* PollQuark.swift */; };
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
@@ -113,6 +114,7 @@
 		C2B9180A208CE3D40030822F /* ResultFRCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultFRCell.swift; sourceTree = "<group>"; };
 		C2B9180C208CE7320030822F /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		C2BB14B7209449390081C35D /* CardRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRowCell.swift; sourceTree = "<group>"; };
+		C2BB14B9209469CD0081C35D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C2BF44CD2033FA140067505A /* PollQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollQuark.swift; sourceTree = "<group>"; };
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				C212179E20281E94007395DA /* UIFont+Shared.swift */,
 				C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */,
 				C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */,
+				C2BB14B9209469CD0081C35D /* Utils.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
+				C2BB14BA209469CD0081C35D /* Utils.swift in Sources */,
 				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				6389C94B208583BD00F78003 /* LiveQAskedCard.swift in Sources */,
 				C2B9180B208CE3D40030822F /* ResultFRCell.swift in Sources */,

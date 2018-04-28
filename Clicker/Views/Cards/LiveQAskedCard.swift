@@ -159,7 +159,6 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
         var count: Int = 0
-        print(poll.results)
         if let choiceInfo = poll.results![mcOption] as? [String:Any] {
             cell.optionLabel.text = choiceInfo["text"] as? String
             count = choiceInfo["count"] as! Int

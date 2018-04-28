@@ -209,18 +209,14 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
-        print(datePollsArr[0].1[0])
-        print(print(datePollsArr[0].1[0].results))
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
@@ -234,18 +230,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         ]
         socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        var results: [String:Any] = [:]
-        for (index, option) in options.enumerated() {
-            let mcOption = intToMCOption(index)
-            results[mcOption] = ["text": option, "count": 0]
-        }
-        livePoll = Poll(id: -1, text: text, results: results, isLive: true)
+        let newPoll = Poll(text: text, options: options, isLive: true)
         if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [livePoll]))
+            self.datePollsArr.append((getTodaysDate(), [newPoll]))
             removeEmptyStudentPoll()
             setupAdminGroup()
         } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(livePoll)
+            self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
         }
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
