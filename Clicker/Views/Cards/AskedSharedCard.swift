@@ -1,5 +1,5 @@
 //
-//  PastQAskedShared.swift
+//  AskedSharedCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/17/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     var poll: Poll!
     var freeResponses: [String]!
@@ -62,7 +62,7 @@ class ClosedQAskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITable
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
         addSubview(visibiltyLabel)
-
+        
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "17 votes"

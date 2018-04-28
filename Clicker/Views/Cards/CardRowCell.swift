@@ -18,7 +18,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     var collectionView: UICollectionView!
     let askedIdenfitifer = "askedCardID"
     let closedQAskedIdentifier = "closedQAskedCardID"
-    let closedQAskedSharedIdentifier = "closedQAskedSharedCardID"
+    let askedSharedIdentifier = "askedSharedCardID"
     let liveQAnswerIdentifier = "liveQAnswerCardID"
     let closedQAnswerIdentifier = "closedQAnsweredCardID"
     let closedQAnswerSharedIdentifier = "closedQAnsweredSharedCardID"
@@ -48,7 +48,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdenfitifer)
-        collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: closedQAskedSharedIdentifier)
+        collectionView.register(AskedSharedCard.self, forCellWithReuseIdentifier: askedSharedIdentifier)
         collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: liveQAnswerIdentifier)
         collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
         collectionView.register(ClosedQAnsweredSharedCard.self, forCellWithReuseIdentifier: closedQAnswerSharedIdentifier)
@@ -78,7 +78,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         switch (pollRole) {
         case .ask: // ASK
             if (poll.isShared)  {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedSharedIdentifier, for: indexPath) as! ClosedQAskedSharedCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedSharedIdentifier, for: indexPath) as! AskedSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell
