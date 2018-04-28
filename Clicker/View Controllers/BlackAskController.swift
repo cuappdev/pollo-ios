@@ -11,6 +11,9 @@ import Presentr
 
 class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, SocketDelegate {
     
+    // name vars
+    var nameView: NameView!
+    
     // empty student vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
@@ -25,6 +28,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var socket: Socket!
     var sessionId: Int!
     var code: String!
+    var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
     
@@ -36,8 +40,39 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
+        setupName()
+    }
+   
+    // MARK - NAME THE POLL
+    
+    func setupName() {
+        setupNameViews()
+        setupNameConstraints()
     }
     
+    func setupNameViews() {
+        nameView = NameView()
+        view.addSubview(nameView)
+    }
+    
+    func setupNameConstraints() {
+        nameView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
+        }
+    }
+    
+    @objc func didFinishEditingTitle() {
+        
+    }
+    
+
     @objc func createPollBtnPressed() {
         let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6
