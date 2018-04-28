@@ -8,15 +8,23 @@
 
 import UIKit
 import Presentr
+import DropDown
 
 protocol StartPollDelegate {
     func startPoll(text: String, type: String, options: [String])
 }
 
-class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuestionDelegate, PickQTypeDelegate {
+protocol PollBuilderDelegate {
+    func updateDrafts(_ canDraft: Bool)
+}
+
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate {
     
+    let questionTypeButtonWidth: CGFloat = 150
+    let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
-    var pickQTypeVC: PickQTypeViewController!    
+    var pickQTypeVC: PickQTypeViewController!
+    var dropDown: DropDown!
     
     let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
@@ -32,12 +40,14 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     var numDrafts: Int = 0 // TODO: use actual # of drafts
     var questionType: String!
     
-    var questionCollectionView: UICollectionView!
-    let mcSectionIdentifier = "mcSectionCellID"
-    let frSectionIdentifier = "frSectionCellID"
     var startPollDelegate: StartPollDelegate!
     var isFollowUpQuestion: Bool = false
     
+    var centerView: UIView!
+    var mcPollBuilder: MCPollBuilderView!
+    var frPollBuilder: FRPollBuilderView!
+    
+    var canDraft: Bool!
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
@@ -54,28 +64,27 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        setupDropDown()
         setupViews()
+        setupConstraints()
     }
     
     func setupViews() {
-        exitButton = UIButton(frame: CGRect(x: edgePadding, y: edgePadding, width: topBarHeight, height: topBarHeight))
+        exitButton = UIButton()
         exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
         
-        let questionTypeButtonWidth: CGFloat = 150
-        questionTypeButton = UIButton(frame: CGRect(x: 0, y: edgePadding, width: questionTypeButtonWidth, height: topBarHeight))
+        questionTypeButton = UIButton()
         updateQuestionTypeButton()
         questionTypeButton.setTitleColor(.clickerBlack, for: .normal)
         questionTypeButton.titleLabel?.font = ._16SemiboldFont
         questionTypeButton.contentHorizontalAlignment = .center
-        questionTypeButton.center.x = view.center.x
         questionTypeButton.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
         questionTypeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: questionTypeButton.titleLabel!.frame.size.width)
         view.addSubview(questionTypeButton)
         
-        let draftsButtonWidth: CGFloat = 100
-        draftsButton = UIButton(frame: CGRect(x: view.frame.width - edgePadding - draftsButtonWidth, y: edgePadding, width: draftsButtonWidth, height: topBarHeight))
+        draftsButton = UIButton()
         draftsButton.setTitle("Drafts (\(numDrafts))", for: .normal)
         draftsButton.setTitleColor(.clickerBlack, for: .normal)
         draftsButton.titleLabel?.font = ._16MediumFont
@@ -83,23 +92,19 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
         view.addSubview(draftsButton)
         
-        let layout = UICollectionViewFlowLayout()
-        questionCollectionView = UICollectionView(frame: CGRect(x: edgePadding, y: 61.5, width: view.frame.width - edgePadding * 2, height: view.frame.height - 100), collectionViewLayout: layout)
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .horizontal
-        questionCollectionView.alwaysBounceHorizontal = true
-        questionCollectionView.delegate = self
-        questionCollectionView.dataSource = self
-        questionCollectionView.showsVerticalScrollIndicator = false
-        questionCollectionView.showsHorizontalScrollIndicator = false
-        questionCollectionView.register(MCSectionCell.self, forCellWithReuseIdentifier: mcSectionIdentifier)
-        questionCollectionView.register(FRSectionCell.self, forCellWithReuseIdentifier: frSectionIdentifier)
-        questionCollectionView.backgroundColor = .clickerBackground
-        questionCollectionView.isPagingEnabled = true
-        view.addSubview(questionCollectionView)
+        centerView = UIView()
+        view.addSubview(centerView)
         
-        buttonsView = UIView(frame: CGRect(x: 0, y: view.frame.height - buttonsViewHeight, width: view.frame.width, height: buttonsViewHeight))
+        mcPollBuilder = MCPollBuilderView()
+        mcPollBuilder.pollBuilderDelegate = self
+        view.addSubview(mcPollBuilder)
+        
+        frPollBuilder = FRPollBuilderView()
+        frPollBuilder.pollBuilderDelegate = self
+        view.addSubview(frPollBuilder)
+        frPollBuilder.isHidden = true
+        
+        buttonsView = UIView()
         buttonsView.backgroundColor = .white
         view.addSubview(buttonsView)
         
@@ -107,20 +112,17 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         divider.backgroundColor = .clickerBorder
         buttonsView.addSubview(divider)
         
-        let buttonWidth = (view.frame.width - (edgePadding * 3)) / 2
-        saveDraftButton = UIButton(frame: CGRect(x: edgePadding, y: 0, width: buttonWidth, height: buttonHeight))
-        saveDraftButton.center.y = buttonsViewHeight / 2
+        saveDraftButton = UIButton()
         saveDraftButton.setTitle("Save as draft", for: .normal)
-        saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
+        canDraft = false
+        updateDrafts(canDraft)
         saveDraftButton.titleLabel?.font = ._16SemiboldFont
         saveDraftButton.layer.cornerRadius = buttonHeight / 2
-        saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
         saveDraftButton.layer.borderWidth = 1.5
         saveDraftButton.addTarget(self, action: #selector(saveAsDraft), for: .touchUpInside)
         buttonsView.addSubview(saveDraftButton)
         
-        startQuestionButton = UIButton(frame: CGRect(x: buttonWidth + edgePadding * 2, y: 0, width: buttonWidth, height: buttonHeight))
-        startQuestionButton.center.y = buttonsViewHeight / 2
+        startQuestionButton = UIButton()
         startQuestionButton.setTitle("Start Question", for: .normal)
         startQuestionButton.setTitleColor(.white, for: .normal)
         startQuestionButton.titleLabel?.font = ._16SemiboldFont
@@ -130,41 +132,122 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         buttonsView.addSubview(startQuestionButton)
     }
     
-    func scrollToIndex(index: Int) {
-        let indexPath = IndexPath(item: index, section: 0)
-        questionCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
+    func setupConstraints() {
+        exitButton.snp.makeConstraints { make in
+            make.left.equalTo(edgePadding)
+            make.top.equalTo(edgePadding)
+            make.width.equalTo(topBarHeight)
+            make.height.equalTo(topBarHeight)
+        }
+        
+        questionTypeButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(edgePadding)
+            make.width.equalTo(questionTypeButtonWidth)
+            make.height.equalTo(topBarHeight)
+        }
+        
+        draftsButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(edgePadding)
+            make.top.equalTo(edgePadding)
+            make.width.equalTo(draftsButtonWidth)
+            make.height.equalTo(topBarHeight)
+        }
+        
+        buttonsView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(buttonsViewHeight)
+        }
+        
+        saveDraftButton.snp.makeConstraints { make in
+            make.left.equalTo(edgePadding)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(161)
+            make.height.equalTo(buttonHeight)
+        }
+        
+        startQuestionButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(edgePadding)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(saveDraftButton.snp.width)
+            make.height.equalTo(buttonHeight)
+        }
+        
+        mcPollBuilder.snp.makeConstraints { make in
+            make.width.equalToSuperview().inset(36)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(questionTypeButton.snp.bottom).offset(28)
+            make.bottom.equalTo(buttonsView.snp.top)
+        }
+        
+        frPollBuilder.snp.makeConstraints { make in
+            make.width.equalToSuperview().inset(36)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(mcPollBuilder.snp.top)
+            make.bottom.equalTo(mcPollBuilder.snp.bottom)
+        }
+        
     }
+    
     
     func updateQuestionTypeButton() {
         let questionTypeText = (questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response"
+        dropDown.dataSource = [(questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response",
+                               (questionType == "FREE_RESPONSE") ? "Multiple Choice" : "Free Response"]
         questionTypeButton.setTitle(questionTypeText, for: .normal)
     }
     
     // MARK - ACTIONS
     
     @objc func saveAsDraft() {
-        // TODO: Save question as draft
-        print("save as draft")
+        if canDraft {
+            print("save as draft")
+            // MULTIPLE CHOICE
+            if (questionType == "MULTIPLE_CHOICE") {
+                let question = mcPollBuilder.questionTextField.text
+                let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
+                
+                CreateDraft(text: question!, options: options).make()
+                    .done { _ in
+                        
+                        }.catch { error in
+                            print("error: ", error)
+                    }
+            
+            } else { // FREE RESPONSE
+                //let question = frPollBuilder.questionTextField.text
+
+            }
+            self.dismiss(animated: true, completion: nil)
+            }  else {
+            print("empty, drafts disabled")
+        }
+        GetDrafts().make()
+            .done { drafts in
+                let draft = drafts[0]
+                print(draft)
+            } .catch { error in
+                print("error: ",error)
+            }
         
-        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func startQuestion() {
         // TODO: Start question session
         print("start question")
-        let currentIndexPath = questionCollectionView.indexPathsForVisibleItems.first!
         
         // MULTIPLE CHOICE
-        if (currentIndexPath.item == 0) {
-            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! MCSectionCell
-            let question = cell.questionTextField.text
-            let options = cell.optionsDict.keys.sorted().map { cell.optionsDict[$0]! }
-            print(options)
+        if (questionType == "MULTIPLE_CHOICE") {
+
+            let question = mcPollBuilder.questionTextField.text
+            let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
             
             startPollDelegate.startPoll(text: question!, type: "MULTIPLE_CHOICE", options: options)
         } else { // FREE RESPONSE
-            let cell = questionCollectionView.cellForItem(at: currentIndexPath) as! FRSectionCell
-            let question = cell.questionTextField.text
+            
+            let question = frPollBuilder.questionTextField.text
             
             startPollDelegate.startPoll(text: question!, type: "FREE_RESPONSE", options: [])
         }
@@ -172,43 +255,50 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         self.dismiss(animated: true, completion: nil)
     }
     
+    func setupDropDown() {
+        dropDown = DropDown()
+        dropDown.anchorView = exitButton
+        dropDown.width = view.frame.width
+        dropDown.dataSource = ["Multiple Choice", "Free Response"]
+        dropDown.direction = .bottom
+        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            print("Selected dropdown item: \(item) at index: \(index)")
+            if index == 1 {
+                self.updateQuestionType()
+            }
+        }
+    }
+    
     // TODO: Show a dropdown of question types
     @objc func toggleQuestionType() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(popupViewHeight))
-        let originY = 0
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.transitionType = TransitionType.coverVerticalFromTop
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnTap = true
-        presenter.dismissOnSwipeDirection = .top
-        presenter.backgroundOpacity = 0.4
-        
-        pickQTypeVC = PickQTypeViewController()
-        pickQTypeVC.currentType = questionType
-        pickQTypeVC.setup()
-        pickQTypeVC.delegate = self
-        pickQTypeVC.popupHeight = popupViewHeight
-        customPresentViewController(presenter, viewController: pickQTypeVC, animated: true, completion: nil)
+        dropDown.show()
     }
     
     // MARK - PickQTypeDelegate
     
-    func updateQuestionType(_ type: String) {
-        pickQTypeVC.dismiss(animated: true, completion: nil)
-        questionType = type
+    func updateQuestionType() {
+        questionType = (questionType == "MULTIPLE_CHOICE") ? "FREE_RESPONSE" : "MULTIPLE_CHOICE"
         updateQuestionTypeButton()
-        questionCollectionView.reloadData()
+        if questionType == "MULTIPLE_CHOICE" {
+            mcPollBuilder.isHidden = false
+            frPollBuilder.isHidden = true
+            print("showing mc")
+            
+        } else { //  FREE_RESPONSE
+            frPollBuilder.isHidden = false
+            mcPollBuilder.isHidden = true
+            print("showing fr")
+        }
     }
     
     @objc func showDrafts() {
-        // TODO: Show poll drafts
         print("show poll drafts")
+        
+        let draftsVC = DraftsViewController()
+        //(startPollDelegate as! UIViewController).navigationController?.pushViewController(draftsVC, animated: true)
+        navigationController?.pushViewController(draftsVC, animated: true)
+        self.dismiss(animated: false, completion: nil)
+        
     }
     
     @objc func exit() {
@@ -221,29 +311,22 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
         isFollowUpQuestion = true
     }
     
-    // MARK: - COLLECTION VIEW
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if questionType == "MULTIPLE_CHOICE" {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: mcSectionIdentifier, for: indexPath) as! MCSectionCell
-            cell.questionTextField.becomeFirstResponder()
-            cell.questionDelegate = self
-            return cell
-        } else if questionType == "FREE_RESPONSE" {
-            let cell = questionCollectionView.dequeueReusableCell(withReuseIdentifier: frSectionIdentifier, for: indexPath) as! FRSectionCell
-            cell.questionTextField.becomeFirstResponder()
-            cell.questionDelegate = self
-            return cell
+    // MARK: POLLBUILDER DELEGATE
+    func updateDrafts(_ canDraft: Bool) {
+        self.canDraft = canDraft
+        if canDraft {
+            saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
+            saveDraftButton.backgroundColor = .clear
+            saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
+            print("drafts enabled")
+        } else {
+            saveDraftButton.setTitleColor(.clickerMediumGray, for: .normal)
+            saveDraftButton.backgroundColor = .clickerOptionGrey
+            saveDraftButton.layer.borderColor = UIColor.clickerOptionGrey.cgColor
+            draftsButton.titleLabel?.font = ._16MediumFont
+            print("draft disabled")
         }
         
-        return UICollectionViewCell()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: questionCollectionView.frame.width, height: questionCollectionView.frame.height)
     }
     
     // MARK: - KEYBOARD
