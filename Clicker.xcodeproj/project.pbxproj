@@ -23,6 +23,7 @@
 		6389C94B208583BD00F78003 /* LiveQAskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94A208583BD00F78003 /* LiveQAskedCard.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
+		639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B4D552093F975009D3309 /* PickQTypeViewController.swift */; };
 		63D19CC3208D72E40041C774 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63D19CC2208D72E40041C774 /* Keys.plist */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
@@ -90,6 +91,7 @@
 		6389C94A208583BD00F78003 /* LiveQAskedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQAskedCard.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
 		6389C9512085953F00F78003 /* PollsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsCell.swift; sourceTree = "<group>"; };
+		639B4D552093F975009D3309 /* PickQTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickQTypeViewController.swift; sourceTree = "<group>"; };
 		63D19CC2208D72E40041C774 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Keys.plist; path = Secrets/Keys.plist; sourceTree = SOURCE_ROOT; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
+				639B4D552093F975009D3309 /* PickQTypeViewController.swift */,
 				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
 				633381322086D07D008BD455 /* BlackAnswerController.swift */,
 				C21D98802083D32000191103 /* LoginViewController.swift */,
@@ -571,6 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
 				C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
