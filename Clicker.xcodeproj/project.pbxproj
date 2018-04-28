@@ -127,7 +127,6 @@
 		C2F48EBE208304980022FE6B /* SessionQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionQuark.swift; sourceTree = "<group>"; };
 		C2F48EC22083051A0022FE6B /* PollsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsViewController.swift; sourceTree = "<group>"; };
 		C2F48EC9208305C90022FE6B /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
-		C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -356,7 +355,6 @@
 				633381322086D07D008BD455 /* BlackAnswerController.swift */,
 				C21D98802083D32000191103 /* LoginViewController.swift */,
 				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
-				C71173C81F7801BD00B4F9A1 /* HomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
