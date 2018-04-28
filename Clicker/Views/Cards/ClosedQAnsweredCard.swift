@@ -18,8 +18,8 @@ import UIKit
 
 class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    var question: Question!
     var currentState: CurrentState!
+    var poll: Poll!
     var totalNumResults: Int!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
@@ -39,13 +39,13 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
     
     func setupCell() {
         isMCQuestion = true
-        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
+//        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
         let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
                                                                    "B": ["text": "Jason", "count": 5],
                                                                    "C": ["text": "George", "count": 3],
                                                                    "D": ["text": "Jimmy", "count": 7]],
                                                             ["1": "A"])
-        question = staticQuestion
+//        question = staticQuestion
         currentState = staticCurrentState
         
         totalNumResults = Int(currentState.getTotalCount())
@@ -62,7 +62,7 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         self.layer.cornerRadius = 15
         
         questionLabel = UILabel()
-        questionLabel.text = question.text
+        questionLabel.text = "QUESTION"
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -131,7 +131,7 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "closedOptionCellID", for: indexPath) as! ClosedOptionCell
-        cell.questionLabel.text = question.options[indexPath.row]
+        cell.questionLabel.text = poll.options?[indexPath.row]
         cell.index = indexPath.row
         cell.chosen = (yourChoice() == indexPath.row)
         cell.setColors()
@@ -139,7 +139,7 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        return poll.options!.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

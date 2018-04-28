@@ -19,7 +19,6 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var code: String!
     var sessionId: Int!
     var datePollsArr: [(String, [Poll])] = []
-    var liveQuestion: Question!
     
     let cardRowCellIdentifier = "cardRowCellID"
     
@@ -150,19 +149,17 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) {
+    func pollStarted(_ poll: Poll) {
         if (datePollsArr.count == 0) {
             removeEmpty()
             setupViews()
             setupConstraints()
             datePollsArr.append((getTodaysDate(), []))
         }
-        liveQuestion = question
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
-    func questionEnded(_ question: Question) {
-        liveQuestion = nil
+    func pollEnded(_ poll: Poll) {
         updateDatePollsArr()
     }
     

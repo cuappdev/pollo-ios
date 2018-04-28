@@ -204,9 +204,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) { }
+    func pollStarted(_ poll: Poll) { }
     
-    func questionEnded(_ question: Question) { }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
         livePoll.id = currentState.pollId

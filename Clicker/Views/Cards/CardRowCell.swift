@@ -25,7 +25,6 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     var socket: Socket!
     var polls: [Poll]!
     var pollRole: PollRole!
-    var liveQuestion: Question! // FOR USERS
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,21 +70,10 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let _ = liveQuestion {
-            return polls.count + 1
-        } else {
-            return polls.count
-        }
+        return polls.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if (indexPath.item == polls.count) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
-            cell.question = liveQuestion
-            cell.questionLabel.text = liveQuestion.text
-            cell.socket = socket
-            return cell
-        }
         let poll = polls[indexPath.item]
         switch (pollRole) {
         case .ask: // ASK
