@@ -154,8 +154,8 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
             removeEmpty()
             setupViews()
             setupConstraints()
-            datePollsArr.append((getTodaysDate(), []))
         }
+        datePollsArr.append((getTodaysDate(), [poll]))
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
