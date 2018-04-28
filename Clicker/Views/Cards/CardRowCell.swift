@@ -25,6 +25,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     var socket: Socket!
     var polls: [Poll]!
     var pollRole: PollRole!
+    var endPollDelegate: EndPollDelegate!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,7 +48,6 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(LiveQAskedCard.self, forCellWithReuseIdentifier: liveQAskedIdenfitifer)
-        collectionView.register(ClosedQAskedCard.self, forCellWithReuseIdentifier: closedQAskedIdentifier)
         collectionView.register(ClosedQAskedSharedCard.self, forCellWithReuseIdentifier: closedQAskedSharedIdentifier)
         collectionView.register(LiveQAnswerCard.self, forCellWithReuseIdentifier: liveQAnswerIdentifier)
         collectionView.register(ClosedQAnsweredCard.self, forCellWithReuseIdentifier: closedQAnswerIdentifier)
@@ -77,39 +77,30 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         let poll = polls[indexPath.item]
         switch (pollRole) {
         case .ask: // ASK
-            if (poll.isLive) {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
-                cell.socket = socket
-                socket.addDelegate(cell)
-                cell.poll = poll
-                cell.questionLabel.text = poll.text
-                return cell
-            } else if (poll.isShared)  {
+            if (poll.isShared)  {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedSharedIdentifier, for: indexPath) as! ClosedQAskedSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAskedIdentifier, for: indexPath) as! ClosedQAskedCard
-                cell.poll = poll
-                cell.questionLabel.text = poll.text
-                return cell
-            }
-        default: // ANSWER
-            if (poll.isLive) { // LIVE
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAskedIdenfitifer, for: indexPath) as! LiveQAskedCard
                 cell.socket = socket
                 socket.addDelegate(cell)
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
+                cell.endPollDelegate = endPollDelegate
                 return cell
-            } else if (poll.isShared) { // SHARED
+            }
+        default: // ANSWER
+            if (poll.isShared) { // SHARED
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerSharedIdentifier, for: indexPath) as! ClosedQAnsweredSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: closedQAnswerIdentifier, for: indexPath) as! ClosedQAnsweredCard
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: liveQAnswerIdentifier, for: indexPath) as! LiveQAnswerCard
+                cell.socket = socket
+                socket.addDelegate(cell)
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell

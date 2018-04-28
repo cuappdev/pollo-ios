@@ -85,7 +85,7 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
         cell.delegate = self
         cell.index = indexPath.row
         cell.chosen = (choice == indexPath.row)
-        cell.setColors()
+        cell.setColors(isLive: poll.isLive)
         return cell
     }
     
@@ -99,15 +99,17 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     // MARK - OptionViewDelegate
     func choose(_ choice: Int) {
-        let answer: [String:Any] = [
-            "googleId": User.currentUser?.id,
-            "poll": poll.id,
-            "choice": intToMCOption(choice),
-            "text": poll.options![choice]
-        ]
-        socket.socket.emit("server/poll/tally", answer)
-        self.choice = choice
-        resultsTableView.reloadData()
+        if (poll.isLive) {
+            let answer: [String:Any] = [
+                "googleId": User.currentUser?.id,
+                "poll": poll.id,
+                "choice": intToMCOption(choice),
+                "text": poll.options![choice]
+            ]
+            socket.socket.emit("server/poll/tally", answer)
+            self.choice = choice
+            resultsTableView.reloadData()
+        }
     }
     
     // MARK: SOCKET DELEGATE
@@ -117,7 +119,9 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func pollStarted(_ poll: Poll) { }
     
-    func pollEnded(_ poll: Poll) { }
+    func pollEnded(_ poll: Poll) {
+        self.resultsTableView.reloadData()
+    }
     
     func receivedResults(_ currentState: CurrentState) { }
     

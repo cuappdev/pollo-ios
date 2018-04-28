@@ -133,7 +133,6 @@ class ClosedQAnsweredCard: UICollectionViewCell, UITableViewDelegate, UITableVie
         cell.questionLabel.text = poll.options?[indexPath.row]
         cell.index = indexPath.row
         cell.chosen = (yourChoice() == indexPath.row)
-        cell.setColors()
         return cell
     }
     

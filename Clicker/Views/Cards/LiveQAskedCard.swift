@@ -13,6 +13,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     var socket: Socket!
     var poll: Poll!
     var currentState: CurrentState!
+    var endPollDelegate: EndPollDelegate!
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
@@ -218,6 +219,7 @@ class LiveQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewData
     // MARK  - ACTIONS
     @objc func endQuestionAction() {
         socket.socket.emit("server/poll/end", [])
+        endPollDelegate.endedPoll()
         shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
         shareResultsButton.backgroundColor = .clickerGreen
         shareResultsButton.setTitle("Share Results", for: .normal)
