@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import Presentr
 
 protocol StartPollDelegate {
     func startPoll(text: String, type: String, options: [String])
 }
 
-class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuestionDelegate {
+class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuestionDelegate, PickQTypeDelegate {
+    
+    let popupViewHeight: CGFloat = 95
+    var pickQTypeVC: PickQTypeViewController!    
     
     let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
@@ -170,15 +174,34 @@ class PollBuilderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     // TODO: Show a dropdown of question types
     @objc func toggleQuestionType() {
-        switch(questionType) {
-        case "MULTIPLE_CHOICE":
-            questionType = "FREE_RESPONSE"
-        case "FREE_RESPONSE":
-            questionType = "MULTIPLE_CHOICE"
-        default:
-            break
-        }
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: Float(popupViewHeight))
+        let originY = 0
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
         
+        let presenter: Presentr = Presentr(presentationType: customType)
+        presenter.transitionType = TransitionType.coverVerticalFromTop
+        presenter.backgroundOpacity = 0.6
+        presenter.roundCorners = false
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnTap = true
+        presenter.dismissOnSwipeDirection = .top
+        presenter.backgroundOpacity = 0.4
+        
+        pickQTypeVC = PickQTypeViewController()
+        pickQTypeVC.currentType = questionType
+        pickQTypeVC.setup()
+        pickQTypeVC.delegate = self
+        pickQTypeVC.popupHeight = popupViewHeight
+        customPresentViewController(presenter, viewController: pickQTypeVC, animated: true, completion: nil)
+    }
+    
+    // MARK - PickQTypeDelegate
+    
+    func updateQuestionType(_ type: String) {
+        pickQTypeVC.dismiss(animated: true, completion: nil)
+        questionType = type
         updateQuestionTypeButton()
         questionCollectionView.reloadData()
     }
