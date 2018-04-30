@@ -10,13 +10,12 @@ import SocketIO
 
 class Socket {
     let id: String
-    var delegate: SocketDelegate?
+    var delegates: [SocketDelegate] = [SocketDelegate]()
     var socket: SocketIOClient
     var manager: SocketManager
     
-    init(id: String, userType: String, delegate: SocketDelegate? = nil) {
+    init(id: String, userType: String) {
         self.id = id
-        self.delegate = delegate
         
         let url = URL(string: hostURL)!
         manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": User.currentUser?.id])])
@@ -24,28 +23,28 @@ class Socket {
         socket = manager.socket(forNamespace: "/\(id)")
         
         socket.on(clientEvent: .connect) { data, ack in
-            self.delegate?.sessionConnected()
+            self.delegates.forEach{ $0.sessionConnected() }
         }
         
         socket.on(clientEvent: .disconnect) { data, ack in
-            self.delegate?.sessionDisconnected()
+            self.delegates.forEach { $0.sessionConnected() }
         }
         
         socket.on("user/poll/start") { data, ack in
             print(data)
-            guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
+            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
                 return
             }
-            let question = Question(json: questionJSON)
-            self.delegate?.questionStarted(question)
+            let poll = Poll(json: pollJSON)
+            self.delegates.forEach { $0.pollStarted(poll) }
         }
         
         socket.on("user/poll/end") { data, ack in
-            guard let json = data[0] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
+            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any] else {
                 return
             }
-            let question = Question(json: questionJSON)
-            self.delegate?.questionEnded(question)
+            let poll = Poll(json: pollJSON)
+            self.delegates.forEach { $0.pollEnded(poll) }
         }
         
         socket.on("user/poll/results") { data, ack in
@@ -54,7 +53,7 @@ class Socket {
                 return
             }
             let currentState = CurrentState(json: json)
-            self.delegate?.receivedResults(currentState)
+            self.delegates.forEach { $0.receivedResults(currentState) }
         }
         
         socket.on("user/session/save") { data, ack in
@@ -62,7 +61,7 @@ class Socket {
                 return
             }
             let session = Session(json: json)
-            self.delegate?.saveSession(session)
+            self.delegates.forEach { $0.saveSession(session) }
         }
         
         socket.on("admin/poll/updateTally") { data, ack in
@@ -71,9 +70,13 @@ class Socket {
                 return
             }
             let currentState = CurrentState(json: json)
-            self.delegate?.updatedTally(currentState)
+            self.delegates.forEach { $0.updatedTally(currentState) }
         }
         
         socket.connect()
+    }
+    
+    func addDelegate(_ delegate: SocketDelegate) {
+        self.delegates.append(delegate)
     }
 }

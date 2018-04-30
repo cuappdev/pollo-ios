@@ -9,7 +9,11 @@
 import UIKit
 import Presentr
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, SocketDelegate {
+protocol EndPollDelegate {
+    func endedPoll()
+}
+
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
     
     // name vars
     var nameView: NameView!
@@ -24,13 +28,15 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var mainCollectionView: UICollectionView!
     
-    var tabController: UITabBarController!
     var socket: Socket!
     var sessionId: Int!
     var code: String!
     var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
+    
+    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
+    let cardRowCellIdentifier = "cardRowCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,7 +189,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         layout.scrollDirection = .vertical
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(DateCell.self, forCellWithReuseIdentifier: "dateCellID")
+        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -210,9 +216,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
+        cell.pollRole = .ask
+        cell.endPollDelegate = self
+        cell.collectionView.reloadData()
         return cell
     }
     
@@ -236,23 +245,19 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) { }
+    func pollStarted(_ poll: Poll) { }
     
-    func questionEnded(_ question: Question) { }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
-        print(datePollsArr[0].1[0])
-        print(print(datePollsArr[0].1[0].results))
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
@@ -264,22 +269,27 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.delegate = self
+        socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        var results: [String:Any] = [:]
-        for (index, option) in options.enumerated() {
-            let mcOption = intToMCOption(index)
-            results[mcOption] = ["text": option, "count": 0]
-        }
-        livePoll = Poll(id: -1, text: text, results: results, isLive: true)
+        let newPoll = Poll(text: text, options: options, isLive: true)
         if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [livePoll]))
+            self.datePollsArr.append((getTodaysDate(), [newPoll]))
             removeEmptyStudentPoll()
             setupAdminGroup()
         } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(livePoll)
+            self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
         }
+        // HIDE CREATE POLL BUTTON
+        createPollButton.alpha = 0
+        createPollButton.isUserInteractionEnabled = false
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    }
+    
+    // MARK: ENDED POLL DELEGATE
+    func endedPoll() {
+        // SHOW CREATE POLL BUTTON
+        createPollButton.alpha = 1
+        createPollButton.isUserInteractionEnabled = true
     }
     
     func setupNavBar() {
@@ -312,7 +322,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {

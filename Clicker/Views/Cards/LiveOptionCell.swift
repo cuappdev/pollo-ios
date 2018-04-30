@@ -57,14 +57,24 @@ class LiveOptionCell: UITableViewCell {
         }
     }
     
-    func setColors() {
+    func setColors(isLive: Bool) {
         if chosen {
-            buttonView.backgroundColor = .clickerGreen
+            if (isLive) {
+                buttonView.backgroundColor = .clickerGreen
+            } else {
+                buttonView.backgroundColor = .clickerMint
+                buttonView.layer.borderColor = UIColor.clickerMint.cgColor
+            }
             buttonView.setTitleColor(.clickerWhite, for: .normal)
-        }
-        else {
+        } else {
+            if (isLive) {
+                buttonView.setTitleColor(.clickerGreen, for: .normal)
+                buttonView.layer.borderColor = UIColor.clickerGreen.cgColor
+            } else {
+                buttonView.setTitleColor(.clickerMint, for: .normal)
+                buttonView.layer.borderColor = UIColor.clickerMint.cgColor
+            }
             buttonView.backgroundColor = .clickerWhite
-            buttonView.setTitleColor(.clickerGreen, for: .normal)
         }
     }
     

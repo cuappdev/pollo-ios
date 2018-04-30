@@ -1,18 +1,16 @@
 //
-//  PastQuestionCard.swift
+//  AskedSharedCard.swift
 //  Clicker
 //
-//  Created by eoin on 4/14/18.
+//  Created by eoin on 4/17/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    var question: Question!
-    var currentState: CurrentState!
-    var totalNumResults: Int!
+    var poll: Poll!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
@@ -20,9 +18,8 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
-    var shareResultsButton: UIButton!
     var totalResultsLabel: UILabel!
-    var eyeView: UIImageView!
+    var worldView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,17 +28,6 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     func setupCell() {
         isMCQuestion = true
-        let staticQuestion: Question = Question(1234, "What is my name?", "MULTIPLE_CHOICE", options: ["Jack", "Jason", "George", "Jimmy"])
-        let staticCurrentState: CurrentState = CurrentState(1234, ["A": ["text": "Jack", "count": 2],
-                                                                   "B": ["text": "Jason", "count": 5],
-                                                                   "C": ["text": "George", "count": 3],
-                                                                   "D": ["text": "Jimmy", "count": 7]],
-                                                            ["1": "A"])
-        question = staticQuestion
-        currentState = staticCurrentState
-        
-        totalNumResults = Int(currentState.getTotalCount())
-        
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
@@ -54,7 +40,6 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         self.layer.cornerRadius = 15
         
         questionLabel = UILabel()
-        questionLabel.text = question.text
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -72,30 +57,22 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
-        visibiltyLabel.text = "Only you can see these results"
+        visibiltyLabel.text = "Shared with group"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
         addSubview(visibiltyLabel)
         
-        shareResultsButton = UIButton()
-        shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
-        shareResultsButton.backgroundColor = .clickerGreen
-        shareResultsButton.setTitle("Share Results", for: .normal)
-        shareResultsButton.titleLabel?.font = ._16SemiboldFont
-        shareResultsButton.titleLabel?.textAlignment = .center
-        shareResultsButton.layer.cornerRadius = 25.5
-        addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults!) votes"
+        totalResultsLabel.text = "17 votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
         
-        eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        addSubview(eyeView)
+        worldView = UIImageView(image: #imageLiteral(resourceName: "results_shared"))
+        addSubview(worldView)
         
     }
     
@@ -117,15 +94,8 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         visibiltyLabel.snp.updateConstraints { make in
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.bottom.equalTo(shareResultsButton.snp.top).offset(-17)
+            make.bottom.equalToSuperview().offset(-23.5)
             make.height.equalTo(14.5)
-        }
-        
-        shareResultsButton.snp.updateConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-24)
-            make.height.equalTo(47)
-            make.width.equalTo(292.5)
         }
         
         totalResultsLabel.snp.updateConstraints { make in
@@ -135,7 +105,7 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
             make.height.equalTo(14.5)
         }
         
-        eyeView.snp.makeConstraints { make in
+        worldView.snp.makeConstraints { make in
             make.height.equalTo(14.5)
             make.width.equalTo(14.5)
             make.top.equalTo(visibiltyLabel.snp.top)
@@ -149,16 +119,17 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = question.options[indexPath.row]
+        cell.optionLabel.text = poll.options?[indexPath.row]
         cell.selectionStyle = .none
         cell.highlightView.backgroundColor = .clickerMint
         
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = currentState.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
+        guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
             return cell
         }
         cell.numberLabel.text = "\(count)"
+        let totalNumResults = poll.getTotalResults()
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
@@ -176,7 +147,7 @@ class ClosedQAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        return poll.options!.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

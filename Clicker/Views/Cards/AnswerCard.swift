@@ -1,5 +1,5 @@
 //
-//  CollectionViewCell.swift
+//  AnswerCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/17/18.
@@ -8,18 +8,17 @@
 
 import UIKit
 
-class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate {
+class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
     
-    var question: Question!
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var totalResultsLabel: UILabel!
     
     var choice: Int?
+    var poll: Poll!
     var socket: Socket!
     
     override init(frame: CGRect) {
@@ -82,16 +81,16 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "optionCellID", for: indexPath) as! LiveOptionCell
-        cell.buttonView.setTitle(question.options[indexPath.row], for: .normal)
+        cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
         cell.delegate = self
         cell.index = indexPath.row
         cell.chosen = (choice == indexPath.row)
-        cell.setColors()
+        cell.setColors(isLive: poll.isLive)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return question.options.count
+        return poll.options!.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -100,17 +99,35 @@ class LiveQAnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     // MARK - OptionViewDelegate
     func choose(_ choice: Int) {
-        print("reloding Data")
-        let answer: [String:Any] = [
-            "googleId": User.currentUser?.id,
-            "poll": question.id,
-            "choice": intToMCOption(choice),
-            "text": question.options[choice]
-        ]
-        socket.socket.emit("server/poll/tally", answer)
-        self.choice = choice
-        resultsTableView.reloadData()
+        if (poll.isLive) {
+            let answer: [String:Any] = [
+                "googleId": User.currentUser?.id,
+                "poll": poll.id,
+                "choice": intToMCOption(choice),
+                "text": poll.options![choice]
+            ]
+            socket.socket.emit("server/poll/tally", answer)
+            self.choice = choice
+            resultsTableView.reloadData()
+        }
     }
+    
+    // MARK: SOCKET DELEGATE
+    func sessionConnected() { }
+    
+    func sessionDisconnected() { }
+    
+    func pollStarted(_ poll: Poll) { }
+    
+    func pollEnded(_ poll: Poll) {
+        self.resultsTableView.reloadData()
+    }
+    
+    func receivedResults(_ currentState: CurrentState) { }
+    
+    func saveSession(_ session: Session) { }
+    
+    func updatedTally(_ currentState: CurrentState) { }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
