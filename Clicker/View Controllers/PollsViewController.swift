@@ -176,7 +176,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                     .done { session in
                         let socket = Socket(id: "\(session.id)", userType: "admin")
                         let blackAskVC = BlackAskController()
-                        blackAskVC.tabController = self.tabBarController
                         blackAskVC.socket = socket
                         blackAskVC.code = code
                         blackAskVC.sessionId = session.id
@@ -216,6 +215,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             self.navigationController?.setNavigationBarHidden(true, animated: true)
             self.tabBarController?.tabBar.isHidden = false
         }
+        
     }
     
     // TODO: Move this function to where it will be used

@@ -11,8 +11,8 @@ protocol SocketDelegate {
     func sessionDisconnected()
     
     // USER RECEIVES
-    func questionStarted(_ question: Question)
-    func questionEnded(_ question: Question)
+    func pollStarted(_ poll: Poll)
+    func pollEnded(_ poll: Poll)
     func receivedResults(_ currentState: CurrentState)
     func saveSession(_ session: Session)
     

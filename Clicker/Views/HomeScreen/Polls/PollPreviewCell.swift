@@ -10,6 +10,8 @@ import UIKit
 
 class PollPreviewCell: UITableViewCell {
     
+    var session: Session!
+    
     var nameLabel: UILabel!
     var timeLabel: UILabel!
     var line: UIView!
@@ -25,12 +27,10 @@ class PollPreviewCell: UITableViewCell {
     
     func setupViews() {
         nameLabel = UILabel()
-        nameLabel.text = "Intro to DPP"
         nameLabel.font = ._18SemiboldFont
         addSubview(nameLabel)
     
         timeLabel = UILabel()
-        timeLabel.text = "Last Active 2 hours ago"
         timeLabel.font = ._18MediumFont
         timeLabel.textColor = .clickerMediumGray
         addSubview(timeLabel)
@@ -63,6 +63,18 @@ class PollPreviewCell: UITableViewCell {
         }
     }
     
+    func updateLabels() {
+        nameLabel.text = session.name
+        if let live = session.isLive {
+            if live {
+                timeLabel.text = "This poll is live!"
+            } else {
+                timeLabel.text = "Not currently active"
+            }
+        } else {
+            timeLabel.text = "Not currently active"
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

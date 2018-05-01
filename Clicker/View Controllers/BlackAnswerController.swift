@@ -15,12 +15,12 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     
-    var tabController: UITabBarController!
     var socket: Socket!
     var code: String!
     var sessionId: Int!
     var datePollsArr: [(String, [Poll])] = []
-    var liveQuestion: Question!
+    
+    let cardRowCellIdentifier = "cardRowCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         view.backgroundColor = .clickerDeepBlack
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        socket.delegate = self
+        socket.addDelegate(self)
         if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
@@ -38,22 +38,16 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         setupNavBar()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     // MARK: - LAYOUT
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(DateCell.self, forCellWithReuseIdentifier: "dateCellID")
-        mainCollectionView.register(EmptyAnswerCell.self, forCellWithReuseIdentifier: "emptyAnswerCellID")
+        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -137,19 +131,12 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.row {
-        case datePollsArr.count - 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
-            cell.liveQuestion = liveQuestion
-            cell.polls = datePollsArr[indexPath.item].1
-            cell.socket = socket
-            return cell
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
-            cell.polls = datePollsArr[indexPath.item].1
-            cell.socket = socket
-            return cell
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
+        cell.polls = datePollsArr[indexPath.item].1
+        cell.socket = socket
+        cell.pollRole = .answer
+        cell.collectionView.reloadData()
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -163,24 +150,25 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) {
+    func pollStarted(_ poll: Poll) {
         if (datePollsArr.count == 0) {
             removeEmpty()
             setupViews()
             setupConstraints()
-            datePollsArr.append((getTodaysDate(), []))
         }
-        liveQuestion = question
+        datePollsArr.append((getTodaysDate(), [poll]))
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
-    func questionEnded(_ question: Question) {
-        liveQuestion = nil
-        updateDatePollsArr()
+    func pollEnded(_ poll: Poll) {
+        self.datePollsArr.last?.1.last?.isLive = false
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateDatePollsArr()
+        self.datePollsArr.last?.1.last?.isShared = true
+        self.datePollsArr.last?.1.last?.results = currentState.results
+        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
@@ -194,7 +182,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
             }.catch { error in
                 print(error)
-        }
+            }
     }
     
     func setupNavBar() {
@@ -225,9 +213,8 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
+        // HIDE NAV BAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
     }
 }
 

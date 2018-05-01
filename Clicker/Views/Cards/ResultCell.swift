@@ -53,7 +53,6 @@ class ResultCell: UITableViewCell {
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()
-        //highlightView.backgroundColor =
         highlightView.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -93,7 +92,7 @@ class ResultCell: UITableViewCell {
         numberLabel.snp.updateConstraints { make in
             make.height.equalTo(optionLabel.snp.height)
             make.top.equalToSuperview()
-            make.right.equalToSuperview().offset(15)
+            make.right.equalToSuperview().offset(-15)
         }
         
         highlightView.snp.updateConstraints { make in

@@ -9,7 +9,14 @@
 import UIKit
 import Presentr
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, SocketDelegate {
+protocol EndPollDelegate {
+    func endedPoll()
+}
+
+class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
+    
+    // name vars
+    var nameView: NameView!
     
     // empty student vars
     var monkeyView: UIImageView!
@@ -21,12 +28,18 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var mainCollectionView: UICollectionView!
     
-    var tabController: UITabBarController!
+    // nav bar
+    var navigationTitleView: NavigationTitleView!
+    
     var socket: Socket!
     var sessionId: Int!
     var code: String!
+    var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
+    
+    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
+    let cardRowCellIdentifier = "cardRowCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +49,42 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
+        if name != code {
+            setupName()
+        }
+    }
+   
+    // MARK - NAME THE POLL
+    
+    func setupName() {
+        nameView = NameView()
+        nameView.sessionId = sessionId
+        nameView.code = code
+        nameView.name = name
+        nameView.delegate = self
+
+        view.addSubview(nameView)
+
+        setupNameConstraints()
     }
     
+    func updateNavBar() {
+        navigationTitleView.updateViews(name: name, code: code)
+    }
+    
+    func setupNameConstraints() {
+        nameView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
+        }
+    }
+
     @objc func createPollBtnPressed() {
         let pollBuilderVC = PollBuilderViewController()
         pollBuilderVC.startPollDelegate = self
@@ -149,7 +196,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         layout.scrollDirection = .vertical
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(DateCell.self, forCellWithReuseIdentifier: "dateCellID")
+        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -176,9 +223,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dateCellID", for: indexPath) as! DateCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
         cell.polls = datePollsArr[indexPath.item].1
         cell.socket = socket
+        cell.pollRole = .ask
+        cell.endPollDelegate = self
+        cell.collectionView.reloadData()
         return cell
     }
     
@@ -202,23 +252,19 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func sessionDisconnected() { }
     
-    func questionStarted(_ question: Question) { }
+    func pollStarted(_ poll: Poll) { }
     
-    func questionEnded(_ question: Question) { }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        livePoll.id = currentState.pollId
-        livePoll.results = currentState.results
-        print(datePollsArr[0].1[0])
-        print(print(datePollsArr[0].1[0].results))
+        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
@@ -230,22 +276,27 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.delegate = self
+        socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        var results: [String:Any] = [:]
-        for (index, option) in options.enumerated() {
-            let mcOption = intToMCOption(index)
-            results[mcOption] = ["text": option, "count": 0]
-        }
-        livePoll = Poll(id: -1, text: text, results: results, isLive: true)
+        let newPoll = Poll(text: text, options: options, isLive: true)
         if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [livePoll]))
+            self.datePollsArr.append((getTodaysDate(), [newPoll]))
             removeEmptyStudentPoll()
             setupAdminGroup()
         } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(livePoll)
+            self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
         }
+        // HIDE CREATE POLL BUTTON
+        createPollButton.alpha = 0
+        createPollButton.isUserInteractionEnabled = false
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    }
+    
+    // MARK: ENDED POLL DELEGATE
+    func endedPoll() {
+        // SHOW CREATE POLL BUTTON
+        createPollButton.alpha = 1
+        createPollButton.isUserInteractionEnabled = true
     }
     
     func setupNavBar() {
@@ -254,14 +305,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let codeLabel = UILabel()
-        if let c = code {
-            codeLabel.text = "Code: \(c)"
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
         }
-        codeLabel.textColor = .white
-        codeLabel.font = UIFont._16SemiboldFont
-        codeLabel.textAlignment = .center
-        self.navigationItem.titleView = codeLabel
+        self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
@@ -278,7 +327,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        tabController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
