@@ -10,8 +10,8 @@ import UIKit
 import SnapKit
 
 class EditPollViewController: UIViewController {
-
-    var pollName: String!
+    
+    var session: Session!
     
     var buttonStackView: UIStackView!
     var editNameImageView: UIImageView!
@@ -88,7 +88,7 @@ class EditPollViewController: UIViewController {
     }
     
     func setupNavBar() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: pollName, style: .plain, target: self, action: nil)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: session.name, style: .plain, target: self, action: nil)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "exit"), style: .plain, target: self, action: #selector(exitBtnPressed))
     }
     
