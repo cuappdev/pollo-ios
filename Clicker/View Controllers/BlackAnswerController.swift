@@ -132,10 +132,14 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
-        cell.polls = datePollsArr[indexPath.item].1
+        let polls = datePollsArr[0].1
+        cell.polls = polls
         cell.socket = socket
         cell.pollRole = .answer
         cell.collectionView.reloadData()
+        // SCROLL TO LATEST QUESTION
+        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
+        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
         return cell
     }
     
@@ -151,12 +155,19 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     func sessionDisconnected() { }
     
     func pollStarted(_ poll: Poll) {
+        let currentDate = getTodaysDate()
         if (datePollsArr.count == 0) {
             removeEmpty()
             setupViews()
             setupConstraints()
+            datePollsArr.append((currentDate, [poll]))
+        } else {
+            if (datePollsArr.last?.0 == currentDate) {
+                datePollsArr[datePollsArr.count - 1].1.append(poll)
+            } else {
+                datePollsArr.append((currentDate, [poll]))
+            }
         }
-        datePollsArr.append((getTodaysDate(), [poll]))
         DispatchQueue.main.async { self.mainCollectionView.reloadData() }
     }
     
