@@ -70,6 +70,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     func setupViews() {
+        navigationController?.navigationBar.isHidden = true
+        
         exitButton = UIButton()
         exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
@@ -295,10 +297,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         print("show poll drafts")
         
         let draftsVC = DraftsViewController()
-        //(startPollDelegate as! UIViewController).navigationController?.pushViewController(draftsVC, animated: true)
         navigationController?.pushViewController(draftsVC, animated: true)
-        self.dismiss(animated: false, completion: nil)
-        
     }
     
     @objc func exit() {
