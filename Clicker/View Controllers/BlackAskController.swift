@@ -15,6 +15,9 @@ protocol EndPollDelegate {
 
 class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
     
+    // name vars
+    var nameView: NameView!
+    
     // empty student vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
@@ -25,9 +28,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var mainCollectionView: UICollectionView!
     
+    // nav bar
+    var navigationTitleView: NavigationTitleView!
+    
     var socket: Socket!
     var sessionId: Int!
     var code: String!
+    var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
     
@@ -42,8 +49,42 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
+        if name != code {
+            setupName()
+        }
+    }
+   
+    // MARK - NAME THE POLL
+    
+    func setupName() {
+        nameView = NameView()
+        nameView.sessionId = sessionId
+        nameView.code = code
+        nameView.name = name
+        nameView.delegate = self
+
+        view.addSubview(nameView)
+
+        setupNameConstraints()
     }
     
+    func updateNavBar() {
+        navigationTitleView.updateViews(name: name, code: code)
+    }
+    
+    func setupNameConstraints() {
+        nameView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(bottomLayoutGuide.snp.top)
+            }
+        }
+    }
+
     @objc func createPollBtnPressed() {
         let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6
@@ -263,14 +304,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let codeLabel = UILabel()
-        if let c = code {
-            codeLabel.text = "Code: \(c)"
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
         }
-        codeLabel.textColor = .white
-        codeLabel.font = UIFont._16SemiboldFont
-        codeLabel.textAlignment = .center
-        self.navigationItem.titleView = codeLabel
+        self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
