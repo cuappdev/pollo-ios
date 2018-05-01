@@ -37,6 +37,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var livePoll: Poll!
+    var drafts: [Draft]!
     
     let emptyAnswerCellIdentifier = "emptyAnswerCellID"
     let cardRowCellIdentifier = "cardRowCellID"
@@ -88,6 +89,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func createPollBtnPressed() {
         let pollBuilderVC = PollBuilderViewController()
         pollBuilderVC.startPollDelegate = self
+        pollBuilderVC.drafts = drafts
+        print("drafts: \n",drafts)
         let nc = UINavigationController(rootViewController: pollBuilderVC)
         let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6
@@ -325,6 +328,16 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func getDrafts() {
+        GetDrafts().make()
+            .done { drafts in
+                self.drafts = drafts
+                print("got drafts!: ", drafts)
+            } .catch { error in
+                print("error: ", error)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

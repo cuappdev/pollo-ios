@@ -13,9 +13,13 @@ class DraftCell: UICollectionViewCell {
     var titleTextView: UITextView!
     var optionsImageView: UIImageView!
     
+    var draft: Draft!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+    }
+    
+    func setupCell() {
         setupViews()
         setupConstraints()
     }
@@ -28,7 +32,7 @@ class DraftCell: UICollectionViewCell {
         clipsToBounds = true
         
         titleTextView = UITextView()
-        titleTextView.text = "I am a draft, i hope you think i'm cool"
+        titleTextView.text = draft.text
         titleTextView.font = ._18SemiboldFont
         titleTextView.textAlignment = .left
         titleTextView.isScrollEnabled = false

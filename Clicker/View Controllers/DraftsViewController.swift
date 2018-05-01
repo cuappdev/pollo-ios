@@ -13,7 +13,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
 
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
-    
+    var drafts: [Draft]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +44,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         draftsCollectionView.delegate = self
         draftsCollectionView.dataSource = self
         draftsCollectionView.isScrollEnabled = true
+        draftsCollectionView.allowsSelection = true
         draftsCollectionView.showsVerticalScrollIndicator = false
         draftsCollectionView.showsHorizontalScrollIndicator = false
         draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: "draftCellID")
@@ -62,11 +63,13 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     // MARK - COLLECTION VIEW delegate/data source
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return drafts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: "draftCellID", for: indexPath) as! DraftCell
+        cell.draft = drafts[drafts.count - (indexPath.row + 1)]
+        cell.setupCell()
         return cell
     }
     
@@ -75,10 +78,17 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         let height: CGFloat = 100.0
         return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected item at ", indexPath.row)
+        navigationController?.popViewController(animated: true)
+        let pollBuilderVC = navigationController?.visibleViewController as! PollBuilderViewController
+        pollBuilderVC.loadDraft(drafts[drafts.count - (indexPath.row + 1)])
+    }
 
     
     func setupNavBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.isHidden = false
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()

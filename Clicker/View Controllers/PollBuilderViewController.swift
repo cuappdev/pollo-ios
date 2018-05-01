@@ -37,7 +37,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
     var draftsButton: UIButton!
-    var numDrafts: Int = 0 // TODO: use actual # of drafts
+    var drafts: [Draft]!
     var questionType: String!
     
     var startPollDelegate: StartPollDelegate!
@@ -87,7 +87,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(questionTypeButton)
         
         draftsButton = UIButton()
-        draftsButton.setTitle("Drafts (\(numDrafts))", for: .normal)
+        draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
         draftsButton.setTitleColor(.clickerBlack, for: .normal)
         draftsButton.titleLabel?.font = ._16MediumFont
         draftsButton.contentHorizontalAlignment = .right
@@ -297,6 +297,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         print("show poll drafts")
         
         let draftsVC = DraftsViewController()
+        draftsVC.drafts = drafts
         navigationController?.pushViewController(draftsVC, animated: true)
     }
     
@@ -325,7 +326,19 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             draftsButton.titleLabel?.font = ._16MediumFont
             print("draft disabled")
         }
-        
+    }
+    
+    func loadDraft(_ draft: Draft) {
+        print("load draft: ", draft)
+        mcPollBuilder.questionTextField.text = draft.text
+        var optionsDict: [Int: String] = [:]
+        if draft.options.count > 0 {
+            for i in 0...draft.options.count-1 {
+                optionsDict[i] = draft.options[i]
+            }
+        }
+        mcPollBuilder.optionsDict = optionsDict
+        updateDrafts(true)
     }
     
     // MARK: - KEYBOARD
