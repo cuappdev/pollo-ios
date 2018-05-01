@@ -34,6 +34,8 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
+        cell.session = sessions[indexPath.row]
+        cell.updateLabels()
         return cell
     }
     
