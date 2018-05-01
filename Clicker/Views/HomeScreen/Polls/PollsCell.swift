@@ -34,6 +34,8 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
+        cell.session = sessions[sessions.count - indexPath.row - 1]
+        cell.updateLabels()
         return cell
     }
     
@@ -106,7 +108,6 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             print("\(error.localizedDescription)")
         }
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

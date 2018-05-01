@@ -48,6 +48,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         codeTextField.borderStyle = .none
         codeTextField.font = ._16MediumFont
         codeTextField.backgroundColor = .white
+        codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._16MediumFont])
@@ -84,19 +85,13 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                             .done { datePollsArr in
                                 let socket = Socket(id: "\(session.id)", userType: "user")
                                 let blackAnswerVC = BlackAnswerController()
-                                blackAnswerVC.tabController = self.tabBarController
                                 blackAnswerVC.socket = socket
                                 blackAnswerVC.code = code
                                 blackAnswerVC.datePollsArr = datePollsArr
                                 blackAnswerVC.sessionId = session.id
                                 self.dismiss(animated: true, completion: {
-                                    if let tabController = self.dismissController as? UITabBarController {
-                                        if let navVC = tabController.selectedViewController as? UINavigationController {
-                                            navVC.pushViewController(blackAnswerVC, animated: true)
-                                            navVC.setNavigationBarHidden(false, animated: true)
-                                            tabController.tabBar.isHidden = true
-                                        }
-                                    }
+                                    self.dismissController.navigationController?.pushViewController(blackAnswerVC, animated: true)
+                                    self.dismissController.navigationController?.setNavigationBarHidden(false, animated: true)
                                 })
                             }.catch { error in
                                 print(error)
@@ -105,6 +100,12 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                         print(error)
                 }
             }
+        }
+    }
+    
+    @objc func didStartTyping(_ textField: UITextField) {
+        if let text = textField.text {
+            textField.text = text.uppercased()
         }
     }
     
