@@ -26,7 +26,7 @@ struct GetDrafts: ClickerQuark {
     }
 
     let method: HTTPMethod = .get
-
+    
     func process(element: Element) throws -> [Draft] {
         switch element {
         case .nodes(let nodes):
@@ -36,6 +36,18 @@ struct GetDrafts: ClickerQuark {
                     throw NeutronError.badResponseData
                 }
                 drafts.append(Draft(id: id, text: text, options: options.map({ $0.stringValue })))
+            }
+            return drafts
+        case .edges(let edges):
+            print("edges!: ", edges)
+            var drafts: [Draft] = []
+            for edge in edges {
+                let node = edge.node
+                if let id = node["id"].int, let text = node["text"].string, let options = node["options"].array {
+                    drafts.append(Draft(id: id, text: text, options: options.map({ $0.stringValue })))
+                } else {
+                    throw NeutronError.badResponseData
+                }
             }
             return drafts
         default: throw NeutronError.badResponseData
