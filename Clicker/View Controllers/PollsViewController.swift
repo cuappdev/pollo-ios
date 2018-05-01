@@ -215,6 +215,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
             self.navigationController?.setNavigationBarHidden(true, animated: true)
             self.tabBarController?.tabBar.isHidden = false
         }
+        
     }
     
     // TODO: Move this function to where it will be used

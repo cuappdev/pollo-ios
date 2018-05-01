@@ -200,7 +200,7 @@ struct GetGroupSessions: ClickerQuark {
 struct UpdateSession: ClickerQuark {
 
     typealias ResponseType = Session
-    let id: String
+    let id: Int
     let name: String
     let code: String
 
