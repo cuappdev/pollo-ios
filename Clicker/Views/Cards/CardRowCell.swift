@@ -93,6 +93,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerSharedIdentifier, for: indexPath) as! AnswerSharedCard
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
+                cell.resultsTableView.reloadData()
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerIdentifier, for: indexPath) as! AnswerCard
@@ -100,6 +101,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 socket.addDelegate(cell)
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
+                cell.resultsTableView.reloadData()
                 return cell
             }
         }

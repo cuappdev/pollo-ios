@@ -120,6 +120,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     func pollStarted(_ poll: Poll) { }
     
     func pollEnded(_ poll: Poll) {
+        print(choice)
         self.resultsTableView.reloadData()
     }
     

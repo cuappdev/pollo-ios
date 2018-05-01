@@ -224,11 +224,15 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
-        cell.polls = datePollsArr[indexPath.item].1
+        let polls = datePollsArr[indexPath.item].1
+        cell.polls = polls
         cell.socket = socket
         cell.pollRole = .ask
         cell.endPollDelegate = self
         cell.collectionView.reloadData()
+        // SCROLL TO LATEST QUESTION
+        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
+        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
         return cell
     }
     
