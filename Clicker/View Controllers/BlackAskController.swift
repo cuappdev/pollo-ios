@@ -88,14 +88,14 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func createPollBtnPressed() {
         let pollBuilderVC = PollBuilderViewController()
         pollBuilderVC.startPollDelegate = self
-        /*let presenter = Presentr(presentationType: .fullScreen)
+        let nc = UINavigationController(rootViewController: pollBuilderVC)
+        let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6
         presenter.roundCorners = true
         presenter.cornerRadius = 15
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
-        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)*/
-        navigationController?.pushViewController(pollBuilderVC, animated: true)
+        customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
     func setupEmptyStudentPoll() {

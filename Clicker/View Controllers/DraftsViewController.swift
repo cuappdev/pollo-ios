@@ -8,16 +8,17 @@
 
 import UIKit
 
-class DraftsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
 
     var titleLabel: UILabel!
-    var draftsTableView: UITableView!
+    var draftsCollectionView: UICollectionView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("vc pushed")
-        view.backgroundColor = .clickerDraftsBlack
+        view.backgroundColor = .clicker85Black
         
         setupNavBar()
         setupViews()
@@ -28,9 +29,63 @@ class DraftsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.didReceiveMemoryWarning()
         
     }
+    
+    @objc func goBack() {
+        self.navigationController?.popViewController(animated: true)
+        //self.removeFromParentViewController()
+    }
+    
+    func setupViews() {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 6
+        layout.scrollDirection = .vertical
+        draftsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        draftsCollectionView.backgroundColor = .clear
+        draftsCollectionView.delegate = self
+        draftsCollectionView.dataSource = self
+        draftsCollectionView.isScrollEnabled = true
+        draftsCollectionView.showsVerticalScrollIndicator = false
+        draftsCollectionView.showsHorizontalScrollIndicator = false
+        draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: "draftCellID")
+        view.addSubview(draftsCollectionView)
+        
+    }
+    
+    func setupConstraints() {
+        draftsCollectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(100)
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview().inset(36)
+            make.centerX.equalToSuperview()
+        }
+    }
+    
+    // MARK - COLLECTION VIEW delegate/data source
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: "draftCellID", for: indexPath) as! DraftCell
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat = draftsCollectionView.frame.width
+        let height: CGFloat = 100.0
+        return CGSize(width: width, height: height)
+    }
 
+    
     func setupNavBar() {
-       
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // REMOVE BOTTOM SHADOW
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        let backImage = UIImage(named: "SmallExitIcon")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+        
         titleLabel = UILabel()
         titleLabel.text = "Drafts"
         titleLabel.textColor = .white
@@ -38,43 +93,6 @@ class DraftsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         titleLabel.textAlignment = .center
         self.navigationItem.titleView = titleLabel
         
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        navigationController?.isToolbarHidden = false
     }
     
-    @objc func goBack() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    func setupViews() {
-        draftsTableView = UITableView()
-        draftsTableView.backgroundColor = .clear
-        draftsTableView.delegate = self
-        draftsTableView.dataSource = self
-        draftsTableView.separatorStyle = .none
-        draftsTableView.register(DraftCell.self, forCellReuseIdentifier: "draftCellID")
-        view.addSubview(draftsTableView)
-        
-    }
-    
-    func setupConstraints() {
-        draftsTableView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview()
-            make.width.equalToSuperview()
-        }
-    }
-    
-    // MARK - TABLE VIEW DELEGATE
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "draftCellID", for: indexPath) as! DraftCell
-        return cell
-    }
-
 }
