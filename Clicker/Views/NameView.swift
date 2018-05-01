@@ -11,7 +11,13 @@ import UIKit
 class NameView: UIView, UITextFieldDelegate {
 
     var titleField: UITextField!
-    var blurView: UIVisualEffectView!    
+    var blurView: UIVisualEffectView!
+    
+    var sessionId: Int!
+    var code: String!
+    var name: String!
+    
+    var delegate: BlackAskController!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,28 +27,33 @@ class NameView: UIView, UITextFieldDelegate {
         setupConstraints()
         
     }
-    
+    
     func setupViews() {
-        backgroundColor = .clear
+        backgroundColor = .clicker77Black
         
-        let blur = UIBlurEffect(style: .regular)
+        /*let blur = UIBlurEffect(style: )
         blurView = UIVisualEffectView(effect: blur)
-        addSubview(blurView)
+        addSubview(blurView)*/
         
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._24MediumFont])
+        if code != name {
+            titleField.text = name
+        }
         titleField.font = ._24MediumFont
+        titleField.textColor = .clickerMediumGray
         titleField.textAlignment = .center
         titleField.delegate = self
         titleField.becomeFirstResponder()
+        titleField.keyboardType = .asciiCapable
         addSubview(titleField)
         
     }
     
     func setupConstraints() {
-        blurView.snp.makeConstraints { make in
+        /*blurView.snp.makeConstraints { make in
             make.size.equalToSuperview()
-        }
+        }*/
         
         titleField.snp.makeConstraints { make in
             make.height.equalTo(27)
@@ -52,10 +63,20 @@ class NameView: UIView, UITextFieldDelegate {
         }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        removeFromSuperview()
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        name = textField.text
+        name = (name == "") ? code : name
+        UpdateSession(id: sessionId, name: name, code: code).make()
+            .done { code in
+                self.delegate.name = self.name
+                self.delegate.updateNavBar()
+                self.removeFromSuperview()
+            }.catch { error in
+                print("error: ", error)
+            }
+        
+        return true
     }
-
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -28,6 +28,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var mainCollectionView: UICollectionView!
     
+    // nav bar
+    var navigationTitleView: NavigationTitleView!
+    
     var socket: Socket!
     var sessionId: Int!
     var code: String!
@@ -46,19 +49,27 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
-        setupName()
+        if name != code {
+            setupName()
+        }
     }
    
     // MARK - NAME THE POLL
     
     func setupName() {
-        setupNameViews()
+        nameView = NameView()
+        nameView.sessionId = sessionId
+        nameView.code = code
+        nameView.name = name
+        nameView.delegate = self
+
+        view.addSubview(nameView)
+
         setupNameConstraints()
     }
     
-    func setupNameViews() {
-        nameView = NameView()
-        view.addSubview(nameView)
+    func updateNavBar() {
+        navigationTitleView.updateViews(name: name, code: code)
     }
     
     func setupNameConstraints() {
@@ -73,11 +84,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
     }
-    
-    @objc func didFinishEditingTitle() {
-        
-    }
-    
 
     @objc func createPollBtnPressed() {
         let presenter = Presentr(presentationType: .fullScreen)
@@ -298,14 +304,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let codeLabel = UILabel()
-        if let c = code {
-            codeLabel.text = "Code: \(c)"
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
         }
-        codeLabel.textColor = .white
-        codeLabel.font = UIFont._16SemiboldFont
-        codeLabel.textAlignment = .center
-        self.navigationItem.titleView = codeLabel
+        self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
