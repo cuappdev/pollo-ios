@@ -15,13 +15,17 @@ enum PollType {
     case joined
 }
 
+protocol EditSessionDelegate {
+    func editSession(forSession session: Session)
+}
+
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, EditPollDelegate, GIDSignInDelegate {
     
     var pollsTableView: UITableView!
+    var editSessionDelegate: EditSessionDelegate!
     let pollPreviewIdentifier = "pollPreviewCellID"
     var sessions: [Session] = []
     var pollType: PollType!
-    let modalHeight: Float = 230
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,18 +74,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     // MARK: EDIT POLL DELEGATE
     func editPoll(forIndex index: Int) {
         let session = sessions[index]
-        
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: modalHeight)
-        let originY = frame.height - CGFloat(modalHeight)
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        let presenter = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        let editPollVC = EditPollViewController()
-//        customPresentViewController(presenter, viewController: editPollVC, animated: true, completion: nil)
+        editSessionDelegate.editSession(forSession: session)
     }
     
     // GET POLL SESSIONS
