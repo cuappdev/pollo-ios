@@ -15,10 +15,10 @@ protocol StartPollDelegate {
 }
 
 protocol PollBuilderDelegate {
-    func updateDrafts(_ canDraft: Bool)
+    func updateCanDraft(_ canDraft: Bool)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate {
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate {
     
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
@@ -52,6 +52,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
     
+    var presented: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,9 +66,13 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setupDropDown()
-        setupViews()
-        setupConstraints()
+        if !presented {
+            setupViews()
+            setupConstraints()
+            setupDropDown()
+        }
+        presented = true
+        getDrafts()
     }
     
     func setupViews() {
@@ -78,7 +84,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(exitButton)
         
         questionTypeButton = UIButton()
-        updateQuestionTypeButton()
+        questionTypeButton.setTitle("Multiple Choice", for: .normal)
         questionTypeButton.setTitleColor(.clickerBlack, for: .normal)
         questionTypeButton.titleLabel?.font = ._16SemiboldFont
         questionTypeButton.contentHorizontalAlignment = .center
@@ -87,7 +93,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(questionTypeButton)
         
         draftsButton = UIButton()
-        draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
+        draftsButton.setTitle("Drafts (\((drafts ?? []).count))", for: .normal)
         draftsButton.setTitleColor(.clickerBlack, for: .normal)
         draftsButton.titleLabel?.font = ._16MediumFont
         draftsButton.contentHorizontalAlignment = .right
@@ -117,7 +123,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         saveDraftButton = UIButton()
         saveDraftButton.setTitle("Save as draft", for: .normal)
         canDraft = false
-        updateDrafts(canDraft)
+        updateCanDraft(canDraft)
         saveDraftButton.titleLabel?.font = ._16SemiboldFont
         saveDraftButton.layer.cornerRadius = buttonHeight / 2
         saveDraftButton.layer.borderWidth = 1.5
@@ -203,6 +209,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     // MARK - ACTIONS
     
+    
     @objc func saveAsDraft() {
         if canDraft {
             print("save as draft")
@@ -211,28 +218,26 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 let question = mcPollBuilder.questionTextField.text
                 let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
                 
+                //print("creating a draft with:\n\t text: ",question,"\n\toptions: ", options)
                 CreateDraft(text: question!, options: options).make()
                     .done { _ in
-                        
-                        }.catch { error in
+
+                    }.catch { error in
                             print("error: ", error)
                     }
+                self.mcPollBuilder.clearOptionsDict()
+                self.mcPollBuilder.questionTextField.text = ""
+                self.mcPollBuilder.optionsTableView.reloadData()
             
             } else { // FREE RESPONSE
                 //let question = frPollBuilder.questionTextField.text
 
             }
-            self.dismiss(animated: true, completion: nil)
+            self.updateCanDraft(false)
+            self.getDrafts()
             }  else {
             print("empty, drafts disabled")
         }
-        GetDrafts().make()
-            .done { drafts in
-                let draft = drafts[0]
-                print(draft)
-            } .catch { error in
-                print("error: ",error)
-            }
         
     }
     
@@ -259,9 +264,14 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     func setupDropDown() {
         dropDown = DropDown()
-        dropDown.anchorView = exitButton
+        dropDown.anchorView = questionTypeButton
         dropDown.width = view.frame.width
         dropDown.dataSource = ["Multiple Choice", "Free Response"]
+        dropDown.cellNib = UINib(nibName: "QuestionTypeDDCell", bundle: nil)
+        dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
+            guard let cell = cell as? QuestionTypeDDCell else { return }
+            cell.setup(index: index, type: "Free Response")
+        }
         dropDown.direction = .bottom
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             print("Selected dropdown item: \(item) at index: \(index)")
@@ -298,6 +308,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
+        draftsVC.delegate = self
         navigationController?.pushViewController(draftsVC, animated: true)
     }
     
@@ -312,7 +323,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     // MARK: POLLBUILDER DELEGATE
-    func updateDrafts(_ canDraft: Bool) {
+    func updateCanDraft(_ canDraft: Bool) {
         self.canDraft = canDraft
         if canDraft {
             saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
@@ -328,17 +339,33 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         }
     }
     
-    func loadDraft(_ draft: Draft) {
+    func fillDraft(_ draft: Draft) {
         print("load draft: ", draft)
-        mcPollBuilder.questionTextField.text = draft.text
-        var optionsDict: [Int: String] = [:]
-        if draft.options.count > 0 {
-            for i in 0...draft.options.count-1 {
-                optionsDict[i] = draft.options[i]
+        if questionType == "MULTIPLE_CHOICE" {
+            mcPollBuilder.questionTextField.text = draft.text
+            var optionsDict: [Int: String] = [:]
+            if draft.options.count > 0 {
+                for i in 0...draft.options.count-1 {
+                    optionsDict[i] = draft.options[i]
+                }
             }
+            mcPollBuilder.optionsDict = optionsDict
+            mcPollBuilder.optionsTableView.reloadData()
+        } else { // FREE_RESPONSE
+            frPollBuilder.questionTextField.text = draft.text
         }
-        mcPollBuilder.optionsDict = optionsDict
-        updateDrafts(true)
+            updateCanDraft(true)
+    }
+    
+    func getDrafts() {
+        GetDrafts().make()
+            .done { drafts in
+                self.drafts = drafts
+                print("got drafts!: ", drafts)
+                self.draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
+            } .catch { error in
+                print("error: ", error)
+        }
     }
     
     // MARK: - KEYBOARD
