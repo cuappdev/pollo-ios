@@ -8,12 +8,18 @@
 
 import UIKit
 
+protocol FillsDraftDelegate {
+    func fillDraft(_ draft: Draft)
+}
+
 class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
 
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
     var drafts: [Draft]!
+    
+    var delegate: FillsDraftDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,9 +87,8 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("selected item at ", indexPath.row)
+        delegate.fillDraft(drafts[drafts.count - (indexPath.row + 1)])
         navigationController?.popViewController(animated: true)
-        let pollBuilderVC = navigationController?.visibleViewController as! PollBuilderViewController
-        pollBuilderVC.loadDraft(drafts[drafts.count - (indexPath.row + 1)])
     }
 
     

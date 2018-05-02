@@ -164,12 +164,12 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     @objc func updateEditable() {
         if editable {
             if questionTextField.text == "" {
-                pollBuilderDelegate.updateDrafts(false)
+                pollBuilderDelegate.updateCanDraft(false)
                 editable = false
             }
         } else {
             if questionTextField.text != "" {
-                pollBuilderDelegate.updateDrafts(true)
+                pollBuilderDelegate.updateCanDraft(true)
                 editable = true
             }
         }

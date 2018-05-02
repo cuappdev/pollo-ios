@@ -29,17 +29,7 @@ struct GetDrafts: ClickerQuark {
     
     func process(element: Element) throws -> [Draft] {
         switch element {
-        case .nodes(let nodes):
-            var drafts: [Draft] = []
-            for node in nodes {
-                guard let id = node["id"].int, let text = node["text"].string, let options = node["options"].array else {
-                    throw NeutronError.badResponseData
-                }
-                drafts.append(Draft(id: id, text: text, options: options.map({ $0.stringValue })))
-            }
-            return drafts
         case .edges(let edges):
-            print("edges!: ", edges)
             var drafts: [Draft] = []
             for edge in edges {
                 let node = edge.node
