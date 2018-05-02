@@ -21,7 +21,7 @@ class EditPollViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .clickerWhite
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -32,6 +32,7 @@ class EditPollViewController: UIViewController {
         
         editNameButton = UIButton()
         editNameButton.setTitle("Edit Name", for: .normal)
+        editNameButton.setTitleColor(.black, for: .normal)
         editNameButton.titleLabel?.font = UIFont._16RegularFont
         
         let editView = UIView()
@@ -49,17 +50,18 @@ class EditPollViewController: UIViewController {
         deleteView.addSubview(deleteImageView)
         deleteView.addSubview(deleteButton)
         
-        buttonStackView = UIStackView(arrangedSubviews: [editView])
+        buttonStackView = UIStackView(arrangedSubviews: [editView, deleteView])
         buttonStackView.axis = .vertical
         buttonStackView.distribution = .fillEqually
+        buttonStackView.spacing = 20
         view.addSubview(buttonStackView)
     }
     
     func setupConstraints() {
         buttonStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.center.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.height.equalTo(80)
         }
         
         editNameImageView.snp.makeConstraints { make in
@@ -88,8 +90,16 @@ class EditPollViewController: UIViewController {
     }
     
     func setupNavBar() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: session.name, style: .plain, target: self, action: nil)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "exit"), style: .plain, target: self, action: #selector(exitBtnPressed))
+        let sessionNameButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        sessionNameButton.setTitle(session.name, for: .normal)
+        sessionNameButton.setTitleColor(.black, for: .normal)
+        sessionNameButton.titleLabel?.font = UIFont._18SemiboldFont
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sessionNameButton)
+        
+        let exitButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
+        exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
     }
     
 }
