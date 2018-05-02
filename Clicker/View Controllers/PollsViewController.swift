@@ -9,9 +9,10 @@ import UIKit
 import GoogleSignIn
 import Presentr
 
-class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate {
+class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate, EditSessionDelegate {
     
     let popupViewHeight: CGFloat = 140
+    let editModalHeight: Float = 205
     
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
@@ -36,6 +37,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: pollsIdentifier, for: indexPath) as! PollsCell
+        cell.editSessionDelegate = self
         if (indexPath.item == 0) {
             cell.pollType = .created
         } else {
@@ -190,6 +192,24 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
+    // MARK: EDIT SESSION DELEGATE
+    func editSession(forSession session: Session) {
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: editModalHeight)
+        let originY = view.frame.height - CGFloat(editModalHeight)
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        let presenter = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let editPollVC = EditPollViewController()
+        editPollVC.session = session
+        let navigationVC = UINavigationController(rootViewController: editPollVC)
+        customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
+    }
+    
+    // JOIN SESSION
     @objc func showJoinSessionPopup() {
         let width = ModalSize.full
         let height = ModalSize.custom(size: Float(popupViewHeight))
