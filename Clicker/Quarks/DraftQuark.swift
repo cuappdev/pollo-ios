@@ -70,11 +70,13 @@ struct CreateDraft: ClickerQuark {
     let method: HTTPMethod = .post
 
     func process(element: Element) throws -> Draft {
+        print("options: ", options)
         switch element {
         case .node(let node):
             guard let id = node["id"].int, let text = node["text"].string, let options = node["options"].array else {
                 throw NeutronError.badResponseData
             }
+            print("options: ", options)
             return Draft(id: id, text: text, options: options.map({ $0.stringValue }))
         default: throw NeutronError.badResponseData
         }
