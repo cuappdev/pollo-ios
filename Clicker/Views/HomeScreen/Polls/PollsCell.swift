@@ -73,7 +73,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     // MARK: EDIT POLL DELEGATE
     func editPoll(forIndex index: Int) {
-        let session = sessions[index]
+        let session = sessions[sessions.count - index - 1]
         editSessionDelegate.editSession(forSession: session)
     }
     

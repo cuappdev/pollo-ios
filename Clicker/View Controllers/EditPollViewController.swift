@@ -14,8 +14,10 @@ class EditPollViewController: UIViewController {
     var session: Session!
     
     var buttonStackView: UIStackView!
+    var editView: UIView!
     var editNameImageView: UIImageView!
     var editNameButton: UIButton!
+    var deleteView: UIView!
     var deleteImageView: UIImageView!
     var deleteButton: UIButton!
     
@@ -37,7 +39,7 @@ class EditPollViewController: UIViewController {
         editNameButton.titleLabel?.font = UIFont._16RegularFont
         editNameButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
-        let editView = UIView()
+        editView = UIView()
         editView.addSubview(editNameImageView)
         editView.addSubview(editNameButton)
         
@@ -50,13 +52,13 @@ class EditPollViewController: UIViewController {
         deleteButton.titleLabel?.font = UIFont._16RegularFont
         deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
-        let deleteView = UIView()
+        deleteView = UIView()
         deleteView.addSubview(deleteImageView)
         deleteView.addSubview(deleteButton)
         
         buttonStackView = UIStackView(arrangedSubviews: [editView, deleteView])
         buttonStackView.axis = .vertical
-        buttonStackView.distribution = .fillEqually
+        buttonStackView.distribution =  .fillEqually
         buttonStackView.spacing = 20
         view.addSubview(buttonStackView)
     }
@@ -65,7 +67,11 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(100)
+            make.height.equalTo(75)
+        }
+        
+        editView.snp.makeConstraints { make in
+            make.height.equalTo(24)
         }
         
         editNameImageView.snp.makeConstraints { make in
@@ -77,6 +83,10 @@ class EditPollViewController: UIViewController {
             make.left.equalTo(editNameImageView.snp.right).offset(18)
             make.centerY.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.7)
+        }
+        
+        deleteView.snp.makeConstraints { make in
+            make.height.equalTo(editView.snp.height)
         }
         
         deleteImageView.snp.makeConstraints { make in
