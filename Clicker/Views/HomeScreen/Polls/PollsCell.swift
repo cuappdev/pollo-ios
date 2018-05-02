@@ -8,15 +8,21 @@
 
 import UIKit
 import GoogleSignIn
+import Presentr
 
 enum PollType {
     case created
     case joined
 }
 
-class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, GIDSignInDelegate {
+protocol EditSessionDelegate {
+    func editSession(forSession session: Session)
+}
+
+class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, EditPollDelegate, GIDSignInDelegate {
     
     var pollsTableView: UITableView!
+    var editSessionDelegate: EditSessionDelegate!
     let pollPreviewIdentifier = "pollPreviewCellID"
     var sessions: [Session] = []
     var pollType: PollType!
@@ -35,6 +41,8 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
         cell.session = sessions[sessions.count - indexPath.row - 1]
+        cell.index = indexPath.row
+        cell.editPollDelegate = self
         cell.updateLabels()
         return cell
     }
@@ -61,6 +69,12 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         pollsTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+    
+    // MARK: EDIT POLL DELEGATE
+    func editPoll(forIndex index: Int) {
+        let session = sessions[sessions.count - index - 1]
+        editSessionDelegate.editSession(forSession: session)
     }
     
     // GET POLL SESSIONS

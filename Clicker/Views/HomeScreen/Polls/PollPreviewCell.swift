@@ -8,13 +8,20 @@
 
 import UIKit
 
+protocol EditPollDelegate {
+    func editPoll(forIndex index: Int)
+}
+
 class PollPreviewCell: UITableViewCell {
     
     var session: Session!
+    var index: Int!
+    var editPollDelegate: EditPollDelegate!
     
     var nameLabel: UILabel!
     var timeLabel: UILabel!
     var line: UIView!
+    var dotsButton: UIButton!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,6 +45,12 @@ class PollPreviewCell: UITableViewCell {
         line = UIView()
         line.backgroundColor = .clickerBorder
         addSubview(line)
+        
+        dotsButton = UIButton()
+        dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
+        dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
+        dotsButton.clipsToBounds = true
+        addSubview(dotsButton)
     }
     
     func setupConstraints() {
@@ -61,6 +74,15 @@ class PollPreviewCell: UITableViewCell {
             make.bottom.equalToSuperview()
             make.right.equalToSuperview()
         }
+        
+        dotsButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-12)
+            make.centerY.equalToSuperview()
+        }
+    }
+    
+    @objc func dotsBtnPressed() {
+        editPollDelegate.editPoll(forIndex: index)
     }
     
     func updateLabels() {
