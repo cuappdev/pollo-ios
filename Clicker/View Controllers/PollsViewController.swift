@@ -12,7 +12,7 @@ import Presentr
 class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate, EditSessionDelegate {
     
     let popupViewHeight: CGFloat = 140
-    let editModalHeight: Float = 175
+    let editModalHeight: Float = 205
     
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
