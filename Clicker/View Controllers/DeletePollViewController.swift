@@ -19,6 +19,7 @@ class DeletePollViewController: UIViewController {
         view.backgroundColor = .clickerWhite
         self.title = "Are you sure?"
         
+        setupNavBar()
         setupViews()
         setupConstraints()
     }
@@ -26,6 +27,8 @@ class DeletePollViewController: UIViewController {
     func setupViews() {
         deleteLabel = UILabel()
         deleteLabel.text = "Deleting will permanently close the group for all participants and all poll data will be lost."
+        deleteLabel.textColor = .clickerMediumGray
+        deleteLabel.textAlignment = .center
         deleteLabel.font = UIFont._16RegularFont
         deleteLabel.numberOfLines = 0
         deleteLabel.lineBreakMode = .byWordWrapping
@@ -36,6 +39,7 @@ class DeletePollViewController: UIViewController {
         cancelButton.setTitleColor(.white, for: .normal)
         cancelButton.backgroundColor = .clickerMediumGray
         cancelButton.layer.cornerRadius = 25
+        cancelButton.addTarget(self, action: #selector(backCancelBtnPressed), for: .touchUpInside)
         view.addSubview(cancelButton)
         
         deleteButton = UIButton()
@@ -50,22 +54,41 @@ class DeletePollViewController: UIViewController {
         deleteLabel.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.92)
             make.height.equalTo(40)
-            make.top.equalToSuperview().offset(26)
+            make.top.equalTo(topLayoutGuide.snp.bottom).offset(26)
+            make.centerX.equalToSuperview()
         }
         
         cancelButton.snp.makeConstraints { make in
-            make.top.equalTo(deleteLabel.snp.bottom).offset(26)
             make.left.equalToSuperview().offset(16)
             make.width.equalTo(160)
             make.height.equalTo(48)
+            make.bottom.equalToSuperview().offset(-18)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.top.equalTo(cancelButton.snp.top)
             make.right.equalToSuperview().offset(-16)
             make.width.equalTo(cancelButton.snp.width)
             make.height.equalTo(cancelButton.snp.height)
+            make.bottom.equalTo(cancelButton.snp.bottom)
         }
+    }
+    
+    @objc func backCancelBtnPressed() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func exitBtnPressed() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func setupNavBar() {
+        let backImage = UIImage(named: "blackBack")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(backCancelBtnPressed))
+        
+        let exitButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
+        exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
     }
     
 }

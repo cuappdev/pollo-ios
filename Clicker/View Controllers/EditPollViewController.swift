@@ -33,6 +33,7 @@ class EditPollViewController: UIViewController {
         editNameButton = UIButton()
         editNameButton.setTitle("Edit Name", for: .normal)
         editNameButton.setTitleColor(.black, for: .normal)
+        editNameButton.contentHorizontalAlignment = .left
         editNameButton.titleLabel?.font = UIFont._16RegularFont
         editNameButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
@@ -45,6 +46,7 @@ class EditPollViewController: UIViewController {
         deleteButton = UIButton()
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(.clickerRed, for: .normal)
+        deleteButton.contentHorizontalAlignment = .left
         deleteButton.titleLabel?.font = UIFont._16RegularFont
         deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
@@ -63,7 +65,7 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(60)
+            make.height.equalTo(100)
         }
         
         editNameImageView.snp.makeConstraints { make in
@@ -74,6 +76,7 @@ class EditPollViewController: UIViewController {
         editNameButton.snp.makeConstraints { make in
             make.left.equalTo(editNameImageView.snp.right).offset(18)
             make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.7)
         }
         
         deleteImageView.snp.makeConstraints { make in
@@ -84,6 +87,7 @@ class EditPollViewController: UIViewController {
         deleteButton.snp.makeConstraints { make in
             make.left.equalTo(editNameImageView.snp.right).offset(18)
             make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.7)
         }
     }
     
@@ -92,7 +96,9 @@ class EditPollViewController: UIViewController {
     }
     
     @objc func editNameBtnPressed() {
-        
+        let editNameVC = EditNameViewController()
+        editNameVC.sessionName = session.name
+        self.navigationController?.pushViewController(editNameVC, animated: true)
     }
     
     @objc func exitBtnPressed() {
