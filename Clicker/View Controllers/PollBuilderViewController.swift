@@ -218,10 +218,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 let question = mcPollBuilder.questionTextField.text
                 let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
                 
-                //print("creating a draft with:\n\t text: ",question,"\n\toptions: ", options)
+                print("creating a draft with:\n\t text: ",question,"\n\toptions: ", options)
                 CreateDraft(text: question!, options: options).make()
-                    .done { _ in
-
+                    .done { draft in
+                        print("made draft with options: ", draft.options)
                     }.catch { error in
                             print("error: ", error)
                     }
@@ -267,11 +267,18 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         dropDown.anchorView = questionTypeButton
         dropDown.width = view.frame.width
         dropDown.dataSource = ["Multiple Choice", "Free Response"]
-        dropDown.cellNib = UINib(nibName: "QuestionTypeDDCell", bundle: nil)
+        DropDown.appearance().textColor = .clickerDeepBlack
+        DropDown.appearance().textFont = ._16MediumFont
+        DropDown.appearance().backgroundColor = .clickerWhite
+        //DropDown.appearance().dimmedBackgroundColor = .clicker60Black
+        DropDown.appearance().cellHeight = 47.5
+        
+        
+        /*dropDown.cellNib = UINib(nibName: "QuestionTypeDDCell", bundle: nil)
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
             guard let cell = cell as? QuestionTypeDDCell else { return }
             cell.setup(index: index, type: "Free Response")
-        }
+        }*/
         dropDown.direction = .bottom
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             print("Selected dropdown item: \(item) at index: \(index)")
