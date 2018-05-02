@@ -181,7 +181,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                         blackAskVC.sessionId = session.id
                         self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        self.tabBarController?.tabBar.isHidden = true
                     }.catch { error in
                         print("error: ", error)
                 }
