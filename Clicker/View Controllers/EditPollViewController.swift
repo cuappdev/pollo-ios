@@ -34,6 +34,7 @@ class EditPollViewController: UIViewController {
         editNameButton.setTitle("Edit Name", for: .normal)
         editNameButton.setTitleColor(.black, for: .normal)
         editNameButton.titleLabel?.font = UIFont._16RegularFont
+        editNameButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
         let editView = UIView()
         editView.addSubview(editNameImageView)
@@ -45,6 +46,7 @@ class EditPollViewController: UIViewController {
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(.clickerRed, for: .normal)
         deleteButton.titleLabel?.font = UIFont._16RegularFont
+        deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
         let deleteView = UIView()
         deleteView.addSubview(deleteImageView)
@@ -61,7 +63,7 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(80)
+            make.height.equalTo(60)
         }
         
         editNameImageView.snp.makeConstraints { make in
@@ -83,6 +85,14 @@ class EditPollViewController: UIViewController {
             make.left.equalTo(editNameImageView.snp.right).offset(18)
             make.centerY.equalToSuperview()
         }
+    }
+    
+    @objc func deleteBtnPressed() {
+        self.navigationController?.pushViewController(DeletePollViewController(), animated: true)
+    }
+    
+    @objc func editNameBtnPressed() {
+        
     }
     
     @objc func exitBtnPressed() {
