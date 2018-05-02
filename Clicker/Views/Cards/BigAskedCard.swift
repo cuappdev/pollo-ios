@@ -1,14 +1,14 @@
 //
-//  AskedCard.swift
+//  BigAskedCard.swift
 //  Clicker
 //
-//  Created by eoin on 4/16/18.
+//  Created by eoin on 5/2/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
+class BigAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
@@ -26,6 +26,9 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalResultsLabel: UILabel!
     var eyeView: UIImageView!
     
+    var moreOptionsLabel: UILabel!
+    var seeMoreButton: UIButton!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -33,7 +36,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func setupCell() {
         isMCQuestion = true
-
+        
         socket?.addDelegate(self)
         
         backgroundColor = .clickerNavBarLightGrey
@@ -94,6 +97,18 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
         addSubview(eyeView)
+        
+        moreOptionsLabel = UILabel()
+        moreOptionsLabel.text = "\(10) more options..."
+        moreOptionsLabel.font = ._12SemiboldFont
+        moreOptionsLabel.textColor = .clickerDeepBlack
+        addSubview(moreOptionsLabel)
+        
+        seeMoreButton = UIButton(type: .system)
+        seeMoreButton.setTitle("See More", for: .normal)
+        seeMoreButton.titleLabel?.font = ._12SemiboldFont
+        seeMoreButton.tintColor = .clickerBlue
+        addSubview(seeMoreButton)
     }
     
     func layoutViews() {
@@ -137,6 +152,18 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.width.equalTo(14.5)
             make.top.equalTo(visibiltyLabel.snp.top)
             make.left.equalToSuperview().offset(25)
+        }
+        
+        moreOptionsLabel.snp.makeConstraints { make in
+            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
+            make.left.equalTo(resultsTableView.snp.left)
+            moreOptionsLabel.sizeToFit()
+        }
+        
+        seeMoreButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(moreOptionsLabel.snp.top)
+            seeMoreButton.sizeToFit()
         }
         
     }

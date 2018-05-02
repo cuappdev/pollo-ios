@@ -59,6 +59,11 @@ struct CreateDraft: ClickerQuark {
             "Authorization": "Bearer \(User.userSession!.accessToken)"
         ]
     }
+
+    var encoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
+
     var parameters: Parameters {
         return [
             "text": text,

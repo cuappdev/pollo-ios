@@ -18,6 +18,7 @@
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
 		639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B4D552093F975009D3309 /* PickQTypeViewController.swift */; };
+		63A1BEA1209A5E9900C8E680 /* BigAskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */; };
 		63A4A6462094D41600523AE6 /* MCPollBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A4A6452094D41600523AE6 /* MCPollBuilderView.swift */; };
 		63A4A6482094D5EF00523AE6 /* FRPollBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A4A6472094D5EF00523AE6 /* FRPollBuilderView.swift */; };
 		63A4A64B2094F26F00523AE6 /* DraftsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A4A64A2094F26F00523AE6 /* DraftsViewController.swift */; };
@@ -92,6 +93,7 @@
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
 		6389C9512085953F00F78003 /* PollsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsCell.swift; sourceTree = "<group>"; };
 		639B4D552093F975009D3309 /* PickQTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickQTypeViewController.swift; sourceTree = "<group>"; };
+		63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigAskedCard.swift; sourceTree = "<group>"; };
 		63A4A6452094D41600523AE6 /* MCPollBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPollBuilderView.swift; sourceTree = "<group>"; };
 		63A4A6472094D5EF00523AE6 /* FRPollBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRPollBuilderView.swift; sourceTree = "<group>"; };
 		63A4A64A2094F26F00523AE6 /* DraftsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				C2BB14B7209449390081C35D /* CardRowCell.swift */,
 				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
+				63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */,
 				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				C2BB14C22094DF950081C35D /* AnswerSharedCard.swift */,
@@ -656,6 +659,7 @@
 				6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */,
 				63A4A64E2094FD7800523AE6 /* DraftCell.swift in Sources */,
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,
+				63A1BEA1209A5E9900C8E680 /* BigAskedCard.swift in Sources */,
 				C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */,
 				637FD6932093E5FA007BADF1 /* NameView.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,

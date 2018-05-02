@@ -79,7 +79,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
                 cell.poll = poll
                 cell.questionLabel.text = poll.text
                 return cell
-            } else {
+            } else if {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdenfitifer, for: indexPath) as! AskedCard
                 cell.socket = socket
                 socket.addDelegate(cell)
