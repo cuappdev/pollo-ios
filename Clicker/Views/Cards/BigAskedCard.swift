@@ -108,36 +108,55 @@ class BigAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         seeMoreButton.setTitle("See More", for: .normal)
         seeMoreButton.titleLabel?.font = ._12SemiboldFont
         seeMoreButton.tintColor = .clickerBlue
+        seeMoreButton.addTarget(self, action: #selector(seeMoreAction), for: .touchUpInside)
         addSubview(seeMoreButton)
     }
     
     func layoutViews() {
         
+        contentView.snp.makeConstraints { make in
+            make.height.equalTo(439)
+            make.width.equalTo(339)
+        }
+        
         questionLabel.snp.updateConstraints{ make in
-            make.top.equalToSuperview().offset(18)
-            make.left.equalToSuperview().offset(18)
-            make.right.equalToSuperview().offset(-18)
+            questionLabel.sizeToFit()
+            make.top.equalToSuperview().offset(20)
+            make.left.equalToSuperview().offset(17)
+            make.right.equalToSuperview().offset(17)
         }
         
         resultsTableView.snp.updateConstraints{ make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(17)
+            make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-51)
+            make.height.equalTo(206)
+        }
+        
+        moreOptionsLabel.snp.makeConstraints { make in
+            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
+            make.left.equalToSuperview().offset(36)
+            moreOptionsLabel.sizeToFit()
+        }
+        
+        seeMoreButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(moreOptionsLabel.snp.top)
+            seeMoreButton.sizeToFit()
         }
         
         visibiltyLabel.snp.updateConstraints{ make in
+            make.top.equalTo(moreOptionsLabel.snp.bottom).offset(29)
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.top.equalTo(shareResultsButton.snp.top).offset(-17)
             make.height.equalTo(14.5)
         }
         
-        shareResultsButton.snp.updateConstraints{ make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-24)
-            make.height.equalTo(47)
-            make.width.equalTo(292.5)
+        eyeView.snp.makeConstraints { make in
+            make.height.equalTo(14.5)
+            make.width.equalTo(14.5)
+            make.centerY.equalTo(visibiltyLabel.snp.centerY)
+            make.left.equalToSuperview().offset(25)
         }
         
         totalResultsLabel.snp.updateConstraints{ make in
@@ -147,23 +166,12 @@ class BigAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
             make.height.equalTo(14.5)
         }
         
-        eyeView.snp.makeConstraints { make in
-            make.height.equalTo(14.5)
-            make.width.equalTo(14.5)
-            make.top.equalTo(visibiltyLabel.snp.top)
-            make.left.equalToSuperview().offset(25)
-        }
-        
-        moreOptionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
-            make.left.equalTo(resultsTableView.snp.left)
-            moreOptionsLabel.sizeToFit()
-        }
-        
-        seeMoreButton.snp.makeConstraints { make in
+        shareResultsButton.snp.updateConstraints{ make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(moreOptionsLabel.snp.top)
-            seeMoreButton.sizeToFit()
+            make.bottom.equalToSuperview().inset(24)
+            make.height.equalTo(47)
+            make.top.equalTo(visibiltyLabel.snp.bottom).offset(15)
+            make.width.equalTo(303)
         }
         
     }
@@ -202,7 +210,7 @@ class BigAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return poll.options!.count
+        return 4
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -262,6 +270,10 @@ class BigAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
             make.bottom.equalToSuperview().offset(-23.5)
         }
         
+    }
+    
+    @objc func seeMoreAction() {
+        endPollDelegate.expandView(poll: poll, socket: socket)
     }
     
     
