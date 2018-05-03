@@ -98,31 +98,37 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func layoutViews() {
         
+        contentView.snp.makeConstraints { make in
+            make.height.equalTo(398)
+            make.width.equalTo(339)
+        }
+        
         questionLabel.snp.updateConstraints{ make in
-            make.top.equalToSuperview().offset(18)
-            make.left.equalToSuperview().offset(18)
-            make.right.equalToSuperview().offset(-18)
+            questionLabel.sizeToFit()
+            make.top.equalToSuperview().offset(20)
+            make.left.equalToSuperview().offset(17)
+            make.right.equalToSuperview().offset(17)
         }
         
         resultsTableView.snp.updateConstraints{ make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(17)
+            make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-51)
+            make.height.equalTo(206)
         }
         
         visibiltyLabel.snp.updateConstraints{ make in
+            make.top.equalTo(resultsTableView.snp.bottom).offset(15)
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.top.equalTo(shareResultsButton.snp.top).offset(-17)
             make.height.equalTo(14.5)
         }
         
-        shareResultsButton.snp.updateConstraints{ make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-24)
-            make.height.equalTo(47)
-            make.width.equalTo(292.5)
+        eyeView.snp.makeConstraints { make in
+            make.height.equalTo(14.5)
+            make.width.equalTo(14.5)
+            make.centerY.equalTo(visibiltyLabel.snp.centerY)
+            make.left.equalToSuperview().offset(25)
         }
         
         totalResultsLabel.snp.updateConstraints{ make in
@@ -132,12 +138,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.height.equalTo(14.5)
         }
         
-        eyeView.snp.makeConstraints { make in
-            make.height.equalTo(14.5)
-            make.width.equalTo(14.5)
-            make.top.equalTo(visibiltyLabel.snp.top)
-            make.left.equalToSuperview().offset(25)
+        shareResultsButton.snp.updateConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(24)
+            make.height.equalTo(47)
+            make.top.equalTo(visibiltyLabel.snp.bottom).offset(15)
+            make.width.equalTo(303)
         }
+        
         
     }
     
@@ -234,7 +242,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         visibiltyLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-23.5)
         }
-        
     }
     
     

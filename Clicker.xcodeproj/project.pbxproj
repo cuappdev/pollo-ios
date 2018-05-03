@@ -13,6 +13,8 @@
 		633381332086D07D008BD455 /* BlackAnswerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633381322086D07D008BD455 /* BlackAnswerController.swift */; };
 		633381352086D18B008BD455 /* EmptyAnswerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633381342086D18B008BD455 /* EmptyAnswerCell.swift */; };
 		6353FD3A2086DDC900E16EB2 /* BlackAskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353FD392086DDC900E16EB2 /* BlackAskController.swift */; };
+		637D5B1A209A95B900E446E8 /* ExpandedAskedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D5B19209A95B900E446E8 /* ExpandedAskedCard.swift */; };
+		637D5B1C209A95EF00E446E8 /* ExpandedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */; };
 		637FD6932093E5FA007BADF1 /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FD6922093E5FA007BADF1 /* NameView.swift */; };
 		638406D52083CC1400483645 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638406D42083CC1400483645 /* ResultCell.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
@@ -91,6 +93,8 @@
 		633381322086D07D008BD455 /* BlackAnswerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackAnswerController.swift; sourceTree = "<group>"; };
 		633381342086D18B008BD455 /* EmptyAnswerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyAnswerCell.swift; sourceTree = "<group>"; };
 		6353FD392086DDC900E16EB2 /* BlackAskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackAskController.swift; sourceTree = "<group>"; };
+		637D5B19209A95B900E446E8 /* ExpandedAskedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAskedCard.swift; sourceTree = "<group>"; };
+		637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedViewController.swift; sourceTree = "<group>"; };
 		637FD6922093E5FA007BADF1 /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
 		638406D42083CC1400483645 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
@@ -192,6 +196,8 @@
 				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */,
+				637D5B19209A95B900E446E8 /* ExpandedAskedCard.swift */,
+				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				C2BB14C22094DF950081C35D /* AnswerSharedCard.swift */,
@@ -649,6 +655,7 @@
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C2BB14BD2094DD400081C35D /* AskedCard.swift in Sources */,
 				C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */,
+				637D5B1C209A95EF00E446E8 /* ExpandedViewController.swift in Sources */,
 				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
 				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */,
@@ -664,6 +671,7 @@
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				63C36F232099418E004EBB16 /* QuestionTypeDDCell.swift in Sources */,
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
+				637D5B1A209A95B900E446E8 /* ExpandedAskedCard.swift in Sources */,
 				633381332086D07D008BD455 /* BlackAnswerController.swift in Sources */,
 				C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,

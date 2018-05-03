@@ -11,6 +11,7 @@ import Presentr
 
 protocol EndPollDelegate {
     func endedPoll()
+    func expandView(poll: Poll, socket: Socket) 
 }
 
 class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
@@ -301,6 +302,17 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         // SHOW CREATE POLL BUTTON
         createPollButton.alpha = 1
         createPollButton.isUserInteractionEnabled = true
+    }
+    
+    func expandView(poll: Poll, socket: Socket) {
+        let expandedVC = ExpandedViewController()
+        expandedVC.setup()
+        expandedVC.expandedCard.socket = socket
+        socket.addDelegate(expandedVC.expandedCard)
+        expandedVC.expandedCard.poll = poll
+        expandedVC.expandedCard.questionLabel.text = poll.text
+        expandedVC.expandedCard.endPollDelegate = self
+        present(expandedVC, animated: true, completion: nil)
     }
     
     func setupNavBar() {

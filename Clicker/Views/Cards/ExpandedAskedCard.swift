@@ -1,25 +1,30 @@
 //
-//  AskedSharedCard.swift
+//  ExpandedAskedCard.swift
 //  Clicker
 //
-//  Created by eoin on 4/17/18.
+//  Created by eoin on 5/2/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+class ExpandedAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
+    var socket: Socket!
     var poll: Poll!
+    var endPollDelegate: EndPollDelegate!
+    var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
+    var cellColors: UIColor!
     
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
+    var shareResultsButton: UIButton!
     var totalResultsLabel: UILabel!
-    var worldView: UIImageView!
+    var eyeView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +33,9 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func setupCell() {
         isMCQuestion = true
+        
+        socket?.addDelegate(self)
+        
         backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
@@ -38,6 +46,8 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
         self.layer.borderColor = UIColor.clickerBorder.cgColor
         self.layer.shadowRadius = 2.5
         self.layer.cornerRadius = 15
+        
+        cellColors = .clickerHalfGreen
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -52,35 +62,45 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
         resultsTableView.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.separatorStyle = .none
-        resultsTableView.isScrollEnabled = false
+        resultsTableView.isScrollEnabled = true
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
         addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
-        visibiltyLabel.text = "Shared with group"
+        visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
         addSubview(visibiltyLabel)
         
+        shareResultsButton = UIButton()
+        shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
+        shareResultsButton.backgroundColor = .clear
+        shareResultsButton.setTitle("End Question", for: .normal)
+        shareResultsButton.titleLabel?.font = ._16SemiboldFont
+        shareResultsButton.titleLabel?.textAlignment = .center
+        shareResultsButton.layer.cornerRadius = 25.5
+        shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+        shareResultsButton.layer.borderWidth = 1.5
+        shareResultsButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
+        addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
-        totalResultsLabel.text = "17 votes"
+        totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
         
-        worldView = UIImageView(image: #imageLiteral(resourceName: "results_shared"))
-        addSubview(worldView)
-        
+        eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
+        addSubview(eyeView)
     }
     
     func layoutViews() {
         
         contentView.snp.makeConstraints { make in
-            make.height.equalTo(398)
-            make.width.equalTo(333)
+            make.height.equalTo(439)
+            make.width.equalTo(339)
         }
         
         questionLabel.snp.updateConstraints{ make in
@@ -94,17 +114,17 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
             make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(206)
+            make.height.equalTo(312)
         }
         
         visibiltyLabel.snp.updateConstraints{ make in
-            make.top.equalTo(resultsTableView.snp.bottom).offset(15)
+            make.top.equalTo(resultsTableView.snp.bottom).offset(29)
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
             make.height.equalTo(14.5)
         }
         
-        worldView.snp.makeConstraints { make in
+        eyeView.snp.makeConstraints { make in
             make.height.equalTo(14.5)
             make.width.equalTo(14.5)
             make.centerY.equalTo(visibiltyLabel.snp.centerY)
@@ -118,6 +138,14 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
             make.height.equalTo(14.5)
         }
         
+        shareResultsButton.snp.updateConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(24)
+            make.height.equalTo(47)
+            make.top.equalTo(visibiltyLabel.snp.bottom).offset(15)
+            make.width.equalTo(303)
+        }
+        
     }
     
     // MARK - TABLEVIEW
@@ -125,17 +153,18 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
         cell.choiceTag = indexPath.row
-        cell.optionLabel.text = poll.options?[indexPath.row]
         cell.selectionStyle = .none
-        cell.highlightView.backgroundColor = .clickerMint
+        cell.highlightView.backgroundColor = cellColors
         
         // UPDATE HIGHLIGHT VIEW WIDTH
         let mcOption: String = intToMCOption(indexPath.row)
-        guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
-            return cell
+        var count: Int = 0
+        if let choiceInfo = poll.results![mcOption] as? [String:Any] {
+            cell.optionLabel.text = choiceInfo["text"] as? String
+            count = choiceInfo["count"] as! Int
+            cell.numberLabel.text = "\(count)"
         }
-        cell.numberLabel.text = "\(count)"
-        let totalNumResults = poll.getTotalResults()
+        
         if (totalNumResults > 0) {
             let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
             let totalWidth = cell.frame.width
@@ -153,13 +182,67 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return poll.options!.count
+        return (poll.options?.count)!
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 47
     }
     
+    func sessionConnected() {
+        
+    }
+    
+    func sessionDisconnected() {
+        
+    }
+    
+    func pollStarted(_ poll: Poll) {
+    }
+    
+    func pollEnded(_ poll: Poll) {
+    }
+    
+    func receivedResults(_ currentState: CurrentState) {
+    }
+    
+    func saveSession(_ session: Session) {
+    }
+    
+    func updatedTally(_ currentState: CurrentState) {
+        totalNumResults = currentState.getTotalCount()
+        poll.results = currentState.results
+        self.resultsTableView.reloadData()
+    }
+    
+    // MARK  - ACTIONS
+    @objc func endQuestionAction() {
+        socket.socket.emit("server/poll/end", [])
+        endPollDelegate.endedPoll()
+        shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
+        shareResultsButton.backgroundColor = .clickerGreen
+        shareResultsButton.setTitle("Share Results", for: .normal)
+        shareResultsButton.titleLabel?.font = ._16SemiboldFont
+        shareResultsButton.layer.borderWidth = 0
+        
+        cellColors = .clickerMint
+        resultsTableView.reloadData()
+        
+        shareResultsButton.removeTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
+        shareResultsButton.addTarget(self, action: #selector(shareQuestionAction), for: .touchUpInside)
+    }
+    
+    @objc func shareQuestionAction() {
+        socket.socket.emit("server/poll/results", [])
+        shareResultsButton.removeFromSuperview()
+        eyeView.image = #imageLiteral(resourceName: "results_shared")
+        visibiltyLabel.text = "Shared with group"
+        visibiltyLabel.textColor = .clickerGreen
+        visibiltyLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-23.5)
+        }
+        
+    }
     
     
     required init?(coder aDecoder: NSCoder) {
