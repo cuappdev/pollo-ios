@@ -14,12 +14,15 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var poll: Poll!
     var currentState: CurrentState!
     var endPollDelegate: EndPollDelegate!
+    var timer: Timer!
+    var elapsedSeconds: Int = 0
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
     
     var cellColors: UIColor!
     
+    var timerLabel: UILabel!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
@@ -30,6 +33,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
+        runTimer()
     }
     
     func setupCell() {
@@ -42,18 +46,31 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         currentState = staticCurrentState
         socket?.addDelegate(self)
         
-        backgroundColor = .clickerNavBarLightGrey
+//        backgroundColor = .clickerNavBarLightGrey
+        backgroundColor = .clickerDeepBlack
         setupViews()
         layoutViews()
     }
     
     func setupViews() {
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.clickerBorder.cgColor
-        self.layer.shadowRadius = 2.5
-        self.layer.cornerRadius = 15
+        contentView.layer.cornerRadius = 15
+        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        contentView.layer.borderWidth = 1
+        contentView.layer.shadowRadius = 2.5
+        contentView.backgroundColor = .clickerNavBarLightGrey
+//        self.layer.borderWidth = 1
+//        self.layer.borderColor = UIColor.clickerBorder.cgColor
+//        self.layer.shadowRadius = 2.5
+//        self.layer.cornerRadius = 15
         
         cellColors = .clickerHalfGreen
+        
+        timerLabel = UILabel()
+        timerLabel.text = "00:00"
+        timerLabel.font = UIFont._14BoldFont
+        timerLabel.textColor = .clickerMediumGray
+        timerLabel.textAlignment = .center
+        addSubview(timerLabel)
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -61,7 +78,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        addSubview(questionLabel)
+        contentView.addSubview(questionLabel)
         
         resultsTableView = UITableView()
         resultsTableView.backgroundColor = .clear
@@ -70,14 +87,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        addSubview(resultsTableView)
+        contentView.addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
         visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
-        addSubview(visibiltyLabel)
+        contentView.addSubview(visibiltyLabel)
         
         shareResultsButton = UIButton()
         shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
@@ -89,20 +106,26 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
         shareResultsButton.layer.borderWidth = 1.5
         shareResultsButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
-        addSubview(shareResultsButton)
+        contentView.addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
-        addSubview(totalResultsLabel)
+        contentView.addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        addSubview(eyeView)
+        contentView.addSubview(eyeView)
     }
     
     func layoutViews() {
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(24, 0, 0, 0))
+        
+        timerLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(3)
+        }
         
         questionLabel.snp.updateConstraints{ make in
             make.top.equalToSuperview().offset(18)
@@ -214,7 +237,38 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         self.resultsTableView.reloadData()
     }
     
+    // MARK: Start timer
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
+    }
+    
     // MARK  - ACTIONS
+    // Update timer label
+    @objc func updateTimerLabel() {
+        elapsedSeconds += 1
+        if (elapsedSeconds < 10) {
+            timerLabel.text = "00:0\(elapsedSeconds)"
+        } else if (elapsedSeconds < 60) {
+            timerLabel.text = "00:\(elapsedSeconds)"
+        } else {
+            let minutes = Int(elapsedSeconds / 60)
+            let seconds = elapsedSeconds - minutes * 60
+            if (elapsedSeconds < 600) {
+                if (seconds < 10) {
+                    timerLabel.text = "0\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "0\(minutes):\(seconds)"
+                }
+            } else {
+                if (seconds < 10) {
+                    timerLabel.text = "\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "\(minutes):\(seconds)"
+                }
+            }
+        }
+    }
+    
     @objc func endQuestionAction() {
         socket.socket.emit("server/poll/end", [])
         endPollDelegate.endedPoll()
