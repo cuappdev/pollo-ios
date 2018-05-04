@@ -108,7 +108,12 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width * 0.9, height: 415)
+        let poll = polls[indexPath.item]
+        if (pollRole == .ask && !poll.isShared) { // ASKED CARD
+            return CGSize(width: frame.width * 0.9, height: 440)
+        } else {
+            return CGSize(width: frame.width * 0.9, height: 415)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

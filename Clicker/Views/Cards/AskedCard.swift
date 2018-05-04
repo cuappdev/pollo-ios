@@ -19,6 +19,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
+    var didReduceContentSize: Bool = false
     
     var cellColors: UIColor!
     
@@ -46,7 +47,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         currentState = staticCurrentState
         socket?.addDelegate(self)
         
-//        backgroundColor = .clickerNavBarLightGrey
         backgroundColor = .clickerDeepBlack
         setupViews()
         layoutViews()
@@ -58,10 +58,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         contentView.layer.borderWidth = 1
         contentView.layer.shadowRadius = 2.5
         contentView.backgroundColor = .clickerNavBarLightGrey
-//        self.layer.borderWidth = 1
-//        self.layer.borderColor = UIColor.clickerBorder.cgColor
-//        self.layer.shadowRadius = 2.5
-//        self.layer.cornerRadius = 15
         
         cellColors = .clickerHalfGreen
         
@@ -120,7 +116,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func layoutViews() {
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(24, 0, 0, 0))
         
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -168,6 +163,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.left.equalToSuperview().offset(25)
         }
         
+    }
+    
+    // MARK: LAYOUT SUBVIEWS
+    override func layoutSubviews() {
+        if (!didReduceContentSize) {
+            contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(24, 0, 0, 0))
+            didReduceContentSize = true
+        }
     }
     
     // MARK - TABLEVIEW
@@ -272,6 +275,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     @objc func endQuestionAction() {
         socket.socket.emit("server/poll/end", [])
         endPollDelegate.endedPoll()
+        
+        timer.invalidate()
+        timerLabel.removeFromSuperview()
+        
         shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
         shareResultsButton.backgroundColor = .clickerGreen
         shareResultsButton.setTitle("Share Results", for: .normal)
