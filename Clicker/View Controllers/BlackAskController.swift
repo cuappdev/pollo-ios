@@ -228,6 +228,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.socket = socket
         cell.pollRole = .ask
         cell.endPollDelegate = self
+        // SETUP COUNT LABEL
+        let countString = "0/\(polls.count)"
+        cell.countLabel.attributedText = cell.getCountLabelAttributedString(countString)
         cell.collectionView.reloadData()
         // SCROLL TO LATEST QUESTION
         let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)

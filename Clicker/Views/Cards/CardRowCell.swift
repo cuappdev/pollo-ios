@@ -16,6 +16,7 @@ enum PollRole {
 class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
+    var countLabel: UILabel!
     let askedIdenfitifer = "askedCardID"
     let askedSharedIdentifier = "askedSharedCardID"
     let answerIdentifier = "answerCardID"
@@ -54,6 +55,13 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.backgroundColor = .clear
         collectionView.isPagingEnabled = true
         addSubview(collectionView)
+        
+        countLabel = UILabel()
+        countLabel.textAlignment = .center
+        countLabel.backgroundColor = UIColor.clickerLabelGrey
+        countLabel.layer.cornerRadius = 12
+        countLabel.clipsToBounds = true
+        addSubview(countLabel)
     }
     
     func setupConstraints() {
@@ -62,6 +70,13 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             make.width.equalToSuperview()
             make.height.equalTo(444)
             make.centerX.equalToSuperview()
+        }
+        
+        countLabel.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(42)
+            make.height.equalTo(23)
         }
     }
     
@@ -113,6 +128,39 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             return CGSize(width: frame.width * 0.9, height: 440)
         } else {
             return CGSize(width: frame.width * 0.9, height: 415)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // UPDATE COUNT LABEL
+        let countString = "\(indexPath.item)/\(polls.count)"
+        countLabel.attributedText = getCountLabelAttributedString(countString)
+    }
+    
+    // Get attributed string for countLabel
+    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
+        let slashIndex = countString.index(of: "/")?.encodedOffset
+        let attributedString = NSMutableAttributedString(string: countString, attributes: [
+            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
+            .foregroundColor: UIColor.clickerMediumGray,
+            .kern: 0.0
+            ])
+        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
+        return attributedString
+    }
+    
+    // MARK: SCROLLVIEW METHODS
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        for cell in collectionView.visibleCells {
+            let indexPath = collectionView.indexPath(for: cell)
+            guard let cellRect = collectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
+                return
+            }
+            if (collectionView.bounds.contains(cellRect)) {
+                let countString = "\(indexPath!.item)/\(polls.count)"
+                countLabel.attributedText = getCountLabelAttributedString(countString)
+                break
+            }
         }
     }
     
