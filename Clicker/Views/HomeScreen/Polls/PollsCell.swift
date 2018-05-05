@@ -128,23 +128,29 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         let session: Session = sessions[sessions.count - indexPath.row - 1]
         let socket = Socket(id: "\(session.id)", userType: "admin")
         
-        switch pollType {
-        case .created:
-            let blackVC = BlackAskController()
-            blackVC.socket = socket
-            blackVC.code = session.code
-            blackVC.name = session.name
-            blackVC.sessionId = session.id
-            parentNavController.pushViewController(blackVC, animated: true)
-        default:
-            let blackVC = BlackAnswerController()
-            blackVC.socket = socket
-            blackVC.code = session.code
-            blackVC.name = session.name
-            blackVC.sessionId = session.id
-            parentNavController.pushViewController(blackVC, animated: true)
-            
-        }
+        GetSortedPolls(id: session.id).make()
+            .done { datePollsArr in
+                switch self.pollType {
+                case .created:
+                    let blackVC = BlackAskController()
+                    blackVC.socket = socket
+                    blackVC.code = session.code
+                    blackVC.name = session.name
+                    blackVC.sessionId = session.id
+                    blackVC.datePollsArr = datePollsArr
+                    self.parentNavController.pushViewController(blackVC, animated: true)
+                default:
+                    let blackVC = BlackAnswerController()
+                    blackVC.socket = socket
+                    blackVC.code = session.code
+                    blackVC.name = session.name
+                    blackVC.sessionId = session.id
+                    blackVC.datePollsArr = datePollsArr
+                    self.parentNavController.pushViewController(blackVC, animated: true)
+                }
+            } .catch { error in
+                print(error)
+            }
     }
     
     required init?(coder aDecoder: NSCoder) {

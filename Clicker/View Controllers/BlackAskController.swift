@@ -47,8 +47,11 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         view.backgroundColor = .clickerDeepBlack
         setupNavBar()
+        setupCreatePollBtn()
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
+        } else {
+            setupAdminGroup()
         }
         if (name == code) {
             setupName()
@@ -99,6 +102,24 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
+    func setupCreatePollBtn() {
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create a poll", for: .normal)
+        createPollButton.backgroundColor = .clear
+        createPollButton.layer.cornerRadius = 24
+        createPollButton.layer.borderWidth = 1
+        createPollButton.layer.borderColor = UIColor.white.cgColor
+        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+        view.addSubview(createPollButton)
+        
+        createPollButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.45)
+            make.height.equalToSuperview().multipliedBy(0.08)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-22)
+        }
+    }
+    
     func setupEmptyStudentPoll() {
         setupEmptyStudentPollViews()
         setupEmptyStudentPollConstraints()
@@ -132,16 +153,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         waitingLabel.numberOfLines = 0
         view.addSubview(waitingLabel)
         
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create a poll", for: .normal)
-        createPollButton.backgroundColor = .clear
-        createPollButton.layer.cornerRadius = 24
-        createPollButton.layer.borderWidth = 1
-        createPollButton.layer.borderColor = UIColor.white.cgColor
-        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-        view.addSubview(createPollButton)
-        
-        
         downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
         downArrowImageView.contentMode = .scaleAspectFit
         view.addSubview(downArrowImageView)
@@ -167,13 +178,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             make.height.equalTo(36)
             make.centerX.equalToSuperview()
             make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
-        }
-        
-        createPollButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalToSuperview().multipliedBy(0.08)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-22)
         }
         
         downArrowImageView.snp.makeConstraints { make in
@@ -245,7 +249,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func updateDatePollsArr() {
-        GetSortedPolls(id: "\(sessionId)").make()
+        GetSortedPolls(id: sessionId).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
