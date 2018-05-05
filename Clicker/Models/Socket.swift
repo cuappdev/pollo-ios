@@ -18,7 +18,11 @@ class Socket {
         self.id = id
         
         let url = URL(string: hostURL)!
-        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": User.currentUser?.id])])
+        if let googleId = User.currentUser?.id {
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": googleId])])
+        } else {
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
+        }
         
         socket = manager.socket(forNamespace: "/\(id)")
         
