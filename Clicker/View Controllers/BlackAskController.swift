@@ -11,6 +11,7 @@ import Presentr
 
 protocol EndPollDelegate {
     func endedPoll()
+    func expandView(poll: Poll, socket: Socket) 
 }
 
 class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
@@ -86,15 +87,16 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
 
     @objc func createPollBtnPressed() {
+        let pollBuilderVC = PollBuilderViewController()
+        pollBuilderVC.startPollDelegate = self
+        let nc = UINavigationController(rootViewController: pollBuilderVC)
         let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6
         presenter.roundCorners = true
         presenter.cornerRadius = 15
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
-        let pollBuilderVC = PollBuilderViewController()
-        pollBuilderVC.startPollDelegate = self
-        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
+        customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
     func setupEmptyStudentPoll() {
@@ -228,6 +230,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.socket = socket
         cell.pollRole = .ask
         cell.endPollDelegate = self
+        // SETUP COUNT LABEL
+        let countString = "0/\(polls.count)"
+        cell.countLabel.attributedText = cell.getCountLabelAttributedString(countString)
         cell.collectionView.reloadData()
         // SCROLL TO LATEST QUESTION
         let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
@@ -300,6 +305,17 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         // SHOW CREATE POLL BUTTON
         createPollButton.alpha = 1
         createPollButton.isUserInteractionEnabled = true
+    }
+    
+    func expandView(poll: Poll, socket: Socket) {
+        let expandedVC = ExpandedViewController()
+        expandedVC.setup()
+        expandedVC.expandedCard.socket = socket
+        socket.addDelegate(expandedVC.expandedCard)
+        expandedVC.expandedCard.poll = poll
+        expandedVC.expandedCard.questionLabel.text = poll.text
+        expandedVC.expandedCard.endPollDelegate = self
+        present(expandedVC, animated: true, completion: nil)
     }
     
     func setupNavBar() {

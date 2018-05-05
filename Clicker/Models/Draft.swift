@@ -10,11 +10,11 @@ import Foundation
 
 class Draft {
     
-    var id: String
+    var id: Int
     var text: String
     var options: [String]
     
-    init(id: String, text: String, options: [String]) {
+    init(id: Int, text: String, options: [String]) {
         self.id = id
         self.text = text
         self.options = options
