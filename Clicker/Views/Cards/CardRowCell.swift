@@ -76,7 +76,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         }
         
         countLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(6)
+            make.top.equalTo(collectionView.snp.bottom)
             make.centerX.equalToSuperview()
             make.width.equalTo(42)
             make.height.equalTo(23)

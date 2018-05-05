@@ -29,6 +29,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
+    var verticalCollectionView: UICollectionView!
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
@@ -211,12 +212,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
+        zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
         view.addSubview(zoomOutButton)
     }
 
     func setupAdminGroupConstraints() {
         mainCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
+            make.top.equalToSuperview().offset(40)
             make.bottom.equalTo(createPollButton.snp.top).offset(-12)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -348,9 +350,15 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
     }
     
+    
+    // MARK: ACTIONS
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func zoomOutBtnPressed() {
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
