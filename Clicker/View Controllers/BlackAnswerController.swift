@@ -17,6 +17,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     var socket: Socket!
     var code: String!
+    var name: String!
     var sessionId: Int!
     var datePollsArr: [(String, [Poll])] = []
     
