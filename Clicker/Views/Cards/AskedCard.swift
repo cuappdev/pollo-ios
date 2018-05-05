@@ -18,7 +18,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    var didReduceContentSize: Bool = false
     
     var cellColors: UIColor!
     

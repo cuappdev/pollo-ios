@@ -195,14 +195,13 @@
 			isa = PBXGroup;
 			children = (
 				C2BB14B7209449390081C35D /* CardRowCell.swift */,
-				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */,
 				637D5B19209A95B900E446E8 /* ExpandedAskedCard.swift */,
-				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				C2BB14C22094DF950081C35D /* AnswerSharedCard.swift */,
+				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
 				638406D42083CC1400483645 /* ResultCell.swift */,
 				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */,
@@ -412,6 +411,7 @@
 				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
 				639B4D552093F975009D3309 /* PickQTypeViewController.swift */,
 				C275A1BD2098BE9100815951 /* EditPollViewController.swift */,
+				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2504A58209963A200DC5EDC /* EditNameViewController.swift */,
 				C2504A56209956C600DC5EDC /* DeletePollViewController.swift */,
 				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
