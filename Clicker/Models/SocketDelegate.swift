@@ -9,6 +9,7 @@
 protocol SocketDelegate {
     func sessionConnected()
     func sessionDisconnected()
+    func receivedUserCount(_ count: Int)
     
     // USER RECEIVES
     func pollStarted(_ poll: Poll)
