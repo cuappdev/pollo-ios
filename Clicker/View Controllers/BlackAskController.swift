@@ -27,7 +27,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var createPollButton: UIButton!
     
     // admin group vars
+    var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
+    var verticalCollectionView: UICollectionView!
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
@@ -47,10 +49,13 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         view.backgroundColor = .clickerDeepBlack
         setupNavBar()
+        setupCreatePollBtn()
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
+        } else {
+            setupAdminGroup()
         }
-        if name == code {
+        if (name == code) {
             setupName()
         }
     }
@@ -99,6 +104,24 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
+    func setupCreatePollBtn() {
+        createPollButton = UIButton()
+        createPollButton.setTitle("Create a poll", for: .normal)
+        createPollButton.backgroundColor = .clear
+        createPollButton.layer.cornerRadius = 24
+        createPollButton.layer.borderWidth = 1
+        createPollButton.layer.borderColor = UIColor.white.cgColor
+        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+        view.addSubview(createPollButton)
+        
+        createPollButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.45)
+            make.height.equalToSuperview().multipliedBy(0.08)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-22)
+        }
+    }
+    
     func setupEmptyStudentPoll() {
         setupEmptyStudentPollViews()
         setupEmptyStudentPollConstraints()
@@ -132,16 +155,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         waitingLabel.numberOfLines = 0
         view.addSubview(waitingLabel)
         
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create a poll", for: .normal)
-        createPollButton.backgroundColor = .clear
-        createPollButton.layer.cornerRadius = 24
-        createPollButton.layer.borderWidth = 1
-        createPollButton.layer.borderColor = UIColor.white.cgColor
-        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-        view.addSubview(createPollButton)
-        
-        
         downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
         downArrowImageView.contentMode = .scaleAspectFit
         view.addSubview(downArrowImageView)
@@ -167,13 +180,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             make.height.equalTo(36)
             make.centerX.equalToSuperview()
             make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
-        }
-        
-        createPollButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalToSuperview().multipliedBy(0.08)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-22)
         }
         
         downArrowImageView.snp.makeConstraints { make in
@@ -203,18 +209,25 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         mainCollectionView.backgroundColor = .clear
         mainCollectionView.isPagingEnabled = true
         view.addSubview(mainCollectionView)
+        
+        zoomOutButton = UIButton()
+        zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
+        zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
+        view.addSubview(zoomOutButton)
     }
 
     func setupAdminGroupConstraints() {
         mainCollectionView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom)
-            }
+            make.top.equalToSuperview().offset(40)
             make.bottom.equalTo(createPollButton.snp.top).offset(-12)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
+        }
+        
+        zoomOutButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-24)
+            make.bottom.equalTo(mainCollectionView.snp.top)
+            make.width.height.equalTo(20)
         }
     }
     
@@ -233,7 +246,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         // SETUP COUNT LABEL
         let countString = "0/\(polls.count)"
         cell.countLabel.attributedText = cell.getCountLabelAttributedString(countString)
-        cell.collectionView.reloadData()
+//        cell.collectionView.reloadData()
         // SCROLL TO LATEST QUESTION
         let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
         cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
@@ -245,7 +258,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func updateDatePollsArr() {
-        GetSortedPolls(id: "\(sessionId)").make()
+        GetSortedPolls(id: sessionId).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
@@ -337,9 +350,15 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
     }
     
+    
+    // MARK: ACTIONS
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func zoomOutBtnPressed() {
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
