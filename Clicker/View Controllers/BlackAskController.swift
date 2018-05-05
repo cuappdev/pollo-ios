@@ -373,7 +373,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     @objc func zoomOutBtnPressed() {
-        
+        // SETUP VERTICAL VIEW
+        setupVertical()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
