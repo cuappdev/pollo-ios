@@ -74,7 +74,7 @@ struct GetPoll: ClickerQuark {
 struct GetSortedPolls: ClickerQuark {
     typealias ResponseType = [(String, [Poll])]
     
-    let id: String
+    let id: Int
     
     var route: String {
         return "/sessions/\(id)/polls/date"
