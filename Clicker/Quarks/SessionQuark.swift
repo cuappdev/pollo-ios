@@ -273,7 +273,7 @@ struct GetMembers: ClickerQuark {
         case .nodes(let nodes):
             var users: [User] = []
             for node in nodes {
-                guard let id = node["id"].float, let name = node["name"].string, let netId = node["netId"].string else {
+                guard let id = node["id"].rawString(), let name = node["name"].string, let netId = node["netId"].string else {
                     throw NeutronError.badResponseData
                 }
                 users.append(User(id: id, name: name, netId: netId))
@@ -303,7 +303,7 @@ struct GetAdmins: ClickerQuark {
         case .nodes(let nodes):
             var users: [User] = []
             for node in nodes {
-                guard let id = node["id"].float, let name = node["name"].string, let netId = node["netId"].string else {
+                guard let id = node["id"].rawString(), let name = node["name"].string, let netId = node["netId"].string else {
                     throw NeutronError.badResponseData
                 }
                 users.append(User(id: id, name: name, netId: netId))

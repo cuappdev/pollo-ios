@@ -106,7 +106,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             let familyName = user.profile.familyName
             let email = user.profile.email
             let netId = email?.split(separator: "@")[0]
-            User.currentUser = User(id: Float(userId!)!, name: fullName!, netId: String(netId!), givenName: givenName!, familyName: familyName!, email: email!)
+            User.currentUser = User(id: userId!, name: fullName!, netId: String(netId!), givenName: givenName!, familyName: familyName!, email: email!)
             
             UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
                 .done { userSession in
