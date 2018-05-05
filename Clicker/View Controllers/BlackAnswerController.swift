@@ -15,8 +15,12 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     
+    // nav bar
+    var navigationTitleView: NavigationTitleView!
+    
     var socket: Socket!
     var code: String!
+    var name: String!
     var sessionId: Int!
     var datePollsArr: [(String, [Poll])] = []
     
@@ -202,14 +206,13 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let codeLabel = UILabel()
-        if let c = code {
-            codeLabel.text = "Code: \(c)"
+        
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
         }
-        codeLabel.textColor = .white
-        codeLabel.font = UIFont._16SemiboldFont
-        codeLabel.textAlignment = .center
-        self.navigationItem.titleView = codeLabel
+        self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)

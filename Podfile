@@ -15,5 +15,4 @@ target 'Clicker' do
   pod 'SwiftLint'
   pod 'SwiftyJSON'
   pod 'Neutron', :git => 'https://github.com/dantheli/Neutron.git'
-  pod 'DropDown'
 end

@@ -8,7 +8,6 @@
 
 import UIKit
 import Presentr
-import DropDown
 
 protocol StartPollDelegate {
     func startPoll(text: String, type: String, options: [String])
@@ -18,13 +17,15 @@ protocol PollBuilderDelegate {
     func updateCanDraft(_ canDraft: Bool)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate {
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
     
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
     var pickQTypeVC: PickQTypeViewController!
-    var dropDown: DropDown!
+    
+    var dropDown: PollTypeDropDownView!
+    var dropDownArrow: UIImageView!
     
     let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
@@ -202,9 +203,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     func updateQuestionTypeButton() {
         let questionTypeText = (questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response"
-        dropDown.dataSource = [(questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response",
-                               (questionType == "FREE_RESPONSE") ? "Multiple Choice" : "Free Response"]
+        let otherTypeText = (questionType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
+        dropDown.topButton.setTitle(questionTypeText, for: .normal)
+        dropDown.bottomButton.setTitle(otherTypeText, for: .normal)
     }
     
     // MARK - ACTIONS
@@ -262,35 +264,40 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK - DROP DOWN
+    
     func setupDropDown() {
-        dropDown = DropDown()
-        dropDown.anchorView = questionTypeButton
-        dropDown.width = view.frame.width
-        dropDown.dataSource = ["Multiple Choice", "Free Response"]
-        DropDown.appearance().textColor = .clickerDeepBlack
-        DropDown.appearance().textFont = ._16MediumFont
-        DropDown.appearance().backgroundColor = .clickerWhite
-        //DropDown.appearance().dimmedBackgroundColor = .clicker60Black
-        DropDown.appearance().cellHeight = 47.5
+        dropDownArrow = UIImageView(image: UIImage(named: "DropdownArrowIcon"))
+        view.addSubview(dropDownArrow)
         
+        dropDown = PollTypeDropDownView()
+        let topTitle = (questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response"
+        let bottomTitle = (questionType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice"
+        dropDown.topButton.setTitle(topTitle, for: .normal)
+        dropDown.bottomButton.setTitle(bottomTitle, for: .normal)
+        dropDown.delegate = self
+        view.addSubview(dropDown)
         
-        /*dropDown.cellNib = UINib(nibName: "QuestionTypeDDCell", bundle: nil)
-        dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
-            guard let cell = cell as? QuestionTypeDDCell else { return }
-            cell.setup(index: index, type: "Free Response")
-        }*/
-        dropDown.direction = .bottom
-        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-            print("Selected dropdown item: \(item) at index: \(index)")
-            if index == 1 {
-                self.updateQuestionType()
-            }
+        dropDown.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(questionTypeButton.snp.height).multipliedBy(2)
+            make.centerY.equalTo(questionTypeButton.snp.bottom)
+            make.centerX.equalToSuperview()
         }
+        dropDownArrow.snp.makeConstraints { make in
+            make.height.equalTo(6.5)
+            make.width.equalTo(6.5)
+            make.centerY.equalTo(questionTypeButton.snp.centerY)
+            make.left.equalTo(questionTypeButton.snp.right)
+        }
+        dropDown.isHidden = true
+        
     }
     
     // TODO: Show a dropdown of question types
     @objc func toggleQuestionType() {
-        dropDown.show()
+        dropDown.isHidden = false
+        
     }
     
     // MARK - PickQTypeDelegate
