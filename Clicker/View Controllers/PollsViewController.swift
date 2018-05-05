@@ -38,7 +38,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: pollsIdentifier, for: indexPath) as! PollsCell
         cell.editSessionDelegate = self
-        cell.parentNavController = navigationController
+        cell.parentNavController = self.navigationController
         if (indexPath.item == 0) {
             cell.pollType = .created
         } else {

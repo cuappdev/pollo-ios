@@ -81,7 +81,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
             if code != "" {
                 StartSession(code: code, name: nil, isGroup: nil).make()
                     .done { session in
-                        GetSortedPolls(id: "\(session.id)").make()
+                        GetSortedPolls(id: session.id).make()
                             .done { datePollsArr in
                                 let socket = Socket(id: "\(session.id)", userType: "user")
                                 let blackAnswerVC = BlackAnswerController()

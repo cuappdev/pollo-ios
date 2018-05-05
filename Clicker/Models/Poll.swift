@@ -22,6 +22,7 @@ class Poll {
         self.id = id
         self.text = text
         self.results = results
+        self.options = results.map { (key, _) in key }
     }
     
     // MARK: SEND START POLL INITIALIZER
@@ -38,7 +39,7 @@ class Poll {
     
     // MARK: RECEIVE START POLL INITIALIZER
     init(json: [String:Any]){
-        self.id = json["id"] as! Int
+        self.id = json["id"] as? Int
         self.text = json["text"] as! String
         if let options = json["options"] as? [String] {
             self.options = options
@@ -52,6 +53,7 @@ class Poll {
         self.id = id
         self.text = text
         self.results = results
+        self.options = results.map { (key, _) in key }
         self.isLive = isLive
     }
     
