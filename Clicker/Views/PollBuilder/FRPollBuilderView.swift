@@ -8,7 +8,7 @@
 
 import SnapKit
 import UIKit
-import DropDown
+//import DropDown
 
 class FRPollBuilderView: UIView, UITextFieldDelegate {
     
@@ -25,7 +25,7 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     var responseOptionsLabel: UILabel!
     var changeButton: UIButton!
     
-    var dropDown: DropDown!
+    var dropDown: FROptionsDropDownView!
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -56,6 +56,7 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         
         changeButton = UIButton(type: .system)
         changeButton.setTitle("Change", for: .normal)
+        changeButton.setTitle("Done", for: .selected)
         changeButton.titleLabel?.font = ._14MediumFont
         changeButton.titleLabel?.textColor = .clickerBlue
         changeButton.backgroundColor = .clear
@@ -82,33 +83,34 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         
         responseOptionsLabel.snp.updateConstraints { make in
             responseOptionsLabel.sizeToFit()
-            make.left.equalToSuperview().offset(35.5)
+            make.left.equalTo(line.snp.left)
             make.top.equalTo(line.snp.bottom).offset(14)
         }
         
         changeButton.snp.updateConstraints { make in
             changeButton.sizeToFit()
-            make.top.equalTo(responseOptionsLabel.snp.top)
-            make.right.equalToSuperview().inset(47.5)
+            make.centerY.equalTo(responseOptionsLabel.snp.centerY)
+            make.left.equalTo(responseOptionsLabel.snp.right).offset(10)
         }
     }
     
     func setupDropDown() {
-        dropDown = DropDown()
-        dropDown.anchorView = responseOptionsLabel
-        dropDown.width = frame.width
-        dropDown.dataSource = ["Show Response To Audience", "Show Vote Count"]
-        dropDown.direction = .bottom
-        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-            print("Selected dropdown item: \(item) at index: \(index)")
-            if index == 1 {
-                print(1)
-            }
+        dropDown = FROptionsDropDownView()
+        addSubview(dropDown)
+        
+        dropDown.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(111)
+            make.top.equalTo(responseOptionsLabel.snp.bottom).offset(14)
         }
+        
+        dropDown.isHidden = true
     }
     
     @objc func changeButtonPressed() {
-        dropDown.show()
+        dropDown.isHidden = !dropDown.isHidden
+        changeButton.isSelected = !changeButton.isSelected
     }
     
     required init?(coder _: NSCoder) {

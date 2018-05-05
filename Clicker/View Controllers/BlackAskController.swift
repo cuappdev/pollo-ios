@@ -50,7 +50,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         }
-        if name != code {
+        if name == code {
             setupName()
         }
     }

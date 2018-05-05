@@ -2,7 +2,6 @@ PODS:
   - Alamofire (4.6.0)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
-  - DropDown (2.3.1)
   - Fabric (1.7.5)
   - FirebaseAnalytics (3.9.0):
     - FirebaseCore (~> 3.6)
@@ -59,7 +58,6 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Crashlytics
-  - DropDown
   - Fabric
   - Google/SignIn
   - Neutron (from `https://github.com/dantheli/Neutron.git`)
@@ -74,7 +72,6 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - Crashlytics
-    - DropDown
     - Fabric
     - FirebaseAnalytics
     - FirebaseCore
@@ -105,7 +102,6 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
-  DropDown: 20499c7b2731b0d21609af924e47c7677a2be50d
   Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
@@ -125,6 +121,6 @@ SPEC CHECKSUMS:
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: f947076b544651d23410370123a0d1b6b08aae44
+PODFILE CHECKSUM: d27c69b46913a0914659e012d7bafec4757b3855
 
 COCOAPODS: 1.5.0

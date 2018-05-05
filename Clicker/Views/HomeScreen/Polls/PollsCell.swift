@@ -27,6 +27,8 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var sessions: [Session] = []
     var pollType: PollType!
     
+    var parentNavController: UINavigationController!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -53,6 +55,29 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 82.2
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let session: Session = sessions[sessions.count - indexPath.row - 1]
+        let socket = Socket(id: "\(session.id)", userType: "admin")
+        
+        switch pollType {
+        case .created:
+            let blackVC = BlackAskController()
+            blackVC.socket = socket
+            blackVC.code = session.code
+            blackVC.name = session.name
+            blackVC.sessionId = session.id
+            parentNavController.pushViewController(blackVC, animated: true)
+        default:
+            let blackVC = BlackAnswerController()
+            blackVC.socket = socket
+            blackVC.code = session.code
+            blackVC.name = session.name
+            blackVC.sessionId = session.id
+            parentNavController.pushViewController(blackVC, animated: true)
+
+        }
     }
     
     // MARK: - LAYOUT
@@ -122,6 +147,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             print("\(error.localizedDescription)")
         }
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
