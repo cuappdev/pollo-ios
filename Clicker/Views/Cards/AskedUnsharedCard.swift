@@ -1,5 +1,5 @@
 //
-//  AskedCard.swift
+//  AskedUnsharedCard.swift
 //  Clicker
 //
 //  Created by eoin on 4/16/18.
@@ -13,16 +13,13 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
     var socket: Socket!
     var poll: Poll!
     var endPollDelegate: EndPollDelegate!
-    var timer: Timer!
-    var elapsedSeconds: Int = 0
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    var didReduceContentSize: Bool = false
     
     var cellColors: UIColor!
     
-    var timerLabel: UILabel!
+    var cardView: UIView!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
@@ -33,7 +30,6 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
-        runTimer()
     }
     
     func setupCell() {
@@ -47,13 +43,15 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
     }
     
     func setupViews() {
-        contentView.layer.cornerRadius = 15
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-        contentView.layer.borderWidth = 1
-        contentView.layer.shadowRadius = 2.5
-        contentView.backgroundColor = .clickerNavBarLightGrey
-        
         cellColors = .clickerHalfGreen
+        
+        cardView = UIView()
+        cardView.layer.cornerRadius = 15
+        cardView.layer.borderColor = UIColor.clickerBorder.cgColor
+        cardView.layer.borderWidth = 1
+        cardView.layer.shadowRadius = 2.5
+        cardView.backgroundColor = .clickerNavBarLightGrey
+        addSubview(cardView)
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -61,7 +59,7 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        contentView.addSubview(questionLabel)
+        cardView.addSubview(questionLabel)
         
         resultsTableView = UITableView()
         resultsTableView.backgroundColor = .clear
@@ -70,14 +68,14 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        contentView.addSubview(resultsTableView)
+        cardView.addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
         visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
-        contentView.addSubview(visibiltyLabel)
+        cardView.addSubview(visibiltyLabel)
         
         shareResultsButton = UIButton()
         shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
@@ -89,30 +87,26 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
         shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
         shareResultsButton.layer.borderWidth = 1.5
         shareResultsButton.addTarget(self, action: #selector(shareQuestionAction), for: .touchUpInside)
-        contentView.addSubview(shareResultsButton)
+        cardView.addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
-        contentView.addSubview(totalResultsLabel)
+        cardView.addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        contentView.addSubview(eyeView)
+        cardView.addSubview(eyeView)
     }
     
     func layoutViews() {
         
-        timerLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(3)
-        }
-        
-        contentView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(30)
+        cardView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(25)
             make.height.equalTo(390)
             make.width.equalTo(339)
+            make.centerX.equalToSuperview()
         }
         
         questionLabel.snp.updateConstraints{ make in
@@ -228,38 +222,6 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
         self.resultsTableView.reloadData()
     }
     
-    // MARK: Start timer
-    func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
-    }
-    
-    // MARK  - ACTIONS
-    // Update timer label
-    @objc func updateTimerLabel() {
-        elapsedSeconds += 1
-        if (elapsedSeconds < 10) {
-            timerLabel.text = "00:0\(elapsedSeconds)"
-        } else if (elapsedSeconds < 60) {
-            timerLabel.text = "00:\(elapsedSeconds)"
-        } else {
-            let minutes = Int(elapsedSeconds / 60)
-            let seconds = elapsedSeconds - minutes * 60
-            if (elapsedSeconds < 600) {
-                if (seconds < 10) {
-                    timerLabel.text = "0\(minutes):0\(seconds)"
-                } else {
-                    timerLabel.text = "0\(minutes):\(seconds)"
-                }
-            } else {
-                if (seconds < 10) {
-                    timerLabel.text = "\(minutes):0\(seconds)"
-                } else {
-                    timerLabel.text = "\(minutes):\(seconds)"
-                }
-            }
-        }
-    }
-    
     @objc func shareQuestionAction() {
         socket.socket.emit("server/poll/results", [])
         shareResultsButton.removeFromSuperview()
@@ -270,7 +232,7 @@ class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewD
             make.bottom.equalToSuperview().offset(-23.5)
         }
     }
-    
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

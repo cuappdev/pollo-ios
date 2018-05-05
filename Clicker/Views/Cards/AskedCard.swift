@@ -18,11 +18,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    var didReduceContentSize: Bool = false
     
     var cellColors: UIColor!
     
     var timerLabel: UILabel!
+    var cardView: UIView!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
@@ -47,12 +47,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func setupViews() {
-        contentView.layer.cornerRadius = 15
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-        contentView.layer.borderWidth = 1
-        contentView.layer.shadowRadius = 2.5
-        contentView.backgroundColor = .clickerNavBarLightGrey
-        
         cellColors = .clickerHalfGreen
         
         timerLabel = UILabel()
@@ -62,13 +56,21 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         timerLabel.textAlignment = .center
         addSubview(timerLabel)
         
+        cardView = UIView()
+        cardView.layer.cornerRadius = 15
+        cardView.layer.borderColor = UIColor.clickerBorder.cgColor
+        cardView.layer.borderWidth = 1
+        cardView.layer.shadowRadius = 2.5
+        cardView.backgroundColor = .clickerNavBarLightGrey
+        addSubview(cardView)
+        
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        contentView.addSubview(questionLabel)
+        cardView.addSubview(questionLabel)
         
         resultsTableView = UITableView()
         resultsTableView.backgroundColor = .clear
@@ -77,14 +79,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        contentView.addSubview(resultsTableView)
+        cardView.addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
         visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
-        contentView.addSubview(visibiltyLabel)
+        cardView.addSubview(visibiltyLabel)
         
         endQuestionButton = UIButton()
         endQuestionButton.setTitleColor(.clickerDeepBlack, for: .normal)
@@ -96,17 +98,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         endQuestionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
         endQuestionButton.layer.borderWidth = 1.5
         endQuestionButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
-        contentView.addSubview(endQuestionButton)
+        cardView.addSubview(endQuestionButton)
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
-        contentView.addSubview(totalResultsLabel)
+        cardView.addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        contentView.addSubview(eyeView)
+        cardView.addSubview(eyeView)
     }
     
     func layoutViews() {
@@ -116,10 +118,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.top.equalToSuperview().offset(3)
         }
         
-        contentView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(30)
+        cardView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(25)
             make.height.equalTo(390)
             make.width.equalTo(339)
+            make.centerX.equalToSuperview()
         }
         
         questionLabel.snp.updateConstraints{ make in
