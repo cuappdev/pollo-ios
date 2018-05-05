@@ -23,7 +23,6 @@ extension BlackAskController {
         layout.scrollDirection = .vertical
         verticalCollectionView.delegate = self
         verticalCollectionView.dataSource = self
-        verticalCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
         verticalCollectionView.showsVerticalScrollIndicator = false
         verticalCollectionView.showsHorizontalScrollIndicator = false
         verticalCollectionView.alwaysBounceVertical = true

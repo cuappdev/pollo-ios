@@ -382,10 +382,12 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             endPollDelegate.endedPoll()
             setupEnded()
             askedType = .ended
+            poll.isLive = false
         case .ended:
             socket.socket.emit("server/poll/results", [])
             setupShared()
             askedType = .shared
+            poll.isShared = true
         default: break
         }
     }
