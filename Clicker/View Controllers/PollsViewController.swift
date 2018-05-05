@@ -235,7 +235,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
-            self.tabBarController?.tabBar.isHidden = false
         }
         
         if let cell0 = pollsCollectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as! PollsCell? {

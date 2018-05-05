@@ -27,14 +27,13 @@ struct GetMe: ClickerQuark {
     func process(element: Element) throws -> User {
         switch element {
         case .node(let node):
-            guard let id = node["id"].float, let name = node["name"].string, let netId = node["netId"].string else {
+            guard let id = node["id"].rawString(), let name = node["name"].string, let netId = node["netId"].string else {
                 throw NeutronError.badResponseData
             }
             return User(id: id, name: name, netId: netId)
         default: throw NeutronError.badResponseData
         }
     }
-
 }
 
 struct UserAuthenticate: ClickerQuark {
