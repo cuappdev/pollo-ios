@@ -13,11 +13,17 @@ enum PollRole {
     case answer
 }
 
+enum AskedType {
+    case live
+    case ended
+    case shared
+}
+
 class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
     var countLabel: UILabel!
-    let askedIdenfitifer = "askedCardID"
+    let askedIdentifer = "askedCardID"
     let bigAskedIdentifier = "bigAskedCardID"
     let askedSharedIdentifier = "askedSharedCardID"
     let answerIdentifier = "answerCardID"
@@ -48,7 +54,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdenfitifer)
+        collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
         collectionView.register(AskedSharedCard.self, forCellWithReuseIdentifier: askedSharedIdentifier)
         collectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         collectionView.register(BigAskedCard.self, forCellWithReuseIdentifier: bigAskedIdentifier)
@@ -93,36 +99,19 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         let numOptions: Int? = poll.options?.count
         switch (pollRole) {
         case .ask: // ASK
-            if (poll.isShared)  {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedSharedIdentifier, for: indexPath) as! AskedSharedCard
-                cell.poll = poll
-                cell.questionLabel.text = poll.text
-                return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdentifer, for: indexPath) as! AskedCard
+            cell.socket = socket
+            cell.poll = poll
+            cell.questionLabel.text = poll.text
+            cell.endPollDelegate = endPollDelegate
+            if (poll.isLive) {
+                cell.askedType = .live
+            } else if (poll.isShared) {
+                cell.askedType = .shared
             } else {
-                if numOptions! <= 4 {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdenfitifer, for: indexPath) as! AskedCard
-                    cell.socket = socket
-                    socket.addDelegate(cell)
-                    cell.poll = poll
-                    cell.questionLabel.text = poll.text
-                    cell.endPollDelegate = endPollDelegate
-                    return cell
-                } else {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: bigAskedIdentifier, for: indexPath) as! BigAskedCard
-                    cell.socket = socket
-                    socket.addDelegate(cell)
-                    cell.poll = poll
-                    cell.questionLabel.text = poll.text
-                    let moreOptions = (poll.options?.count)! - 4
-                    if moreOptions == 1 {
-                        cell.moreOptionsLabel.text = "\(moreOptions) more option..."
-                    } else {
-                        cell.moreOptionsLabel.text = "\(moreOptions) more options..."
-                    }
-                    cell.endPollDelegate = endPollDelegate
-                    return cell
-                }
+                cell.askedType = .ended
             }
+            return cell
         default: // ANSWER
             if (poll.isShared) { // SHARED
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerSharedIdentifier, for: indexPath) as! AnswerSharedCard
