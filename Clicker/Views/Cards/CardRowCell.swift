@@ -50,6 +50,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         layout.minimumInteritemSpacing = 18
         layout.scrollDirection = .horizontal
         collectionView.alwaysBounceHorizontal = true
+        collectionView.alwaysBounceVertical = false
         let inset = (frame.width - CGFloat(frame.width * 0.9)) / 2.0
         collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
         collectionView.delegate = self
@@ -102,7 +103,6 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdentifer, for: indexPath) as! AskedCard
             cell.socket = socket
             cell.poll = poll
-            cell.questionLabel.text = poll.text
             cell.endPollDelegate = endPollDelegate
             if (poll.isLive) {
                 cell.askedType = .live
@@ -111,6 +111,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
             } else {
                 cell.askedType = .ended
             }
+            cell.setup()
             return cell
         default: // ANSWER
             if (poll.isShared) { // SHARED

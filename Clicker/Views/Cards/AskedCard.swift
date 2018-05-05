@@ -23,6 +23,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
+    var hasChangedState: Bool = false
     
     var highlightColor: UIColor!
     
@@ -46,8 +47,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         socket?.addDelegate(self)
         
         backgroundColor = .clickerDeepBlack
-        setupViews()
-        layoutViews()
     }
     
     func setupLive() {
@@ -57,6 +56,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         timerLabel.textColor = .clickerMediumGray
         timerLabel.textAlignment = .center
         addSubview(timerLabel)
+        
+        timerLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(3)
+        }
         
         visibiltyLabel.text = "Only you can see these results"
         
@@ -83,8 +87,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.height.equalTo(398)
         }
         
-        timerLabel.removeFromSuperview()
-        timer.invalidate()
+        
+        if (timerLabel != nil && timerLabel.isDescendant(of: self)) {
+            timerLabel.removeFromSuperview()
+            timer.invalidate()
+        }
         
         questionButton.setTitle("Share Results", for: .normal)
         questionButton.backgroundColor = .clickerGreen
@@ -101,20 +108,23 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func setupShared() {
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(333)
+        if (questionButton.isDescendant(of: self)) {
+            questionButton.removeFromSuperview()
         }
-        
-        questionButton.removeFromSuperview()
+        cardView.snp.makeConstraints { make in
+            if (hasChangedState) {
+                make.bottom.equalToSuperview().inset(65)
+            }
+        }
         
         visibiltyLabel.text = "Shared with group"
         
         graphicView.image = #imageLiteral(resourceName: "results_shared")
         
         visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(questionButton.snp.top).offset(-20)
+            make.bottom.equalToSuperview().offset(-20)
         }
-
+        
     }
     
     func setupOverflow(numOptions: Int) {
@@ -149,7 +159,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func setupViews() {
+    func setup() {
         highlightColor = .clickerHalfGreen
         
         cardView = UIView()
@@ -161,6 +171,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         addSubview(cardView)
         
         questionLabel = UILabel()
+        questionLabel.text = poll.text
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -201,6 +212,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         graphicView = UIImageView()
         cardView.addSubview(graphicView)
         
+        layoutViews()
         
         switch (askedType) {
         case .live:
@@ -215,11 +227,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func layoutViews() {
         
-        timerLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(3)
-        }
-        
         cardView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(25)
             make.bottom.equalToSuperview()
@@ -227,14 +234,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.centerX.equalToSuperview()
         }
         
-        questionLabel.snp.updateConstraints{ make in
+        questionLabel.snp.makeConstraints{ make in
             questionLabel.sizeToFit()
             make.top.equalToSuperview().offset(20)
             make.left.equalToSuperview().offset(17)
             make.right.equalToSuperview().offset(17)
         }
         
-        resultsTableView.snp.updateConstraints{ make in
+        resultsTableView.snp.makeConstraints{ make in
             make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -247,24 +254,23 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.centerY.equalTo(visibiltyLabel.snp.centerY)
         }
         
-        visibiltyLabel.snp.updateConstraints{ make in
+        visibiltyLabel.snp.makeConstraints{ make in
             make.left.equalTo(graphicView.snp.right).offset(4)
             make.width.equalTo(200)
             make.height.equalTo(14.5)
         }
         
-        totalResultsLabel.snp.updateConstraints{ make in
+        totalResultsLabel.snp.makeConstraints{ make in
             make.right.equalToSuperview().offset(-22.5)
             make.width.equalTo(50)
             make.height.equalTo(14.5)
             make.centerY.equalTo(visibiltyLabel.snp.centerY)
         }
         
-        questionButton.snp.updateConstraints{ make in
+        questionButton.snp.makeConstraints{ make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(24)
             make.height.equalTo(47)
-            make.top.equalTo(visibiltyLabel.snp.bottom).offset(15)
             make.width.equalTo(303)
         }
         
@@ -305,7 +311,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return poll.options!.count
+        return min((poll.options?.count)!, 4)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -371,14 +377,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     @objc func questionAction() {
+        hasChangedState = true
         switch (askedType) {
         case .live:
             socket.socket.emit("server/poll/end", [])
             endPollDelegate.endedPoll()
             setupEnded()
+            askedType = .ended
         case .ended:
             socket.socket.emit("server/poll/results", [])
             setupShared()
+            askedType = .shared
         default: break
         }
     }
