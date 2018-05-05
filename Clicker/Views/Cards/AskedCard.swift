@@ -318,13 +318,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         return 47
     }
     
-    func sessionConnected() {
-        
-    }
+    func sessionConnected() { }
     
-    func sessionDisconnected() {
-        
-    }
+    func sessionDisconnected() { }
+    
+    func receivedUserCount(_ count: Int) { }
     
     func pollStarted(_ poll: Poll) {
     }
