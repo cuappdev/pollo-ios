@@ -69,7 +69,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(35)
+            make.top.equalToSuperview().offset(10)
             make.width.equalToSuperview()
             make.height.equalTo(444)
             make.centerX.equalToSuperview()
