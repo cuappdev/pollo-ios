@@ -200,15 +200,12 @@
 		638406D12083CBC700483645 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
-				C270524D209D525700C7980F /* CardDateCell.swift */,
 				C2BB14B7209449390081C35D /* CardRowCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				C2705247209D435B00C7980F /* AskedUnsharedCard.swift */,
-				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
 				63A1BEA0209A5E9900C8E680 /* BigAskedCard.swift */,
 				637D5B19209A95B900E446E8 /* ExpandedAskedCard.swift */,
 				C2BB14BE2094DDDB0081C35D /* AskedSharedCard.swift */,
-				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				C2BB14C22094DF950081C35D /* AnswerSharedCard.swift */,
 				633381342086D18B008BD455 /* EmptyAnswerCell.swift */,
@@ -216,6 +213,7 @@
 				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */,
 				63E4DAF72097DE94000808EB /* NavigationTitleView.swift */,
+				C270524D209D525700C7980F /* CardDateCell.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
