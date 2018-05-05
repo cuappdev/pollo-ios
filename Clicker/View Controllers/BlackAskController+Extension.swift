@@ -10,8 +10,29 @@ import UIKit
 
 extension BlackAskController {
     
+    func setupVertical() {
+        setupVerticalCollectionView()
+    }
+    
     func setupVerticalCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        verticalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .vertical
+        verticalCollectionView.delegate = self
+        verticalCollectionView.dataSource = self
+        verticalCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
+        verticalCollectionView.showsVerticalScrollIndicator = false
+        verticalCollectionView.showsHorizontalScrollIndicator = false
+        verticalCollectionView.alwaysBounceVertical = true
+        verticalCollectionView.backgroundColor = .clear
+        verticalCollectionView.isPagingEnabled = true
+        view.addSubview(verticalCollectionView)
         
+        verticalCollectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
 }
