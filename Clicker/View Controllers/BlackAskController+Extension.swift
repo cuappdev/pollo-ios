@@ -11,6 +11,7 @@ import UIKit
 extension BlackAskController {
     
     func setupVertical() {
+        setupVerticalNavBar()
         setupVerticalCollectionView()
     }
     
@@ -33,6 +34,11 @@ extension BlackAskController {
         verticalCollectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+    
+    func setupVerticalNavBar() {
+        self.navigationItem.titleView = UIView()
+        self.navigationItem.rightBarButtonItems = []
     }
     
 }
