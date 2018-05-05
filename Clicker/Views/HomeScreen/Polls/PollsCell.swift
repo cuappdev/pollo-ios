@@ -21,6 +21,7 @@ protocol EditSessionDelegate {
 
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, EditPollDelegate, GIDSignInDelegate {
     
+    var parentNavController: UINavigationController!
     var pollsTableView: UITableView!
     var editSessionDelegate: EditSessionDelegate!
     let pollPreviewIdentifier = "pollPreviewCellID"
@@ -148,6 +149,34 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let session: Session = sessions[sessions.count - indexPath.row - 1]
+        let socket = Socket(id: "\(session.id)", userType: "admin")
+        
+        GetSortedPolls(id: session.id).make()
+            .done { datePollsArr in
+                switch self.pollType {
+                case .created:
+                    let blackVC = BlackAskController()
+                    blackVC.socket = socket
+                    blackVC.code = session.code
+                    blackVC.name = session.name
+                    blackVC.sessionId = session.id
+                    blackVC.datePollsArr = datePollsArr
+                    self.parentNavController.pushViewController(blackVC, animated: true)
+                default:
+                    let blackVC = BlackAnswerController()
+                    blackVC.socket = socket
+                    blackVC.code = session.code
+                    blackVC.name = session.name
+                    blackVC.sessionId = session.id
+                    blackVC.datePollsArr = datePollsArr
+                    self.parentNavController.pushViewController(blackVC, animated: true)
+                }
+            } .catch { error in
+                print(error)
+            }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
