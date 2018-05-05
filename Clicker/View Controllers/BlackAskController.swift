@@ -216,21 +216,17 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
 
     func setupAdminGroupConstraints() {
         mainCollectionView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom)
-            }
+            make.top.equalToSuperview().offset(50)
             make.bottom.equalTo(createPollButton.snp.top).offset(-12)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-//        zoomOutButton.snp.makeConstraints { make in
-//            let rightOffset = (view.frame.width - 339) / 2
-//            make.right.equalTo(rightOffset).multipliedBy(-1)
-//            make.bottom.equalTo(mainCollectionView.snp.top).offset(-20)
-//        }
+        zoomOutButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-24)
+            make.bottom.equalTo(mainCollectionView.snp.top)
+            make.width.height.equalTo(20)
+        }
     }
     
     // MARK: - COLLECTIONVIEW
