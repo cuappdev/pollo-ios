@@ -29,7 +29,7 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     func setupViews() {
-        backgroundColor = .clicker77Black
+        backgroundColor = .clicker85Black
         
         /*let blur = UIBlurEffect(style: )
         blurView = UIVisualEffectView(effect: blur)
