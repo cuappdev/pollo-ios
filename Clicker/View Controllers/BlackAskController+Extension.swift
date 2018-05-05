@@ -37,6 +37,7 @@ extension BlackAskController {
     }
     
     func setupVerticalNavBar() {
+        self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
     }

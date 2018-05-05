@@ -402,6 +402,7 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
 				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
@@ -410,7 +411,6 @@
 				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2504A58209963A200DC5EDC /* EditNameViewController.swift */,
 				C2504A56209956C600DC5EDC /* DeletePollViewController.swift */,
-				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
 				C270524B209D51A600C7980F /* BlackAskController+Extension.swift */,
 				633381322086D07D008BD455 /* BlackAnswerController.swift */,
 				C21D98802083D32000191103 /* LoginViewController.swift */,
