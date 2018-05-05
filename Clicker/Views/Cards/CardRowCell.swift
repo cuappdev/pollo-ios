@@ -24,8 +24,6 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
     var collectionView: UICollectionView!
     var countLabel: UILabel!
     let askedIdentifer = "askedCardID"
-    let bigAskedIdentifier = "bigAskedCardID"
-    let askedSharedIdentifier = "askedSharedCardID"
     let answerIdentifier = "answerCardID"
     let answerSharedIdentifier = "answerSharedCardID"
     var socket: Socket!
@@ -139,38 +137,38 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // UPDATE COUNT LABEL
-        let countString = "\(indexPath.item)/\(polls.count)"
-        countLabel.attributedText = getCountLabelAttributedString(countString)
-    }
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        // UPDATE COUNT LABEL
+//        let countString = "\(indexPath.item)/\(polls.count)"
+//        countLabel.attributedText = getCountLabelAttributedString(countString)
+//    }
     
-    // Get attributed string for countLabel
-    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGray,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
+//    // Get attributed string for countLabel
+//    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
+//        let slashIndex = countString.index(of: "/")?.encodedOffset
+//        let attributedString = NSMutableAttributedString(string: countString, attributes: [
+//            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
+//            .foregroundColor: UIColor.clickerMediumGray,
+//            .kern: 0.0
+//            ])
+//        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
+//        return attributedString
+//    }
     
-    // MARK: SCROLLVIEW METHODS
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        for cell in collectionView.visibleCells {
-            let indexPath = collectionView.indexPath(for: cell)
-            guard let cellRect = collectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
-                return
-            }
-            if (collectionView.bounds.contains(cellRect)) {
-                let countString = "\(indexPath!.item)/\(polls.count)"
-                countLabel.attributedText = getCountLabelAttributedString(countString)
-                break
-            }
-        }
-    }
+//    // MARK: SCROLLVIEW METHODS
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        for cell in collectionView.visibleCells {
+//            let indexPath = collectionView.indexPath(for: cell)
+//            guard let cellRect = collectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
+//                return
+//            }
+//            if (collectionView.bounds.contains(cellRect)) {
+//                let countString = "\(indexPath!.item)/\(polls.count)"
+//                countLabel.attributedText = getCountLabelAttributedString(countString)
+//                break
+//            }
+//        }
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
