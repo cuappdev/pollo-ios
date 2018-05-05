@@ -87,6 +87,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                                 let blackAnswerVC = BlackAnswerController()
                                 blackAnswerVC.socket = socket
                                 blackAnswerVC.code = code
+                                blackAnswerVC.name = session.name
                                 blackAnswerVC.datePollsArr = datePollsArr
                                 blackAnswerVC.sessionId = session.id
                                 self.dismiss(animated: true, completion: {

@@ -38,11 +38,13 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: pollsIdentifier, for: indexPath) as! PollsCell
         cell.editSessionDelegate = self
+        cell.parentNavController = navigationController
         if (indexPath.item == 0) {
             cell.pollType = .created
         } else {
             cell.pollType = .joined
         }
+        print("row: \(indexPath.row)\nitem: \(indexPath.item) \nsection: \(indexPath.section)")
         return cell
     }
     
@@ -180,6 +182,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                         let blackAskVC = BlackAskController()
                         blackAskVC.socket = socket
                         blackAskVC.code = code
+                        blackAskVC.name = code
                         blackAskVC.sessionId = session.id
                         self.navigationController?.pushViewController(blackAskVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -233,6 +236,20 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
             self.tabBarController?.tabBar.isHidden = false
+        }
+        
+        if let cell0 = pollsCollectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as! PollsCell? {
+            cell0.getPollSessions()
+            cell0.pollsTableView.reloadData()
+        } else {
+            print("first time loading row 0")
+        }
+        
+        if let cell1 = pollsCollectionView?.cellForItem(at: IndexPath(row: 1, section: 0)) as! PollsCell? {
+            cell1.getPollSessions()
+            cell1.pollsTableView.reloadData()
+        } else {
+            print("first time loading row 1")
         }
         
     }
