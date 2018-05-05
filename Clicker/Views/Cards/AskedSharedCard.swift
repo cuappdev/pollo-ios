@@ -78,38 +78,44 @@ class AskedSharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDat
     
     func layoutViews() {
         
-        questionLabel.snp.updateConstraints { make in
-            make.top.equalToSuperview().offset(18)
-            make.left.equalToSuperview().offset(18)
-            make.right.equalToSuperview().offset(-18)
+        contentView.snp.makeConstraints { make in
+            make.height.equalTo(398)
+            make.width.equalTo(333)
         }
         
-        resultsTableView.snp.updateConstraints { make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(17)
-            make.left.equalToSuperview()//.offset(18)
-            make.right.equalToSuperview()//.offset(-18)
-            make.bottom.equalToSuperview().offset(-51)
+        questionLabel.snp.updateConstraints{ make in
+            questionLabel.sizeToFit()
+            make.top.equalToSuperview().offset(20)
+            make.left.equalToSuperview().offset(17)
+            make.right.equalToSuperview().offset(17)
         }
         
-        visibiltyLabel.snp.updateConstraints { make in
+        resultsTableView.snp.updateConstraints{ make in
+            make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(206)
+        }
+        
+        visibiltyLabel.snp.updateConstraints{ make in
+            make.top.equalTo(resultsTableView.snp.bottom).offset(15)
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
-            make.bottom.equalToSuperview().offset(-23.5)
-            make.height.equalTo(14.5)
-        }
-        
-        totalResultsLabel.snp.updateConstraints { make in
-            make.right.equalToSuperview().offset(-22.5)
-            make.width.equalTo(50)
-            make.top.equalTo(visibiltyLabel.snp.top)
             make.height.equalTo(14.5)
         }
         
         worldView.snp.makeConstraints { make in
             make.height.equalTo(14.5)
             make.width.equalTo(14.5)
-            make.top.equalTo(visibiltyLabel.snp.top)
+            make.centerY.equalTo(visibiltyLabel.snp.centerY)
             make.left.equalToSuperview().offset(25)
+        }
+        
+        totalResultsLabel.snp.updateConstraints{ make in
+            make.right.equalToSuperview().offset(-22.5)
+            make.width.equalTo(50)
+            make.top.equalTo(visibiltyLabel.snp.top)
+            make.height.equalTo(14.5)
         }
         
     }

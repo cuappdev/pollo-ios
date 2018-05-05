@@ -1,18 +1,20 @@
 //
-//  FRSectionCell.swift
+//  FRPollBuilderView.swift
 //  Clicker
 //
-//  Created by Jack Schluger on 3/15/18.
+//  Created by eoin on 4/28/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
- 
+
 import SnapKit
 import UIKit
-import Presentr
+import DropDown
 
-class FRSectionCell: QuestionSectionCell {
+class FRPollBuilderView: UIView, UITextFieldDelegate {
     
     let popupViewHeight: CGFloat = 95
+    
+    var pollBuilderDelegate: PollBuilderDelegate!
     
     var session: Session!
     var grayViewBottomConstraint: Constraint!
@@ -23,11 +25,14 @@ class FRSectionCell: QuestionSectionCell {
     var responseOptionsLabel: UILabel!
     var changeButton: UIButton!
     
+    var dropDown: DropDown!
+    
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         layoutSubviews()
+        setupDropDown()
     }
     
     // MARK: - LAYOUT
@@ -49,7 +54,7 @@ class FRSectionCell: QuestionSectionCell {
         responseOptionsLabel.font = ._14MediumFont
         addSubview(responseOptionsLabel)
         
-        changeButton = UIButton()
+        changeButton = UIButton(type: .system)
         changeButton.setTitle("Change", for: .normal)
         changeButton.titleLabel?.font = ._14MediumFont
         changeButton.titleLabel?.textColor = .clickerBlue
@@ -88,32 +93,25 @@ class FRSectionCell: QuestionSectionCell {
         }
     }
     
+    func setupDropDown() {
+        dropDown = DropDown()
+        dropDown.anchorView = responseOptionsLabel
+        dropDown.width = frame.width
+        dropDown.dataSource = ["Show Response To Audience", "Show Vote Count"]
+        dropDown.direction = .bottom
+        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            print("Selected dropdown item: \(item) at index: \(index)")
+            if index == 1 {
+                print(1)
+            }
+        }
+    }
+    
     @objc func changeButtonPressed() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(popupViewHeight))
-        let originY = 0
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.transitionType = TransitionType.coverVerticalFromTop
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnTap = true
-        presenter.dismissOnSwipeDirection = .top
-        presenter.backgroundOpacity = 0.4
-        
-        let pickQTypeVC = PickQTypeViewController()
-        pickQTypeVC.currentType = "questionType"
-        pickQTypeVC.setup()
-        pickQTypeVC.popupHeight = popupViewHeight
-        UIViewController().customPresentViewController(presenter, viewController: pickQTypeVC, animated: true, completion: nil)
+        dropDown.show()
     }
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-

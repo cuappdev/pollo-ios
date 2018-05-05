@@ -1,28 +1,24 @@
 //
-//  AskedCard.swift
+//  ExpandedAskedCard.swift
 //  Clicker
 //
-//  Created by eoin on 4/16/18.
+//  Created by eoin on 5/2/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import UIKit
 
-class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
+class ExpandedAskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
     var endPollDelegate: EndPollDelegate!
-    var timer: Timer!
-    var elapsedSeconds: Int = 0
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var isMCQuestion: Bool!
-    var didReduceContentSize: Bool = false
     
     var cellColors: UIColor!
     
-    var timerLabel: UILabel!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
@@ -33,34 +29,25 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
-        runTimer()
     }
     
     func setupCell() {
         isMCQuestion = true
-
+        
         socket?.addDelegate(self)
         
-        backgroundColor = .clickerDeepBlack
+        backgroundColor = .clickerNavBarLightGrey
         setupViews()
         layoutViews()
     }
     
     func setupViews() {
-        contentView.layer.cornerRadius = 15
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
-        contentView.layer.borderWidth = 1
-        contentView.layer.shadowRadius = 2.5
-        contentView.backgroundColor = .clickerNavBarLightGrey
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.clickerBorder.cgColor
+        self.layer.shadowRadius = 2.5
+        self.layer.cornerRadius = 15
         
         cellColors = .clickerHalfGreen
-        
-        timerLabel = UILabel()
-        timerLabel.text = "00:00"
-        timerLabel.font = UIFont._14BoldFont
-        timerLabel.textColor = .clickerMediumGray
-        timerLabel.textAlignment = .center
-        addSubview(timerLabel)
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -68,23 +55,23 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        contentView.addSubview(questionLabel)
+        addSubview(questionLabel)
         
         resultsTableView = UITableView()
         resultsTableView.backgroundColor = .clear
         resultsTableView.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.separatorStyle = .none
-        resultsTableView.isScrollEnabled = false
+        resultsTableView.isScrollEnabled = true
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        contentView.addSubview(resultsTableView)
+        addSubview(resultsTableView)
         
         visibiltyLabel = UILabel()
         visibiltyLabel.text = "Only you can see these results"
         visibiltyLabel.font = ._12MediumFont
         visibiltyLabel.textAlignment = .left
         visibiltyLabel.textColor = .clickerMediumGray
-        contentView.addSubview(visibiltyLabel)
+        addSubview(visibiltyLabel)
         
         shareResultsButton = UIButton()
         shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
@@ -96,29 +83,23 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
         shareResultsButton.layer.borderWidth = 1.5
         shareResultsButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
-        contentView.addSubview(shareResultsButton)
+        addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
         totalResultsLabel.textColor = .clickerMediumGray
-        contentView.addSubview(totalResultsLabel)
+        addSubview(totalResultsLabel)
         
         eyeView = UIImageView(image: #imageLiteral(resourceName: "solo_eye"))
-        contentView.addSubview(eyeView)
+        addSubview(eyeView)
     }
     
     func layoutViews() {
         
-        timerLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(3)
-        }
-        
         contentView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(30)
-            make.height.equalTo(390)
+            make.height.equalTo(439)
             make.width.equalTo(339)
         }
         
@@ -133,11 +114,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(206)
+            make.height.equalTo(312)
         }
         
         visibiltyLabel.snp.updateConstraints{ make in
-            make.top.equalTo(resultsTableView.snp.bottom).offset(15)
+            make.top.equalTo(resultsTableView.snp.bottom).offset(29)
             make.left.equalToSuperview().offset(46)
             make.width.equalTo(200)
             make.height.equalTo(14.5)
@@ -165,15 +146,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.width.equalTo(303)
         }
         
-        
-    }
-    
-    // MARK: LAYOUT SUBVIEWS
-    override func layoutSubviews() {
-//        if (!didReduceContentSize) {
-//            contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(24, 0, 0, 0))
-//            didReduceContentSize = true
-//        }
     }
     
     // MARK - TABLEVIEW
@@ -210,7 +182,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return poll.options!.count
+        return (poll.options?.count)!
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -243,45 +215,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         self.resultsTableView.reloadData()
     }
     
-    // MARK: Start timer
-    func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
-    }
-    
     // MARK  - ACTIONS
-    // Update timer label
-    @objc func updateTimerLabel() {
-        elapsedSeconds += 1
-        if (elapsedSeconds < 10) {
-            timerLabel.text = "00:0\(elapsedSeconds)"
-        } else if (elapsedSeconds < 60) {
-            timerLabel.text = "00:\(elapsedSeconds)"
-        } else {
-            let minutes = Int(elapsedSeconds / 60)
-            let seconds = elapsedSeconds - minutes * 60
-            if (elapsedSeconds < 600) {
-                if (seconds < 10) {
-                    timerLabel.text = "0\(minutes):0\(seconds)"
-                } else {
-                    timerLabel.text = "0\(minutes):\(seconds)"
-                }
-            } else {
-                if (seconds < 10) {
-                    timerLabel.text = "\(minutes):0\(seconds)"
-                } else {
-                    timerLabel.text = "\(minutes):\(seconds)"
-                }
-            }
-        }
-    }
-    
     @objc func endQuestionAction() {
         socket.socket.emit("server/poll/end", [])
         endPollDelegate.endedPoll()
-        
-        timer.invalidate()
-        timerLabel.removeFromSuperview()
-        
         shareResultsButton.setTitleColor(.clickerWhite, for: .normal)
         shareResultsButton.backgroundColor = .clickerGreen
         shareResultsButton.setTitle("Share Results", for: .normal)
@@ -304,6 +241,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         visibiltyLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-23.5)
         }
+        
     }
     
     
