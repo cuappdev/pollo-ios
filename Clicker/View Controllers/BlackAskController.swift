@@ -293,7 +293,16 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: mainCollectionView.frame.width, height: 505)
+        if (collectionView == verticalCollectionView) {
+            return CGSize()
+        } else {
+            let poll = currentPolls[indexPath.item]
+            if (poll.isShared) {g
+                return CGSize(width: view.frame.width * 0.9, height: 415)
+            } else {
+                return CGSize(width: view.frame.width * 0.9, height: 440)
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
