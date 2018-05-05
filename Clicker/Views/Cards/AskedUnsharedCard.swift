@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
+class AskedUnsharedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
@@ -26,7 +26,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var visibiltyLabel: UILabel!
-    var endQuestionButton: UIButton!
+    var shareResultsButton: UIButton!
     var totalResultsLabel: UILabel!
     var eyeView: UIImageView!
     
@@ -38,7 +38,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func setupCell() {
         isMCQuestion = true
-
+        
         socket?.addDelegate(self)
         
         backgroundColor = .clickerDeepBlack
@@ -54,13 +54,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         contentView.backgroundColor = .clickerNavBarLightGrey
         
         cellColors = .clickerHalfGreen
-        
-        timerLabel = UILabel()
-        timerLabel.text = "00:00"
-        timerLabel.font = UIFont._14BoldFont
-        timerLabel.textColor = .clickerMediumGray
-        timerLabel.textAlignment = .center
-        addSubview(timerLabel)
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -86,17 +79,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         visibiltyLabel.textColor = .clickerMediumGray
         contentView.addSubview(visibiltyLabel)
         
-        endQuestionButton = UIButton()
-        endQuestionButton.setTitleColor(.clickerDeepBlack, for: .normal)
-        endQuestionButton.backgroundColor = .clear
-        endQuestionButton.setTitle("End Question", for: .normal)
-        endQuestionButton.titleLabel?.font = ._16SemiboldFont
-        endQuestionButton.titleLabel?.textAlignment = .center
-        endQuestionButton.layer.cornerRadius = 25.5
-        endQuestionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
-        endQuestionButton.layer.borderWidth = 1.5
-        endQuestionButton.addTarget(self, action: #selector(endQuestionAction), for: .touchUpInside)
-        contentView.addSubview(endQuestionButton)
+        shareResultsButton = UIButton()
+        shareResultsButton.setTitleColor(.clickerDeepBlack, for: .normal)
+        shareResultsButton.backgroundColor = .clear
+        shareResultsButton.setTitle("End Question", for: .normal)
+        shareResultsButton.titleLabel?.font = ._16SemiboldFont
+        shareResultsButton.titleLabel?.textAlignment = .center
+        shareResultsButton.layer.cornerRadius = 25.5
+        shareResultsButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+        shareResultsButton.layer.borderWidth = 1.5
+        shareResultsButton.addTarget(self, action: #selector(shareQuestionAction), for: .touchUpInside)
+        contentView.addSubview(shareResultsButton)
         
         totalResultsLabel = UILabel()
         totalResultsLabel.text = "\(totalNumResults) votes"
@@ -157,7 +150,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.height.equalTo(14.5)
         }
         
-        endQuestionButton.snp.updateConstraints{ make in
+        shareResultsButton.snp.updateConstraints{ make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(24)
             make.height.equalTo(47)
@@ -267,23 +260,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    @objc func endQuestionAction() {
-        socket.socket.emit("server/poll/end", [])
-        endPollDelegate.endedPoll()
-        
-        timer.invalidate()
-        timerLabel.removeFromSuperview()
-        
-        endQuestionButton.setTitleColor(.clickerWhite, for: .normal)
-        endQuestionButton.backgroundColor = .clickerGreen
-        endQuestionButton.setTitle("Share Results", for: .normal)
-        endQuestionButton.titleLabel?.font = ._16SemiboldFont
-        endQuestionButton.layer.borderWidth = 0
-        
-        cellColors = .clickerMint
-        resultsTableView.reloadData()
-        
+    @objc func shareQuestionAction() {
+        socket.socket.emit("server/poll/results", [])
+        shareResultsButton.removeFromSuperview()
+        eyeView.image = #imageLiteral(resourceName: "results_shared")
+        visibiltyLabel.text = "Shared with group"
+        visibiltyLabel.textColor = .clickerGreen
+        visibiltyLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-23.5)
+        }
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
