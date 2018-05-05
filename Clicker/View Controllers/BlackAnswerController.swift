@@ -188,7 +188,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     func updatedTally(_ currentState: CurrentState) { }
     
     func updateDatePollsArr() {
-        GetSortedPolls(id: "\(sessionId)").make()
+        GetSortedPolls(id: sessionId).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
