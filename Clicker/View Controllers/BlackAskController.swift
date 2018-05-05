@@ -33,6 +33,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     
     var socket: Socket!
     var sessionId: Int!
@@ -48,6 +49,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
+        socket.addDelegate(self)
         setupNavBar()
         setupCreatePollBtn()
         if (datePollsArr.count == 0) {
@@ -273,6 +275,10 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func sessionDisconnected() { }
     
+    func receivedUserCount(_ count: Int) {
+        peopleButton.setTitle("\(count)", for: .normal)
+    }
+    
     func pollStarted(_ poll: Poll) { }
     
     func pollEnded(_ poll: Poll) { }
@@ -321,14 +327,14 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func expandView(poll: Poll, socket: Socket) {
-        let expandedVC = ExpandedViewController()
-        expandedVC.setup()
-        expandedVC.expandedCard.socket = socket
-        socket.addDelegate(expandedVC.expandedCard)
-        expandedVC.expandedCard.poll = poll
-        expandedVC.expandedCard.questionLabel.text = poll.text
-        expandedVC.expandedCard.endPollDelegate = self
-        present(expandedVC, animated: true, completion: nil)
+//        let expandedVC = ExpandedViewController()
+//        expandedVC.setup()
+//        expandedVC.expandedCard.socket = socket
+//        socket.addDelegate(expandedVC.expandedCard)
+//        expandedVC.expandedCard.poll = poll
+//        expandedVC.expandedCard.questionLabel.text = poll.text
+//        expandedVC.expandedCard.endPollDelegate = self
+//        present(expandedVC, animated: true, completion: nil)
     }
     
     func setupNavBar() {
@@ -345,9 +351,18 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+        
+        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
+        let settingsBarButton = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+        
+        peopleButton = UIButton()
+        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
+        peopleButton.setTitle("0", for: .normal)
+        peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.sizeToFit()
+        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
+        self.navigationItem.rightBarButtonItems = [settingsBarButton, peopleBarButton]
     }
     
     

@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Number of people in poll.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "Number of people in poll.png",
       "scale" : "2x"
     },
     {
