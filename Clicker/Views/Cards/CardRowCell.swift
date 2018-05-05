@@ -56,9 +56,7 @@ class CardRowCell: UICollectionViewCell, UICollectionViewDataSource, UICollectio
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
-        collectionView.register(AskedSharedCard.self, forCellWithReuseIdentifier: askedSharedIdentifier)
         collectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
-        collectionView.register(BigAskedCard.self, forCellWithReuseIdentifier: bigAskedIdentifier)
         collectionView.register(AnswerSharedCard.self, forCellWithReuseIdentifier: answerSharedIdentifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false

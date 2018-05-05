@@ -17,6 +17,7 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     
     var socket: Socket!
     var code: String!
@@ -158,6 +159,10 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
     
     func sessionDisconnected() { }
     
+    func receivedUserCount(_ count: Int) {
+        peopleButton.setTitle("\(count)", for: .normal)
+    }
+    
     func pollStarted(_ poll: Poll) {
         let currentDate = getTodaysDate()
         if (datePollsArr.count == 0) {
@@ -215,9 +220,18 @@ class BlackAnswerController: UIViewController, UICollectionViewDelegate, UIColle
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+        
+        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
+        let settingsBarButton = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
+        
+        peopleButton = UIButton()
+        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
+        peopleButton.setTitle("0", for: .normal)
+        peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.sizeToFit()
+        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
+        self.navigationItem.rightBarButtonItems = [settingsBarButton, peopleBarButton]
     }
     
     @objc func goBack() {

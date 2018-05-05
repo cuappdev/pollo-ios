@@ -73,6 +73,13 @@ class Socket {
             self.delegates.forEach { $0.updatedTally(currentState) }
         }
         
+        socket.on("user/count") { data, ack in
+            guard let json = data[0] as? [String:Any], let count = json["count"] as? Int else {
+                return
+            }
+            self.delegates.forEach { $0.receivedUserCount(count) }
+        }
+        
         socket.connect()
     }
     
