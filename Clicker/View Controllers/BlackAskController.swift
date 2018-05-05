@@ -29,6 +29,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
+    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
     let askedIdentifer = "askedCardID"
     let answerIdentifier = "answerCardID"
     let answerSharedIdentifier = "answerSharedCardID"
@@ -46,9 +47,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var datePollsArr: [(String, [Poll])] = []
     var currentPolls: [Poll] = []
     var currentDatePollsIndex: Int!
-    
-    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
-    let cardRowCellIdentifier = "cardRowCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -209,10 +207,11 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
+        let collectionViewInset = view.frame.width * 0.05
+        mainCollectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         mainCollectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
         mainCollectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         mainCollectionView.register(AnswerSharedCard.self, forCellWithReuseIdentifier: answerSharedIdentifier)
@@ -288,9 +287,6 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         }
         cell.setup()
         return cell
-//        // SCROLL TO LATEST QUESTION
-//        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
-//        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -393,20 +389,28 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
         let newPoll = Poll(text: text, options: options, isLive: true)
-        if (datePollsArr.count == 0) {
+        let arrEmpty = (datePollsArr.count == 0)
+        if (arrEmpty) {
             self.datePollsArr.append((getTodaysDate(), [newPoll]))
+            self.currentDatePollsIndex = 0
             removeEmptyStudentPoll()
             setupAdminGroup()
         } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
+            self.datePollsArr[currentDatePollsIndex].1.append(newPoll)
         }
+        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
         // HIDE CREATE POLL BUTTON
         createPollButton.alpha = 0
         createPollButton.isUserInteractionEnabled = false
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+        DispatchQueue.main.async {
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+            }
+            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        }
     }
     
     // MARK: ENDED POLL DELEGATE
