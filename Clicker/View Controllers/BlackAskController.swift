@@ -45,7 +45,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var name: String!
     var datePollsArr: [(String, [Poll])] = []
     var currentPolls: [Poll] = []
-    var livePoll: Poll!
+    var currentDatePollsIndex: Int!
     
     let emptyAnswerCellIdentifier = "emptyAnswerCellID"
     let cardRowCellIdentifier = "cardRowCellID"
@@ -60,7 +60,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         if (datePollsArr.count == 0) {
             setupEmptyStudentPoll()
         } else {
-            currentPolls = (datePollsArr.last?.1)!
+            currentDatePollsIndex = datePollsArr.count - 1
+            currentPolls = datePollsArr[currentDatePollsIndex].1
             setupAdminGroup()
         }
         if (name == code) {
@@ -297,7 +298,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize()
         } else {
             let poll = currentPolls[indexPath.item]
-            if (poll.isShared) {g
+            if (poll.isShared) {
                 return CGSize(width: view.frame.width * 0.9, height: 415)
             } else {
                 return CGSize(width: view.frame.width * 0.9, height: 440)
@@ -319,6 +320,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         GetSortedPolls(id: sessionId).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
+                self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
             }.catch { error in
                 print(error)
