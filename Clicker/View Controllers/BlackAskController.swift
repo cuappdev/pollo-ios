@@ -27,6 +27,7 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     var createPollButton: UIButton!
     
     // admin group vars
+    var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
     
     // nav bar
@@ -207,6 +208,10 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         mainCollectionView.backgroundColor = .clear
         mainCollectionView.isPagingEnabled = true
         view.addSubview(mainCollectionView)
+        
+        zoomOutButton = UIButton()
+        zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
+        view.addSubview(zoomOutButton)
     }
 
     func setupAdminGroupConstraints() {
@@ -220,6 +225,12 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
+        
+//        zoomOutButton.snp.makeConstraints { make in
+//            let rightOffset = (view.frame.width - 339) / 2
+//            make.right.equalTo(rightOffset).multipliedBy(-1)
+//            make.bottom.equalTo(mainCollectionView.snp.top).offset(-20)
+//        }
     }
     
     // MARK: - COLLECTIONVIEW
