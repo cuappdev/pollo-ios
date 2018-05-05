@@ -29,6 +29,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     // admin group vars
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
+    let askedIdentifer = "askedCardID"
+    let answerIdentifier = "answerCardID"
+    let answerSharedIdentifier = "answerSharedCardID"
     var verticalCollectionView: UICollectionView!
     var countLabel: UILabel!
     
@@ -209,6 +212,9 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
         mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
+        mainCollectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
+        mainCollectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
+        mainCollectionView.register(AnswerSharedCard.self, forCellWithReuseIdentifier: answerSharedIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
         mainCollectionView.backgroundColor = .clear
@@ -263,20 +269,27 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (collectionView == verticalCollectionView) {
-            
+            // TODO
         }
-        // mainCollectionView
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
-        let polls = currentPolls
-        cell.polls = polls
+         // mainCollectionView
+        let poll = currentPolls[indexPath.item]
+        let numOptions: Int? = poll.options?.count
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdentifer, for: indexPath) as! AskedCard
         cell.socket = socket
-        cell.pollRole = .ask
+        cell.poll = poll
         cell.endPollDelegate = self
-        cell.collectionView.reloadData()
-        // SCROLL TO LATEST QUESTION
-        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
-        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        if (poll.isLive) {
+            cell.askedType = .live
+        } else if (poll.isShared) {
+            cell.askedType = .shared
+        } else {
+            cell.askedType = .ended
+        }
+        cell.setup()
         return cell
+//        // SCROLL TO LATEST QUESTION
+//        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
+//        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

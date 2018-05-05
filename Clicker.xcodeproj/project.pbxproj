@@ -192,7 +192,6 @@
 		638406D12083CBC700483645 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
-				C2BB14B7209449390081C35D /* CardRowCell.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
 				C2BB14C22094DF950081C35D /* AnswerSharedCard.swift */,
@@ -402,6 +401,7 @@
 		C7F923D91F73543700B1E975 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C2BB14B7209449390081C35D /* CardRowCell.swift */,
 				6353FD392086DDC900E16EB2 /* BlackAskController.swift */,
 				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
