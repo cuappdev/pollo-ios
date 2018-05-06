@@ -317,7 +317,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 cell.cardType = .ended
             }
             cell.configure()
-            cell.setupCard()
             return cell
         default:
             let poll = currentPolls[indexPath.item]
@@ -334,7 +333,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 cell.cardType = .ended
             }
             cell.configure()
-            cell.setupCard()
             return cell
         }
     }

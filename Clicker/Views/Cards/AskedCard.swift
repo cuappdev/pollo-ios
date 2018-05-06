@@ -52,20 +52,9 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
             make.top.equalToSuperview().offset(3)
         }
         
-        cardView.visibiltyLabel.text = "Only you can see these results"
-        
-        cardView.questionButton.setTitle("End Question", for: .normal)
-        cardView.questionButton.backgroundColor = .clear
-        cardView.questionButton.setTitleColor(.clickerDeepBlack, for: .normal)
-        cardView.questionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
-        
-        cardView.graphicView.image = #imageLiteral(resourceName: "solo_eye")
-        
         runTimer()
         
-        cardView.visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(cardView.questionButton.snp.top).offset(-15)
-        }
+        cardView.setupLive()
     }
     
     func setupEnded() {
@@ -76,36 +65,13 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
             timerLabel.removeFromSuperview()
             timer.invalidate()
         }
-        
-        cardView.questionButton.setTitle("Share Results", for: .normal)
-        cardView.questionButton.backgroundColor = .clickerGreen
-        cardView.questionButton.setTitleColor(.white, for: .normal)
-        cardView.questionButton.layer.borderColor = UIColor.clickerGreen.cgColor
-        
-        cardView.highlightColor = .clickerMint
-        
-        cardView.resultsTableView.reloadData()
-        
-        cardView.visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(cardView.questionButton.snp.top).offset(-15)
-        }
+        cardView.setupEnded()
     }
     
     func setupShared() {
-        if (cardView.questionButton.isDescendant(of: cardView)) {
-            cardView.questionButton.removeFromSuperview()
-        }
         cardHeight = 333
         cardHeightConstraint.update(offset: cardHeight)
-        
-        cardView.visibiltyLabel.text = "Shared with group"
-        
-        cardView.graphicView.image = #imageLiteral(resourceName: "results_shared")
-        
-        cardView.visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
-        }
-        
+        cardView.setupShared()
     }
     
     func setupOverflow(numOptions: Int) {
@@ -142,6 +108,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.questionLabel.text = poll.text
         cardView.poll = poll
         cardView.cardType = cardType
+        setupCard()
     }
     
     func setupCard() {
