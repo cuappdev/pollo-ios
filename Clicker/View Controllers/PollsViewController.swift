@@ -208,6 +208,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         presenter.dismissOnSwipeDirection = .bottom
         let editPollVC = EditPollViewController()
         editPollVC.session = session
+        editPollVC.homeViewController = self
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
     }
