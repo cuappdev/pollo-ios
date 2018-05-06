@@ -48,4 +48,19 @@ extension CardController {
         self.navigationItem.rightBarButtonItems = []
     }
     
+    func revertToHorizontal() {
+        verticalCollectionView.removeFromSuperview()
+        createPollButton.backgroundColor = .clear
+        setupCards()
+        setupHorizontalNavBar()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (collectionView == verticalCollectionView) {
+            currentDatePollsIndex = indexPath.item
+            currentPolls = datePollsArr[currentDatePollsIndex].1
+            revertToHorizontal()
+        }
+    }
+    
 }
