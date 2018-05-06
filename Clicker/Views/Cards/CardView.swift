@@ -23,7 +23,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var graphicView: UIImageView!
-    var visibiltyLabel: UILabel!
+    var visibilityLabel: UILabel!
     var totalResultsLabel: UILabel!
     var questionButton: UIButton!
     var infoLabel: UILabel!
@@ -75,11 +75,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         addSubview(resultsTableView)
         
         if (userRole == .admin) {
-            visibiltyLabel = UILabel()
-            visibiltyLabel.font = ._12MediumFont
-            visibiltyLabel.textAlignment = .left
-            visibiltyLabel.textColor = .clickerMediumGray
-            addSubview(visibiltyLabel)
+            visibilityLabel = UILabel()
+            visibilityLabel.font = ._12MediumFont
+            visibilityLabel.textAlignment = .left
+            visibilityLabel.textColor = .clickerMediumGray
+            addSubview(visibilityLabel)
             
             questionButton = UIButton()
             questionButton.titleLabel?.font = ._16SemiboldFont
@@ -128,27 +128,27 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
         
         if (userRole == .admin) {
-            graphicView.snp.makeConstraints { make in
-                make.width.height.equalTo(14.5)
-                make.left.equalToSuperview().offset(16)
-                make.centerY.equalTo(visibiltyLabel.snp.centerY)
-            }
-            
-            visibiltyLabel.snp.makeConstraints{ make in
+            visibilityLabel.snp.makeConstraints{ make in
                 make.left.equalTo(graphicView.snp.right).offset(4)
                 make.width.equalTo(200)
                 make.height.equalTo(14.5)
+            }
+            
+            graphicView.snp.makeConstraints { make in
+                make.width.height.equalTo(14.5)
+                make.left.equalToSuperview().offset(16)
+                make.centerY.equalTo(visibilityLabel.snp.centerY)
             }
             
             questionButton.snp.makeConstraints{ make in
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(24)
                 make.height.equalTo(47)
-                make.width.equalTo(303)
+                make.width.equalToSuperview().multipliedBy(0.9)
             }
             
             totalResultsLabel.snp.makeConstraints { make in
-                make.centerY.equalTo(visibiltyLabel.snp.centerY)
+                make.centerY.equalTo(visibilityLabel.snp.centerY)
             }
         } else {
             infoLabel.snp.makeConstraints { make in
@@ -205,7 +205,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     
     func setupLive() {
         if (userRole == .admin) {
-            visibiltyLabel.text = "Only you can see these results"
+            visibilityLabel.text = "Only you can see these results"
             
             questionButton.setTitle("End Question", for: .normal)
             questionButton.backgroundColor = .clear
@@ -214,7 +214,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             
             graphicView.image = #imageLiteral(resourceName: "solo_eye")
             
-            visibiltyLabel.snp.makeConstraints { make in
+            visibilityLabel.snp.makeConstraints { make in
                 make.bottom.equalTo(questionButton.snp.top).offset(-15)
             }
         } else {
@@ -233,7 +233,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             
             resultsTableView.reloadData()
             
-            visibiltyLabel.snp.makeConstraints { make in
+            visibilityLabel.snp.makeConstraints { make in
                 make.bottom.equalTo(questionButton.snp.top).offset(-15)
             }
         } else {
@@ -247,11 +247,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             if (questionButton.isDescendant(of: self)) {
                 questionButton.removeFromSuperview()
             }
-            visibiltyLabel.text = "Shared with group"
+            visibilityLabel.text = "Shared with group"
             
             graphicView.image = #imageLiteral(resourceName: "results_shared")
             
-            visibiltyLabel.snp.makeConstraints { make in
+            visibilityLabel.snp.makeConstraints { make in
                 make.bottom.equalToSuperview().offset(-20)
             }
             

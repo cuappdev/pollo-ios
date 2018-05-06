@@ -40,6 +40,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var mainCollectionView: UICollectionView!
     let askedIdentifer = "askedCardID"
     let answerIdentifier = "answerCardID"
+    let dateIdentifier = "dateCardID"
     var verticalCollectionView: UICollectionView!
     var countLabel: UILabel!
     
@@ -265,17 +266,21 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
 
     func setupCardsConstraints() {
+        zoomOutButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-24)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            } else {
+                make.bottom.equalTo(topLayoutGuide.snp.bottom).offset(40)
+            }
+            make.width.height.equalTo(20)
+        }
+        
         mainCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
+            make.top.equalTo(zoomOutButton.snp.bottom)
             make.bottom.equalToSuperview().inset(110)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-        }
-        
-        zoomOutButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-24)
-            make.bottom.equalTo(mainCollectionView.snp.top)
-            make.width.height.equalTo(20)
         }
         
         countLabel.snp.makeConstraints { make in
@@ -297,7 +302,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (collectionView == verticalCollectionView) {
-            // TODO
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dateIdentifier, for: indexPath) as! CardDateCell
+            let poll = datePollsArr[indexPath.item].1.first
+            cell.poll = poll
+            cell.date = datePollsArr[indexPath.item].0
+            cell.userRole = userRole
+            cell.cardType = getCardType(from: poll!)
+            cell.configure()
+            return cell
         }
          // mainCollectionView
         switch (userRole) {
@@ -309,13 +321,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.poll = poll
             cell.endPollDelegate = self
             cell.expandCardDelegate = self
-            if (poll.isLive) {
-                cell.cardType = .live
-            } else if (poll.isShared) {
-                cell.cardType = .shared
-            } else {
-                cell.cardType = .ended
-            }
+            cell.cardType = getCardType(from: poll)
             cell.configure()
             return cell
         default:
@@ -325,13 +331,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             socket.addDelegate(cell)
             cell.poll = poll
             cell.expandCardDelegate = self
-            if (poll.isLive) {
-                cell.cardType = .live
-            } else if (poll.isShared) {
-                cell.cardType = .shared
-            } else {
-                cell.cardType = .ended
-            }
+            cell.cardType = getCardType(from: poll)
             cell.configure()
             return cell
         }
@@ -349,10 +349,21 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if (collectionView == mainCollectionView) {
             return CGSize(width: view.frame.width * 0.9, height: mainCollectionView.frame.height)
         } else {
-            return CGSize()
+            return CGSize(width: view.frame.width * 0.76, height: 440)
         }
     }
 
+    // MARK: Get CardType
+    func getCardType(from poll: Poll) -> CardType {
+        if (poll.isLive) {
+            return .live
+        } else if (poll.isShared) {
+            return .shared
+        } else {
+            return .ended
+        }
+    }
+    
     // MARK: UPDATE DATE POLLS ARRAY
     func updateDatePollsArr() {
         GetSortedPolls(id: sessionId).make()

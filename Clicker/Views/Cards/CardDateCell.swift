@@ -13,6 +13,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     var userRole: UserRole!
     var cardType: CardType!
     var poll: Poll!
+    var date: String!
     
     var dateLabel: UILabel!
     var shadowImage: UIImageView!
@@ -20,9 +21,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setupViews()
-        setupConstraints()
+        backgroundColor = .clickerDeepBlack
     }
     
     func setupViews() {
@@ -64,10 +63,19 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     
     // MARK: Configure after variables are set
     func configure() {
+        setupViews()
+        setupConstraints()
+        
+        dateLabel.text = date
         cardView.questionLabel.text = poll.text
         cardView.poll = poll
         cardView.cardType = cardType
         cardView.setupCard()
+        
+        // Disable all cardView subviews
+        for view in cardView.subviews {
+            view.isUserInteractionEnabled = false
+        }
     }
     
     // MARK: CARD DELEGATE
