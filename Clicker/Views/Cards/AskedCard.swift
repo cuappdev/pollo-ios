@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
+class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
@@ -122,12 +122,26 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
         cardView.setupOverflow(numOptions: (poll.options?.count)!)
     }
     
+    // MARK: CardView setup
     func setup() {
-        cardView = CardView(frame: .zero, userRole: .admin, questionButtonDelegate: self)
+        cardView = CardView(frame: .zero, userRole: .admin, cardDelegate: self)
+        cardView.cardDelegate = self
         cardView.highlightColor = .clickerHalfGreen
         addSubview(cardView)
     
-        layoutViews()
+        cardView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(25)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            cardHeightConstraint = make.height.equalTo(0).constraint
+        }
+    }
+    
+    // MARK: Configure after variables are set
+    func configure() {
+        cardView.questionLabel.text = poll.text
+        cardView.poll = poll
+        cardView.cardType = cardType
     }
     
     func setupCard() {
@@ -142,22 +156,6 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
         setupOverflow(numOptions: (poll.options?.count)!)
     }
     
-    func layoutViews() {
-        
-        cardView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(25)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            cardHeightConstraint = make.height.equalTo(0).constraint
-        }
-        
-    }
-    
-    func configure(with poll: Poll) {
-        cardView.questionLabel.text = poll.text
-        cardView.poll = poll
-    }
-    
     func sessionConnected() { }
     
     func sessionDisconnected() { }
@@ -170,6 +168,7 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         cardView.totalNumResults = currentState.getTotalCount()
+        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
         cardView.poll.results = currentState.results
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
@@ -178,6 +177,7 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
     
     func updatedTally(_ currentState: CurrentState) {
         cardView.totalNumResults = currentState.getTotalCount()
+        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
         cardView.poll.results = currentState.results
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
@@ -187,7 +187,7 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
     }
     
-    // MARK  - ACTIONS
+    // MARK: CARD DELEGATE
     
     func questionBtnPressed() {
         switch (cardType) {
@@ -205,6 +205,10 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
         default: break
         }
     }
+    
+    func emitTally(answer: [String : Any]) { }
+    
+    // MARK: ACTIONS
     
     // Update timer label
     @objc func updateTimerLabel() {
