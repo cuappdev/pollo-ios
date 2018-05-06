@@ -37,7 +37,7 @@
 		C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E3203F75CB001F540E /* MCSectionCell.swift */; };
 		C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */; };
 		C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E9203F77FA001F540E /* AnswerMCCell.swift */; };
-		C270524C209D51A600C7980F /* BlackAskController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524B209D51A600C7980F /* BlackAskController+Extension.swift */; };
+		C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524B209D51A600C7980F /* CardController+Extension.swift */; };
 		C270524E209D525700C7980F /* CardDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524D209D525700C7980F /* CardDateCell.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
@@ -119,7 +119,7 @@
 		C25F21E3203F75CB001F540E /* MCSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCSectionCell.swift; sourceTree = "<group>"; };
 		C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMCOptionCell.swift; sourceTree = "<group>"; };
 		C25F21E9203F77FA001F540E /* AnswerMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMCCell.swift; sourceTree = "<group>"; };
-		C270524B209D51A600C7980F /* BlackAskController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlackAskController+Extension.swift"; sourceTree = "<group>"; };
+		C270524B209D51A600C7980F /* CardController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardController+Extension.swift"; sourceTree = "<group>"; };
 		C270524D209D525700C7980F /* CardDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDateCell.swift; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
@@ -395,6 +395,7 @@
 			isa = PBXGroup;
 			children = (
 				6353FD392086DDC900E16EB2 /* CardController.swift */,
+				C270524B209D51A600C7980F /* CardController+Extension.swift */,
 				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
@@ -403,7 +404,6 @@
 				637D5B1B209A95EF00E446E8 /* ExpandedViewController.swift */,
 				C2504A58209963A200DC5EDC /* EditNameViewController.swift */,
 				C2504A56209956C600DC5EDC /* DeletePollViewController.swift */,
-				C270524B209D51A600C7980F /* BlackAskController+Extension.swift */,
 				C21D98802083D32000191103 /* LoginViewController.swift */,
 				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
 				63A4A64A2094F26F00523AE6 /* DraftsViewController.swift */,
@@ -625,7 +625,7 @@
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
 				C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
-				C270524C209D51A600C7980F /* BlackAskController+Extension.swift in Sources */,
+				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
