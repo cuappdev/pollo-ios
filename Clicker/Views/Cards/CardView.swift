@@ -164,6 +164,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func setupOverflow(numOptions: Int) {
+        if (numOptions <= 4) {
+            return
+        }
         moreOptionsLabel = UILabel()
         moreOptionsLabel.text = "\(numOptions - 4) more options..."
         moreOptionsLabel.font = UIFont._12SemiboldFont
@@ -185,6 +188,76 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         seeAllButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalTo(moreOptionsLabel.snp.centerY)
+        }
+    }
+    
+    func setupCard() {
+        switch cardType {
+        case .live:
+            setupLive()
+        case .ended:
+            setupEnded()
+        default: // shared
+            setupShared()
+        }
+        setupOverflow(numOptions: (poll.options?.count)!)
+    }
+    
+    func setupLive() {
+        if (userRole == .admin) {
+            visibiltyLabel.text = "Only you can see these results"
+            
+            questionButton.setTitle("End Question", for: .normal)
+            questionButton.backgroundColor = .clear
+            questionButton.setTitleColor(.clickerDeepBlack, for: .normal)
+            questionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+            
+            graphicView.image = #imageLiteral(resourceName: "solo_eye")
+            
+            visibiltyLabel.snp.makeConstraints { make in
+                make.bottom.equalTo(questionButton.snp.top).offset(-15)
+            }
+        } else {
+            infoLabel.textColor = .clickerMediumGray
+        }
+    }
+    
+    func setupEnded() {
+        if (userRole == .admin) {
+            questionButton.setTitle("Share Results", for: .normal)
+            questionButton.backgroundColor = .clickerGreen
+            questionButton.setTitleColor(.white, for: .normal)
+            questionButton.layer.borderColor = UIColor.clickerGreen.cgColor
+            
+            highlightColor = .clickerMint
+            
+            resultsTableView.reloadData()
+            
+            visibiltyLabel.snp.makeConstraints { make in
+                make.bottom.equalTo(questionButton.snp.top).offset(-15)
+            }
+        } else {
+            infoLabel.textColor = .clickerDeepBlack
+            infoLabel.text = "Poll has closed"
+        }
+    }
+    
+    func setupShared() {
+        if (userRole == .admin) {
+            if (questionButton.isDescendant(of: self)) {
+                questionButton.removeFromSuperview()
+            }
+            visibiltyLabel.text = "Shared with group"
+            
+            graphicView.image = #imageLiteral(resourceName: "results_shared")
+            
+            visibiltyLabel.snp.makeConstraints { make in
+                make.bottom.equalToSuperview().offset(-20)
+            }
+            
+        } else {
+            infoLabel.textColor = .clickerDeepBlack
+            infoLabel.text = "Poll has closed"
         }
     }
     

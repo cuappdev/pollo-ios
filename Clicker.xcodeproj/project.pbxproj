@@ -189,11 +189,11 @@
 				C2093140209ED1F5001A10CC /* CardView.swift */,
 				C2BB14BC2094DD400081C35D /* AskedCard.swift */,
 				C2BB14C02094DE930081C35D /* AnswerCard.swift */,
+				C270524D209D525700C7980F /* CardDateCell.swift */,
 				638406D42083CC1400483645 /* ResultCell.swift */,
 				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */,
 				63E4DAF72097DE94000808EB /* NavigationTitleView.swift */,
-				C270524D209D525700C7980F /* CardDateCell.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";

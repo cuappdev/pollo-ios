@@ -28,42 +28,11 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         setup()
     }
     
-    func setupCard() {
-        switch cardView.cardType {
-        case .live:
-            setupLive()
-        case .ended:
-            setupEnded()
-        default: // shared
-            setupShared()
-        }
-        setupOverflow(numOptions: (poll.options?.count)!)
-    }
-    
-    func setupLive() {
-        cardView.infoLabel.textColor = .clickerMediumGray
-    }
-    
-    func setupEnded() {
-        cardView.infoLabel.textColor = .clickerDeepBlack
-        cardView.infoLabel.text = "Poll has closed"
-    }
-    
-    func setupShared() {
-        cardView.infoLabel.textColor = .clickerDeepBlack
-        cardView.infoLabel.text = "Poll has closed"
-    }
-    
-    func setupOverflow(numOptions: Int) {
-        if (numOptions > 4) {
-            cardView.setupOverflow(numOptions: (poll.options?.count)!)
-        }
-    }
-    
     func configure() {
         cardView.questionLabel.text = poll.text
         cardView.poll = poll
         cardView.cardType = cardType
+        cardView.setupCard()
     }
     
     func setup() {
@@ -105,7 +74,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.poll.isLive = false
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .ended
-        setupEnded()
+        cardView.setupEnded()
     }
     
     func receivedResults(_ currentState: CurrentState) {
@@ -113,7 +82,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.poll.results = currentState.results
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .shared
-        setupShared()
+        cardView.setupShared()
     }
     
     func saveSession(_ session: Session) { }

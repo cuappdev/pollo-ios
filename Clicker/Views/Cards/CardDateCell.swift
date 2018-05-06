@@ -8,9 +8,12 @@
 
 import UIKit
 
-class CardDateCell: UICollectionViewCell {
+class CardDateCell: UICollectionViewCell, CardDelegate {
     
-    var shadowView: UIView!
+    var userRole: UserRole!
+    
+    var shadowImage: UIImageView!
+    var cardView: CardView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,12 +23,21 @@ class CardDateCell: UICollectionViewCell {
     }
     
     func setupViews() {
-        shadowView = UIView()
+        shadowImage = UIImageView(image: #imageLiteral(resourceName: "cardShadow"))
+        addSubview(shadowImage)
+        
+        cardView = CardView(frame: .zero, userRole: userRole, cardDelegate: self)
+        addSubview(cardView)
     }
     
     func setupConstraints() {
         
     }
+    
+    // MARK: CARD DELEGATE
+    func questionBtnPressed() { }
+    
+    func emitTally(answer: [String : Any]) { }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
