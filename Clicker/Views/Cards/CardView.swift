@@ -36,6 +36,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var cardType: CardType!
     var questionType: QuestionType!
     var poll: Poll!
+    var frResults: [(String, Int)] = []
     var cardHeight: Int!
     var cardHeightConstraint: Constraint!
     
@@ -61,6 +62,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         
         setupViews()
         setupConstraints()
+    }
+    
+    func configure() {
+        if (questionType == .freeResponse) {
+            self.frResults = poll.getFRResultsArray()
+        }
     }
     
     func setupViews() {
@@ -314,79 +321,81 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // ADMIN
-        if (userRole == .admin) {
-            if (questionType == .freeResponse) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: resultFRIdentifier, for: indexPath) as! ResultFRCell
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
-                cell.choiceTag = indexPath.row
-                cell.selectionStyle = .none
-                cell.highlightView.backgroundColor = highlightColor
-                
-                // UPDATE HIGHLIGHT VIEW WIDTH
-                let mcOption: String = intToMCOption(indexPath.row)
-                var count: Int = 0
-                if let choiceInfo = poll.results![mcOption] as? [String:Any] {
-                    cell.optionLabel.text = choiceInfo["text"] as? String
-                    count = choiceInfo["count"] as! Int
-                    cell.numberLabel.text = "\(count)"
-                }
-                
-                if (totalNumResults > 0) {
-                    let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
-                    let totalWidth = cell.frame.width
-                    cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
-                } else {
-                    cell.highlightWidthConstraint.update(offset: 0)
-                }
-                return cell
-            }
-        }
-        // MEMBER
         if (questionType == .freeResponse) {
             let cell = tableView.dequeueReusableCell(withIdentifier: resultFRIdentifier, for: indexPath) as! ResultFRCell
+            let responseCountTuple = frResults[indexPath.row]
+            cell.response = responseCountTuple.0
+            cell.count = responseCountTuple.1
             cell.configure()
             return cell
-        } else {
-            switch cardType {
-            case .live, .ended:
-                let cell = tableView.dequeueReusableCell(withIdentifier: optionIdentifier, for: indexPath) as! LiveOptionCell
-                cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
-                cell.delegate = self
-                cell.index = indexPath.row
-                cell.chosen = (choice == indexPath.row)
-                cell.setColors(isLive: poll.isLive)
-                return cell
-            default:
-                let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
-                cell.choiceTag = indexPath.row
-                cell.optionLabel.text = poll.options?[indexPath.row]
-                cell.selectionStyle = .none
-                cell.highlightView.backgroundColor = .clickerMint
-                
-                // UPDATE HIGHLIGHT VIEW WIDTH
-                let mcOption: String = intToMCOption(indexPath.row)
-                guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
-                    return cell
-                }
+        }
+        // ADMIN
+        if (userRole == .admin) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
+            cell.choiceTag = indexPath.row
+            cell.selectionStyle = .none
+            cell.highlightView.backgroundColor = highlightColor
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            var count: Int = 0
+            if let choiceInfo = poll.results![mcOption] as? [String:Any] {
+                cell.optionLabel.text = choiceInfo["text"] as? String
+                count = choiceInfo["count"] as! Int
                 cell.numberLabel.text = "\(count)"
-                let totalNumResults = poll.getTotalResults()
-                if (totalNumResults > 0) {
-                    let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
-                    let totalWidth = cell.frame.width
-                    cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
-                } else {
-                    cell.highlightWidthConstraint.update(offset: 0)
-                }
+            }
+            
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
+                let totalWidth = cell.frame.width
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            return cell
+        }
+        // MEMBER
+        switch cardType {
+        case .live, .ended:
+            let cell = tableView.dequeueReusableCell(withIdentifier: optionIdentifier, for: indexPath) as! LiveOptionCell
+            cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
+            cell.delegate = self
+            cell.index = indexPath.row
+            cell.chosen = (choice == indexPath.row)
+            cell.setColors(isLive: poll.isLive)
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
+            cell.choiceTag = indexPath.row
+            cell.optionLabel.text = poll.options?[indexPath.row]
+            cell.selectionStyle = .none
+            cell.highlightView.backgroundColor = .clickerMint
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
                 return cell
             }
+            cell.numberLabel.text = "\(count)"
+            let totalNumResults = poll.getTotalResults()
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
+                let totalWidth = cell.frame.width
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            return cell
         }
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min((poll.options?.count)!, 4)
+        if (questionType == .freeResponse) {
+            return min(frResults.count, 4)
+        } else {
+            return min((poll.options?.count)!, 4)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -57,7 +57,7 @@ class ResultFRCell: UITableViewCell {
     
     func configure() {
         freeResponseLabel.text = response
-        countLabel.text = count
+        countLabel.text = "\(count)"
     }
     
     required init?(coder aDecoder: NSCoder) {
