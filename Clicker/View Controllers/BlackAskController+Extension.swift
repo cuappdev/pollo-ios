@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension BlackAskController {
+extension CardController {
     
     func setupVertical() {
         setupVerticalNavBar()

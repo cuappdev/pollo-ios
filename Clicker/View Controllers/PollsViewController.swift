@@ -179,12 +179,13 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
                         let socket = Socket(id: "\(session.id)", userType: "admin")
-                        let blackAskVC = BlackAskController()
-                        blackAskVC.socket = socket
-                        blackAskVC.code = code
-                        blackAskVC.name = code
-                        blackAskVC.sessionId = session.id
-                        self.navigationController?.pushViewController(blackAskVC, animated: true)
+                        let cardVC = CardController()
+                        cardVC.socket = socket
+                        cardVC.code = code
+                        cardVC.name = code
+                        cardVC.sessionId = session.id
+                        cardVC.userRole = .admin
+                        self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print("error: ", error)

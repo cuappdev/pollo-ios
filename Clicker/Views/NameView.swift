@@ -17,7 +17,7 @@ class NameView: UIView, UITextFieldDelegate {
     var code: String!
     var name: String!
     
-    var delegate: BlackAskController!
+    var delegate: CardController!
     
     override init(frame: CGRect) {
         super.init(frame: frame)

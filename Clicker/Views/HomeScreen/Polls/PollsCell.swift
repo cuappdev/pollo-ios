@@ -130,24 +130,18 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
         GetSortedPolls(id: session.id).make()
             .done { datePollsArr in
-                switch self.pollType {
-                case .created:
-                    let blackVC = BlackAskController()
-                    blackVC.socket = socket
-                    blackVC.code = session.code
-                    blackVC.name = session.name
-                    blackVC.sessionId = session.id
-                    blackVC.datePollsArr = datePollsArr
-                    self.parentNavController.pushViewController(blackVC, animated: true)
-                default:
-                    let blackVC = BlackAnswerController()
-                    blackVC.socket = socket
-                    blackVC.code = session.code
-                    blackVC.name = session.name
-                    blackVC.sessionId = session.id
-                    blackVC.datePollsArr = datePollsArr
-                    self.parentNavController.pushViewController(blackVC, animated: true)
+                let cardVC = CardController()
+                cardVC.socket = socket
+                cardVC.code = session.code
+                cardVC.name = session.name
+                cardVC.sessionId = session.id
+                cardVC.datePollsArr = datePollsArr
+                if (self.pollType == .created) {
+                    cardVC.userRole = .admin
+                } else {
+                    cardVC.userRole = .member
                 }
+                self.parentNavController.pushViewController(cardVC, animated: true)
             } .catch { error in
                 print(error)
             }

@@ -13,7 +13,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var socket: Socket!
     var poll: Poll!
     var endPollDelegate: EndPollDelegate!
-    var askedType: AskedType!
+    var expandCardDelegate: ExpandCardDelegate!
+    var cardType: CardType!
     
     // Timer
     var timer: Timer!
@@ -22,7 +23,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     // Question
     var totalNumResults: Int = 0
     var freeResponses: [String]!
-    var isMCQuestion: Bool!
     var hasChangedState: Bool = false
     
     var highlightColor: UIColor!
@@ -42,10 +42,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        isMCQuestion = true
-        
-        socket?.addDelegate(self)
-        
         backgroundColor = .clickerDeepBlack
     }
     
@@ -214,7 +210,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
         layoutViews()
         
-        switch (askedType) {
+        switch (cardType) {
         case .live:
             setupLive()
         case .ended:
@@ -231,7 +227,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.top.equalToSuperview().offset(25)
             make.bottom.equalToSuperview()
             make.width.equalTo(339)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
         }
         
         questionLabel.snp.makeConstraints{ make in
@@ -376,17 +373,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     @objc func questionAction() {
         hasChangedState = true
-        switch (askedType) {
+        switch (cardType) {
         case .live:
             socket.socket.emit("server/poll/end", [])
             endPollDelegate.endedPoll()
             setupEnded()
-            askedType = .ended
+            cardType = .ended
             poll.isLive = false
         case .ended:
             socket.socket.emit("server/poll/results", [])
             setupShared()
-            askedType = .shared
+            cardType = .shared
             poll.isShared = true
         default: break
         }
