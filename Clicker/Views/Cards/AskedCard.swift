@@ -38,6 +38,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalResultsLabel: UILabel!
     var questionButton: UIButton!
     
+    var cardHeight: Int!
     var cardHeightConstraint: Constraint!
     
     // Expanded Card views
@@ -51,7 +52,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func setupLive() {
-        cardHeightConstraint.update(offset: 398)
+        cardHeight = 398
+        cardHeightConstraint.update(offset: cardHeight)
         
         timerLabel = UILabel()
         timerLabel.text = "00:00"
@@ -82,7 +84,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func setupEnded() {
-        cardHeightConstraint.update(offset: 398)
+        cardHeight = 398
+        cardHeightConstraint.update(offset: cardHeight)
         
         if (timerLabel != nil && timerLabel.isDescendant(of: self)) {
             timerLabel.removeFromSuperview()
@@ -107,7 +110,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         if (questionButton.isDescendant(of: self)) {
             questionButton.removeFromSuperview()
         }
-        cardHeightConstraint.update(offset: 333)
+        cardHeight = 333
+        cardHeightConstraint.update(offset: cardHeight)
         
         visibiltyLabel.text = "Shared with group"
         
@@ -123,15 +127,18 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         if (numOptions <= 4) {
             return
         }
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(cardView.snp.height).offset(37.5)
+        if let height = cardHeight {
+            cardHeight = height + 25
+        } else {
+            cardHeight = 436 // First time loading cell
         }
+        cardHeightConstraint.update(offset: cardHeight)
         
         moreOptionsLabel = UILabel()
         moreOptionsLabel.text = "\(numOptions - 4) more options..."
         moreOptionsLabel.font = UIFont._12SemiboldFont
         moreOptionsLabel.textColor = .clickerDeepBlack
-        addSubview(moreOptionsLabel)
+        cardView.addSubview(moreOptionsLabel)
         
         moreOptionsLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(18)
@@ -143,11 +150,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         seeAllButton.setTitleColor(.clickerBlue, for: .normal)
         seeAllButton.titleLabel?.font = UIFont._12SemiboldFont
         seeAllButton.addTarget(self, action: #selector(seeAllAction), for: .touchUpInside)
-        addSubview(seeAllButton)
+        cardView.addSubview(seeAllButton)
         
         seeAllButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
+            make.centerY.equalTo(moreOptionsLabel.snp.centerY)
         }
     }
     
