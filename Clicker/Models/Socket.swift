@@ -44,6 +44,7 @@ class Socket {
         }
         
         socket.on("user/poll/end") { data, ack in
+            print(data)
             guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any] else {
                 return
             }

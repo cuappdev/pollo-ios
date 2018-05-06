@@ -28,14 +28,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // name vars
     var nameView: NameView!
     
-    // empty student vars
+    // empty views
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     var downArrowImageView: UIImageView!
     var createPollButton: UIButton!
     
-    // admin group vars
+    // nonempty views
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
     let askedIdentifer = "askedCardID"
@@ -133,9 +133,9 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         createPollButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalToSuperview().multipliedBy(0.08)
+            make.height.equalTo(47)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-22)
+            make.bottom.equalToSuperview().inset(22)
         }
     }
     
@@ -144,11 +144,13 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         setupEmptyConstraints()
     }
     
-    func removeEmptyStudentPoll() {
+    func removeEmptyState() {
         monkeyView.removeFromSuperview()
         nothingToSeeLabel.removeFromSuperview()
         waitingLabel.removeFromSuperview()
-        downArrowImageView.removeFromSuperview()
+        if (userRole == .admin) {
+            downArrowImageView.removeFromSuperview()
+        }
     }
     
     func setupEmptyViews() {
@@ -265,7 +267,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func setupCardsConstraints() {
         mainCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(40)
-            make.bottom.equalTo(createPollButton.snp.top).offset(-12)
+            make.bottom.equalToSuperview().inset(81)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -314,7 +316,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             } else {
                 cell.cardType = .ended
             }
-            cell.setup()
+            cell.configure(with: poll)
+            cell.setupCard()
             return cell
         default:
             let poll = currentPolls[indexPath.item]
@@ -330,7 +333,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             } else {
                 cell.cardType = .ended
             }
-            cell.setup()
+            cell.configure(with: poll)
+            cell.setupCard()
             return cell
         }
     }
@@ -398,20 +402,32 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         peopleButton.setTitle("\(count)", for: .normal)
     }
     
-    func pollStarted(_ poll: Poll) { }
+    func pollStarted(_ poll: Poll) {
+        let arrEmpty = (datePollsArr.count == 0)
+        appendPoll(poll: poll)
+        if (!arrEmpty) {
+            self.mainCollectionView.reloadData()
+        }
+    }
     
     func pollEnded(_ poll: Poll) { }
     
-    func receivedResults(_ currentState: CurrentState) {
-        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
-    }
+    func receivedResults(_ currentState: CurrentState) { }
     
     func saveSession(_ session: Session) { }
     
-    func updatedTally(_ currentState: CurrentState) {
-        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    func updatedTally(_ currentState: CurrentState) { }
+    
+    func appendPoll(poll: Poll) {
+        if (datePollsArr.count == 0) {
+            self.datePollsArr.append((getTodaysDate(), [poll]))
+            self.currentDatePollsIndex = 0
+            removeEmptyState()
+            setupCards()
+        } else {
+            self.datePollsArr[currentDatePollsIndex].1.append(poll)
+        }
+        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
     }
     
     // MARK: - START POLL DELEGATE
@@ -425,15 +441,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         socket.socket.emit("server/poll/start", with: [socketQuestion])
         let newPoll = Poll(text: text, options: options, isLive: true)
         let arrEmpty = (datePollsArr.count == 0)
-        if (arrEmpty) {
-            self.datePollsArr.append((getTodaysDate(), [newPoll]))
-            self.currentDatePollsIndex = 0
-            removeEmptyStudentPoll()
-            setupCards()
-        } else {
-            self.datePollsArr[currentDatePollsIndex].1.append(newPoll)
-        }
-        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
+        appendPoll(poll: newPoll)
         // HIDE CREATE POLL BUTTON
         createPollButton.alpha = 0
         createPollButton.isUserInteractionEnabled = false

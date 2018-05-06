@@ -26,6 +26,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setup()
     }
     
     func setup() {
@@ -33,6 +34,9 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         setupViews()
         layoutViews()
         
+    }
+    
+    func setupCard() {
         switch cardType {
         case .live:
             setupLive()
@@ -41,6 +45,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         default: // shared
             setupShared()
         }
+        setupOverflow(numOptions: (poll.options?.count)!)
     }
     
     func setupLive() {
@@ -55,9 +60,15 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     func setupShared() {
         infoLabel.textColor = .clickerDeepBlack
         infoLabel.text = "Poll has closed"
-        
     }
     
+    func setupOverflow(numOptions: Int) {
+        // TODO
+    }
+    
+    func configure(with poll: Poll) {
+        questionLabel.text = poll.text
+    }
     
     func setupViews() {
         self.layer.borderWidth = 1
@@ -68,7 +79,6 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
-        questionLabel.text = poll.text
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
@@ -87,7 +97,6 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         infoLabel = UILabel()
         infoLabel.font = ._12SemiboldFont
         addSubview(infoLabel)
-        
         
     }
     
@@ -192,14 +201,18 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     
     func pollEnded(_ poll: Poll) {
         print(choice)
-        resultsTableView.reloadData()
+        self.poll.isLive = false
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
         cardType = .ended
         setupEnded()
-        
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        
+        poll.isShared = true
+        poll.results = currentState.results
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
+        cardType = .shared
+        setupShared()
     }
     
     func saveSession(_ session: Session) { }

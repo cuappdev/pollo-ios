@@ -24,6 +24,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalNumResults: Int = 0
     var freeResponses: [String]!
     var hasChangedState: Bool = false
+    var question: String!
     
     var highlightColor: UIColor!
     
@@ -43,6 +44,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clickerDeepBlack
+        setup()
     }
     
     func setupLive() {
@@ -167,7 +169,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         addSubview(cardView)
         
         questionLabel = UILabel()
-        questionLabel.text = poll.text
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -209,7 +210,9 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         cardView.addSubview(graphicView)
         
         layoutViews()
-        
+    }
+    
+    func setupCard() {
         switch (cardType) {
         case .live:
             setupLive()
@@ -274,6 +277,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
     }
     
+    func configure(with poll: Poll) {
+        questionLabel.text = poll.text
+    }
+    
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -298,11 +305,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         } else {
             cell.highlightWidthConstraint.update(offset: 0)
         }
-        
-        // ANIMATE CHANGE
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
+
         
         return cell
     }
@@ -321,22 +324,22 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func receivedUserCount(_ count: Int) { }
     
-    func pollStarted(_ poll: Poll) {
-    }
+    func pollStarted(_ poll: Poll) { }
     
-    func pollEnded(_ poll: Poll) {
-    }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
+        totalNumResults = currentState.getTotalCount()
+        poll.results = currentState.results
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
     }
     
-    func saveSession(_ session: Session) {
-    }
+    func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
         totalNumResults = currentState.getTotalCount()
         poll.results = currentState.results
-        self.resultsTableView.reloadData()
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
     }
     
     // MARK: Start timer
