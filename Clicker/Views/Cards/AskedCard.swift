@@ -22,28 +22,13 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
     var elapsedSeconds: Int = 0
     
     // Question
-    var totalNumResults: Int = 0
     var freeResponses: [String]!
-    var hasChangedState: Bool = false
-    var question: String!
-    
-    var highlightColor: UIColor!
     
     var timerLabel: UILabel!
     var cardView: CardView!
-    var questionLabel: UILabel!
-    var resultsTableView: UITableView!
-    var graphicView: UIImageView!
-    var visibiltyLabel: UILabel!
-    var totalResultsLabel: UILabel!
-    var questionButton: UIButton!
     
     var cardHeight: Int!
     var cardHeightConstraint: Constraint!
-    
-    // Expanded Card views
-    var moreOptionsLabel: UILabel!
-    var seeAllButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -205,7 +190,6 @@ class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
     // MARK  - ACTIONS
     
     func questionBtnPressed() {
-        hasChangedState = true
         switch (cardType) {
         case .live:
             socket.socket.emit("server/poll/end", [])
