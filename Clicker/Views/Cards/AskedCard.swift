@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
@@ -37,6 +38,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalResultsLabel: UILabel!
     var questionButton: UIButton!
     
+    var cardHeightConstraint: Constraint!
+    
     // Expanded Card views
     var moreOptionsLabel: UILabel!
     var seeAllButton: UIButton!
@@ -48,6 +51,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     func setupLive() {
+        cardHeightConstraint.update(offset: 398)
+        
         timerLabel = UILabel()
         timerLabel.text = "00:00"
         timerLabel.font = UIFont._14BoldFont
@@ -74,17 +79,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         visibiltyLabel.snp.makeConstraints { make in
             make.bottom.equalTo(questionButton.snp.top).offset(-15)
         }
-        
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(398)
-        }
     }
     
     func setupEnded() {
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(398)
-        }
-        
+        cardHeightConstraint.update(offset: 398)
         
         if (timerLabel != nil && timerLabel.isDescendant(of: self)) {
             timerLabel.removeFromSuperview()
@@ -109,11 +107,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         if (questionButton.isDescendant(of: self)) {
             questionButton.removeFromSuperview()
         }
-        cardView.snp.makeConstraints { make in
-            if (hasChangedState) {
-                make.bottom.equalToSuperview().inset(65)
-            }
-        }
+        cardHeightConstraint.update(offset: 333)
         
         visibiltyLabel.text = "Shared with group"
         
@@ -228,10 +222,9 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
         cardView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(25)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(339)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
+            cardHeightConstraint = make.height.equalTo(0).constraint
         }
         
         questionLabel.snp.makeConstraints{ make in

@@ -235,7 +235,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = CGSize(width: 1, height: 1)
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
@@ -245,6 +244,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         mainCollectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
+        mainCollectionView.alwaysBounceHorizontal = true
         mainCollectionView.backgroundColor = .clear
         mainCollectionView.isPagingEnabled = true
         view.addSubview(mainCollectionView)
@@ -267,7 +267,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func setupCardsConstraints() {
         mainCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(40)
-            make.bottom.equalToSuperview().inset(81)
+            make.bottom.equalToSuperview().inset(110)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -347,6 +347,13 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if (collectionView == mainCollectionView) {
+            return CGSize(width: view.frame.width * 0.9, height: mainCollectionView.frame.height)
+        } else {
+            return CGSize()
+        }
+    }
 
     // MARK: UPDATE DATE POLLS ARRAY
     func updateDatePollsArr() {
@@ -403,10 +410,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func pollStarted(_ poll: Poll) {
-        let arrEmpty = (datePollsArr.count == 0)
-        appendPoll(poll: poll)
-        if (!arrEmpty) {
-            self.mainCollectionView.reloadData()
+        if (userRole == .member) {
+            let arrEmpty = (datePollsArr.count == 0)
+            appendPoll(poll: poll)
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+                let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+                self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+            }
         }
     }
     
@@ -449,8 +460,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             if (!arrEmpty) {
                 self.mainCollectionView.reloadData()
             }
-//            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
-//            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
         }
     }
     
