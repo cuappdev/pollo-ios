@@ -90,6 +90,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: optionIdentifier)
         addSubview(resultsTableView)
         
+        totalResultsLabel = UILabel()
+        totalResultsLabel.text = "\(totalNumResults) votes"
+        totalResultsLabel.font = ._12MediumFont
+        totalResultsLabel.textAlignment = .right
+        totalResultsLabel.textColor = .clickerMediumGray
+        addSubview(totalResultsLabel)
+        
         if (userRole == .admin) {
             setupAdminViews()
             setupAdminConstraints()
@@ -97,13 +104,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             setupMemberViews()
             setupMemberConstraints()
         }
-        
-        totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults) votes"
-        totalResultsLabel.font = ._12MediumFont
-        totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
-        addSubview(totalResultsLabel)
         
     }
     
