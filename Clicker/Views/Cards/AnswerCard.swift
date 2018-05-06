@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import SnapKit
 
 class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate, SocketDelegate {
     
     var freeResponses: [String]!
     
+    var cardView: UIView!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var totalResultsLabel: UILabel!
@@ -21,6 +23,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     var poll: Poll!
     var socket: Socket!
     var expandCardDelegate: ExpandCardDelegate!
+    var cardHeightConstraint: Constraint!
     
     var cardType: CardType!
     
@@ -30,10 +33,9 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func setup() {
-        backgroundColor = .clickerNavBarLightGrey
+        backgroundColor = .clickerDeepBlack
         setupViews()
         layoutViews()
-        
     }
     
     func setupCard() {
@@ -71,10 +73,13 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func setupViews() {
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.clickerBorder.cgColor
-        self.layer.shadowRadius = 2.5
-        self.layer.cornerRadius = 15
+        cardView = UIView()
+        cardView.layer.cornerRadius = 15
+        cardView.layer.borderColor = UIColor.clickerBorder.cgColor
+        cardView.layer.borderWidth = 1
+        cardView.layer.shadowRadius = 2.5
+        cardView.backgroundColor = .clickerNavBarLightGrey
+        addSubview(cardView)
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
@@ -82,7 +87,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        addSubview(questionLabel)
+        cardView.addSubview(questionLabel)
         
         resultsTableView = UITableView()
         resultsTableView.backgroundColor = .clear
@@ -92,19 +97,21 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         resultsTableView.isScrollEnabled = false
         resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: "optionCellID")
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        addSubview(resultsTableView)
+        cardView.addSubview(resultsTableView)
         
         infoLabel = UILabel()
         infoLabel.font = ._12SemiboldFont
-        addSubview(infoLabel)
+        cardView.addSubview(infoLabel)
         
     }
     
     func layoutViews() {
         
-        contentView.snp.makeConstraints { make in
-            make.height.equalTo(336)
-            make.width.equalTo(339)
+        cardView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(25)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            cardHeightConstraint = make.height.equalTo(398).constraint
         }
         
         questionLabel.snp.updateConstraints { make in
