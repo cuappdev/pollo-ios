@@ -161,7 +161,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 6), 0.0)
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 12), 0.0)
             } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }

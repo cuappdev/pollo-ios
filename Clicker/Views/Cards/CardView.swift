@@ -18,9 +18,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     
     var choice: Int?
     var totalNumResults: Int = 0
+    let textFieldPadding = 18
+    let textFieldHeight = 48
     var highlightColor: UIColor!
     
     var questionLabel: UILabel!
+    var responseTextField: UITextField!
     var resultsTableView: UITableView!
     var graphicView: UIImageView!
     var visibilityLabel: UILabel!
@@ -31,6 +34,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var cardDelegate: CardDelegate!
     var userRole: UserRole!
     var cardType: CardType!
+    var questionType: QuestionType!
     var poll: Poll!
     var cardHeight: Int!
     var cardHeightConstraint: Constraint!
@@ -75,26 +79,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         addSubview(resultsTableView)
         
         if (userRole == .admin) {
-            visibilityLabel = UILabel()
-            visibilityLabel.font = ._12MediumFont
-            visibilityLabel.textAlignment = .left
-            visibilityLabel.textColor = .clickerMediumGray
-            addSubview(visibilityLabel)
-            
-            questionButton = UIButton()
-            questionButton.titleLabel?.font = ._16SemiboldFont
-            questionButton.titleLabel?.textAlignment = .center
-            questionButton.layer.cornerRadius = 25.5
-            questionButton.layer.borderWidth = 1.5
-            questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
-            addSubview(questionButton)
-            
-            graphicView = UIImageView()
-            addSubview(graphicView)
+            setupAdminViews()
         } else { // member
-            infoLabel = UILabel()
-            infoLabel.font = ._12SemiboldFont
-            addSubview(infoLabel)
+            setupMemberViews()
         }
         
         totalResultsLabel = UILabel()
@@ -104,6 +91,78 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
         
+    }
+    
+    func setupAdminViews() {
+        visibilityLabel = UILabel()
+        visibilityLabel.font = ._12MediumFont
+        visibilityLabel.textAlignment = .left
+        visibilityLabel.textColor = .clickerMediumGray
+        addSubview(visibilityLabel)
+        
+        questionButton = UIButton()
+        questionButton.titleLabel?.font = ._16SemiboldFont
+        questionButton.titleLabel?.textAlignment = .center
+        questionButton.layer.cornerRadius = 25.5
+        questionButton.layer.borderWidth = 1.5
+        questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
+        addSubview(questionButton)
+        
+        graphicView = UIImageView()
+        addSubview(graphicView)
+    }
+    
+    func setupAdminConstraints() {
+        visibilityLabel.snp.makeConstraints{ make in
+            make.left.equalTo(graphicView.snp.right).offset(4)
+            make.width.equalTo(200)
+            make.height.equalTo(14.5)
+        }
+        
+        graphicView.snp.makeConstraints { make in
+            make.width.height.equalTo(14.5)
+            make.left.equalToSuperview().offset(16)
+            make.centerY.equalTo(visibilityLabel.snp.centerY)
+        }
+        
+        questionButton.snp.makeConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(24)
+            make.height.equalTo(47)
+            make.width.equalToSuperview().multipliedBy(0.9)
+        }
+        
+        totalResultsLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(visibilityLabel.snp.centerY)
+        }
+    }
+    
+    func setupMemberViews() {
+        if (questionType == .freeResponse) {
+            responseTextField = UITextField()
+            responseTextField.layer.cornerRadius = 45
+            responseTextField.placeholder = "Type a response"
+            responseTextField.font = ._16MediumFont
+            responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
+            responseTextField.leftViewMode = .always
+            addSubview(responseTextField)
+        }
+        
+        infoLabel = UILabel()
+        infoLabel.font = ._12SemiboldFont
+        addSubview(infoLabel)
+    }
+    
+    func setupMemberConstraints() {
+        infoLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(18)
+            make.bottom.equalToSuperview().inset(24)
+            make.height.equalTo(15)
+        }
+        
+        totalResultsLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(infoLabel.snp.centerY)
+        }
     }
     
     func setupConstraints() {
@@ -128,38 +187,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
         
         if (userRole == .admin) {
-            visibilityLabel.snp.makeConstraints{ make in
-                make.left.equalTo(graphicView.snp.right).offset(4)
-                make.width.equalTo(200)
-                make.height.equalTo(14.5)
-            }
-            
-            graphicView.snp.makeConstraints { make in
-                make.width.height.equalTo(14.5)
-                make.left.equalToSuperview().offset(16)
-                make.centerY.equalTo(visibilityLabel.snp.centerY)
-            }
-            
-            questionButton.snp.makeConstraints{ make in
-                make.centerX.equalToSuperview()
-                make.bottom.equalToSuperview().inset(24)
-                make.height.equalTo(47)
-                make.width.equalToSuperview().multipliedBy(0.9)
-            }
-            
-            totalResultsLabel.snp.makeConstraints { make in
-                make.centerY.equalTo(visibilityLabel.snp.centerY)
-            }
+            setupAdminConstraints()
         } else {
-            infoLabel.snp.makeConstraints { make in
-                make.left.equalToSuperview().offset(18)
-                make.bottom.equalToSuperview().inset(24)
-                make.height.equalTo(15)
-            }
-            
-            totalResultsLabel.snp.makeConstraints { make in
-                make.centerY.equalTo(infoLabel.snp.centerY)
-            }
+            setupMemberConstraints()
         }
     }
     
