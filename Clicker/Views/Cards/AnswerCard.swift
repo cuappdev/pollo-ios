@@ -18,6 +18,8 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     var resultsTableView: UITableView!
     var totalResultsLabel: UILabel!
     var infoLabel: UILabel!
+    var moreOptionsLabel: UILabel!
+    var seeAllButton: UIButton!
     
     var choice: Int?
     var poll: Poll!
@@ -65,7 +67,32 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func setupOverflow(numOptions: Int) {
-        // TODO
+        if (numOptions <= 4) {
+            return
+        }
+        
+        moreOptionsLabel = UILabel()
+        moreOptionsLabel.text = "\(numOptions - 4) more options..."
+        moreOptionsLabel.font = UIFont._12SemiboldFont
+        moreOptionsLabel.textColor = .clickerDeepBlack
+        cardView.addSubview(moreOptionsLabel)
+        
+        moreOptionsLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(18)
+            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
+        }
+        
+        seeAllButton = UIButton()
+        seeAllButton.setTitle("See All", for: .normal)
+        seeAllButton.setTitleColor(.clickerBlue, for: .normal)
+        seeAllButton.titleLabel?.font = UIFont._12SemiboldFont
+        seeAllButton.addTarget(self, action: #selector(seeAllAction), for: .touchUpInside)
+        cardView.addSubview(seeAllButton)
+        
+        seeAllButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(moreOptionsLabel.snp.centerY)
+        }
     }
     
     func configure(with poll: Poll) {
@@ -111,7 +138,7 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
             make.top.equalToSuperview().offset(25)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            cardHeightConstraint = make.height.equalTo(398).constraint
+            cardHeightConstraint = make.height.equalTo(339).constraint
         }
         
         questionLabel.snp.updateConstraints { make in
@@ -121,10 +148,10 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
         }
         
         resultsTableView.snp.updateConstraints { make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(17)
-            make.left.equalToSuperview()//.offset(18)
-            make.right.equalToSuperview()//.offset(-18)
-            make.bottom.equalToSuperview().offset(-51)
+            make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(206)
         }
         
         infoLabel.snp.makeConstraints { make in
@@ -174,11 +201,16 @@ class AnswerCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return poll.options!.count
+        return min(poll.options!.count, 4)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 47
+    }
+
+    // MARK: Actions
+    @objc func seeAllAction() {
+        print("see all")
     }
     
     // MARK - OptionViewDelegate
