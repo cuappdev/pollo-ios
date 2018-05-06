@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
+class AskedCard: UICollectionViewCell, QuestionButtonDelegate, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
@@ -30,7 +30,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var highlightColor: UIColor!
     
     var timerLabel: UILabel!
-    var cardView: UIView!
+    var cardView: CardView!
     var questionLabel: UILabel!
     var resultsTableView: UITableView!
     var graphicView: UIImageView!
@@ -67,19 +67,19 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             make.top.equalToSuperview().offset(3)
         }
         
-        visibiltyLabel.text = "Only you can see these results"
+        cardView.visibiltyLabel.text = "Only you can see these results"
         
-        questionButton.setTitle("End Question", for: .normal)
-        questionButton.backgroundColor = .clear
-        questionButton.setTitleColor(.clickerDeepBlack, for: .normal)
-        questionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+        cardView.questionButton.setTitle("End Question", for: .normal)
+        cardView.questionButton.backgroundColor = .clear
+        cardView.questionButton.setTitleColor(.clickerDeepBlack, for: .normal)
+        cardView.questionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
         
-        graphicView.image = #imageLiteral(resourceName: "solo_eye")
+        cardView.graphicView.image = #imageLiteral(resourceName: "solo_eye")
         
         runTimer()
         
-        visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(questionButton.snp.top).offset(-15)
+        cardView.visibiltyLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(cardView.questionButton.snp.top).offset(-15)
         }
     }
     
@@ -92,32 +92,32 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             timer.invalidate()
         }
         
-        questionButton.setTitle("Share Results", for: .normal)
-        questionButton.backgroundColor = .clickerGreen
-        questionButton.setTitleColor(.white, for: .normal)
-        questionButton.layer.borderColor = UIColor.clickerGreen.cgColor
+        cardView.questionButton.setTitle("Share Results", for: .normal)
+        cardView.questionButton.backgroundColor = .clickerGreen
+        cardView.questionButton.setTitleColor(.white, for: .normal)
+        cardView.questionButton.layer.borderColor = UIColor.clickerGreen.cgColor
         
-        highlightColor = .clickerMint
+        cardView.highlightColor = .clickerMint
         
-        resultsTableView.reloadData()
+        cardView.resultsTableView.reloadData()
         
-        visibiltyLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(questionButton.snp.top).offset(-15)
+        cardView.visibiltyLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(cardView.questionButton.snp.top).offset(-15)
         }
     }
     
     func setupShared() {
-        if (questionButton.isDescendant(of: self)) {
-            questionButton.removeFromSuperview()
+        if (cardView.questionButton.isDescendant(of: cardView)) {
+            cardView.questionButton.removeFromSuperview()
         }
         cardHeight = 333
         cardHeightConstraint.update(offset: cardHeight)
         
-        visibiltyLabel.text = "Shared with group"
+        cardView.visibiltyLabel.text = "Shared with group"
         
-        graphicView.image = #imageLiteral(resourceName: "results_shared")
+        cardView.graphicView.image = #imageLiteral(resourceName: "results_shared")
         
-        visibiltyLabel.snp.makeConstraints { make in
+        cardView.visibiltyLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-20)
         }
         
@@ -134,82 +134,14 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         }
         cardHeightConstraint.update(offset: cardHeight)
         
-        moreOptionsLabel = UILabel()
-        moreOptionsLabel.text = "\(numOptions - 4) more options..."
-        moreOptionsLabel.font = UIFont._12SemiboldFont
-        moreOptionsLabel.textColor = .clickerDeepBlack
-        cardView.addSubview(moreOptionsLabel)
-        
-        moreOptionsLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
-            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
-        }
-        
-        seeAllButton = UIButton()
-        seeAllButton.setTitle("See All", for: .normal)
-        seeAllButton.setTitleColor(.clickerBlue, for: .normal)
-        seeAllButton.titleLabel?.font = UIFont._12SemiboldFont
-        seeAllButton.addTarget(self, action: #selector(seeAllAction), for: .touchUpInside)
-        cardView.addSubview(seeAllButton)
-        
-        seeAllButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalTo(moreOptionsLabel.snp.centerY)
-        }
+        cardView.setupOverflow(numOptions: (poll.options?.count)!)
     }
     
     func setup() {
-        highlightColor = .clickerHalfGreen
-        
-        cardView = UIView()
-        cardView.layer.cornerRadius = 15
-        cardView.layer.borderColor = UIColor.clickerBorder.cgColor
-        cardView.layer.borderWidth = 1
-        cardView.layer.shadowRadius = 2.5
-        cardView.backgroundColor = .clickerNavBarLightGrey
+        cardView = CardView(frame: .zero, userRole: .admin, questionButtonDelegate: self)
+        cardView.highlightColor = .clickerHalfGreen
         addSubview(cardView)
-        
-        questionLabel = UILabel()
-        questionLabel.font = ._22SemiboldFont
-        questionLabel.textColor = .clickerBlack
-        questionLabel.textAlignment = .left
-        questionLabel.lineBreakMode = .byWordWrapping
-        questionLabel.numberOfLines = 0
-        cardView.addSubview(questionLabel)
-        
-        resultsTableView = UITableView()
-        resultsTableView.backgroundColor = .clear
-        resultsTableView.delegate = self
-        resultsTableView.dataSource = self
-        resultsTableView.separatorStyle = .none
-        resultsTableView.isScrollEnabled = false
-        resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
-        cardView.addSubview(resultsTableView)
-        
-        visibiltyLabel = UILabel()
-        visibiltyLabel.font = ._12MediumFont
-        visibiltyLabel.textAlignment = .left
-        visibiltyLabel.textColor = .clickerMediumGray
-        cardView.addSubview(visibiltyLabel)
-        
-        questionButton = UIButton()
-        questionButton.titleLabel?.font = ._16SemiboldFont
-        questionButton.titleLabel?.textAlignment = .center
-        questionButton.layer.cornerRadius = 25.5
-        questionButton.layer.borderWidth = 1.5
-        questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
-        cardView.addSubview(questionButton)
-        
-        totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults) votes"
-        totalResultsLabel.font = ._12MediumFont
-        totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
-        cardView.addSubview(totalResultsLabel)
-        
-        graphicView = UIImageView()
-        cardView.addSubview(graphicView)
-        
+    
         layoutViews()
     }
     
@@ -234,88 +166,11 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
             cardHeightConstraint = make.height.equalTo(0).constraint
         }
         
-        questionLabel.snp.makeConstraints{ make in
-            questionLabel.sizeToFit()
-            make.top.equalToSuperview().offset(20)
-            make.left.equalToSuperview().offset(17)
-            make.right.equalToSuperview().offset(17)
-        }
-        
-        resultsTableView.snp.makeConstraints{ make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(206)
-        }
-        
-        graphicView.snp.makeConstraints { make in
-            make.width.height.equalTo(14.5)
-            make.left.equalToSuperview().offset(16)
-            make.centerY.equalTo(visibiltyLabel.snp.centerY)
-        }
-        
-        visibiltyLabel.snp.makeConstraints{ make in
-            make.left.equalTo(graphicView.snp.right).offset(4)
-            make.width.equalTo(200)
-            make.height.equalTo(14.5)
-        }
-        
-        totalResultsLabel.snp.makeConstraints{ make in
-            make.right.equalToSuperview().offset(-22.5)
-            make.width.equalTo(50)
-            make.height.equalTo(14.5)
-            make.centerY.equalTo(visibiltyLabel.snp.centerY)
-        }
-        
-        questionButton.snp.makeConstraints{ make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(24)
-            make.height.equalTo(47)
-            make.width.equalTo(303)
-        }
-        
-        
     }
     
     func configure(with poll: Poll) {
-        questionLabel.text = poll.text
-    }
-    
-    // MARK - TABLEVIEW
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
-        cell.choiceTag = indexPath.row
-        cell.selectionStyle = .none
-        cell.highlightView.backgroundColor = highlightColor
-        
-        // UPDATE HIGHLIGHT VIEW WIDTH
-        let mcOption: String = intToMCOption(indexPath.row)
-        var count: Int = 0
-        if let choiceInfo = poll.results![mcOption] as? [String:Any] {
-            cell.optionLabel.text = choiceInfo["text"] as? String
-            count = choiceInfo["count"] as! Int
-            cell.numberLabel.text = "\(count)"
-        }
-        
-        if (totalNumResults > 0) {
-            let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
-            let totalWidth = cell.frame.width
-            cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
-        } else {
-            cell.highlightWidthConstraint.update(offset: 0)
-        }
-
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min((poll.options?.count)!, 4)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 47
+        cardView.questionLabel.text = poll.text
+        cardView.poll = poll
     }
     
     func sessionConnected() { }
@@ -329,17 +184,17 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        totalNumResults = currentState.getTotalCount()
-        poll.results = currentState.results
-        DispatchQueue.main.async { self.resultsTableView.reloadData() }
+        cardView.totalNumResults = currentState.getTotalCount()
+        cardView.poll.results = currentState.results
+        DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        totalNumResults = currentState.getTotalCount()
-        poll.results = currentState.results
-        DispatchQueue.main.async { self.resultsTableView.reloadData() }
+        cardView.totalNumResults = currentState.getTotalCount()
+        cardView.poll.results = currentState.results
+        DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
     
     // MARK: Start timer
@@ -348,6 +203,25 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     }
     
     // MARK  - ACTIONS
+    
+    func questionBtnPressed() {
+        hasChangedState = true
+        switch (cardType) {
+        case .live:
+            socket.socket.emit("server/poll/end", [])
+            endPollDelegate.endedPoll()
+            setupEnded()
+            cardType = .ended
+            poll.isLive = false
+        case .ended:
+            socket.socket.emit("server/poll/results", [])
+            setupShared()
+            cardType = .shared
+            poll.isShared = true
+        default: break
+        }
+    }
+    
     // Update timer label
     @objc func updateTimerLabel() {
         elapsedSeconds += 1
@@ -372,28 +246,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
                 }
             }
         }
-    }
-    
-    @objc func questionAction() {
-        hasChangedState = true
-        switch (cardType) {
-        case .live:
-            socket.socket.emit("server/poll/end", [])
-            endPollDelegate.endedPoll()
-            setupEnded()
-            cardType = .ended
-            poll.isLive = false
-        case .ended:
-            socket.socket.emit("server/poll/results", [])
-            setupShared()
-            cardType = .shared
-            poll.isShared = true
-        default: break
-        }
-    }
-    
-    @objc func seeAllAction() {
-        print("see all")
     }
     
     required init?(coder aDecoder: NSCoder) {
