@@ -48,6 +48,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
     
+    var pinchRecognizer: UIPinchGestureRecognizer!
+    
     var userRole: UserRole!
     var socket: Socket!
     var sessionId: Int!
@@ -61,8 +63,11 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
+        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
+        view.addGestureRecognizer(pinchRecognizer)
+        
         socket.addDelegate(self)
-        setupNavBar()
+        setupHorizontalNavBar()
         if (userRole == .admin) {
             setupCreatePollBtn()
         }
@@ -492,7 +497,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //        present(expandedVC, animated: true, completion: nil)
     }
     
-    func setupNavBar() {
+    func setupHorizontalNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -530,6 +535,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func zoomOutBtnPressed() {
         // SETUP VERTICAL VIEW
         setupVertical()
+    }
+    
+    @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
+        print(sender.scale)
+        let isPinchOut: Bool = (sender.scale > 1)
+        if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
+            zoomOutBtnPressed()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
