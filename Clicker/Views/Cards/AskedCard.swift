@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import SnapKit
 
 class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
     var endPollDelegate: EndPollDelegate!
-    var askedType: AskedType!
+    var expandCardDelegate: ExpandCardDelegate!
+    var cardType: CardType!
     
     // Timer
     var timer: Timer!
@@ -22,8 +24,8 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     // Question
     var totalNumResults: Int = 0
     var freeResponses: [String]!
-    var isMCQuestion: Bool!
     var hasChangedState: Bool = false
+    var question: String!
     
     var highlightColor: UIColor!
     
@@ -36,20 +38,21 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     var totalResultsLabel: UILabel!
     var questionButton: UIButton!
     
+    var cardHeightConstraint: Constraint!
+    
     // Expanded Card views
     var moreOptionsLabel: UILabel!
     var seeAllButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        isMCQuestion = true
-        
-        socket?.addDelegate(self)
-        
         backgroundColor = .clickerDeepBlack
+        setup()
     }
     
     func setupLive() {
+        cardHeightConstraint.update(offset: 398)
+        
         timerLabel = UILabel()
         timerLabel.text = "00:00"
         timerLabel.font = UIFont._14BoldFont
@@ -76,17 +79,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         visibiltyLabel.snp.makeConstraints { make in
             make.bottom.equalTo(questionButton.snp.top).offset(-15)
         }
-        
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(398)
-        }
     }
     
     func setupEnded() {
-        cardView.snp.makeConstraints { make in
-            make.height.equalTo(398)
-        }
-        
+        cardHeightConstraint.update(offset: 398)
         
         if (timerLabel != nil && timerLabel.isDescendant(of: self)) {
             timerLabel.removeFromSuperview()
@@ -111,11 +107,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         if (questionButton.isDescendant(of: self)) {
             questionButton.removeFromSuperview()
         }
-        cardView.snp.makeConstraints { make in
-            if (hasChangedState) {
-                make.bottom.equalToSuperview().inset(65)
-            }
-        }
+        cardHeightConstraint.update(offset: 333)
         
         visibiltyLabel.text = "Shared with group"
         
@@ -171,7 +163,6 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         addSubview(cardView)
         
         questionLabel = UILabel()
-        questionLabel.text = poll.text
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
@@ -213,8 +204,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         cardView.addSubview(graphicView)
         
         layoutViews()
-        
-        switch (askedType) {
+    }
+    
+    func setupCard() {
+        switch (cardType) {
         case .live:
             setupLive()
         case .ended:
@@ -229,9 +222,9 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
         cardView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(25)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(339)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            cardHeightConstraint = make.height.equalTo(0).constraint
         }
         
         questionLabel.snp.makeConstraints{ make in
@@ -277,6 +270,10 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         
     }
     
+    func configure(with poll: Poll) {
+        questionLabel.text = poll.text
+    }
+    
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -301,11 +298,7 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         } else {
             cell.highlightWidthConstraint.update(offset: 0)
         }
-        
-        // ANIMATE CHANGE
-        UIView.animate(withDuration: 0.5, animations: {
-            cell.layoutIfNeeded()
-        })
+
         
         return cell
     }
@@ -324,22 +317,22 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func receivedUserCount(_ count: Int) { }
     
-    func pollStarted(_ poll: Poll) {
-    }
+    func pollStarted(_ poll: Poll) { }
     
-    func pollEnded(_ poll: Poll) {
-    }
+    func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
+        totalNumResults = currentState.getTotalCount()
+        poll.results = currentState.results
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
     }
     
-    func saveSession(_ session: Session) {
-    }
+    func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
         totalNumResults = currentState.getTotalCount()
         poll.results = currentState.results
-        self.resultsTableView.reloadData()
+        DispatchQueue.main.async { self.resultsTableView.reloadData() }
     }
     
     // MARK: Start timer
@@ -376,16 +369,18 @@ class AskedCard: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     @objc func questionAction() {
         hasChangedState = true
-        switch (askedType) {
+        switch (cardType) {
         case .live:
             socket.socket.emit("server/poll/end", [])
             endPollDelegate.endedPoll()
             setupEnded()
-            askedType = .ended
+            cardType = .ended
+            poll.isLive = false
         case .ended:
             socket.socket.emit("server/poll/results", [])
             setupShared()
-            askedType = .shared
+            cardType = .shared
+            poll.isShared = true
         default: break
         }
     }

@@ -1,5 +1,5 @@
 //
-//  BlackViewController.swift
+//  CardController.swift
 //  Clicker
 //
 //  Created by eoin on 4/15/18.
@@ -9,41 +9,52 @@
 import UIKit
 import Presentr
 
-protocol EndPollDelegate {
-    func endedPoll()
-    func expandView(poll: Poll, socket: Socket) 
+enum CardType {
+    case live
+    case ended
+    case shared
 }
 
-class BlackAskController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
+protocol EndPollDelegate {
+    func endedPoll()
+}
+
+protocol ExpandCardDelegate {
+    func expandView(poll: Poll, socket: Socket)
+}
+
+class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, ExpandCardDelegate, SocketDelegate {
     
     // name vars
     var nameView: NameView!
     
-    // empty student vars
+    // empty views
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     var downArrowImageView: UIImageView!
     var createPollButton: UIButton!
     
-    // admin group vars
+    // nonempty views
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
+    let askedIdentifer = "askedCardID"
+    let answerIdentifier = "answerCardID"
     var verticalCollectionView: UICollectionView!
+    var countLabel: UILabel!
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
     
+    var userRole: UserRole!
     var socket: Socket!
     var sessionId: Int!
     var code: String!
     var name: String!
     var datePollsArr: [(String, [Poll])] = []
-    var livePoll: Poll!
-    
-    let emptyAnswerCellIdentifier = "emptyAnswerCellID"
-    let cardRowCellIdentifier = "cardRowCellID"
+    var currentPolls: [Poll] = []
+    var currentDatePollsIndex: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,13 +62,17 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         view.backgroundColor = .clickerDeepBlack
         socket.addDelegate(self)
         setupNavBar()
-        setupCreatePollBtn()
-        if (datePollsArr.count == 0) {
-            setupEmptyStudentPoll()
-        } else {
-            setupAdminGroup()
+        if (userRole == .admin) {
+            setupCreatePollBtn()
         }
-        if (name == code) {
+        if (datePollsArr.count == 0) {
+            setupEmpty()
+        } else {
+            currentDatePollsIndex = datePollsArr.count - 1
+            currentPolls = datePollsArr[currentDatePollsIndex].1
+            setupCards()
+        }
+        if (userRole == .admin && name == code) {
             setupName()
         }
     }
@@ -118,38 +133,38 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         
         createPollButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalToSuperview().multipliedBy(0.08)
+            make.height.equalTo(47)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-22)
+            make.bottom.equalToSuperview().inset(22)
         }
     }
     
-    func setupEmptyStudentPoll() {
-        setupEmptyStudentPollViews()
-        setupEmptyStudentPollConstraints()
+    func setupEmpty() {
+        setupEmptyViews()
+        setupEmptyConstraints()
     }
     
-    func removeEmptyStudentPoll() {
+    func removeEmptyState() {
         monkeyView.removeFromSuperview()
         nothingToSeeLabel.removeFromSuperview()
         waitingLabel.removeFromSuperview()
-        downArrowImageView.removeFromSuperview()
+        if (userRole == .admin) {
+            downArrowImageView.removeFromSuperview()
+        }
     }
     
-    func setupEmptyStudentPollViews() {
+    func setupEmptyViews() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
         monkeyView.contentMode = .scaleAspectFit
         view.addSubview(monkeyView)
         
         nothingToSeeLabel = UILabel()
-        nothingToSeeLabel.text = "Nothing to see here."
         nothingToSeeLabel.font = ._16SemiboldFont
         nothingToSeeLabel.textColor = .clickerBorder
         nothingToSeeLabel.textAlignment = .center
         view.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
-        waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
         waitingLabel.font = ._14MediumFont
         waitingLabel.textColor = .clickerMediumGray
         waitingLabel.textAlignment = .center
@@ -157,12 +172,37 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         waitingLabel.numberOfLines = 0
         view.addSubview(waitingLabel)
         
+        if (userRole == .admin) {
+            setupAdminEmpty()
+        } else {
+            setupMemberEmpty()
+        }
+    }
+    
+    func setupAdminEmpty() {
+        nothingToSeeLabel.text = "Nothing to see here."
+        
+        waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
+        
         downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
         downArrowImageView.contentMode = .scaleAspectFit
         view.addSubview(downArrowImageView)
+        
+        downArrowImageView.snp.makeConstraints { make in
+            make.width.equalTo(30)
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(createPollButton.snp.top).offset(-20)
+        }
     }
     
-    func setupEmptyStudentPollConstraints() {
+    func setupMemberEmpty() {
+        nothingToSeeLabel.text = "Nothing to see yet."
+        
+        waitingLabel.text = "Waiting for the host to post a poll."
+    }
+    
+    func setupEmptyConstraints() {
         monkeyView.snp.makeConstraints { make in
             make.width.equalTo(31)
             make.height.equalTo(34)
@@ -183,31 +223,28 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             make.centerX.equalToSuperview()
             make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
         }
-        
-        downArrowImageView.snp.makeConstraints { make in
-            make.width.equalTo(30)
-            make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(createPollButton.snp.top).offset(-20)
-        }
     }
     
-    func setupAdminGroup() {
-        setupAdminGroupViews()
-        setupAdminGroupConstraints()
+    func setupCards() {
+        setupCardsViews()
+        setupCardsConstraints()
     }
     
-    func setupAdminGroupViews() {
+    func setupCardsViews() {
         let layout = UICollectionViewFlowLayout()
-        mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
+        mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(CardRowCell.self, forCellWithReuseIdentifier: cardRowCellIdentifier)
+        let collectionViewInset = view.frame.width * 0.05
+        mainCollectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+        mainCollectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
+        mainCollectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
+        mainCollectionView.alwaysBounceHorizontal = true
         mainCollectionView.backgroundColor = .clear
         mainCollectionView.isPagingEnabled = true
         view.addSubview(mainCollectionView)
@@ -216,12 +253,21 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
         view.addSubview(zoomOutButton)
+        
+        countLabel = UILabel()
+        let countString = "0/\(currentPolls.count)"
+        countLabel.attributedText = getCountLabelAttributedString(countString)
+        countLabel.textAlignment = .center
+        countLabel.backgroundColor = UIColor.clickerLabelGrey
+        countLabel.layer.cornerRadius = 12
+        countLabel.clipsToBounds = true
+        view.addSubview(countLabel)
     }
 
-    func setupAdminGroupConstraints() {
+    func setupCardsConstraints() {
         mainCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(40)
-            make.bottom.equalTo(createPollButton.snp.top).offset(-12)
+            make.bottom.equalToSuperview().inset(110)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -231,42 +277,126 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             make.bottom.equalTo(mainCollectionView.snp.top)
             make.width.height.equalTo(20)
         }
+        
+        countLabel.snp.makeConstraints { make in
+            make.top.equalTo(mainCollectionView.snp.bottom)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(42)
+            make.height.equalTo(23)
+        }
     }
     
     // MARK: - COLLECTIONVIEW
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return datePollsArr.count
+        if (collectionView == verticalCollectionView) {
+            return datePollsArr.count
+        } else { // mainCollectionView
+            return currentPolls.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardRowCellIdentifier, for: indexPath) as! CardRowCell
-        let polls = datePollsArr[indexPath.item].1
-        cell.polls = polls
-        cell.socket = socket
-        cell.pollRole = .ask
-        cell.endPollDelegate = self
-        // SETUP COUNT LABEL
-        let countString = "0/\(polls.count)"
-        cell.countLabel.attributedText = cell.getCountLabelAttributedString(countString)
-//        cell.collectionView.reloadData()
-        // SCROLL TO LATEST QUESTION
-        let lastIndexPath = IndexPath(item: polls.count - 1, section: 0)
-        cell.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        return cell
+        if (collectionView == verticalCollectionView) {
+            // TODO
+        }
+         // mainCollectionView
+        switch (userRole) {
+        case .admin:
+            let poll = currentPolls[indexPath.item]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: askedIdentifer, for: indexPath) as! AskedCard
+            cell.socket = socket
+            socket.addDelegate(cell)
+            cell.poll = poll
+            cell.endPollDelegate = self
+            cell.expandCardDelegate = self
+            if (poll.isLive) {
+                cell.cardType = .live
+            } else if (poll.isShared) {
+                cell.cardType = .shared
+            } else {
+                cell.cardType = .ended
+            }
+            cell.configure(with: poll)
+            cell.setupCard()
+            return cell
+        default:
+            let poll = currentPolls[indexPath.item]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: answerIdentifier, for: indexPath) as! AnswerCard
+            cell.socket = socket
+            socket.addDelegate(cell)
+            cell.poll = poll
+            cell.expandCardDelegate = self
+            if (poll.isLive) {
+                cell.cardType = .live
+            } else if (poll.isShared) {
+                cell.cardType = .shared
+            } else {
+                cell.cardType = .ended
+            }
+            cell.configure(with: poll)
+            cell.setupCard()
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if (collectionView == mainCollectionView) {
+            // UPDATE COUNT LABEL
+            let countString = "\(indexPath.item)/\(currentPolls.count)"
+            countLabel.attributedText = getCountLabelAttributedString(countString)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: mainCollectionView.frame.width, height: 505)
+        if (collectionView == mainCollectionView) {
+            return CGSize(width: view.frame.width * 0.9, height: mainCollectionView.frame.height)
+        } else {
+            return CGSize()
+        }
     }
-    
+
+    // MARK: UPDATE DATE POLLS ARRAY
     func updateDatePollsArr() {
         GetSortedPolls(id: sessionId).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
+                self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
                 DispatchQueue.main.async { self.mainCollectionView.reloadData() }
             }.catch { error in
                 print(error)
         }
+    }
+    
+    // MARK: SCROLLVIEW METHODS
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if (scrollView != mainCollectionView) {
+            return
+        }
+        for cell in mainCollectionView.visibleCells {
+            let indexPath = mainCollectionView.indexPath(for: cell)
+            // Get cell frame
+            guard let cellRect = mainCollectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
+                return
+            }
+            // Check if cell is fully visible
+            if (mainCollectionView.bounds.contains(cellRect)) {
+                let countString = "\(indexPath!.item)/\(currentPolls.count)"
+                countLabel.attributedText = getCountLabelAttributedString(countString)
+                break
+            }
+        }
+    }
+    
+    // MARK: GET COUNT LABEL TEXT
+    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
+        let slashIndex = countString.index(of: "/")?.encodedOffset
+        let attributedString = NSMutableAttributedString(string: countString, attributes: [
+            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
+            .foregroundColor: UIColor.clickerMediumGray,
+            .kern: 0.0
+            ])
+        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
+        return attributedString
     }
     
     // MARK - SOCKET DELEGATE
@@ -279,20 +409,36 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
         peopleButton.setTitle("\(count)", for: .normal)
     }
     
-    func pollStarted(_ poll: Poll) { }
+    func pollStarted(_ poll: Poll) {
+        if (userRole == .member) {
+            let arrEmpty = (datePollsArr.count == 0)
+            appendPoll(poll: poll)
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+                let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+                self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        }
+    }
     
     func pollEnded(_ poll: Poll) { }
     
-    func receivedResults(_ currentState: CurrentState) {
-        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
-    }
+    func receivedResults(_ currentState: CurrentState) { }
     
     func saveSession(_ session: Session) { }
     
-    func updatedTally(_ currentState: CurrentState) {
-        self.datePollsArr[datePollsArr.count - 1].1.last?.results = currentState.results
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+    func updatedTally(_ currentState: CurrentState) { }
+    
+    func appendPoll(poll: Poll) {
+        if (datePollsArr.count == 0) {
+            self.datePollsArr.append((getTodaysDate(), [poll]))
+            self.currentDatePollsIndex = 0
+            removeEmptyState()
+            setupCards()
+        } else {
+            self.datePollsArr[currentDatePollsIndex].1.append(poll)
+        }
+        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
     }
     
     // MARK: - START POLL DELEGATE
@@ -303,20 +449,20 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
             "type": type,
             "options": options
         ]
-        socket.addDelegate(self)
         socket.socket.emit("server/poll/start", with: [socketQuestion])
         let newPoll = Poll(text: text, options: options, isLive: true)
-        if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [newPoll]))
-            removeEmptyStudentPoll()
-            setupAdminGroup()
-        } else {
-            self.datePollsArr[datePollsArr.count - 1].1.append(newPoll)
-        }
+        let arrEmpty = (datePollsArr.count == 0)
+        appendPoll(poll: newPoll)
         // HIDE CREATE POLL BUTTON
         createPollButton.alpha = 0
         createPollButton.isUserInteractionEnabled = false
-        DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+        DispatchQueue.main.async {
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+            }
+            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        }
     }
     
     // MARK: ENDED POLL DELEGATE
@@ -373,7 +519,8 @@ class BlackAskController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     @objc func zoomOutBtnPressed() {
-        
+        // SETUP VERTICAL VIEW
+        setupVertical()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
