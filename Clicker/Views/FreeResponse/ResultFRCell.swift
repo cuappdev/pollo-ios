@@ -11,17 +11,19 @@ import SnapKit
 
 class ResultFRCell: UITableViewCell {
     
+    var response: String!
+    var count: Int!
     var freeResponseLabel: UILabel!
+    var countLabel: UILabel!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
-        contentView.backgroundColor = .white
+        backgroundColor = .white
         clipsToBounds = true
         
         setupViews()
-        layoutSubviews()
+        setupConstraints()
     }
     
     //MARK: - LAYOUT
@@ -32,19 +34,30 @@ class ResultFRCell: UITableViewCell {
         freeResponseLabel.lineBreakMode = .byWordWrapping
         freeResponseLabel.numberOfLines = 0
         addSubview(freeResponseLabel)
+        
+        countLabel = UILabel()
+        countLabel.font = ._12SemiboldFont
+        countLabel.textColor = .clickerBlue
+        countLabel.textAlignment = .center
+        addSubview(countLabel)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 0, 5, 0))
-        
+    func setupConstraints() {
         freeResponseLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.85)
-            make.height.equalTo(contentView.snp.height)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview()
         }
         
+        countLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().inset(13)
+        }
+    }
+    
+    func configure() {
+        freeResponseLabel.text = response
+        countLabel.text = count
     }
     
     required init?(coder aDecoder: NSCoder) {
