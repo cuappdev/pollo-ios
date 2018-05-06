@@ -19,6 +19,9 @@ class Poll {
     var text: String
     var options: [String]?
     var results: [String:Any]?
+    // results format:
+    // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
+    // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     var questionType: QuestionType?
     var isLive: Bool = false
     var isShared: Bool = false
@@ -67,6 +70,18 @@ class Poll {
         self.results = results
         self.options = results.map { (key, _) in key }
         self.isLive = isLive
+    }
+    
+    // Returns array representation of results
+    // Ex) [('Blah', 3), ('Jupiter', 2)...]
+    func getFRResultsArray() -> [(String, Int)] {
+        var resultsArr: [(String, Int)] = []
+        results?.forEach { (key, val) in
+            if let choiceJSON = val as? [String:Any] {
+                resultsArr.append((key, (choiceJSON["count"] as! Int)))
+            }
+        }
+        return resultsArr
     }
     
     func getTotalResults() -> Int {

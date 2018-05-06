@@ -108,6 +108,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.questionLabel.text = poll.text
         cardView.poll = poll
         cardView.cardType = cardType
+        cardView.configure()
         setupCard()
     }
     
