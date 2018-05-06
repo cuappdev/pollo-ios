@@ -84,14 +84,15 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                         GetSortedPolls(id: session.id).make()
                             .done { datePollsArr in
                                 let socket = Socket(id: "\(session.id)", userType: "user")
-                                let blackAnswerVC = BlackAnswerController()
-                                blackAnswerVC.socket = socket
-                                blackAnswerVC.code = code
-                                blackAnswerVC.name = session.name
-                                blackAnswerVC.datePollsArr = datePollsArr
-                                blackAnswerVC.sessionId = session.id
+                                let cardVC = CardController()
+                                cardVC.socket = socket
+                                cardVC.code = code
+                                cardVC.name = session.name
+                                cardVC.datePollsArr = datePollsArr
+                                cardVC.sessionId = session.id
+                                cardVC.userRole = .member
                                 self.dismiss(animated: true, completion: {
-                                    self.dismissController.navigationController?.pushViewController(blackAnswerVC, animated: true)
+                                    self.dismissController.navigationController?.pushViewController(cardVC, animated: true)
                                     self.dismissController.navigationController?.setNavigationBarHidden(false, animated: true)
                                 })
                             }.catch { error in
