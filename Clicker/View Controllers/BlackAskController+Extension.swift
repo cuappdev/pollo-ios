@@ -8,10 +8,37 @@
 
 import UIKit
 
-extension BlackAskController {
+extension CardController {
+    
+    func setupVertical() {
+        setupVerticalNavBar()
+        setupVerticalCollectionView()
+    }
     
     func setupVerticalCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        verticalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .vertical
+        verticalCollectionView.delegate = self
+        verticalCollectionView.dataSource = self
+        verticalCollectionView.showsVerticalScrollIndicator = false
+        verticalCollectionView.showsHorizontalScrollIndicator = false
+        verticalCollectionView.alwaysBounceVertical = true
+        verticalCollectionView.backgroundColor = .clear
+        verticalCollectionView.isPagingEnabled = true
+        view.addSubview(verticalCollectionView)
         
+        verticalCollectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    func setupVerticalNavBar() {
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationItem.titleView = UIView()
+        self.navigationItem.rightBarButtonItems = []
     }
     
 }
