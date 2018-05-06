@@ -316,7 +316,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             } else {
                 cell.cardType = .ended
             }
-            cell.configure(with: poll)
+            cell.configure()
             cell.setupCard()
             return cell
         default:
@@ -333,7 +333,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             } else {
                 cell.cardType = .ended
             }
-            cell.configure(with: poll)
+            cell.configure()
             cell.setupCard()
             return cell
         }

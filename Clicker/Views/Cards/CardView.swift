@@ -9,12 +9,14 @@
 import UIKit
 import SnapKit
 
-protocol QuestionButtonDelegate {
+protocol CardDelegate {
     func questionBtnPressed()
+    func emitTally(answer: [String:Any])
 }
 
-class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
+class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate {
     
+    var choice: Int?
     var totalNumResults: Int = 0
     var highlightColor: UIColor!
     
@@ -24,9 +26,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
     var visibiltyLabel: UILabel!
     var totalResultsLabel: UILabel!
     var questionButton: UIButton!
+    var infoLabel: UILabel!
     
-    var questionButtonDelegate: QuestionButtonDelegate!
+    var cardDelegate: CardDelegate!
     var userRole: UserRole!
+    var cardType: CardType!
     var poll: Poll!
     var cardHeight: Int!
     var cardHeightConstraint: Constraint!
@@ -35,11 +39,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
     var moreOptionsLabel: UILabel!
     var seeAllButton: UIButton!
     
-    init(frame: CGRect, userRole: UserRole, questionButtonDelegate: QuestionButtonDelegate) {
+    init(frame: CGRect, userRole: UserRole, cardDelegate: CardDelegate) {
         super.init(frame: frame)
         
         self.userRole = userRole
-        self.questionButtonDelegate = questionButtonDelegate
+        self.cardDelegate = cardDelegate
         
         layer.cornerRadius = 15
         layer.borderColor = UIColor.clickerBorder.cgColor
@@ -67,15 +71,16 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: "resultCellID")
+        resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: "optionCellID")
         addSubview(resultsTableView)
         
-        visibiltyLabel = UILabel()
-        visibiltyLabel.font = ._12MediumFont
-        visibiltyLabel.textAlignment = .left
-        visibiltyLabel.textColor = .clickerMediumGray
-        addSubview(visibiltyLabel)
-        
         if (userRole == .admin) {
+            visibiltyLabel = UILabel()
+            visibiltyLabel.font = ._12MediumFont
+            visibiltyLabel.textAlignment = .left
+            visibiltyLabel.textColor = .clickerMediumGray
+            addSubview(visibiltyLabel)
+            
             questionButton = UIButton()
             questionButton.titleLabel?.font = ._16SemiboldFont
             questionButton.titleLabel?.textAlignment = .center
@@ -83,6 +88,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
             questionButton.layer.borderWidth = 1.5
             questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
             addSubview(questionButton)
+            
+            graphicView = UIImageView()
+            addSubview(graphicView)
+        } else { // member
+            infoLabel = UILabel()
+            infoLabel.font = ._12SemiboldFont
+            addSubview(infoLabel)
         }
         
         totalResultsLabel = UILabel()
@@ -92,8 +104,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
         totalResultsLabel.textColor = .clickerMediumGray
         addSubview(totalResultsLabel)
         
-        graphicView = UIImageView()
-        addSubview(graphicView)
     }
     
     func setupConstraints() {
@@ -111,31 +121,44 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
             make.height.equalTo(206)
         }
         
-        graphicView.snp.makeConstraints { make in
-            make.width.height.equalTo(14.5)
-            make.left.equalToSuperview().offset(16)
-            make.centerY.equalTo(visibiltyLabel.snp.centerY)
-        }
-        
-        visibiltyLabel.snp.makeConstraints{ make in
-            make.left.equalTo(graphicView.snp.right).offset(4)
-            make.width.equalTo(200)
-            make.height.equalTo(14.5)
-        }
-        
         totalResultsLabel.snp.makeConstraints{ make in
             make.right.equalToSuperview().offset(-22.5)
             make.width.equalTo(50)
             make.height.equalTo(14.5)
-            make.centerY.equalTo(visibiltyLabel.snp.centerY)
         }
         
         if (userRole == .admin) {
+            graphicView.snp.makeConstraints { make in
+                make.width.height.equalTo(14.5)
+                make.left.equalToSuperview().offset(16)
+                make.centerY.equalTo(visibiltyLabel.snp.centerY)
+            }
+            
+            visibiltyLabel.snp.makeConstraints{ make in
+                make.left.equalTo(graphicView.snp.right).offset(4)
+                make.width.equalTo(200)
+                make.height.equalTo(14.5)
+            }
+            
             questionButton.snp.makeConstraints{ make in
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(24)
                 make.height.equalTo(47)
                 make.width.equalTo(303)
+            }
+            
+            totalResultsLabel.snp.makeConstraints { make in
+                make.centerY.equalTo(visibiltyLabel.snp.centerY)
+            }
+        } else {
+            infoLabel.snp.makeConstraints { make in
+                make.left.equalToSuperview().offset(18)
+                make.bottom.equalToSuperview().inset(24)
+                make.height.equalTo(15)
+            }
+            
+            totalResultsLabel.snp.makeConstraints { make in
+                make.centerY.equalTo(infoLabel.snp.centerY)
             }
         }
     }
@@ -168,30 +191,64 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
-        cell.choiceTag = indexPath.row
-        cell.selectionStyle = .none
-        cell.highlightView.backgroundColor = highlightColor
-        
-        // UPDATE HIGHLIGHT VIEW WIDTH
-        let mcOption: String = intToMCOption(indexPath.row)
-        var count: Int = 0
-        if let choiceInfo = poll.results![mcOption] as? [String:Any] {
-            cell.optionLabel.text = choiceInfo["text"] as? String
-            count = choiceInfo["count"] as! Int
+        // ADMIN
+        if (userRole == .admin) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
+            cell.choiceTag = indexPath.row
+            cell.selectionStyle = .none
+            cell.highlightView.backgroundColor = highlightColor
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            var count: Int = 0
+            if let choiceInfo = poll.results![mcOption] as? [String:Any] {
+                cell.optionLabel.text = choiceInfo["text"] as? String
+                count = choiceInfo["count"] as! Int
+                cell.numberLabel.text = "\(count)"
+            }
+            
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
+                let totalWidth = cell.frame.width
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            return cell
+        }
+        // MEMBER
+        switch cardType {
+        case .live, .ended:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "optionCellID", for: indexPath) as! LiveOptionCell
+            cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
+            cell.delegate = self
+            cell.index = indexPath.row
+            cell.chosen = (choice == indexPath.row)
+            cell.setColors(isLive: poll.isLive)
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "resultCellID", for: indexPath) as! ResultCell
+            cell.choiceTag = indexPath.row
+            cell.optionLabel.text = poll.options?[indexPath.row]
+            cell.selectionStyle = .none
+            cell.highlightView.backgroundColor = .clickerMint
+            
+            // UPDATE HIGHLIGHT VIEW WIDTH
+            let mcOption: String = intToMCOption(indexPath.row)
+            guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
+                return cell
+            }
             cell.numberLabel.text = "\(count)"
+            let totalNumResults = poll.getTotalResults()
+            if (totalNumResults > 0) {
+                let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
+                let totalWidth = cell.frame.width
+                cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
+            } else {
+                cell.highlightWidthConstraint.update(offset: 0)
+            }
+            return cell
         }
-        
-        if (totalNumResults > 0) {
-            let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
-            let totalWidth = cell.frame.width
-            cell.highlightWidthConstraint.update(offset: percentWidth * totalWidth)
-        } else {
-            cell.highlightWidthConstraint.update(offset: 0)
-        }
-        
-        
-        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -202,6 +259,22 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
         return 47
     }
     
+    // MARK - OptionViewDelegate
+    func choose(_ choice: Int) {
+        if (poll.isLive) {
+            let answer: [String:Any] = [
+                "googleId": User.currentUser?.id,
+                "poll": poll.id,
+                "choice": intToMCOption(choice),
+                "text": poll.options![choice]
+            ]
+            cardDelegate.emitTally(answer: answer)
+            self.choice = choice
+            resultsTableView.reloadData()
+            infoLabel.text = "Vote Sumbitted"
+        }
+    }
+    
     // MARK: ACTIONS
     
     @objc func seeAllAction() {
@@ -209,7 +282,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource {
     }
 
     @objc func questionAction() {
-        questionButtonDelegate.questionBtnPressed()
+        cardDelegate.questionBtnPressed()
     }
     
     required init?(coder aDecoder: NSCoder) {
