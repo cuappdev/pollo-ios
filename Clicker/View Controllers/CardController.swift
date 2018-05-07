@@ -274,25 +274,25 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
             if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             } else {
-                make.bottom.equalTo(topLayoutGuide.snp.bottom).offset(40)
+                make.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
             }
             make.width.height.equalTo(20)
         }
         
-        mainCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(zoomOutButton.snp.bottom)
-            make.bottom.equalToSuperview().inset(110)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
         countLabel.snp.makeConstraints { make in
-            make.top.equalTo(mainCollectionView.snp.bottom)
+            make.centerY.equalTo(zoomOutButton.snp.centerY)
             make.centerX.equalToSuperview()
             make.width.equalTo(42)
             make.height.equalTo(23)
+        }
+        
+        mainCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(countLabel.snp.bottom).offset(6)
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
         }
     }
     

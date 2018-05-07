@@ -22,8 +22,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     let textFieldHeight = 48
     var highlightColor: UIColor!
     
+    var topView: UIView!
     var questionLabel: UILabel!
     var responseTextField: UITextField!
+    
+    var scrollView: UIScrollView!
+    var scrollContentView: UIView!
     var resultsTableView: UITableView!
     var graphicView: UIImageView!
     var visibilityLabel: UILabel!
@@ -37,16 +41,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var questionType: QuestionType!
     var poll: Poll!
     var frResults: [(String, Int)] = []
-    var cardHeight: Int!
-    var cardHeightConstraint: Constraint!
+    var tableViewHeightConstraint: Constraint!
     
+    let cornerRadius = 15
+    let optionCellHeight = 47
     let resultIdentifier = "resultCellID"
     let resultFRIdentifier = "resultFRCellID"
     let optionIdentifier = "optionCellID"
-    
-    // Expanded Card views
-    var moreOptionsLabel: UILabel!
-    var seeAllButton: UIButton!
     
     init(frame: CGRect, userRole: UserRole, cardDelegate: CardDelegate) {
         super.init(frame: frame)
@@ -54,11 +55,17 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         self.userRole = userRole
         self.cardDelegate = cardDelegate
         
-        layer.cornerRadius = 15
-        layer.borderColor = UIColor.clickerBorder.cgColor
-        layer.borderWidth = 1
-        layer.shadowRadius = 2.5
-        backgroundColor = .clickerNavBarLightGrey
+        if #available(iOS 11.0, *) {
+            layer.cornerRadius = CGFloat(cornerRadius)
+            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else {
+            let path =  UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            layer.mask = maskLayer
+        }
+        
+        backgroundColor = .clickerDeepBlack
         
         setupViews()
         setupConstraints()
@@ -68,19 +75,45 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         if (questionType == .freeResponse) {
             self.frResults = poll.getFRResultsArray()
         }
+        let height = (poll.options?.count)! * optionCellHeight
+        tableViewHeightConstraint.update(offset: height + 10)
     }
     
     func setupViews() {
+        topView = UIView()
+        topView.backgroundColor = .clickerWhite
+        if #available(iOS 11.0, *) {
+            topView.layer.cornerRadius = CGFloat(cornerRadius)
+            topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else {
+            let path =  UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            topView.layer.mask = maskLayer
+        }
+        addSubview(topView)
+        
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
         questionLabel.textColor = .clickerBlack
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
-        addSubview(questionLabel)
+        topView.addSubview(questionLabel)
+        
+        scrollView = UIScrollView()
+        scrollView.backgroundColor = .clickerDeepBlack
+        scrollView.isScrollEnabled = true
+        scrollView.alwaysBounceVertical = true
+        scrollView.delegate = self
+        addSubview(scrollView)
+        
+        scrollContentView = UIView()
+        scrollContentView.backgroundColor = .clickerDeepBlack
+        scrollView.addSubview(scrollContentView)
         
         resultsTableView = UITableView()
-        resultsTableView.backgroundColor = .clear
+        resultsTableView.backgroundColor = .white
         resultsTableView.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.separatorStyle = .none
@@ -88,14 +121,23 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         resultsTableView.register(ResultCell.self, forCellReuseIdentifier: resultIdentifier)
         resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: resultFRIdentifier)
         resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: optionIdentifier)
-        addSubview(resultsTableView)
+        if #available(iOS 11.0, *) {
+            resultsTableView.layer.cornerRadius = 15
+            resultsTableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        } else {
+            let path =  UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            resultsTableView.layer.mask = maskLayer
+        }
+        scrollContentView.addSubview(resultsTableView)
         
-        totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults) votes"
-        totalResultsLabel.font = ._12MediumFont
-        totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
-        addSubview(totalResultsLabel)
+//        totalResultsLabel = UILabel()
+//        totalResultsLabel.text = "\(totalNumResults) votes"
+//        totalResultsLabel.font = ._12MediumFont
+//        totalResultsLabel.textAlignment = .right
+//        totalResultsLabel.textColor = .clickerMediumGray
+//        addSubview(totalResultsLabel)
         
         if (userRole == .admin) {
             setupAdminViews()
@@ -108,110 +150,130 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func setupAdminViews() {
-        visibilityLabel = UILabel()
-        visibilityLabel.font = ._12MediumFont
-        visibilityLabel.textAlignment = .left
-        visibilityLabel.textColor = .clickerMediumGray
-        addSubview(visibilityLabel)
-        
+//        visibilityLabel = UILabel()
+//        visibilityLabel.font = ._12MediumFont
+//        visibilityLabel.textAlignment = .left
+//        visibilityLabel.textColor = .clickerMediumGray
+//        addSubview(visibilityLabel)
+//
         questionButton = UIButton()
+        questionButton.backgroundColor = .clickerTransparentGrey
+        questionButton.setTitleColor(.white, for: .normal)
         questionButton.titleLabel?.font = ._16SemiboldFont
         questionButton.titleLabel?.textAlignment = .center
-        questionButton.layer.cornerRadius = 25.5
+        questionButton.layer.cornerRadius = 23.5
         questionButton.layer.borderWidth = 1.5
+        questionButton.layer.borderColor = UIColor.white.cgColor
         questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
         addSubview(questionButton)
-        
-        graphicView = UIImageView()
-        addSubview(graphicView)
+//
+//        graphicView = UIImageView()
+//        addSubview(graphicView)
     }
     
     func setupAdminConstraints() {
-        visibilityLabel.snp.makeConstraints{ make in
-            make.left.equalTo(graphicView.snp.right).offset(4)
-            make.width.equalTo(200)
-            make.height.equalTo(14.5)
-        }
-        
-        graphicView.snp.makeConstraints { make in
-            make.width.height.equalTo(14.5)
-            make.left.equalToSuperview().offset(16)
-            make.centerY.equalTo(visibilityLabel.snp.centerY)
-        }
-        
+//        visibilityLabel.snp.makeConstraints{ make in
+//            make.left.equalTo(graphicView.snp.right).offset(4)
+//            make.width.equalTo(200)
+//            make.height.equalTo(14.5)
+//        }
+//
+//        graphicView.snp.makeConstraints { make in
+//            make.width.height.equalTo(14.5)
+//            make.left.equalToSuperview().offset(16)
+//            make.centerY.equalTo(visibilityLabel.snp.centerY)
+//        }
+//
         questionButton.snp.makeConstraints{ make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(24)
+            make.bottom.equalToSuperview().inset(28)
             make.height.equalTo(47)
-            make.width.equalToSuperview().multipliedBy(0.9)
+            make.width.equalToSuperview().multipliedBy(0.5)
         }
-        
-        totalResultsLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(visibilityLabel.snp.centerY)
-        }
+//
+//        totalResultsLabel.snp.makeConstraints { make in
+//            make.centerY.equalTo(visibilityLabel.snp.centerY)
+//        }
     }
     
     func setupMemberViews() {
         if (questionType == .freeResponse) {
-            responseTextField = UITextField()
-            responseTextField.layer.cornerRadius = 45
-            responseTextField.placeholder = "Type a response"
-            responseTextField.font = ._16MediumFont
-            responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
-            responseTextField.leftViewMode = .always
-            addSubview(responseTextField)
+//            responseTextField = UITextField()
+//            responseTextField.layer.cornerRadius = 45
+//            responseTextField.placeholder = "Type a response"
+//            responseTextField.font = ._16MediumFont
+//            responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
+//            responseTextField.leftViewMode = .always
+//            addSubview(responseTextField)
         }
         
-        infoLabel = UILabel()
-        infoLabel.font = ._12SemiboldFont
-        addSubview(infoLabel)
+//        infoLabel = UILabel()
+//        infoLabel.font = ._12SemiboldFont
+//        addSubview(infoLabel)
     }
     
     func setupMemberConstraints() {
-        if (questionType == .freeResponse) {
-            responseTextField.snp.makeConstraints { make in
-                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
-                make.centerY.equalToSuperview()
-                make.width.equalToSuperview().multipliedBy(0.9)
-                make.height.equalTo(textFieldHeight)
-            }
-        }
-        
-        infoLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
-            make.bottom.equalToSuperview().inset(24)
-            make.height.equalTo(15)
-        }
-        
-        totalResultsLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(infoLabel.snp.centerY)
-        }
+//        if (questionType == .freeResponse) {
+//            responseTextField.snp.makeConstraints { make in
+//                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
+//                make.centerY.equalToSuperview()
+//                make.width.equalToSuperview().multipliedBy(0.9)
+//                make.height.equalTo(textFieldHeight)
+//            }
+//        }
+//
+//        infoLabel.snp.makeConstraints { make in
+//            make.left.equalToSuperview().offset(18)
+//            make.bottom.equalToSuperview().inset(24)
+//            make.height.equalTo(15)
+//        }
+//
+//        totalResultsLabel.snp.makeConstraints { make in
+//            make.centerY.equalTo(infoLabel.snp.centerY)
+//        }
     }
     
     func setupConstraints() {
+        topView.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(76)
+        }
+        
         questionLabel.snp.makeConstraints{ make in
             questionLabel.sizeToFit()
             make.top.equalToSuperview().offset(20)
             make.left.equalToSuperview().offset(17)
-            make.right.equalToSuperview().offset(17)
+            make.right.equalToSuperview().inset(17)
+        }
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(topView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
+        
+        scrollContentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
         }
         
         resultsTableView.snp.makeConstraints{ make in
-            if (questionType == .freeResponse && userRole == .member) {
-                make.top.equalTo(responseTextField.snp.bottom).offset(18)
-            } else {
-                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
-            }
+//            if (questionType == .freeResponse && userRole == .member) {
+//                make.top.equalTo(responseTextField.snp.bottom).offset(18)
+//            } else {
+//                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
+//            }
+            make.top.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(206)
+            tableViewHeightConstraint = make.height.equalTo(0).constraint
         }
         
-        totalResultsLabel.snp.makeConstraints{ make in
-            make.right.equalToSuperview().offset(-22.5)
-            make.width.equalTo(50)
-            make.height.equalTo(14.5)
-        }
+//        totalResultsLabel.snp.makeConstraints{ make in
+//            make.right.equalToSuperview().offset(-22.5)
+//            make.width.equalTo(50)
+//            make.height.equalTo(14.5)
+//        }
         
         if (userRole == .admin) {
             setupAdminConstraints()
@@ -223,28 +285,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     func setupOverflow(numOptions: Int) {
         if (numOptions <= 4) {
             return
-        }
-        moreOptionsLabel = UILabel()
-        moreOptionsLabel.text = "\(numOptions - 4) more options..."
-        moreOptionsLabel.font = UIFont._12SemiboldFont
-        moreOptionsLabel.textColor = .clickerDeepBlack
-        addSubview(moreOptionsLabel)
-        
-        moreOptionsLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
-            make.top.equalTo(resultsTableView.snp.bottom).offset(9)
-        }
-        
-        seeAllButton = UIButton()
-        seeAllButton.setTitle("See All", for: .normal)
-        seeAllButton.setTitleColor(.clickerBlue, for: .normal)
-        seeAllButton.titleLabel?.font = UIFont._12SemiboldFont
-        seeAllButton.addTarget(self, action: #selector(seeAllAction), for: .touchUpInside)
-        addSubview(seeAllButton)
-        
-        seeAllButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalTo(moreOptionsLabel.snp.centerY)
         }
     }
     
@@ -262,60 +302,54 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     
     func setupLive() {
         if (userRole == .admin) {
-            visibilityLabel.text = "Only you can see these results"
-            
+//            visibilityLabel.text = "Only you can see these results"
+//
             questionButton.setTitle("End Question", for: .normal)
-            questionButton.backgroundColor = .clear
-            questionButton.setTitleColor(.clickerDeepBlack, for: .normal)
-            questionButton.layer.borderColor = UIColor.clickerDeepBlack.cgColor
-            
-            graphicView.image = #imageLiteral(resourceName: "solo_eye")
-            
-            visibilityLabel.snp.makeConstraints { make in
-                make.bottom.equalTo(questionButton.snp.top).offset(-15)
+//
+//            graphicView.image = #imageLiteral(resourceName: "solo_eye")
+//
+//            visibilityLabel.snp.makeConstraints { make in
+//                make.bottom.equalTo(questionButton.snp.top).offset(-15)
             }
-        } else {
-            infoLabel.textColor = .clickerMediumGray
-        }
+//        } else {
+//            infoLabel.textColor = .clickerMediumGray
+//        }
     }
     
     func setupEnded() {
         if (userRole == .admin) {
             questionButton.setTitle("Share Results", for: .normal)
-            questionButton.backgroundColor = .clickerGreen
-            questionButton.setTitleColor(.white, for: .normal)
-            questionButton.layer.borderColor = UIColor.clickerGreen.cgColor
-            
-            highlightColor = .clickerMint
-            
-            resultsTableView.reloadData()
-            
-            visibilityLabel.snp.makeConstraints { make in
-                make.bottom.equalTo(questionButton.snp.top).offset(-15)
+//
+//            highlightColor = .clickerMint
+//
+//            resultsTableView.reloadData()
+//
+//            visibilityLabel.snp.makeConstraints { make in
+//                make.bottom.equalTo(questionButton.snp.top).offset(-15)
             }
-        } else {
-            infoLabel.textColor = .clickerDeepBlack
-            infoLabel.text = "Poll has closed"
-        }
+//        } else {
+//            infoLabel.textColor = .clickerDeepBlack
+//            infoLabel.text = "Poll has closed"
+//        }
     }
     
     func setupShared() {
-        if (userRole == .admin) {
-            if (questionButton.isDescendant(of: self)) {
-                questionButton.removeFromSuperview()
-            }
-            visibilityLabel.text = "Shared with group"
-            
-            graphicView.image = #imageLiteral(resourceName: "results_shared")
-            
-            visibilityLabel.snp.makeConstraints { make in
-                make.bottom.equalToSuperview().offset(-20)
-            }
-            
-        } else {
-            infoLabel.textColor = .clickerDeepBlack
-            infoLabel.text = "Poll has closed"
-        }
+//        if (userRole == .admin) {
+//            if (questionButton.isDescendant(of: self)) {
+//                questionButton.removeFromSuperview()
+//            }
+//            visibilityLabel.text = "Shared with group"
+//
+//            graphicView.image = #imageLiteral(resourceName: "results_shared")
+//
+//            visibilityLabel.snp.makeConstraints { make in
+//                make.bottom.equalToSuperview().offset(-20)
+//            }
+//
+//        } else {
+//            infoLabel.textColor = .clickerDeepBlack
+//            infoLabel.text = "Poll has closed"
+//        }
     }
     
     // MARK - TABLEVIEW
@@ -392,14 +426,30 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (questionType == .freeResponse) {
-            return min(frResults.count, 4)
+            return frResults.count
         } else {
-            return min((poll.options?.count)!, 4)
+            return (poll.options?.count)!
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 47
+        return CGFloat(optionCellHeight)
+    }
+    
+    // MARK: SCROLLVIEW METHODS
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == self.scrollView {
+//            print("scrolling")
+//            print(scrollView.contentOffset.y)
+//            let height = (poll.options?.count)! * optionCellHeight
+//            let diff = frame.height - CGFloat(height) - scrollView.contentOffset.y - 179
+//            print("DIFFERENCE: \(diff)")
+            if ((poll.options?.count)! > 7) {
+                let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, scrollView.contentOffset.y, 0.0)
+                resultsTableView.contentInset = contentInsets
+                self.scrollView.contentInset = contentInsets
+            }
+        }
     }
     
     // MARK - OptionViewDelegate
