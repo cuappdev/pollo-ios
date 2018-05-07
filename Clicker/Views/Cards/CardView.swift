@@ -75,8 +75,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         if (questionType == .freeResponse) {
             self.frResults = poll.getFRResultsArray()
         }
-        let height = (poll.options?.count)! * optionCellHeight
-        tableViewHeightConstraint.update(offset: height + 10)
+        let height = (poll.options?.count)! * optionCellHeight + 10
+        tableViewHeightConstraint.update(offset: height)
     }
     
     func setupViews() {
