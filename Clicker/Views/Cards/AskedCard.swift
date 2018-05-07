@@ -37,9 +37,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     }
     
     func setupLive() {
-        cardHeight = 398
-        cardHeightConstraint.update(offset: cardHeight)
-        
         timerLabel = UILabel()
         timerLabel.text = "00:00"
         timerLabel.font = UIFont._14BoldFont
@@ -58,9 +55,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     }
     
     func setupEnded() {
-        cardHeight = 398
-        cardHeightConstraint.update(offset: cardHeight)
-        
         if (timerLabel != nil && timerLabel.isDescendant(of: self)) {
             timerLabel.removeFromSuperview()
             timer.invalidate()
@@ -69,8 +63,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     }
     
     func setupShared() {
-        cardHeight = 333
-        cardHeightConstraint.update(offset: cardHeight)
         cardView.setupShared()
     }
     
@@ -78,13 +70,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         if (numOptions <= 4) {
             return
         }
-        if let height = cardHeight {
-            cardHeight = height + 25
-        } else {
-            cardHeight = 436 // First time loading cell
-        }
-        cardHeightConstraint.update(offset: cardHeight)
-        
         cardView.setupOverflow(numOptions: (poll.options?.count)!)
     }
     
@@ -96,10 +81,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         addSubview(cardView)
     
         cardView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(25)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            cardHeightConstraint = make.height.equalTo(0).constraint
+            make.edges.equalToSuperview()
         }
     }
     
