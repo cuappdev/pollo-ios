@@ -43,7 +43,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var questionType: QuestionType!
     var poll: Poll!
     var frResults: [(String, Int)] = []
-    var scrollContentHeightConstraint: Constraint!
     var tableViewHeightConstraint: Constraint!
     
     let cornerRadius = 15
@@ -108,6 +107,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         
         scrollContentView = UIView()
         scrollContentView.backgroundColor = .white
+        scrollContentView.layer.cornerRadius = 15
+        scrollContentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         scrollView.addSubview(scrollContentView)
         
         resultsTableView = UITableView()
@@ -127,7 +128,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         blackView = UIView()
         blackView.backgroundColor = .clickerDeepBlack
         scrollContentView.addSubview(blackView)
-        scrollContentView.sendSubview(toBack: blackView)
         
         if (userRole == .admin) {
             setupAdminViews()
@@ -170,8 +170,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             //                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
             //            }
             make.top.equalToSuperview().offset(18)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.right.equalToSuperview()
             tableViewHeightConstraint = make.height.equalTo(0).constraint
         }
         
