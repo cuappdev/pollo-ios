@@ -55,7 +55,7 @@ class FROptionsDropDownView: UIView {
         addSubview(responsesButton)
 
         votesLabel = UILabel()
-        votesLabel.textColor = .clickerMediumGray
+        votesLabel.textColor = .clickerMediumGrey
         votesLabel.text = "Show vote count to audience"
         votesLabel.font = ._14MediumFont
         votesLabel.textAlignment = .left
@@ -131,7 +131,7 @@ class FROptionsDropDownView: UIView {
             responsesCheck.image = checkImage
         } else {
             votesButton.isEnabled = false
-            votesLabel.textColor = .clickerMediumGray
+            votesLabel.textColor = .clickerMediumGrey
             
             responsesCheck.image = circleImage
             votesCheck.image = circleImage

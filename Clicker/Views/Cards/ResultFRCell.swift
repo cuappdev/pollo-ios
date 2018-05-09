@@ -45,11 +45,11 @@ class ResultFRCell: UITableViewCell {
         
         countLabel = UILabel()
         countLabel.font = ._12SemiboldFont
-        countLabel.textColor = .clickerBlue
+        countLabel.textColor = .clickerMediumGrey
         countLabel.textAlignment = .center
         rightView.addSubview(countLabel)
         
-        triangleImageView = UIImageView(image: #imageLiteral(resourceName: "blueTriangle"))
+        triangleImageView = UIImageView(image: #imageLiteral(resourceName: "greyTriangle"))
         triangleImageView.contentMode = .scaleAspectFit
         rightView.addSubview(triangleImageView)
         

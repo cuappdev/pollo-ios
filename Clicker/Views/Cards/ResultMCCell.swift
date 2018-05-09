@@ -49,7 +49,7 @@ class ResultMCCell: UITableViewCell {
         numberLabel.font = ._16MediumFont
         numberLabel.backgroundColor = .clear
         numberLabel.text = "0"
-        numberLabel.textColor = .clickerMediumGray
+        numberLabel.textColor = .clickerMediumGrey
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()

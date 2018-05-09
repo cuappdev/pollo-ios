@@ -33,14 +33,14 @@ class AddMoreOptionCell: UITableViewCell {
     func setupViews() {
         plusLabel = UILabel()
         plusLabel.text = "+"
-        plusLabel.textColor = .clickerMediumGray
+        plusLabel.textColor = .clickerMediumGrey
         plusLabel.textAlignment = .center
         plusLabel.font = ._20MediumFont
         addSubview(plusLabel)
         
         addMoreLabel = UILabel()
         addMoreLabel.text = "Add Option"
-        addMoreLabel.textColor = .clickerMediumGray
+        addMoreLabel.textColor = .clickerMediumGrey
         addMoreLabel.font = ._16RegularFont
         addSubview(addMoreLabel)
     }

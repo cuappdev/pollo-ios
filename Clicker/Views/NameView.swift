@@ -31,12 +31,12 @@ class NameView: UIView, UITextFieldDelegate {
         backgroundColor = .clicker85Black
         
         titleField = UITextField()
-        titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._24MediumFont])
+        titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._24MediumFont])
         if code != name {
             titleField.text = name
         }
         titleField.font = ._24MediumFont
-        titleField.textColor = .clickerMediumGray
+        titleField.textColor = .clickerMediumGrey
         titleField.textAlignment = .center
         titleField.delegate = self
         titleField.becomeFirstResponder()
