@@ -116,7 +116,8 @@ class EditPollViewController: UIViewController {
     
     @objc func editNameBtnPressed() {
         let editNameVC = EditNameViewController()
-        editNameVC.sessionName = session.name
+        editNameVC.session = session
+        editNameVC.homeViewController = homeViewController
         self.navigationController?.pushViewController(editNameVC, animated: true)
     }
     
