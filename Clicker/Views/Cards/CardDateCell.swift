@@ -19,7 +19,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     var shadowImage: UIImageView!
     var cardView: CardView!
     
-    let minCardHeight = 358
+    let minCardHeight = 320
     
     override init(frame: CGRect) {
         super.init(frame: frame)

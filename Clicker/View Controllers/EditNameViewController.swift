@@ -22,6 +22,10 @@ class EditNameViewController: UIViewController {
         view.backgroundColor = .clickerWhite
         self.title = "Edit Name"
         
+        // Add Keyboard Handlers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -86,6 +90,19 @@ class EditNameViewController: UIViewController {
         exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
         exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
+    }
+    
+    // MARK: - KEYBOARD
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.origin.y -= keyboardSize.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            view.frame.origin.y += keyboardSize.height
+        }
     }
     
 }

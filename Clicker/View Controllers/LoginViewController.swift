@@ -12,6 +12,7 @@ import SnapKit
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
+    var appLogoImage: UIImageView!
     var signInButton: GIDSignInButton!
     
     // MARK: - INITIALIZATION
@@ -20,6 +21,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         view.backgroundColor = .clickerGreen
         
         GIDSignIn.sharedInstance().uiDelegate = self
+        
+        appLogoImage = UIImageView(image: #imageLiteral(resourceName: "AppLogo"))
+        appLogoImage.contentMode = .scaleAspectFit
+        view.addSubview(appLogoImage)
         
         signInButton = GIDSignInButton()
         signInButton.colorScheme = .light
@@ -30,6 +35,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     // MARK: - CONSTRAINTS
     func setupConstraints() {
+        appLogoImage.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(70)
+        }
+        
         signInButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-60)
             make.centerX.equalToSuperview()
