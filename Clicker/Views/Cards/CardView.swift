@@ -122,7 +122,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         topView.addSubview(questionLabel)
         
         scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = .clickerDeepBlack
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = true
         scrollView.showsVerticalScrollIndicator = false
@@ -189,9 +189,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
         
         scrollContentView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
+//            make.top.left.right.equalToSuperview()
+            make.edges.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(2)
         }
         
         resultsTableView.snp.makeConstraints{ make in
