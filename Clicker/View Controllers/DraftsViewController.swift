@@ -14,7 +14,8 @@ protocol FillsDraftDelegate {
 
 class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-
+    var visualEffectView: UIVisualEffectView!
+    var backButton: UIButton!
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
     var drafts: [Draft]!
@@ -24,24 +25,28 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         print("vc pushed")
-        view.backgroundColor = .clicker85Black
+        view.backgroundColor = .clear
         
-        setupNavBar()
         setupViews()
         setupConstraints()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-    }
-    
-    @objc func goBack() {
-        self.navigationController?.popViewController(animated: true)
-        //self.removeFromParentViewController()
-    }
     
     func setupViews() {
+        visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        view.addSubview(visualEffectView)
+        
+        backButton = UIButton()
+        backButton.setImage(#imageLiteral(resourceName: "whiteExit"), for: .normal)
+        backButton.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
+        view.addSubview(backButton)
+        
+        titleLabel = UILabel()
+        titleLabel.text = "Drafts"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont._16SemiboldFont
+        titleLabel.textAlignment = .center
+        view.addSubview(titleLabel)
+        
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 6
         layout.scrollDirection = .vertical
@@ -59,6 +64,21 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func setupConstraints() {
+        visualEffectView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        backButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(32)
+            make.width.height.equalTo(16)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(backButton)
+        }
+        
         draftsCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(100)
             make.bottom.equalToSuperview()
@@ -80,34 +100,23 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = draftsCollectionView.frame.width
-        let height: CGFloat = 100.0
-        return CGSize(width: width, height: height)
+        return CGSize(width: draftsCollectionView.frame.width, height: 82.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("selected item at ", indexPath.row)
         delegate.fillDraft(drafts[drafts.count - (indexPath.row + 1)])
-        navigationController?.popViewController(animated: true)
+
+        self.dismiss(animated: true, completion: nil)
     }
 
+    // MARK: ACTIONS
+    @objc func backBtnPressed() {
+        self.dismiss(animated: true, completion: nil)
+    }
     
-    func setupNavBar() {
-        navigationController?.navigationBar.isHidden = false
-        // REMOVE BOTTOM SHADOW
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        
-        let backImage = UIImage(named: "SmallExitIcon")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
-        titleLabel = UILabel()
-        titleLabel.text = "Drafts"
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont._16SemiboldFont
-        titleLabel.textAlignment = .center
-        self.navigationItem.titleView = titleLabel
-        
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
 }

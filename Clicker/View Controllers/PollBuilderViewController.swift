@@ -323,7 +323,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
         draftsVC.delegate = self
-        navigationController?.pushViewController(draftsVC, animated: true)
+        draftsVC.modalPresentationStyle = .overFullScreen
+        present(draftsVC, animated: true, completion: nil)
     }
     
     @objc func exit() {
