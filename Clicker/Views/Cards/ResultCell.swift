@@ -23,7 +23,7 @@ class ResultCell: UITableViewCell {
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
+        backgroundColor = .white
         
         setupViews()
         layoutSubviews()
@@ -54,11 +54,7 @@ class ResultCell: UITableViewCell {
         
         highlightView = UIView()
         highlightView.layer.cornerRadius = 8
-        if #available(iOS 11.0, *) {
-            highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-        } else {
-            // Fallback on earlier versions
-        }
+        highlightView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
         

@@ -105,12 +105,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nameView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            } else {
-                make.bottom.equalTo(bottomLayoutGuide.snp.top)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
 
@@ -273,11 +269,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func setupCardsConstraints() {
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.width.height.equalTo(20)
         }
         

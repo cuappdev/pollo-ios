@@ -119,11 +119,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom).offset(90)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
             make.centerX.equalToSuperview()
             make.height.equalTo(35.5)
         }
@@ -136,11 +132,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
         
         bottomBarView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            } else {
-                make.bottom.equalTo(bottomLayoutGuide.snp.top)
-            }
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
             make.height.equalTo(54)
@@ -154,11 +146,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
         
         newPollButton.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            } else {
-                make.top.equalTo(topLayoutGuide.snp.bottom).offset(15)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             make.width.equalTo(19)
             make.height.equalTo(19)
             make.right.equalToSuperview().offset(-15)

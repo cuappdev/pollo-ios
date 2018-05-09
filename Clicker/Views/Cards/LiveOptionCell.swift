@@ -24,7 +24,7 @@ class LiveOptionCell: UITableViewCell {
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
+        backgroundColor = .white
         
         setupViews()
         layoutSubviews()

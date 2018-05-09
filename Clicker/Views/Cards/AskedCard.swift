@@ -66,13 +66,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.setupShared()
     }
     
-    func setupOverflow(numOptions: Int) {
-        if (numOptions <= 4) {
-            return
-        }
-        cardView.setupOverflow(numOptions: (poll.options?.count)!)
-    }
-    
     // MARK: CardView setup
     func setup() {
         cardView = CardView(frame: .zero, userRole: .admin, cardDelegate: self)
@@ -103,7 +96,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         default:
             setupShared()
         }
-        setupOverflow(numOptions: (poll.options?.count)!)
     }
     
     func sessionConnected() { }
