@@ -48,6 +48,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     let textFieldHeight = 48
     let cornerRadius = 15
     let optionCellHeight = 47
+    let frCellHeight = 64
     let tableViewTopPadding = 18
     let resultMCIdentifier = "resultMCCellID"
     let resultFRIdentifier = "resultFRCellID"
@@ -69,6 +70,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     }
     
     func configure() {
+        if (userRole == .member && poll.questionType == .freeResponse) {
+            topViewHeightConstraint.update(offset: 140)
+        } else {
+            topViewHeightConstraint.update(offset: 102)
+        }
+        
         if (poll.questionType == .multipleChoice) {
             setupTotalResultsLabel()
         }
@@ -77,22 +84,21 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             setupAdminViews()
             setupAdminConstraints()
         } else { // member
-            if (poll.questionType == .freeResponse) {
-                topViewHeightConstraint.update(offset: 140)
-            } else {
-                topViewHeightConstraint.update(offset: 102)
-            }
             setupMemberViews()
             setupMemberConstraints()
         }
         
         if (poll.questionType == .freeResponse) {
             self.frResults = poll.getFRResultsArray()
-            tableViewHeightConstraint.update(offset: 254)
+            let numResults = frResults.count
+            if (numResults < 5) {
+                tableViewHeightConstraint.update(offset: 254)
+            } else {
+                updateTableViewHeight(baseHeight: numResults * frCellHeight)
+            }
         } else {
             let numOptions = (poll.options?.count)!
-            let height = numOptions * optionCellHeight + tableViewTopPadding + 10
-            tableViewHeightConstraint.update(offset: height)
+            updateTableViewHeight(baseHeight: numOptions * optionCellHeight)
         }
     }
     
@@ -201,16 +207,14 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     }
     
     func setupAdminViews() {
-        if (poll.questionType == .multipleChoice) {
-            graphicView = UIImageView()
-            topView.addSubview(graphicView)
-            
-            visibilityLabel = UILabel()
-            visibilityLabel.font = ._12MediumFont
-            visibilityLabel.textAlignment = .left
-            visibilityLabel.textColor = .clickerMediumGray
-            topView.addSubview(visibilityLabel)
-        }
+        graphicView = UIImageView()
+        topView.addSubview(graphicView)
+        
+        visibilityLabel = UILabel()
+        visibilityLabel.font = ._12MediumFont
+        visibilityLabel.textAlignment = .left
+        visibilityLabel.textColor = .clickerMediumGray
+        topView.addSubview(visibilityLabel)
         
         questionButton = UIButton()
         questionButton.backgroundColor = .clickerTransparentGrey
@@ -226,18 +230,17 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     }
     
     func setupAdminConstraints() {
-        if (poll.questionType == .multipleChoice) {
-            graphicView.snp.makeConstraints { make in
-                make.width.height.equalTo(14.5)
-                make.left.equalToSuperview().offset(16)
-                make.centerY.equalTo(totalResultsLabel.snp.centerY)
-            }
-            
-            visibilityLabel.snp.makeConstraints{ make in
-                make.left.equalTo(graphicView.snp.right).offset(4)
-                make.height.equalTo(14.5)
-                make.centerY.equalTo(totalResultsLabel.snp.centerY)
-            }
+
+        visibilityLabel.snp.makeConstraints{ make in
+            make.left.equalTo(graphicView.snp.right).offset(4)
+            make.height.equalTo(14.5)
+            make.bottom.equalToSuperview().inset(15)
+        }
+        
+        graphicView.snp.makeConstraints { make in
+            make.width.height.equalTo(14.5)
+            make.left.equalToSuperview().offset(16)
+            make.centerY.equalTo(visibilityLabel.snp.centerY)
         }
         
         questionButton.snp.makeConstraints{ make in
@@ -252,11 +255,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         if (poll.questionType == .freeResponse) {
             responseTextField = UITextField()
             responseTextField.backgroundColor = .white
-            responseTextField.layer.cornerRadius = 15
             responseTextField.placeholder = "Type a response"
             responseTextField.font = ._16MediumFont
             responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
-            responseTextField.layer.cornerRadius = 45
+            responseTextField.layer.cornerRadius = 20
             responseTextField.layer.borderWidth = 1
             responseTextField.layer.borderColor = UIColor.clickerBorder.cgColor
             responseTextField.leftViewMode = .always
@@ -344,6 +346,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
     }
     
+    // MARK: UPDATE TABLE VIEW HEIGHT CONSTRAINT
+    func updateTableViewHeight(baseHeight: Int) {
+        tableViewHeightConstraint.update(offset: baseHeight + tableViewTopPadding + 10)
+    }
+    
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -425,7 +432,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(optionCellHeight)
+        return (poll.questionType == .freeResponse) ? CGFloat(frCellHeight) : CGFloat(optionCellHeight)
     }
     
     // MARK: SCROLLVIEW METHODS
@@ -472,6 +479,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
                 "text": freeResponse ?? ""
             ]
             cardDelegate.emitTally(answer: answer)
+            responseTextField.text = ""
         }
         textField.resignFirstResponder()
         return true

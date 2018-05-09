@@ -77,8 +77,12 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func receivedResults(_ currentState: CurrentState) {
         cardView.poll.isShared = true
         cardView.poll.results = currentState.results
-        cardView.totalNumResults = currentState.getTotalCount()
-        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
+        let totalNumResults = currentState.getTotalCount()
+        cardView.totalNumResults = totalNumResults
+        cardView.totalResultsLabel.text = "\(totalNumResults) votes"
+        if (poll.questionType == .freeResponse) {
+            cardView.updateTableViewHeight(baseHeight: totalNumResults * cardView.frCellHeight)
+        }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .shared
         cardView.setupShared()
