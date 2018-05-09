@@ -298,11 +298,16 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func setupLive() {
         if (userRole == .admin) {
-            visibilityLabel.text = "Only you can see these results"
+            if (poll.isShared) {
+                visibilityLabel.text = "Shared with group"
+                graphicView.image = #imageLiteral(resourceName: "liveIcon")
+            } else {
+                visibilityLabel.text = "Only you can see these results"
+                graphicView.image = #imageLiteral(resourceName: "solo_eye")
+            }
             
             questionButton.setTitle("End Question", for: .normal)
             
-            graphicView.image = #imageLiteral(resourceName: "solo_eye")
         } else {
             if (poll.questionType == .multipleChoice) {
                 infoLabel.textColor = .clickerMediumGray
@@ -312,6 +317,14 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func setupEnded() {
         if (userRole == .admin) {
+            if (poll.isShared) {
+                visibilityLabel.text = "Shared with group"
+                graphicView.image = #imageLiteral(resourceName: "liveIcon")
+            } else {
+                visibilityLabel.text = "Only you can see these results"
+                graphicView.image = #imageLiteral(resourceName: "solo_eye")
+            }
+            
             questionButton.setTitle("Share Results", for: .normal)
             
             highlightColor = .clickerMint

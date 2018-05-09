@@ -27,16 +27,17 @@ class Poll {
     var isShared: Bool = false
 
     // MARK: SORTED BY DATE POLL INITIALIZER
-    init(id: Int, text: String, results: [String:Any]) {
+    init(id: Int, text: String, results: [String:Any], isShared: Bool) {
         self.id = id
         self.text = text
         self.results = results
         self.options = results.map { (key, _) in key }
         self.questionType = (self.options?.count == 0) ? .freeResponse : .multipleChoice
+        self.isShared = isShared
     }
     
     // MARK: SEND START POLL INITIALIZER
-    init(text: String, options: [String], isLive: Bool) {
+    init(text: String, options: [String], isLive: Bool, isShared: Bool) {
         self.text = text
         self.options = options
         self.isLive = isLive
@@ -46,6 +47,7 @@ class Poll {
             let mcOption = intToMCOption(index)
             results![mcOption] = ["text": option, "count": 0]
         }
+        self.isShared = isShared
     }
     
     // MARK: RECEIVE START POLL INITIALIZER
