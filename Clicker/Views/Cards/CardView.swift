@@ -94,7 +94,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             if (numResults < 5) {
                 tableViewHeightConstraint.update(offset: 254)
             } else {
-                updateTableViewHeight(baseHeight: numResults * frCellHeight)
+                updateTableViewHeightForFR()
             }
         } else {
             let numOptions = (poll.options?.count)!
@@ -201,11 +201,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
     
     }
-    
-    func setupButton() {
-        
-    }
-    
+
     func setupAdminViews() {
         graphicView = UIImageView()
         topView.addSubview(graphicView)
@@ -349,6 +345,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     // MARK: UPDATE TABLE VIEW HEIGHT CONSTRAINT
     func updateTableViewHeight(baseHeight: Int) {
         tableViewHeightConstraint.update(offset: baseHeight + tableViewTopPadding + 10)
+    }
+    
+    func updateTableViewHeightForFR() {
+        let numFRResults = frResults.count
+        if (numFRResults >= 5) {
+            updateTableViewHeight(baseHeight: self.frResults.count * frCellHeight)
+        }
     }
     
     // MARK - TABLEVIEW

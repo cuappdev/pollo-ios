@@ -116,7 +116,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         } else {
             let frResults = currentState.getFRResultsArray()
             cardView.frResults = frResults
-            cardView.updateTableViewHeight(baseHeight: frResults.count * cardView.frCellHeight)
+            cardView.updateTableViewHeightForFR()
         }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
@@ -131,7 +131,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         } else {
             let frResults = currentState.getFRResultsArray()
             cardView.frResults = frResults
-            cardView.updateTableViewHeight(baseHeight: frResults.count * cardView.frCellHeight)
+            cardView.updateTableViewHeightForFR()
         }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
