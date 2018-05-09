@@ -416,7 +416,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             "shared": isShared
         ]
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        let newPoll = Poll(text: text, options: options, isLive: true, isShared: isShared)
+        let questionType: QuestionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
+        let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
         let arrEmpty = (datePollsArr.count == 0)
         appendPoll(poll: newPoll)
         // DISABLE CREATE POLL BUTTON
