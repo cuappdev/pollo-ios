@@ -48,7 +48,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     let cornerRadius = 15
     let optionCellHeight = 47
     let tableViewTopPadding = 18
-    let resultIdentifier = "resultCellID"
+    let resultMCIdentifier = "resultMCCellID"
     let resultFRIdentifier = "resultFRCellID"
     let optionIdentifier = "optionCellID"
     
@@ -118,7 +118,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.showsVerticalScrollIndicator = false
-        resultsTableView.register(ResultCell.self, forCellReuseIdentifier: resultIdentifier)
+        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: resultMCIdentifier)
         resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: resultFRIdentifier)
         resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: optionIdentifier)
         resultsTableView.layer.cornerRadius = 15
@@ -207,7 +207,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         questionButton.titleLabel?.font = ._16SemiboldFont
         questionButton.titleLabel?.textAlignment = .center
         questionButton.layer.cornerRadius = 23.5
-        questionButton.layer.borderWidth = 1.5
+        questionButton.layer.borderWidth = 1
         questionButton.layer.borderColor = UIColor.white.cgColor
         questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
         addSubview(questionButton)
@@ -332,7 +332,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
         // ADMIN
         if (userRole == .admin) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: resultMCIdentifier, for: indexPath) as! ResultMCCell
             cell.choiceTag = indexPath.row
             cell.selectionStyle = .none
             cell.highlightView.backgroundColor = highlightColor
@@ -366,7 +366,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             cell.setColors(isLive: poll.isLive)
             return cell
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: resultIdentifier, for: indexPath) as! ResultCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: resultMCIdentifier, for: indexPath) as! ResultMCCell
             cell.choiceTag = indexPath.row
             cell.optionLabel.text = poll.options?[indexPath.row]
             cell.selectionStyle = .none
