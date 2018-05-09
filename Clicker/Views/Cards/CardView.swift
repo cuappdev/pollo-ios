@@ -14,12 +14,10 @@ protocol CardDelegate {
     func emitTally(answer: [String:Any])
 }
 
-class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCellDelegate {
+class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceDelegate {
     
     var choice: Int?
     var totalNumResults: Int = 0
-    let textFieldPadding = 18
-    let textFieldHeight = 48
     var highlightColor: UIColor!
     
     var topView: UIView!
@@ -42,8 +40,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var cardType: CardType!
     var poll: Poll!
     var frResults: [(String, Int)] = []
+    var topViewHeightConstraint: Constraint!
     var tableViewHeightConstraint: Constraint!
     
+    // Constants
+    let textFieldPadding = 18
+    let textFieldHeight = 48
     let cornerRadius = 15
     let optionCellHeight = 47
     let tableViewTopPadding = 18
@@ -67,6 +69,23 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func configure() {
+        if (poll.questionType == .multipleChoice) {
+            setupTotalResultsLabel()
+        }
+        
+        if (userRole == .admin) {
+            setupAdminViews()
+            setupAdminConstraints()
+        } else { // member
+            if (poll.questionType == .freeResponse) {
+                topViewHeightConstraint.update(offset: 140)
+            } else {
+                topViewHeightConstraint.update(offset: 102)
+            }
+            setupMemberViews()
+            setupMemberConstraints()
+        }
+        
         if (poll.questionType == .freeResponse) {
             self.frResults = poll.getFRResultsArray()
             tableViewHeightConstraint.update(offset: 254)
@@ -91,13 +110,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
         topView.addSubview(questionLabel)
-        
-        totalResultsLabel = UILabel()
-        totalResultsLabel.text = "\(totalNumResults) votes"
-        totalResultsLabel.font = ._12MediumFont
-        totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
-        topView.addSubview(totalResultsLabel)
         
         scrollView = UIScrollView()
         scrollView.backgroundColor = .white
@@ -131,32 +143,33 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         blackView.backgroundColor = .clickerDeepBlack
         scrollContentView.addSubview(blackView)
         
-        if (userRole == .admin) {
-            setupAdminViews()
-            setupAdminConstraints()
-        } else { // member
-            setupMemberViews()
-            setupMemberConstraints()
-        }
+    }
+    
+    func setupTotalResultsLabel() {
+        totalResultsLabel = UILabel()
+        totalResultsLabel.text = "\(totalNumResults) votes"
+        totalResultsLabel.font = ._12MediumFont
+        totalResultsLabel.textAlignment = .right
+        totalResultsLabel.textColor = .clickerMediumGray
+        topView.addSubview(totalResultsLabel)
         
+        totalResultsLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(15)
+            make.right.equalToSuperview().inset(16)
+        }
     }
     
     func setupConstraints() {
         topView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(102)
+            topViewHeightConstraint = make.height.equalTo(0).constraint
         }
         
         questionLabel.snp.makeConstraints{ make in
-            questionLabel.sizeToFit()
             make.top.equalToSuperview().offset(20)
+            make.height.equalTo(44)
             make.left.equalToSuperview().offset(17)
             make.right.equalToSuperview().inset(17)
-        }
-        
-        totalResultsLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(15)
-            make.right.equalToSuperview().inset(16)
         }
         
         scrollView.snp.makeConstraints { make in
@@ -180,23 +193,24 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             make.top.equalTo(resultsTableView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
         }
+    
+    }
+    
+    func setupButton() {
         
-        if (userRole == .admin) {
-            setupAdminConstraints()
-        } else {
-            setupMemberConstraints()
-        }
     }
     
     func setupAdminViews() {
-        graphicView = UIImageView()
-        topView.addSubview(graphicView)
-        
-        visibilityLabel = UILabel()
-        visibilityLabel.font = ._12MediumFont
-        visibilityLabel.textAlignment = .left
-        visibilityLabel.textColor = .clickerMediumGray
-        topView.addSubview(visibilityLabel)
+        if (poll.questionType == .multipleChoice) {
+            graphicView = UIImageView()
+            topView.addSubview(graphicView)
+            
+            visibilityLabel = UILabel()
+            visibilityLabel.font = ._12MediumFont
+            visibilityLabel.textAlignment = .left
+            visibilityLabel.textColor = .clickerMediumGray
+            topView.addSubview(visibilityLabel)
+        }
         
         questionButton = UIButton()
         questionButton.backgroundColor = .clickerTransparentGrey
@@ -212,16 +226,18 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func setupAdminConstraints() {
-        graphicView.snp.makeConstraints { make in
-            make.width.height.equalTo(14.5)
-            make.left.equalToSuperview().offset(16)
-            make.centerY.equalTo(totalResultsLabel.snp.centerY)
-        }
-        
-        visibilityLabel.snp.makeConstraints{ make in
-            make.left.equalTo(graphicView.snp.right).offset(4)
-            make.height.equalTo(14.5)
-            make.centerY.equalTo(totalResultsLabel.snp.centerY)
+        if (poll.questionType == .multipleChoice) {
+            graphicView.snp.makeConstraints { make in
+                make.width.height.equalTo(14.5)
+                make.left.equalToSuperview().offset(16)
+                make.centerY.equalTo(totalResultsLabel.snp.centerY)
+            }
+            
+            visibilityLabel.snp.makeConstraints{ make in
+                make.left.equalTo(graphicView.snp.right).offset(4)
+                make.height.equalTo(14.5)
+                make.centerY.equalTo(totalResultsLabel.snp.centerY)
+            }
         }
         
         questionButton.snp.makeConstraints{ make in
@@ -234,34 +250,40 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     
     func setupMemberViews() {
         if (poll.questionType == .freeResponse) {
-            //            responseTextField = UITextField()
-            //            responseTextField.layer.cornerRadius = 45
-            //            responseTextField.placeholder = "Type a response"
-            //            responseTextField.font = ._16MediumFont
-            //            responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
-            //            responseTextField.leftViewMode = .always
-            //            addSubview(responseTextField)
+            responseTextField = UITextField()
+            responseTextField.backgroundColor = .white
+            responseTextField.layer.cornerRadius = 15
+            responseTextField.placeholder = "Type a response"
+            responseTextField.font = ._16MediumFont
+            responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
+            responseTextField.layer.cornerRadius = 45
+            responseTextField.layer.borderWidth = 1
+            responseTextField.layer.borderColor = UIColor.clickerBorder.cgColor
+            responseTextField.leftViewMode = .always
+            responseTextField.returnKeyType = .send
+            responseTextField.delegate = self
+            topView.addSubview(responseTextField)
+        } else {
+            infoLabel = UILabel()
+            infoLabel.font = ._12SemiboldFont
+            topView.addSubview(infoLabel)
         }
-        
-        infoLabel = UILabel()
-        infoLabel.font = ._12SemiboldFont
-        topView.addSubview(infoLabel)
     }
     
     func setupMemberConstraints() {
-        //        if (poll.questionType == .freeResponse) {
-        //            responseTextField.snp.makeConstraints { make in
-        //                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
-        //                make.centerY.equalToSuperview()
-        //                make.width.equalToSuperview().multipliedBy(0.9)
-        //                make.height.equalTo(textFieldHeight)
-        //            }
-        //        }
-        //
-        infoLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
-            make.centerY.equalTo(totalResultsLabel.snp.centerY)
-            make.height.equalTo(15)
+        if (poll.questionType == .freeResponse) {
+            responseTextField.snp.makeConstraints { make in
+                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(306)
+                make.height.equalTo(textFieldHeight)
+            }
+        } else {
+            infoLabel.snp.makeConstraints { make in
+                make.left.equalToSuperview().offset(18)
+                make.centerY.equalTo(totalResultsLabel.snp.centerY)
+                make.height.equalTo(15)
+            }
         }
     }
     
@@ -284,7 +306,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             
             graphicView.image = #imageLiteral(resourceName: "solo_eye")
         } else {
-            infoLabel.textColor = .clickerMediumGray
+            if (poll.questionType == .multipleChoice) {
+                infoLabel.textColor = .clickerMediumGray
+            }
         }
     }
     
@@ -297,8 +321,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             resultsTableView.reloadData()
             
         } else {
-            infoLabel.textColor = .clickerDeepBlack
-            infoLabel.text = "Poll has closed"
+            if (poll.questionType == .multipleChoice) {
+                infoLabel.textColor = .clickerDeepBlack
+                infoLabel.text = "Poll has closed"
+            }
         }
     }
     
@@ -311,8 +337,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             
             graphicView.image = #imageLiteral(resourceName: "results_shared")
         } else {
-            infoLabel.textColor = .clickerDeepBlack
-            infoLabel.text = "Poll has closed"
+            if (poll.questionType == .multipleChoice) {
+                infoLabel.textColor = .clickerDeepBlack
+                infoLabel.text = "Poll has closed"
+            }
         }
     }
     
@@ -416,12 +444,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
     }
     
-    // MARK - OptionViewDelegate
+    // MARK - MultipleChoiceDelegate
     func choose(_ choice: Int) {
         if (poll.isLive) {
             let answer: [String:Any] = [
-                "googleId": User.currentUser?.id,
-                "poll": poll.id,
+                "googleId": User.currentUser?.id ?? 0,
+                "poll": poll.id ?? 0,
                 "choice": intToMCOption(choice),
                 "text": poll.options![choice]
             ]
@@ -432,14 +460,30 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
     }
     
-    // MARK: ACTIONS
-    
-    @objc func seeAllAction() {
-        print("see all")
+    // MARK: TEXTFIELD DELEGATE
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if (textField == responseTextField) {
+            print("submitted free response")
+            let freeResponse = responseTextField.text
+            let answer: [String:Any] = [
+                "googleId": User.currentUser?.id ?? 0,
+                "poll": poll.id ?? 0,
+                "choice": freeResponse ?? "",
+                "text": freeResponse ?? ""
+            ]
+            cardDelegate.emitTally(answer: answer)
+        }
+        textField.resignFirstResponder()
+        return true
     }
     
+    
+    // MARK: ACTIONS
+    
     @objc func questionAction() {
-        cardDelegate.questionBtnPressed()
+        if (userRole == .admin) {
+            cardDelegate.questionBtnPressed()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

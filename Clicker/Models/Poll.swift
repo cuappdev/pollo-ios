@@ -54,17 +54,11 @@ class Poll {
         self.text = json["text"] as! String
         if let options = json["options"] as? [String] {
             self.options = options
-            self.questionType = .multipleChoice
         } else {
             self.options = []
-            self.questionType = .freeResponse
         }
         let type = json["type"] as? String
-        if (type == "MULTIPLE_CHOICE") {
-            self.questionType = .multipleChoice
-        } else {
-            self.questionType = .freeResponse
-        }
+        self.questionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
         self.isLive = true
     }
     
