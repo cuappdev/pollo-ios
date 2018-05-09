@@ -325,7 +325,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
                 graphicView.image = #imageLiteral(resourceName: "solo_eye")
             }
             
-            questionButton.setTitle("Share Results", for: .normal)
+            if (poll.questionType == .multipleChoice) {
+                questionButton.setTitle("Share Results", for: .normal)
+            } else {
+                questionButton.removeFromSuperview()
+            }
             
             highlightColor = .clickerMint
             
