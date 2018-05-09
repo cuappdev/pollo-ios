@@ -49,6 +49,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     let cornerRadius = 15
     let optionCellHeight = 47
     let frCellHeight = 64
+    let minTableViewHeight = 254
     let tableViewTopPadding = 18
     let resultMCIdentifier = "resultMCCellID"
     let resultFRIdentifier = "resultFRCellID"
@@ -93,7 +94,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             let numResults = frResults.count
             if (numResults < 5) {
                 scrollView.isScrollEnabled = false
-                tableViewHeightConstraint.update(offset: 254)
+                tableViewHeightConstraint.update(offset: minTableViewHeight)
             } else {
                 updateTableViewHeightForFR()
             }
@@ -369,7 +370,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     // MARK: UPDATE TABLE VIEW HEIGHT CONSTRAINT
     func updateTableViewHeight(baseHeight: Int) {
-        tableViewHeightConstraint.update(offset: baseHeight + tableViewTopPadding + 10)
+        let height = max(baseHeight + tableViewTopPadding + 10, minTableViewHeight)
+        tableViewHeightConstraint.update(offset: height)
     }
     
     func updateTableViewHeightForFR() {

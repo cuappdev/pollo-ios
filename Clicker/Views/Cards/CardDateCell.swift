@@ -19,6 +19,8 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     var shadowImage: UIImageView!
     var cardView: CardView!
     
+    let minCardHeight = 358
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clickerDeepBlack
@@ -55,7 +57,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
         
         shadowImage.snp.makeConstraints { make in
             make.width.equalTo(13)
-            make.height.equalTo(cardView.snp.height).multipliedBy(0.94)
+            make.height.equalTo(minCardHeight)
             make.centerY.equalTo(cardView.snp.centerY)
             make.right.equalToSuperview()
         }
@@ -70,6 +72,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
         cardView.questionLabel.text = poll.text
         cardView.poll = poll
         cardView.cardType = cardType
+        cardView.configure()
         cardView.setupCard()
         
         // Disable all cardView subviews

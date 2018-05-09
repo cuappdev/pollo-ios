@@ -14,9 +14,7 @@ extension CardController {
         mainCollectionView.removeFromSuperview()
         zoomOutButton.removeFromSuperview()
         countLabel.removeFromSuperview()
-        
-        createPollButton.backgroundColor = .clickerTransparentGrey
-        
+                
         setupVerticalNavBar()
         setupVerticalCollectionView()
     }
