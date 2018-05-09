@@ -65,7 +65,7 @@ class LiveOptionCell: UITableViewCell {
                 buttonView.backgroundColor = .clickerMint
                 buttonView.layer.borderColor = UIColor.clickerMint.cgColor
             }
-            buttonView.setTitleColor(.clickerWhite, for: .normal)
+            buttonView.setTitleColor(.white, for: .normal)
         } else {
             if (isLive) {
                 buttonView.setTitleColor(.clickerGreen, for: .normal)
@@ -74,7 +74,7 @@ class LiveOptionCell: UITableViewCell {
                 buttonView.setTitleColor(.clickerMint, for: .normal)
                 buttonView.layer.borderColor = UIColor.clickerMint.cgColor
             }
-            buttonView.backgroundColor = .clickerWhite
+            buttonView.backgroundColor = .white
         }
     }
     

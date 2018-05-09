@@ -42,12 +42,8 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         addSubview(cardView)
         
         cardView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(25)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            cardHeightConstraint = make.height.equalTo(398).constraint
+            make.edges.equalToSuperview()
         }
-        
     }
 
     // MARK: Actions
@@ -81,6 +77,8 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func receivedResults(_ currentState: CurrentState) {
         cardView.poll.isShared = true
         cardView.poll.results = currentState.results
+        cardView.totalNumResults = currentState.getTotalCount()
+        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .shared
         cardView.setupShared()
