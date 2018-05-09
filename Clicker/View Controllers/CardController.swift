@@ -84,7 +84,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nameView.code = code
         nameView.name = name
         nameView.delegate = self
-
         view.addSubview(nameView)
 
         setupNameConstraints()
@@ -219,7 +218,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        let countString = "0/\(currentPolls.count)"
+        let countString = "1/\(currentPolls.count)"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerLabelGrey
@@ -297,7 +296,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if (collectionView == mainCollectionView) {
             // UPDATE COUNT LABEL
-            let countString = "\(indexPath.item)/\(currentPolls.count)"
+            let countString = "\(indexPath.item + 1)/\(currentPolls.count)"
             countLabel.attributedText = getCountLabelAttributedString(countString)
         }
     }
@@ -346,7 +345,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
             // Check if cell is fully visible
             if (mainCollectionView.bounds.contains(cellRect)) {
-                let countString = "\(indexPath!.item)/\(currentPolls.count)"
+                let countString = "\(indexPath!.item + 1)/\(currentPolls.count)"
                 countLabel.attributedText = getCountLabelAttributedString(countString)
                 break
             }
