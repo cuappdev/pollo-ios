@@ -14,7 +14,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     var socket: Socket!
     var poll: Poll!
     var endPollDelegate: EndPollDelegate!
-    var expandCardDelegate: ExpandCardDelegate!
     var cardType: CardType!
     
     // Timer

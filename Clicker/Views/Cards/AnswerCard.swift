@@ -20,7 +20,6 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     var socket: Socket!
     var cardType: CardType!
     var cardHeightConstraint: Constraint!
-    var expandCardDelegate: ExpandCardDelegate!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,12 +74,14 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
+        print("received results!")
         cardView.poll.isShared = true
-        cardView.poll.results = currentState.results
-        let totalNumResults = currentState.getTotalCount()
-        cardView.totalNumResults = totalNumResults
-        cardView.totalResultsLabel.text = "\(totalNumResults) votes"
-        if (poll.questionType == .freeResponse) {
+        if (poll.questionType == .multipleChoice) {
+            cardView.poll.results = currentState.results
+            let totalNumResults = currentState.getTotalCount()
+            cardView.totalNumResults = totalNumResults
+            cardView.totalResultsLabel.text = "\(totalNumResults) votes"
+        } else {
             let frResults = currentState.getFRResultsArray()
             cardView.frResults = frResults
             cardView.updateTableViewHeightForFR()

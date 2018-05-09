@@ -19,11 +19,8 @@ protocol EndPollDelegate {
     func endedPoll()
 }
 
-protocol ExpandCardDelegate {
-    func expandView(poll: Poll, socket: Socket)
-}
 
-class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, ExpandCardDelegate, SocketDelegate {
+class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
     
     // name vars
     var nameView: NameView!
@@ -282,7 +279,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             socket.addDelegate(cell)
             cell.poll = poll
             cell.endPollDelegate = self
-            cell.expandCardDelegate = self
             cell.cardType = getCardType(from: poll)
             cell.configure()
             return cell
@@ -292,7 +288,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.socket = socket
             socket.addDelegate(cell)
             cell.poll = poll
-            cell.expandCardDelegate = self
             cell.cardType = getCardType(from: poll)
             cell.configure()
             return cell
@@ -414,11 +409,13 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: - START POLL DELEGATE
     func startPoll(text: String, type: String, options: [String]) {
+        let isShared = (type == "FREE_RESPONSE")
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
             "type": type,
-            "options": options
+            "options": options,
+            "shared": isShared
         ]
         socket.socket.emit("server/poll/start", with: [socketQuestion])
         let newPoll = Poll(text: text, options: options, isLive: true)
@@ -439,17 +436,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func endedPoll() {
         // ENABLE CREATE POLL BUTTON
         createPollButton.isUserInteractionEnabled = true
-    }
-    
-    func expandView(poll: Poll, socket: Socket) {
-//        let expandedVC = ExpandedViewController()
-//        expandedVC.setup()
-//        expandedVC.expandedCard.socket = socket
-//        socket.addDelegate(expandedVC.expandedCard)
-//        expandedVC.expandedCard.poll = poll
-//        expandedVC.expandedCard.questionLabel.text = poll.text
-//        expandedVC.expandedCard.endPollDelegate = self
-//        present(expandedVC, animated: true, completion: nil)
     }
     
     func setupHorizontalNavBar() {
@@ -478,7 +464,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         if (userRole == .admin) {
             createPollButton = UIButton()
-            createPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)
             self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
