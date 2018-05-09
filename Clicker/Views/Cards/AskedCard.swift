@@ -109,18 +109,30 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
-        cardView.totalNumResults = currentState.getTotalCount()
-        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
-        cardView.poll.results = currentState.results
+        if (poll.questionType == .multipleChoice) {
+            cardView.totalNumResults = currentState.getTotalCount()
+            cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
+            cardView.poll.results = currentState.results
+        } else {
+            let frResults = currentState.getFRResultsArray()
+            cardView.frResults = frResults
+            cardView.updateTableViewHeight(baseHeight: frResults.count * cardView.frCellHeight)
+        }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
     
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) {
-        cardView.totalNumResults = currentState.getTotalCount()
-        cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
-        cardView.poll.results = currentState.results
+        if (poll.questionType == .multipleChoice) {
+            cardView.totalNumResults = currentState.getTotalCount()
+            cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
+            cardView.poll.results = currentState.results
+        } else {
+            let frResults = currentState.getFRResultsArray()
+            cardView.frResults = frResults
+            cardView.updateTableViewHeight(baseHeight: frResults.count * cardView.frCellHeight)
+        }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
     }
     

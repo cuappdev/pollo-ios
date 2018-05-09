@@ -35,9 +35,16 @@ class CurrentState {
         return counter
     }
     
-    // GET LIST OF SUBMITTED RESPONSES
-    func getResponses() -> [String] {
-        return results.map { key, value in key }
+    // Returns array representation of results
+    // Ex) [('Blah', 3), ('Jupiter', 2)...]
+    func getFRResultsArray() -> [(String, Int)] {
+        var resultsArr: [(String, Int)] = []
+        results.forEach { (key, val) in
+            if let choiceJSON = val as? [String:Any] {
+                resultsArr.append((key, (choiceJSON["count"] as! Int)))
+            }
+        }
+        return resultsArr
     }
     
 }
