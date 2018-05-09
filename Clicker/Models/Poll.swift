@@ -17,12 +17,12 @@ class Poll {
 
     var id: Int?
     var text: String
+    var questionType: QuestionType
     var options: [String]?
     var results: [String:Any]?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
-    var questionType: QuestionType?
     var isLive: Bool = false
     var isShared: Bool = false
 
@@ -32,6 +32,7 @@ class Poll {
         self.text = text
         self.results = results
         self.options = results.map { (key, _) in key }
+        self.questionType = (self.options?.count == 0) ? .freeResponse : .multipleChoice
     }
     
     // MARK: SEND START POLL INITIALIZER
@@ -40,6 +41,7 @@ class Poll {
         self.options = options
         self.isLive = isLive
         self.results = [:]
+        self.questionType = (options.count == 0) ? .freeResponse : .multipleChoice
         for (index, option) in options.enumerated() {
             let mcOption = intToMCOption(index)
             results![mcOption] = ["text": option, "count": 0]
@@ -52,8 +54,10 @@ class Poll {
         self.text = json["text"] as! String
         if let options = json["options"] as? [String] {
             self.options = options
+            self.questionType = .multipleChoice
         } else {
             self.options = []
+            self.questionType = .freeResponse
         }
         let type = json["type"] as? String
         if (type == "MULTIPLE_CHOICE") {
@@ -70,6 +74,7 @@ class Poll {
         self.results = results
         self.options = results.map { (key, _) in key }
         self.isLive = isLive
+        self.questionType = (self.options?.count == 0) ? .freeResponse : .multipleChoice
     }
     
     // Returns array representation of results
