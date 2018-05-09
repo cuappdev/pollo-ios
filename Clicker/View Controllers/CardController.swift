@@ -408,8 +408,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     // MARK: - START POLL DELEGATE
-    func startPoll(text: String, type: String, options: [String]) {
-        let isShared = (type == "FREE_RESPONSE")
+    func startPoll(text: String, type: String, options: [String], isShared: Bool) {
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
@@ -418,7 +417,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             "shared": isShared
         ]
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        let newPoll = Poll(text: text, options: options, isLive: true)
+        let newPoll = Poll(text: text, options: options, isLive: true, isShared: isShared)
         let arrEmpty = (datePollsArr.count == 0)
         appendPoll(poll: newPoll)
         // DISABLE CREATE POLL BUTTON

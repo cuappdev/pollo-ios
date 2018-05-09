@@ -13,12 +13,12 @@ class FROptionsDropDownView: UIView {
     var responsesButton: UIButton!
     var responsesLabel: UILabel!
     var responsesCheck: UIImageView!
-    var shareResponses: Bool!
+    var shareResponses: Bool = false
     
     var votesButton: UIButton!
     var votesLabel: UILabel!
     var votesCheck: UIImageView!
-    var shareVotes: Bool!
+    var shareVotes: Bool = false
     
     let circleImage = UIImage(named: "emptyCircle")
     let checkImage = UIImage(named: "blueCheck")
