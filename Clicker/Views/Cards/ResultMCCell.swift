@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 
-class ResultCell: UITableViewCell {
+class ResultMCCell: UITableViewCell {
     
     var containerView: UIView!
     var optionLabel: UILabel!

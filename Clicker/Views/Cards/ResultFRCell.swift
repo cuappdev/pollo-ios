@@ -14,7 +14,9 @@ class ResultFRCell: UITableViewCell {
     var response: String!
     var count: Int!
     var freeResponseLabel: UILabel!
+    var rightView: UIView!
     var countLabel: UILabel!
+    var triangleImageView: UIImageView!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -29,17 +31,25 @@ class ResultFRCell: UITableViewCell {
     //MARK: - LAYOUT
     func setupViews() {
         freeResponseLabel = UILabel()
-        freeResponseLabel.font = UIFont._16RegularFont
+        freeResponseLabel.font = UIFont._14MediumFont
         freeResponseLabel.backgroundColor = .white
         freeResponseLabel.lineBreakMode = .byWordWrapping
         freeResponseLabel.numberOfLines = 0
         addSubview(freeResponseLabel)
         
+        rightView = UIView()
+        rightView.backgroundColor = .white
+        addSubview(rightView)
+        
         countLabel = UILabel()
         countLabel.font = ._12SemiboldFont
         countLabel.textColor = .clickerBlue
         countLabel.textAlignment = .center
-        addSubview(countLabel)
+        rightView.addSubview(countLabel)
+        
+        triangleImageView = UIImageView(image: #imageLiteral(resourceName: "blueTriangle"))
+        triangleImageView.contentMode = .scaleAspectFit
+        rightView.addSubview(triangleImageView)
     }
     
     func setupConstraints() {
@@ -49,9 +59,20 @@ class ResultFRCell: UITableViewCell {
             make.height.equalToSuperview()
         }
         
-        countLabel.snp.makeConstraints { make in
+        rightView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(13)
+            make.height.equalTo(30)
+        }
+        
+        countLabel.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(14)
+        }
+        
+        triangleImageView.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalTo(countLabel.snp.top)
         }
     }
     
