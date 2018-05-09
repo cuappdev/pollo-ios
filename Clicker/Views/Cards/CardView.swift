@@ -195,7 +195,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
         
         scrollContentView.snp.makeConstraints { make in
-//            make.top.left.right.equalToSuperview()
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(2)

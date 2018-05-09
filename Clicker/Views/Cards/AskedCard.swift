@@ -108,10 +108,10 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func pollEnded(_ poll: Poll) { }
     
     func receivedResults(_ currentState: CurrentState) {
+        cardView.poll.results = currentState.results
         if (poll.questionType == .multipleChoice) {
             cardView.totalNumResults = currentState.getTotalCount()
             cardView.totalResultsLabel.text = "\(cardView.totalNumResults) votes"
-            cardView.poll.results = currentState.results
         } else {
             let frResults = currentState.getFRResultsArray()
             cardView.frResults = frResults

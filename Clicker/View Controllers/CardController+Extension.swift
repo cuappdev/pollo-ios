@@ -48,7 +48,6 @@ extension CardController {
     
     func revertToHorizontal() {
         verticalCollectionView.removeFromSuperview()
-        createPollButton.backgroundColor = .clear
         setupCards()
         setupHorizontalNavBar()
     }
