@@ -412,6 +412,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
                 cell.numberLabel.text = "\(count)"
             }
             
+            let totalNumResults = poll.getTotalResults()
             if (totalNumResults > 0) {
                 let percentWidth = CGFloat(Float(count) / Float(totalNumResults))
                 let totalWidth = cell.frame.width
@@ -480,7 +481,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             if ((poll.options?.count)! > 7) {
                 print("scrolling")
                 let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, scrollView.contentOffset.y, 0.0)
-//                resultsTableView.contentInset = contentInsets
                 self.scrollView.contentInset = contentInsets
             }
         }
