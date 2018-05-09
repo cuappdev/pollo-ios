@@ -155,6 +155,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         scrollContentView.addSubview(blackView)
         scrollContentView.sendSubview(toBack: blackView)
         
+//        let shadowLayer = CAGradientLayer()
+//        shadowLayer.frame = CGRect(x: 0, y: frame.height - 92, width: frame.width, height: 92)
+//        shadowLayer.colors = [UIColor.clickerGradientGrey.cgColor, UIColor.black.cgColor]
+//        layer.insertSublayer(shadowLayer, at: 0)
     }
     
     func setupTotalResultsLabel() {

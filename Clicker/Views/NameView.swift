@@ -11,7 +11,6 @@ import UIKit
 class NameView: UIView, UITextFieldDelegate {
 
     var titleField: UITextField!
-    var blurView: UIVisualEffectView!
     
     var sessionId: Int!
     var code: String!
@@ -31,10 +30,6 @@ class NameView: UIView, UITextFieldDelegate {
     func setupViews() {
         backgroundColor = .clicker85Black
         
-        /*let blur = UIBlurEffect(style: )
-        blurView = UIVisualEffectView(effect: blur)
-        addSubview(blurView)*/
-        
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._24MediumFont])
         if code != name {
@@ -51,10 +46,6 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     func setupConstraints() {
-        /*blurView.snp.makeConstraints { make in
-            make.size.equalToSuperview()
-        }*/
-        
         titleField.snp.makeConstraints { make in
             make.height.equalTo(27)
             make.width.equalToSuperview()
