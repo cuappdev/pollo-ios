@@ -40,7 +40,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     var cardDelegate: CardDelegate!
     var userRole: UserRole!
     var cardType: CardType!
-    var questionType: QuestionType!
     var poll: Poll!
     var frResults: [(String, Int)] = []
     var tableViewHeightConstraint: Constraint!
@@ -68,11 +67,14 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func configure() {
-        if (questionType == .freeResponse) {
+        if (poll.questionType == .freeResponse) {
             self.frResults = poll.getFRResultsArray()
+            tableViewHeightConstraint.update(offset: 254)
+        } else {
+            let numOptions = (poll.options?.count)!
+            let height = numOptions * optionCellHeight + tableViewTopPadding + 10
+            tableViewHeightConstraint.update(offset: height)
         }
-        let height = (poll.options?.count)! * optionCellHeight + tableViewTopPadding + 10
-        tableViewHeightConstraint.update(offset: height)
     }
     
     func setupViews() {
@@ -169,11 +171,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         }
         
         resultsTableView.snp.makeConstraints{ make in
-            //            if (questionType == .freeResponse && userRole == .member) {
-            //                make.top.equalTo(responseTextField.snp.bottom).offset(18)
-            //            } else {
-            //                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
-            //            }
             make.top.equalToSuperview().offset(18)
             make.left.right.equalToSuperview()
             tableViewHeightConstraint = make.height.equalTo(0).constraint
@@ -236,7 +233,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func setupMemberViews() {
-        if (questionType == .freeResponse) {
+        if (poll.questionType == .freeResponse) {
             //            responseTextField = UITextField()
             //            responseTextField.layer.cornerRadius = 45
             //            responseTextField.placeholder = "Type a response"
@@ -252,7 +249,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func setupMemberConstraints() {
-        //        if (questionType == .freeResponse) {
+        //        if (poll.questionType == .freeResponse) {
         //            responseTextField.snp.makeConstraints { make in
         //                make.top.equalTo(questionLabel.snp.bottom).offset(13.5)
         //                make.centerY.equalToSuperview()
@@ -322,7 +319,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     // MARK - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (questionType == .freeResponse) {
+        if (poll.questionType == .freeResponse) {
             let cell = tableView.dequeueReusableCell(withIdentifier: resultFRIdentifier, for: indexPath) as! ResultFRCell
             let responseCountTuple = frResults[indexPath.row]
             cell.response = responseCountTuple.0
@@ -392,7 +389,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (questionType == .freeResponse) {
+        if (poll.questionType == .freeResponse) {
             return frResults.count
         } else {
             return (poll.options?.count)!

@@ -42,7 +42,6 @@
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */; };
-		C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD564205CD3AF0053AD62 /* ResultMCCell.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
 		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
 		C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B91808208CE3A80030822F /* FRSectionCell.swift */; };
@@ -124,7 +123,6 @@
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionSectionCell.swift; sourceTree = "<group>"; };
-		C28AD564205CD3AF0053AD62 /* ResultMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMCCell.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
 		C2B91808208CE3A80030822F /* FRSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
@@ -294,7 +292,6 @@
 				C25F21E9203F77FA001F540E /* AnswerMCCell.swift */,
 				C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */,
 				C25F21E3203F75CB001F540E /* MCSectionCell.swift */,
-				C28AD564205CD3AF0053AD62 /* ResultMCCell.swift */,
 			);
 			path = MultipleChoice;
 			sourceTree = "<group>";
@@ -623,7 +620,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
-				C28AD565205CD3AF0053AD62 /* ResultMCCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
 				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
