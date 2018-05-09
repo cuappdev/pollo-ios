@@ -11,12 +11,14 @@ import SnapKit
 
 class ResultFRCell: UITableViewCell {
     
-    var response: String!
-    var count: Int!
+    var response: String?
+    var count: Int?
+    
     var freeResponseLabel: UILabel!
     var rightView: UIView!
     var countLabel: UILabel!
     var triangleImageView: UIImageView!
+    var lineView: UIView!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -50,11 +52,17 @@ class ResultFRCell: UITableViewCell {
         triangleImageView = UIImageView(image: #imageLiteral(resourceName: "blueTriangle"))
         triangleImageView.contentMode = .scaleAspectFit
         rightView.addSubview(triangleImageView)
+        
+        lineView = UIView()
+        lineView.backgroundColor = .clickerBorder
+        addSubview(lineView)
+        bringSubview(toFront: lineView)
     }
     
     func setupConstraints() {
         freeResponseLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.left.equalToSuperview().offset(17)
+            make.centerY.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalToSuperview()
         }
@@ -71,14 +79,23 @@ class ResultFRCell: UITableViewCell {
         }
         
         triangleImageView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-            make.bottom.equalTo(countLabel.snp.top)
+            make.top.equalToSuperview()
+            make.height.width.equalTo(10)
+            make.centerX.equalToSuperview()
+        }
+        
+        lineView.snp.makeConstraints { make in
+            make.height.equalTo(1.5)
+            make.left.equalTo(freeResponseLabel.snp.left)
+            make.bottom.right.equalToSuperview()
         }
     }
     
     func configure() {
         freeResponseLabel.text = response
-        countLabel.text = "\(count)"
+        if let unwrappedCount = count {
+            countLabel.text = "\(unwrappedCount)"
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
