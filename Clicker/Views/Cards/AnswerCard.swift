@@ -81,7 +81,9 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         cardView.totalNumResults = totalNumResults
         cardView.totalResultsLabel.text = "\(totalNumResults) votes"
         if (poll.questionType == .freeResponse) {
-            cardView.updateTableViewHeight(baseHeight: totalNumResults * cardView.frCellHeight)
+            let frResults = currentState.getFRResultsArray()
+            cardView.frResults = frResults
+            cardView.updateTableViewHeight(baseHeight: frResults.count * cardView.frCellHeight)
         }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .shared
