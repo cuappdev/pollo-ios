@@ -93,7 +93,7 @@ struct GetSortedPolls: ClickerQuark {
             for (date, pollsJSON) in node {
                 if let pollsArray = pollsJSON.array {
                     let pollsArr: [Poll] = try pollsArray.map {
-                        guard let id = $0["id"].int, let text = $0["text"].string, let results = $0["results"].dictionaryObject, let shared = node["shared"].bool else {
+                        guard let id = $0["id"].int, let text = $0["text"].string, let results = $0["results"].dictionaryObject, let shared = $0["shared"].bool else {
                             throw NeutronError.badResponseData
                         }
                         return Poll(id: id, text: text, results: results, isShared: shared)
