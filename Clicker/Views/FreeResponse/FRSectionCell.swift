@@ -33,14 +33,14 @@ class FRSectionCell: QuestionSectionCell {
     // MARK: - LAYOUT
     func setupViews() {
         questionTextField = UITextField()
-        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._18RegularFont])
+        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._18RegularFont])
         questionTextField.font = ._18RegularFont
         questionTextField.returnKeyType = .done
         questionTextField.delegate = self
         addSubview(questionTextField)
         
         line = UIView()
-        line.backgroundColor = .clickerMediumGray
+        line.backgroundColor = .clickerMediumGrey
         addSubview(line)
         
         responseOptionsLabel = UILabel()

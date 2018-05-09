@@ -12,6 +12,7 @@ import SnapKit
 protocol CardDelegate {
     func questionBtnPressed()
     func emitTally(answer: [String:Any])
+    func upvote(answer: [String:Any])
 }
 
 class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MultipleChoiceDelegate {
@@ -166,7 +167,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGray
+        totalResultsLabel.textColor = .clickerMediumGrey
         topView.addSubview(totalResultsLabel)
         
         totalResultsLabel.snp.makeConstraints { make in
@@ -221,7 +222,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         visibilityLabel = UILabel()
         visibilityLabel.font = ._12MediumFont
         visibilityLabel.textAlignment = .left
-        visibilityLabel.textColor = .clickerMediumGray
+        visibilityLabel.textColor = .clickerMediumGrey
         topView.addSubview(visibilityLabel)
         
         questionButton = UIButton()
@@ -323,7 +324,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             
         } else {
             if (poll.questionType == .multipleChoice) {
-                infoLabel.textColor = .clickerMediumGray
+                infoLabel.textColor = .clickerMediumGrey
             }
         }
     }
@@ -468,6 +469,24 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return (poll.questionType == .freeResponse) ? CGFloat(frCellHeight) : CGFloat(optionCellHeight)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (poll.questionType == .freeResponse && userRole == .member) {
+            // upvote
+            let upvotedResponse = frResults[indexPath.row].0
+            let answer: [String:Any] = [
+                "googleId": User.currentUser?.id ?? 0,
+                "poll": poll.id ?? 0,
+                "choice": upvotedResponse,
+                "text": upvotedResponse
+            ]
+            cardDelegate.upvote(answer: answer)
+            // update cell subviews
+            let upvotedCell = tableView.cellForRow(at: indexPath) as! ResultFRCell
+            upvotedCell.countLabel.textColor = .clickerBlue
+            upvotedCell.triangleImageView.image = #imageLiteral(resourceName: "blueTriangle")
+        }
     }
     
     // MARK: SCROLLVIEW METHODS

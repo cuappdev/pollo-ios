@@ -39,7 +39,7 @@ class PollPreviewCell: UITableViewCell {
     
         codeLabel = UILabel()
         codeLabel.font = ._18MediumFont
-        codeLabel.textColor = .clickerMediumGray
+        codeLabel.textColor = .clickerMediumGrey
         addSubview(codeLabel)
         
         line = UIView()

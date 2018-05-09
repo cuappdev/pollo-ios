@@ -161,6 +161,8 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     func emitTally(answer: [String : Any]) { }
     
+    func upvote(answer: [String : Any]) { }
+    
     // MARK: ACTIONS
     
     // Update timer label

@@ -28,7 +28,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     
     func setupViews() {
         dateLabel = UILabel()
-        dateLabel.textColor = .clickerMediumGray
+        dateLabel.textColor = .clickerMediumGrey
         dateLabel.font = ._14BoldFont
         dateLabel.textAlignment = .center
         addSubview(dateLabel)
@@ -85,6 +85,8 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     func questionBtnPressed() { }
     
     func emitTally(answer: [String : Any]) { }
+    
+    func upvote(answer: [String : Any]) { }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

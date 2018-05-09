@@ -139,7 +139,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGray
+        waitingLabel.textColor = .clickerMediumGrey
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
@@ -357,7 +357,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let slashIndex = countString.index(of: "/")?.encodedOffset
         let attributedString = NSMutableAttributedString(string: countString, attributes: [
             .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGray,
+            .foregroundColor: UIColor.clickerMediumGrey,
             .kern: 0.0
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))

@@ -346,7 +346,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
             print("drafts enabled")
         } else {
-            saveDraftButton.setTitleColor(.clickerMediumGray, for: .normal)
+            saveDraftButton.setTitleColor(.clickerMediumGrey, for: .normal)
             saveDraftButton.backgroundColor = .clickerOptionGrey
             saveDraftButton.layer.borderColor = UIColor.clickerOptionGrey.cgColor
             draftsButton.titleLabel?.font = ._16MediumFont
