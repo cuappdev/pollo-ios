@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol LiveOptionCellDelegate {
+protocol MultipleChoiceDelegate {
     func choose(_ choice: Int)
 }
 
@@ -19,7 +19,7 @@ class LiveOptionCell: UITableViewCell {
     var buttonView: UIButton!
     var chosen: Bool!
     var index: Int!
-    var delegate: LiveOptionCellDelegate!
+    var delegate: MultipleChoiceDelegate!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
