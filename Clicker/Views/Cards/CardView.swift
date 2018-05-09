@@ -92,6 +92,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             self.frResults = poll.getFRResultsArray()
             let numResults = frResults.count
             if (numResults < 5) {
+                scrollView.isScrollEnabled = false
                 tableViewHeightConstraint.update(offset: 254)
             } else {
                 updateTableViewHeightForFR()
@@ -99,6 +100,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         } else {
             let numOptions = (poll.options?.count)!
             updateTableViewHeight(baseHeight: numOptions * optionCellHeight)
+            if (numOptions <= 7) {
+                scrollView.isScrollEnabled = false
+            }
         }
     }
     
@@ -148,6 +152,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         blackView = UIView()
         blackView.backgroundColor = .clickerDeepBlack
         scrollContentView.addSubview(blackView)
+        scrollContentView.sendSubview(toBack: blackView)
         
     }
     
@@ -196,7 +201,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
         
         blackView.snp.makeConstraints { make in
-            make.top.equalTo(resultsTableView.snp.bottom)
+            // Move blackView above resultsTableView's bottom to show corners
+            make.top.equalTo(resultsTableView.snp.bottom).inset(10)
             make.left.right.bottom.equalToSuperview()
         }
     
@@ -223,6 +229,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         questionButton.addTarget(self, action: #selector(questionAction), for: .touchUpInside)
         addSubview(questionButton)
         bringSubview(toFront: questionButton)
+        
     }
     
     func setupAdminConstraints() {
@@ -464,8 +471,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             //            let diff = frame.height - CGFloat(height) - scrollView.contentOffset.y - 179
             //            print("DIFFERENCE: \(diff)")
             if ((poll.options?.count)! > 7) {
+                print("scrolling")
                 let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, scrollView.contentOffset.y, 0.0)
-                resultsTableView.contentInset = contentInsets
+//                resultsTableView.contentInset = contentInsets
                 self.scrollView.contentInset = contentInsets
             }
         }
