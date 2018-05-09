@@ -32,7 +32,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
-    var downArrowImageView: UIImageView!
     var createPollButton: UIButton!
     
     // nonempty views
@@ -68,9 +67,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         socket.addDelegate(self)
         setupHorizontalNavBar()
-        if (userRole == .admin) {
-            setupCreatePollBtn()
-        }
         if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
@@ -123,24 +119,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
-    func setupCreatePollBtn() {
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create a poll", for: .normal)
-        createPollButton.backgroundColor = .clear
-        createPollButton.layer.cornerRadius = 24
-        createPollButton.layer.borderWidth = 1
-        createPollButton.layer.borderColor = UIColor.white.cgColor
-        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-        view.addSubview(createPollButton)
-        
-        createPollButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalTo(47)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(22)
-        }
-    }
-    
     func setupEmpty() {
         setupEmptyViews()
         setupEmptyConstraints()
@@ -150,9 +128,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         monkeyView.removeFromSuperview()
         nothingToSeeLabel.removeFromSuperview()
         waitingLabel.removeFromSuperview()
-        if (userRole == .admin) {
-            downArrowImageView.removeFromSuperview()
-        }
     }
     
     func setupEmptyViews() {
@@ -186,16 +161,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
         
-        downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
-        downArrowImageView.contentMode = .scaleAspectFit
-        view.addSubview(downArrowImageView)
-        
-        downArrowImageView.snp.makeConstraints { make in
-            make.width.equalTo(30)
-            make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(createPollButton.snp.top).offset(-20)
-        }
     }
     
     func setupMemberEmpty() {
@@ -459,8 +424,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let newPoll = Poll(text: text, options: options, isLive: true)
         let arrEmpty = (datePollsArr.count == 0)
         appendPoll(poll: newPoll)
-        // HIDE CREATE POLL BUTTON
-        createPollButton.alpha = 0
+        // DISABLE CREATE POLL BUTTON
         createPollButton.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             if (!arrEmpty) {
@@ -473,8 +437,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: ENDED POLL DELEGATE
     func endedPoll() {
-        // SHOW CREATE POLL BUTTON
-        createPollButton.alpha = 1
+        // ENABLE CREATE POLL BUTTON
         createPollButton.isUserInteractionEnabled = true
     }
     
@@ -505,8 +468,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
-        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
-        let settingsBarButton = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
@@ -514,7 +475,16 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        self.navigationItem.rightBarButtonItems = [settingsBarButton, peopleBarButton]
+        
+        if (userRole == .admin) {
+            createPollButton = UIButton()
+            createPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
+        } else {
+            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+        }
     }
     
     
