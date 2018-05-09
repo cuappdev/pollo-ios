@@ -40,13 +40,13 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         timerLabel = UILabel()
         timerLabel.text = "00:00"
         timerLabel.font = UIFont._14BoldFont
-        timerLabel.textColor = .clickerMediumGray
+        timerLabel.textColor = .white
         timerLabel.textAlignment = .center
         addSubview(timerLabel)
         
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(3)
+            make.bottom.equalToSuperview().inset(14)
         }
         
         runTimer()

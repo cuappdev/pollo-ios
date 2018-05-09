@@ -152,6 +152,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             make.right.equalToSuperview().inset(17)
         }
         
+        totalResultsLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(15)
+            make.right.equalToSuperview().inset(16)
+        }
+        
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(topView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
@@ -213,18 +218,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         graphicView.snp.makeConstraints { make in
             make.width.height.equalTo(14.5)
             make.left.equalToSuperview().offset(16)
-            make.centerY.equalTo(visibilityLabel.snp.centerY)
+            make.centerY.equalTo(totalResultsLabel.snp.centerY)
         }
         
         visibilityLabel.snp.makeConstraints{ make in
             make.left.equalTo(graphicView.snp.right).offset(4)
             make.height.equalTo(14.5)
-            make.bottom.equalToSuperview().inset(15)
-        }
-        
-        totalResultsLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(visibilityLabel.snp.centerY)
-            make.right.equalToSuperview().inset(16)
+            make.centerY.equalTo(totalResultsLabel.snp.centerY)
         }
         
         questionButton.snp.makeConstraints{ make in
@@ -246,9 +246,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             //            addSubview(responseTextField)
         }
         
-        //        infoLabel = UILabel()
-        //        infoLabel.font = ._12SemiboldFont
-        //        addSubview(infoLabel)
+        infoLabel = UILabel()
+        infoLabel.font = ._12SemiboldFont
+        topView.addSubview(infoLabel)
     }
     
     func setupMemberConstraints() {
@@ -261,15 +261,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
         //            }
         //        }
         //
-        //        infoLabel.snp.makeConstraints { make in
-        //            make.left.equalToSuperview().offset(18)
-        //            make.bottom.equalToSuperview().inset(24)
-        //            make.height.equalTo(15)
-        //        }
-        //
-        //        totalResultsLabel.snp.makeConstraints { make in
-        //            make.centerY.equalTo(infoLabel.snp.centerY)
-        //        }
+        infoLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(18)
+            make.centerY.equalTo(totalResultsLabel.snp.centerY)
+            make.height.equalTo(15)
+        }
     }
     
     func setupCard() {
@@ -290,10 +286,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             questionButton.setTitle("End Question", for: .normal)
             
             graphicView.image = #imageLiteral(resourceName: "solo_eye")
+        } else {
+            infoLabel.textColor = .clickerMediumGray
         }
-        //        } else {
-        //            infoLabel.textColor = .clickerMediumGray
-        //        }
     }
     
     func setupEnded() {
@@ -304,11 +299,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             
             resultsTableView.reloadData()
             
+        } else {
+            infoLabel.textColor = .clickerDeepBlack
+            infoLabel.text = "Poll has closed"
         }
-        //        } else {
-        //            infoLabel.textColor = .clickerDeepBlack
-        //            infoLabel.text = "Poll has closed"
-        //        }
     }
     
     func setupShared() {
@@ -319,12 +313,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, LiveOptionCe
             visibilityLabel.text = "Shared with group"
             
             graphicView.image = #imageLiteral(resourceName: "results_shared")
+        } else {
+            infoLabel.textColor = .clickerDeepBlack
+            infoLabel.text = "Poll has closed"
         }
-        
-        //        } else {
-        //            infoLabel.textColor = .clickerDeepBlack
-        //            infoLabel.text = "Poll has closed"
-        //        }
     }
     
     // MARK - TABLEVIEW
