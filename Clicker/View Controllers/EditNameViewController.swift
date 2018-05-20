@@ -10,7 +10,9 @@ import UIKit
 
 class EditNameViewController: UIViewController {
     
-    var sessionName: String!
+    var session: Session!
+    var homeViewController: UIViewController!
+    
     var nameTextField: UITextField!
     var saveButton: UIButton!
     
@@ -22,6 +24,10 @@ class EditNameViewController: UIViewController {
         view.backgroundColor = .clickerWhite
         self.title = "Edit Name"
         
+        // Add Keyboard Handlers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -29,7 +35,7 @@ class EditNameViewController: UIViewController {
     
     func setupViews() {
         nameTextField = UITextField()
-        nameTextField.placeholder = sessionName
+        nameTextField.placeholder = session.name
         nameTextField.layer.cornerRadius = 5
         nameTextField.layer.borderWidth = 1
         nameTextField.layer.borderColor = UIColor.clickerBorder.cgColor
@@ -66,8 +72,23 @@ class EditNameViewController: UIViewController {
     }
     
     @objc func saveBtnPressed() {
-        // TODO: SAVE NEW NAME
-        print("save name")
+        if let newName = nameTextField.text {
+            if (newName != "") {
+                UpdateSession(id: session.id, name: newName, code: session.code).make()
+                    .done { code in
+                        if let pollsVC = self.homeViewController as? PollsViewController {
+                            self.dismiss(animated: true, completion: nil)
+                            for cell in pollsVC.pollsCollectionView.visibleCells {
+                                if let pollsCell = cell as? PollsCell {
+                                    DispatchQueue.main.async { pollsCell.getPollSessions() }
+                                }
+                            }
+                        }
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            }
+        }
     }
     
     @objc func backCancelBtnPressed() {
@@ -86,6 +107,19 @@ class EditNameViewController: UIViewController {
         exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
         exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
+    }
+    
+    // MARK: - KEYBOARD
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.navigationController?.view.frame.origin.y -= keyboardSize.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.navigationController?.view.frame.origin.y += keyboardSize.height
+        }
     }
     
 }

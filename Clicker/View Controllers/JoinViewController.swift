@@ -51,7 +51,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
-        codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._16MediumFont])
+        codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._16MediumFont])
         view.addSubview(codeTextField)
         
         let joinButtonView = UIView(frame: CGRect(x: 0, y: 0, width: joinButtonSize.width + textFieldPadding * 2, height: joinButtonSize.height + textFieldPadding * 2))

@@ -19,7 +19,7 @@ class PollPreviewCell: UITableViewCell {
     var editPollDelegate: EditPollDelegate!
     
     var nameLabel: UILabel!
-    var timeLabel: UILabel!
+    var codeLabel: UILabel!
     var line: UIView!
     var dotsButton: UIButton!
     
@@ -37,10 +37,10 @@ class PollPreviewCell: UITableViewCell {
         nameLabel.font = ._18SemiboldFont
         addSubview(nameLabel)
     
-        timeLabel = UILabel()
-        timeLabel.font = ._18MediumFont
-        timeLabel.textColor = .clickerMediumGray
-        addSubview(timeLabel)
+        codeLabel = UILabel()
+        codeLabel.font = ._18MediumFont
+        codeLabel.textColor = .clickerMediumGrey
+        addSubview(codeLabel)
         
         line = UIView()
         line.backgroundColor = .clickerBorder
@@ -61,7 +61,7 @@ class PollPreviewCell: UITableViewCell {
             make.left.equalToSuperview().offset(17)
         }
         
-        timeLabel.snp.makeConstraints { make in
+        codeLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(4)
             make.height.equalTo(17)
             make.left.equalTo(nameLabel.snp.left)
@@ -87,15 +87,7 @@ class PollPreviewCell: UITableViewCell {
     
     func updateLabels() {
         nameLabel.text = session.name
-        if let live = session.isLive {
-            if live {
-                timeLabel.text = "This poll is live!"
-            } else {
-                timeLabel.text = "Not currently active"
-            }
-        } else {
-            timeLabel.text = "Not currently active"
-        }
+        codeLabel.text = "CODE: \(session.code)"
     }
     
     required init?(coder aDecoder: NSCoder) {

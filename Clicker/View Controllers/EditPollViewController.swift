@@ -12,6 +12,9 @@ import SnapKit
 class EditPollViewController: UIViewController {
     
     var session: Session!
+    var homeViewController: UIViewController!
+    var index: Int!
+    var deleteSessionDelegate: DeleteSessionDelegate!
     
     var buttonStackView: UIStackView!
     var editView: UIView!
@@ -101,13 +104,20 @@ class EditPollViewController: UIViewController {
         }
     }
     
+    // MARK: ACTIONS
+    
     @objc func deleteBtnPressed() {
-        self.navigationController?.pushViewController(DeletePollViewController(), animated: true)
+        let deleteVC = DeletePollViewController()
+//        deleteVC.deleteSessionDelegate = deleteSessionDelegate
+        deleteVC.session = session
+        deleteVC.homeViewController = homeViewController
+        self.navigationController?.pushViewController(deleteVC, animated: true)
     }
     
     @objc func editNameBtnPressed() {
         let editNameVC = EditNameViewController()
-        editNameVC.sessionName = session.name
+        editNameVC.session = session
+        editNameVC.homeViewController = homeViewController
         self.navigationController?.pushViewController(editNameVC, animated: true)
     }
     

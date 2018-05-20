@@ -34,9 +34,7 @@ class PickQTypeViewController: UIViewController {
     func setupViews() {
         view.clipsToBounds = true
         view.layer.cornerRadius = 15
-        if #available(iOS 11.0, *) {
-            view.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
-        }
+        view.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         
         topBackgroundView = UIButton()
         topBackgroundView.backgroundColor = .clear

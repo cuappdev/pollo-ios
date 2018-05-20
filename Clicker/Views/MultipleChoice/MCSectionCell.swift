@@ -96,7 +96,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
     // MARK: - LAYOUT
     func setupViews() {
         questionTextField = UITextField()
-        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGray, NSAttributedStringKey.font: UIFont._18RegularFont])
+        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._18RegularFont])
         questionTextField.font = ._18RegularFont
         questionTextField.returnKeyType = .done
         questionTextField.delegate = self
@@ -161,7 +161,7 @@ class MCSectionCell: QuestionSectionCell, UITableViewDelegate, UITableViewDataSo
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets:UIEdgeInsets!
             if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 6), 0.0)
+                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 12), 0.0)
             } else {
                 contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
             }

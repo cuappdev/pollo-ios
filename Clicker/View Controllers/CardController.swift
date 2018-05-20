@@ -19,11 +19,8 @@ protocol EndPollDelegate {
     func endedPoll()
 }
 
-protocol ExpandCardDelegate {
-    func expandView(poll: Poll, socket: Socket)
-}
 
-class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, ExpandCardDelegate, SocketDelegate {
+class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
     
     // name vars
     var nameView: NameView!
@@ -32,7 +29,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
-    var downArrowImageView: UIImageView!
     var createPollButton: UIButton!
     
     // nonempty views
@@ -40,12 +36,15 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var mainCollectionView: UICollectionView!
     let askedIdentifer = "askedCardID"
     let answerIdentifier = "answerCardID"
+    let dateIdentifier = "dateCardID"
     var verticalCollectionView: UICollectionView!
     var countLabel: UILabel!
     
     // nav bar
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
+    
+    var pinchRecognizer: UIPinchGestureRecognizer!
     
     var userRole: UserRole!
     var socket: Socket!
@@ -60,11 +59,11 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
+        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
+        view.addGestureRecognizer(pinchRecognizer)
+        
         socket.addDelegate(self)
-        setupNavBar()
-        if (userRole == .admin) {
-            setupCreatePollBtn()
-        }
+        setupHorizontalNavBar()
         if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
@@ -85,7 +84,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nameView.code = code
         nameView.name = name
         nameView.delegate = self
-
         view.addSubview(nameView)
 
         setupNameConstraints()
@@ -99,12 +97,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nameView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            } else {
-                make.bottom.equalTo(bottomLayoutGuide.snp.top)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
 
@@ -121,24 +115,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
     
-    func setupCreatePollBtn() {
-        createPollButton = UIButton()
-        createPollButton.setTitle("Create a poll", for: .normal)
-        createPollButton.backgroundColor = .clear
-        createPollButton.layer.cornerRadius = 24
-        createPollButton.layer.borderWidth = 1
-        createPollButton.layer.borderColor = UIColor.white.cgColor
-        createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-        view.addSubview(createPollButton)
-        
-        createPollButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalTo(47)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(22)
-        }
-    }
-    
     func setupEmpty() {
         setupEmptyViews()
         setupEmptyConstraints()
@@ -148,9 +124,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         monkeyView.removeFromSuperview()
         nothingToSeeLabel.removeFromSuperview()
         waitingLabel.removeFromSuperview()
-        if (userRole == .admin) {
-            downArrowImageView.removeFromSuperview()
-        }
     }
     
     func setupEmptyViews() {
@@ -166,7 +139,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGray
+        waitingLabel.textColor = .clickerMediumGrey
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
@@ -184,16 +157,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
         
-        downArrowImageView = UIImageView(image: #imageLiteral(resourceName: "down arrow"))
-        downArrowImageView.contentMode = .scaleAspectFit
-        view.addSubview(downArrowImageView)
-        
-        downArrowImageView.snp.makeConstraints { make in
-            make.width.equalTo(30)
-            make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(createPollButton.snp.top).offset(-20)
-        }
     }
     
     func setupMemberEmpty() {
@@ -255,7 +218,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        let countString = "0/\(currentPolls.count)"
+        let countString = "1/\(currentPolls.count)"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerLabelGrey
@@ -265,24 +228,24 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
 
     func setupCardsConstraints() {
-        mainCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
-            make.bottom.equalToSuperview().inset(110)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
-            make.bottom.equalTo(mainCollectionView.snp.top)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.width.height.equalTo(20)
         }
         
         countLabel.snp.makeConstraints { make in
-            make.top.equalTo(mainCollectionView.snp.bottom)
+            make.centerY.equalTo(zoomOutButton.snp.centerY)
             make.centerX.equalToSuperview()
             make.width.equalTo(42)
             make.height.equalTo(23)
+        }
+        
+        mainCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(countLabel.snp.bottom).offset(6)
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
         }
     }
     
@@ -297,7 +260,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (collectionView == verticalCollectionView) {
-            // TODO
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dateIdentifier, for: indexPath) as! CardDateCell
+            let poll = datePollsArr[indexPath.item].1.first
+            cell.poll = poll
+            cell.date = datePollsArr[indexPath.item].0
+            cell.userRole = userRole
+            cell.cardType = getCardType(from: poll!)
+            cell.configure()
+            return cell
         }
          // mainCollectionView
         switch (userRole) {
@@ -308,16 +278,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             socket.addDelegate(cell)
             cell.poll = poll
             cell.endPollDelegate = self
-            cell.expandCardDelegate = self
-            if (poll.isLive) {
-                cell.cardType = .live
-            } else if (poll.isShared) {
-                cell.cardType = .shared
-            } else {
-                cell.cardType = .ended
-            }
-            cell.configure(with: poll)
-            cell.setupCard()
+            cell.cardType = getCardType(from: poll)
+            cell.configure()
             return cell
         default:
             let poll = currentPolls[indexPath.item]
@@ -325,16 +287,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.socket = socket
             socket.addDelegate(cell)
             cell.poll = poll
-            cell.expandCardDelegate = self
-            if (poll.isLive) {
-                cell.cardType = .live
-            } else if (poll.isShared) {
-                cell.cardType = .shared
-            } else {
-                cell.cardType = .ended
-            }
-            cell.configure(with: poll)
-            cell.setupCard()
+            cell.cardType = getCardType(from: poll)
+            cell.configure()
             return cell
         }
     }
@@ -342,7 +296,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if (collectionView == mainCollectionView) {
             // UPDATE COUNT LABEL
-            let countString = "\(indexPath.item)/\(currentPolls.count)"
+            let countString = "\(indexPath.item + 1)/\(currentPolls.count)"
             countLabel.attributedText = getCountLabelAttributedString(countString)
         }
     }
@@ -351,10 +305,21 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if (collectionView == mainCollectionView) {
             return CGSize(width: view.frame.width * 0.9, height: mainCollectionView.frame.height)
         } else {
-            return CGSize()
+            return CGSize(width: view.frame.width * 0.76, height: 440)
         }
     }
 
+    // MARK: Get CardType
+    func getCardType(from poll: Poll) -> CardType {
+        if (poll.isLive) {
+            return .live
+        } else if (poll.isShared) {
+            return .shared
+        } else {
+            return .ended
+        }
+    }
+    
     // MARK: UPDATE DATE POLLS ARRAY
     func updateDatePollsArr() {
         GetSortedPolls(id: sessionId).make()
@@ -380,7 +345,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
             // Check if cell is fully visible
             if (mainCollectionView.bounds.contains(cellRect)) {
-                let countString = "\(indexPath!.item)/\(currentPolls.count)"
+                let countString = "\(indexPath!.item + 1)/\(currentPolls.count)"
                 countLabel.attributedText = getCountLabelAttributedString(countString)
                 break
             }
@@ -392,7 +357,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let slashIndex = countString.index(of: "/")?.encodedOffset
         let attributedString = NSMutableAttributedString(string: countString, attributes: [
             .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGray,
+            .foregroundColor: UIColor.clickerMediumGrey,
             .kern: 0.0
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
@@ -442,19 +407,20 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     // MARK: - START POLL DELEGATE
-    func startPoll(text: String, type: String, options: [String]) {
+    func startPoll(text: String, type: String, options: [String], isShared: Bool) {
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
             "type": type,
-            "options": options
+            "options": options,
+            "shared": isShared
         ]
         socket.socket.emit("server/poll/start", with: [socketQuestion])
-        let newPoll = Poll(text: text, options: options, isLive: true)
+        let questionType: QuestionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
+        let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
         let arrEmpty = (datePollsArr.count == 0)
         appendPoll(poll: newPoll)
-        // HIDE CREATE POLL BUTTON
-        createPollButton.alpha = 0
+        // DISABLE CREATE POLL BUTTON
         createPollButton.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             if (!arrEmpty) {
@@ -467,23 +433,11 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: ENDED POLL DELEGATE
     func endedPoll() {
-        // SHOW CREATE POLL BUTTON
-        createPollButton.alpha = 1
+        // ENABLE CREATE POLL BUTTON
         createPollButton.isUserInteractionEnabled = true
     }
     
-    func expandView(poll: Poll, socket: Socket) {
-//        let expandedVC = ExpandedViewController()
-//        expandedVC.setup()
-//        expandedVC.expandedCard.socket = socket
-//        socket.addDelegate(expandedVC.expandedCard)
-//        expandedVC.expandedCard.poll = poll
-//        expandedVC.expandedCard.questionLabel.text = poll.text
-//        expandedVC.expandedCard.endPollDelegate = self
-//        present(expandedVC, animated: true, completion: nil)
-    }
-    
-    func setupNavBar() {
+    func setupHorizontalNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -499,8 +453,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
-        let settingsImage = UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
-        let settingsBarButton = UIBarButtonItem(image: settingsImage, style: .plain, target: self, action: nil)
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
@@ -508,7 +460,16 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        self.navigationItem.rightBarButtonItems = [settingsBarButton, peopleBarButton]
+        
+        if (userRole == .admin) {
+            createPollButton = UIButton()
+            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
+        } else {
+            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+        }
     }
     
     
@@ -521,6 +482,14 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func zoomOutBtnPressed() {
         // SETUP VERTICAL VIEW
         setupVertical()
+    }
+    
+    @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
+        print(sender.scale)
+        let isPinchOut: Bool = (sender.scale > 1)
+        if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
+            zoomOutBtnPressed()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
