@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol LiveOptionCellDelegate {
+protocol MultipleChoiceDelegate {
     func choose(_ choice: Int)
 }
 
@@ -19,12 +19,12 @@ class LiveOptionCell: UITableViewCell {
     var buttonView: UIButton!
     var chosen: Bool!
     var index: Int!
-    var delegate: LiveOptionCellDelegate!
+    var delegate: MultipleChoiceDelegate!
     
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
+        backgroundColor = .white
         
         setupViews()
         layoutSubviews()
@@ -65,7 +65,7 @@ class LiveOptionCell: UITableViewCell {
                 buttonView.backgroundColor = .clickerMint
                 buttonView.layer.borderColor = UIColor.clickerMint.cgColor
             }
-            buttonView.setTitleColor(.clickerWhite, for: .normal)
+            buttonView.setTitleColor(.white, for: .normal)
         } else {
             if (isLive) {
                 buttonView.setTitleColor(.clickerGreen, for: .normal)
@@ -74,7 +74,7 @@ class LiveOptionCell: UITableViewCell {
                 buttonView.setTitleColor(.clickerMint, for: .normal)
                 buttonView.layer.borderColor = UIColor.clickerMint.cgColor
             }
-            buttonView.backgroundColor = .clickerWhite
+            buttonView.backgroundColor = .white
         }
     }
     

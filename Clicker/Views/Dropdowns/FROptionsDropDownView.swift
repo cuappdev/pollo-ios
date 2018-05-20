@@ -13,12 +13,12 @@ class FROptionsDropDownView: UIView {
     var responsesButton: UIButton!
     var responsesLabel: UILabel!
     var responsesCheck: UIImageView!
-    var shareResponses: Bool!
+    var shareResponses: Bool = false
     
     var votesButton: UIButton!
     var votesLabel: UILabel!
     var votesCheck: UIImageView!
-    var shareVotes: Bool!
+    var shareVotes: Bool = false
     
     let circleImage = UIImage(named: "emptyCircle")
     let checkImage = UIImage(named: "blueCheck")
@@ -55,7 +55,7 @@ class FROptionsDropDownView: UIView {
         addSubview(responsesButton)
 
         votesLabel = UILabel()
-        votesLabel.textColor = .clickerMediumGray
+        votesLabel.textColor = .clickerMediumGrey
         votesLabel.text = "Show vote count to audience"
         votesLabel.font = ._14MediumFont
         votesLabel.textAlignment = .left
@@ -131,7 +131,7 @@ class FROptionsDropDownView: UIView {
             responsesCheck.image = checkImage
         } else {
             votesButton.isEnabled = false
-            votesLabel.textColor = .clickerMediumGray
+            votesLabel.textColor = .clickerMediumGrey
             
             responsesCheck.image = circleImage
             votesCheck.image = circleImage

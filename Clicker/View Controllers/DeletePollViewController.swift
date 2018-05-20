@@ -8,7 +8,16 @@
 
 import UIKit
 
+protocol DeleteSessionDelegate {
+    func deleteSession(at index: Int)
+}
+
 class DeletePollViewController: UIViewController {
+    
+    var index: Int!
+    var deleteSessionDelegate: DeleteSessionDelegate!
+    var session: Session!
+    var homeViewController: UIViewController!
     
     var deleteLabel: UILabel!
     var cancelButton: UIButton!
@@ -27,7 +36,7 @@ class DeletePollViewController: UIViewController {
     func setupViews() {
         deleteLabel = UILabel()
         deleteLabel.text = "Deleting will permanently close the group for all participants and all poll data will be lost."
-        deleteLabel.textColor = .clickerMediumGray
+        deleteLabel.textColor = .clickerMediumGrey
         deleteLabel.textAlignment = .center
         deleteLabel.font = UIFont._16RegularFont
         deleteLabel.numberOfLines = 0
@@ -37,7 +46,7 @@ class DeletePollViewController: UIViewController {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.white, for: .normal)
-        cancelButton.backgroundColor = .clickerMediumGray
+        cancelButton.backgroundColor = .clickerMediumGrey
         cancelButton.layer.cornerRadius = 25
         cancelButton.addTarget(self, action: #selector(backCancelBtnPressed), for: .touchUpInside)
         view.addSubview(cancelButton)
@@ -47,6 +56,7 @@ class DeletePollViewController: UIViewController {
         deleteButton.setTitleColor(.white, for: .normal)
         deleteButton.backgroundColor = .clickerRed
         deleteButton.layer.cornerRadius = 25
+        deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         view.addSubview(deleteButton)
     }
     
@@ -75,6 +85,22 @@ class DeletePollViewController: UIViewController {
     
     @objc func backCancelBtnPressed() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func deleteBtnPressed() {
+        DeleteSession(id: session.id).make()
+            .done {
+                if let pollsVC = self.homeViewController as? PollsViewController {
+                    self.dismiss(animated: true, completion: nil)
+                    for cell in pollsVC.pollsCollectionView.visibleCells {
+                        if let pollsCell = cell as? PollsCell {
+                            DispatchQueue.main.async { pollsCell.getPollSessions() }
+                        }
+                    }
+                }
+            }.catch { error in
+                print(error)
+            }
     }
     
     @objc func exitBtnPressed() {

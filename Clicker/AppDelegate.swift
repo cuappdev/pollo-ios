@@ -24,11 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.tintColor = .clickerGreen
         window?.makeKeyAndVisible()
-        pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
-        pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
-        pollsNavigationController.navigationBar.isTranslucent = false
-        window?.rootViewController = pollsNavigationController
         
         // GOOGLE SIGN IN
         GIDSignIn.sharedInstance().clientID = Google.googleClientID
@@ -38,9 +33,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             DispatchQueue.main.async {
                 GIDSignIn.sharedInstance().signInSilently()
             }
+            pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
+            pollsNavigationController.setNavigationBarHidden(true, animated: false)
+            pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+            pollsNavigationController.navigationBar.isTranslucent = false
+            window?.rootViewController = pollsNavigationController
         } else {
-            let login = LoginViewController()
-            pollsNavigationController.pushViewController(login, animated: false)
+//            let login = LoginViewController()
+            window?.rootViewController = LoginViewController()
+//            pollsNavigationController.pushViewController(login, animated: false)
             //window?.rootViewController?.present(login, animated: false, completion: nil)
         }
         
@@ -85,7 +86,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 UserDefaults.standard.set(significantEvents + 2, forKey:"significantEvents")
             }
             
-            pollsNavigationController.popToRootViewController(animated: false)
+            UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
+                .done { userSession in
+                    print(userSession)
+                    User.userSession = userSession
+                    self.pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
+                    self.pollsNavigationController.setNavigationBarHidden(true, animated: false)
+                    self.pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+                    self.pollsNavigationController.navigationBar.isTranslucent = false
+                    self.window?.rootViewController?.present(self.pollsNavigationController, animated: true, completion: nil)
+                } .catch { error in
+                    print(error)
+            }
             
         } else {
             print("\(error.localizedDescription)")

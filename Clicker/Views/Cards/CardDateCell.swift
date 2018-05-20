@@ -8,24 +8,85 @@
 
 import UIKit
 
-class CardDateCell: UICollectionViewCell {
+class CardDateCell: UICollectionViewCell, CardDelegate {
     
-    var shadowView: UIView!
+    var userRole: UserRole!
+    var cardType: CardType!
+    var poll: Poll!
+    var date: String!
+    
+    var dateLabel: UILabel!
+    var shadowImage: UIImageView!
+    var cardView: CardView!
+    
+    let minCardHeight = 320
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setupViews()
-        setupConstraints()
+        backgroundColor = .clickerDeepBlack
     }
     
     func setupViews() {
-        shadowView = UIView()
+        dateLabel = UILabel()
+        dateLabel.textColor = .clickerMediumGrey
+        dateLabel.font = ._14BoldFont
+        dateLabel.textAlignment = .center
+        addSubview(dateLabel)
+        
+        shadowImage = UIImageView(image: #imageLiteral(resourceName: "cardShadow"))
+        addSubview(shadowImage)
+        
+        cardView = CardView(frame: .zero, userRole: userRole, cardDelegate: self)
+        cardView.highlightColor = .clickerHalfGreen
+        addSubview(cardView)
     }
     
     func setupConstraints() {
         
+        dateLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+        
+        cardView.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(12)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview().inset(13)
+            make.height.equalTo(398)
+        }
+        
+        shadowImage.snp.makeConstraints { make in
+            make.width.equalTo(13)
+            make.height.equalTo(minCardHeight)
+            make.centerY.equalTo(cardView.snp.centerY)
+            make.right.equalToSuperview()
+        }
     }
+    
+    // MARK: Configure after variables are set
+    func configure() {
+        setupViews()
+        setupConstraints()
+        
+        dateLabel.text = date
+        cardView.questionLabel.text = poll.text
+        cardView.poll = poll
+        cardView.cardType = cardType
+        cardView.configure()
+        cardView.setupCard()
+        
+        // Disable all cardView subviews
+        for view in cardView.subviews {
+            view.isUserInteractionEnabled = false
+        }
+    }
+    
+    // MARK: CARD DELEGATE
+    func questionBtnPressed() { }
+    
+    func emitTally(answer: [String : Any]) { }
+    
+    func upvote(answer: [String : Any]) { }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
