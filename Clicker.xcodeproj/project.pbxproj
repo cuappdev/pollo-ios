@@ -26,6 +26,7 @@
 		63D19CC3208D72E40041C774 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63D19CC2208D72E40041C774 /* Keys.plist */; };
 		63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4DAF72097DE94000808EB /* NavigationTitleView.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
+		C203E56021330D480016A147 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = C203E55F21330D480016A147 /* .swiftlint.yml */; };
 		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
 		C2093141209ED1F6001A10CC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2093140209ED1F5001A10CC /* CardView.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
@@ -107,6 +108,7 @@
 		6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug dev server.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug dev server.xcconfig"; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
+		C203E55F21330D480016A147 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		C205588E2026591A000E9B07 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C2093140209ED1F5001A10CC /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 		C7F923B91F73540600B1E975 = {
 			isa = PBXGroup;
 			children = (
+				C203E55F21330D480016A147 /* .swiftlint.yml */,
 				63D19CC4208D72EC0041C774 /* Secrets */,
 				C7F923C41F73540600B1E975 /* Clicker */,
 				652915081F78124700882CBB /* ClickerTests */,
@@ -503,6 +506,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C203E56021330D480016A147 /* .swiftlint.yml in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
@@ -583,7 +587,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET";
+			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET\n\nif which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
