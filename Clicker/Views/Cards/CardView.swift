@@ -44,7 +44,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     var topViewHeightConstraint: Constraint!
     var tableViewHeightConstraint: Constraint!
     
-    // Constants
+    // MARK: Constants
     let textFieldPadding = 18
     let textFieldHeight = 48
     let cornerRadius = 15

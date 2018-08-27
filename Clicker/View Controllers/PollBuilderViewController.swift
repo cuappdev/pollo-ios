@@ -59,7 +59,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         super.viewDidLoad()
         
         view.backgroundColor = .clickerWhite
-        questionType = "MULTIPLE_CHOICE"
+        questionType = MULTIPLE_CHOICE
         
         // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -202,8 +202,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     
     func updateQuestionTypeButton() {
-        let questionTypeText = (questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response"
-        let otherTypeText = (questionType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice"
+        let questionTypeText = (questionType == MULTIPLE_CHOICE) ? "Multiple Choice" : "Free Response"
+        let otherTypeText = (questionType == MULTIPLE_CHOICE) ? "Free Response" : "Multiple Choice"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
         dropDown.topButton.setTitle(questionTypeText, for: .normal)
         dropDown.bottomButton.setTitle(otherTypeText, for: .normal)
@@ -216,7 +216,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         if canDraft {
             print("save as draft")
             // MULTIPLE CHOICE
-            if (questionType == "MULTIPLE_CHOICE") {
+            if (questionType == MULTIPLE_CHOICE) {
                 let question = mcPollBuilder.questionTextField.text
                 let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
                 
@@ -248,17 +248,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         print("start question")
         
         // MULTIPLE CHOICE
-        if (questionType == "MULTIPLE_CHOICE") {
+        if (questionType == MULTIPLE_CHOICE) {
 
             let question = mcPollBuilder.questionTextField.text
             let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
             
-            startPollDelegate.startPoll(text: question!, type: "MULTIPLE_CHOICE", options: options, isShared: false)
+            startPollDelegate.startPoll(text: question!, type: MULTIPLE_CHOICE, options: options, isShared: false)
         } else { // FREE RESPONSE
             
             let question = frPollBuilder.questionTextField.text
             let isShared = frPollBuilder.dropDown.shareResponses
-            startPollDelegate.startPoll(text: question!, type: "FREE_RESPONSE", options: [], isShared: isShared)
+            startPollDelegate.startPoll(text: question!, type: FREE_RESPONSE, options: [], isShared: isShared)
         }
         
         self.dismiss(animated: true, completion: nil)
@@ -271,8 +271,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(dropDownArrow)
         
         dropDown = PollTypeDropDownView()
-        let topTitle = (questionType == "MULTIPLE_CHOICE") ? "Multiple Choice" : "Free Response"
-        let bottomTitle = (questionType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice"
+        let topTitle = (questionType == MULTIPLE_CHOICE) ? "Multiple Choice" : "Free Response"
+        let bottomTitle = (questionType == MULTIPLE_CHOICE) ? "Free Response" : "Multiple Choice"
         dropDown.topButton.setTitle(topTitle, for: .normal)
         dropDown.bottomButton.setTitle(bottomTitle, for: .normal)
         dropDown.delegate = self
@@ -303,9 +303,9 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     // MARK - PickQTypeDelegate
     
     func updateQuestionType() {
-        questionType = (questionType == "MULTIPLE_CHOICE") ? "FREE_RESPONSE" : "MULTIPLE_CHOICE"
+        questionType = (questionType == MULTIPLE_CHOICE) ? FREE_RESPONSE : MULTIPLE_CHOICE
         updateQuestionTypeButton()
-        if questionType == "MULTIPLE_CHOICE" {
+        if questionType == MULTIPLE_CHOICE {
             mcPollBuilder.isHidden = false
             frPollBuilder.isHidden = true
             print("showing mc")
@@ -356,7 +356,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     func fillDraft(_ draft: Draft) {
         print("load draft: ", draft)
-        if questionType == "MULTIPLE_CHOICE" {
+        if questionType == MULTIPLE_CHOICE {
             mcPollBuilder.questionTextField.text = draft.text
             var optionsDict: [Int: String] = [:]
             if draft.options.count > 0 {

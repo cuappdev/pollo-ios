@@ -9,6 +9,17 @@
 import Foundation
 import UIKit
 
+let MULTIPLE_CHOICE = "MULTIPLE_CHOICE"
+let FREE_RESPONSE = "FREE_RESPONSE"
+let significantEventsIdentifier = "significantEvents"
+let addMoreOptionCellID = "addMoreOptionCellID"
+let createMCOptionCellID = "createMCOptionCellID"
+
+let server_poll_end = "server/poll/end"
+let server_poll_results = "server/poll/results"
+let server_poll_tally = "server/poll/tally"
+let server_poll_upvote = "server/poll/upvote"
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"
