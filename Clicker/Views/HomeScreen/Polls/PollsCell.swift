@@ -21,10 +21,14 @@ protocol EditSessionDelegate {
 
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, EditPollDelegate, GIDSignInDelegate {
     
+    // MARK: Constants
+    let pollPreviewIdentifier = "pollPreviewCellID"
+    let adminIdentifier = "admin"
+    
+    
     var parentNavController: UINavigationController!
     var pollsTableView: UITableView!
     var editSessionDelegate: EditSessionDelegate!
-    let pollPreviewIdentifier = "pollPreviewCellID"
     var sessions: [Session] = []
     var pollType: PollType!
     
@@ -117,7 +121,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
                     print(error)
             }
             
-            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: "significantEvents") + 2, forKey:"significantEvents")
+            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: significantEventsIdentifier) + 2, forKey: significantEventsIdentifier)
             window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")
@@ -126,7 +130,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let session: Session = sessions[sessions.count - indexPath.row - 1]
-        let socket = Socket(id: "\(session.id)", userType: "admin")
+        let socket = Socket(id: "\(session.id)", userType: adminIdentifier)
         
         GetSortedPolls(id: session.id).make()
             .done { datePollsArr in

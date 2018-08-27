@@ -105,7 +105,7 @@ class FRSectionCell: QuestionSectionCell {
         presenter.backgroundOpacity = 0.4
         
         let pickQTypeVC = PickQTypeViewController()
-        pickQTypeVC.currentType = "questionType"
+        pickQTypeVC.currentType = "questionType" // ToDo: actually set this to MULTIPLE_CHOICE or FREE_RESPONSE based on q type
         pickQTypeVC.setup()
         pickQTypeVC.popupHeight = popupViewHeight
         UIViewController().customPresentViewController(presenter, viewController: pickQTypeVC, animated: true, completion: nil)

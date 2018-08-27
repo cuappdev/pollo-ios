@@ -43,7 +43,7 @@ class PickQTypeViewController: UIViewController {
         
         bottomBackgroundView = UIButton()
         bottomBackgroundView.backgroundColor = .clickerWhite
-        bottomBackgroundView.setTitle((currentType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice", for: .normal)
+        bottomBackgroundView.setTitle((currentType == MULTIPLE_CHOICE) ? "Free Response" : "Multiple Choice", for: .normal)
         bottomBackgroundView.setTitleColor(.clickerBlack, for: .normal)
         bottomBackgroundView.titleLabel?.font = ._16SemiboldFont
         bottomBackgroundView.addTarget(self, action: #selector(bottomPressed), for: .touchUpInside)
@@ -77,7 +77,7 @@ class PickQTypeViewController: UIViewController {
     }
     
     @objc func bottomPressed() {
-        delegate.updateQuestionType((currentType == "MULTIPLE_CHOICE") ? "FREE_RESPONSE" : "MULTIPLE_CHOICE")
+        delegate.updateQuestionType((currentType == MULTIPLE_CHOICE) ? FREE_RESPONSE : MULTIPLE_CHOICE)
     }
 
     override func didReceiveMemoryWarning() {
