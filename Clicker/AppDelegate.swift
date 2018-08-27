@@ -8,6 +8,7 @@
 
 import UIKit
 import Fabric
+import FLEX
 import GoogleSignIn
 import Crashlytics
 import StoreKit
@@ -63,6 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
 
         #endif
+        
         return true
     }
     

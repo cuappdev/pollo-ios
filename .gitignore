@@ -66,5 +66,7 @@ fastlane/test_output
 
 Secrets/
 
+# Swiftlint
+.swiftlint.yml
 
 .DS_Store
