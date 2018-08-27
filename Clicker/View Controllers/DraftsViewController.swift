@@ -86,29 +86,6 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
             make.centerX.equalToSuperview()
         }
     }
-    
-    // MARK - COLLECTION VIEW delegate/data source
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return drafts.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: "draftCellID", for: indexPath) as! DraftCell
-        cell.draft = drafts[drafts.count - (indexPath.row + 1)]
-        cell.setupCell()
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: draftsCollectionView.frame.width, height: 82.0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("selected item at ", indexPath.row)
-        delegate.fillDraft(drafts[drafts.count - (indexPath.row + 1)])
-
-        self.dismiss(animated: true, completion: nil)
-    }
 
     // MARK: ACTIONS
     @objc func backBtnPressed() {

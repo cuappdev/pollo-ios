@@ -56,7 +56,7 @@ class EditNameViewController: UIViewController {
     func setupConstraints() {
         
         nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(topLayoutGuide.snp.bottom).offset(26)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(26)
             make.width.equalToSuperview().multipliedBy(0.92)
             make.height.equalTo(textFieldHeight)
             make.centerX.equalToSuperview()
