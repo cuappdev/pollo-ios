@@ -7,6 +7,7 @@ target 'Clicker' do
   pod 'Alamofire'
   pod 'Crashlytics'
   pod 'Fabric'
+  pod 'FLEX'
   pod 'Google/SignIn'
   pod 'Presentr'
   pod 'Siren'
