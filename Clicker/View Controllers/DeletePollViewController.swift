@@ -64,7 +64,7 @@ class DeletePollViewController: UIViewController {
         deleteLabel.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.92)
             make.height.equalTo(40)
-            make.top.equalTo(topLayoutGuide.snp.bottom).offset(26)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(26)
             make.centerX.equalToSuperview()
         }
         
