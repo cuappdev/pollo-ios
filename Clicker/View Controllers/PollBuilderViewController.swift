@@ -220,12 +220,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 let question = mcPollBuilder.questionTextField.text
                 let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
                 
-                print("creating a draft with:\n\t text: ",question,"\n\toptions: ", options)
                 CreateDraft(text: question!, options: options).make()
                     .done { draft in
-                        print("made draft with options: ", draft.options)
                     }.catch { error in
-                            print("error: ", error)
+                        print("error: ", error)
                     }
                 self.mcPollBuilder.clearOptionsDict()
                 self.mcPollBuilder.questionTextField.text = ""
@@ -308,17 +306,14 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         if questionType == "MULTIPLE_CHOICE" {
             mcPollBuilder.isHidden = false
             frPollBuilder.isHidden = true
-            print("showing mc")
             
         } else { //  FREE_RESPONSE
             frPollBuilder.isHidden = false
             mcPollBuilder.isHidden = true
-            print("showing fr")
         }
     }
     
     @objc func showDrafts() {
-        print("show poll drafts")
         
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
@@ -344,18 +339,15 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
             saveDraftButton.backgroundColor = .clear
             saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
-            print("drafts enabled")
         } else {
             saveDraftButton.setTitleColor(.clickerMediumGrey, for: .normal)
             saveDraftButton.backgroundColor = .clickerOptionGrey
             saveDraftButton.layer.borderColor = UIColor.clickerOptionGrey.cgColor
             draftsButton.titleLabel?.font = ._16MediumFont
-            print("draft disabled")
         }
     }
     
     func fillDraft(_ draft: Draft) {
-        print("load draft: ", draft)
         if questionType == "MULTIPLE_CHOICE" {
             mcPollBuilder.questionTextField.text = draft.text
             var optionsDict: [Int: String] = [:]
