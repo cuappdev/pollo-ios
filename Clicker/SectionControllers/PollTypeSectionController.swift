@@ -25,8 +25,9 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
+        guard let context = collectionContext else { return .zero }
         // This is the size of the whole collection view
-        return (collectionContext?.containerSize)!
+        return context.containerSize
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -47,8 +48,8 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     }
     
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController) {}
-    
+
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {}
-    
+
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {}
 }

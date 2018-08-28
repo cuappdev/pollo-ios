@@ -31,7 +31,7 @@ extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerD
     }
     
     func sectionControllerWillDisplayPollType(sectionController: PollTypeSectionController, pollType: PollType) {
-        let item: Int = pollType == .created ? 0 : 1
+        let item = pollType == .created ? 0 : 1
         let indexPath: IndexPath = IndexPath(item: item, section: 0)
         pollsOptionsView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
     }
