@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CardController {
+extension CardController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: - COLLECTIONVIEW METHODS
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,4 +78,72 @@ extension CardController {
         }
     }
     
+}
+
+extension CardController: StartPollDelegate {
+    func startPoll(text: String, type: String, options: [String], isShared: Bool) {
+        // EMIT START QUESTION
+        let socketQuestion: [String:Any] = [
+            "text": text,
+            "type": type,
+            "options": options,
+            "shared": isShared
+        ]
+        socket.socket.emit("server/poll/start", with: [socketQuestion])
+        let questionType: QuestionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
+        let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
+        let arrEmpty = (datePollsArr.count == 0)
+        appendPoll(poll: newPoll)
+        // DISABLE CREATE POLL BUTTON
+        createPollButton.isUserInteractionEnabled = false
+        DispatchQueue.main.async {
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+            }
+            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+}
+
+extension CardController: EndPollDelegate {
+    func endedPoll() {
+        createPollButton.isUserInteractionEnabled = true
+    }
+}
+
+extension CardController: NameViewDelegate {
+    func nameViewDidUpdateSessionName() {
+        navigationTitleView.updateViews(name: session.name, code: session.code)
+    }
+}
+
+extension CardController: SocketDelegate {
+    func sessionConnected() { }
+    
+    func sessionDisconnected() { }
+    
+    func receivedUserCount(_ count: Int) {
+        peopleButton.setTitle("\(count)", for: .normal)
+    }
+    
+    func pollStarted(_ poll: Poll) {
+        if (userRole == .member) {
+            let arrEmpty = (datePollsArr.count == 0)
+            appendPoll(poll: poll)
+            if (!arrEmpty) {
+                self.mainCollectionView.reloadData()
+                let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
+                self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        }
+    }
+    
+    func pollEnded(_ poll: Poll) { }
+    
+    func receivedResults(_ currentState: CurrentState) { }
+    
+    func saveSession(_ session: Session) { }
+    
+    func updatedTally(_ currentState: CurrentState) { }
 }

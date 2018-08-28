@@ -26,7 +26,7 @@ extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerD
     }
     
     // MARK: - PollTypeSectionControllerDelegate
-    var editSessionDelegate: EditSessionDelegate {
+    var pollsCellDelegate: PollsCellDelegate {
         return self
     }
     
@@ -49,8 +49,8 @@ extension PollsViewController: UIScrollViewDelegate {
     }
 }
 
-extension PollsViewController: EditSessionDelegate {
-    func editSession(forSession session: Session) {
+extension PollsViewController: PollsCellDelegate {
+    func shouldEditSession(session: Session) {
         let width = ModalSize.full
         let height = ModalSize.custom(size: editModalHeight)
         let originY = view.frame.height - CGFloat(editModalHeight)
@@ -65,6 +65,10 @@ extension PollsViewController: EditSessionDelegate {
         editPollVC.homeViewController = self
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
+    }
+    
+    func shouldPushCardController(cardController: CardController) {
+        self.navigationController?.pushViewController(cardController, animated: true)
     }
 }
 
