@@ -8,15 +8,15 @@
 
 import UIKit
 
-protocol EditPollDelegate {
-    func editPoll(forIndex index: Int)
+protocol PollPreviewCellDelegate {
+    func shouldEditPoll(atIndex index: Int)
 }
 
 class PollPreviewCell: UITableViewCell {
     
     var session: Session!
     var index: Int!
-    var editPollDelegate: EditPollDelegate!
+    var delegate: PollPreviewCellDelegate!
     
     var nameLabel: UILabel!
     var codeLabel: UILabel!
@@ -30,27 +30,26 @@ class PollPreviewCell: UITableViewCell {
         setupConstraints()
     }
     
-    // MARK - layout
-    
+    // MARK - Layout
     func setupViews() {
         nameLabel = UILabel()
         nameLabel.font = ._18SemiboldFont
-        addSubview(nameLabel)
+        contentView.addSubview(nameLabel)
     
         codeLabel = UILabel()
         codeLabel.font = ._18MediumFont
         codeLabel.textColor = .clickerMediumGrey
-        addSubview(codeLabel)
+        contentView.addSubview(codeLabel)
         
         line = UIView()
         line.backgroundColor = .clickerBorder
-        addSubview(line)
+        contentView.addSubview(line)
         
         dotsButton = UIButton()
         dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
         dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
         dotsButton.clipsToBounds = true
-        addSubview(dotsButton)
+        contentView.addSubview(dotsButton)
     }
     
     func setupConstraints() {
@@ -82,7 +81,7 @@ class PollPreviewCell: UITableViewCell {
     }
     
     @objc func dotsBtnPressed() {
-        editPollDelegate.editPoll(forIndex: index)
+        delegate.shouldEditPoll(atIndex: index)
     }
     
     func updateLabels() {

@@ -83,14 +83,8 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
                     .done { session in
                         GetSortedPolls(id: session.id).make()
                             .done { datePollsArr in
-                                let socket = Socket(id: "\(session.id)", userType: "user")
-                                let cardVC = CardController()
-                                cardVC.socket = socket
-                                cardVC.code = code
-                                cardVC.name = session.name
+                                let cardVC = CardController(session: session, userRole: .member)
                                 cardVC.datePollsArr = datePollsArr
-                                cardVC.sessionId = session.id
-                                cardVC.userRole = .member
                                 self.dismiss(animated: true, completion: {
                                     self.dismissController.navigationController?.pushViewController(cardVC, animated: true)
                                     self.dismissController.navigationController?.setNavigationBarHidden(false, animated: true)

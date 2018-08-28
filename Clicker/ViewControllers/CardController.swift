@@ -20,7 +20,7 @@ protocol EndPollDelegate {
 }
 
 
-class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
+class CardController: UIViewController {
     
     // name vars
     var nameView: NameView!
@@ -56,6 +56,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     init(session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
         
+        self.session = session
+        self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
     }
     
@@ -82,18 +84,12 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
    
     // MARK - NAME THE POLL
     func setupName() {
-        nameView = NameView()
-        nameView.sessionId = session.id
-        nameView.code = session.code
-        nameView.name = session.name
+        nameView = NameView(frame: .zero)
+        nameView.session = session
         nameView.delegate = self
         view.addSubview(nameView)
 
         setupNameConstraints()
-    }
-    
-    func updateNavBar() {
-        navigationTitleView.updateViews(name: session.name, code: session.code)
     }
     
     func setupNameConstraints() {
@@ -349,37 +345,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
         return attributedString
     }
-    
-    // MARK - SOCKET DELEGATE
-    
-    func sessionConnected() { }
-    
-    func sessionDisconnected() { }
-    
-    func receivedUserCount(_ count: Int) {
-        peopleButton.setTitle("\(count)", for: .normal)
-    }
-    
-    func pollStarted(_ poll: Poll) {
-        if (userRole == .member) {
-            let arrEmpty = (datePollsArr.count == 0)
-            appendPoll(poll: poll)
-            if (!arrEmpty) {
-                self.mainCollectionView.reloadData()
-                let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
-                self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-            }
-        }
-    }
-    
-    func pollEnded(_ poll: Poll) { }
-    
-    func receivedResults(_ currentState: CurrentState) { }
-    
-    func saveSession(_ session: Session) { }
-    
-    func updatedTally(_ currentState: CurrentState) { }
-    
+        
     func appendPoll(poll: Poll) {
         if (datePollsArr.count == 0) {
             self.datePollsArr.append((getTodaysDate(), [poll]))
@@ -391,38 +357,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
     }
-    
-    // MARK: - START POLL DELEGATE
-    func startPoll(text: String, type: String, options: [String], isShared: Bool) {
-        // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
-            "text": text,
-            "type": type,
-            "options": options,
-            "shared": isShared
-        ]
-        socket.socket.emit("server/poll/start", with: [socketQuestion])
-        let questionType: QuestionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
-        let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
-        let arrEmpty = (datePollsArr.count == 0)
-        appendPoll(poll: newPoll)
-        // DISABLE CREATE POLL BUTTON
-        createPollButton.isUserInteractionEnabled = false
-        DispatchQueue.main.async {
-            if (!arrEmpty) {
-                self.mainCollectionView.reloadData()
-            }
-            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
-            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        }
-    }
-    
-    // MARK: ENDED POLL DELEGATE
-    func endedPoll() {
-        // ENABLE CREATE POLL BUTTON
-        createPollButton.isUserInteractionEnabled = true
-    }
-    
+        
     func setupHorizontalNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW

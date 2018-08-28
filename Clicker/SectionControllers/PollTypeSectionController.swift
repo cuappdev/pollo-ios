@@ -10,7 +10,7 @@ import Foundation
 import IGListKit
 
 protocol PollTypeSectionControllerDelegate {
-    var editSessionDelegate: EditSessionDelegate {get}
+    var pollsCellDelegate: PollsCellDelegate {get}
     func sectionControllerWillDisplayPollType(sectionController:PollTypeSectionController, pollType: PollType)
 }
 
@@ -33,7 +33,7 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollsCell.self, for: self, at: index) as! PollsCell
         cell.pollType = pollTypeModel.pollType
-        cell.editSessionDelegate = delegate.editSessionDelegate
+        cell.delegate = delegate.pollsCellDelegate
         
         return cell
     }
