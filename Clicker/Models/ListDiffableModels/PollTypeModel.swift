@@ -14,7 +14,7 @@ enum PollType {
     case joined
 }
 
-class PollTypeModel: ListDiffable {
+class PollTypeModel {
     
     var pollType: PollType!
     let identifier: String = UUID().uuidString
@@ -22,7 +22,9 @@ class PollTypeModel: ListDiffable {
     init(pollType: PollType) {
         self.pollType = pollType
     }
-    
+}
+
+extension PollTypeModel: ListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -32,6 +34,4 @@ class PollTypeModel: ListDiffable {
         guard let object = object as? PollTypeModel else { return false }
         return pollType == object.pollType
     }
-    
-    
 }
