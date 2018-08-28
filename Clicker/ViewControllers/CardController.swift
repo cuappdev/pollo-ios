@@ -22,36 +22,37 @@ protocol EndPollDelegate {
 
 class CardController: UIViewController {
     
-    // name vars
+    // MARK: - View vars
+    var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     var nameView: NameView!
     
-    // empty views
+    // MARK: - Empty State View vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     var createPollButton: UIButton!
     
-    // nonempty views
+    // MARK: - Nonempty State View vars
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
-    let askedIdentifer = "askedCardID"
-    let answerIdentifier = "answerCardID"
-    let dateIdentifier = "dateCardID"
     var verticalCollectionView: UICollectionView!
     var countLabel: UILabel!
     
-    // nav bar
-    var navigationTitleView: NavigationTitleView!
-    var peopleButton: UIButton!
-    
     var pinchRecognizer: UIPinchGestureRecognizer!
     
+    // MARK: - Data vars
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
     var datePollsArr: [(String, [Poll])] = []
     var currentPolls: [Poll] = []
     var currentDatePollsIndex: Int!
+    
+    // MARK: - Constants
+    let askedIdentifer = "askedCardID"
+    let answerIdentifier = "answerCardID"
+    let dateIdentifier = "dateCardID"
     
     init(session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -69,7 +70,7 @@ class CardController: UIViewController {
         view.addGestureRecognizer(pinchRecognizer)
         
         socket.addDelegate(self)
-        setupHorizontalNavBar()
+        setupNavBar()
         if (datePollsArr.count == 0) {
             setupEmpty()
         } else {
@@ -288,7 +289,7 @@ class CardController: UIViewController {
     func revertToHorizontal() {
         verticalCollectionView.removeFromSuperview()
         setupCards()
-        setupHorizontalNavBar()
+        setupNavBar()
     }
 
     // MARK: Get CardType
@@ -333,32 +334,8 @@ class CardController: UIViewController {
             }
         }
     }
-    
-    // MARK: GET COUNT LABEL TEXT
-    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGrey,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
         
-    func appendPoll(poll: Poll) {
-        if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [poll]))
-            self.currentDatePollsIndex = 0
-            removeEmptyState()
-            setupCards()
-        } else {
-            self.datePollsArr[currentDatePollsIndex].1.append(poll)
-        }
-        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
-    }
-        
-    func setupHorizontalNavBar() {
+    func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -393,6 +370,18 @@ class CardController: UIViewController {
         }
     }
     
+    // MARK: Helpers
+    private func appendPoll(poll: Poll) {
+        if (datePollsArr.count == 0) {
+            self.datePollsArr.append((getTodaysDate(), [poll]))
+            self.currentDatePollsIndex = 0
+            removeEmptyState()
+            setupCards()
+        } else {
+            self.datePollsArr[currentDatePollsIndex].1.append(poll)
+        }
+        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
+    }
     
     // MARK: ACTIONS
     @objc func goBack() {
@@ -401,27 +390,20 @@ class CardController: UIViewController {
     }
     
     @objc func zoomOutBtnPressed() {
-        // SETUP VERTICAL VIEW
         setupVertical()
     }
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
-        print(sender.scale)
         let isPinchOut: Bool = (sender.scale > 1)
         if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
             zoomOutBtnPressed()
         }
     }
     
+    // MARK: - View lifecycle
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     required init?(coder aDecoder: NSCoder) {
