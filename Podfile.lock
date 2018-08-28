@@ -39,6 +39,11 @@ PODS:
   - GTMSessionFetcher/Core (1.1.14)
   - GTMSessionFetcher/Full (1.1.14):
     - GTMSessionFetcher/Core (= 1.1.14)
+  - IGListKit (3.4.0):
+    - IGListKit/Default (= 3.4.0)
+  - IGListKit/Default (3.4.0):
+    - IGListKit/Diffing
+  - IGListKit/Diffing (3.4.0)
   - Neutron (0.4.0):
     - Alamofire
     - PromiseKit/Alamofire
@@ -62,6 +67,7 @@ DEPENDENCIES:
   - Fabric
   - FLEX
   - Google/SignIn
+  - IGListKit
   - Neutron (from `https://github.com/dantheli/Neutron.git`)
   - Presentr
   - Siren
@@ -84,6 +90,7 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GTMOAuth2
     - GTMSessionFetcher
+    - IGListKit
     - Presentr
     - PromiseKit
     - Siren
@@ -115,6 +122,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+  IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
   Neutron: d554b11bd8fe9daccb68a062c2f2fe16e0dfead6
   Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
   PromiseKit: ea9a155e1fd98a926ccfaf633c0fbd69851f0e7b
@@ -125,6 +133,6 @@ SPEC CHECKSUMS:
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 3b252475396b1ebadd8decd02fbaf3b2b68d08d3
+PODFILE CHECKSUM: cad19c4d3035a0440ddfbd6241592c02e76040d9
 
 COCOAPODS: 1.5.3
