@@ -5,46 +5,40 @@
 //  Created by eoin on 4/14/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-import UIKit
-import GoogleSignIn
-import Presentr
 
-class PollsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SliderBarDelegate, EditSessionDelegate {
+import GoogleSignIn
+import IGListKit
+import Presentr
+import UIKit
+
+class PollsViewController: UIViewController {
     
-    let popupViewHeight: CGFloat = 140
-    let editModalHeight: Float = 205
-    
+    // MARK: - View vars
     var pollsOptionsView: OptionsView!
     var pollsCollectionView: UICollectionView!
-    let pollsIdentifier = "pollsCellID"
+    var adapter: ListAdapter!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
     var bottomBarView: UIView!
     var joinSessionButton: UIButton!
     
+    // MARK: - Data vars
+    var pollTypeModels: [PollTypeModel]!
+    
+    // MARK: - Constants
+    let popupViewHeight: CGFloat = 140
+    let editModalHeight: Float = 205
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerNavBarLightGrey
         
+        let createdPollTypeModel = PollTypeModel(pollType: .created)
+        let joinedPollTypeModel = PollTypeModel(pollType: .joined)
+        pollTypeModels = [createdPollTypeModel, joinedPollTypeModel]
+        
         setupViews()
         setupConstraints()
-    }
-    
-    // MARK: - SCROLLVIEW
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pollsOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let index = targetContentOffset.pointee.x / view.frame.width
-        let indexPath = IndexPath(item: Int(index), section: 0)
-        pollsOptionsView.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-    }
-    
-    // MARK: - SLIDERBAR DELEGATE
-    func scrollToIndex(index: Int) {
-        let indexPath = IndexPath(item: index, section: 0)
-        pollsCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
     // MARK: - LAYOUT
@@ -64,15 +58,18 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
-        pollsCollectionView.alwaysBounceHorizontal = true
-        pollsCollectionView.delegate = self
-        pollsCollectionView.dataSource = self
-        pollsCollectionView.register(PollsCell.self, forCellWithReuseIdentifier: pollsIdentifier)
+        pollsCollectionView.bounces = false
         pollsCollectionView.showsVerticalScrollIndicator = false
         pollsCollectionView.showsHorizontalScrollIndicator = false
         pollsCollectionView.backgroundColor = .clickerBackground
         pollsCollectionView.isPagingEnabled = true
         view.addSubview(pollsCollectionView)
+        
+        let updater: ListAdapterUpdater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = pollsCollectionView
+        adapter.dataSource = self
+        adapter.scrollViewDelegate = self
         
         newPollButton = UIButton()
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
@@ -134,7 +131,7 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    // MARK - actions
+    // MARK - Actions
     @objc func newPollAction() {
         GenerateCode().make()
             .done { code in
@@ -157,25 +154,6 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    // MARK: EDIT SESSION DELEGATE
-    func editSession(forSession session: Session) {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: editModalHeight)
-        let originY = view.frame.height - CGFloat(editModalHeight)
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        let presenter = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        let editPollVC = EditPollViewController()
-        editPollVC.session = session
-        editPollVC.homeViewController = self
-        let navigationVC = UINavigationController(rootViewController: editPollVC)
-        customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
-    }
-    
-    // JOIN SESSION
     @objc func showJoinSessionPopup() {
         let width = ModalSize.full
         let height = ModalSize.custom(size: Float(popupViewHeight))
@@ -195,47 +173,11 @@ class PollsViewController: UIViewController, UICollectionViewDelegate, UICollect
         customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
+    // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
-        
-        if let cell0 = pollsCollectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as! PollsCell? {
-            cell0.getPollSessions()
-            cell0.pollsTableView.reloadData()
-        } else {
-            print("first time loading row 0")
-        }
-        
-        if let cell1 = pollsCollectionView?.cellForItem(at: IndexPath(row: 1, section: 0)) as! PollsCell? {
-            cell1.getPollSessions()
-            cell1.pollsTableView.reloadData()
-        } else {
-            print("first time loading row 1")
-        }
-        
     }
-    
-    // TODO: Move this function to where it will be used
-    @objc func createPoll() {
-        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(view.frame.size.height - statusBarHeight))
-        let originY = statusBarHeight
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.backgroundColor = .black
-        presenter.roundCorners = true
-        presenter.cornerRadius = 15
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        
-        let pollBuilderVC = PollBuilderViewController()
-        pollBuilderVC.dismissController = self
-        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
-    }
-    
 }
