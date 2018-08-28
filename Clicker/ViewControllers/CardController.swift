@@ -48,12 +48,16 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var userRole: UserRole!
     var socket: Socket!
-    var sessionId: Int!
-    var code: String!
-    var name: String!
+    var session: Session!
     var datePollsArr: [(String, [Poll])] = []
     var currentPolls: [Poll] = []
     var currentDatePollsIndex: Int!
+    
+    init(session: Session, userRole: UserRole) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +75,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             currentPolls = datePollsArr[currentDatePollsIndex].1
             setupCards()
         }
-        if (userRole == .admin && name == code) {
+        if (userRole == .admin && session.name == session.code) {
             setupName()
         }
     }
@@ -79,9 +83,9 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK - NAME THE POLL
     func setupName() {
         nameView = NameView()
-        nameView.sessionId = sessionId
-        nameView.code = code
-        nameView.name = name
+        nameView.sessionId = session.id
+        nameView.code = session.code
+        nameView.name = session.name
         nameView.delegate = self
         view.addSubview(nameView)
 
@@ -89,7 +93,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func updateNavBar() {
-        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.updateViews(name: session.name, code: session.code)
     }
     
     func setupNameConstraints() {
@@ -304,7 +308,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: UPDATE DATE POLLS ARRAY
     func updateDatePollsArr() {
-        GetSortedPolls(id: sessionId).make()
+        GetSortedPolls(id: session.id).make()
             .done { datePollsArr in
                 self.datePollsArr = datePollsArr
                 self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
@@ -426,7 +430,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.updateViews(name: session.name, code: session.code)
         navigationTitleView.snp.makeConstraints { make in
             make.height.equalTo(36)
         }
@@ -483,6 +487,10 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }
