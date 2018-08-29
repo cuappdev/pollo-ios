@@ -47,11 +47,11 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     // MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.row == numOptions && numOptions <= 25) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: addMoreOptionCellID) as! AddMoreOptionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.addMoreOptionCellID) as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: createMCOptionCellID) as! CreateMCOptionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.createMCOptionCellID) as! CreateMCOptionCell
         cell.choiceTag = indexPath.row
         cell.mcOptionDelegate = self
         cell.addOptionTextField.text = optionsDict[indexPath.row]
@@ -110,8 +110,8 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         optionsTableView = UITableView()
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
-        optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: createMCOptionCellID)
-        optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: addMoreOptionCellID)
+        optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: Identifiers.createMCOptionCellID)
+        optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: Identifiers.addMoreOptionCellID)
         optionsTableView.backgroundColor = .clickerWhite
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none

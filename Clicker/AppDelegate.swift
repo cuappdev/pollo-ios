@@ -75,8 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             User.currentUser = User(id: userId!, name: fullName!, netId: netId!, givenName: givenName!, familyName: familyName!, email: email!)
             
             
-            if let significantEvents: Int = UserDefaults.standard.integer(forKey: significantEventsIdentifier){
-                UserDefaults.standard.set(significantEvents + 2, forKey: significantEventsIdentifier)
+            if let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier){
+                UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
             }
             
             UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()

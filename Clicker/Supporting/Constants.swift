@@ -31,16 +31,18 @@ enum QuestionType: CustomStringConvertible {
 struct Identifiers {
     static let multipleChoice = "MULTIPLE_CHOICE"
     static let freeResponse = "FREE_RESPONSE"
+    static let significantEventsIdentifier = "significantEvents"
+    static let addMoreOptionCellID = "addMoreOptionCellID"
+    static let createMCOptionCellID = "createMCOptionCellID"
 }
 
-let significantEventsIdentifier = "significantEvents"
-let addMoreOptionCellID = "addMoreOptionCellID"
-let createMCOptionCellID = "createMCOptionCellID"
-
-let server_poll_end = "server/poll/end"
-let server_poll_results = "server/poll/results"
-let server_poll_tally = "server/poll/tally"
-let server_poll_upvote = "server/poll/upvote"
+struct Routes {
+    static let start = "server/poll/start"
+    static let end = "server/poll/end"
+    static let results = "server/poll/results"
+    static let tally = "server/poll/tally"
+    static let upvote = "server/poll/upvote"
+}
 
 enum Keys: String {
     case apiURL = "api-url"

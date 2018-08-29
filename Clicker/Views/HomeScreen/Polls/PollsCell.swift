@@ -116,7 +116,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
                     print(error)
             }
             
-            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: significantEventsIdentifier) + 2, forKey: significantEventsIdentifier)
+            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier) + 2, forKey: Identifiers.significantEventsIdentifier)
             window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")

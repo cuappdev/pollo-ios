@@ -397,7 +397,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             "options": options,
             "shared": isShared
         ]
-        socket.socket.emit("server/poll/start", with: [socketQuestion])
+        socket.socket.emit(Routes.start, with: [socketQuestion])
         let questionType: QuestionType = type
         let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
         let arrEmpty = (datePollsArr.count == 0)
