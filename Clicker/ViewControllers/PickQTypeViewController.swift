@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PickQTypeDelegate {
-    func updateQuestionType(_ type: String)
+    func updateQuestionType(_ type: QuestionType)
 }
 
 class PickQTypeViewController: UIViewController {
@@ -19,7 +19,7 @@ class PickQTypeViewController: UIViewController {
     var bottomBackgroundView: UIButton!
     var delegate: PickQTypeDelegate!
 
-    var currentType: String! // MULTIPLE_CHOICE or FREE_RESPONSE
+    var currentType: QuestionType! 
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +43,7 @@ class PickQTypeViewController: UIViewController {
         
         bottomBackgroundView = UIButton()
         bottomBackgroundView.backgroundColor = .clickerWhite
-        bottomBackgroundView.setTitle((currentType == "MULTIPLE_CHOICE") ? "Free Response" : "Multiple Choice", for: .normal)
+        bottomBackgroundView.setTitle(currentType.description, for: .normal)
         bottomBackgroundView.setTitleColor(.clickerBlack, for: .normal)
         bottomBackgroundView.titleLabel?.font = ._16SemiboldFont
         bottomBackgroundView.addTarget(self, action: #selector(bottomPressed), for: .touchUpInside)
@@ -77,7 +77,7 @@ class PickQTypeViewController: UIViewController {
     }
     
     @objc func bottomPressed() {
-        delegate.updateQuestionType((currentType == "MULTIPLE_CHOICE") ? "FREE_RESPONSE" : "MULTIPLE_CHOICE")
+        delegate.updateQuestionType((currentType == .multipleChoice) ? .freeResponse : .multipleChoice)
     }
 
     override func didReceiveMemoryWarning() {
