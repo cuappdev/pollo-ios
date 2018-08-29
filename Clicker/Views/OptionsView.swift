@@ -15,9 +15,6 @@ protocol SliderBarDelegate {
 
 class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    //MARK: Constants
-    let questionOptionCellId = "questionOptionCellId"
-    
     var collectionView: UICollectionView!
     var options: [String]!
     var sliderBar: UIView!
@@ -42,7 +39,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         collectionView.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: questionOptionCellId)
+        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: Identifiers.questionOptionCellId)
         addSubview(collectionView)
         
         let selectedIndexPath = IndexPath(item: 0, section: 0)
@@ -82,7 +79,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: questionOptionCellId, for: indexPath) as! QuestionOptionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.questionOptionCellId, for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
         cell.backgroundColor = .clickerNavBarLightGrey
         return cell
