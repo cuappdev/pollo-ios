@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import IGListKit
 import UIKit
 
 extension CardController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

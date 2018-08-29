@@ -137,7 +137,7 @@ class PollsViewController: UIViewController {
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
-                        let cardVC = CardController(session: session, userRole: .admin)
+                        let cardVC = CardController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
