@@ -34,6 +34,8 @@ struct Identifiers {
     static let significantEventsIdentifier = "significantEvents"
     static let addMoreOptionCellID = "addMoreOptionCellID"
     static let createMCOptionCellID = "createMCOptionCellID"
+    static let questionOptionCellId = "questionOptionCellId"
+    static let draftCellID = "draftCellID"
 }
 
 struct Routes {
