@@ -77,18 +77,6 @@ extension CardController: UICollectionViewDelegate, UICollectionViewDataSource, 
             revertToHorizontal()
         }
     }
-    
-    // MARK: - Helpers
-    private func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGrey,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
 }
 
 extension CardController: StartPollDelegate {
@@ -125,7 +113,7 @@ extension CardController: EndPollDelegate {
 
 extension CardController: NameViewDelegate {
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.updateViews(name: session.name, code: session.code)
+        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
     }
 }
 

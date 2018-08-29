@@ -66,6 +66,7 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
+
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
         
@@ -79,21 +80,17 @@ class CardController: UIViewController {
             setupCards()
         }
         if (userRole == .admin && session.name == session.code) {
-            setupName()
+            setupNameView()
         }
     }
    
     // MARK - NAME THE POLL
-    func setupName() {
+    func setupNameView() {
         nameView = NameView(frame: .zero)
         nameView.session = session
         nameView.delegate = self
         view.addSubview(nameView)
 
-        setupNameConstraints()
-    }
-    
-    func setupNameConstraints() {
         nameView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -116,17 +113,6 @@ class CardController: UIViewController {
     }
     
     func setupEmpty() {
-        setupEmptyViews()
-        setupEmptyConstraints()
-    }
-    
-    func removeEmptyState() {
-        monkeyView.removeFromSuperview()
-        nothingToSeeLabel.removeFromSuperview()
-        waitingLabel.removeFromSuperview()
-    }
-    
-    func setupEmptyViews() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
         monkeyView.contentMode = .scaleAspectFit
         view.addSubview(monkeyView)
@@ -146,26 +132,13 @@ class CardController: UIViewController {
         view.addSubview(waitingLabel)
         
         if (userRole == .admin) {
-            setupAdminEmpty()
+            nothingToSeeLabel.text = "Nothing to see here."
+            waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
         } else {
-            setupMemberEmpty()
+            nothingToSeeLabel.text = "Nothing to see yet."
+            waitingLabel.text = "Waiting for the host to post a poll."
         }
-    }
-    
-    func setupAdminEmpty() {
-        nothingToSeeLabel.text = "Nothing to see here."
         
-        waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
-        
-    }
-    
-    func setupMemberEmpty() {
-        nothingToSeeLabel.text = "Nothing to see yet."
-        
-        waitingLabel.text = "Waiting for the host to post a poll."
-    }
-    
-    func setupEmptyConstraints() {
         monkeyView.snp.makeConstraints { make in
             make.width.equalTo(31)
             make.height.equalTo(34)
@@ -188,12 +161,13 @@ class CardController: UIViewController {
         }
     }
     
-    func setupCards() {
-        setupCardsViews()
-        setupCardsConstraints()
+    func removeEmptyState() {
+        monkeyView.removeFromSuperview()
+        nothingToSeeLabel.removeFromSuperview()
+        waitingLabel.removeFromSuperview()
     }
     
-    func setupCardsViews() {
+    func setupCards() {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
@@ -225,9 +199,7 @@ class CardController: UIViewController {
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
-    }
-
-    func setupCardsConstraints() {
+        
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -291,29 +263,6 @@ class CardController: UIViewController {
         setupCards()
         setupNavBar()
     }
-
-    // MARK: Get CardType
-    func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
-            return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
-            return .ended
-        }
-    }
-    
-    // MARK: UPDATE DATE POLLS ARRAY
-    func updateDatePollsArr() {
-        GetSortedPolls(id: session.id).make()
-            .done { datePollsArr in
-                self.datePollsArr = datePollsArr
-                self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
-                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
-            }.catch { error in
-                print(error)
-        }
-    }
     
     // MARK: SCROLLVIEW METHODS
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -342,7 +291,7 @@ class CardController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.updateViews(name: session.name, code: session.code)
+        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
         navigationTitleView.snp.makeConstraints { make in
             make.height.equalTo(36)
         }
@@ -371,7 +320,28 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    private func appendPoll(poll: Poll) {
+    func getCardType(from poll: Poll) -> CardType {
+        if (poll.isLive) {
+            return .live
+        } else if (poll.isShared) {
+            return .shared
+        } else {
+            return .ended
+        }
+    }
+    
+    func updateDatePollsArr() {
+        GetSortedPolls(id: session.id).make()
+            .done { datePollsArr in
+                self.datePollsArr = datePollsArr
+                self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
+                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+            }.catch { error in
+                print(error)
+        }
+    }
+    
+    func appendPoll(poll: Poll) {
         if (datePollsArr.count == 0) {
             self.datePollsArr.append((getTodaysDate(), [poll]))
             self.currentDatePollsIndex = 0
@@ -381,6 +351,17 @@ class CardController: UIViewController {
             self.datePollsArr[currentDatePollsIndex].1.append(poll)
         }
         self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
+    }
+    
+    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
+        let slashIndex = countString.index(of: "/")?.encodedOffset
+        let attributedString = NSMutableAttributedString(string: countString, attributes: [
+            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
+            .foregroundColor: UIColor.clickerMediumGrey,
+            .kern: 0.0
+            ])
+        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
+        return attributedString
     }
     
     // MARK: ACTIONS
