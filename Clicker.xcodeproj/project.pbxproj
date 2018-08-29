@@ -620,7 +620,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET";
+			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Secrets/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET\n\n# Note: Uncomment these lines to turn on SwiftLint\n# if which swiftlint >/dev/null; then\n# swiftlint\n# else\n# echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n# fi";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

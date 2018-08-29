@@ -40,7 +40,7 @@ class PollsCell: UICollectionViewCell {
         pollsTableView = UITableView()
         pollsTableView.delegate = self
         pollsTableView.dataSource = self
-        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: pollPreviewIdentifier)
+        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: Identifiers.pollPreviewIdentifier)
         pollsTableView.separatorStyle = .none
         addSubview(pollsTableView)
     }
