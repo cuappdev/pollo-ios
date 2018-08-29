@@ -8,11 +8,6 @@
 
 import UIKit
 
-enum QuestionType {
-    case multipleChoice
-    case freeResponse
-}
-
 class Poll {
 
     var id: Int?
@@ -60,7 +55,7 @@ class Poll {
             self.options = []
         }
         let type = json["type"] as? String
-        self.questionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
+        self.questionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
         self.isLive = true
     }
     

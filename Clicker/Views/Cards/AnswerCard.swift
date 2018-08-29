@@ -54,11 +54,11 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func questionBtnPressed() { }
     
     func emitTally(answer: [String : Any]) {
-        socket.socket.emit("server/poll/tally", answer)
+        socket.socket.emit(Routes.tally, answer)
     }
     
     func upvote(answer: [String : Any]) {
-        socket.socket.emit("server/poll/upvote", answer)
+        socket.socket.emit(Routes.upvote, answer)
     }
     
     // MARK: SOCKET DELEGATE

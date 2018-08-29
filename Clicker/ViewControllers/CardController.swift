@@ -389,16 +389,16 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     // MARK: - START POLL DELEGATE
-    func startPoll(text: String, type: String, options: [String], isShared: Bool) {
+    func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
-            "type": type,
+            "type": type.description,
             "options": options,
             "shared": isShared
         ]
-        socket.socket.emit("server/poll/start", with: [socketQuestion])
-        let questionType: QuestionType = (type == "MULTIPLE_CHOICE") ? .multipleChoice : .freeResponse
+        socket.socket.emit(Routes.start, with: [socketQuestion])
+        let questionType: QuestionType = type
         let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
         let arrEmpty = (datePollsArr.count == 0)
         appendPoll(poll: newPoll)
