@@ -10,11 +10,6 @@ import UIKit
 import GoogleSignIn
 import Presentr
 
-enum PollType {
-    case created
-    case joined
-}
-
 protocol EditSessionDelegate {
     func editSession(forSession session: Session)
 }

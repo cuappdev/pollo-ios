@@ -9,6 +9,7 @@ target 'Clicker' do
   pod 'Fabric'
   pod 'FLEX'
   pod 'Google/SignIn'
+  pod 'IGListKit'
   pod 'Presentr'
   pod 'Siren'
   pod 'SnapKit'

@@ -40,17 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             pollsNavigationController.navigationBar.isTranslucent = false
             window?.rootViewController = pollsNavigationController
         } else {
-//            let login = LoginViewController()
             window?.rootViewController = LoginViewController()
-//            pollsNavigationController.pushViewController(login, animated: false)
-            //window?.rootViewController?.present(login, animated: false, completion: nil)
         }
-        
-//        // SIREN
-//        let siren = Siren.shared
-//        siren.alertType = .option
-//        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available", updateMessage: "A new version of Pollo is available! Please update now.", updateButtonMessage: "Update", nextTimeButtonMessage: "Next Time", skipVersionButtonMessage: "Skip this version")
-//        siren.checkVersion(checkType: .immediately)
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         UINavigationBar.appearance().backIndicatorImage = backImage
