@@ -9,8 +9,30 @@
 import Foundation
 import UIKit
 
-let MULTIPLE_CHOICE = "MULTIPLE_CHOICE"
-let FREE_RESPONSE = "FREE_RESPONSE"
+enum QuestionType: CustomStringConvertible {
+    case multipleChoice
+    case freeResponse
+    
+    var description : String {
+        switch self {
+        case .multipleChoice: return "Multiple Choice"
+        case .freeResponse: return "Free Response"
+        }
+    }
+    
+    var other: QuestionType {
+        switch self {
+        case .multipleChoice: return .freeResponse
+        case .freeResponse: return .multipleChoice
+        }
+    }
+}
+
+struct Identifiers {
+    static let multipleChoice = "MULTIPLE_CHOICE"
+    static let freeResponse = "FREE_RESPONSE"
+}
+
 let significantEventsIdentifier = "significantEvents"
 let addMoreOptionCellID = "addMoreOptionCellID"
 let createMCOptionCellID = "createMCOptionCellID"
