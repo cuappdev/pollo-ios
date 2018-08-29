@@ -32,6 +32,8 @@
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C21D98812083D32000191103 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D98802083D32000191103 /* LoginViewController.swift */; };
 		C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */; };
+		C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CB321346F8000929C98 /* PollTypeModel.swift */; };
+		C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CB82134715600929C98 /* PollTypeSectionController.swift */; };
 		C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A56209956C600DC5EDC /* DeletePollViewController.swift */; };
 		C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A58209963A200DC5EDC /* EditNameViewController.swift */; };
 		C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259603A20390F0800C8DBA3 /* CurrentState.swift */; };
@@ -115,6 +117,8 @@
 		C21D98802083D32000191103 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shared.swift"; sourceTree = "<group>"; };
 		C2434C8D2133346C00929C98 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
+		C2434CB321346F8000929C98 /* PollTypeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollTypeModel.swift; sourceTree = "<group>"; };
+		C2434CB82134715600929C98 /* PollTypeSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollTypeSectionController.swift; sourceTree = "<group>"; };
 		C2504A56209956C600DC5EDC /* DeletePollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePollViewController.swift; sourceTree = "<group>"; };
 		C2504A58209963A200DC5EDC /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		C259603A20390F0800C8DBA3 /* CurrentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentState.swift; sourceTree = "<group>"; };
@@ -261,6 +265,22 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		C2434CB221346F5100929C98 /* ListDiffableModels */ = {
+			isa = PBXGroup;
+			children = (
+				C2434CB321346F8000929C98 /* PollTypeModel.swift */,
+			);
+			path = ListDiffableModels;
+			sourceTree = "<group>";
+		};
+		C2434CB72134710E00929C98 /* SectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
+			);
+			path = SectionControllers;
+			sourceTree = "<group>";
+		};
 		C27429E11F8C252D006FAD31 /* Quarks */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +296,7 @@
 		C281886C1F7ADE6F00D7E944 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C2434CB221346F5100929C98 /* ListDiffableModels */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
 				C259603A20390F0800C8DBA3 /* CurrentState.swift */,
 				C205588E2026591A000E9B07 /* Poll.swift */,
@@ -384,7 +405,8 @@
 				C281886C1F7ADE6F00D7E944 /* Models */,
 				C27429E11F8C252D006FAD31 /* Quarks */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
-				C7F923D91F73543700B1E975 /* View Controllers */,
+				C7F923D91F73543700B1E975 /* ViewControllers */,
+				C2434CB72134710E00929C98 /* SectionControllers */,
 				C7D6AF571F93DE43003ABA10 /* Supporting */,
 				C7441389204C653D00E446CF /* Extensions */,
 				C7F923D11F73540600B1E975 /* Info.plist */,
@@ -392,25 +414,25 @@
 			path = Clicker;
 			sourceTree = "<group>";
 		};
-		C7F923D91F73543700B1E975 /* View Controllers */ = {
+		C7F923D91F73543700B1E975 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				6353FD392086DDC900E16EB2 /* CardController.swift */,
 				C270524B209D51A600C7980F /* CardController+Extension.swift */,
-				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
-				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
-				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
-				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
-				639B4D552093F975009D3309 /* PickQTypeViewController.swift */,
-				C275A1BD2098BE9100815951 /* EditPollViewController.swift */,
-				C2504A58209963A200DC5EDC /* EditNameViewController.swift */,
 				C2504A56209956C600DC5EDC /* DeletePollViewController.swift */,
-				C21D98802083D32000191103 /* LoginViewController.swift */,
-				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
 				63A4A64A2094F26F00523AE6 /* DraftsViewController.swift */,
 				C203E563213330AC0016A147 /* DraftsViewController+Extension.swift */,
+				C2504A58209963A200DC5EDC /* EditNameViewController.swift */,
+				C275A1BD2098BE9100815951 /* EditPollViewController.swift */,
+				C2B9180C208CE7320030822F /* FeedbackViewController.swift */,
+				C2F48EC9208305C90022FE6B /* JoinViewController.swift */,
+				C21D98802083D32000191103 /* LoginViewController.swift */,
+				639B4D552093F975009D3309 /* PickQTypeViewController.swift */,
+				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
+				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
+				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
 			);
-			path = "View Controllers";
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -548,6 +570,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/IGListKit/IGListKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Neutron/Neutron.framework",
 				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
@@ -564,6 +587,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IGListKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neutron.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
@@ -658,6 +682,7 @@
 				6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
 				C2F48EB7208302F90022FE6B /* Socket.swift in Sources */,
+				C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */,
 				C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
@@ -666,6 +691,7 @@
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */,
+				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
 				6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */,
 				63A4A64E2094FD7800523AE6 /* DraftCell.swift in Sources */,
