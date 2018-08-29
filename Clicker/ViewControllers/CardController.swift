@@ -274,7 +274,7 @@ class CardController: UIViewController {
             }
         }
     }
-        
+
     func setupHorizontalNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW

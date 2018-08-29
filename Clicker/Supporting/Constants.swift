@@ -9,6 +9,48 @@
 import Foundation
 import UIKit
 
+enum QuestionType: CustomStringConvertible {
+    case multipleChoice
+    case freeResponse
+    
+    var description : String {
+        switch self {
+        case .multipleChoice: return "Multiple Choice"
+        case .freeResponse: return "Free Response"
+        }
+    }
+    
+    var other: QuestionType {
+        switch self {
+        case .multipleChoice: return .freeResponse
+        case .freeResponse: return .multipleChoice
+        }
+    }
+}
+
+struct Identifiers {
+    static let multipleChoice = "MULTIPLE_CHOICE"
+    static let freeResponse = "FREE_RESPONSE"
+    static let significantEventsIdentifier = "significantEvents"
+    static let addMoreOptionCellID = "addMoreOptionCellID"
+    static let createMCOptionCellID = "createMCOptionCellID"
+    static let questionOptionCellId = "questionOptionCellId"
+    static let draftCellID = "draftCellID"
+    static let pollPreviewIdentifier = "pollPreviewCellID"
+    static let adminIdentifier = "admin"
+    static let resultMCIdentifier = "resultMCCellID"
+    static let resultFRIdentifier = "resultFRCellID"
+    static let optionIdentifier = "optionCellID"
+}
+
+struct Routes {
+    static let start = "server/poll/start"
+    static let end = "server/poll/end"
+    static let results = "server/poll/results"
+    static let tally = "server/poll/tally"
+    static let upvote = "server/poll/upvote"
+}
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"

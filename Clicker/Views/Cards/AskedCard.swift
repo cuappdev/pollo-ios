@@ -145,13 +145,13 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func questionBtnPressed() {
         switch (cardType) {
         case .live:
-            socket.socket.emit("server/poll/end", [])
+            socket.socket.emit(Routes.end, [])
             endPollDelegate.endedPoll()
             setupEnded()
             cardType = .ended
             poll.isLive = false
         case .ended:
-            socket.socket.emit("server/poll/results", [])
+            socket.socket.emit(Routes.results, [])
             setupShared()
             cardType = .shared
             poll.isShared = true
