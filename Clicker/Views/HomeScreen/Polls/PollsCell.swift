@@ -16,11 +16,6 @@ protocol EditSessionDelegate {
 
 class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, EditPollDelegate, GIDSignInDelegate {
     
-    // MARK: Constants
-    let pollPreviewIdentifier = "pollPreviewCellID"
-    let adminIdentifier = "admin"
-    
-    
     var parentNavController: UINavigationController!
     var pollsTableView: UITableView!
     var editSessionDelegate: EditSessionDelegate!
@@ -39,7 +34,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     // MARK: - TABLEVIEW
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.pollPreviewIdentifier) as! PollPreviewCell
         cell.session = sessions[sessions.count - indexPath.row - 1]
         cell.index = indexPath.row
         cell.editPollDelegate = self
@@ -60,7 +55,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
         pollsTableView = UITableView()
         pollsTableView.delegate = self
         pollsTableView.dataSource = self
-        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: pollPreviewIdentifier)
+        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: Identifiers.pollPreviewIdentifier)
         pollsTableView.separatorStyle = .none
         addSubview(pollsTableView)
     }
@@ -125,7 +120,7 @@ class PollsCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let session: Session = sessions[sessions.count - indexPath.row - 1]
-        let socket = Socket(id: "\(session.id)", userType: adminIdentifier)
+        let socket = Socket(id: "\(session.id)", userType: Identifiers.adminIdentifier)
         
         GetSortedPolls(id: session.id).make()
             .done { datePollsArr in

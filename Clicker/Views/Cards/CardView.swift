@@ -52,9 +52,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     let frCellHeight = 64
     let minTableViewHeight = 254
     let tableViewTopPadding = 18
-    let resultMCIdentifier = "resultMCCellID"
-    let resultFRIdentifier = "resultFRCellID"
-    let optionIdentifier = "optionCellID"
     
     init(frame: CGRect, userRole: UserRole, cardDelegate: CardDelegate) {
         super.init(frame: frame)
@@ -144,9 +141,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         resultsTableView.separatorStyle = .none
         resultsTableView.isScrollEnabled = false
         resultsTableView.showsVerticalScrollIndicator = false
-        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: resultMCIdentifier)
-        resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: resultFRIdentifier)
-        resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: optionIdentifier)
+        resultsTableView.register(ResultMCCell.self, forCellReuseIdentifier: Identifiers.resultMCIdentifier)
+        resultsTableView.register(ResultFRCell.self, forCellReuseIdentifier: Identifiers.resultFRIdentifier)
+        resultsTableView.register(LiveOptionCell.self, forCellReuseIdentifier: Identifiers.optionIdentifier)
         resultsTableView.layer.cornerRadius = 15
         resultsTableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         scrollContentView.addSubview(resultsTableView)
@@ -389,7 +386,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (poll.questionType == .freeResponse) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: resultFRIdentifier, for: indexPath) as! ResultFRCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.resultFRIdentifier, for: indexPath) as! ResultFRCell
             let responseCountTuple = frResults[indexPath.row]
             cell.response = responseCountTuple.0
             cell.count = responseCountTuple.1
@@ -398,7 +395,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         }
         // ADMIN
         if (userRole == .admin) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: resultMCIdentifier, for: indexPath) as! ResultMCCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.resultMCIdentifier, for: indexPath) as! ResultMCCell
             cell.choiceTag = indexPath.row
             cell.selectionStyle = .none
             cell.highlightView.backgroundColor = highlightColor
@@ -425,7 +422,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         // MEMBER
         switch cardType {
         case .live, .ended:
-            let cell = tableView.dequeueReusableCell(withIdentifier: optionIdentifier, for: indexPath) as! LiveOptionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.optionIdentifier, for: indexPath) as! LiveOptionCell
             cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
             cell.delegate = self
             cell.index = indexPath.row
@@ -433,7 +430,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             cell.setColors(isLive: poll.isLive)
             return cell
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: resultMCIdentifier, for: indexPath) as! ResultMCCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.resultMCIdentifier, for: indexPath) as! ResultMCCell
             cell.choiceTag = indexPath.row
             cell.optionLabel.text = poll.options?[indexPath.row]
             cell.selectionStyle = .none

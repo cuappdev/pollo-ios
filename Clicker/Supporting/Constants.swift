@@ -36,6 +36,11 @@ struct Identifiers {
     static let createMCOptionCellID = "createMCOptionCellID"
     static let questionOptionCellId = "questionOptionCellId"
     static let draftCellID = "draftCellID"
+    static let pollPreviewIdentifier = "pollPreviewCellID"
+    static let adminIdentifier = "admin"
+    static let resultMCIdentifier = "resultMCCellID"
+    static let resultFRIdentifier = "resultFRCellID"
+    static let optionIdentifier = "optionCellID"
 }
 
 struct Routes {
