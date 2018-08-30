@@ -55,7 +55,7 @@ class Poll {
             self.options = []
         }
         let type = json["type"] as? String
-        self.questionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+        self.questionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
         self.isLive = true
     }
     

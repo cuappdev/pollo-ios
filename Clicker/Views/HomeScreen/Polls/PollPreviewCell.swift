@@ -9,7 +9,9 @@
 import UIKit
 
 protocol PollPreviewCellDelegate {
+    
     func shouldEditPoll(atIndex index: Int)
+
 }
 
 class PollPreviewCell: UITableViewCell {

@@ -58,7 +58,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         draftsCollectionView.allowsSelection = true
         draftsCollectionView.showsVerticalScrollIndicator = false
         draftsCollectionView.showsHorizontalScrollIndicator = false
-        draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: Identifiers.draftCellID)
+        draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: Identifiers.draftCellIdentifier)
         view.addSubview(draftsCollectionView)
         
     }

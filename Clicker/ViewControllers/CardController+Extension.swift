@@ -10,24 +10,31 @@ import IGListKit
 import UIKit
 
 extension CardController: StartPollDelegate {
+    
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
         // TODO
     }
+
 }
 
 extension CardController: EndPollDelegate {
+    
     func endedPoll() {
         createPollButton.isUserInteractionEnabled = true
     }
+
 }
 
 extension CardController: NameViewDelegate {
+    
     func nameViewDidUpdateSessionName() {
         navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
     }
+    
 }
 
 extension CardController: SocketDelegate {
+    
     func sessionConnected() { }
     
     func sessionDisconnected() { }
@@ -47,4 +54,5 @@ extension CardController: SocketDelegate {
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) { }
+    
 }

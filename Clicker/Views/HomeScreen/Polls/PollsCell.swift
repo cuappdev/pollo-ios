@@ -51,9 +51,7 @@ class PollsCell: UICollectionViewCell {
     }
     
     func getPollSessions() {
-        guard let _ = User.userSession else {
-            return
-        }
+        if (User.userSession == nil) { return }
         let role: UserRole
         if (pollType == .created) {
             role = .admin

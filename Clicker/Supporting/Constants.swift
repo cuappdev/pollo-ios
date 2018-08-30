@@ -29,20 +29,20 @@ enum QuestionType: CustomStringConvertible {
 }
 
 struct Identifiers {
-    static let addMoreOptionCellID = "addMoreOptionCellID"
+    static let addMoreOptionCellIdentifier = "addMoreOptionCellId"
     static let adminIdentifier = "admin"
-    static let answerIdentifier = "answerCardID"
-    static let askedIdentifer = "askedCardID"
-    static let createMCOptionCellID = "createMCOptionCellID"
-    static let dateIdentifier = "dateCardID"
-    static let draftCellID = "draftCellID"
-    static let freeResponse = "FREE_RESPONSE"
-    static let multipleChoice = "MULTIPLE_CHOICE"
-    static let optionIdentifier = "optionCellID"
-    static let pollPreviewIdentifier = "pollPreviewCellID"
-    static let questionOptionCellId = "questionOptionCellId"
-    static let resultMCIdentifier = "resultMCCellID"
-    static let resultFRIdentifier = "resultFRCellID"
+    static let answerIdentifier = "answerCardId"
+    static let askedIdentifer = "askedCardId"
+    static let createMCOptionCellIdentifier = "createMCOptionCellId"
+    static let dateIdentifier = "dateCardId"
+    static let draftCellIdentifier = "draftCellId"
+    static let freeResponseIdentifier = "FREE_RESPONSE"
+    static let multipleChoiceIdentifier = "MULTIPLE_CHOICE"
+    static let optionIdentifier = "optionCellId"
+    static let pollPreviewIdentifier = "pollPreviewCellId"
+    static let questionOptionCellIdentifier = "questionOptionCellId"
+    static let resultMCIdentifier = "resultMCCellId"
+    static let resultFRIdentifier = "resultFRCellId"
     static let significantEventsIdentifier = "significantEvents"
 }
 
