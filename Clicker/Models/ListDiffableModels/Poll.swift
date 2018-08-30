@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import IGListKit
 
 class Poll {
-
+    
     var id: Int?
     var text: String
     var questionType: QuestionType
@@ -20,7 +21,7 @@ class Poll {
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     var isLive: Bool = false
     var isShared: Bool = false
-
+    
     // MARK: SORTED BY DATE POLL INITIALIZER
     init(id: Int, text: String, results: [String:Any], type: QuestionType, isShared: Bool) {
         self.id = id
@@ -89,5 +90,17 @@ class Poll {
                 return 0
             }
         }
+    }
+}
+
+extension Poll: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return "\(id)" as NSString
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        if (self === object) { return true }
+        guard let object = object as? Poll else { return false }
+        return id == object.id
     }
 }
