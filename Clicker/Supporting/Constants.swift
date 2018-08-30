@@ -41,6 +41,9 @@ struct Identifiers {
     static let resultMCIdentifier = "resultMCCellID"
     static let resultFRIdentifier = "resultFRCellID"
     static let optionIdentifier = "optionCellID"
+    static let askedIdentifer = "askedCardID"
+    static let answerIdentifier = "answerCardID"
+    static let dateIdentifier = "dateCardID"
 }
 
 struct Routes {

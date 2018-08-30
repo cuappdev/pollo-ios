@@ -48,15 +48,8 @@ class CardController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
-    var datePollsArr: [(String, [Poll])] = []
-    var currentPolls: [Poll] = []
-    var currentDatePollsIndex: Int!
     
-    // MARK: - Constants
-    let askedIdentifer = "askedCardID"
-    let answerIdentifier = "answerCardID"
-    let dateIdentifier = "dateCardID"
-    
+    // MARK: - Constants    
     let monkeyViewLength: CGFloat = 32.0
     let monkeyViewTopPadding: CGFloat = 142.0
     let nothingToSeeLabelWidth: CGFloat = 200.0
@@ -87,13 +80,9 @@ class CardController: UIViewController {
         
         socket.addDelegate(self)
         setupHorizontalNavBar()
-        if (datePollsArr.count == 0) {
-            setupEmptyState()
-        } else {
-            currentDatePollsIndex = datePollsArr.count - 1
-            currentPolls = datePollsArr[currentDatePollsIndex].1
-            setupCards()
-        }
+        
+        // TODO: Add logic for setting up empty state or nonempty state
+        
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
         }
@@ -184,7 +173,8 @@ class CardController: UIViewController {
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        let countString = "1/\(currentPolls.count)"
+        // TODO: Set count string to be 1 / total num of polls
+        let countString = "1/1"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerLabelGrey
@@ -219,28 +209,6 @@ class CardController: UIViewController {
         countLabel.removeFromSuperview()
         
         setupVerticalNavBar()
-        setupVerticalCollectionView()
-    }
-    
-    func setupVerticalCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        verticalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
-        verticalCollectionView.delegate = self
-        verticalCollectionView.dataSource = self
-        verticalCollectionView.register(CardDateCell.self, forCellWithReuseIdentifier: dateIdentifier)
-        verticalCollectionView.showsVerticalScrollIndicator = false
-        verticalCollectionView.showsHorizontalScrollIndicator = false
-        verticalCollectionView.alwaysBounceVertical = true
-        verticalCollectionView.backgroundColor = .clear
-        verticalCollectionView.isPagingEnabled = true
-        view.addSubview(verticalCollectionView)
-        view.sendSubview(toBack: verticalCollectionView)
-        
-        verticalCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     func setupVerticalNavBar() {
@@ -250,7 +218,6 @@ class CardController: UIViewController {
     }
     
     func revertToHorizontal() {
-        verticalCollectionView.removeFromSuperview()
         setupCards()
         setupHorizontalNavBar()
     }
@@ -260,19 +227,7 @@ class CardController: UIViewController {
         if (scrollView != mainCollectionView) {
             return
         }
-        for cell in mainCollectionView.visibleCells {
-            let indexPath = mainCollectionView.indexPath(for: cell)
-            // Get cell frame
-            guard let cellRect = mainCollectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
-                return
-            }
-            // Check if cell is fully visible
-            if (mainCollectionView.bounds.contains(cellRect)) {
-                let countString = "\(indexPath!.item + 1)/\(currentPolls.count)"
-                countLabel.attributedText = getCountLabelAttributedString(countString)
-                break
-            }
-        }
+        // TODO: Add logic for updating countLabel to display current question # / total num questions
     }
 
     func setupHorizontalNavBar() {
@@ -332,15 +287,7 @@ class CardController: UIViewController {
     }
     
     func appendPoll(poll: Poll) {
-        if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [poll]))
-            self.currentDatePollsIndex = 0
-            removeEmptyState()
-            setupCards()
-        } else {
-            self.datePollsArr[currentDatePollsIndex].1.append(poll)
-        }
-        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
+        // TODO
     }
     
     func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
