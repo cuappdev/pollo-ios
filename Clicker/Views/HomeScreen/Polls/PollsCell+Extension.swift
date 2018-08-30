@@ -11,7 +11,7 @@ import UIKit
 
 extension PollsCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: pollPreviewIdentifier) as! PollPreviewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.pollPreviewIdentifier) as! PollPreviewCell
         cell.session = sessions[sessions.count - indexPath.row - 1]
         cell.index = indexPath.row
         cell.delegate = self
@@ -68,7 +68,7 @@ extension PollsCell: GIDSignInDelegate {
                     print(error)
             }
             
-            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: "significantEvents") + 2, forKey:"significantEvents")
+            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier) + 2, forKey:Identifiers.significantEventsIdentifier)
             window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
         } else {
             print("\(error.localizedDescription)")
