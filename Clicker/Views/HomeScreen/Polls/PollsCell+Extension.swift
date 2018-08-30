@@ -10,6 +10,7 @@ import GoogleSignIn
 import UIKit
 
 extension PollsCell: UITableViewDelegate, UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.pollPreviewIdentifier) as! PollPreviewCell
         cell.session = sessions[sessions.count - indexPath.row - 1]
@@ -40,16 +41,20 @@ extension PollsCell: UITableViewDelegate, UITableViewDataSource {
                 print(error)
         }
     }
+
 }
 
 extension PollsCell: PollPreviewCellDelegate {
+    
     func shouldEditPoll(atIndex index: Int) {
         let session = sessions[sessions.count - index - 1]
         self.delegate.shouldEditSession(session: session)
     }
+    
 }
 
 extension PollsCell: GIDSignInDelegate {
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             let userId = user.userID // For client-side use only!
@@ -74,4 +79,5 @@ extension PollsCell: GIDSignInDelegate {
             print("\(error.localizedDescription)")
         }
     }
+    
 }

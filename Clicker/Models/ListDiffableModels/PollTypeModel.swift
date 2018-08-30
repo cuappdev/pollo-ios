@@ -17,7 +17,7 @@ enum PollType {
 class PollTypeModel {
     
     var pollType: PollType!
-    let identifier: String = UUID().uuidString
+    let identifier = UUID().uuidString
     
     init(pollType: PollType) {
         self.pollType = pollType
