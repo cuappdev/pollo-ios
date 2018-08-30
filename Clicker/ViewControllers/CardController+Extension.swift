@@ -10,6 +10,7 @@ import IGListKit
 import UIKit
 
 extension CardController: ListAdapterDataSource {
+    
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         if (currentIndex > -1) {
             return pollsDateArray[currentIndex].polls
@@ -18,17 +19,12 @@ extension CardController: ListAdapterDataSource {
         }
     }
     
-    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) throws -> ListSectionController {
-        var sectionController: ListSectionController
-        if let object = object as? Poll {
-            
-        } else if let object = object as? EmptyStateModel {
-            sectionController = EmptyStateSectionController()
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        if let _ = object as? Poll {
+            return PollSectionController()
         } else {
-            throw ClickerError.invalidListObject(message: "CardController: Expected Poll or EmptyStateModel")
+            return EmptyStateSectionController()
         }
-        
-        return sectionController
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
