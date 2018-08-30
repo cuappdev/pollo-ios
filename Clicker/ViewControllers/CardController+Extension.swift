@@ -9,6 +9,29 @@
 import IGListKit
 import UIKit
 
+extension CardController: ListAdapterDataSource {
+    
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        if (currentIndex > -1) {
+            return pollsDateArray[currentIndex].polls
+        } else {
+            return [EmptyStateModel(userRole: userRole)]
+        }
+    }
+    
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        if let _ = object as? Poll {
+            return PollSectionController()
+        } else {
+            return EmptyStateSectionController()
+        }
+    }
+    
+    func emptyView(for listAdapter: ListAdapter) -> UIView? {
+        return nil
+    }
+}
+
 extension CardController: StartPollDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
