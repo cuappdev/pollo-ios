@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum UserRole: String {
+    case admin
+    case member
+}
+
 class User {
     
     static var currentUser: User?
@@ -51,9 +56,4 @@ struct UserSession {
         self.isActive = isActive
     }
     
-}
-
-enum UserRole {
-    case admin
-    case member
 }

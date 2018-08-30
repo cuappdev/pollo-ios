@@ -8,32 +8,30 @@
 
 import UIKit
 
+protocol NameViewDelegate {
+    func nameViewDidUpdateSessionName()
+}
+
 class NameView: UIView, UITextFieldDelegate {
 
     var titleField: UITextField!
     
-    var sessionId: Int!
-    var code: String!
-    var name: String!
-    
-    var delegate: CardController!
+    var session: Session!
+    var delegate: NameViewDelegate!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
+        backgroundColor = .clicker85Black
         setupViews()
         setupConstraints()
-        
     }
     
     func setupViews() {
-        backgroundColor = .clicker85Black
-        
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._24MediumFont])
-        if code != name {
-            titleField.text = name
+        if (session.code != session.name) {
+            titleField.text = session.name
         }
         titleField.font = ._24MediumFont
         titleField.textColor = .clickerMediumGrey
@@ -55,12 +53,16 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        name = textField.text
-        name = (name == "") ? code : name
-        UpdateSession(id: sessionId, name: name, code: code).make()
+        var name: String
+        if let text = textField.text {
+            name = text
+        } else {
+            name = session.code
+        }
+        UpdateSession(id: session.id, name: name, code: session.code).make()
             .done { code in
-                self.delegate.name = self.name
-                self.delegate.updateNavBar()
+                self.session.name = name
+                self.delegate.nameViewDidUpdateSessionName()
                 self.removeFromSuperview()
             }.catch { error in
                 print("error: ", error)
