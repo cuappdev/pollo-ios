@@ -38,7 +38,7 @@ struct CreatePoll: ClickerQuark {
             guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
                 throw NeutronError.badResponseData
             }
-            let questionType: QuestionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
             return Poll(id: id, text: text, results: results, type: questionType, isShared: shared)
         default: throw NeutronError.badResponseData
         }
@@ -66,7 +66,7 @@ struct GetPoll: ClickerQuark {
             guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
                 throw NeutronError.badResponseData
             }
-            let questionType: QuestionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
             return Poll(id: id, text: text, results: results, type: questionType, isShared: shared)
         default: throw NeutronError.badResponseData
         }
@@ -74,7 +74,7 @@ struct GetPoll: ClickerQuark {
 }
 
 struct GetSortedPolls: ClickerQuark {
-    typealias ResponseType = [(String, [Poll])]
+    typealias ResponseType = [PollsDateModel]
     
     let id: Int
     
@@ -88,27 +88,24 @@ struct GetSortedPolls: ClickerQuark {
     }
     let method: HTTPMethod = .get
     
-    func process(element: Element) throws -> [(String, [Poll])] {
+    func process(element: Element) throws -> [PollsDateModel] {
         switch element {
         case .node(let node):
-            var datePollsDict: [String:[Poll]] = [:]
+            var pollsDateArray: [PollsDateModel] = []
             for (date, pollsJSON) in node {
                 if let pollsArray = pollsJSON.array {
                     let pollsArr: [Poll] = try pollsArray.map {
                         guard let id = $0["id"].int, let text = $0["text"].string, let results = $0["results"].dictionaryObject, let type = $0["type"].string, let shared = $0["shared"].bool else {
                             throw NeutronError.badResponseData
                         }
-                        let questionType: QuestionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+                        let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
                         return Poll(id: id, text: text, results: results, type: questionType, isShared: shared)
                     }
-                    datePollsDict[date] = pollsArr
+                    let pollsDateModel = PollsDateModel(date: date, polls: pollsArr)
+                    pollsDateArray.append(pollsDateModel)
                 }
             }
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
-            return datePollsDict.map { (formatter.date(from: $0)!, $0, $1) }
-                .sorted() { ($0.0 as Date).compare($1.0 as Date) == .orderedAscending }
-                .map() { (_, dateString, dayTotal) in (dateString, dayTotal) }
+            return pollsDateArray
         default:
             throw NeutronError.badResponseData
         }
@@ -138,7 +135,7 @@ struct GetPollsForSession: ClickerQuark {
                 guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
                     throw NeutronError.badResponseData
                 }
-                let questionType: QuestionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+                let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
                 polls.append(Poll(id: id, text: text, results: results, type: questionType, isShared: shared))
             }
             return polls
@@ -178,7 +175,7 @@ struct UpdatePoll: ClickerQuark {
             guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
                 throw NeutronError.badResponseData
             }
-            let questionType: QuestionType = (type == Identifiers.multipleChoice) ? .multipleChoice : .freeResponse
+            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
             return Poll(id: id, text: text, results: results, type: questionType, isShared: shared)
         default: throw NeutronError.badResponseData
         }

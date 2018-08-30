@@ -137,13 +137,7 @@ class PollsViewController: UIViewController {
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
-                        let socket = Socket(id: "\(session.id)", userType: "admin")
-                        let cardVC = CardController()
-                        cardVC.socket = socket
-                        cardVC.code = code
-                        cardVC.name = code
-                        cardVC.sessionId = session.id
-                        cardVC.userRole = .admin
+                        let cardVC = CardController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in

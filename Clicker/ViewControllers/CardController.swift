@@ -6,8 +6,9 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
+import IGListKit
 import Presentr
+import UIKit
 
 enum CardType {
     case live
@@ -20,79 +21,80 @@ protocol EndPollDelegate {
 }
 
 
-class CardController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StartPollDelegate, EndPollDelegate, SocketDelegate {
+class CardController: UIViewController {
     
-    // name vars
+    // MARK: - View vars
+    var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     var nameView: NameView!
     
-    // empty views
+    // MARK: - Empty State View vars
     var monkeyView: UIImageView!
     var nothingToSeeLabel: UILabel!
     var waitingLabel: UILabel!
     var createPollButton: UIButton!
     
-    // nonempty views
+    // MARK: - Nonempty State View vars
+    var countLabel: UILabel!
     var zoomOutButton: UIButton!
     var mainCollectionView: UICollectionView!
-    let askedIdentifer = "askedCardID"
-    let answerIdentifier = "answerCardID"
-    let dateIdentifier = "dateCardID"
     var verticalCollectionView: UICollectionView!
-    var countLabel: UILabel!
-    
-    // nav bar
-    var navigationTitleView: NavigationTitleView!
-    var peopleButton: UIButton!
+    var adapter: ListAdapter!
     
     var pinchRecognizer: UIPinchGestureRecognizer!
     
+    // MARK: - Data vars
     var userRole: UserRole!
     var socket: Socket!
-    var sessionId: Int!
-    var code: String!
-    var name: String!
-    var datePollsArr: [(String, [Poll])] = []
-    var currentPolls: [Poll] = []
-    var currentDatePollsIndex: Int!
+    var session: Session!
+    var pollsDateArray: [PollsDateModel]!
+    
+    // MARK: - Constants    
+    let monkeyViewLength: CGFloat = 32.0
+    let monkeyViewTopPadding: CGFloat = 142.0
+    let nothingToSeeLabelWidth: CGFloat = 200.0
+    let nothingToSeeLabelTopPadding: CGFloat = 20.0
+    let waitingLabelWidth: CGFloat = 220.0
+    let waitingLabelTopPadding: CGFloat = 10.0
+    let countLabelWidth: CGFloat = 42.0
+    let adminNothingToSeeText = "Nothing to see here."
+    let userNothingToSeeText = "Nothing to see yet."
+    let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
+    let userWaitingText = "Waiting for the host to post a poll."
+    
+    init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.session = session
+        self.userRole = userRole
+        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
+
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
         
         socket.addDelegate(self)
         setupHorizontalNavBar()
-        if (datePollsArr.count == 0) {
-            setupEmpty()
-        } else {
-            currentDatePollsIndex = datePollsArr.count - 1
-            currentPolls = datePollsArr[currentDatePollsIndex].1
-            setupCards()
-        }
-        if (userRole == .admin && name == code) {
-            setupName()
+        
+        // TODO: Add logic for setting up empty state or nonempty state
+        
+        if (userRole == .admin && session.name == session.code) {
+            setupNameView()
         }
     }
    
     // MARK - NAME THE POLL
-    func setupName() {
-        nameView = NameView()
-        nameView.sessionId = sessionId
-        nameView.code = code
-        nameView.name = name
+    func setupNameView() {
+        nameView = NameView(frame: .zero)
+        nameView.session = session
         nameView.delegate = self
         view.addSubview(nameView)
 
-        setupNameConstraints()
-    }
-    
-    func updateNavBar() {
-        navigationTitleView.updateViews(name: name, code: code)
-    }
-    
-    func setupNameConstraints() {
         nameView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -100,32 +102,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
-
-    @objc func createPollBtnPressed() {
-        let pollBuilderVC = PollBuilderViewController()
-        pollBuilderVC.startPollDelegate = self
-        let nc = UINavigationController(rootViewController: pollBuilderVC)
-        let presenter = Presentr(presentationType: .fullScreen)
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = true
-        presenter.cornerRadius = 15
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
-    }
     
-    func setupEmpty() {
-        setupEmptyViews()
-        setupEmptyConstraints()
-    }
-    
-    func removeEmptyState() {
-        monkeyView.removeFromSuperview()
-        nothingToSeeLabel.removeFromSuperview()
-        waitingLabel.removeFromSuperview()
-    }
-    
-    func setupEmptyViews() {
+    func setupEmptyState() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
         monkeyView.contentMode = .scaleAspectFit
         view.addSubview(monkeyView)
@@ -134,6 +112,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nothingToSeeLabel.font = ._16SemiboldFont
         nothingToSeeLabel.textColor = .clickerBorder
         nothingToSeeLabel.textAlignment = .center
+        nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
         view.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
@@ -142,74 +121,51 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
+        waitingLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
         view.addSubview(waitingLabel)
         
-        if (userRole == .admin) {
-            setupAdminEmpty()
-        } else {
-            setupMemberEmpty()
-        }
-    }
-    
-    func setupAdminEmpty() {
-        nothingToSeeLabel.text = "Nothing to see here."
-        
-        waitingLabel.text = "You haven't asked any polls yet!\nTry it out below."
-        
-    }
-    
-    func setupMemberEmpty() {
-        nothingToSeeLabel.text = "Nothing to see yet."
-        
-        waitingLabel.text = "Waiting for the host to post a poll."
-    }
-    
-    func setupEmptyConstraints() {
         monkeyView.snp.makeConstraints { make in
-            make.width.equalTo(31)
-            make.height.equalTo(34)
+            make.width.height.equalTo(monkeyViewLength)
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(142)
+            make.top.equalToSuperview().offset(monkeyViewTopPadding)
         }
         
         nothingToSeeLabel.snp.makeConstraints { make in
-            make.width.equalTo(200)
-            make.height.equalTo(19)
+            make.width.equalTo(nothingToSeeLabelWidth)
             make.centerX.equalToSuperview()
-            make.top.equalTo(monkeyView.snp.bottom).offset(21)
+            make.top.equalTo(monkeyView.snp.bottom).offset(nothingToSeeLabelTopPadding)
         }
         
         waitingLabel.snp.makeConstraints { make in
-            make.width.equalTo(220)
-            make.height.equalTo(36)
+            make.width.equalTo(waitingLabelWidth)
             make.centerX.equalToSuperview()
-            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(11)
+            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(waitingLabelTopPadding)
         }
     }
     
-    func setupCards() {
-        setupCardsViews()
-        setupCardsConstraints()
+    func removeEmptyState() {
+        monkeyView.removeFromSuperview()
+        nothingToSeeLabel.removeFromSuperview()
+        waitingLabel.removeFromSuperview()
     }
     
-    func setupCardsViews() {
+    func setupCards() {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
-        layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
         mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        mainCollectionView.delegate = self
-        mainCollectionView.dataSource = self
         let collectionViewInset = view.frame.width * 0.05
         mainCollectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        mainCollectionView.register(AskedCard.self, forCellWithReuseIdentifier: askedIdentifer)
-        mainCollectionView.register(AnswerCard.self, forCellWithReuseIdentifier: answerIdentifier)
         mainCollectionView.showsVerticalScrollIndicator = false
         mainCollectionView.showsHorizontalScrollIndicator = false
-        mainCollectionView.alwaysBounceHorizontal = true
+        mainCollectionView.bounces = false
         mainCollectionView.backgroundColor = .clear
         mainCollectionView.isPagingEnabled = true
         view.addSubview(mainCollectionView)
+        
+        let updater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = mainCollectionView
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
@@ -217,16 +173,15 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        let countString = "1/\(currentPolls.count)"
+        // TODO: Set count string to be 1 / total num of polls
+        let countString = "1/1"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerLabelGrey
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
-    }
-
-    func setupCardsConstraints() {
+        
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -236,8 +191,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         countLabel.snp.makeConstraints { make in
             make.centerY.equalTo(zoomOutButton.snp.centerY)
             make.centerX.equalToSuperview()
-            make.width.equalTo(42)
-            make.height.equalTo(23)
+            make.width.equalTo(countLabelWidth)
         }
         
         mainCollectionView.snp.makeConstraints { make in
@@ -255,28 +209,6 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         countLabel.removeFromSuperview()
         
         setupVerticalNavBar()
-        setupVerticalCollectionView()
-    }
-    
-    func setupVerticalCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        verticalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
-        verticalCollectionView.delegate = self
-        verticalCollectionView.dataSource = self
-        verticalCollectionView.register(CardDateCell.self, forCellWithReuseIdentifier: dateIdentifier)
-        verticalCollectionView.showsVerticalScrollIndicator = false
-        verticalCollectionView.showsHorizontalScrollIndicator = false
-        verticalCollectionView.alwaysBounceVertical = true
-        verticalCollectionView.backgroundColor = .clear
-        verticalCollectionView.isPagingEnabled = true
-        view.addSubview(verticalCollectionView)
-        view.sendSubview(toBack: verticalCollectionView)
-        
-        verticalCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     func setupVerticalNavBar() {
@@ -286,32 +218,8 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func revertToHorizontal() {
-        verticalCollectionView.removeFromSuperview()
         setupCards()
         setupHorizontalNavBar()
-    }
-
-    // MARK: Get CardType
-    func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
-            return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
-            return .ended
-        }
-    }
-    
-    // MARK: UPDATE DATE POLLS ARRAY
-    func updateDatePollsArr() {
-        GetSortedPolls(id: sessionId).make()
-            .done { datePollsArr in
-                self.datePollsArr = datePollsArr
-                self.currentPolls = datePollsArr[self.currentDatePollsIndex].1
-                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
-            }.catch { error in
-                print(error)
-        }
     }
     
     // MARK: SCROLLVIEW METHODS
@@ -319,106 +227,9 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if (scrollView != mainCollectionView) {
             return
         }
-        for cell in mainCollectionView.visibleCells {
-            let indexPath = mainCollectionView.indexPath(for: cell)
-            // Get cell frame
-            guard let cellRect = mainCollectionView.layoutAttributesForItem(at: indexPath!)?.frame else {
-                return
-            }
-            // Check if cell is fully visible
-            if (mainCollectionView.bounds.contains(cellRect)) {
-                let countString = "\(indexPath!.item + 1)/\(currentPolls.count)"
-                countLabel.attributedText = getCountLabelAttributedString(countString)
-                break
-            }
-        }
+        // TODO: Add logic for updating countLabel to display current question # / total num questions
     }
-    
-    // MARK: GET COUNT LABEL TEXT
-    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGrey,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
-    
-    // MARK - SOCKET DELEGATE
-    
-    func sessionConnected() { }
-    
-    func sessionDisconnected() { }
-    
-    func receivedUserCount(_ count: Int) {
-        peopleButton.setTitle("\(count)", for: .normal)
-    }
-    
-    func pollStarted(_ poll: Poll) {
-        if (userRole == .member) {
-            let arrEmpty = (datePollsArr.count == 0)
-            appendPoll(poll: poll)
-            if (!arrEmpty) {
-                self.mainCollectionView.reloadData()
-                let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
-                self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-            }
-        }
-    }
-    
-    func pollEnded(_ poll: Poll) { }
-    
-    func receivedResults(_ currentState: CurrentState) { }
-    
-    func saveSession(_ session: Session) { }
-    
-    func updatedTally(_ currentState: CurrentState) { }
-    
-    func appendPoll(poll: Poll) {
-        if (datePollsArr.count == 0) {
-            self.datePollsArr.append((getTodaysDate(), [poll]))
-            self.currentDatePollsIndex = 0
-            removeEmptyState()
-            setupCards()
-        } else {
-            self.datePollsArr[currentDatePollsIndex].1.append(poll)
-        }
-        self.currentPolls = self.datePollsArr[currentDatePollsIndex].1
-    }
-    
-    // MARK: - START POLL DELEGATE
-    func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
-        // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
-            "text": text,
-            "type": type.description,
-            "options": options,
-            "shared": isShared
-        ]
-        socket.socket.emit(Routes.start, with: [socketQuestion])
-        let questionType: QuestionType = type
-        let newPoll = Poll(text: text, options: options, type: questionType, isLive: true, isShared: isShared)
-        let arrEmpty = (datePollsArr.count == 0)
-        appendPoll(poll: newPoll)
-        // DISABLE CREATE POLL BUTTON
-        createPollButton.isUserInteractionEnabled = false
-        DispatchQueue.main.async {
-            if (!arrEmpty) {
-                self.mainCollectionView.reloadData()
-            }
-            let lastIndexPath = IndexPath(item: self.currentPolls.count - 1, section: 0)
-            self.mainCollectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        }
-    }
-    
-    // MARK: ENDED POLL DELEGATE
-    func endedPoll() {
-        // ENABLE CREATE POLL BUTTON
-        createPollButton.isUserInteractionEnabled = true
-    }
-    
+
     func setupHorizontalNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
@@ -426,7 +237,7 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.updateViews(name: name, code: code)
+        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
         navigationTitleView.snp.makeConstraints { make in
             make.height.equalTo(36)
         }
@@ -454,35 +265,80 @@ class CardController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    // MARK: Helpers
+    func getCardType(from poll: Poll) -> CardType {
+        if (poll.isLive) {
+            return .live
+        } else if (poll.isShared) {
+            return .shared
+        } else {
+            return .ended
+        }
+    }
+    
+    func updateDatePollsArr() {
+        GetSortedPolls(id: session.id).make()
+            .done { pollsDateArray in
+                self.pollsDateArray = pollsDateArray
+                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+            }.catch { error in
+                print(error)
+        }
+    }
+    
+    func appendPoll(poll: Poll) {
+        // TODO
+    }
+    
+    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
+        let slashIndex = countString.index(of: "/")?.encodedOffset
+        let attributedString = NSMutableAttributedString(string: countString, attributes: [
+            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
+            .foregroundColor: UIColor.clickerMediumGrey,
+            .kern: 0.0
+            ])
+        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
+        return attributedString
+    }
     
     // MARK: ACTIONS
+    @objc func createPollBtnPressed() {
+        let pollBuilderVC = PollBuilderViewController()
+        pollBuilderVC.startPollDelegate = self
+        let nc = UINavigationController(rootViewController: pollBuilderVC)
+        let presenter = Presentr(presentationType: .fullScreen)
+        presenter.backgroundOpacity = 0.6
+        presenter.roundCorners = true
+        presenter.cornerRadius = 15
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
+    }
+    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func zoomOutBtnPressed() {
-        // SETUP VERTICAL VIEW
         setupVertical()
     }
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
-        print(sender.scale)
         let isPinchOut: Bool = (sender.scale > 1)
         if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
             zoomOutBtnPressed()
         }
     }
     
+    // MARK: - View lifecycle
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // HIDE NAV BAR, SHOW TABBAR
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

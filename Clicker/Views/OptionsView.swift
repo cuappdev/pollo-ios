@@ -39,7 +39,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         collectionView.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: Identifiers.questionOptionCellId)
+        collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: Identifiers.questionOptionCellIdentifier)
         addSubview(collectionView)
         
         let selectedIndexPath = IndexPath(item: 0, section: 0)
@@ -79,7 +79,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.questionOptionCellId, for: indexPath) as! QuestionOptionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.questionOptionCellIdentifier, for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
         cell.backgroundColor = .clickerNavBarLightGrey
         return cell

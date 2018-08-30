@@ -38,7 +38,7 @@ class NavigationTitleView: UIView {
         addSubview(codeLabel)
     }
     
-    func updateViews(name: String?, code: String?) {
+    func updateNameAndCode(name: String?, code: String?) {
         self.code = "Code: \(code ?? "")"
         if let _ = name { self.name = name } else { self.name = code }
 

@@ -29,24 +29,27 @@ enum QuestionType: CustomStringConvertible {
 }
 
 struct Identifiers {
-    static let multipleChoice = "MULTIPLE_CHOICE"
-    static let freeResponse = "FREE_RESPONSE"
-    static let significantEventsIdentifier = "significantEvents"
-    static let addMoreOptionCellID = "addMoreOptionCellID"
-    static let createMCOptionCellID = "createMCOptionCellID"
-    static let questionOptionCellId = "questionOptionCellId"
-    static let draftCellID = "draftCellID"
-    static let pollPreviewIdentifier = "pollPreviewCellID"
+    static let addMoreOptionCellIdentifier = "addMoreOptionCellId"
     static let adminIdentifier = "admin"
-    static let resultMCIdentifier = "resultMCCellID"
-    static let resultFRIdentifier = "resultFRCellID"
-    static let optionIdentifier = "optionCellID"
+    static let answerIdentifier = "answerCardId"
+    static let askedIdentifer = "askedCardId"
+    static let createMCOptionCellIdentifier = "createMCOptionCellId"
+    static let dateIdentifier = "dateCardId"
+    static let draftCellIdentifier = "draftCellId"
+    static let freeResponseIdentifier = "FREE_RESPONSE"
+    static let multipleChoiceIdentifier = "MULTIPLE_CHOICE"
+    static let optionIdentifier = "optionCellId"
+    static let pollPreviewIdentifier = "pollPreviewCellId"
+    static let questionOptionCellIdentifier = "questionOptionCellId"
+    static let resultMCIdentifier = "resultMCCellId"
+    static let resultFRIdentifier = "resultFRCellId"
+    static let significantEventsIdentifier = "significantEvents"
 }
 
 struct Routes {
-    static let start = "server/poll/start"
     static let end = "server/poll/end"
     static let results = "server/poll/results"
+    static let start = "server/poll/start"
     static let tally = "server/poll/tally"
     static let upvote = "server/poll/upvote"
 }
