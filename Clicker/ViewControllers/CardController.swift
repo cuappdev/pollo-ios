@@ -37,7 +37,7 @@ class CardController: UIViewController {
     // MARK: - Nonempty State View vars
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
-    var mainCollectionView: UICollectionView!
+    var collectionView: UICollectionView!
     var verticalCollectionView: UICollectionView!
     var adapter: ListAdapter!
     
@@ -48,6 +48,7 @@ class CardController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
+    var currentIndex: Int!
     
     // MARK: - Constants    
     let monkeyViewLength: CGFloat = 32.0
@@ -68,6 +69,7 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+        self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
     }
     
     override func viewDidLoad() {
@@ -80,6 +82,8 @@ class CardController: UIViewController {
         
         socket.addDelegate(self)
         setupHorizontalNavBar()
+        
+        
         
         // TODO: Add logic for setting up empty state or nonempty state
         
@@ -153,19 +157,20 @@ class CardController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
-        mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         let collectionViewInset = view.frame.width * 0.05
-        mainCollectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        mainCollectionView.showsVerticalScrollIndicator = false
-        mainCollectionView.showsHorizontalScrollIndicator = false
-        mainCollectionView.bounces = false
-        mainCollectionView.backgroundColor = .clear
-        mainCollectionView.isPagingEnabled = true
-        view.addSubview(mainCollectionView)
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.bounces = false
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
+        view.addSubview(collectionView)
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)
-        adapter.collectionView = mainCollectionView
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
@@ -194,7 +199,7 @@ class CardController: UIViewController {
             make.width.equalTo(countLabelWidth)
         }
         
-        mainCollectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(countLabel.snp.bottom).offset(6)
             make.bottom.equalToSuperview()
             make.width.equalToSuperview()
@@ -204,7 +209,7 @@ class CardController: UIViewController {
     
     // MARK: - Vertical Collection View
     func setupVertical() {
-        mainCollectionView.removeFromSuperview()
+        collectionView.removeFromSuperview()
         zoomOutButton.removeFromSuperview()
         countLabel.removeFromSuperview()
         
@@ -224,7 +229,7 @@ class CardController: UIViewController {
     
     // MARK: SCROLLVIEW METHODS
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView != mainCollectionView) {
+        if (scrollView != collectionView) {
             return
         }
         // TODO: Add logic for updating countLabel to display current question # / total num questions
@@ -280,7 +285,7 @@ class CardController: UIViewController {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
                 self.pollsDateArray = pollsDateArray
-                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+                DispatchQueue.main.async { self.collectionView.reloadData() }
             }.catch { error in
                 print(error)
         }

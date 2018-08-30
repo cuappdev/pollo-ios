@@ -27,8 +27,11 @@
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203E56121332FA30016A147 /* PollsViewController+Extension.swift */; };
 		C203E564213330AC0016A147 /* DraftsViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203E563213330AC0016A147 /* DraftsViewController+Extension.swift */; };
-		C205588F2026591A000E9B07 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205588E2026591A000E9B07 /* Poll.swift */; };
 		C2093141209ED1F6001A10CC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2093140209ED1F5001A10CC /* CardView.swift */; };
+		C20B570721388F500091034F /* EmptyStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B570621388F500091034F /* EmptyStateModel.swift */; };
+		C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B57082138903B0091034F /* EmptyStateSectionController.swift */; };
+		C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B570A2138917D0091034F /* EmptyStateCell.swift */; };
+		C20B570D213893180091034F /* PollSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B570C213893180091034F /* PollSectionController.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C21D98812083D32000191103 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D98802083D32000191103 /* LoginViewController.swift */; };
 		C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */; };
@@ -36,6 +39,7 @@
 		C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CB82134715600929C98 /* PollTypeSectionController.swift */; };
 		C2434CBB2134F29F00929C98 /* PollsCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CBA2134F29F00929C98 /* PollsCell+Extension.swift */; };
 		C2434CBD2134FFD500929C98 /* PollsDateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CBC2134FFD500929C98 /* PollsDateModel.swift */; };
+		C2434CBF21388E2B00929C98 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CBE21388E2B00929C98 /* Poll.swift */; };
 		C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A56209956C600DC5EDC /* DeletePollViewController.swift */; };
 		C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A58209963A200DC5EDC /* EditNameViewController.swift */; };
 		C259603B20390F0800C8DBA3 /* CurrentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259603A20390F0800C8DBA3 /* CurrentState.swift */; };
@@ -113,8 +117,11 @@
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
 		C203E56121332FA30016A147 /* PollsViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsViewController+Extension.swift"; sourceTree = "<group>"; };
 		C203E563213330AC0016A147 /* DraftsViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftsViewController+Extension.swift"; sourceTree = "<group>"; };
-		C205588E2026591A000E9B07 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C2093140209ED1F5001A10CC /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		C20B570621388F500091034F /* EmptyStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateModel.swift; sourceTree = "<group>"; };
+		C20B57082138903B0091034F /* EmptyStateSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateSectionController.swift; sourceTree = "<group>"; };
+		C20B570A2138917D0091034F /* EmptyStateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCell.swift; sourceTree = "<group>"; };
+		C20B570C213893180091034F /* PollSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollSectionController.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C21D98802083D32000191103 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shared.swift"; sourceTree = "<group>"; };
@@ -123,6 +130,7 @@
 		C2434CB82134715600929C98 /* PollTypeSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollTypeSectionController.swift; sourceTree = "<group>"; };
 		C2434CBA2134F29F00929C98 /* PollsCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsCell+Extension.swift"; sourceTree = "<group>"; };
 		C2434CBC2134FFD500929C98 /* PollsDateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateModel.swift; sourceTree = "<group>"; };
+		C2434CBE21388E2B00929C98 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C2504A56209956C600DC5EDC /* DeletePollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePollViewController.swift; sourceTree = "<group>"; };
 		C2504A58209963A200DC5EDC /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		C259603A20390F0800C8DBA3 /* CurrentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentState.swift; sourceTree = "<group>"; };
@@ -204,6 +212,7 @@
 				6333812A2086B645008BD455 /* LiveOptionCell.swift */,
 				6333812E2086C8D1008BD455 /* ClosedOptionCell.swift */,
 				63E4DAF72097DE94000808EB /* NavigationTitleView.swift */,
+				C20B570A2138917D0091034F /* EmptyStateCell.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -274,6 +283,8 @@
 			children = (
 				C2434CB321346F8000929C98 /* PollTypeModel.swift */,
 				C2434CBC2134FFD500929C98 /* PollsDateModel.swift */,
+				C2434CBE21388E2B00929C98 /* Poll.swift */,
+				C20B570621388F500091034F /* EmptyStateModel.swift */,
 			);
 			path = ListDiffableModels;
 			sourceTree = "<group>";
@@ -282,6 +293,8 @@
 			isa = PBXGroup;
 			children = (
 				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
+				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
+				C20B570C213893180091034F /* PollSectionController.swift */,
 			);
 			path = SectionControllers;
 			sourceTree = "<group>";
@@ -304,7 +317,6 @@
 				C2434CB221346F5100929C98 /* ListDiffableModels */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
 				C259603A20390F0800C8DBA3 /* CurrentState.swift */,
-				C205588E2026591A000E9B07 /* Poll.swift */,
 				C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */,
 				C2F48EB2208302AE0022FE6B /* Draft.swift */,
 				C2F48EB6208302F90022FE6B /* Socket.swift */,
@@ -659,7 +671,6 @@
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
-				C205588F2026591A000E9B07 /* Poll.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
 				C2BB14BA209469CD0081C35D /* Utils.swift in Sources */,
@@ -671,12 +682,16 @@
 				6333812F2086C8D1008BD455 /* ClosedOptionCell.swift in Sources */,
 				C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */,
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
+				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
+				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
+				C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */,
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
 				C2434CBB2134F29F00929C98 /* PollsCell+Extension.swift in Sources */,
 				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
 				638406D52083CC1400483645 /* ResultMCCell.swift in Sources */,
 				C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
+				C2434CBF21388E2B00929C98 /* Poll.swift in Sources */,
 				C2BB14BD2094DD400081C35D /* AskedCard.swift in Sources */,
 				C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */,
 				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
@@ -707,6 +722,7 @@
 				C2434CBD2134FFD500929C98 /* PollsDateModel.swift in Sources */,
 				C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */,
 				637FD6932093E5FA007BADF1 /* NameView.swift in Sources */,
+				C20B570D213893180091034F /* PollSectionController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */,
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
