@@ -23,7 +23,6 @@ class PollsCell: UICollectionViewCell {
     var sessions: [Session] = []
     var pollType: PollType!
     
-    let pollPreviewIdentifier = "pollPreviewCellID"
     let pollPreviewCellHeight: CGFloat = 82.5
     
     override init(frame: CGRect) {
