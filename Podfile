@@ -1,5 +1,8 @@
 platform :ios, '9.0'
 
+# ignore all warnings from all pods
+inhibit_all_warnings!
+
 target 'Clicker' do
   use_frameworks!
 

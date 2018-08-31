@@ -23,13 +23,18 @@ class NameView: UIView, UITextFieldDelegate {
         super.init(frame: frame)
         
         backgroundColor = .clicker85Black
+    }
+    
+    func setup() {
         setupViews()
         setupConstraints()
     }
-    
     func setupViews() {
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._24MediumFont])
+        print("session: ",session)
+        print("code: ",session.code)
+        print("name: ",session.name)
         if (session.code != session.name) {
             titleField.text = session.name
         }

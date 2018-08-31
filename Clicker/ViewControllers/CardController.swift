@@ -26,15 +26,9 @@ class CardController: UIViewController {
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
-    var nameView: NameView!
-    
-    // MARK: - Empty State View vars
-    var monkeyView: UIImageView!
-    var nothingToSeeLabel: UILabel!
-    var waitingLabel: UILabel!
-    var createPollButton: UIButton!
     
     // MARK: - Nonempty State View vars
+    var createPollButton: UIButton!
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
     var collectionView: UICollectionView!
@@ -51,17 +45,7 @@ class CardController: UIViewController {
     var currentIndex: Int!
     
     // MARK: - Constants    
-    let monkeyViewLength: CGFloat = 32.0
-    let monkeyViewTopPadding: CGFloat = 142.0
-    let nothingToSeeLabelWidth: CGFloat = 200.0
-    let nothingToSeeLabelTopPadding: CGFloat = 20.0
-    let waitingLabelWidth: CGFloat = 220.0
-    let waitingLabelTopPadding: CGFloat = 10.0
     let countLabelWidth: CGFloat = 42.0
-    let adminNothingToSeeText = "Nothing to see here."
-    let userNothingToSeeText = "Nothing to see yet."
-    let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
-    let userWaitingText = "Waiting for the host to post a poll."
     
     init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -83,75 +67,8 @@ class CardController: UIViewController {
         socket.addDelegate(self)
         setupHorizontalNavBar()
         
-        
-        
-        // TODO: Add logic for setting up empty state or nonempty state
-        
-        if (userRole == .admin && session.name == session.code) {
-            setupNameView()
-        }
-    }
-   
-    // MARK - NAME THE POLL
-    func setupNameView() {
-        nameView = NameView(frame: .zero)
-        nameView.session = session
-        nameView.delegate = self
-        view.addSubview(nameView)
-
-        nameView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
     }
     
-    func setupEmptyState() {
-        monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
-        monkeyView.contentMode = .scaleAspectFit
-        view.addSubview(monkeyView)
-        
-        nothingToSeeLabel = UILabel()
-        nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerBorder
-        nothingToSeeLabel.textAlignment = .center
-        nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-        view.addSubview(nothingToSeeLabel)
-        
-        waitingLabel = UILabel()
-        waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGrey
-        waitingLabel.textAlignment = .center
-        waitingLabel.lineBreakMode = .byWordWrapping
-        waitingLabel.numberOfLines = 0
-        waitingLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-        view.addSubview(waitingLabel)
-        
-        monkeyView.snp.makeConstraints { make in
-            make.width.height.equalTo(monkeyViewLength)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(monkeyViewTopPadding)
-        }
-        
-        nothingToSeeLabel.snp.makeConstraints { make in
-            make.width.equalTo(nothingToSeeLabelWidth)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(monkeyView.snp.bottom).offset(nothingToSeeLabelTopPadding)
-        }
-        
-        waitingLabel.snp.makeConstraints { make in
-            make.width.equalTo(waitingLabelWidth)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(waitingLabelTopPadding)
-        }
-    }
-    
-    func removeEmptyState() {
-        monkeyView.removeFromSuperview()
-        nothingToSeeLabel.removeFromSuperview()
-        waitingLabel.removeFromSuperview()
-    }
     
     func setupCards() {
         let layout = UICollectionViewFlowLayout()
@@ -319,7 +236,6 @@ class CardController: UIViewController {
         presenter.dismissOnSwipeDirection = .bottom
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
-    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)

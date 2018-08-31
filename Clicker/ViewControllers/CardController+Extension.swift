@@ -32,20 +32,20 @@ extension CardController: ListAdapterDataSource {
     }
 }
 
+extension CardController: EndPollDelegate {
+    
+    func endedPoll() {
+        //createPollButton.isUserInteractionEnabled = true
+    }
+
+}
+
 extension CardController: StartPollDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
         // TODO
     }
-
-}
-
-extension CardController: EndPollDelegate {
     
-    func endedPoll() {
-        createPollButton.isUserInteractionEnabled = true
-    }
-
 }
 
 extension CardController: NameViewDelegate {
