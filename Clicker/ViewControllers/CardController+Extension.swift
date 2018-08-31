@@ -54,6 +54,12 @@ extension CardController: StartPollDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
         // TODO
+        // CreatePoll(...)
+        currentIndex = (pollsDateArray ?? []).count - 1
+        adapter.performUpdates(animated: true) { done in
+            print(done)
+        }
+        
     }
     
 }
