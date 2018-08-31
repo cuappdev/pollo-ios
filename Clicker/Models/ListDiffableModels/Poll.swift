@@ -21,6 +21,7 @@ class Poll {
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     var isLive: Bool = false
     var isShared: Bool = false
+    let defaultIdentifier = UUID().uuidString
     
     // MARK: SORTED BY DATE POLL INITIALIZER
     init(id: Int, text: String, results: [String:Any], type: QuestionType, isShared: Bool) {
@@ -95,6 +96,9 @@ class Poll {
 
 extension Poll: ListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
+        guard let id = id else {
+            return defaultIdentifier as NSString
+        }
         return "\(id)" as NSString
     }
     
