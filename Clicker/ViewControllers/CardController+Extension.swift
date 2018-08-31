@@ -20,10 +20,20 @@ extension CardController: ListAdapterDataSource {
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        print(object)
         if let _ = object as? Poll {
-            return PollSectionController()
+            let pollSectionController = PollSectionController()
+            pollSectionController.session = session
+            pollSectionController.userRole = userRole
+            pollSectionController.socket = socket
+            pollSectionController.endPollDelegate = self
+            return pollSectionController
         } else {
-            return EmptyStateSectionController()
+            let emptyStateController = EmptyStateSectionController()
+            emptyStateController.session = session
+            emptyStateController.userRole = userRole
+            emptyStateController.nameViewDelegate = self
+            return emptyStateController
         }
     }
     
