@@ -9,11 +9,14 @@
 import Foundation
 import IGListKit
 
-protocol PollSectionControllerDelegate {
-    var userRole: UserRole { get }
-}
 
 class PollSectionController: ListSectionController {
+    
+    // MARK: todo implement
+    var session: Session!
+    var userRole: UserRole!
+    var socket: Socket!
+    var endPollDelegate: EndPollDelegate!
     
     var poll: Poll!
     let widthScaleFactor: CGFloat = 0.9
@@ -27,12 +30,39 @@ class PollSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = collectionContext?.dequeueReusableCell(of: EmptyStateCell.self, for: self, at: index) as! EmptyStateCell
-        return cell
+        switch (userRole) {
+        case .admin:
+            let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
+            cell.socket = socket
+            socket.addDelegate(cell)
+            cell.poll = poll
+            cell.endPollDelegate = endPollDelegate
+            cell.cardType = getCardType(from: poll)
+            cell.configure()
+            return cell
+        default:
+            let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AskedCard
+            cell.socket = socket
+            socket.addDelegate(cell)
+            cell.poll = poll
+            cell.cardType = getCardType(from: poll)
+            cell.configure()
+            return cell
+        }
     }
     
     override func didUpdate(to object: Any) {
         poll = object as? Poll
     }
-    
+        
+    // MARK: Helpers
+    func getCardType(from poll: Poll) -> CardType {
+        if (poll.isLive) {
+            return .live
+        } else if (poll.isShared) {
+            return .shared
+        } else {
+            return .ended
+        }
+    }
 }

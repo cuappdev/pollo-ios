@@ -187,17 +187,7 @@ class CardController: UIViewController {
         }
     }
     
-    // MARK: Helpers
-    func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
-            return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
-            return .ended
-        }
-    }
-    
+    // MARK: Helpers    
     func updateDatePollsArr() {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
