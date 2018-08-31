@@ -16,10 +16,10 @@ enum CardType {
     case shared
 }
 
-protocol EndPollDelegate {
-    func endedPoll()
+enum CardControllerState {
+    case horizontal
+    case vertical
 }
-
 
 class CardController: UIViewController {
     
@@ -47,6 +47,7 @@ class CardController: UIViewController {
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
+    var state: CardControllerState!
     var pollsDateArray: [PollsDateModel]!
     var currentIndex: Int!
     
@@ -69,6 +70,7 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+        self.state = .horizontal
         self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
     }
     
@@ -81,11 +83,22 @@ class CardController: UIViewController {
         view.addGestureRecognizer(pinchRecognizer)
         
         socket.addDelegate(self)
-        setupHorizontalNavBar()
+//        setupHorizontalNavBar()
         
-        
-        
-        // TODO: Add logic for setting up empty state or nonempty state
+        let results = [
+            "A": [
+                "text": "Moon name #1",
+                "count": 3
+            ],
+            "B": [
+                "text": "Moon name #2",
+                "count": 2
+            ]
+        ]
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, isLive: false)
+        pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
+        setupVerticalNavBar()
+        mockVertical()
         
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
@@ -208,10 +221,51 @@ class CardController: UIViewController {
     }
     
     // MARK: - Vertical Collection View
+    // TODO: REMOVE THIS FUNCTION
+    func mockVertical() {
+        self.state = .vertical
+        
+        peopleButton = UIButton()
+        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
+        peopleButton.setTitle("0", for: .normal)
+        peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.sizeToFit()
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .vertical
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionViewInset = view.frame.width * 0.1
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.bounces = false
+        collectionView.backgroundColor = .clear
+        view.addSubview(collectionView)
+        
+        let updater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+    }
+    
     func setupVertical() {
-        collectionView.removeFromSuperview()
         zoomOutButton.removeFromSuperview()
         countLabel.removeFromSuperview()
+        
+        self.state = .vertical
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+        }
+        adapter.performUpdates(animated: true, completion: nil)
         
         setupVerticalNavBar()
     }

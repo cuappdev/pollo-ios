@@ -9,11 +9,15 @@
 import UIKit
 import SnapKit
 
+protocol AskedCardDelegate {
+    func askedCardDidEndPoll()
+}
+
 class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
-    var endPollDelegate: EndPollDelegate!
+    var delegate: AskedCardDelegate!
     var cardType: CardType!
     
     // Timer
@@ -146,7 +150,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         switch (cardType) {
         case .live:
             socket.socket.emit(Routes.end, [])
-            endPollDelegate.endedPoll()
+            delegate.askedCardDidEndPoll()
             setupEnded()
             cardType = .ended
             poll.isLive = false
