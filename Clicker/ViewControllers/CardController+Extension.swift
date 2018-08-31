@@ -12,16 +12,26 @@ import UIKit
 extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if (currentIndex > -1) {
-            return pollsDateArray[currentIndex].polls
-        } else {
-            return [EmptyStateModel(userRole: userRole)]
+        switch state {
+        case .horizontal:
+            if (currentIndex > -1) {
+                return pollsDateArray[currentIndex].polls
+            } else {
+                return [EmptyStateModel(userRole: userRole)]
+            }
+        default:
+            return pollsDateArray.map({ pollsDateModel -> PollDateModel in
+                let latestPoll = pollsDateModel.polls[pollsDateModel.polls.count - 1]
+                return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+            })
         }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if let _ = object as? Poll {
+        if object is Poll {
             return PollSectionController()
+        } else if object is PollDateModel {
+            return PollDateSectionController()
         } else {
             return EmptyStateSectionController()
         }
@@ -40,9 +50,9 @@ extension CardController: StartPollDelegate {
 
 }
 
-extension CardController: EndPollDelegate {
+extension CardController: AskedCardDelegate {
     
-    func endedPoll() {
+    func askedCardDidEndPoll() {
         createPollButton.isUserInteractionEnabled = true
     }
 
