@@ -13,6 +13,11 @@ class EmptyStateSectionController: ListSectionController {
     
     var emptyStateModel: EmptyStateModel!
     
+    // MARK: Must pass these to the EmptyStateCell
+    var session: Session!
+    var userRole: UserRole!
+    var nameViewDelegate: NameViewDelegate!
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
@@ -23,6 +28,10 @@ class EmptyStateSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: EmptyStateCell.self, for: self, at: index) as! EmptyStateCell
+        cell.session = session
+        cell.userRole = userRole
+        cell.nameViewDelegate = nameViewDelegate
+        cell.setup()
         return cell
     }
     
