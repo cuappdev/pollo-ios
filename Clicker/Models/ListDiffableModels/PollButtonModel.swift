@@ -1,5 +1,5 @@
 //
-//  PollMiscellaneousModel.swift
+//  PollButtonModel.swift
 //  Clicker
 //
 //  Created by Kevin Chan on 8/31/18.
@@ -8,20 +8,18 @@
 
 import IGListKit
 
-class PollMiscellaneousModel {
+class PollButtonModel {
     
-    var pollState: PollState
-    var totalVotes: Int
+    var state: PollState
     let identifier = UUID().uuidString
     
-    init(pollState: PollState, totalVotes: Int) {
-        self.pollState = pollState
-        self.totalVotes = totalVotes
+    init(state: PollState) {
+        self.state = state
     }
     
 }
 
-extension PollMiscellaneousModel: ListDiffable {
+extension PollButtonModel: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
@@ -29,7 +27,7 @@ extension PollMiscellaneousModel: ListDiffable {
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
-        guard let object = object as? PollMiscellaneousModel else { return false }
+        guard let object = object as? PollButtonModel else { return false }
         return identifier == object.identifier
     }
     

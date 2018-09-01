@@ -14,6 +14,7 @@ import UIKit
 class CardCell: UICollectionViewCell {
     
     // MARK: - View vars
+    var shadowView: UIView!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
     
@@ -22,12 +23,19 @@ class CardCell: UICollectionViewCell {
     var questionModel: QuestionModel!
     var resultModelArray: [MCResultModel]!
     var miscellaneousModel: PollMiscellaneousModel!
+    var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
+    
+    // MARK: - Constants
+    let shadowViewCornerRadius: CGFloat = 11
+    let shadowViewWidth: CGFloat = 15
+    let shadowHeightScaleFactor: CGFloat = 0.9
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         topHamburgerCardModel = HamburgerCardModel(state: .top)
+        pollButtonModel = PollButtonModel(state: .ended)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         setupViews()
     }
@@ -48,11 +56,24 @@ class CardCell: UICollectionViewCell {
         adapter = ListAdapter(updater: updater, viewController: nil)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+        
+        shadowView = UIView()
+        shadowView.backgroundColor = .clickerDarkGray
+        shadowView.layer.cornerRadius = shadowViewCornerRadius
+        shadowView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        contentView.addSubview(shadowView)
     }
     
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.top.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().offset(shadowViewWidth * -1)
+        }
+        
+        shadowView.snp.updateConstraints { make in
+            make.leading.equalTo(collectionView.snp.trailing)
+            make.trailing.centerY.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(shadowHeightScaleFactor)
         }
         super.updateConstraints()
     }
@@ -92,6 +113,7 @@ extension CardCell: ListAdapterDataSource {
         objects.append(questionModel)
         objects.append(contentsOf: resultModelArray)
         objects.append(miscellaneousModel)
+        objects.append(pollButtonModel)
         objects.append(bottomHamburgerCardModel)
         return objects
     }
@@ -103,6 +125,8 @@ extension CardCell: ListAdapterDataSource {
             return MCResultSectionController()
         } else if object is PollMiscellaneousModel {
             return PollMiscellaneousSectionController()
+        } else if object is PollButtonModel {
+            return PollButtonSectionController()
         } else {
             return HamburgerCardSectionController()
         }
