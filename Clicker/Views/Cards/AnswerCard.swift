@@ -71,7 +71,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func pollStarted(_ poll: Poll) { }
     
     func pollEnded(_ poll: Poll) {
-        cardView.poll.isLive = false
+        cardView.poll.state = .ended
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
         cardView.cardType = .ended
         cardView.setupEnded()
@@ -79,7 +79,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         print("received results!")
-        cardView.poll.isShared = true
+        cardView.poll.state = .shared
         if (poll.questionType == .multipleChoice) {
             cardView.poll.results = currentState.results
             let totalNumResults = currentState.getTotalCount()

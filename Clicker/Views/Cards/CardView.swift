@@ -97,7 +97,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
                 updateTableViewHeightForFR()
             }
         } else {
-            let numOptions = (poll.options?.count)!
+            let numOptions = poll.options.count
             updateTableViewHeight(baseHeight: numOptions * optionCellHeight)
             if (numOptions <= 7) {
                 scrollView.isScrollEnabled = false
@@ -308,7 +308,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func setupLive() {
         if (userRole == .admin) {
-            if (poll.isShared) {
+            if (poll.state == .shared) {
                 visibilityLabel.text = "Shared with group"
                 graphicView.image = #imageLiteral(resourceName: "liveIcon")
             } else {
@@ -327,7 +327,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     func setupEnded() {
         if (userRole == .admin) {
-            if (poll.isShared) {
+            if (poll.state == .shared) {
                 visibilityLabel.text = "Shared with group"
                 graphicView.image = #imageLiteral(resourceName: "liveIcon")
             } else {
@@ -423,16 +423,16 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         switch cardType {
         case .live, .ended:
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.optionIdentifier, for: indexPath) as! LiveOptionCell
-            cell.buttonView.setTitle(poll.options?[indexPath.row], for: .normal)
+            cell.buttonView.setTitle(poll.options[indexPath.row], for: .normal)
             cell.delegate = self
             cell.index = indexPath.row
             cell.chosen = (choice == indexPath.row)
-            cell.setColors(isLive: poll.isLive)
+            cell.setColors(isLive: poll.state == .live)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.resultMCIdentifier, for: indexPath) as! ResultMCCell
             cell.choiceTag = indexPath.row
-            cell.optionLabel.text = poll.options?[indexPath.row]
+            cell.optionLabel.text = poll.options[indexPath.row]
             cell.selectionStyle = .none
             cell.highlightView.backgroundColor = .clickerMint
             
@@ -459,7 +459,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         if (poll.questionType == .freeResponse) {
             return frResults.count
         } else {
-            return (poll.options?.count)!
+            return poll.options.count
         }
     }
     
@@ -493,7 +493,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             //            let height = (poll.options?.count)! * optionCellHeight
             //            let diff = frame.height - CGFloat(height) - scrollView.contentOffset.y - 179
             //            print("DIFFERENCE: \(diff)")
-            if ((poll.options?.count)! > 7) {
+            if (poll.options.count > 7) {
                 print("scrolling")
                 let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, scrollView.contentOffset.y, 0.0)
                 self.scrollView.contentInset = contentInsets
@@ -503,12 +503,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     // MARK - MultipleChoiceDelegate
     func choose(_ choice: Int) {
-        if (poll.isLive) {
+        if (poll.state == .live) {
             let answer: [String:Any] = [
                 "googleId": User.currentUser?.id ?? 0,
                 "poll": poll.id ?? 0,
                 "choice": intToMCOption(choice),
-                "text": poll.options![choice]
+                "text": poll.options[choice]
             ]
             cardDelegate.emitTally(answer: answer)
             self.choice = choice

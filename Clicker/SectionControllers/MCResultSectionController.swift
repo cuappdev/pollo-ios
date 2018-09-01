@@ -12,15 +12,12 @@ class MCResultSectionController: ListSectionController {
     
     var resultModel: MCResultModel!
     
-    // MARK: - Constants
-    let cellHeight: CGFloat = 44
-    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: cellHeight)
+        return CGSize(width: containerSize.width, height: LayoutConstants.optionCellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

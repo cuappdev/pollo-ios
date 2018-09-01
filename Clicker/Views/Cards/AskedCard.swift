@@ -153,12 +153,12 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
             delegate.askedCardDidEndPoll()
             setupEnded()
             cardType = .ended
-            poll.isLive = false
+            poll.state = .ended
         case .ended:
             socket.socket.emit(Routes.results, [])
             setupShared()
             cardType = .shared
-            poll.isShared = true
+            poll.state = .shared
         default: break
         }
     }

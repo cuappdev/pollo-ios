@@ -12,15 +12,12 @@ class PollButtonSectionController: ListSectionController {
     
     var pollButtonModel: PollButtonModel!
     
-    // MARK: - Constants
-    let cellHeight: CGFloat = 45
-    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: cellHeight)
+        return CGSize(width: containerSize.width, height: LayoutConstants.pollButtonCellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

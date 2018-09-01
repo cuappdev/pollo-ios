@@ -31,7 +31,7 @@ extension CardController: ListAdapterDataSource {
         if object is Poll {
             return PollSectionController()
         } else if object is PollDateModel {
-            return PollDateSectionController()
+            return PollDateSectionController(delegate: self)
         } else {
             return EmptyStateSectionController()
         }
@@ -40,6 +40,14 @@ extension CardController: ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
     }
+}
+
+extension CardController: PollDateSectionControllerDelegate {
+    
+    var role: UserRole {
+        return userRole
+    }
+    
 }
 
 extension CardController: StartPollDelegate {
