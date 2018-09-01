@@ -1,5 +1,5 @@
 //
-//  QuestionSectionController.swift
+//  HamburgerCardSectionController.swift
 //  Clicker
 //
 //  Created by Kevin Chan on 8/31/18.
@@ -8,10 +8,12 @@
 
 import IGListKit
 
-class QuestionSectionController: ListSectionController {
+class HamburgerCardSectionController: ListSectionController {
     
-    var questionModel: QuestionModel!
-    let cellHeight: CGFloat = 40
+    var hamburgerCardModel: HamburgerCardModel!
+    
+    // MARK: - Constants
+    let cellHeight: CGFloat = 25
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -22,14 +24,14 @@ class QuestionSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = collectionContext?.dequeueReusableCell(of: QuestionCell.self, for: self, at: index) as! QuestionCell
-        cell.configure(for: questionModel)
+        let cell = collectionContext?.dequeueReusableCell(of: HamburgerCardCell.self, for: self, at: index) as! HamburgerCardCell
+        cell.configure(for: hamburgerCardModel)
         cell.setNeedsUpdateConstraints()
         return cell
     }
     
     override func didUpdate(to object: Any) {
-        questionModel = object as? QuestionModel
+        hamburgerCardModel = object as? HamburgerCardModel
     }
     
 }

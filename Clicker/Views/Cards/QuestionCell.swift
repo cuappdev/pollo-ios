@@ -15,7 +15,6 @@ class QuestionCell: UICollectionViewCell {
     var moreButton: UIButton!
     
     // MARK: - Constants
-    let contentViewCornerRadius: CGFloat = 12
     let horizontalPadding: CGFloat = 14
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
@@ -24,8 +23,6 @@ class QuestionCell: UICollectionViewCell {
         super.init(frame: frame)
         
         contentView.backgroundColor = .white
-        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        contentView.layer.cornerRadius = 12
         setupViews()
     }
     
@@ -47,7 +44,7 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(horizontalPadding)
             make.width.equalToSuperview().multipliedBy(questionLabelWidthScaleFactor)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
         }
         
         moreButton.snp.makeConstraints { make in
