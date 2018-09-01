@@ -19,7 +19,6 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var adapter: ListAdapter!
-    var collectionViewHeight: CGFloat!
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
     var resultModelArray: [MCResultModel]!
@@ -80,7 +79,7 @@ class CardCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for poll: Poll, userRole: UserRole) {
+    func configure(for poll: Poll) {
         questionModel = QuestionModel(question: poll.text)
         resultModelArray = []
         if let results = poll.results {
@@ -97,15 +96,6 @@ class CardCell: UICollectionViewCell {
         }
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
         adapter.performUpdates(animated: true, completion: nil)
-    }
-    
-    // MARK: - Helpers
-    private func collectionViewHeightForPollAndRole(poll: Poll, userRole: UserRole) -> CGFloat {
-        let topBottomHamburgerCellHeight = LayoutConstants.hamburgerCardCellHeight * 2
-        let questionCellHeight = LayoutConstants.questionCellHeight
-        let optionsCellHeight = LayoutConstants.optionCellHeight * CGFloat(poll.options.count)
-        let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
-        return LayoutConstants.hamburgerCardCellHeight * 2 + LayoutConstants.questionCellHeight
     }
     
     required init?(coder aDecoder: NSCoder) {

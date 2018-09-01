@@ -26,7 +26,6 @@ class PollDateSectionController: ListSectionController {
     
     // MARK: - Constants
     let dateCellHeight: CGFloat = 50
-    let cardCellHeight: CGFloat = 300
     
     init(delegate: PollDateSectionControllerDelegate) {
         self.delegate = delegate
@@ -46,6 +45,7 @@ class PollDateSectionController: ListSectionController {
         case .date:
             return CGSize(width: containerSize.width, height: dateCellHeight)
         case .card:
+            let cardCellHeight = calculateCardCellHeight(poll: pollDateModel.poll, userRole: delegate.role)
             return CGSize(width: containerSize.width, height: cardCellHeight)
         }
     }
@@ -62,7 +62,7 @@ class PollDateSectionController: ListSectionController {
             break
         case .card:
             let cardCell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
-            cardCell.configure(for: pollDateModel.poll, userRole: delegate.role)
+            cardCell.configure(for: pollDateModel.poll)
             cardCell.setNeedsUpdateConstraints()
             cell = cardCell
             break
@@ -77,5 +77,35 @@ class PollDateSectionController: ListSectionController {
         } else {
             itemTypes = []
         }
+    }
+    
+    // MARK: - Helpers
+    private func calculateCardCellHeight(poll: Poll, userRole: UserRole) -> CGFloat {
+        let topBottomHamburgerCellHeight = LayoutConstants.hamburgerCardCellHeight * 2
+        let questionCellHeight = LayoutConstants.questionCellHeight
+        let optionsCellHeight = LayoutConstants.optionCellHeight * CGFloat(poll.options.count)
+        let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
+        var pollButtonCellHeight: CGFloat
+        switch (userRole) {
+        case .admin:
+            switch (poll.state) {
+            case .live:
+                pollButtonCellHeight = LayoutConstants.pollButtonCellHeight
+            case .ended:
+                pollButtonCellHeight = LayoutConstants.pollButtonCellHeight
+            default:
+                pollButtonCellHeight = 0
+            }
+        case .member:
+            switch (poll.state) {
+            case .live:
+                pollButtonCellHeight = 0
+            case .ended:
+                pollButtonCellHeight = 0
+            default:
+                pollButtonCellHeight = 0
+            }
+        }
+        return topBottomHamburgerCellHeight + questionCellHeight + optionsCellHeight + miscellaneousCellHeight + pollButtonCellHeight
     }
 }

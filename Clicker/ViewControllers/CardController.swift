@@ -38,8 +38,11 @@ class CardController: UIViewController {
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
     var collectionView: UICollectionView!
-    var verticalCollectionView: UICollectionView!
     var adapter: ListAdapter!
+    var topGradientView: UIView!
+    var topGradientLayer: CAGradientLayer!
+    var bottomGradientView: UIView!
+    var bottomGradientLayer: CAGradientLayer!
     
     var pinchRecognizer: UIPinchGestureRecognizer!
     
@@ -59,6 +62,7 @@ class CardController: UIViewController {
     let waitingLabelWidth: CGFloat = 220.0
     let waitingLabelTopPadding: CGFloat = 10.0
     let countLabelWidth: CGFloat = 42.0
+    let gradientViewHeight: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -74,6 +78,7 @@ class CardController: UIViewController {
         self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
     }
     
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,7 +88,7 @@ class CardController: UIViewController {
         view.addGestureRecognizer(pinchRecognizer)
         
         socket.addDelegate(self)
-//        setupHorizontalNavBar()
+        setupHorizontalNavBar()
         
         let results = [
             "A": [
@@ -97,15 +102,26 @@ class CardController: UIViewController {
             "C": [
                 "text": "Moon name #3",
                 "count": 2
+            ],
+            "D": [
+                "text": "Moon name #4",
+                "count": 2
             ]
         ]
         let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .ended)
         pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        setupVerticalNavBar()
         mockVertical()
+        setupVerticalNavBar()
         
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if (topGradientView.isDescendant(of: view) && bottomGradientView.isDescendant(of: view)) {
+            topGradientLayer.frame = topGradientView.bounds
+            bottomGradientLayer.frame = bottomGradientView.bounds
         }
     }
    
@@ -183,6 +199,7 @@ class CardController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.isPagingEnabled = true
         view.addSubview(collectionView)
+        view.sendSubview(toBack: collectionView)
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)
@@ -278,11 +295,44 @@ class CardController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
+        setupGradientViews()
     }
     
     func revertToHorizontal() {
+        topGradientView.removeFromSuperview()
+        bottomGradientView.removeFromSuperview()
         setupCards()
         setupHorizontalNavBar()
+    }
+    
+    func setupGradientViews() {
+        topGradientView = UIView()
+        topGradientView.backgroundColor = .clear
+        topGradientLayer = CAGradientLayer()
+        topGradientLayer.colors = [UIColor.clickerGrey0.cgColor, UIColor.clear.cgColor]
+        topGradientLayer.locations = [0.0, 1.0]
+        topGradientView.layer.addSublayer(topGradientLayer)
+        view.addSubview(topGradientView)
+        view.bringSubview(toFront: topGradientView)
+        
+        bottomGradientView = UIView()
+        bottomGradientView.backgroundColor = .clear
+        bottomGradientLayer = CAGradientLayer()
+        bottomGradientLayer.colors = [UIColor.clear.cgColor, UIColor.clickerGrey0.cgColor]
+        bottomGradientLayer.locations = [0.0, 1.0]
+        bottomGradientView.layer.addSublayer(bottomGradientLayer)
+        view.addSubview(bottomGradientView)
+        view.bringSubview(toFront: bottomGradientView)
+        
+        topGradientView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(gradientViewHeight)
+        }
+        
+        bottomGradientView.snp.makeConstraints { make in
+            make.leading.bottom.trailing.equalToSuperview()
+            make.height.equalTo(gradientViewHeight)
+        }
     }
     
     // MARK: SCROLLVIEW METHODS
@@ -390,7 +440,7 @@ class CardController: UIViewController {
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
         let isPinchOut: Bool = (sender.scale > 1)
-        if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
+        if (isPinchOut) {
             zoomOutBtnPressed()
         }
     }
