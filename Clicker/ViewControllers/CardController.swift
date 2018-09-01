@@ -93,6 +93,10 @@ class CardController: UIViewController {
             "B": [
                 "text": "Moon name #2",
                 "count": 2
+            ],
+            "C": [
+                "text": "Moon name #3",
+                "count": 2
             ]
         ]
         let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, isLive: false)

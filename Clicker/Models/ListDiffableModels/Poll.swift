@@ -9,6 +9,12 @@
 import UIKit
 import IGListKit
 
+enum PollState {
+    case live
+    case ended
+    case shared
+}
+
 class Poll {
     
     var id: Int?
