@@ -8,6 +8,10 @@
 
 import IGListKit
 
+protocol PollDateSectionControllerDelegate {
+    var role: UserRole { get }
+}
+
 enum PollDateSectionControllerItemType {
     case date
     case card
@@ -15,10 +19,18 @@ enum PollDateSectionControllerItemType {
 
 class PollDateSectionController: ListSectionController {
     
+    // MARK: - Data Vars
     var pollDateModel: PollDateModel!
+    var delegate: PollDateSectionControllerDelegate!
     var itemTypes: [PollDateSectionControllerItemType]!
+    
+    // MARK: - Constants
     let dateCellHeight: CGFloat = 50
     let cardCellHeight: CGFloat = 300
+    
+    init(delegate: PollDateSectionControllerDelegate) {
+        self.delegate = delegate
+    }
     
     // MARK: - ListSectionController overrides
     override func numberOfItems() -> Int {
@@ -50,7 +62,7 @@ class PollDateSectionController: ListSectionController {
             break
         case .card:
             let cardCell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
-            cardCell.configure(for: pollDateModel.poll)
+            cardCell.configure(for: pollDateModel.poll, userRole: delegate.role)
             cardCell.setNeedsUpdateConstraints()
             cell = cardCell
             break

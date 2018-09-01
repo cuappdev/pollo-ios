@@ -99,7 +99,7 @@ class CardController: UIViewController {
                 "count": 2
             ]
         ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, isLive: false)
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .ended)
         pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
         setupVerticalNavBar()
         mockVertical()
@@ -330,12 +330,13 @@ class CardController: UIViewController {
     
     // MARK: Helpers
     func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
+        switch poll.state {
+        case .live:
             return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
+        case .ended:
             return .ended
+        default:
+            return .shared
         }
     }
     

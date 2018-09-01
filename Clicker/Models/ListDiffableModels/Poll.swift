@@ -20,37 +20,35 @@ class Poll {
     var id: Int?
     var text: String
     var questionType: QuestionType
-    var options: [String]?
+    var options: [String]
     var results: [String:Any]?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
-    var isLive: Bool = false
-    var isShared: Bool = false
+    var state: PollState!
     let defaultIdentifier = UUID().uuidString
     
     // MARK: SORTED BY DATE POLL INITIALIZER
-    init(id: Int, text: String, results: [String:Any], type: QuestionType, isShared: Bool) {
+    init(id: Int, text: String, results: [String:Any], type: QuestionType, state: PollState) {
         self.id = id
         self.text = text
         self.results = results
         self.options = results.map { (key, _) in key }
         self.questionType = type
-        self.isShared = isShared
+        self.state = state
     }
     
     // MARK: SEND START POLL INITIALIZER
-    init(text: String, options: [String], type: QuestionType, isLive: Bool, isShared: Bool) {
+    init(text: String, options: [String], type: QuestionType, state: PollState) {
         self.text = text
         self.options = options
-        self.isLive = isLive
         self.results = [:]
         self.questionType = type
         for (index, option) in options.enumerated() {
             let mcOption = intToMCOption(index)
             results![mcOption] = ["text": option, "count": 0]
         }
-        self.isShared = isShared
+        self.state = state
     }
     
     // MARK: RECEIVE START POLL INITIALIZER
@@ -64,16 +62,7 @@ class Poll {
         }
         let type = json["type"] as? String
         self.questionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-        self.isLive = true
-    }
-    
-    init(id: Int, text: String, results: [String:Any], type: QuestionType, isLive: Bool) {
-        self.id = id
-        self.text = text
-        self.results = results
-        self.options = results.map { (key, _) in key }
-        self.isLive = isLive
-        self.questionType = type
+        self.state = .live
     }
     
     // Returns array representation of results
