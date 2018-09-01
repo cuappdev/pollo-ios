@@ -61,6 +61,10 @@
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */; };
 		C2A0F7C92139F5E100A28D75 /* PollMiscellaneousSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */; };
+		C2A0F7CB213A0BC200A28D75 /* PollMiscellaneousCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */; };
+		C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */; };
+		C2A0F7CF213A115900A28D75 /* HamburgerCardSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */; };
+		C2A0F7D1213A11CE00A28D75 /* HamburgerCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
 		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
 		C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B91808208CE3A80030822F /* FRSectionCell.swift */; };
@@ -164,6 +168,10 @@
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionSectionCell.swift; sourceTree = "<group>"; };
 		C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMiscellaneousSectionController.swift; sourceTree = "<group>"; };
+		C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMiscellaneousCell.swift; sourceTree = "<group>"; };
+		C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardModel.swift; sourceTree = "<group>"; };
+		C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardSectionController.swift; sourceTree = "<group>"; };
+		C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardCell.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
 		C2B91808208CE3A80030822F /* FRSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
@@ -241,6 +249,8 @@
 				C20B571421390D2A0091034F /* CardCell.swift */,
 				C20B571A2139DEF90091034F /* QuestionCell.swift */,
 				C20B571C2139E6080091034F /* MCResultCell.swift */,
+				C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */,
+				C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -317,6 +327,7 @@
 				C20B57162139D9D70091034F /* QuestionModel.swift */,
 				C20B571E2139E9F40091034F /* MCResultModel.swift */,
 				C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */,
+				C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */,
 			);
 			path = ListDiffableModels;
 			sourceTree = "<group>";
@@ -331,6 +342,7 @@
 				C20B57182139DDA10091034F /* QuestionSectionController.swift */,
 				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
 				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
+				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
 			);
 			path = SectionControllers;
 			sourceTree = "<group>";
@@ -704,6 +716,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2A0F7CB213A0BC200A28D75 /* PollMiscellaneousCell.swift in Sources */,
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
@@ -746,7 +759,9 @@
 				C2A0F7C92139F5E100A28D75 /* PollMiscellaneousSectionController.swift in Sources */,
 				C20B57172139D9D70091034F /* QuestionModel.swift in Sources */,
 				C20B571B2139DEF90091034F /* QuestionCell.swift in Sources */,
+				C2A0F7D1213A11CE00A28D75 /* HamburgerCardCell.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,
+				C2A0F7CF213A115900A28D75 /* HamburgerCardSectionController.swift in Sources */,
 				C20B571F2139E9F40091034F /* MCResultModel.swift in Sources */,
 				C2F48EB7208302F90022FE6B /* Socket.swift in Sources */,
 				C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */,
@@ -778,6 +793,7 @@
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
 				63A4A6482094D5EF00523AE6 /* FRPollBuilderView.swift in Sources */,
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,
+				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
 				C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */,
 				C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */,

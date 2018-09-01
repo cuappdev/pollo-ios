@@ -18,12 +18,17 @@ class CardCell: UICollectionViewCell {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
+    var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
     var resultModelArray: [MCResultModel]!
     var miscellaneousModel: PollMiscellaneousModel!
+    var bottomHamburgerCardModel: HamburgerCardModel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        topHamburgerCardModel = HamburgerCardModel(state: .top)
+        bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         setupViews()
     }
     
@@ -83,9 +88,11 @@ extension CardCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let questionModel = questionModel, let resultModelArray = resultModelArray, let miscellaneousModel = miscellaneousModel else { return [] }
         var objects: [ListDiffable] = []
+        objects.append(topHamburgerCardModel)
         objects.append(questionModel)
         objects.append(contentsOf: resultModelArray)
         objects.append(miscellaneousModel)
+        objects.append(bottomHamburgerCardModel)
         return objects
     }
     
@@ -95,7 +102,9 @@ extension CardCell: ListAdapterDataSource {
         } else if object is MCResultModel {
             return MCResultSectionController()
         } else if object is PollMiscellaneousModel {
-            
+            return PollMiscellaneousSectionController()
+        } else {
+            return HamburgerCardSectionController()
         }
     }
     

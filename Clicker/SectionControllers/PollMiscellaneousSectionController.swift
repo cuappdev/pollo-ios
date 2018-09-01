@@ -10,16 +10,27 @@ import IGListKit
 
 class PollMiscellaneousSectionController: ListSectionController {
     
+    var miscellaneousModel: PollMiscellaneousModel!
+    
+    // MARK: - Constants
+    let cellHeight: CGFloat = 30
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
-        <#code#>
+        guard let containerSize = collectionContext?.containerSize else {
+            return .zero
+        }
+        return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        <#code#>
+        let cell = collectionContext?.dequeueReusableCell(of: PollMiscellaneousCell.self, for: self, at: index) as! PollMiscellaneousCell
+        cell.configure(for: miscellaneousModel)
+        cell.setNeedsUpdateConstraints()
+        return cell
     }
     
     override func didUpdate(to object: Any) {
-        <#code#>
+        miscellaneousModel = object as? PollMiscellaneousModel
     }
 }
