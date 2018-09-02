@@ -53,7 +53,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         sliderBarLeftConstraint.isActive = true
         
         grayBar = UIView()
-        grayBar.backgroundColor = .clickerMediumGrey
+        grayBar.backgroundColor = .clickerGrey2
         addSubview(grayBar)
     }
     
@@ -81,7 +81,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.questionOptionCellIdentifier, for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
-        cell.backgroundColor = .clickerNavBarLightGrey
+        cell.backgroundColor = .clickerGrey8
         return cell
     }
     
@@ -104,7 +104,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
             unselectedIndexPath = IndexPath(item: 0, section: 0)
         }
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
-        unselectedCell.optionLabel.textColor = .clickerMediumGrey
+        unselectedCell.optionLabel.textColor = .clickerGrey2
     }
     
     // BACKGROUND COLOR
@@ -121,7 +121,7 @@ class QuestionOptionCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            optionLabel.textColor = isSelected ? .black : .clickerMediumGrey
+            optionLabel.textColor = isSelected ? .black : .clickerGrey2
         }
     }
     
@@ -130,7 +130,7 @@ class QuestionOptionCell: UICollectionViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textColor = .clickerMediumGrey
+        label.textColor = .clickerGrey2
         label.font = UIFont._16MediumFont
         return label
     }()

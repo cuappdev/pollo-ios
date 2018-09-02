@@ -32,7 +32,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        view.backgroundColor = .clickerDeepBlack
+        view.backgroundColor = .clickerBlack1
 
         setupViews()
     }
@@ -51,7 +51,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
-        codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._16MediumFont])
+        codeTextField.attributedPlaceholder = NSAttributedString(string: "Enter a code", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._16MediumFont])
         view.addSubview(codeTextField)
         
         let joinButtonView = UIView(frame: CGRect(x: 0, y: 0, width: joinButtonSize.width + textFieldPadding * 2, height: joinButtonSize.height + textFieldPadding * 2))
@@ -60,7 +60,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
         joinButton.setTitleColor(.white, for: .normal)
         joinButton.titleLabel?.font = ._16SemiboldFont
         joinButton.titleLabel?.textAlignment = .center
-        joinButton.backgroundColor = .clickerGreen
+        joinButton.backgroundColor = .clickerGreen0
         joinButton.layer.cornerRadius = joinButtonSize.height / 2
         joinButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
         joinButtonView.addSubview(joinButton)

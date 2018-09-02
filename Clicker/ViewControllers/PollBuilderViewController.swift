@@ -86,7 +86,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
         questionTypeButton = UIButton()
         questionTypeButton.setTitle("Multiple Choice", for: .normal)
-        questionTypeButton.setTitleColor(.clickerBlack, for: .normal)
+        questionTypeButton.setTitleColor(.clickerBlack0, for: .normal)
         questionTypeButton.titleLabel?.font = ._16SemiboldFont
         questionTypeButton.contentHorizontalAlignment = .center
         questionTypeButton.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
@@ -95,7 +95,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
         draftsButton = UIButton()
         draftsButton.setTitle("Drafts (\((drafts ?? []).count))", for: .normal)
-        draftsButton.setTitleColor(.clickerBlack, for: .normal)
+        draftsButton.setTitleColor(.clickerBlack0, for: .normal)
         draftsButton.titleLabel?.font = ._16MediumFont
         draftsButton.contentHorizontalAlignment = .right
         draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
@@ -118,7 +118,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(buttonsView)
         
         let divider = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1.5))
-        divider.backgroundColor = .clickerBorder
+        divider.backgroundColor = .clickerGrey5
         buttonsView.addSubview(divider)
         
         saveDraftButton = UIButton()
@@ -135,7 +135,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         startQuestionButton.setTitle("Start Question", for: .normal)
         startQuestionButton.setTitleColor(.white, for: .normal)
         startQuestionButton.titleLabel?.font = ._16SemiboldFont
-        startQuestionButton.backgroundColor = .clickerGreen
+        startQuestionButton.backgroundColor = .clickerGreen0
         startQuestionButton.layer.cornerRadius = buttonHeight / 2
         startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
         buttonsView.addSubview(startQuestionButton)
@@ -336,13 +336,13 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func updateCanDraft(_ canDraft: Bool) {
         self.canDraft = canDraft
         if canDraft {
-            saveDraftButton.setTitleColor(.clickerGreen, for: .normal)
+            saveDraftButton.setTitleColor(.clickerGreen0, for: .normal)
             saveDraftButton.backgroundColor = .clear
-            saveDraftButton.layer.borderColor = UIColor.clickerGreen.cgColor
+            saveDraftButton.layer.borderColor = UIColor.clickerGreen0.cgColor
         } else {
-            saveDraftButton.setTitleColor(.clickerMediumGrey, for: .normal)
-            saveDraftButton.backgroundColor = .clickerOptionGrey
-            saveDraftButton.layer.borderColor = UIColor.clickerOptionGrey.cgColor
+            saveDraftButton.setTitleColor(.clickerGrey2, for: .normal)
+            saveDraftButton.backgroundColor = .clickerGrey6
+            saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
             draftsButton.titleLabel?.font = ._16MediumFont
         }
     }

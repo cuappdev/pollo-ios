@@ -18,7 +18,7 @@ class QuestionSectionCell: UICollectionViewCell, UITextFieldDelegate {
     //MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerBackground
+        backgroundColor = .clickerGrey4
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

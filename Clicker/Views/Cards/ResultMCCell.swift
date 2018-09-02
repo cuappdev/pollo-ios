@@ -36,7 +36,7 @@ class ResultMCCell: UITableViewCell {
         containerView.layer.cornerRadius = 8
         containerView.clipsToBounds = true
         containerView.layer.borderWidth = 0.5
-        containerView.layer.borderColor = UIColor.clickerBorder.cgColor
+        containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         addSubview(containerView)
 
         optionLabel = UILabel()
@@ -49,7 +49,7 @@ class ResultMCCell: UITableViewCell {
         numberLabel.font = ._16MediumFont
         numberLabel.backgroundColor = .clear
         numberLabel.text = "0"
-        numberLabel.textColor = .clickerMediumGrey
+        numberLabel.textColor = .clickerGrey2
         containerView.addSubview(numberLabel)
         
         highlightView = UIView()
