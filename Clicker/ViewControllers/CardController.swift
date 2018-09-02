@@ -37,6 +37,7 @@ class CardController: UIViewController {
     // MARK: - Nonempty State View vars
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
+    var collectionViewLayout: UICollectionViewFlowLayout!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
     var topGradientView: UIView!
@@ -83,35 +84,10 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerDeepBlack
-
-        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
-        view.addGestureRecognizer(pinchRecognizer)
-        
         socket.addDelegate(self)
         setupHorizontalNavBar()
-        
-        let results = [
-            "A": [
-                "text": "Moon name #1",
-                "count": 3
-            ],
-            "B": [
-                "text": "Moon name #2",
-                "count": 2
-            ],
-            "C": [
-                "text": "Moon name #3",
-                "count": 2
-            ],
-            "D": [
-                "text": "Moon name #4",
-                "count": 2
-            ]
-        ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .ended)
-        pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        mockVertical()
-        setupVerticalNavBar()
+        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
+        view.addGestureRecognizer(pinchRecognizer)
         
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
@@ -187,10 +163,11 @@ class CardController: UIViewController {
     }
     
     func setupCards() {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
-        layout.scrollDirection = .horizontal
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.minimumInteritemSpacing = 10
+        collectionViewLayout.minimumLineSpacing = 10
+        collectionViewLayout.scrollDirection = .horizontal
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         let collectionViewInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView.showsVerticalScrollIndicator = false
@@ -242,52 +219,17 @@ class CardController: UIViewController {
     }
     
     // MARK: - Vertical Collection View
-    // TODO: REMOVE THIS FUNCTION
-    func mockVertical() {
-        self.state = .vertical
-        
-        peopleButton = UIButton()
-        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("0", for: .normal)
-        peopleButton.titleLabel?.font = UIFont._16RegularFont
-        peopleButton.sizeToFit()
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
-        layout.minimumLineSpacing = 10
-        layout.scrollDirection = .vertical
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        let collectionViewInset = view.frame.width * 0.1
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
-        collectionView.backgroundColor = .clear
-        view.addSubview(collectionView)
-        
-        let updater = ListAdapterUpdater()
-        adapter = ListAdapter(updater: updater, viewController: self)
-        adapter.collectionView = collectionView
-        adapter.dataSource = self
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-    }
-    
     func setupVertical() {
+        self.state = .vertical
         zoomOutButton.removeFromSuperview()
         countLabel.removeFromSuperview()
-        
-        self.state = .vertical
+        collectionViewLayout.scrollDirection = .vertical
+        let collectionViewInset = view.frame.width * 0.1
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
         }
         adapter.performUpdates(animated: true, completion: nil)
-        
         setupVerticalNavBar()
     }
     
