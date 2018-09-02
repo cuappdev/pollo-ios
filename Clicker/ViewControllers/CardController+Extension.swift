@@ -20,9 +20,11 @@ extension CardController: ListAdapterDataSource {
                 return [EmptyStateModel(userRole: userRole)]
             }
         default:
-            return pollsDateArray.map({ pollsDateModel -> PollDateModel in
-                let latestPoll = pollsDateModel.polls[pollsDateModel.polls.count - 1]
-                return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+            return pollsDateArray.compactMap({ pollsDateModel -> PollDateModel? in
+                if let latestPoll = pollsDateModel.polls.last {
+                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+                }
+                return nil
             })
         }
     }
@@ -32,9 +34,8 @@ extension CardController: ListAdapterDataSource {
             return PollSectionController()
         } else if object is PollDateModel {
             return PollDateSectionController(delegate: self)
-        } else {
-            return EmptyStateSectionController()
         }
+        return EmptyStateSectionController()
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {

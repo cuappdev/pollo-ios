@@ -382,7 +382,7 @@ class CardController: UIViewController {
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
         let isPinchOut: Bool = (sender.scale > 1)
-        if (isPinchOut) {
+        if isPinchOut {
             zoomOutBtnPressed()
         }
     }
