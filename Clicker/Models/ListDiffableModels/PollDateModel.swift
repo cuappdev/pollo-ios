@@ -23,6 +23,7 @@ class PollDateModel {
 }
 
 extension PollDateModel: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -32,4 +33,5 @@ extension PollDateModel: ListDiffable {
         guard let object = object as? PollDateModel else { return false }
         return identifier == object.identifier
     }
+    
 }

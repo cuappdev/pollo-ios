@@ -25,6 +25,7 @@ class HamburgerCardModel {
 }
 
 extension HamburgerCardModel: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -34,4 +35,5 @@ extension HamburgerCardModel: ListDiffable {
         guard let object = object as? HamburgerCardModel else { return false }
         return identifier == object.identifier
     }
+    
 }

@@ -32,19 +32,19 @@ class PollTypeDropDownView: UIView {
         backgroundColor = .clickerWhite
         
         topButton = UIButton()
-        topButton.setTitleColor(.clickerGreen, for: .normal)
+        topButton.setTitleColor(.clickerGreen0, for: .normal)
         topButton.titleLabel?.font = ._16SemiboldFont
         topButton.addTarget(self, action: #selector(selectedTop), for: .touchUpInside)
         addSubview(topButton)
         
         bottomButton = UIButton()
-        bottomButton.setTitleColor(.clickerBlack, for: .normal)
+        bottomButton.setTitleColor(.clickerBlack0, for: .normal)
         bottomButton.titleLabel?.font = ._16RegularFont
         bottomButton.addTarget(self, action: #selector(selectedBottom), for: .touchUpInside)
         addSubview(bottomButton)
         
         line = UIView()
-        line.backgroundColor = .clickerBorder
+        line.backgroundColor = .clickerGrey5
         addSubview(line)
     }
     func setupConstraints() {

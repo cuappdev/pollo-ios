@@ -37,12 +37,12 @@ class PollMiscellaneousCell: UICollectionViewCell {
         contentView.addSubview(iconImageView)
         
         descriptionLabel = UILabel()
-        descriptionLabel.textColor = .clickerMediumGrey
+        descriptionLabel.textColor = .clickerGrey2
         descriptionLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         contentView.addSubview(descriptionLabel)
         
         totalVotesLabel = UILabel()
-        totalVotesLabel.textColor = .clickerMediumGrey
+        totalVotesLabel.textColor = .clickerGrey2
         totalVotesLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         contentView.addSubview(totalVotesLabel)
     }

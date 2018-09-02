@@ -39,7 +39,7 @@ class MCResultCell: UICollectionViewCell {
     func setupViews() {
         containerView = UIView()
         containerView.layer.cornerRadius = containerViewCornerRadius
-        containerView.layer.borderColor = UIColor.clickerBorder.cgColor
+        containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
         contentView.addSubview(containerView)
@@ -50,11 +50,11 @@ class MCResultCell: UICollectionViewCell {
         
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
-        numSelectedLabel.textColor = .clickerMediumGrey
+        numSelectedLabel.textColor = .clickerGrey2
         containerView.addSubview(numSelectedLabel)
         
         highlightView = UIView()
-        highlightView.backgroundColor = .clickerGreen
+        highlightView.backgroundColor = .clickerGreen0
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
     }

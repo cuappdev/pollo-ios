@@ -41,7 +41,7 @@ class FROptionsDropDownView: UIView {
         backgroundColor = .clickerWhite
         
         responsesLabel = UILabel()
-        responsesLabel.textColor = .clickerBlack
+        responsesLabel.textColor = .clickerBlack0
         responsesLabel.font = ._14MediumFont
         responsesLabel.text = "Show responses to audience"
         responsesLabel.textAlignment = .left
@@ -55,7 +55,7 @@ class FROptionsDropDownView: UIView {
         addSubview(responsesButton)
 
         votesLabel = UILabel()
-        votesLabel.textColor = .clickerMediumGrey
+        votesLabel.textColor = .clickerGrey2
         votesLabel.text = "Show vote count to audience"
         votesLabel.font = ._14MediumFont
         votesLabel.textAlignment = .left
@@ -70,7 +70,7 @@ class FROptionsDropDownView: UIView {
         addSubview(votesButton)
         
         line = UIView()
-        line.backgroundColor = .clickerBorder
+        line.backgroundColor = .clickerGrey5
         addSubview(line)
     }
     func setupConstraints() {
@@ -126,12 +126,12 @@ class FROptionsDropDownView: UIView {
     @objc func toggleResponses() {
         if !shareResponses {
             votesButton.isEnabled = true
-            votesLabel.textColor = .clickerBlack
+            votesLabel.textColor = .clickerBlack0
 
             responsesCheck.image = checkImage
         } else {
             votesButton.isEnabled = false
-            votesLabel.textColor = .clickerMediumGrey
+            votesLabel.textColor = .clickerGrey2
             
             responsesCheck.image = circleImage
             votesCheck.image = circleImage

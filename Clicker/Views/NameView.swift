@@ -22,19 +22,19 @@ class NameView: UIView, UITextFieldDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .clicker85Black
+        backgroundColor = .clickerBlack2
         setupViews()
         setupConstraints()
     }
     
     func setupViews() {
         titleField = UITextField()
-        titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._24MediumFont])
+        titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
         if (session.code != session.name) {
             titleField.text = session.name
         }
         titleField.font = ._24MediumFont
-        titleField.textColor = .clickerMediumGrey
+        titleField.textColor = .clickerGrey2
         titleField.textAlignment = .center
         titleField.delegate = self
         titleField.becomeFirstResponder()

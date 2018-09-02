@@ -23,7 +23,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerDeepBlack
+        backgroundColor = .clickerBlack1
         setup()
     }
     
@@ -37,7 +37,7 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     func setup() {
         cardView = CardView(frame: .zero, userRole: .member, cardDelegate: self)
-        cardView.highlightColor = .clickerHalfGreen
+        cardView.highlightColor = .clickerGreen1
         addSubview(cardView)
         
         cardView.snp.makeConstraints { make in

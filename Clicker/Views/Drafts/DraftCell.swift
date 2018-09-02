@@ -28,7 +28,7 @@ class DraftCell: UICollectionViewCell {
     func setupViews() {
         backgroundColor = .clear
         layer.cornerRadius = 15
-        layer.borderColor = UIColor.clickerBorder.cgColor
+        layer.borderColor = UIColor.clickerGrey5.cgColor
         layer.borderWidth = 1
         clipsToBounds = true
         

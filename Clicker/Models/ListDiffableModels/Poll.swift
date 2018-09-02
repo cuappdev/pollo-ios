@@ -21,12 +21,19 @@ class Poll {
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String:Any]?
+    var results: [String:Any]
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     var state: PollState!
+    
+    // MARK: - Constants
     let defaultIdentifier = UUID().uuidString
+    let idKey = "key"
+    let textKey = "text"
+    let countKey = "count"
+    let optionsKey = "options"
+    let typeKey = "type"
     
     // MARK: SORTED BY DATE POLL INITIALIZER
     init(id: Int, text: String, results: [String:Any], type: QuestionType, state: PollState) {
@@ -46,21 +53,22 @@ class Poll {
         self.questionType = type
         for (index, option) in options.enumerated() {
             let mcOption = intToMCOption(index)
-            results![mcOption] = ["text": option, "count": 0]
+            results[mcOption] = [textKey: option, countKey: 0]
         }
         self.state = state
     }
     
     // MARK: RECEIVE START POLL INITIALIZER
     init(json: [String:Any]){
-        self.id = json["id"] as? Int
-        self.text = json["text"] as! String
-        if let options = json["options"] as? [String] {
+        self.id = json[idKey] as? Int
+        self.text = json[textKey] as! String
+        if let options = json[optionsKey] as? [String] {
             self.options = options
         } else {
             self.options = []
         }
-        let type = json["type"] as? String
+        self.results = [:]
+        let type = json[typeKey] as? String
         self.questionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
         self.state = .live
     }
@@ -69,19 +77,19 @@ class Poll {
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
     func getFRResultsArray() -> [(String, Int)] {
         var resultsArr: [(String, Int)] = []
-        results?.forEach { (key, val) in
+        results.forEach { (key, val) in
             if let choiceJSON = val as? [String:Any] {
-                resultsArr.append((key, (choiceJSON["count"] as! Int)))
+                resultsArr.append((key, (choiceJSON[countKey] as! Int)))
             }
         }
         return resultsArr
     }
     
-    func getTotalResults() -> Int {
-        return results!.reduce(0) { (res, arg1) -> Int in
+    func getTotalResults() -> Float {
+        return results.reduce(0) { (res, arg1) -> Float in
             let (_, value) = arg1
-            if let choiceJSON = value as? [String:Any] {
-                return res + (choiceJSON["count"] as! Int)
+            if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[countKey] as? Float {
+                return res + numSelected
             } else {
                 return 0
             }
@@ -90,6 +98,7 @@ class Poll {
 }
 
 extension Poll: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         guard let id = id else {
             return defaultIdentifier as NSString
@@ -100,6 +109,7 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id
+        return id == object.id && text == object.text && questionType == object.questionType
     }
+    
 }

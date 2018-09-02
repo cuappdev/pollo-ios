@@ -20,6 +20,7 @@ class QuestionModel {
 }
 
 extension QuestionModel: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -29,6 +30,7 @@ extension QuestionModel: ListDiffable {
         guard let object = object as? QuestionModel else { return false }
         return identifier == object.identifier
     }
+    
 }
 
 

@@ -85,27 +85,8 @@ class PollDateSectionController: ListSectionController {
         let questionCellHeight = LayoutConstants.questionCellHeight
         let optionsCellHeight = LayoutConstants.optionCellHeight * CGFloat(poll.options.count)
         let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
-        var pollButtonCellHeight: CGFloat
-        switch (userRole) {
-        case .admin:
-            switch (poll.state) {
-            case .live:
-                pollButtonCellHeight = LayoutConstants.pollButtonCellHeight
-            case .ended:
-                pollButtonCellHeight = LayoutConstants.pollButtonCellHeight
-            default:
-                pollButtonCellHeight = 0
-            }
-        case .member:
-            switch (poll.state) {
-            case .live:
-                pollButtonCellHeight = 0
-            case .ended:
-                pollButtonCellHeight = 0
-            default:
-                pollButtonCellHeight = 0
-            }
-        }
+        let hasButtonCell = userRole == .admin && (poll.state == .live || poll.state == .ended)
+        let pollButtonCellHeight = hasButtonCell ? LayoutConstants.pollButtonCellHeight : 0
         return topBottomHamburgerCellHeight + questionCellHeight + optionsCellHeight + miscellaneousCellHeight + pollButtonCellHeight
     }
 }

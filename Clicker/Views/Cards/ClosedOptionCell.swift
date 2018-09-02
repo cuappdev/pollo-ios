@@ -17,7 +17,7 @@ class ClosedOptionCell: UITableViewCell {
     //MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clickerBackground
+        backgroundColor = .clickerGrey4
         
         setupViews()
         layoutSubviews()
@@ -32,7 +32,7 @@ class ClosedOptionCell: UITableViewCell {
         questionLabel.layer.cornerRadius = 8
         questionLabel.clipsToBounds = true
         questionLabel.layer.borderWidth = 1.0
-        questionLabel.layer.borderColor = UIColor.clickerMint.cgColor
+        questionLabel.layer.borderColor = UIColor.clickerGreen2.cgColor
         questionLabel.textAlignment = .center
         addSubview(questionLabel)
     }

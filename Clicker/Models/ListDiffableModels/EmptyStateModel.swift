@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-class EmptyStateModel: ListDiffable {
+class EmptyStateModel {
     
     var userRole: UserRole
     let identifier = UUID().uuidString
@@ -17,6 +17,10 @@ class EmptyStateModel: ListDiffable {
     init(userRole: UserRole) {
         self.userRole = userRole
     }
+
+}
+
+extension EmptyStateModel: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
@@ -27,4 +31,5 @@ class EmptyStateModel: ListDiffable {
         guard let object = object as? EmptyStateModel else { return false }
         return identifier == object.identifier
     }
+    
 }
