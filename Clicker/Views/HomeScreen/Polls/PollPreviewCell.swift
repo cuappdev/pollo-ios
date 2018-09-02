@@ -40,11 +40,11 @@ class PollPreviewCell: UITableViewCell {
     
         codeLabel = UILabel()
         codeLabel.font = ._18MediumFont
-        codeLabel.textColor = .clickerMediumGrey
+        codeLabel.textColor = .clickerGrey2
         contentView.addSubview(codeLabel)
         
         line = UIView()
-        line.backgroundColor = .clickerBorder
+        line.backgroundColor = .clickerGrey5
         contentView.addSubview(line)
         
         dotsButton = UIButton()

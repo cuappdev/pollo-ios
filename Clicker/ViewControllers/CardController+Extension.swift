@@ -9,6 +9,48 @@
 import IGListKit
 import UIKit
 
+extension CardController: ListAdapterDataSource {
+    
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        switch state {
+        case .horizontal:
+            if (currentIndex > -1) {
+                return pollsDateArray[currentIndex].polls
+            } else {
+                return [EmptyStateModel(userRole: userRole)]
+            }
+        default:
+            return pollsDateArray.compactMap({ pollsDateModel -> PollDateModel? in
+                if let latestPoll = pollsDateModel.polls.last {
+                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+                }
+                return nil
+            })
+        }
+    }
+    
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        if object is Poll {
+            return PollSectionController()
+        } else if object is PollDateModel {
+            return PollDateSectionController(delegate: self)
+        }
+        return EmptyStateSectionController()
+    }
+    
+    func emptyView(for listAdapter: ListAdapter) -> UIView? {
+        return nil
+    }
+}
+
+extension CardController: PollDateSectionControllerDelegate {
+    
+    var role: UserRole {
+        return userRole
+    }
+    
+}
+
 extension CardController: StartPollDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
@@ -17,9 +59,9 @@ extension CardController: StartPollDelegate {
 
 }
 
-extension CardController: EndPollDelegate {
+extension CardController: AskedCardDelegate {
     
-    func endedPoll() {
+    func askedCardDidEndPoll() {
         createPollButton.isUserInteractionEnabled = true
     }
 

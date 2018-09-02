@@ -39,7 +39,7 @@ class LiveOptionCell: UITableViewCell {
         buttonView.layer.cornerRadius = 8
         buttonView.clipsToBounds = true
         buttonView.layer.borderWidth = 1.0
-        buttonView.layer.borderColor = UIColor.clickerGreen.cgColor
+        buttonView.layer.borderColor = UIColor.clickerGreen0.cgColor
         buttonView.addTarget(self, action: #selector(chooseMe), for: .touchUpInside)
         addSubview(buttonView)
     }
@@ -60,19 +60,19 @@ class LiveOptionCell: UITableViewCell {
     func setColors(isLive: Bool) {
         if chosen {
             if (isLive) {
-                buttonView.backgroundColor = .clickerGreen
+                buttonView.backgroundColor = .clickerGreen0
             } else {
-                buttonView.backgroundColor = .clickerMint
-                buttonView.layer.borderColor = UIColor.clickerMint.cgColor
+                buttonView.backgroundColor = .clickerGreen2
+                buttonView.layer.borderColor = UIColor.clickerGreen2.cgColor
             }
             buttonView.setTitleColor(.white, for: .normal)
         } else {
             if (isLive) {
-                buttonView.setTitleColor(.clickerGreen, for: .normal)
-                buttonView.layer.borderColor = UIColor.clickerGreen.cgColor
+                buttonView.setTitleColor(.clickerGreen0, for: .normal)
+                buttonView.layer.borderColor = UIColor.clickerGreen0.cgColor
             } else {
-                buttonView.setTitleColor(.clickerMint, for: .normal)
-                buttonView.layer.borderColor = UIColor.clickerMint.cgColor
+                buttonView.setTitleColor(.clickerGreen2, for: .normal)
+                buttonView.layer.borderColor = UIColor.clickerGreen2.cgColor
             }
             buttonView.backgroundColor = .white
         }

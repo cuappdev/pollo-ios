@@ -16,10 +16,10 @@ enum CardType {
     case shared
 }
 
-protocol EndPollDelegate {
-    func endedPoll()
+enum CardControllerState {
+    case horizontal
+    case vertical
 }
-
 
 class CardController: UIViewController {
     
@@ -37,9 +37,13 @@ class CardController: UIViewController {
     // MARK: - Nonempty State View vars
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
-    var mainCollectionView: UICollectionView!
-    var verticalCollectionView: UICollectionView!
+    var collectionViewLayout: UICollectionViewFlowLayout!
+    var collectionView: UICollectionView!
     var adapter: ListAdapter!
+    var topGradientView: UIView!
+    var topGradientLayer: CAGradientLayer!
+    var bottomGradientView: UIView!
+    var bottomGradientLayer: CAGradientLayer!
     
     var pinchRecognizer: UIPinchGestureRecognizer!
     
@@ -47,7 +51,9 @@ class CardController: UIViewController {
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
+    var state: CardControllerState!
     var pollsDateArray: [PollsDateModel]!
+    var currentIndex: Int!
     
     // MARK: - Constants    
     let monkeyViewLength: CGFloat = 32.0
@@ -57,6 +63,7 @@ class CardController: UIViewController {
     let waitingLabelWidth: CGFloat = 220.0
     let waitingLabelTopPadding: CGFloat = 10.0
     let countLabelWidth: CGFloat = 42.0
+    let gradientViewHeight: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -68,23 +75,29 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+        self.state = .horizontal
+        self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
     }
     
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerDeepBlack
-
+        view.backgroundColor = .clickerBlack1
+        socket.addDelegate(self)
+        setupHorizontalNavBar()
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
         
-        socket.addDelegate(self)
-        setupHorizontalNavBar()
-        
-        // TODO: Add logic for setting up empty state or nonempty state
-        
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if (topGradientView.isDescendant(of: view) && bottomGradientView.isDescendant(of: view)) {
+            topGradientLayer.frame = topGradientView.bounds
+            bottomGradientLayer.frame = bottomGradientView.bounds
         }
     }
    
@@ -110,14 +123,14 @@ class CardController: UIViewController {
         
         nothingToSeeLabel = UILabel()
         nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerBorder
+        nothingToSeeLabel.textColor = .clickerGrey5
         nothingToSeeLabel.textAlignment = .center
         nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
         view.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGrey
+        waitingLabel.textColor = .clickerGrey2
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
@@ -150,22 +163,25 @@ class CardController: UIViewController {
     }
     
     func setupCards() {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
-        layout.scrollDirection = .horizontal
-        mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.minimumInteritemSpacing = 10
+        collectionViewLayout.minimumLineSpacing = 10
+        collectionViewLayout.scrollDirection = .horizontal
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         let collectionViewInset = view.frame.width * 0.05
-        mainCollectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        mainCollectionView.showsVerticalScrollIndicator = false
-        mainCollectionView.showsHorizontalScrollIndicator = false
-        mainCollectionView.bounces = false
-        mainCollectionView.backgroundColor = .clear
-        mainCollectionView.isPagingEnabled = true
-        view.addSubview(mainCollectionView)
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.bounces = false
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
+        view.addSubview(collectionView)
+        view.sendSubview(toBack: collectionView)
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)
-        adapter.collectionView = mainCollectionView
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
@@ -177,7 +193,7 @@ class CardController: UIViewController {
         let countString = "1/1"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
-        countLabel.backgroundColor = UIColor.clickerLabelGrey
+        countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
@@ -194,7 +210,7 @@ class CardController: UIViewController {
             make.width.equalTo(countLabelWidth)
         }
         
-        mainCollectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(countLabel.snp.bottom).offset(6)
             make.bottom.equalToSuperview()
             make.width.equalToSuperview()
@@ -204,10 +220,16 @@ class CardController: UIViewController {
     
     // MARK: - Vertical Collection View
     func setupVertical() {
-        mainCollectionView.removeFromSuperview()
+        self.state = .vertical
         zoomOutButton.removeFromSuperview()
         countLabel.removeFromSuperview()
-        
+        collectionViewLayout.scrollDirection = .vertical
+        let collectionViewInset = view.frame.width * 0.1
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+        }
+        adapter.performUpdates(animated: true, completion: nil)
         setupVerticalNavBar()
     }
     
@@ -215,16 +237,49 @@ class CardController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
+        setupGradientViews()
     }
     
     func revertToHorizontal() {
+        topGradientView.removeFromSuperview()
+        bottomGradientView.removeFromSuperview()
         setupCards()
         setupHorizontalNavBar()
     }
     
+    func setupGradientViews() {
+        topGradientView = UIView()
+        topGradientView.backgroundColor = .clear
+        topGradientLayer = CAGradientLayer()
+        topGradientLayer.colors = [UIColor.clickerGrey0.cgColor, UIColor.clear.cgColor]
+        topGradientLayer.locations = [0.0, 1.0]
+        topGradientView.layer.addSublayer(topGradientLayer)
+        view.addSubview(topGradientView)
+        view.bringSubview(toFront: topGradientView)
+        
+        bottomGradientView = UIView()
+        bottomGradientView.backgroundColor = .clear
+        bottomGradientLayer = CAGradientLayer()
+        bottomGradientLayer.colors = [UIColor.clear.cgColor, UIColor.clickerGrey0.cgColor]
+        bottomGradientLayer.locations = [0.0, 1.0]
+        bottomGradientView.layer.addSublayer(bottomGradientLayer)
+        view.addSubview(bottomGradientView)
+        view.bringSubview(toFront: bottomGradientView)
+        
+        topGradientView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(gradientViewHeight)
+        }
+        
+        bottomGradientView.snp.makeConstraints { make in
+            make.leading.bottom.trailing.equalToSuperview()
+            make.height.equalTo(gradientViewHeight)
+        }
+    }
+    
     // MARK: SCROLLVIEW METHODS
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView != mainCollectionView) {
+        if (scrollView != collectionView) {
             return
         }
         // TODO: Add logic for updating countLabel to display current question # / total num questions
@@ -267,12 +322,13 @@ class CardController: UIViewController {
     
     // MARK: Helpers
     func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
+        switch poll.state {
+        case .live:
             return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
+        case .ended:
             return .ended
+        default:
+            return .shared
         }
     }
     
@@ -280,7 +336,7 @@ class CardController: UIViewController {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
                 self.pollsDateArray = pollsDateArray
-                DispatchQueue.main.async { self.mainCollectionView.reloadData() }
+                DispatchQueue.main.async { self.collectionView.reloadData() }
             }.catch { error in
                 print(error)
         }
@@ -294,7 +350,7 @@ class CardController: UIViewController {
         let slashIndex = countString.index(of: "/")?.encodedOffset
         let attributedString = NSMutableAttributedString(string: countString, attributes: [
             .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGrey,
+            .foregroundColor: UIColor.clickerGrey2,
             .kern: 0.0
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
@@ -326,7 +382,7 @@ class CardController: UIViewController {
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
         let isPinchOut: Bool = (sender.scale > 1)
-        if (isPinchOut && verticalCollectionView != nil && !verticalCollectionView.isDescendant(of: self.view)) {
+        if isPinchOut {
             zoomOutBtnPressed()
         }
     }

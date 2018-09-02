@@ -44,7 +44,7 @@ class PickQTypeViewController: UIViewController {
         bottomBackgroundView = UIButton()
         bottomBackgroundView.backgroundColor = .clickerWhite
         bottomBackgroundView.setTitle(currentType.description, for: .normal)
-        bottomBackgroundView.setTitleColor(.clickerBlack, for: .normal)
+        bottomBackgroundView.setTitleColor(.clickerBlack0, for: .normal)
         bottomBackgroundView.titleLabel?.font = ._16SemiboldFont
         bottomBackgroundView.addTarget(self, action: #selector(bottomPressed), for: .touchUpInside)
         view.addSubview(bottomBackgroundView)
