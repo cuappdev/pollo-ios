@@ -41,7 +41,7 @@ class PollDateSectionController: ListSectionController {
             return .zero
         }
         let itemType = itemTypes[index]
-        switch (itemType) {
+        switch itemType {
         case .date:
             return CGSize(width: containerSize.width, height: dateCellHeight)
         case .card:

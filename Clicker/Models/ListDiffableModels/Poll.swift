@@ -22,10 +22,10 @@ class Poll {
     var questionType: QuestionType
     var options: [String]
     var results: [String:Any]
+    var state: PollState!
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
-    var state: PollState!
     
     // MARK: - Constants
     let defaultIdentifier = UUID().uuidString
@@ -40,7 +40,7 @@ class Poll {
         self.id = id
         self.text = text
         self.results = results
-        self.options = results.map { (key, _) in key }
+        self.options = Array(results.keys)
         self.questionType = type
         self.state = state
     }
@@ -51,7 +51,7 @@ class Poll {
         self.options = options
         self.results = [:]
         self.questionType = type
-        for (index, option) in options.enumerated() {
+        options.enumerated().forEach { (index, option) in
             let mcOption = intToMCOption(index)
             results[mcOption] = [textKey: option, countKey: 0]
         }
@@ -61,7 +61,11 @@ class Poll {
     // MARK: RECEIVE START POLL INITIALIZER
     init(json: [String:Any]){
         self.id = json[idKey] as? Int
-        self.text = json[textKey] as! String
+        if let text = json[textKey] as? String {
+            self.text = text
+        } else {
+            self.text = ""
+        }
         if let options = json[optionsKey] as? [String] {
             self.options = options
         } else {
@@ -78,8 +82,8 @@ class Poll {
     func getFRResultsArray() -> [(String, Int)] {
         var resultsArr: [(String, Int)] = []
         results.forEach { (key, val) in
-            if let choiceJSON = val as? [String:Any] {
-                resultsArr.append((key, (choiceJSON[countKey] as! Int)))
+            if let choiceJSON = val as? [String:Any], let numSelected = choiceJSON[countKey] as? Int {
+                resultsArr.append((key, numSelected))
             }
         }
         return resultsArr
@@ -90,9 +94,8 @@ class Poll {
             let (_, value) = arg1
             if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[countKey] as? Float {
                 return res + numSelected
-            } else {
-                return 0
             }
+            return 0
         }
     }
 }
