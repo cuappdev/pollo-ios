@@ -68,7 +68,6 @@ typealias Edge = (cursor: String, node: JSON)
 
 enum ClickerError: Error {
     case backendError(messages: [String])
-    case invalidListObject(message: String)
 }
 
 enum Element {

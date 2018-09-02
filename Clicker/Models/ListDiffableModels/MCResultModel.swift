@@ -23,6 +23,7 @@ class MCResultModel {
 }
 
 extension MCResultModel: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -32,4 +33,5 @@ extension MCResultModel: ListDiffable {
         guard let object = object as? MCResultModel else { return false }
         return identifier == object.identifier
     }
+    
 }

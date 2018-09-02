@@ -18,7 +18,7 @@ class DateCell: UICollectionViewCell {
         
         dateLabel = UILabel()
         dateLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        dateLabel.textColor = .clickerMediumGrey
+        dateLabel.textColor = .clickerGrey2
         dateLabel.textAlignment = .center
         contentView.addSubview(dateLabel)
     }

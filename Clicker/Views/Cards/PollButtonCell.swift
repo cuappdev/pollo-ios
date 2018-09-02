@@ -46,15 +46,15 @@ class PollButtonCell: UICollectionViewCell {
         switch pollButtonModel.state {
         case .live:
             button.setTitle(liveButtonTitle, for: .normal)
-            button.setTitleColor(.clickerDeepBlack, for: .normal)
+            button.setTitleColor(.clickerBlack1, for: .normal)
             button.backgroundColor = .white
-            button.layer.borderColor = UIColor.clickerDeepBlack.cgColor
+            button.layer.borderColor = UIColor.clickerBlack1.cgColor
             button.layer.borderWidth = buttonBorderWidth
             break
         default:
             button.setTitle(endedButtonTitle, for: .normal)
             button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = .clickerGreen
+            button.backgroundColor = .clickerGreen0
         }
     }
     

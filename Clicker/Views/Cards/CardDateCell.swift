@@ -23,12 +23,12 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerDeepBlack
+        backgroundColor = .clickerBlack1
     }
     
     func setupViews() {
         dateLabel = UILabel()
-        dateLabel.textColor = .clickerMediumGrey
+        dateLabel.textColor = .clickerGrey2
         dateLabel.font = ._14BoldFont
         dateLabel.textAlignment = .center
         addSubview(dateLabel)
@@ -37,7 +37,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
         addSubview(shadowImage)
         
         cardView = CardView(frame: .zero, userRole: userRole, cardDelegate: self)
-        cardView.highlightColor = .clickerHalfGreen
+        cardView.highlightColor = .clickerGreen1
         addSubview(cardView)
     }
     

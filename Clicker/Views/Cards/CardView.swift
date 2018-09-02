@@ -62,7 +62,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         layer.cornerRadius = CGFloat(cornerRadius)
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        backgroundColor = .clickerDeepBlack
+        backgroundColor = .clickerBlack1
         
         setupViews()
         setupConstraints()
@@ -114,14 +114,14 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         
         questionLabel = UILabel()
         questionLabel.font = ._22SemiboldFont
-        questionLabel.textColor = .clickerBlack
+        questionLabel.textColor = .clickerBlack0
         questionLabel.textAlignment = .left
         questionLabel.lineBreakMode = .byWordWrapping
         questionLabel.numberOfLines = 0
         topView.addSubview(questionLabel)
         
         scrollView = UIScrollView()
-        scrollView.backgroundColor = .clickerDeepBlack
+        scrollView.backgroundColor = .clickerBlack1
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = true
         scrollView.showsVerticalScrollIndicator = false
@@ -149,7 +149,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         scrollContentView.addSubview(resultsTableView)
         
         blackView = UIView()
-        blackView.backgroundColor = .clickerDeepBlack
+        blackView.backgroundColor = .clickerBlack1
         scrollContentView.addSubview(blackView)
         scrollContentView.sendSubview(toBack: blackView)
         
@@ -164,7 +164,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         totalResultsLabel.text = "\(totalNumResults) votes"
         totalResultsLabel.font = ._12MediumFont
         totalResultsLabel.textAlignment = .right
-        totalResultsLabel.textColor = .clickerMediumGrey
+        totalResultsLabel.textColor = .clickerGrey2
         topView.addSubview(totalResultsLabel)
         
         totalResultsLabel.snp.makeConstraints { make in
@@ -218,11 +218,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         visibilityLabel = UILabel()
         visibilityLabel.font = ._12MediumFont
         visibilityLabel.textAlignment = .left
-        visibilityLabel.textColor = .clickerMediumGrey
+        visibilityLabel.textColor = .clickerGrey2
         topView.addSubview(visibilityLabel)
         
         questionButton = UIButton()
-        questionButton.backgroundColor = .clickerTransparentGrey
+        questionButton.backgroundColor = .clickerGrey9
         questionButton.setTitleColor(.white, for: .normal)
         questionButton.titleLabel?.font = ._16SemiboldFont
         questionButton.titleLabel?.textAlignment = .center
@@ -266,7 +266,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             responseTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldPadding, height: textFieldHeight))
             responseTextField.layer.cornerRadius = 20
             responseTextField.layer.borderWidth = 1
-            responseTextField.layer.borderColor = UIColor.clickerBorder.cgColor
+            responseTextField.layer.borderColor = UIColor.clickerGrey5.cgColor
             responseTextField.leftViewMode = .always
             responseTextField.returnKeyType = .send
             responseTextField.delegate = self
@@ -320,7 +320,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             
         } else {
             if (poll.questionType == .multipleChoice) {
-                infoLabel.textColor = .clickerMediumGrey
+                infoLabel.textColor = .clickerGrey2
             }
         }
     }
@@ -341,13 +341,13 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
                 questionButton.removeFromSuperview()
             }
             
-            highlightColor = .clickerMint
+            highlightColor = .clickerGreen2
             
             resultsTableView.reloadData()
             
         } else {
             if (poll.questionType == .multipleChoice) {
-                infoLabel.textColor = .clickerDeepBlack
+                infoLabel.textColor = .clickerBlack1
                 infoLabel.text = "Poll has closed"
             }
         }
@@ -363,7 +363,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             graphicView.image = #imageLiteral(resourceName: "results_shared")
         } else {
             if (poll.questionType == .multipleChoice) {
-                infoLabel.textColor = .clickerDeepBlack
+                infoLabel.textColor = .clickerBlack1
                 infoLabel.text = "Poll has closed"
             }
         }
@@ -403,7 +403,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             // UPDATE HIGHLIGHT VIEW WIDTH
             let mcOption: String = intToMCOption(indexPath.row)
             var count: Int = 0
-            if let choiceInfo = poll.results![mcOption] as? [String:Any] {
+            if let choiceInfo = poll.results[mcOption] as? [String:Any] {
                 cell.optionLabel.text = choiceInfo["text"] as? String
                 count = choiceInfo["count"] as! Int
                 cell.numberLabel.text = "\(count)"
@@ -434,11 +434,11 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             cell.choiceTag = indexPath.row
             cell.optionLabel.text = poll.options[indexPath.row]
             cell.selectionStyle = .none
-            cell.highlightView.backgroundColor = .clickerMint
+            cell.highlightView.backgroundColor = .clickerGreen2
             
             // UPDATE HIGHLIGHT VIEW WIDTH
             let mcOption: String = intToMCOption(indexPath.row)
-            guard let info = poll.results![mcOption] as? [String:Any], let count = info["count"] as? Int else {
+            guard let info = poll.results[mcOption] as? [String:Any], let count = info["count"] as? Int else {
                 return cell
             }
             cell.numberLabel.text = "\(count)"
@@ -488,13 +488,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     // MARK: SCROLLVIEW METHODS
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == self.scrollView {
-            //            print("scrolling")
-            //            print(scrollView.contentOffset.y)
-            //            let height = (poll.options?.count)! * optionCellHeight
-            //            let diff = frame.height - CGFloat(height) - scrollView.contentOffset.y - 179
-            //            print("DIFFERENCE: \(diff)")
             if (poll.options.count > 7) {
-                print("scrolling")
                 let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, scrollView.contentOffset.y, 0.0)
                 self.scrollView.contentInset = contentInsets
             }

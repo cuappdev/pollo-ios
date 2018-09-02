@@ -83,7 +83,7 @@ class CardController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerDeepBlack
+        view.backgroundColor = .clickerBlack1
         socket.addDelegate(self)
         setupHorizontalNavBar()
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
@@ -123,14 +123,14 @@ class CardController: UIViewController {
         
         nothingToSeeLabel = UILabel()
         nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerBorder
+        nothingToSeeLabel.textColor = .clickerGrey5
         nothingToSeeLabel.textAlignment = .center
         nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
         view.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGrey
+        waitingLabel.textColor = .clickerGrey2
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
@@ -193,7 +193,7 @@ class CardController: UIViewController {
         let countString = "1/1"
         countLabel.attributedText = getCountLabelAttributedString(countString)
         countLabel.textAlignment = .center
-        countLabel.backgroundColor = UIColor.clickerLabelGrey
+        countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
@@ -350,7 +350,7 @@ class CardController: UIViewController {
         let slashIndex = countString.index(of: "/")?.encodedOffset
         let attributedString = NSMutableAttributedString(string: countString, attributes: [
             .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerMediumGrey,
+            .foregroundColor: UIColor.clickerGrey2,
             .kern: 0.0
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))

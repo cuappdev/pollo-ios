@@ -58,7 +58,7 @@ class CardCell: UICollectionViewCell {
         adapter.dataSource = self
         
         shadowView = UIView()
-        shadowView.backgroundColor = .clickerDarkGray
+        shadowView.backgroundColor = .clickerGrey3
         shadowView.layer.cornerRadius = shadowViewCornerRadius
         shadowView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         contentView.addSubview(shadowView)
@@ -82,18 +82,15 @@ class CardCell: UICollectionViewCell {
     func configure(for poll: Poll) {
         questionModel = QuestionModel(question: poll.text)
         resultModelArray = []
-        if let results = poll.results {
-            for (_, info) in results {
-                if let infoDict = info as? [String:Any] {
-                    guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else {
-                        adapter.performUpdates(animated: true, completion: nil)
-                        return
-                    }
-                    let resultModel = MCResultModel(option: option, numSelected: numSelected, percentSelected: 0.5)
-                    resultModelArray.append(resultModel)
-                }
+        let totalNumResults = poll.getTotalResults()
+        for (_, info) in poll.results {
+            if let infoDict = info as? [String:Any] {
+                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Float else { return }
+                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: numSelected / totalNumResults)
+                resultModelArray.append(resultModel)
             }
         }
+        
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
         adapter.performUpdates(animated: true, completion: nil)
     }
