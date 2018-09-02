@@ -53,19 +53,17 @@ class PollDateSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         var cell: UICollectionViewCell
         let itemType = itemTypes[index]
-        switch (itemType) {
+        switch itemType {
         case .date:
             let dateCell = collectionContext?.dequeueReusableCell(of: DateCell.self, for: self, at: index) as! DateCell
             dateCell.configure(with: pollDateModel.date)
             dateCell.setNeedsUpdateConstraints()
             cell = dateCell
-            break
         case .card:
             let cardCell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
             cardCell.configure(for: pollDateModel.poll)
             cardCell.setNeedsUpdateConstraints()
             cell = cardCell
-            break
         }
         return cell
     }
