@@ -11,7 +11,8 @@ import IGListKit
 
 class Poll {
     
-    var id: Int?
+    let identifier = UUID().uuidString as NSString
+    var id: Int!
     var text: String
     var questionType: QuestionType
     var options: [String]?
@@ -95,12 +96,12 @@ class Poll {
 
 extension Poll: ListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
-        return "\(id)" as NSString
+        return identifier
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id
+        return identifier == object.identifier
     }
 }

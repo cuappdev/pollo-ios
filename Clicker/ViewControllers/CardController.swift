@@ -103,8 +103,7 @@ class CardController: UIViewController {
         
         countLabel = UILabel()
         // TODO: Set count string to be 1 / total num of polls
-        let countString = "1/1"
-        countLabel.attributedText = getCountLabelAttributedString(countString)
+        updateCount()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerLabelGrey
         countLabel.layer.cornerRadius = 12
@@ -209,6 +208,16 @@ class CardController: UIViewController {
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
         return attributedString
+    }
+    
+    func updateCount(_ current: Int = 1) {
+        if currentIndex == -1 {
+            countLabel.text = ""
+        } else {
+            let total = pollsDateArray[currentIndex].polls.count
+            countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
+        }
+        
     }
     
     // MARK: ACTIONS

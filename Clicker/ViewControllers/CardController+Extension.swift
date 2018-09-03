@@ -14,6 +14,9 @@ extension CardController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         if (currentIndex > -1) {
             print(pollsDateArray[currentIndex].polls.count)
+            for poll in pollsDateArray[currentIndex].polls {
+                print(poll.diffIdentifier())
+            }
             return pollsDateArray[currentIndex].polls
         } else {
             return [EmptyStateModel(userRole: userRole)]
@@ -64,6 +67,8 @@ extension CardController: StartPollDelegate {
         let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: true, completion: nil)
+        let lastIndexPath = IndexPath(item: 0, section: 0)//pollsDateArray[currentIndex].polls.count-1)
+        self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
         
     }
     
@@ -83,6 +88,7 @@ extension CardController: StartPollDelegate {
         } else {
             pollsDateArray[currentIndex].polls.append(poll)
         }
+        updateCount()
         
         
     }
@@ -118,5 +124,4 @@ extension CardController: SocketDelegate {
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) { }
-    
 }
