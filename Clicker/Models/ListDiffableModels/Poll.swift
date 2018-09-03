@@ -25,10 +25,10 @@ class Poll {
     // MARK: SORTED BY DATE POLL INITIALIZER
     init(id: Int, text: String, results: [String:Any], type: QuestionType, isShared: Bool) {
         self.id = id
-        self.text = text
-        self.results = results
-        self.options = results.map { (key, _) in key }
-        self.questionType = type
+            self.text = text
+            self.results = results
+            self.options = results.map { (key, _) in key }
+            self.questionType = type
         self.isShared = isShared
     }
     

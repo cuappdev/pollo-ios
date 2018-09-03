@@ -198,10 +198,6 @@ class CardController: UIViewController {
         }
     }
     
-    func appendPoll(poll: Poll) {
-        // TODO
-    }
-    
     func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
         let slashIndex = countString.index(of: "/")?.encodedOffset
         let attributedString = NSMutableAttributedString(string: countString, attributes: [
