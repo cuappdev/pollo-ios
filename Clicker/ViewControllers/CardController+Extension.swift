@@ -13,6 +13,7 @@ extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         if (currentIndex > -1) {
+            print(pollsDateArray[currentIndex].polls.count)
             return pollsDateArray[currentIndex].polls
         } else {
             return [EmptyStateModel(userRole: userRole)]
@@ -62,9 +63,7 @@ extension CardController: StartPollDelegate {
         socket.socket.emit(Routes.start, [socketQuestion])
         let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
         appendPoll(poll: newPoll)
-        adapter.performUpdates(animated: true) { done in
-            print(done)
-        }
+        adapter.performUpdates(animated: true, completion: nil)
         
     }
     
