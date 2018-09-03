@@ -56,14 +56,11 @@ extension CardController: StartPollDelegate {
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
-            "type": type,
+            "type": type.description,
             "options": options,
             "shared": isShared
         ]
-        print(Routes.start)
-        print(socketQuestion)
-        print(socket.socket)
-        //socket.socket.emit(Routes.start, with: [socketQuestion])
+        socket.socket.emit(Routes.start, [socketQuestion])
         let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
         appendPoll(poll: newPoll)
         currentIndex = (pollsDateArray ?? []).count - 1
