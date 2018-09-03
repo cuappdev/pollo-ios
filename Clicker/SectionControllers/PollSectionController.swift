@@ -21,6 +21,11 @@ class PollSectionController: ListSectionController {
     var poll: Poll!
     let widthScaleFactor: CGFloat = 0.9
     
+    override init() {
+        super.init()
+        self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+    }
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
