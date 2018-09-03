@@ -20,7 +20,6 @@ extension CardController: ListAdapterDataSource {
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        print(object)
         if let _ = object as? Poll {
             let pollSectionController = PollSectionController()
             pollSectionController.session = session
@@ -63,7 +62,6 @@ extension CardController: StartPollDelegate {
         socket.socket.emit(Routes.start, [socketQuestion])
         let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
         appendPoll(poll: newPoll)
-        currentIndex = (pollsDateArray ?? []).count - 1
         adapter.performUpdates(animated: true) { done in
             print(done)
         }
@@ -77,16 +75,16 @@ extension CardController: StartPollDelegate {
 
         guard let _ = pollsDateArray else {
             pollsDateArray = [newPollDate]
+            currentIndex = 0
             return
         }
-        for pollsDate in pollsDateArray {
-            print(pollsDate.date)
-            if pollsDate.date == date {
-                pollsDate.polls.append(poll)
-                return
-            }
+        if (currentIndex != pollsDateArray.count - 1) || (currentIndex == -1) {
+            pollsDateArray.append(newPollDate)
+            currentIndex = pollsDateArray.count - 1
+        } else {
+            pollsDateArray[currentIndex].polls.append(poll)
         }
-        pollsDateArray.append(newPollDate)
+        
         
     }
     

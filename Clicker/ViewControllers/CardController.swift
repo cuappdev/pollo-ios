@@ -53,7 +53,8 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
-        self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
+        self.pollsDateArray = pollsDateArray
+        setupHorizontal()
     }
     
     override func viewDidLoad() {
@@ -69,6 +70,10 @@ class CardController: UIViewController {
         
     }
     
+    func setupHorizontal() {
+        setupCards()
+        setupHorizontalNavBar()
+    }
     
     func setupCards() {
         let layout = UICollectionViewFlowLayout()
@@ -83,6 +88,8 @@ class CardController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.isPagingEnabled = true
         view.addSubview(collectionView)
+        
+        currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)
@@ -137,11 +144,6 @@ class CardController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
-    }
-    
-    func revertToHorizontal() {
-        setupCards()
-        setupHorizontalNavBar()
     }
     
     // MARK: SCROLLVIEW METHODS
