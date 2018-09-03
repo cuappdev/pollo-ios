@@ -53,12 +53,43 @@ extension CardController: EndPollDelegate {
 extension CardController: StartPollDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
-        // TODO
-        // CreatePoll(...)
+        // EMIT START QUESTION
+        let socketQuestion: [String:Any] = [
+            "text": text,
+            "type": type,
+            "options": options,
+            "shared": isShared
+        ]
+        print(Routes.start)
+        print(socketQuestion)
+        print(socket.socket)
+        //socket.socket.emit(Routes.start, with: [socketQuestion])
+        let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
+        appendPoll(poll: newPoll)
         currentIndex = (pollsDateArray ?? []).count - 1
         adapter.performUpdates(animated: true) { done in
             print(done)
         }
+        
+    }
+    
+    func appendPoll(poll: Poll) {
+        print(pollsDateArray)
+        let date = "today"
+        let newPollDate = PollsDateModel(date: date, polls: [poll])
+
+        guard let _ = pollsDateArray else {
+            pollsDateArray = [newPollDate]
+            return
+        }
+        for pollsDate in pollsDateArray {
+            print(pollsDate.date)
+            if pollsDate.date == date {
+                pollsDate.polls.append(poll)
+                return
+            }
+        }
+        pollsDateArray.append(newPollDate)
         
     }
     
