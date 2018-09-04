@@ -142,32 +142,11 @@ class CardController: UIViewController {
     }
     
     // MARK: - Vertical Collection View
-    func setupVertical() {
-        self.state = .vertical
-        zoomOutButton.removeFromSuperview()
-        countLabel.removeFromSuperview()
-        collectionViewLayout.scrollDirection = .vertical
-        let collectionViewInset = view.frame.width * 0.1
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-        }
-        adapter.performUpdates(animated: true, completion: nil)
-        setupVerticalNavBar()
-    }
-    
     func setupVerticalNavBar() {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
         setupGradientViews()
-    }
-
-    func revertToHorizontal() {
-        topGradientView.removeFromSuperview()
-        bottomGradientView.removeFromSuperview()
-        setupCards()
-        setupHorizontalNavBar()
     }
     
     func setupGradientViews() {
@@ -198,6 +177,22 @@ class CardController: UIViewController {
             make.leading.bottom.trailing.equalToSuperview()
             make.height.equalTo(gradientViewHeight)
         }
+    }
+    
+    // MARK: Switching between vertical and horizontal
+    func switchTo(state: CardControllerState) {
+        zoomOutButton.isHidden = (state == .vertical)
+        countLabel.isHidden = (state == .vertical)
+        self.state = state
+        switch state {
+        case .vertical:
+            collectionViewLayout.scrollDirection = .vertical
+            setupVerticalNavBar()
+        default:
+            collectionViewLayout.scrollDirection = .horizontal
+            setupHorizontalNavBar()
+        }
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     // MARK: SCROLLVIEW METHODS
@@ -242,7 +237,7 @@ class CardController: UIViewController {
             self.navigationItem.rightBarButtonItems = [peopleBarButton]
         }
     }
-
+    
     // MARK: Helpers
     func updateDatePollsArr() {
         GetSortedPolls(id: session.id).make()
@@ -298,7 +293,7 @@ class CardController: UIViewController {
     }
     
     @objc func zoomOutBtnPressed() {
-        setupVertical()
+        switchTo(state: .vertical)
     }
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {
