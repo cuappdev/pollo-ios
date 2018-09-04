@@ -31,7 +31,7 @@ class PollsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerNavBarLightGrey
+        view.backgroundColor = .clickerGrey8
         
         let createdPollTypeModel = PollTypeModel(pollType: .created)
         let joinedPollTypeModel = PollTypeModel(pollType: .joined)
@@ -46,11 +46,11 @@ class PollsViewController: UIViewController {
         titleLabel = UILabel()
         titleLabel.text = "Polls"
         titleLabel.font = ._30SemiboldFont
-        titleLabel.textColor = .clickerDeepBlack
+        titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
         pollsOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
-        pollsOptionsView.setBackgroundColor(color: .clickerNavBarLightGrey)
+        pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         
         let layout = UICollectionViewFlowLayout()
@@ -61,7 +61,7 @@ class PollsViewController: UIViewController {
         pollsCollectionView.bounces = false
         pollsCollectionView.showsVerticalScrollIndicator = false
         pollsCollectionView.showsHorizontalScrollIndicator = false
-        pollsCollectionView.backgroundColor = .clickerBackground
+        pollsCollectionView.backgroundColor = .clickerGrey4
         pollsCollectionView.isPagingEnabled = true
         view.addSubview(pollsCollectionView)
         
@@ -77,7 +77,7 @@ class PollsViewController: UIViewController {
         view.addSubview(newPollButton)
         
         bottomBarView = UIView()
-        bottomBarView.backgroundColor = .clickerDeepBlack
+        bottomBarView.backgroundColor = .clickerBlack1
         view.addSubview(bottomBarView)
         
         joinSessionButton = UIButton()

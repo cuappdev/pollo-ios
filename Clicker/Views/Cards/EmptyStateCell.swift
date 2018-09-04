@@ -59,14 +59,14 @@ class EmptyStateCell: UICollectionViewCell {
         
         nothingToSeeLabel = UILabel()
         nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerBorder
+        nothingToSeeLabel.textColor = .clickerGrey5
         nothingToSeeLabel.textAlignment = .center
         nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
         addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerMediumGrey
+        waitingLabel.textColor = .clickerGrey2
         waitingLabel.textAlignment = .center
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0

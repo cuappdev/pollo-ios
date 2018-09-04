@@ -25,9 +25,9 @@ class AnswerMCCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = .clickerBackground
+        backgroundColor = .clickerGrey4
         contentView.layer.cornerRadius = 8
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        contentView.layer.borderColor = UIColor.clickerGrey5.cgColor
         contentView.layer.borderWidth = 0.5
         contentView.backgroundColor = .white
         
@@ -37,7 +37,7 @@ class AnswerMCCell: UITableViewCell {
     
     //MARK: - LAYOUT
     func setupViews() {
-        choiceLabel.textColor = .clickerDarkGray
+        choiceLabel.textColor = .clickerGrey3
         choiceLabel.font = UIFont._16SemiboldFont
         choiceLabel.textAlignment = .center
         addSubview(choiceLabel)
@@ -75,7 +75,7 @@ class AnswerMCCell: UITableViewCell {
             contentView.layer.borderColor = UIColor.clickerBlue.cgColor
             contentView.layer.borderWidth = 2.0
         } else {
-            contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+            contentView.layer.borderColor = UIColor.clickerGrey5.cgColor
             contentView.layer.borderWidth = 0.5
         }
     }
@@ -85,7 +85,7 @@ class AnswerMCCell: UITableViewCell {
             contentView.layer.borderColor = UIColor.clickerBlue.cgColor
             contentView.layer.borderWidth = 2.0
         } else {
-            contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+            contentView.layer.borderColor = UIColor.clickerGrey5.cgColor
             contentView.layer.borderWidth = 0.5
         }
     }

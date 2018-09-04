@@ -45,7 +45,7 @@ class ResultFRCell: UITableViewCell {
         
         countLabel = UILabel()
         countLabel.font = ._12SemiboldFont
-        countLabel.textColor = .clickerMediumGrey
+        countLabel.textColor = .clickerGrey2
         countLabel.textAlignment = .center
         rightView.addSubview(countLabel)
         
@@ -54,7 +54,7 @@ class ResultFRCell: UITableViewCell {
         rightView.addSubview(triangleImageView)
         
         lineView = UIView()
-        lineView.backgroundColor = .clickerBorder
+        lineView.backgroundColor = .clickerGrey5
         addSubview(lineView)
         bringSubview(toFront: lineView)
     }

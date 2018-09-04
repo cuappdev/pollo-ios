@@ -23,7 +23,7 @@ class AddMoreOptionCell: UITableViewCell {
         backgroundColor = .clear
         contentView.layer.cornerRadius = 5
         contentView.layer.borderWidth = 0.5
-        contentView.layer.borderColor = UIColor.clickerBorder.cgColor
+        contentView.layer.borderColor = UIColor.clickerGrey5.cgColor
         
         setupViews()
         layoutSubviews()
@@ -33,14 +33,14 @@ class AddMoreOptionCell: UITableViewCell {
     func setupViews() {
         plusLabel = UILabel()
         plusLabel.text = "+"
-        plusLabel.textColor = .clickerMediumGrey
+        plusLabel.textColor = .clickerGrey2
         plusLabel.textAlignment = .center
         plusLabel.font = ._20MediumFont
         addSubview(plusLabel)
         
         addMoreLabel = UILabel()
         addMoreLabel.text = "Add Option"
-        addMoreLabel.textColor = .clickerMediumGrey
+        addMoreLabel.textColor = .clickerGrey2
         addMoreLabel.font = ._16RegularFont
         addSubview(addMoreLabel)
     }

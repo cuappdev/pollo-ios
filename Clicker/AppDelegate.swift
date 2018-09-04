@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.tintColor = .clickerGreen
+        window?.tintColor = .clickerGreen0
         window?.makeKeyAndVisible()
         
         // GOOGLE SIGN IN
@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
             pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
             pollsNavigationController.setNavigationBarHidden(true, animated: false)
-            pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+            pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
             pollsNavigationController.navigationBar.isTranslucent = false
             window?.rootViewController = pollsNavigationController
         } else {
@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     User.userSession = userSession
                     self.pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
                     self.pollsNavigationController.setNavigationBarHidden(true, animated: false)
-                    self.pollsNavigationController.navigationBar.barTintColor = .clickerDeepBlack
+                    self.pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
                     self.pollsNavigationController.navigationBar.isTranslucent = false
                     self.window?.rootViewController?.present(self.pollsNavigationController, animated: true, completion: nil)
                 } .catch { error in

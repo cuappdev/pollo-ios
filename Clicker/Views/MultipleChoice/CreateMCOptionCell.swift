@@ -43,11 +43,11 @@ class CreateMCOptionCell: UITableViewCell, UITextFieldDelegate {
     func setupViews() {
         
         addOptionTextField = UITextField()
-        addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Add Option", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerMediumGrey, NSAttributedStringKey.font: UIFont._16RegularFont])
+        addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Add Option", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._16RegularFont])
         addOptionTextField.font = UIFont._16RegularFont
         addOptionTextField.layer.cornerRadius = 5
         addOptionTextField.borderStyle = .none
-        addOptionTextField.backgroundColor = .clickerOptionGrey
+        addOptionTextField.backgroundColor = .clickerGrey6
         addOptionTextField.returnKeyType = .done
         addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addOptionTextField.delegate = self

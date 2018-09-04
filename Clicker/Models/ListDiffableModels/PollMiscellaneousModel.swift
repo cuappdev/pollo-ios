@@ -1,26 +1,27 @@
 //
-//  EmptyStateModel.swift
+//  PollMiscellaneousModel.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 8/30/18.
+//  Created by Kevin Chan on 8/31/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import Foundation
 import IGListKit
 
-class EmptyStateModel {
+class PollMiscellaneousModel {
     
-    var userRole: UserRole
+    var pollState: PollState
+    var totalVotes: Int
     let identifier = UUID().uuidString
     
-    init(userRole: UserRole) {
-        self.userRole = userRole
+    init(pollState: PollState, totalVotes: Int) {
+        self.pollState = pollState
+        self.totalVotes = totalVotes
     }
-
+    
 }
 
-extension EmptyStateModel: ListDiffable {
+extension PollMiscellaneousModel: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
@@ -28,7 +29,7 @@ extension EmptyStateModel: ListDiffable {
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
-        guard let object = object as? EmptyStateModel else { return false }
+        guard let object = object as? PollMiscellaneousModel else { return false }
         return identifier == object.identifier
     }
     
