@@ -31,7 +31,8 @@ extension PollsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let session: Session = sessions[sessions.count - indexPath.row - 1]
-        
+        print(session.id)
+        print(session.code)
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
                 print(pollsDateArray)
