@@ -59,7 +59,7 @@ extension CardController: StartPollDelegate {
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
-            "type": type.description,
+            "type": type.descriptionForServer,
             "options": options,
             "shared": isShared
         ]
