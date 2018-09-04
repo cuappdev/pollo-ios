@@ -36,7 +36,7 @@ class DeletePollViewController: UIViewController {
     func setupViews() {
         deleteLabel = UILabel()
         deleteLabel.text = "Deleting will permanently close the group for all participants and all poll data will be lost."
-        deleteLabel.textColor = .clickerMediumGrey
+        deleteLabel.textColor = .clickerGrey2
         deleteLabel.textAlignment = .center
         deleteLabel.font = UIFont._16RegularFont
         deleteLabel.numberOfLines = 0
@@ -46,7 +46,7 @@ class DeletePollViewController: UIViewController {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.white, for: .normal)
-        cancelButton.backgroundColor = .clickerMediumGrey
+        cancelButton.backgroundColor = .clickerGrey2
         cancelButton.layer.cornerRadius = 25
         cancelButton.addTarget(self, action: #selector(backCancelBtnPressed), for: .touchUpInside)
         view.addSubview(cancelButton)

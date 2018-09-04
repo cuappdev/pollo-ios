@@ -1,26 +1,25 @@
 //
-//  EmptyStateModel.swift
+//  QuestionModel.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 8/30/18.
+//  Created by Kevin Chan on 8/31/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import Foundation
 import IGListKit
 
-class EmptyStateModel {
+class QuestionModel {
     
-    var userRole: UserRole
+    var question: String
     let identifier = UUID().uuidString
     
-    init(userRole: UserRole) {
-        self.userRole = userRole
+    init(question: String) {
+        self.question = question
     }
-
+    
 }
 
-extension EmptyStateModel: ListDiffable {
+extension QuestionModel: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
@@ -28,8 +27,10 @@ extension EmptyStateModel: ListDiffable {
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
-        guard let object = object as? EmptyStateModel else { return false }
+        guard let object = object as? QuestionModel else { return false }
         return identifier == object.identifier
     }
     
 }
+
+

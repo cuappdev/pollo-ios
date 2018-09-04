@@ -12,11 +12,12 @@ import IGListKit
 
 class PollSectionController: ListSectionController {
     
-    // MARK: todo implement
+    // MARK: these refrences must be passed to each cell in the section
     var session: Session!
     var userRole: UserRole!
     var socket: Socket!
-    var endPollDelegate: EndPollDelegate!
+    var askedCardDelegate: AskedCardDelegate!
+    
     
     var poll: Poll!
     let widthScaleFactor: CGFloat = 0.9
@@ -39,18 +40,19 @@ class PollSectionController: ListSectionController {
         case .admin:
             let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
             cell.socket = socket
+            cell.delegate = askedCardDelegate
             socket.addDelegate(cell)
             cell.poll = poll
-            cell.endPollDelegate = endPollDelegate
-            cell.cardType = getCardType(from: poll)
+            cell.cardType = poll.state
             cell.configure()
             return cell
         default:
             let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AskedCard
             cell.socket = socket
+            cell.delegate = askedCardDelegate
             socket.addDelegate(cell)
             cell.poll = poll
-            cell.cardType = getCardType(from: poll)
+            cell.cardType = poll.state
             cell.configure()
             return cell
         }
@@ -60,14 +62,4 @@ class PollSectionController: ListSectionController {
         poll = object as? Poll
     }
         
-    // MARK: Helpers
-    func getCardType(from poll: Poll) -> CardType {
-        if (poll.isLive) {
-            return .live
-        } else if (poll.isShared) {
-            return .shared
-        } else {
-            return .ended
-        }
-    }
 }

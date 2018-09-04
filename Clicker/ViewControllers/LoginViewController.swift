@@ -18,7 +18,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerGreen
+        view.backgroundColor = .clickerGreen0
         
         GIDSignIn.sharedInstance().uiDelegate = self
         

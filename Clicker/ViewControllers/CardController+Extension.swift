@@ -12,25 +12,36 @@ import UIKit
 extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if (currentIndex > -1) {
-            print(pollsDateArray[currentIndex].polls.count)
-            for poll in pollsDateArray[currentIndex].polls {
-                print(poll.diffIdentifier())
+        switch state {
+        case .horizontal:
+            if (currentIndex > -1) {
+                collectionView.isScrollEnabled = true
+                return pollsDateArray[currentIndex].polls
+            } else {
+                collectionView.isScrollEnabled = false
+                return [EmptyStateModel(userRole: userRole)]
             }
-            return pollsDateArray[currentIndex].polls
-        } else {
-            return [EmptyStateModel(userRole: userRole)]
+        default:
+            return pollsDateArray.compactMap({ pollsDateModel -> PollDateModel? in
+                if let latestPoll = pollsDateModel.polls.last {
+                    collectionView.isScrollEnabled = true
+                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+                }
+                return nil
+            })
         }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if let _ = object as? Poll {
+        if object is Poll {
             let pollSectionController = PollSectionController()
             pollSectionController.session = session
             pollSectionController.userRole = userRole
             pollSectionController.socket = socket
-            pollSectionController.endPollDelegate = self
+            pollSectionController.askedCardDelegate = self
             return pollSectionController
+        } else if object is PollDateModel {
+            return PollDateSectionController(delegate: self)
         } else {
             let emptyStateController = EmptyStateSectionController()
             emptyStateController.session = session
@@ -45,38 +56,41 @@ extension CardController: ListAdapterDataSource {
     }
 }
 
-extension CardController: EndPollDelegate {
-    
-    func endedPoll() {
-        //createPollButton.isUserInteractionEnabled = true
-    }
 
+
+extension CardController: PollDateSectionControllerDelegate {
+    
+    var role: UserRole {
+        return userRole
+    }
+    
 }
 
 extension CardController: StartPollDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
+        createPollButton.isUserInteractionEnabled = false
+        
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             "text": text,
             "type": type.descriptionForServer,
             "options": options,
-            "shared": isShared
+            "shared": state == .shared
         ]
         socket.socket.emit(Routes.start, [socketQuestion])
-        let newPoll = Poll(text: text, options: options, type: type, isLive: true, isShared: isShared)
+        let newPoll = Poll(text: text, options: options, type: type, state: state)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: true, completion: nil)
         let lastIndexPath = IndexPath(item: 0, section: 0)//pollsDateArray[currentIndex].polls.count-1)
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        
     }
     
     func appendPoll(poll: Poll) {
         print(pollsDateArray)
         let date = "today"
         let newPollDate = PollsDateModel(date: date, polls: [poll])
-
+        
         guard let _ = pollsDateArray else {
             pollsDateArray = [newPollDate]
             currentIndex = 0
@@ -91,6 +105,12 @@ extension CardController: StartPollDelegate {
         updateCount()
         
         
+    }
+}
+extension CardController: AskedCardDelegate {
+    
+    func askedCardDidEndPoll() {
+        createPollButton.isUserInteractionEnabled = true
     }
     
 }

@@ -38,7 +38,7 @@ class EditNameViewController: UIViewController {
         nameTextField.placeholder = session.name
         nameTextField.layer.cornerRadius = 5
         nameTextField.layer.borderWidth = 1
-        nameTextField.layer.borderColor = UIColor.clickerBorder.cgColor
+        nameTextField.layer.borderColor = UIColor.clickerGrey5.cgColor
         nameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: textFieldHeight))
         nameTextField.leftViewMode = .always
         view.addSubview(nameTextField)

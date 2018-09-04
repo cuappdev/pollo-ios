@@ -61,6 +61,14 @@ struct Routes {
     static let upvote = "server/poll/upvote"
 }
 
+struct LayoutConstants {
+    static let questionCellHeight: CGFloat = 40
+    static let optionCellHeight: CGFloat = 44
+    static let pollMiscellaneousCellHeight: CGFloat = 30
+    static let pollButtonCellHeight: CGFloat = 45
+    static let hamburgerCardCellHeight: CGFloat = 25
+}
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"

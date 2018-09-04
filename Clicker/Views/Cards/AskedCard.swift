@@ -9,12 +9,16 @@
 import UIKit
 import SnapKit
 
+protocol AskedCardDelegate {
+    func askedCardDidEndPoll()
+}
+
 class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     var socket: Socket!
     var poll: Poll!
-    var endPollDelegate: EndPollDelegate!
-    var cardType: CardType!
+    var delegate: AskedCardDelegate!
+    var cardType: PollState!
     
     // Timer
     var timer: Timer!
@@ -31,7 +35,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerDeepBlack
+        backgroundColor = .clickerBlack1
         setup()
     }
     
@@ -69,7 +73,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func setup() {
         cardView = CardView(frame: .zero, userRole: .admin, cardDelegate: self)
         cardView.cardDelegate = self
-        cardView.highlightColor = .clickerHalfGreen
+        cardView.highlightColor = .clickerGreen1
         addSubview(cardView)
     
         cardView.snp.makeConstraints { make in
@@ -146,15 +150,15 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         switch (cardType) {
         case .live:
             socket.socket.emit(Routes.end, [])
-            endPollDelegate.endedPoll()
+            delegate.askedCardDidEndPoll()
             setupEnded()
             cardType = .ended
-            poll.isLive = false
+            poll.state = .ended
         case .ended:
             socket.socket.emit(Routes.results, [])
             setupShared()
             cardType = .shared
-            poll.isShared = true
+            poll.state = .shared
         default: break
         }
     }
