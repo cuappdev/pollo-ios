@@ -57,8 +57,8 @@ class CardController: UIViewController {
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
         self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        setupHorizontal()
         setupGradientViews()
+        setupHorizontal()
 
     }
     
@@ -114,14 +114,13 @@ class CardController: UIViewController {
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        // TODO: Set count string to be 1 / total num of polls
         updateCount()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
-        
+    
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -269,10 +268,14 @@ class CardController: UIViewController {
     func updateCount(_ current: Int = 1) {
         if currentIndex == -1 {
             countLabel.text = ""
+            zoomOutButton.isUserInteractionEnabled = false
         } else {
             let total = pollsDateArray[currentIndex].polls.count
             countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
+            zoomOutButton.isUserInteractionEnabled = total > 0
+            
         }
+        
         
     }
     

@@ -31,12 +31,8 @@ extension PollsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let session: Session = sessions[sessions.count - indexPath.row - 1]
-        print(session.id)
-        print(session.code)
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
-                print(pollsDateArray)
-                print(pollsDateArray.count)
                 let userRole: UserRole = self.pollType == .created ? .admin : .member
                 let cardController = CardController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
                 self.delegate.shouldPushCardController(cardController: cardController)
