@@ -79,7 +79,7 @@ class PollDateSectionController: ListSectionController {
     }
     
     override func didSelectItem(at index: Int) {
-        delegate.switchToHorizontalWith(index: 1)
+        delegate.switchToHorizontalWith(index: pollDateModel.index)
     }
     
     // MARK: - Helpers
