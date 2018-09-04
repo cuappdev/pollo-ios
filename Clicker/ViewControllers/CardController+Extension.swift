@@ -56,9 +56,11 @@ extension CardController: ListAdapterDataSource {
     }
 }
 
-
-
 extension CardController: PollDateSectionControllerDelegate {
+    
+    func switchToHorizontalWith(index: Int) {
+        revertToHorizontal()
+    }
     
     var role: UserRole {
         return userRole
@@ -87,7 +89,6 @@ extension CardController: StartPollDelegate {
     }
     
     func appendPoll(poll: Poll) {
-        print(pollsDateArray)
         let date = "today"
         let newPollDate = PollsDateModel(date: date, polls: [poll])
         
