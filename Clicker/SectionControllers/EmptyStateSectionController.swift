@@ -18,19 +18,19 @@ class EmptyStateSectionController: ListSectionController {
     var userRole: UserRole!
     var nameViewDelegate: NameViewDelegate!
     
+    init(session: Session, userRole: UserRole, nameViewDelegate: NameViewDelegate) {
+        super.init()
+        self.session = session
+        self.userRole = userRole
+        self.nameViewDelegate = nameViewDelegate
+    }
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
         return containerSize
-    }
-    
-    func configureWith(session: Session, userRole: UserRole, nameViewDelegate: NameViewDelegate)
-    {
-        self.session = session
-        self.userRole = userRole
-        self.nameViewDelegate = nameViewDelegate
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
