@@ -26,6 +26,13 @@ class EmptyStateSectionController: ListSectionController {
         return containerSize
     }
     
+    func configureWith(session: Session, userRole: UserRole, nameViewDelegate: NameViewDelegate)
+    {
+        self.session = session
+        self.userRole = userRole
+        self.nameViewDelegate = nameViewDelegate
+    }
+    
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: EmptyStateCell.self, for: self, at: index) as! EmptyStateCell
         cell.session = session

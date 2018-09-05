@@ -45,7 +45,6 @@ class EmptyStateCell: UICollectionViewCell {
     func setup() {
         setupViews()
         setupConstraints()
-        print("setting up empty state cell with userRole = \(userRole), session=\(session)")
         // TODO: Add logic for setting up empty state or nonempty state
         if (userRole == .admin && session.name == session.code) {
             setupNameView()
@@ -55,14 +54,14 @@ class EmptyStateCell: UICollectionViewCell {
     func setupViews() {
         monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
         monkeyView.contentMode = .scaleAspectFit
-        addSubview(monkeyView)
+        contentView.addSubview(monkeyView)
         
         nothingToSeeLabel = UILabel()
         nothingToSeeLabel.font = ._16SemiboldFont
         nothingToSeeLabel.textColor = .clickerGrey5
         nothingToSeeLabel.textAlignment = .center
         nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-        addSubview(nothingToSeeLabel)
+        contentView.addSubview(nothingToSeeLabel)
         
         waitingLabel = UILabel()
         waitingLabel.font = ._14MediumFont
@@ -71,7 +70,7 @@ class EmptyStateCell: UICollectionViewCell {
         waitingLabel.lineBreakMode = .byWordWrapping
         waitingLabel.numberOfLines = 0
         waitingLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-        addSubview(waitingLabel)
+        contentView.addSubview(waitingLabel)
         
     }
     func setupConstraints() {
@@ -95,11 +94,8 @@ class EmptyStateCell: UICollectionViewCell {
     }
     // MARK - NAME THE POLL
     func setupNameView() {
-        nameView = NameView(frame: .zero)
-        nameView.session = session
-        nameView.delegate = nameViewDelegate
-        nameView.setup()
-        addSubview(nameView)
+        nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
+        contentView.addSubview(nameView)
         
         nameView.snp.makeConstraints { make in
             make.width.equalTo(self.snp.width)

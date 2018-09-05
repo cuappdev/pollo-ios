@@ -18,7 +18,6 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     var choice: Int?
     var poll: Poll!
     var socket: Socket!
-    var cardType: PollState!
     var cardHeightConstraint: Constraint!
     
     override init(frame: CGRect) {
@@ -27,11 +26,10 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         setup()
     }
     
-    func configure() {
-        cardView.questionLabel.text = poll.text
-        cardView.poll = poll
-        cardView.cardType = cardType
-        cardView.configure()
+    func configureWith(socket: Socket, poll: Poll) {
+        self.socket = socket
+        self.poll = poll
+        cardView.configureWith(poll: poll)
         cardView.setupCard()
     }
     
@@ -73,7 +71,6 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     func pollEnded(_ poll: Poll) {
         cardView.poll.state = .ended
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
-        cardView.cardType = .ended
         cardView.setupEnded()
     }
     
@@ -91,7 +88,6 @@ class AnswerCard: UICollectionViewCell, CardDelegate, SocketDelegate {
             cardView.updateTableViewHeightForFR()
         }
         DispatchQueue.main.async { self.cardView.resultsTableView.reloadData() }
-        cardView.cardType = .shared
         cardView.setupShared()
     }
     
