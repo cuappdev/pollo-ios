@@ -10,7 +10,7 @@ import UIKit
 import Presentr
 
 protocol StartPollDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool)
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
 }
 
 protocol PollBuilderDelegate {
@@ -251,12 +251,12 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = mcPollBuilder.questionTextField.text
             let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
             
-            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: options, isShared: false)
+            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
         } else { // FREE RESPONSE
             
             let question = frPollBuilder.questionTextField.text
             let isShared = frPollBuilder.dropDown.shareResponses
-            startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], isShared: isShared)
+            startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)

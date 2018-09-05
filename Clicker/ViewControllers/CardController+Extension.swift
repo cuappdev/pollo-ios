@@ -15,14 +15,17 @@ extension CardController: ListAdapterDataSource {
         switch state {
         case .horizontal:
             if (currentIndex > -1) {
+                collectionView.isScrollEnabled = true
                 return pollsDateArray[currentIndex].polls
             } else {
+                collectionView.isScrollEnabled = false
                 return [EmptyStateModel(userRole: userRole)]
             }
         default:
-            return pollsDateArray.compactMap({ pollsDateModel -> PollDateModel? in
+            return pollsDateArray.enumerated().compactMap({ index,pollsDateModel -> PollDateModel? in
                 if let latestPoll = pollsDateModel.polls.last {
-                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll)
+                    collectionView.isScrollEnabled = true
+                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll, index: index)
                 }
                 return nil
             })
@@ -31,11 +34,22 @@ extension CardController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is Poll {
-            return PollSectionController()
+            let pollSectionController = PollSectionController()
+            pollSectionController.session = session
+            pollSectionController.userRole = userRole
+            pollSectionController.socket = socket
+            pollSectionController.askedCardDelegate = self
+            return pollSectionController
         } else if object is PollDateModel {
-            return PollDateSectionController(delegate: self)
+            let pollDateSectionController = PollDateSectionController(delegate: self)
+            return pollDateSectionController
+        } else {
+            let emptyStateController = EmptyStateSectionController()
+            emptyStateController.session = session
+            emptyStateController.userRole = userRole
+            emptyStateController.nameViewDelegate = self
+            return emptyStateController
         }
-        return EmptyStateSectionController()
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
@@ -45,6 +59,11 @@ extension CardController: ListAdapterDataSource {
 
 extension CardController: PollDateSectionControllerDelegate {
     
+    func switchToHorizontalWith(index: Int) {
+        currentIndex = index
+        switchTo(state: .horizontal)
+    }
+    
     var role: UserRole {
         return userRole
     }
@@ -53,18 +72,50 @@ extension CardController: PollDateSectionControllerDelegate {
 
 extension CardController: StartPollDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], isShared: Bool) {
-        // TODO
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
+        createPollButton.isUserInteractionEnabled = false
+        
+        // EMIT START QUESTION
+        let socketQuestion: [String:Any] = [
+            "text": text,
+            "type": type.descriptionForServer,
+            "options": options,
+            "shared": state == .shared
+        ]
+        socket.socket.emit(Routes.start, [socketQuestion])
+        let newPoll = Poll(text: text, options: options, type: type, state: state)
+        appendPoll(poll: newPoll)
+        adapter.performUpdates(animated: true, completion: nil)
+        let lastIndexPath = IndexPath(item: 0, section: 0) // TODO: implement scrolling to end of CV
+        self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
-
+    
+    func appendPoll(poll: Poll) {
+        let date = "today"
+        let newPollDate = PollsDateModel(date: date, polls: [poll])
+        
+        if pollsDateArray == nil {
+            pollsDateArray = [newPollDate]
+            currentIndex = 0
+            return
+        }
+        if (currentIndex != pollsDateArray.count - 1) || (currentIndex == -1) {
+            pollsDateArray.append(newPollDate)
+            currentIndex = pollsDateArray.count - 1
+        } else {
+            pollsDateArray[currentIndex].polls.append(poll)
+        }
+        updateCount()
+        
+        
+    }
 }
-
 extension CardController: AskedCardDelegate {
     
     func askedCardDidEndPoll() {
         createPollButton.isUserInteractionEnabled = true
     }
-
+    
 }
 
 extension CardController: NameViewDelegate {
@@ -96,5 +147,4 @@ extension CardController: SocketDelegate {
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) { }
-    
 }

@@ -77,7 +77,7 @@ DEPENDENCIES:
   - SwiftyJSON
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - Crashlytics
     - Fabric
@@ -133,6 +133,6 @@ SPEC CHECKSUMS:
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: cad19c4d3035a0440ddfbd6241592c02e76040d9
+PODFILE CHECKSUM: 546ce665c60448b278cb2f9a673c6ec6c4aae082
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.5.0

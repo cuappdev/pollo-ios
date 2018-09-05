@@ -11,7 +11,6 @@ import UIKit
 class CardDateCell: UICollectionViewCell, CardDelegate {
     
     var userRole: UserRole!
-    var cardType: CardType!
     var poll: Poll!
     var date: String!
     
@@ -69,10 +68,7 @@ class CardDateCell: UICollectionViewCell, CardDelegate {
         setupConstraints()
         
         dateLabel.text = date
-        cardView.questionLabel.text = poll.text
-        cardView.poll = poll
-        cardView.cardType = cardType
-        cardView.configure()
+        cardView.configureWith(poll: poll)
         cardView.setupCard()
         
         // Disable all cardView subviews

@@ -20,6 +20,13 @@ enum QuestionType: CustomStringConvertible {
         }
     }
     
+    var descriptionForServer : String {
+        switch self {
+        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
+        case .freeResponse: return Identifiers.freeResponseIdentifier
+        }
+    }
+    
     var other: QuestionType {
         switch self {
         case .multipleChoice: return .freeResponse

@@ -10,12 +10,6 @@ import IGListKit
 import Presentr
 import UIKit
 
-enum CardType {
-    case live
-    case ended
-    case shared
-}
-
 enum CardControllerState {
     case horizontal
     case vertical
@@ -26,15 +20,7 @@ class CardController: UIViewController {
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
-    var nameView: NameView!
-    
-    // MARK: - Empty State View vars
-    var monkeyView: UIImageView!
-    var nothingToSeeLabel: UILabel!
-    var waitingLabel: UILabel!
     var createPollButton: UIButton!
-    
-    // MARK: - Nonempty State View vars
     var countLabel: UILabel!
     var zoomOutButton: UIButton!
     var collectionViewLayout: UICollectionViewFlowLayout!
@@ -56,12 +42,6 @@ class CardController: UIViewController {
     var currentIndex: Int!
     
     // MARK: - Constants    
-    let monkeyViewLength: CGFloat = 32.0
-    let monkeyViewTopPadding: CGFloat = 142.0
-    let nothingToSeeLabelWidth: CGFloat = 200.0
-    let nothingToSeeLabelTopPadding: CGFloat = 20.0
-    let waitingLabelWidth: CGFloat = 220.0
-    let waitingLabelTopPadding: CGFloat = 10.0
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
@@ -75,8 +55,11 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
+        self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        self.currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
+        setupGradientViews()
+        setupHorizontal()
+
     }
     
     // MARK: - View lifecycle
@@ -88,10 +71,6 @@ class CardController: UIViewController {
         setupHorizontalNavBar()
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
-        
-        if (userRole == .admin && session.name == session.code) {
-            setupNameView()
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -100,66 +79,10 @@ class CardController: UIViewController {
             bottomGradientLayer.frame = bottomGradientView.bounds
         }
     }
-   
-    // MARK - NAME THE POLL
-    func setupNameView() {
-        nameView = NameView(frame: .zero)
-        nameView.session = session
-        nameView.delegate = self
-        view.addSubview(nameView)
-
-        nameView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
     
-    func setupEmptyState() {
-        monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
-        monkeyView.contentMode = .scaleAspectFit
-        view.addSubview(monkeyView)
-        
-        nothingToSeeLabel = UILabel()
-        nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerGrey5
-        nothingToSeeLabel.textAlignment = .center
-        nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-        view.addSubview(nothingToSeeLabel)
-        
-        waitingLabel = UILabel()
-        waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerGrey2
-        waitingLabel.textAlignment = .center
-        waitingLabel.lineBreakMode = .byWordWrapping
-        waitingLabel.numberOfLines = 0
-        waitingLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-        view.addSubview(waitingLabel)
-        
-        monkeyView.snp.makeConstraints { make in
-            make.width.height.equalTo(monkeyViewLength)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(monkeyViewTopPadding)
-        }
-        
-        nothingToSeeLabel.snp.makeConstraints { make in
-            make.width.equalTo(nothingToSeeLabelWidth)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(monkeyView.snp.bottom).offset(nothingToSeeLabelTopPadding)
-        }
-        
-        waitingLabel.snp.makeConstraints { make in
-            make.width.equalTo(waitingLabelWidth)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(waitingLabelTopPadding)
-        }
-    }
-    
-    func removeEmptyState() {
-        monkeyView.removeFromSuperview()
-        nothingToSeeLabel.removeFromSuperview()
-        waitingLabel.removeFromSuperview()
+    func setupHorizontal() {
+        setupCards()
+        setupHorizontalNavBar()
     }
     
     func setupCards() {
@@ -178,6 +101,8 @@ class CardController: UIViewController {
         view.addSubview(collectionView)
         view.sendSubview(toBack: collectionView)
         
+        currentIndex = pollsDateArray.isEmpty ? -1 : pollsDateArray.count - 1
+        
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
@@ -189,15 +114,13 @@ class CardController: UIViewController {
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        // TODO: Set count string to be 1 / total num of polls
-        let countString = "1/1"
-        countLabel.attributedText = getCountLabelAttributedString(countString)
+        updateCount()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
-        
+    
         zoomOutButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-24)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -219,32 +142,11 @@ class CardController: UIViewController {
     }
     
     // MARK: - Vertical Collection View
-    func setupVertical() {
-        self.state = .vertical
-        zoomOutButton.removeFromSuperview()
-        countLabel.removeFromSuperview()
-        collectionViewLayout.scrollDirection = .vertical
-        let collectionViewInset = view.frame.width * 0.1
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-        }
-        adapter.performUpdates(animated: true, completion: nil)
-        setupVerticalNavBar()
-    }
-    
     func setupVerticalNavBar() {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
         setupGradientViews()
-    }
-    
-    func revertToHorizontal() {
-        topGradientView.removeFromSuperview()
-        bottomGradientView.removeFromSuperview()
-        setupCards()
-        setupHorizontalNavBar()
     }
     
     func setupGradientViews() {
@@ -275,6 +177,22 @@ class CardController: UIViewController {
             make.leading.bottom.trailing.equalToSuperview()
             make.height.equalTo(gradientViewHeight)
         }
+    }
+    
+    // MARK: Switching between vertical and horizontal
+    func switchTo(state: CardControllerState) {
+        zoomOutButton.isHidden = (state == .vertical)
+        countLabel.isHidden = (state == .vertical)
+        self.state = state
+        switch state {
+        case .vertical:
+            collectionViewLayout.scrollDirection = .vertical
+            setupVerticalNavBar()
+        case .horizontal:
+            collectionViewLayout.scrollDirection = .horizontal
+            setupHorizontalNavBar()
+        }
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     // MARK: SCROLLVIEW METHODS
@@ -321,17 +239,6 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    func getCardType(from poll: Poll) -> CardType {
-        switch poll.state {
-        case .live:
-            return .live
-        case .ended:
-            return .ended
-        default:
-            return .shared
-        }
-    }
-    
     func updateDatePollsArr() {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
@@ -340,10 +247,6 @@ class CardController: UIViewController {
             }.catch { error in
                 print(error)
         }
-    }
-    
-    func appendPoll(poll: Poll) {
-        // TODO
     }
     
     func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
@@ -355,6 +258,20 @@ class CardController: UIViewController {
             ])
         attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
         return attributedString
+    }
+    
+    func updateCount(_ current: Int = 1) {
+        if currentIndex == -1 {
+            countLabel.text = ""
+            zoomOutButton.isUserInteractionEnabled = false
+        } else {
+            let total = pollsDateArray[currentIndex].polls.count
+            countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
+            zoomOutButton.isUserInteractionEnabled = total > 0
+            
+        }
+        
+        
     }
     
     // MARK: ACTIONS
@@ -370,14 +287,13 @@ class CardController: UIViewController {
         presenter.dismissOnSwipeDirection = .bottom
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
-    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func zoomOutBtnPressed() {
-        setupVertical()
+        switchTo(state: .vertical)
     }
     
     @objc func detectedPinchAction(_ sender: UIPinchGestureRecognizer) {

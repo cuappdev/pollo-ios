@@ -69,6 +69,7 @@ extension PollsViewController: PollsCellDelegate {
     
     func shouldPushCardController(cardController: CardController) {
         self.navigationController?.pushViewController(cardController, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }
 
