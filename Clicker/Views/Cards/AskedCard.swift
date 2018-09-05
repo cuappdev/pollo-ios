@@ -18,7 +18,6 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     var socket: Socket!
     var poll: Poll!
     var delegate: AskedCardDelegate!
-    var cardType: CardType!
     
     // Timer
     var timer: Timer!
@@ -37,6 +36,15 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         super.init(frame: frame)
         backgroundColor = .clickerBlack1
         setup()
+    }
+    
+    // MARK: Configure after variables are set
+    func configureWith(socket: Socket, delegate: AskedCardDelegate, poll: Poll) {
+        self.socket = socket
+        self.delegate = delegate
+        self.poll = poll
+        cardView.configureWith(poll: poll)
+        setupCard()
     }
     
     func setupLive() {
@@ -81,17 +89,8 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
         }
     }
     
-    // MARK: Configure after variables are set
-    func configure() {
-        cardView.questionLabel.text = poll.text
-        cardView.poll = poll
-        cardView.cardType = cardType
-        cardView.configure()
-        setupCard()
-    }
-    
     func setupCard() {
-        switch (cardType) {
+        switch poll.state {
         case .live:
             setupLive()
         case .ended:
@@ -147,17 +146,15 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     // MARK: CARD DELEGATE
     
     func questionBtnPressed() {
-        switch (cardType) {
+        switch (poll.state) {
         case .live:
             socket.socket.emit(Routes.end, [])
             delegate.askedCardDidEndPoll()
             setupEnded()
-            cardType = .ended
             poll.state = .ended
         case .ended:
             socket.socket.emit(Routes.results, [])
             setupShared()
-            cardType = .shared
             poll.state = .shared
         default: break
         }

@@ -31,7 +31,6 @@ extension PollsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let session: Session = sessions[sessions.count - indexPath.row - 1]
-        
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
                 let userRole: UserRole = self.pollType == .created ? .admin : .member

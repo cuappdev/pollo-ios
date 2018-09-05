@@ -10,6 +10,7 @@ import IGListKit
 
 protocol PollDateSectionControllerDelegate {
     var role: UserRole { get }
+    func switchToHorizontalWith(index: Int)
 }
 
 enum PollDateSectionControllerItemType {
@@ -35,7 +36,7 @@ class PollDateSectionController: ListSectionController {
     override func numberOfItems() -> Int {
         return itemTypes.count
     }
-    
+
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.insetContainerSize else {
             return .zero
@@ -75,6 +76,10 @@ class PollDateSectionController: ListSectionController {
         } else {
             itemTypes = []
         }
+    }
+    
+    override func didSelectItem(at index: Int) {
+        delegate.switchToHorizontalWith(index: pollDateModel.index)
     }
     
     // MARK: - Helpers

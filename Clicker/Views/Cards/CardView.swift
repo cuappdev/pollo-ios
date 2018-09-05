@@ -38,7 +38,6 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     
     var cardDelegate: CardDelegate!
     var userRole: UserRole!
-    var cardType: CardType!
     var poll: Poll!
     var frResults: [(String, Int)] = []
     var topViewHeightConstraint: Constraint!
@@ -68,7 +67,10 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
         setupConstraints()
     }
     
-    func configure() {
+    func configureWith(poll: Poll) {
+        self.poll = poll
+        questionLabel.text = poll.text
+        
         if (userRole == .member && poll.questionType == .freeResponse) {
             topViewHeightConstraint.update(offset: 140)
         } else {
@@ -296,7 +298,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
     }
     
     func setupCard() {
-        switch cardType {
+        switch poll.state {
         case .live:
             setupLive()
         case .ended:
@@ -420,7 +422,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldD
             return cell
         }
         // MEMBER
-        switch cardType {
+        switch poll.state {
         case .live, .ended:
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.optionIdentifier, for: indexPath) as! LiveOptionCell
             cell.buttonView.setTitle(poll.options[indexPath.row], for: .normal)

@@ -17,7 +17,8 @@ enum PollState {
 
 class Poll {
     
-    var id: Int?
+    let identifier = UUID().uuidString
+    var id: Int!
     var text: String
     var questionType: QuestionType
     var options: [String]

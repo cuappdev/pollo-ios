@@ -13,11 +13,13 @@ class PollDateModel {
     
     var date: String
     var poll: Poll
+    var index: Int
     let identifier = UUID().uuidString
     
-    init(date: String, poll: Poll) {
+    init(date: String, poll: Poll, index: Int) {
         self.date = date
         self.poll = poll
+        self.index = index
     }
     
 }
