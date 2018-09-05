@@ -27,6 +27,14 @@ class PollSectionController: ListSectionController {
         self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
     }
     
+    func configureWith(session: Session, userRole: UserRole, askedCardDelegate: AskedCardDelegate, socket: Socket)
+    {
+        self.session = session
+        self.userRole = userRole
+        self.askedCardDelegate = askedCardDelegate
+        self.socket = socket
+    }
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
@@ -39,21 +47,14 @@ class PollSectionController: ListSectionController {
         switch (userRole) {
         case .admin:
             let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
-            cell.socket = socket
-            cell.delegate = askedCardDelegate
             socket.addDelegate(cell)
-            cell.poll = poll
-            cell.cardType = poll.state
-            cell.configure()
+            cell.configureWith(socket: socket, delegate: askedCardDelegate, poll: poll)
             return cell
         default:
-            let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AskedCard
+            let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AnswerCard
             cell.socket = socket
-            cell.delegate = askedCardDelegate
             socket.addDelegate(cell)
-            cell.poll = poll
-            cell.cardType = poll.state
-            cell.configure()
+            cell.configureWith(socket: socket, poll: poll)
             return cell
         }
     }

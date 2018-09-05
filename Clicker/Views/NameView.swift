@@ -19,10 +19,13 @@ class NameView: UIView, UITextFieldDelegate {
     var session: Session!
     var delegate: NameViewDelegate!
     
-    override init(frame: CGRect) {
+    init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
-        
+        self.session = session
+        self.delegate = delegate
         backgroundColor = .clickerBlack2
+        
+        setup()
     }
     
     func setup() {
