@@ -90,7 +90,7 @@ class AskedCard: UICollectionViewCell, CardDelegate, SocketDelegate {
     }
     
     func setupCard() {
-        switch (poll.state) {
+        switch poll.state {
         case .live:
             setupLive()
         case .ended:

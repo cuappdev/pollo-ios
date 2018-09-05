@@ -22,10 +22,10 @@ extension CardController: ListAdapterDataSource {
                 return [EmptyStateModel(userRole: userRole)]
             }
         default:
-            return pollsDateArray.enumerated().compactMap({ (i,pollsDateModel) -> PollDateModel? in
+            return pollsDateArray.enumerated().compactMap({ index,pollsDateModel -> PollDateModel? in
                 if let latestPoll = pollsDateModel.polls.last {
                     collectionView.isScrollEnabled = true
-                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll, index: i)
+                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll, index: index)
                 }
                 return nil
             })
@@ -86,7 +86,7 @@ extension CardController: StartPollDelegate {
         let newPoll = Poll(text: text, options: options, type: type, state: state)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: true, completion: nil)
-        let lastIndexPath = IndexPath(item: 0, section: 0)//pollsDateArray[currentIndex].polls.count-1)
+        let lastIndexPath = IndexPath(item: 0, section: 0) // TODO: implement scrolling to end of CV
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
     
@@ -94,7 +94,7 @@ extension CardController: StartPollDelegate {
         let date = "today"
         let newPollDate = PollsDateModel(date: date, polls: [poll])
         
-        guard let _ = pollsDateArray else {
+        if pollsDateArray == nil {
             pollsDateArray = [newPollDate]
             currentIndex = 0
             return
