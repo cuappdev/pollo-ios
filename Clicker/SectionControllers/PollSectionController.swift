@@ -44,18 +44,21 @@ class PollSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        switch (userRole) {
+        switch userRole {
         case .admin:
             let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
             socket.addDelegate(cell)
             cell.configureWith(socket: socket, delegate: askedCardDelegate, poll: poll)
             return cell
-        default:
+        case .member:
             let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AnswerCard
             cell.socket = socket
             socket.addDelegate(cell)
             cell.configureWith(socket: socket, poll: poll)
             return cell
+        default:
+            print("userRole was not initialized!")
+            return UICollectionViewCell()
         }
     }
     

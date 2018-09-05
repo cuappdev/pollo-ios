@@ -46,7 +46,7 @@ class EmptyStateCell: UICollectionViewCell {
         setupViews()
         setupConstraints()
         // TODO: Add logic for setting up empty state or nonempty state
-        if (userRole == .admin && session.name == session.code) {
+        if userRole == .admin && session.name == session.code {
             setupNameView()
         }
     }

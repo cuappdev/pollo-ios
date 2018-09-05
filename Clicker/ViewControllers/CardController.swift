@@ -188,7 +188,7 @@ class CardController: UIViewController {
         case .vertical:
             collectionViewLayout.scrollDirection = .vertical
             setupVerticalNavBar()
-        default:
+        case .horizontal:
             collectionViewLayout.scrollDirection = .horizontal
             setupHorizontalNavBar()
         }
