@@ -18,17 +18,12 @@ class PollSectionController: ListSectionController {
     var socket: Socket!
     var askedCardDelegate: AskedCardDelegate!
     
-    
     var poll: Poll!
     let widthScaleFactor: CGFloat = 0.9
     
-    override init() {
+    init(session: Session, userRole: UserRole, socket: Socket, askedCardDelegate: AskedCardDelegate) {
         super.init()
         self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-    }
-    
-    func configureWith(session: Session, userRole: UserRole, askedCardDelegate: AskedCardDelegate, socket: Socket)
-    {
         self.session = session
         self.userRole = userRole
         self.askedCardDelegate = askedCardDelegate

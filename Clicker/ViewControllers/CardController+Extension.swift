@@ -34,20 +34,13 @@ extension CardController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is Poll {
-            let pollSectionController = PollSectionController()
-            pollSectionController.session = session
-            pollSectionController.userRole = userRole
-            pollSectionController.socket = socket
-            pollSectionController.askedCardDelegate = self
+            let pollSectionController = PollSectionController(session: session, userRole: userRole, socket: socket, askedCardDelegate: self)
             return pollSectionController
         } else if object is PollDateModel {
             let pollDateSectionController = PollDateSectionController(delegate: self)
             return pollDateSectionController
         } else {
-            let emptyStateController = EmptyStateSectionController()
-            emptyStateController.session = session
-            emptyStateController.userRole = userRole
-            emptyStateController.nameViewDelegate = self
+            let emptyStateController = EmptyStateSectionController(session: session, userRole: userRole, nameViewDelegate: self)
             return emptyStateController
         }
     }
@@ -106,9 +99,8 @@ extension CardController: StartPollDelegate {
             pollsDateArray[currentIndex].polls.append(poll)
         }
         updateCount()
-        
-        
     }
+
 }
 extension CardController: AskedCardDelegate {
     
