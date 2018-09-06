@@ -62,7 +62,7 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(containerViewHorizontalPadding)
-            make.trailing.equalToSuperview().offset(containerViewHorizontalPadding * -1)
+            make.trailing.equalToSuperview().inset(containerViewHorizontalPadding)
             make.top.equalToSuperview().offset(containerViewTopPadding)
             make.bottom.equalToSuperview()
         }
@@ -70,12 +70,12 @@ class MCResultCell: UICollectionViewCell {
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(numSelectedLabel.snp.leading).offset(optionLabelHorizontalPadding * -1)
+            make.trailing.equalTo(numSelectedLabel.snp.leading).inset(optionLabelHorizontalPadding)
         }
         
         numSelectedLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(numSelectedLabelTrailingPadding * -1)
+            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
         }
         
         highlightView.snp.makeConstraints { make in

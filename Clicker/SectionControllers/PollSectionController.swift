@@ -9,6 +9,11 @@
 import Foundation
 import IGListKit
 
+protocol PollSectionControllerDelegate {
+    
+    var cardControllerState: CardControllerState { get }
+    
+}
 
 class PollSectionController: ListSectionController {
     
@@ -19,15 +24,13 @@ class PollSectionController: ListSectionController {
     var askedCardDelegate: AskedCardDelegate!
     
     var poll: Poll!
+    var delegate: PollSectionControllerDelegate!
     let widthScaleFactor: CGFloat = 0.9
     
-    init(session: Session, userRole: UserRole, socket: Socket, askedCardDelegate: AskedCardDelegate) {
+    init(delegate: PollSectionControllerDelegate) {
         super.init()
         self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-        self.session = session
-        self.userRole = userRole
-        self.askedCardDelegate = askedCardDelegate
-        self.socket = socket
+        self.delegate = delegate
     }
     
     // MARK: - ListSectionController overrides
@@ -39,26 +42,22 @@ class PollSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        switch userRole {
-        case .admin:
-            let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
-            socket.addDelegate(cell)
-            cell.configureWith(socket: socket, delegate: askedCardDelegate, poll: poll)
-            return cell
-        case .member:
-            let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AnswerCard
-            cell.socket = socket
-            socket.addDelegate(cell)
-            cell.configureWith(socket: socket, poll: poll)
-            return cell
-        default:
-            print("userRole was not initialized!")
-            return UICollectionViewCell()
-        }
+        let cell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
+        cell.configure(with: self, poll: poll)
+        cell.setNeedsUpdateConstraints()
+        return cell
     }
     
     override func didUpdate(to object: Any) {
         poll = object as? Poll
     }
         
+}
+
+extension PollSectionController: CardCellDelegate {
+    
+    var cardControllerState: CardControllerState {
+        return delegate.cardControllerState
+    }
+    
 }

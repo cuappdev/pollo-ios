@@ -11,6 +11,10 @@ import SnapKit
 import SwiftyJSON
 import UIKit
 
+protocol CardCellDelegate {
+    var cardControllerState: CardControllerState { get }
+}
+
 class CardCell: UICollectionViewCell {
     
     // MARK: - View vars
@@ -18,6 +22,7 @@ class CardCell: UICollectionViewCell {
     var collectionView: UICollectionView!
     
     // MARK: - Data vars
+    var delegate: CardCellDelegate!
     var adapter: ListAdapter!
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
@@ -25,10 +30,10 @@ class CardCell: UICollectionViewCell {
     var miscellaneousModel: PollMiscellaneousModel!
     var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
+    var shadowViewWidth: CGFloat!
     
     // MARK: - Constants
     let shadowViewCornerRadius: CGFloat = 11
-    let shadowViewWidth: CGFloat = 15
     let shadowHeightScaleFactor: CGFloat = 0.9
     
     override init(frame: CGRect) {
@@ -67,7 +72,7 @@ class CardCell: UICollectionViewCell {
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().offset(shadowViewWidth * -1)
+            make.trailing.equalToSuperview().inset(shadowViewWidth)
         }
         
         shadowView.snp.updateConstraints { make in
@@ -79,14 +84,17 @@ class CardCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for poll: Poll) {
+    func configure(with delegate: CardCellDelegate, poll: Poll) {
+        self.delegate = delegate
+        shadowViewWidth = delegate.cardControllerState == .vertical ? 15 : 0
         questionModel = QuestionModel(question: poll.text)
         resultModelArray = []
         let totalNumResults = poll.getTotalResults()
         for (_, info) in poll.results {
             if let infoDict = info as? [String:Any] {
                 guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Float else { return }
-                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: numSelected / totalNumResults)
+                let percentSelected = totalNumResults > 0 ? numSelected / totalNumResults : 0
+                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected)
                 resultModelArray.append(resultModel)
             }
         }

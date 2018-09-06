@@ -60,7 +60,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
         }
         
         totalVotesLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(totalVotesLabelTrailingPadding * -1)
+            make.trailing.equalToSuperview().inset(totalVotesLabelTrailingPadding)
             make.centerY.equalToSuperview()
         }
         super.updateConstraints()

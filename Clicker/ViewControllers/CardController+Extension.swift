@@ -34,7 +34,7 @@ extension CardController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is Poll {
-            let pollSectionController = PollSectionController(session: session, userRole: userRole, socket: socket, askedCardDelegate: self)
+            let pollSectionController = PollSectionController(delegate: self)
             return pollSectionController
         } else if object is PollDateModel {
             let pollDateSectionController = PollDateSectionController(delegate: self)
@@ -50,15 +50,23 @@ extension CardController: ListAdapterDataSource {
     }
 }
 
+extension CardController: PollSectionControllerDelegate {
+    
+    var cardControllerState: CardControllerState {
+        return state
+    }
+    
+}
+
 extension CardController: PollDateSectionControllerDelegate {
+    
+    var role: UserRole {
+        return userRole
+    }
     
     func switchToHorizontalWith(index: Int) {
         currentIndex = index
         switchTo(state: .horizontal)
-    }
-    
-    var role: UserRole {
-        return userRole
     }
     
 }
