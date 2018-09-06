@@ -17,7 +17,6 @@ class PollButtonCell: UICollectionViewCell {
     let buttonCornerRadius: CGFloat = 20
     let buttonBorderWidth: CGFloat = 1
     let buttonHorizontalPadding: CGFloat = 14
-    let buttonHeight: CGFloat = 38
     let liveButtonTitle = "End Question"
     let endedButtonTitle = "Share Results"
     
@@ -35,8 +34,8 @@ class PollButtonCell: UICollectionViewCell {
     override func updateConstraints() {
         button.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(buttonHorizontalPadding)
-            make.trailing.equalToSuperview().offset(buttonHorizontalPadding * -1)
-            make.height.equalTo(buttonHeight)
+            make.trailing.equalToSuperview().inset(buttonHorizontalPadding)
+            make.top.bottom.equalToSuperview()
         }
         super.updateConstraints()
     }

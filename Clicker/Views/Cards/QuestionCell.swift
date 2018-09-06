@@ -49,7 +49,7 @@ class QuestionCell: UICollectionViewCell {
         
         moreButton.snp.makeConstraints { make in
             make.width.equalTo(moreButtonWidth)
-            make.trailing.equalToSuperview().offset(horizontalPadding * -1)
+            make.trailing.equalToSuperview().inset(horizontalPadding)
             make.centerY.equalToSuperview()
         }
         super.updateConstraints()

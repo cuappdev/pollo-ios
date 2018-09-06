@@ -9,6 +9,7 @@
 import IGListKit
 
 protocol PollDateSectionControllerDelegate {
+    var cardControllerState: CardControllerState { get }
     var role: UserRole { get }
     func switchToHorizontalWith(index: Int)
 }
@@ -62,7 +63,7 @@ class PollDateSectionController: ListSectionController {
             cell = dateCell
         case .card:
             let cardCell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
-            cardCell.configure(for: pollDateModel.poll)
+            cardCell.configure(with: self, poll: pollDateModel.poll)
             cardCell.setNeedsUpdateConstraints()
             cell = cardCell
         }
@@ -92,4 +93,12 @@ class PollDateSectionController: ListSectionController {
         let pollButtonCellHeight = hasButtonCell ? LayoutConstants.pollButtonCellHeight : 0
         return topBottomHamburgerCellHeight + questionCellHeight + optionsCellHeight + miscellaneousCellHeight + pollButtonCellHeight
     }
+}
+
+extension PollDateSectionController: CardCellDelegate {
+    
+    var cardControllerState: CardControllerState {
+        return delegate.cardControllerState
+    }
+    
 }
