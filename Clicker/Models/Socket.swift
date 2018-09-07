@@ -7,6 +7,7 @@
 //
 
 import SocketIO
+import SwiftyJSON
 
 class Socket {
     let id: String
@@ -35,25 +36,22 @@ class Socket {
         }
         
         socket.on("user/poll/start") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
+            guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let poll = Poll(json: pollJSON)
+            let poll = PollParser.parseItem(json: JSON(pollDict))
             self.delegates.forEach { $0.pollStarted(poll) }
         }
         
         socket.on("user/poll/end") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any] else {
+            guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let poll = Poll(json: pollJSON)
+            let poll = PollParser.parseItem(json: JSON(pollDict))
             self.delegates.forEach { $0.pollEnded(poll) }
         }
         
         socket.on("user/poll/results") { data, ack in
-            print(data)
             guard let json = data[0] as? [String:Any] else {
                 return
             }

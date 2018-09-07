@@ -137,14 +137,15 @@ class CardCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with delegate: CardCellDelegate, poll: Poll) {
+    func configure(with delegate: CardCellDelegate, poll: Poll, userRole: UserRole) {
         self.delegate = delegate
         self.poll = poll
         let isVertical = delegate.cardControllerState == .vertical
+        let isMember = userRole == .member
         shadowViewWidth = isVertical ? 15 : 0
         collectionViewRightPadding = isVertical ? 0 : collectionViewLeftPadding
-        questionButton.isHidden = poll.state == .shared || isVertical
-        timerLabel.isHidden = !(poll.state == .live) || isVertical
+        questionButton.isHidden = poll.state == .shared || isVertical || isMember
+        timerLabel.isHidden = !(poll.state == .live) || isVertical || isMember
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
             timerLabel.text = initialTimerLabelText
@@ -187,11 +188,6 @@ class CardCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Helpers
-    func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
-    }
-    
     @objc func updateTimerLabel() {
         elapsedSeconds += 1
         if (elapsedSeconds < 10) {
@@ -215,6 +211,15 @@ class CardCell: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    // MARK: - Helpers
+    private func buildPollOptionsModel(from poll: Poll) {
+        
+    }
+    
+    private func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {

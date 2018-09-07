@@ -72,6 +72,16 @@ struct LayoutConstants {
     static let pollOptionsVerticalPadding: CGFloat = 10
 }
 
+struct ParserKeys {
+    static let countKey = "count"
+    static let idKey = "key"
+    static let optionsKey = "options"
+    static let resultsKey = "results"
+    static let sharedKey = "shared"
+    static let textKey = "text"
+    static let typeKey = "type"
+}
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"

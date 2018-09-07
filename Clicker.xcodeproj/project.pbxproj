@@ -43,6 +43,8 @@
 		C20B571F2139E9F40091034F /* MCResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B571E2139E9F40091034F /* MCResultModel.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C21D98812083D32000191103 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D98802083D32000191103 /* LoginViewController.swift */; };
+		C22D5B562142E631005A0E29 /* PollParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22D5B552142E631005A0E29 /* PollParser.swift */; };
+		C22D5B582142E640005A0E29 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22D5B572142E640005A0E29 /* Parser.swift */; };
 		C22F66622141B75100D4E349 /* SeparatorLineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66612141B75100D4E349 /* SeparatorLineModel.swift */; };
 		C22F66642141B7AA00D4E349 /* SeparatorLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */; };
 		C22F66662141B86400D4E349 /* SeparatorLineSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */; };
@@ -158,6 +160,8 @@
 		C20B571E2139E9F40091034F /* MCResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCResultModel.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C21D98802083D32000191103 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C22D5B552142E631005A0E29 /* PollParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollParser.swift; sourceTree = "<group>"; };
+		C22D5B572142E640005A0E29 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		C22F66612141B75100D4E349 /* SeparatorLineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineModel.swift; sourceTree = "<group>"; };
 		C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineCell.swift; sourceTree = "<group>"; };
 		C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineSectionController.swift; sourceTree = "<group>"; };
@@ -337,6 +341,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		C22D5B542142E621005A0E29 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				C22D5B552142E631005A0E29 /* PollParser.swift */,
+				C22D5B572142E640005A0E29 /* Parser.swift */,
+			);
+			path = Parsers;
+			sourceTree = "<group>";
+		};
 		C2434CB221346F5100929C98 /* ListDiffableModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -389,6 +402,7 @@
 		C281886C1F7ADE6F00D7E944 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C22D5B542142E621005A0E29 /* Parsers */,
 				C2434CB221346F5100929C98 /* ListDiffableModels */,
 				C2D0579A1F926BB4008F21CB /* Answer.swift */,
 				C259603A20390F0800C8DBA3 /* CurrentState.swift */,
@@ -760,6 +774,7 @@
 				C2649F77214232CF00370454 /* PollOptionsSectionController.swift in Sources */,
 				C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */,
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
+				C22D5B582142E640005A0E29 /* Parser.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
@@ -810,6 +825,7 @@
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */,
 				C22F66622141B75100D4E349 /* SeparatorLineModel.swift in Sources */,
+				C22D5B562142E631005A0E29 /* PollParser.swift in Sources */,
 				C20B570F2138FE6B0091034F /* PollDateModel.swift in Sources */,
 				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,

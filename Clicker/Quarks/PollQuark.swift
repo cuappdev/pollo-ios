@@ -35,12 +35,7 @@ struct CreatePoll: ClickerQuark {
     func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
-                throw NeutronError.badResponseData
-            }
-            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-            let state: PollState = shared ? .shared : .ended
-            return Poll(id: id, text: text, results: results, type: questionType, state: state)
+            return PollParser.parseItem(json: node)
         default: throw NeutronError.badResponseData
         }
     }
@@ -64,12 +59,7 @@ struct GetPoll: ClickerQuark {
     func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
-                throw NeutronError.badResponseData
-            }
-            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-            let state: PollState = shared ? .shared : .ended
-            return Poll(id: id, text: text, results: results, type: questionType, state: state)
+            return PollParser.parseItem(json: node)
         default: throw NeutronError.badResponseData
         }
     }
@@ -97,12 +87,7 @@ struct GetSortedPolls: ClickerQuark {
             for (date, pollsJSON) in node {
                 if let pollsArray = pollsJSON.array {
                     let pollsArr: [Poll] = try pollsArray.map {
-                        guard let id = $0["id"].int, let text = $0["text"].string, let results = $0["results"].dictionaryObject, let type = $0["type"].string, let shared = $0["shared"].bool else {
-                            throw NeutronError.badResponseData
-                        }
-                        let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-                        let state: PollState = shared ? .shared : .ended
-                        return Poll(id: id, text: text, results: results, type: questionType, state: state)
+                        return PollParser.parseItem(json: $0)
                     }
                     let pollsDateModel = PollsDateModel(date: date, polls: pollsArr)
                     pollsDateArray.append(pollsDateModel)
@@ -133,16 +118,9 @@ struct GetPollsForSession: ClickerQuark {
     func process(element: Element) throws -> [Poll] {
         switch element {
         case .nodes(let nodes):
-            var polls: [Poll] = []
-            for node in nodes {
-                guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
-                    throw NeutronError.badResponseData
-                }
-                let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-                let state: PollState = shared ? .shared : .ended
-                polls.append(Poll(id: id, text: text, results: results, type: questionType, state: state))
+            return nodes.map {
+                return PollParser.parseItem(json: $0)
             }
-            return polls
         default: throw NeutronError.badResponseData
         }
     }
@@ -176,12 +154,7 @@ struct UpdatePoll: ClickerQuark {
     func process(element: Element) throws -> Poll {
         switch element {
         case .node(let node):
-            guard let id = node["id"].int, let text = node["text"].string, let results = node["results"].dictionaryObject, let type = node["type"].string, let shared = node["shared"].bool else {
-                throw NeutronError.badResponseData
-            }
-            let questionType: QuestionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-            let state: PollState = shared ? .shared : .ended
-            return Poll(id: id, text: text, results: results, type: questionType, state: state)
+            return PollParser.parseItem(json: node)
         default: throw NeutronError.badResponseData
         }
     }
