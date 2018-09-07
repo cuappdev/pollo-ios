@@ -56,13 +56,13 @@ extension CardController: PollSectionControllerDelegate {
         return state
     }
     
-}
-
-extension CardController: PollDateSectionControllerDelegate {
-    
     var role: UserRole {
         return userRole
     }
+    
+}
+
+extension CardController: PollDateSectionControllerDelegate {
     
     func switchToHorizontalWith(index: Int) {
         currentIndex = index
@@ -84,7 +84,7 @@ extension CardController: StartPollDelegate {
             "shared": state == .shared
         ]
         socket.socket.emit(Routes.start, [socketQuestion])
-        let newPoll = Poll(text: text, options: options, type: type, state: state)
+        let newPoll = Poll(id: 0, text: text, questionType: type, options: options, results: [:], state: state)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: true, completion: nil)
         let lastIndexPath = IndexPath(item: 0, section: 0) // TODO: implement scrolling to end of CV

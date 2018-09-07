@@ -63,7 +63,7 @@ class PollDateSectionController: ListSectionController {
             cell = dateCell
         case .card:
             let cardCell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
-            cardCell.configure(with: self, poll: pollDateModel.poll)
+            cardCell.configure(with: self, poll: pollDateModel.poll, userRole: delegate.role)
             cardCell.setNeedsUpdateConstraints()
             cell = cardCell
         }

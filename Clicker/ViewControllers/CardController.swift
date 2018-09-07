@@ -59,42 +59,18 @@ class CardController: UIViewController {
         self.state = .horizontal
         
         // REMOVE LATER
-        let results = [
-            "A": [
-                "text": "Moon name #1",
-                "count": 3
-            ],
-            "B": [
-                "text": "Moon name #2",
-                "count": 2
-            ],
-            "C": [
-                "text": "Moon name #3",
-                "count": 2
-            ],
-            "D": [
-                "text": "Moon name #4",
-                "count": 2
-            ],
-            "E": [
-                "text": "Moon name #4",
-                "count": 2
-            ],
-            "F": [
-                "text": "Moon name #5",
-                "count": 2
-            ],
-            "G": [
-                "text": "Moon name #6",
-                "count": 2
-            ],
-            "H": [
-                "text": "Moon name #7",
-                "count": 2
-            ]
+        let options = [
+            "Moon name #1",
+            "Moon name #2",
+            "Moon name #3",
+            "Moon name #4",
+            "Moon name #5",
+            "Moon name #6",
+            "Moon name #7",
         ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .live)
+        let poll = Poll(id: 0, text: "What is the name of Saturn's largest moon?", questionType: .multipleChoice, options: options, results: [:], state: .live)
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
+        self.userRole = .member
         
         setupGradientViews()
         setupHorizontal()

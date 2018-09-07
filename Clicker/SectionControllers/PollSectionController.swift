@@ -12,16 +12,11 @@ import IGListKit
 protocol PollSectionControllerDelegate {
     
     var cardControllerState: CardControllerState { get }
+    var role: UserRole { get }
     
 }
 
 class PollSectionController: ListSectionController {
-    
-    // MARK: these refrences must be passed to each cell in the section
-    var session: Session!
-    var userRole: UserRole!
-    var socket: Socket!
-    var askedCardDelegate: AskedCardDelegate!
     
     var poll: Poll!
     var delegate: PollSectionControllerDelegate!
@@ -42,7 +37,7 @@ class PollSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
-        cell.configure(with: self, poll: poll)
+        cell.configure(with: self, poll: poll, userRole: delegate.role)
         cell.setNeedsUpdateConstraints()
         return cell
     }
