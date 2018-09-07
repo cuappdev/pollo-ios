@@ -17,7 +17,7 @@ class MCResultSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: LayoutConstants.optionCellHeight)
+        return CGSize(width: containerSize.width, height: LayoutConstants.verticalOptionCellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

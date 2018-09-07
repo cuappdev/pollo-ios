@@ -43,6 +43,9 @@
 		C20B571F2139E9F40091034F /* MCResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B571E2139E9F40091034F /* MCResultModel.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
 		C21D98812083D32000191103 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D98802083D32000191103 /* LoginViewController.swift */; };
+		C22F66622141B75100D4E349 /* SeparatorLineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66612141B75100D4E349 /* SeparatorLineModel.swift */; };
+		C22F66642141B7AA00D4E349 /* SeparatorLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */; };
+		C22F66662141B86400D4E349 /* SeparatorLineSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */; };
 		C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */; };
 		C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CB321346F8000929C98 /* PollTypeModel.swift */; };
 		C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CB82134715600929C98 /* PollTypeSectionController.swift */; };
@@ -152,6 +155,9 @@
 		C20B571E2139E9F40091034F /* MCResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCResultModel.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
 		C21D98802083D32000191103 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C22F66612141B75100D4E349 /* SeparatorLineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineModel.swift; sourceTree = "<group>"; };
+		C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineCell.swift; sourceTree = "<group>"; };
+		C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorLineSectionController.swift; sourceTree = "<group>"; };
 		C23B3D8D203B69CC006AD046 /* UIView+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shared.swift"; sourceTree = "<group>"; };
 		C2434C8D2133346C00929C98 /* Clicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		C2434CB321346F8000929C98 /* PollTypeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollTypeModel.swift; sourceTree = "<group>"; };
@@ -258,6 +264,7 @@
 				C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */,
 				C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */,
 				C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */,
+				C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -336,6 +343,7 @@
 				C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */,
 				C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */,
 				C2A0F7D2213A198600A28D75 /* PollButtonModel.swift */,
+				C22F66612141B75100D4E349 /* SeparatorLineModel.swift */,
 			);
 			path = ListDiffableModels;
 			sourceTree = "<group>";
@@ -352,6 +360,7 @@
 				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
 				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
 				C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */,
+				C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */,
 			);
 			path = SectionControllers;
 			sourceTree = "<group>";
@@ -750,6 +759,7 @@
 				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
 				638406D52083CC1400483645 /* ResultMCCell.swift in Sources */,
 				C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */,
+				C22F66662141B86400D4E349 /* SeparatorLineSectionController.swift in Sources */,
 				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C2434CBF21388E2B00929C98 /* Poll.swift in Sources */,
 				C20B571D2139E6080091034F /* MCResultCell.swift in Sources */,
@@ -778,6 +788,7 @@
 				C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */,
 				C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
+				C22F66642141B7AA00D4E349 /* SeparatorLineCell.swift in Sources */,
 				C2E1A2642139F0E500087EE4 /* MCResultSectionController.swift in Sources */,
 				C23B3D8E203B69CC006AD046 /* UIView+Shared.swift in Sources */,
 				C20B5711213904C10091034F /* PollDateSectionController.swift in Sources */,
@@ -786,6 +797,7 @@
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2F48ECA208305C90022FE6B /* JoinViewController.swift in Sources */,
 				C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */,
+				C22F66622141B75100D4E349 /* SeparatorLineModel.swift in Sources */,
 				C20B570F2138FE6B0091034F /* PollDateModel.swift in Sources */,
 				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
