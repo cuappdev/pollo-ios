@@ -64,10 +64,12 @@ struct Routes {
 struct LayoutConstants {
     static let verticalQuestionCellHeight: CGFloat = 40
     static let verticalOptionCellHeight: CGFloat = 44
+    static let horizontalOptionCellHeight: CGFloat = 50
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let separatorLineCellHeight: CGFloat = 1
     static let pollButtonCellHeight: CGFloat = 48
     static let hamburgerCardCellHeight: CGFloat = 25
+    static let pollOptionsVerticalPadding: CGFloat = 10
 }
 
 enum Keys: String {

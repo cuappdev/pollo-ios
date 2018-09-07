@@ -8,16 +8,28 @@
 
 import IGListKit
 
+protocol MCResultSectionControllerDelegate {
+    var cardControllerState: CardControllerState { get }
+}
+
 class MCResultSectionController: ListSectionController {
     
+    var delegate: MCResultSectionControllerDelegate!
     var resultModel: MCResultModel!
+    
+    init(delegate: MCResultSectionControllerDelegate) {
+        self.delegate = delegate
+    }
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: LayoutConstants.verticalOptionCellHeight)
+        let cellHeight = delegate.cardControllerState == .horizontal
+            ? LayoutConstants.horizontalOptionCellHeight
+            : LayoutConstants.verticalOptionCellHeight
+        return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
