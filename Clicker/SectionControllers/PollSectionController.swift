@@ -29,7 +29,6 @@ class PollSectionController: ListSectionController {
     
     init(delegate: PollSectionControllerDelegate) {
         super.init()
-        self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         self.delegate = delegate
     }
     

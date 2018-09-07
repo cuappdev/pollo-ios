@@ -20,6 +20,8 @@ class CardCell: UICollectionViewCell {
     // MARK: - View vars
     var shadowView: UIView!
     var collectionView: UICollectionView!
+    var questionButton: UIButton!
+    var timerLabel: UILabel!
     
     // MARK: - Data vars
     var delegate: CardCellDelegate!
@@ -32,10 +34,22 @@ class CardCell: UICollectionViewCell {
     var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var shadowViewWidth: CGFloat!
+    var timer: Timer!
+    var elapsedSeconds: Int = 0
     
     // MARK: - Constants
-    let shadowViewCornerRadius: CGFloat = 11
+    let shadowViewCornerRadius: CGFloat = 11.0
     let shadowHeightScaleFactor: CGFloat = 0.9
+    let questionButtonFontSize: CGFloat = 16.0
+    let questionButtonCornerRadius: CGFloat = 23.0
+    let questionButtonBorderWidth: CGFloat = 1.0
+    let questionButtonWidth: CGFloat = 170.0
+    let questionButtonHeight: CGFloat = 47.0
+    let questionButtonBottomPadding: CGFloat = 10.0
+    let timerLabelFontSize: CGFloat = 14.0
+    let timerLabelBottomPadding: CGFloat =  50.0
+    let endQuestionText = "End Question"
+    let shareResultsText = "Share Results"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,6 +83,21 @@ class CardCell: UICollectionViewCell {
         shadowView.layer.cornerRadius = shadowViewCornerRadius
         shadowView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         contentView.addSubview(shadowView)
+        
+        questionButton = UIButton()
+        questionButton.titleLabel?.font = UIFont.systemFont(ofSize: questionButtonFontSize, weight: .semibold)
+        questionButton.setTitleColor(.white, for: .normal)
+        questionButton.layer.cornerRadius = questionButtonCornerRadius
+        questionButton.layer.borderWidth = questionButtonBorderWidth
+        questionButton.layer.borderColor = UIColor.white.cgColor
+        questionButton.isHidden = true
+        contentView.addSubview(questionButton)
+        
+        timerLabel = UILabel()
+        timerLabel.font = UIFont.systemFont(ofSize: timerLabelFontSize, weight: .bold)
+        timerLabel.textColor = .white
+        timerLabel.isHidden = true
+        contentView.addSubview(timerLabel)
     }
     
     override func updateConstraints() {
@@ -82,6 +111,18 @@ class CardCell: UICollectionViewCell {
             make.trailing.centerY.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(shadowHeightScaleFactor)
         }
+        
+        timerLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(timerLabelBottomPadding)
+        }
+        
+        questionButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(timerLabel.snp.top).offset(questionButtonBottomPadding * -1)
+            make.width.equalTo(questionButtonWidth)
+            make.height.equalTo(questionButtonHeight)
+        }
         super.updateConstraints()
     }
     
@@ -89,6 +130,15 @@ class CardCell: UICollectionViewCell {
     func configure(with delegate: CardCellDelegate, poll: Poll) {
         self.delegate = delegate
         shadowViewWidth = delegate.cardControllerState == .vertical ? 15 : 0
+        questionButton.isHidden = poll.state == .shared
+        timerLabel.isHidden = !(poll.state == .live)
+        if poll.state == .live {
+            questionButton.setTitle(endQuestionText, for: .normal)
+            runTimer()
+        } else if poll.state == .ended {
+            questionButton.setTitle(shareResultsText, for: .normal)
+        }
+        
         questionModel = QuestionModel(question: poll.text)
         resultModelArray = []
         let totalNumResults = poll.getTotalResults()
@@ -100,9 +150,38 @@ class CardCell: UICollectionViewCell {
                 resultModelArray.append(resultModel)
             }
         }
-        
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
         adapter.performUpdates(animated: true, completion: nil)
+    }
+    
+    // MARK: - Helpers
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTimerLabel() {
+        elapsedSeconds += 1
+        if (elapsedSeconds < 10) {
+            timerLabel.text = "00:0\(elapsedSeconds)"
+        } else if (elapsedSeconds < 60) {
+            timerLabel.text = "00:\(elapsedSeconds)"
+        } else {
+            let minutes = Int(elapsedSeconds / 60)
+            let seconds = elapsedSeconds - minutes * 60
+            if (elapsedSeconds < 600) {
+                if (seconds < 10) {
+                    timerLabel.text = "0\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "0\(minutes):\(seconds)"
+                }
+            } else {
+                if (seconds < 10) {
+                    timerLabel.text = "\(minutes):0\(seconds)"
+                } else {
+                    timerLabel.text = "\(minutes):\(seconds)"
+                }
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -121,7 +200,6 @@ extension CardCell: ListAdapterDataSource {
         objects.append(miscellaneousModel)
         objects.append(separatorLineModel)
         objects.append(contentsOf: resultModelArray)
-        objects.append(pollButtonModel)
         objects.append(bottomHamburgerCardModel)
         return objects
     }
