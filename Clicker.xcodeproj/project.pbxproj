@@ -352,14 +352,14 @@
 			isa = PBXGroup;
 			children = (
 				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
+				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
+				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
+				C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */,
 				C20B5710213904C10091034F /* PollDateSectionController.swift */,
+				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
 				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
 				C20B570C213893180091034F /* PollSectionController.swift */,
 				C20B57182139DDA10091034F /* QuestionSectionController.swift */,
-				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
-				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
-				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
-				C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */,
 				C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */,
 			);
 			path = SectionControllers;

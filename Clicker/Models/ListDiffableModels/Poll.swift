@@ -90,10 +90,10 @@ class Poll {
         return resultsArr
     }
     
-    func getTotalResults() -> Float {
-        return results.reduce(0) { (res, arg1) -> Float in
+    func getTotalResults() -> Int {
+        return results.reduce(0) { (res, arg1) -> Int in
             let (_, value) = arg1
-            if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[countKey] as? Float {
+            if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[countKey] as? Int {
                 return res + numSelected
             }
             return 0

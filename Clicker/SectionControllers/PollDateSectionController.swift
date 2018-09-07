@@ -101,4 +101,8 @@ extension PollDateSectionController: CardCellDelegate {
         return delegate.cardControllerState
     }
     
+    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {}
+    
+    func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {}
+    
 }

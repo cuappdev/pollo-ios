@@ -59,4 +59,12 @@ extension PollSectionController: CardCellDelegate {
         return delegate.cardControllerState
     }
     
+    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
+        // TODO
+    }
+    
+    func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {
+        // TODO
+    }
+    
 }

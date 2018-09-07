@@ -13,6 +13,9 @@ import UIKit
 
 protocol CardCellDelegate {
     var cardControllerState: CardControllerState { get }
+    
+    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
+    func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
 }
 
 class CardCell: UICollectionViewCell {
@@ -25,6 +28,7 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var delegate: CardCellDelegate!
+    var poll: Poll!
     var adapter: ListAdapter!
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
@@ -34,10 +38,12 @@ class CardCell: UICollectionViewCell {
     var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var shadowViewWidth: CGFloat!
+    var collectionViewRightPadding: CGFloat!
     var timer: Timer!
     var elapsedSeconds: Int = 0
     
     // MARK: - Constants
+    let collectionViewLeftPadding: CGFloat = 5.0
     let shadowViewCornerRadius: CGFloat = 11.0
     let shadowHeightScaleFactor: CGFloat = 0.9
     let questionButtonFontSize: CGFloat = 16.0
@@ -50,6 +56,7 @@ class CardCell: UICollectionViewCell {
     let timerLabelBottomPadding: CGFloat =  50.0
     let endQuestionText = "End Question"
     let shareResultsText = "Share Results"
+    let initialTimerLabelText = "00:00"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,6 +98,7 @@ class CardCell: UICollectionViewCell {
         questionButton.layer.borderWidth = questionButtonBorderWidth
         questionButton.layer.borderColor = UIColor.white.cgColor
         questionButton.isHidden = true
+        questionButton.addTarget(self, action: #selector(questionButtonTapped), for: .touchUpInside)
         contentView.addSubview(questionButton)
         
         timerLabel = UILabel()
@@ -102,13 +110,15 @@ class CardCell: UICollectionViewCell {
     
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().inset(shadowViewWidth)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(collectionViewLeftPadding)
+            make.trailing.equalToSuperview().inset(collectionViewRightPadding)
         }
         
         shadowView.snp.updateConstraints { make in
             make.leading.equalTo(collectionView.snp.trailing)
-            make.trailing.centerY.equalToSuperview()
+            make.width.equalTo(shadowViewWidth)
+            make.centerY.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(shadowHeightScaleFactor)
         }
         
@@ -129,11 +139,14 @@ class CardCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(with delegate: CardCellDelegate, poll: Poll) {
         self.delegate = delegate
+        self.poll = poll
         shadowViewWidth = delegate.cardControllerState == .vertical ? 15 : 0
+        collectionViewRightPadding = delegate.cardControllerState == .vertical ? 0 : collectionViewLeftPadding
         questionButton.isHidden = poll.state == .shared
         timerLabel.isHidden = !(poll.state == .live)
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
+            timerLabel.text = initialTimerLabelText
             runTimer()
         } else if poll.state == .ended {
             questionButton.setTitle(shareResultsText, for: .normal)
@@ -141,7 +154,7 @@ class CardCell: UICollectionViewCell {
         
         questionModel = QuestionModel(question: poll.text)
         resultModelArray = []
-        let totalNumResults = poll.getTotalResults()
+        let totalNumResults = Float(poll.getTotalResults())
         for (_, info) in poll.results {
             if let infoDict = info as? [String:Any] {
                 guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
@@ -152,6 +165,20 @@ class CardCell: UICollectionViewCell {
         }
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
         adapter.performUpdates(animated: true, completion: nil)
+    }
+    
+    // MARK: - Actions
+    @objc func questionButtonTapped() {
+        if poll.state == .live {
+            poll.state = .ended
+            questionButton.setTitle(shareResultsText, for: .normal)
+            timer.invalidate()
+            timerLabel.isHidden = true
+            delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
+        } else if poll.state == .ended {
+            poll.state = .shared
+            questionButton.isHidden = true
+        }
     }
     
     // MARK: - Helpers
