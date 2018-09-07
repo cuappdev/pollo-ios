@@ -33,7 +33,7 @@ class CardCell: UICollectionViewCell {
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
     var separatorLineModel: SeparatorLineModel!
-    var resultModelArray: [MCResultModel]!
+    var pollOptionsModel: PollOptionsModel!
     var miscellaneousModel: PollMiscellaneousModel!
     var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
@@ -140,10 +140,11 @@ class CardCell: UICollectionViewCell {
     func configure(with delegate: CardCellDelegate, poll: Poll) {
         self.delegate = delegate
         self.poll = poll
-        shadowViewWidth = delegate.cardControllerState == .vertical ? 15 : 0
-        collectionViewRightPadding = delegate.cardControllerState == .vertical ? 0 : collectionViewLeftPadding
-        questionButton.isHidden = poll.state == .shared
-        timerLabel.isHidden = !(poll.state == .live)
+        let isVertical = delegate.cardControllerState == .vertical
+        shadowViewWidth = isVertical ? 15 : 0
+        collectionViewRightPadding = isVertical ? 0 : collectionViewLeftPadding
+        questionButton.isHidden = poll.state == .shared || isVertical
+        timerLabel.isHidden = !(poll.state == .live) || isVertical
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
             timerLabel.text = initialTimerLabelText
@@ -153,7 +154,7 @@ class CardCell: UICollectionViewCell {
         }
         
         questionModel = QuestionModel(question: poll.text)
-        resultModelArray = []
+        var resultModelArray: [MCResultModel] = []
         let totalNumResults = Float(poll.getTotalResults())
         for (_, info) in poll.results {
             if let infoDict = info as? [String:Any] {
@@ -163,6 +164,7 @@ class CardCell: UICollectionViewCell {
                 resultModelArray.append(resultModel)
             }
         }
+        pollOptionsModel = PollOptionsModel(multipleChoiceResultModels: resultModelArray)
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
         adapter.performUpdates(animated: true, completion: nil)
     }
@@ -224,13 +226,13 @@ class CardCell: UICollectionViewCell {
 extension CardCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        guard let questionModel = questionModel, let resultModelArray = resultModelArray, let miscellaneousModel = miscellaneousModel else { return [] }
+        guard let questionModel = questionModel, let pollOptionsModel = pollOptionsModel, let miscellaneousModel = miscellaneousModel else { return [] }
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
         objects.append(miscellaneousModel)
         objects.append(separatorLineModel)
-        objects.append(contentsOf: resultModelArray)
+        objects.append(pollOptionsModel)
         objects.append(bottomHamburgerCardModel)
         return objects
     }
@@ -238,8 +240,8 @@ extension CardCell: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is QuestionModel {
             return QuestionSectionController()
-        } else if object is MCResultModel {
-            return MCResultSectionController()
+        } else if object is PollOptionsModel {
+            return PollOptionsSectionController(delegate: self)
         } else if object is PollMiscellaneousModel {
             return PollMiscellaneousSectionController()
         } else if object is PollButtonModel {
@@ -253,6 +255,14 @@ extension CardCell: ListAdapterDataSource {
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
+    }
+    
+}
+
+extension CardCell: PollOptionsSectionControllerDelegate {
+    
+    var cardControllerState: CardControllerState {
+        return delegate.cardControllerState
     }
     
 }
