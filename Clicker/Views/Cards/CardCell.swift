@@ -26,6 +26,7 @@ class CardCell: UICollectionViewCell {
     var adapter: ListAdapter!
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
+    var separatorLineModel: SeparatorLineModel!
     var resultModelArray: [MCResultModel]!
     var miscellaneousModel: PollMiscellaneousModel!
     var pollButtonModel: PollButtonModel!
@@ -40,6 +41,7 @@ class CardCell: UICollectionViewCell {
         super.init(frame: frame)
         
         topHamburgerCardModel = HamburgerCardModel(state: .top)
+        separatorLineModel = SeparatorLineModel()
         pollButtonModel = PollButtonModel(state: .ended)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         setupViews()
@@ -92,8 +94,8 @@ class CardCell: UICollectionViewCell {
         let totalNumResults = poll.getTotalResults()
         for (_, info) in poll.results {
             if let infoDict = info as? [String:Any] {
-                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Float else { return }
-                let percentSelected = totalNumResults > 0 ? numSelected / totalNumResults : 0
+                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
+                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
                 let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected)
                 resultModelArray.append(resultModel)
             }
@@ -116,8 +118,9 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        objects.append(contentsOf: resultModelArray)
         objects.append(miscellaneousModel)
+        objects.append(separatorLineModel)
+        objects.append(contentsOf: resultModelArray)
         objects.append(pollButtonModel)
         objects.append(bottomHamburgerCardModel)
         return objects
@@ -132,8 +135,10 @@ extension CardCell: ListAdapterDataSource {
             return PollMiscellaneousSectionController()
         } else if object is PollButtonModel {
             return PollButtonSectionController()
-        } else {
+        } else if object is HamburgerCardModel {
             return HamburgerCardSectionController()
+        } else {
+            return SeparatorLineSectionController()
         }
     }
     

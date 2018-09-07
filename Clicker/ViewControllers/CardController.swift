@@ -55,11 +55,33 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
-        self.pollsDateArray = pollsDateArray
+//        self.pollsDateArray = pollsDateArray
         self.state = .horizontal
+        
+        // REMOVE LATER
+        let results = [
+            "A": [
+                "text": "Moon name #1",
+                "count": 3
+            ],
+            "B": [
+                "text": "Moon name #2",
+                "count": 2
+            ],
+            "C": [
+                "text": "Moon name #3",
+                "count": 2
+            ],
+            "D": [
+                "text": "Moon name #4",
+                "count": 2
+            ]
+        ]
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .ended)
+        self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
+        
         setupGradientViews()
         setupHorizontal()
-
     }
     
     // MARK: - View lifecycle
@@ -143,7 +165,10 @@ class CardController: UIViewController {
     
     // MARK: - Vertical Collection View
     func setupVerticalNavBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
         setupGradientViews()
@@ -187,9 +212,21 @@ class CardController: UIViewController {
         switch state {
         case .vertical:
             collectionViewLayout.scrollDirection = .vertical
+            collectionView.isPagingEnabled = false
+            let collectionViewInset = view.frame.width * 0.1
+            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+            collectionView.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+            }
             setupVerticalNavBar()
         case .horizontal:
             collectionViewLayout.scrollDirection = .horizontal
+            collectionView.isPagingEnabled = true
+            let collectionViewInset = view.frame.width * 0.05
+            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+            collectionView.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+            }
             setupHorizontalNavBar()
         }
         adapter.performUpdates(animated: true, completion: nil)
@@ -218,7 +255,6 @@ class CardController: UIViewController {
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
@@ -270,8 +306,6 @@ class CardController: UIViewController {
             zoomOutButton.isUserInteractionEnabled = total > 0
             
         }
-        
-        
     }
     
     // MARK: ACTIONS
@@ -287,6 +321,7 @@ class CardController: UIViewController {
         presenter.dismissOnSwipeDirection = .bottom
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
+    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
