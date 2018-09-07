@@ -77,7 +77,7 @@ class CardController: UIViewController {
                 "count": 2
             ]
         ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .ended)
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", results: results, type: .multipleChoice, state: .live)
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
         
         setupGradientViews()
@@ -102,11 +102,12 @@ class CardController: UIViewController {
         }
     }
     
-    func setupHorizontal() {
-        setupCards()
-        setupHorizontalNavBar()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    // MARK: - Layout
     func setupCards() {
         collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.minimumInteritemSpacing = 10
@@ -163,7 +164,45 @@ class CardController: UIViewController {
         }
     }
     
-    // MARK: - Vertical Collection View
+    func setupHorizontal() {
+        setupCards()
+        setupHorizontalNavBar()
+    }
+    
+    func setupHorizontalNavBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // REMOVE BOTTOM SHADOW
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
+        }
+        self.navigationItem.titleView = navigationTitleView
+        
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+        
+        peopleButton = UIButton()
+        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
+        peopleButton.setTitle("0", for: .normal)
+        peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.sizeToFit()
+        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
+        
+        if (userRole == .admin) {
+            createPollButton = UIButton()
+            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
+        } else {
+            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+        }
+    }
+    
     func setupVerticalNavBar() {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -204,7 +243,15 @@ class CardController: UIViewController {
         }
     }
     
-    // MARK: Switching between vertical and horizontal
+    // MARK: SCROLLVIEW METHODS
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if (scrollView != collectionView) {
+            return
+        }
+        // TODO: Add logic for updating countLabel to display current question # / total num questions
+    }
+    
+    // MARK: Helpers
     func switchTo(state: CardControllerState) {
         zoomOutButton.isHidden = (state == .vertical)
         countLabel.isHidden = (state == .vertical)
@@ -232,49 +279,6 @@ class CardController: UIViewController {
         adapter.performUpdates(animated: true, completion: nil)
     }
     
-    // MARK: SCROLLVIEW METHODS
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView != collectionView) {
-            return
-        }
-        // TODO: Add logic for updating countLabel to display current question # / total num questions
-    }
-
-    func setupHorizontalNavBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        // REMOVE BOTTOM SHADOW
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        
-        navigationTitleView = NavigationTitleView()
-        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
-        navigationTitleView.snp.makeConstraints { make in
-            make.height.equalTo(36)
-        }
-        self.navigationItem.titleView = navigationTitleView
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
-        peopleButton = UIButton()
-        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("0", for: .normal)
-        peopleButton.titleLabel?.font = UIFont._16RegularFont
-        peopleButton.sizeToFit()
-        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        
-        if (userRole == .admin) {
-            createPollButton = UIButton()
-            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
-            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
-        } else {
-            self.navigationItem.rightBarButtonItems = [peopleBarButton]
-        }
-    }
-    
-    // MARK: Helpers
     func updateDatePollsArr() {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
@@ -336,12 +340,6 @@ class CardController: UIViewController {
         if isPinchOut {
             zoomOutBtnPressed()
         }
-    }
-    
-    // MARK: - View lifecycle
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     required init?(coder aDecoder: NSCoder) {
