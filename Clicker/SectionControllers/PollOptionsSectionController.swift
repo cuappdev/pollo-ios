@@ -9,7 +9,10 @@
 import IGListKit
 
 protocol PollOptionsSectionControllerDelegate {
+    
     var cardControllerState: CardControllerState { get }
+    var userRole: UserRole { get }
+    
 }
 
 class PollOptionsSectionController: ListSectionController {
@@ -63,6 +66,10 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState
+    }
+    
+    var userRole: UserRole {
+        return delegate.userRole
     }
 
 }

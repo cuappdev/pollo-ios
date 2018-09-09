@@ -102,7 +102,7 @@ class CardController: UIViewController {
                 "count": 2
             ]
         ]
-        let poll = Poll(id: 0, text: "What is the name of Saturn's largest moon?", questionType: .multipleChoice, options: options, results: results, state: .ended, answer: "Moon name #2")
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .multipleChoice, options: options, results: results, state: .shared, answer: "Moon name #2")
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
         self.userRole = .member
         

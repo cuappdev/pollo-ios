@@ -103,6 +103,10 @@ extension PollDateSectionController: CardCellDelegate {
         return delegate.cardControllerState
     }
     
+    var userRole: UserRole {
+        return delegate.role
+    }
+    
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {}
     
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {}

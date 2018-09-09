@@ -71,7 +71,7 @@ class MCChoiceCell: UICollectionViewCell {
         case .ended:
             configureForEndedPoll(isAnswer: mcChoiceModel.isAnswer)
         case .shared:
-            configureForSharedPoll()
+            return
         }
     }
     
@@ -94,10 +94,6 @@ class MCChoiceCell: UICollectionViewCell {
         optionButton.backgroundColor = optionButtonBackgroundColor
         optionButton.setTitleColor(optionButtonTitleColor, for: .normal)
         optionButton.layer.borderColor = UIColor.clickerGreen1.cgColor
-    }
-    
-    func configureForSharedPoll() {
-        // TODO
     }
     
     func selectChoice() {

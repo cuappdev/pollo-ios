@@ -13,6 +13,7 @@ import UIKit
 
 protocol CardCellDelegate {
     var cardControllerState: CardControllerState { get }
+    var userRole: UserRole { get }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
@@ -205,20 +206,22 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel? {
-//        var resultModelArray: [MCResultModel] = []
-//        let totalNumResults = Float(poll.getTotalResults())
-//        for (_, info) in poll.results {
-//            if let infoDict = info as? [String:Any] {
-//                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return nil }
-//                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-//                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected)
-//                resultModelArray.append(resultModel)
-//            }
-//        }
-//        return PollOptionsModel(multipleChoiceResultModels: resultModelArray)
-        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
-        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
+        var mcResultModels: [MCResultModel] = []
+        let totalNumResults = Float(poll.getTotalResults())
+        for (_, info) in poll.results {
+            if let infoDict = info as? [String:Any] {
+                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return nil }
+                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+                let isAnswer = option == poll.answer
+                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+                mcResultModels.append(resultModel)
+            }
+        }
+        let type: PollOptionsModelType = .mcResult(resultModels: mcResultModels)
         return PollOptionsModel(type: type, pollState: poll.state)
+//        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
+//        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
+//        return PollOptionsModel(type: type, pollState: poll.state)
     }
     
     private func runTimer() {
@@ -271,6 +274,10 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState
+    }
+    
+    var userRole: UserRole {
+        return delegate.userRole
     }
     
 }
