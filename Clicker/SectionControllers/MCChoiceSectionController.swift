@@ -10,6 +10,8 @@ import IGListKit
 
 protocol MCChoiceSectionControllerDelegate {
     var cardControllerState: CardControllerState { get }
+    
+    func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController)
 }
 
 class MCChoiceSectionController: ListSectionController {
@@ -34,7 +36,7 @@ class MCChoiceSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: MCChoiceCell.self, for: self, at: index) as! MCChoiceCell
-        cell.configure(with: choiceModel, index: index, delegate: self)
+        cell.configure(with: choiceModel, delegate: self)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -42,12 +44,14 @@ class MCChoiceSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         choiceModel = object as? MCChoiceModel
     }
+    
 }
 
 extension MCChoiceSectionController: MCChoiceCellDelegate {
     
-    func mcChoiceCellWasSelected(at index: Int) {
-        
+    func mcChoiceCellWasSelected() {
+        choiceModel.isSelected = true
+        delegate.mcChoiceSectionControllerWasSelected(sectionController: self)
     }
     
 }

@@ -205,19 +205,19 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel? {
-        var resultModelArray: [MCResultModel] = []
-        let totalNumResults = Float(poll.getTotalResults())
-        for (_, info) in poll.results {
-            if let infoDict = info as? [String:Any] {
-                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return nil }
-                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected)
-                resultModelArray.append(resultModel)
-            }
-        }
-        return PollOptionsModel(multipleChoiceResultModels: resultModelArray)
-//        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0) }
-//        return PollOptionsModel(multipleChoiceChoiceModels: mcChoiceModels)
+//        var resultModelArray: [MCResultModel] = []
+//        let totalNumResults = Float(poll.getTotalResults())
+//        for (_, info) in poll.results {
+//            if let infoDict = info as? [String:Any] {
+//                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return nil }
+//                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+//                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected)
+//                resultModelArray.append(resultModel)
+//            }
+//        }
+//        return PollOptionsModel(multipleChoiceResultModels: resultModelArray)
+        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0) }
+        return PollOptionsModel(multipleChoiceChoiceModels: mcChoiceModels)
     }
     
     private func runTimer() {

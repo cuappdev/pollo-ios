@@ -10,7 +10,7 @@ import UIKit
 
 protocol MCChoiceCellDelegate {
     
-    func mcChoiceCellWasSelected(at index: Int)
+    func mcChoiceCellWasSelected()
     
 }
 
@@ -21,7 +21,6 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var delegate: MCChoiceCellDelegate!
-    var index: Int!
     
     // MARK: - Constants
     let optionButtonFontSize: CGFloat = 16.0
@@ -61,17 +60,26 @@ class MCChoiceCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with mcChoiceModel: MCChoiceModel, index: Int, delegate: MCChoiceCellDelegate) {
-        self.index = index
+    func configure(with mcChoiceModel: MCChoiceModel, delegate: MCChoiceCellDelegate) {
         self.delegate = delegate
         optionButton.setTitle(mcChoiceModel.option, for: .normal)
+        mcChoiceModel.isSelected ? selectChoice() : deselectChoice()
+    }
+    
+    func selectChoice() {
+        optionButton.backgroundColor = .clickerGreen0
+        optionButton.setTitleColor(.white, for: .normal)
+    }
+    
+    func deselectChoice() {
+        optionButton.backgroundColor = .white
+        optionButton.setTitleColor(.clickerGreen0, for: .normal)
     }
     
     // MARK: - Action
     @objc func optionButtonWasPressed() {
-        optionButton.backgroundColor = .clickerGreen0
-        optionButton.setTitleColor(.white, for: .normal)
-        delegate.mcChoiceCellWasSelected(at: index)
+        selectChoice()
+        delegate.mcChoiceCellWasSelected()
     }
     
     required init?(coder aDecoder: NSCoder) {
