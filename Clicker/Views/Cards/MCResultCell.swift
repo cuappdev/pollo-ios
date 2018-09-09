@@ -50,11 +50,9 @@ class MCResultCell: UICollectionViewCell {
         
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
-        numSelectedLabel.textColor = .clickerGrey2
         containerView.addSubview(numSelectedLabel)
         
         highlightView = UIView()
-        highlightView.backgroundColor = .clickerGreen0
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
     }
@@ -86,10 +84,19 @@ class MCResultCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for resultModel: MCResultModel) {
+    func configure(for resultModel: MCResultModel, userRole: UserRole) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
         percentSelected = resultModel.percentSelected
+        switch userRole {
+        case .admin:
+            highlightView.backgroundColor = .clickerGreen0
+            numSelectedLabel.textColor = .clickerGrey2
+        case .member:
+            let isAnswer = resultModel.isAnswer
+            highlightView.backgroundColor = isAnswer ? .clickerGreen0 : .clickerGreen1
+            numSelectedLabel.textColor = isAnswer ? .black : .clickerGrey2
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

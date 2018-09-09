@@ -10,7 +10,9 @@ import UIKit
 import IGListKit
 
 protocol PollOptionsCellDelegate {
+    
     var cardControllerState: CardControllerState { get }
+    var userRole: UserRole { get }
 }
 
 class PollOptionsCell: UICollectionViewCell {
@@ -98,6 +100,10 @@ extension PollOptionsCell: MCResultSectionControllerDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState
+    }
+    
+    var userRole: UserRole {
+        return delegate.userRole
     }
     
 }

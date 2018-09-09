@@ -13,12 +13,14 @@ class MCResultModel {
     var option: String
     var numSelected: Int
     var percentSelected: Float
+    var isAnswer: Bool
     let identifier = UUID().uuidString
     
-    init(option: String, numSelected: Int, percentSelected: Float) {
+    init(option: String, numSelected: Int, percentSelected: Float, isAnswer: Bool) {
         self.option = option
         self.numSelected = numSelected
         self.percentSelected = percentSelected
+        self.isAnswer = isAnswer
     }
 }
 
