@@ -216,7 +216,7 @@ class CardCell: UICollectionViewCell {
 //            }
 //        }
 //        return PollOptionsModel(multipleChoiceResultModels: resultModelArray)
-        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0) }
+        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
         let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
         return PollOptionsModel(type: type, pollState: poll.state)
     }

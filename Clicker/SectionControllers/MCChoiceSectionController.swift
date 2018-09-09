@@ -10,6 +10,7 @@ import IGListKit
 
 protocol MCChoiceSectionControllerDelegate {
     var cardControllerState: CardControllerState { get }
+    var pollState: PollState { get }
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController)
 }
@@ -36,7 +37,7 @@ class MCChoiceSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: MCChoiceCell.self, for: self, at: index) as! MCChoiceCell
-        cell.configure(with: choiceModel, delegate: self)
+        cell.configure(with: choiceModel, pollState: delegate.pollState, delegate: self)
         cell.setNeedsUpdateConstraints()
         return cell
     }

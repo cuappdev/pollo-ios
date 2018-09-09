@@ -21,6 +21,7 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var delegate: MCChoiceCellDelegate!
+    var pollState: PollState!
     
     // MARK: - Constants
     let optionButtonFontSize: CGFloat = 16.0
@@ -60,10 +61,43 @@ class MCChoiceCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with mcChoiceModel: MCChoiceModel, delegate: MCChoiceCellDelegate) {
+    func configure(with mcChoiceModel: MCChoiceModel, pollState: PollState, delegate: MCChoiceCellDelegate) {
         self.delegate = delegate
+        self.pollState = pollState
         optionButton.setTitle(mcChoiceModel.option, for: .normal)
-        mcChoiceModel.isSelected ? selectChoice() : deselectChoice()
+        switch pollState {
+        case .live:
+            configureForLivePoll(isSelected: mcChoiceModel.isSelected)
+        case .ended:
+            configureForEndedPoll(isAnswer: mcChoiceModel.isAnswer)
+        case .shared:
+            configureForSharedPoll()
+        }
+    }
+    
+    // MARK: - Action
+    @objc func optionButtonWasPressed() {
+        if (pollState == .live) {
+            selectChoice()
+            delegate.mcChoiceCellWasSelected()
+        }
+    }
+    
+    // MARK: - Helpers
+    func configureForLivePoll(isSelected: Bool) {
+        isSelected ? selectChoice() : deselectChoice()
+    }
+    
+    func configureForEndedPoll(isAnswer: Bool) {
+        let optionButtonBackgroundColor: UIColor = isAnswer ? .clickerGreen1 : .white
+        let optionButtonTitleColor: UIColor = isAnswer ? .white : .clickerGreen1
+        optionButton.backgroundColor = optionButtonBackgroundColor
+        optionButton.setTitleColor(optionButtonTitleColor, for: .normal)
+        optionButton.layer.borderColor = UIColor.clickerGreen1.cgColor
+    }
+    
+    func configureForSharedPoll() {
+        // TODO
     }
     
     func selectChoice() {
@@ -74,12 +108,6 @@ class MCChoiceCell: UICollectionViewCell {
     func deselectChoice() {
         optionButton.backgroundColor = .white
         optionButton.setTitleColor(.clickerGreen0, for: .normal)
-    }
-    
-    // MARK: - Action
-    @objc func optionButtonWasPressed() {
-        selectChoice()
-        delegate.mcChoiceCellWasSelected()
     }
     
     required init?(coder aDecoder: NSCoder) {

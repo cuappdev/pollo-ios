@@ -22,7 +22,11 @@ class PollParser: Parser {
             ? .multipleChoice
             : .freeResponse
         let state: PollState = json[ParserKeys.sharedKey].boolValue ? .shared : .ended
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state)
+        var answer: String? = nil
+        if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
+            answer = answerText
+        }
+        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, answer: answer)
     }
 
 }
