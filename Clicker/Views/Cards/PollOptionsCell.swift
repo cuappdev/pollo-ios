@@ -104,6 +104,10 @@ extension PollOptionsCell: MCResultSectionControllerDelegate {
 
 extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     
+    var pollState: PollState {
+        return pollOptionsModel.pollState
+    }
+    
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
         if selectedIndex != NSNotFound {
             switch pollOptionsModel.type {

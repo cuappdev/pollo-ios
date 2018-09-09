@@ -6,7 +6,6 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
 
 enum PollState {
@@ -23,6 +22,7 @@ class Poll {
     var options: [String]
     var results: [String:Any]
     var state: PollState
+    var answer: String?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
@@ -30,13 +30,14 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int, text: String, questionType: QuestionType, options: [String], results: [String:Any], state: PollState) {
+    init(id: Int, text: String, questionType: QuestionType, options: [String], results: [String:Any], state: PollState, answer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
         self.options = options
         self.results = results
         self.state = state
+        self.answer = answer
     }
     
     // Returns array representation of results

@@ -12,16 +12,19 @@ class MCChoiceModel {
     
     var option: String
     var isSelected: Bool
+    var isAnswer: Bool
     let identifier = UUID().uuidString
-    
-    init(option: String) {
-        self.option = option
-        self.isSelected = false
-    }
     
     init(option: String, isSelected: Bool) {
         self.option = option
         self.isSelected = isSelected
+        self.isAnswer = false
+    }
+    
+    init(option: String, isAnswer: Bool) {
+        self.option = option
+        self.isSelected = false
+        self.isAnswer = isAnswer
     }
 }
 

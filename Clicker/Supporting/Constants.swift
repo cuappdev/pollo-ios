@@ -73,6 +73,7 @@ struct LayoutConstants {
 }
 
 struct ParserKeys {
+    static let answerKey = "answer"
     static let countKey = "count"
     static let idKey = "key"
     static let optionsKey = "options"
