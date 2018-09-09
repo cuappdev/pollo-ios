@@ -47,10 +47,11 @@ class PollOptionsSectionController: ListSectionController {
     private func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
         let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
         var numOptions: Int = 0
-        if let multipleChoiceResultModels = pollOptionsModel.mcResultModels {
-            numOptions = min(multipleChoiceResultModels.count, maximumNumberVisibleOptions)
-        } else if let multipleChoiceChoiceModels = pollOptionsModel.mcChoiceModels {
-            numOptions = min(multipleChoiceChoiceModels.count, maximumNumberVisibleOptions)
+        switch pollOptionsModel.type {
+        case .mcResult(resultModels: let mcResultModels):
+            numOptions = min(mcResultModels.count, maximumNumberVisibleOptions)
+        case .mcChoice(choiceModels: let mcChoiceModels):
+            numOptions = min(mcChoiceModels.count, maximumNumberVisibleOptions)
         }
         let optionsHeight: CGFloat = CGFloat(numOptions) * LayoutConstants.horizontalOptionCellHeight
         return verticalPadding + optionsHeight

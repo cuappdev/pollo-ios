@@ -8,20 +8,22 @@
 
 import IGListKit
 
+enum PollOptionsModelType {
+    case mcResult(resultModels: [MCResultModel])
+    case mcChoice(choiceModels: [MCChoiceModel])
+}
+
 class PollOptionsModel {
     
-    var mcResultModels: [MCResultModel]?
-    var mcChoiceModels: [MCChoiceModel]?
+    var type: PollOptionsModelType
+    var pollState: PollState
     let identifier = UUID().uuidString
     
-    init(multipleChoiceResultModels: [MCResultModel]) {
-        self.mcResultModels = multipleChoiceResultModels
+    init(type: PollOptionsModelType, pollState: PollState) {
+        self.pollState = pollState
+        self.type = type
     }
-    
-    init(multipleChoiceChoiceModels: [MCChoiceModel]) {
-        self.mcChoiceModels = multipleChoiceChoiceModels
-    }
-    
+
 }
 
 extension PollOptionsModel: ListDiffable {

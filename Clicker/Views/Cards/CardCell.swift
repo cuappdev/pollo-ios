@@ -217,7 +217,8 @@ class CardCell: UICollectionViewCell {
 //        }
 //        return PollOptionsModel(multipleChoiceResultModels: resultModelArray)
         let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0) }
-        return PollOptionsModel(multipleChoiceChoiceModels: mcChoiceModels)
+        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
+        return PollOptionsModel(type: type, pollState: poll.state)
     }
     
     private func runTimer() {
