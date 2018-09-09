@@ -205,12 +205,13 @@ class CardCell: UICollectionViewCell {
     }
     
     // MARK: - Helpers
-    private func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel? {
+    private func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
         var mcResultModels: [MCResultModel] = []
         let totalNumResults = Float(poll.getTotalResults())
-        for (_, info) in poll.results {
-            if let infoDict = info as? [String:Any] {
-                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return nil }
+        poll.options.enumerated().forEach { (index, option) in
+            let mcOptionKey = intToMCOption(index)
+            if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
+                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
                 let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
                 let isAnswer = option == poll.answer
                 let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
