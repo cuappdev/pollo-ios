@@ -11,10 +11,15 @@ import IGListKit
 class PollOptionsModel {
     
     var mcResultModels: [MCResultModel]?
+    var mcChoiceModels: [MCChoiceModel]?
     let identifier = UUID().uuidString
     
     init(multipleChoiceResultModels: [MCResultModel]) {
         self.mcResultModels = multipleChoiceResultModels
+    }
+    
+    init(multipleChoiceChoiceModels: [MCChoiceModel]) {
+        self.mcChoiceModels = multipleChoiceChoiceModels
     }
     
 }

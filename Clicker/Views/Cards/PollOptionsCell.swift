@@ -73,12 +73,18 @@ extension PollOptionsCell: ListAdapterDataSource {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         if let multipleChoiceResultModels = pollOptionsModel.mcResultModels {
             return multipleChoiceResultModels
+        } else if let multipleChoiceChoiceModels = pollOptionsModel.mcChoiceModels {
+            return multipleChoiceChoiceModels
         }
         return []
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return MCResultSectionController(delegate: self)
+        if object is MCResultModel {
+            return MCResultSectionController(delegate: self)
+        } else {
+            return MCChoiceSectionController(delegate: self)
+        }
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
@@ -87,7 +93,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     
 }
 
-extension PollOptionsCell: MCResultSectionControllerDelegate {
+extension PollOptionsCell: MCResultSectionControllerDelegate, MCChoiceSectionControllerDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState

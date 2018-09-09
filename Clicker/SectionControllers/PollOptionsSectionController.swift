@@ -49,6 +49,8 @@ class PollOptionsSectionController: ListSectionController {
         var numOptions: Int = 0
         if let multipleChoiceResultModels = pollOptionsModel.mcResultModels {
             numOptions = min(multipleChoiceResultModels.count, maximumNumberVisibleOptions)
+        } else if let multipleChoiceChoiceModels = pollOptionsModel.mcChoiceModels {
+            numOptions = min(multipleChoiceChoiceModels.count, maximumNumberVisibleOptions)
         }
         let optionsHeight: CGFloat = CGFloat(numOptions) * LayoutConstants.horizontalOptionCellHeight
         return verticalPadding + optionsHeight

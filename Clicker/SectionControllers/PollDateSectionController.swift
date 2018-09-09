@@ -87,11 +87,13 @@ class PollDateSectionController: ListSectionController {
     private func calculateCardCellHeight(poll: Poll, userRole: UserRole) -> CGFloat {
         let topBottomHamburgerCellHeight = LayoutConstants.hamburgerCardCellHeight * 2
         let questionCellHeight = LayoutConstants.verticalQuestionCellHeight
-        let optionsCellHeight = LayoutConstants.verticalOptionCellHeight * CGFloat(poll.options.count)
+        let pollOptionsCellVerticalPadding = LayoutConstants.pollOptionsVerticalPadding * 2
+        let numOptions = min(poll.options.count, 6)
+        let pollOptionsCellHeight = LayoutConstants.verticalOptionCellHeight * CGFloat(numOptions) + pollOptionsCellVerticalPadding
         let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
         let hasButtonCell = userRole == .admin && (poll.state == .live || poll.state == .ended)
         let pollButtonCellHeight = hasButtonCell ? LayoutConstants.pollButtonCellHeight : 0
-        return topBottomHamburgerCellHeight + questionCellHeight + optionsCellHeight + miscellaneousCellHeight + pollButtonCellHeight
+        return topBottomHamburgerCellHeight + questionCellHeight + pollOptionsCellHeight + miscellaneousCellHeight + pollButtonCellHeight
     }
 }
 
