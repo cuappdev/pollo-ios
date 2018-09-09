@@ -72,12 +72,12 @@ extension PollOptionsCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
-        if let multipleChoiceResultModels = pollOptionsModel.mcResultModels {
-            return multipleChoiceResultModels
-        } else if let multipleChoiceChoiceModels = pollOptionsModel.mcChoiceModels {
-            return multipleChoiceChoiceModels
+        switch pollOptionsModel.type {
+        case .mcResult(resultModels: let mcResultModels):
+            return mcResultModels
+        case .mcChoice(choiceModels: let mcChoiceModels):
+            return mcChoiceModels
         }
-        return []
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -106,12 +106,15 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
         if selectedIndex != NSNotFound {
-            guard let mcChoiceModels = pollOptionsModel.mcChoiceModels else {
+            switch pollOptionsModel.type {
+            case .mcChoice(choiceModels: var mcChoiceModels):
+                let currentChoiceModel = mcChoiceModels[selectedIndex]
+                mcChoiceModels[selectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
+                pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
+                adapter.performUpdates(animated: false, completion: nil)
+            default:
                 return
             }
-            let currentChoiceModel = mcChoiceModels[selectedIndex]
-            pollOptionsModel.mcChoiceModels?[selectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
-            adapter.performUpdates(animated: false, completion: nil)
         }
         selectedIndex = adapter.section(for: sectionController)
     }
