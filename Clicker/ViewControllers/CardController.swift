@@ -86,18 +86,14 @@ class CardController: UIViewController {
                 "count": 2
             ],
             "E": [
-                "text": "Moon name #4",
-                "count": 2
-            ],
-            "F": [
                 "text": "Moon name #5",
                 "count": 2
             ],
-            "G": [
+            "F": [
                 "text": "Moon name #6",
                 "count": 2
             ],
-            "H": [
+            "G": [
                 "text": "Moon name #7",
                 "count": 2
             ]
