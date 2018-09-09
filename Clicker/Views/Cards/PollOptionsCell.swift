@@ -22,6 +22,7 @@ class PollOptionsCell: UICollectionViewCell {
     var delegate: PollOptionsCellDelegate!
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
+    var selectedIndex: Int = NSNotFound
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,10 +94,26 @@ extension PollOptionsCell: ListAdapterDataSource {
     
 }
 
-extension PollOptionsCell: MCResultSectionControllerDelegate, MCChoiceSectionControllerDelegate {
+extension PollOptionsCell: MCResultSectionControllerDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState
+    }
+    
+}
+
+extension PollOptionsCell: MCChoiceSectionControllerDelegate {
+    
+    func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
+        if selectedIndex != NSNotFound {
+            guard let mcChoiceModels = pollOptionsModel.mcChoiceModels else {
+                return
+            }
+            let currentChoiceModel = mcChoiceModels[selectedIndex]
+            pollOptionsModel.mcChoiceModels?[selectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
+            adapter.performUpdates(animated: false, completion: nil)
+        }
+        selectedIndex = adapter.section(for: sectionController)
     }
     
 }
