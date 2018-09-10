@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol FROptionCellDelegate {
+    
+    func frOptionCellDidReceiveUpvote()
+    
+}
+
 class FROptionCell: UICollectionViewCell {
     
     // MARK: - View vars
@@ -17,6 +23,7 @@ class FROptionCell: UICollectionViewCell {
     var separatorLineView: UIView!
     
     // MARK: - Data vars
+    var delegate: FROptionCellDelegate!
     var didUpvote: Bool!
     
     // MARK: - Constants
@@ -89,7 +96,8 @@ class FROptionCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for frOptionModel: FROptionModel) {
+    func configure(for frOptionModel: FROptionModel, delegate: FROptionCellDelegate) {
+        self.delegate = delegate
         self.didUpvote = frOptionModel.didUpvote
         optionLabel.text = frOptionModel.option
         let numUpvotedButtonTitleColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
@@ -101,10 +109,7 @@ class FROptionCell: UICollectionViewCell {
     
     // MARK: - Actions
     @objc func upvoteFROption() {
-        if (didUpvote) { return }
-        self.didUpvote = true
-        upvoteButton.setImage(#imageLiteral(resourceName: "blueTriangle"), for: .normal)
-        numUpvotedButton.setTitleColor(.clickerBlue, for: .normal)
+        if !didUpvote { delegate.frOptionCellDidReceiveUpvote() }
     }
     
     required init?(coder aDecoder: NSCoder) {

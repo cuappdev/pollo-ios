@@ -24,7 +24,7 @@ class PollOptionsCell: UICollectionViewCell {
     var delegate: PollOptionsCellDelegate!
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
-    var selectedIndex: Int = NSNotFound
+    var mcSelectedIndex: Int = NSNotFound
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -110,6 +110,19 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
         return delegate.userRole
     }
     
+    func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController) {
+        switch pollOptionsModel.type {
+        case .frOption(optionModels: var frOptionModels):
+            let upvoteIndex = adapter.section(for: sectionController)
+            let upvotedFROptionModel = frOptionModels[upvoteIndex]
+            frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
+            pollOptionsModel.type = .frOption(optionModels: frOptionModels)
+            adapter.performUpdates(animated: false, completion: nil)
+        default:
+            return
+        }
+    }
+    
 }
 
 extension PollOptionsCell: MCChoiceSectionControllerDelegate {
@@ -119,18 +132,18 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     }
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
-        if selectedIndex != NSNotFound {
+        if mcSelectedIndex != NSNotFound {
             switch pollOptionsModel.type {
             case .mcChoice(choiceModels: var mcChoiceModels):
-                let currentChoiceModel = mcChoiceModels[selectedIndex]
-                mcChoiceModels[selectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
+                let currentChoiceModel = mcChoiceModels[mcSelectedIndex]
+                mcChoiceModels[mcSelectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
                 pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
                 adapter.performUpdates(animated: false, completion: nil)
             default:
                 return
             }
         }
-        selectedIndex = adapter.section(for: sectionController)
+        mcSelectedIndex = adapter.section(for: sectionController)
     }
     
 }
