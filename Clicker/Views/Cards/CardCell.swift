@@ -249,6 +249,7 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
+        objects.append(FRInputModel())
         objects.append(miscellaneousModel)
         objects.append(separatorLineModel)
         objects.append(pollOptionsModel)
@@ -259,6 +260,8 @@ extension CardCell: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is QuestionModel {
             return QuestionSectionController()
+        } else if object is FRInputModel {
+            return FRInputSectionController()
         } else if object is PollOptionsModel {
             return PollOptionsSectionController(delegate: self)
         } else if object is PollMiscellaneousModel {

@@ -1,28 +1,16 @@
 //
-//  FROptionModel.swift
+//  FRInputModel.swift
 //  Clicker
 //
-//  Created by Kevin Chan on 9/9/18.
+//  Created by Kevin Chan on 9/10/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
 import IGListKit
 
-class FROptionModel: OptionModel {
+class FRInputModel: ListDiffable {
     
-    var numUpvoted: Int
-    var didUpvote: Bool
     let identifier = UUID().uuidString
-    
-    init(option: String, isAnswer: Bool, numUpvoted: Int, didUpvote: Bool) {
-        self.numUpvoted = numUpvoted
-        self.didUpvote = didUpvote
-        super.init(option: option, isAnswer: isAnswer)
-    }
-    
-}
-
-extension FROptionModel: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
@@ -33,5 +21,5 @@ extension FROptionModel: ListDiffable {
         guard let object = object as? FROptionModel else { return false }
         return identifier == object.identifier
     }
-    
+
 }
