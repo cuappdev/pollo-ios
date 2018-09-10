@@ -83,7 +83,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (options.count <= 25) {
-            return max(options.count + 1,3)
+            return options.count + 1
         }
         return options.count
     }
@@ -137,11 +137,6 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         print("deleting optino at \(index)")
         let indexPath = IndexPath(row: index, section: 0)
         options.remove(at: index)
-        //let deleteCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
-        //deleteCell.addOptionTextField.text = ""
-        //optionsTableView.beginUpdates()
-        //optionsTableView.deleteRows(at: [indexPath], with: .fade)
-        //optionsTableView.endUpdates()
         
         optionsTableView.performBatchUpdates({
             optionsTableView.deleteRows(at: [indexPath], with: .fade)
