@@ -218,14 +218,15 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             // MULTIPLE CHOICE
             if (questionType == .multipleChoice) {
                 let question = mcPollBuilder.questionTextField.text
-                let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
+                let options = mcPollBuilder.options.filter { $0 != "" }
+                
                 
                 CreateDraft(text: question!, options: options).make()
                     .done { draft in
                     }.catch { error in
                         print("error: ", error)
                     }
-                self.mcPollBuilder.clearOptionsDict()
+                self.mcPollBuilder.clearOptions()
                 self.mcPollBuilder.questionTextField.text = ""
                 self.mcPollBuilder.optionsTableView.reloadData()
             
@@ -234,6 +235,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
 
             }
             self.updateCanDraft(false)
+
             self.getDrafts()
             }  else {
             print("empty, drafts disabled")
@@ -249,9 +251,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         if (questionType == .multipleChoice) {
 
             let question = mcPollBuilder.questionTextField.text
-            let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
             
-            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
+            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
         } else { // FREE RESPONSE
             
             let question = frPollBuilder.questionTextField.text
@@ -348,13 +349,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     func fillDraft(_ draft: Draft) {
         if questionType == .multipleChoice {
-            var optionsDict: [Int: String] = [:]
-            if draft.options.count > 0 {
-                for i in 0...draft.options.count-1 {
-                    optionsDict[i] = draft.options[i]
-                }
-            }
-            mcPollBuilder.fillDraft(title: draft.text, options: optionsDict)
+            mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             mcPollBuilder.optionsTableView.reloadData()
         } else { // FREE_RESPONSE
             frPollBuilder.questionTextField.text = draft.text
