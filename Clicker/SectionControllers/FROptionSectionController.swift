@@ -13,6 +13,8 @@ protocol FROptionSectionControllerDelegate {
     var cardControllerState: CardControllerState { get }
     var pollState: PollState { get }
     
+    func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController)
+    
 }
 
 class FROptionSectionController: ListSectionController {
@@ -41,7 +43,7 @@ class FROptionSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: FROptionCell.self, for: self, at: index) as! FROptionCell
-        cell.configure(for: frOptionModel)
+        cell.configure(for: frOptionModel, delegate: self)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -57,4 +59,12 @@ class FROptionSectionController: ListSectionController {
         let optionLabelHeight = frOptionModel.option.height(withConstrainedWidth: optionLabelWidth, font: .systemFont(ofSize: frOptionCellOptionLabelSize, weight: .medium))
         return optionLabelHeight + frOptionCellOptionLabelVerticalPadding * 2
     }
+}
+
+extension FROptionSectionController: FROptionCellDelegate {
+    
+    func frOptionCellDidReceiveUpvote() {
+        delegate.frOptionSectionControllerDidUpvote(sectionController: self)
+    }
+    
 }
