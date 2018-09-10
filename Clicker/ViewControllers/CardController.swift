@@ -44,6 +44,7 @@ class CardController: UIViewController {
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
+    let verticalCollectionViewBottomInset: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -60,47 +61,47 @@ class CardController: UIViewController {
         
         // REMOVE LATER
         let options = [
-            "Moon name #1",
-            "Moon name #2",
-            "Moon name #3",
-            "Moon name #4",
-            "Moon name #5",
-            "Moon name #6",
-            "Moon name #7",
+            "This is going to be a very long question for the sake of being a long question?",
+            "Moon name #2?",
+            "Moon name #3?",
+            "Moon name #4?",
+            "Moon name #5?",
+            "Moon name #6?",
+            "Moon name #7?",
             ]
         let results = [
-            "A": [
-                "text": "Moon name #1",
+            "This is going to be a very long question for the sake of being a long question?": [
+                "text": "This is going to be a very long question for the sake of being a long question?",
                 "count": 3
             ],
-            "B": [
-                "text": "Moon name #2",
+            "Moon name #2?": [
+                "text": "Moon name #2?",
                 "count": 2
             ],
-            "C": [
-                "text": "Moon name #3",
+            "Moon name #3?": [
+                "text": "Moon name #3?",
                 "count": 2
             ],
-            "D": [
-                "text": "Moon name #4",
+            "Moon name #4?": [
+                "text": "Moon name #4?",
                 "count": 2
             ],
-            "E": [
-                "text": "Moon name #5",
+            "Moon name #5?": [
+                "text": "Moon name #5?",
                 "count": 2
             ],
-            "F": [
-                "text": "Moon name #6",
+            "Moon name #6?": [
+                "text": "Moon name #6?",
                 "count": 2
             ],
-            "G": [
-                "text": "Moon name #7",
+            "Moon name #7?": [
+                "text": "Moon name #7?",
                 "count": 2
             ]
         ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .multipleChoice, options: options, results: results, state: .shared, answer: "Moon name #2")
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .freeResponse, options: options, results: results, state: .live, answer: "Moon name #2")
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        self.userRole = .member
+        self.userRole = .admin
         
         setupGradientViews()
         setupHorizontal()
@@ -282,8 +283,8 @@ class CardController: UIViewController {
         case .vertical:
             collectionViewLayout.scrollDirection = .vertical
             collectionView.isPagingEnabled = false
-            let collectionViewInset = view.frame.width * 0.1
-            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+            let collectionViewXInset = view.frame.width * 0.1
+            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, verticalCollectionViewBottomInset, collectionViewXInset)
             collectionView.snp.makeConstraints { make in
                 make.top.equalToSuperview()
             }
@@ -291,8 +292,8 @@ class CardController: UIViewController {
         case .horizontal:
             collectionViewLayout.scrollDirection = .horizontal
             collectionView.isPagingEnabled = true
-            let collectionViewInset = view.frame.width * 0.05
-            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
+            let collectionViewXInset = view.frame.width * 0.05
+            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
             collectionView.snp.makeConstraints { make in
                 make.top.equalToSuperview()
             }
