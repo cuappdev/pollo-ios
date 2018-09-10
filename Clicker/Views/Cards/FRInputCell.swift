@@ -10,6 +10,8 @@ import UIKit
 
 protocol FRInputCellDelegate {
     
+    func frInputCellSubmittedResponse(response: String)
+    
 }
 
 class FRInputCell: UICollectionViewCell {
@@ -18,13 +20,14 @@ class FRInputCell: UICollectionViewCell {
     var inputTextField: UITextField!
     
     // MARK: - Data vars
-    var delegate: FROptionCellDelegate!
+    var delegate: FRInputCellDelegate!
     
     // MARK: - Constants
     let textFieldCornerRadius: CGFloat = 25
     let textFieldBorderWidth: CGFloat = 1
     let textFieldTextInset: CGFloat = 18
     let textFieldHorizontalPadding: CGFloat = 16.5
+    let textFieldHeight: CGFloat = 47
     let textFieldVerticalPadding: CGFloat = 8.5
     let textFieldPlaceholder = "Type a response"
     
@@ -59,7 +62,8 @@ class FRInputCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure() {
+    func configure(with delegate: FRInputCellDelegate) {
+        self.delegate = delegate
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,6 +75,10 @@ class FRInputCell: UICollectionViewCell {
 extension FRInputCell: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text, !text.isEmpty {
+            delegate.frInputCellSubmittedResponse(response: text)
+            textField.text = ""
+        }
         endEditing(true)
         return false
     }

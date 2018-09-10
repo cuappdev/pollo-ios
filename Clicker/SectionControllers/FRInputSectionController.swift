@@ -10,8 +10,7 @@ import IGListKit
 
 protocol FRInputSectionControllerDelegate {
     
-    var cardControllerState: CardControllerState { get }
-    var pollState: PollState { get }
+    func frInputSectionControllerSubmittedResponse(sectionController: FRInputSectionController, response: String)
     
 }
 
@@ -24,6 +23,10 @@ class FRInputSectionController: ListSectionController {
     // MARK: - Constants
     let cellHeight: CGFloat = 64
     
+    init(delegate: FRInputSectionControllerDelegate) {
+        self.delegate = delegate
+    }
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
@@ -34,12 +37,21 @@ class FRInputSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: FRInputCell.self, for: self, at: index) as! FRInputCell
+        cell.configure(with: self)
         cell.setNeedsUpdateConstraints()
         return cell
     }
     
     override func didUpdate(to object: Any) {
         frInputModel = object as? FRInputModel
+    }
+    
+}
+
+extension FRInputSectionController: FRInputCellDelegate {
+    
+    func frInputCellSubmittedResponse(response: String) {
+        delegate.frInputSectionControllerSubmittedResponse(sectionController: self, response: response)
     }
     
 }
