@@ -110,13 +110,6 @@ extension CardController: StartPollDelegate {
     }
 
 }
-extension CardController: AskedCardDelegate {
-    
-    func askedCardDidEndPoll() {
-        createPollButton.isUserInteractionEnabled = true
-    }
-    
-}
 
 extension CardController: NameViewDelegate {
     

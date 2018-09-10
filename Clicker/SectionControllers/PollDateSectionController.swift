@@ -89,7 +89,7 @@ class PollDateSectionController: ListSectionController {
         let questionCellHeight = LayoutConstants.verticalQuestionCellHeight
         let pollOptionsCellVerticalPadding = LayoutConstants.pollOptionsVerticalPadding * 2
         let numOptions = min(poll.options.count, 6)
-        let pollOptionsCellHeight = LayoutConstants.verticalOptionCellHeight * CGFloat(numOptions) + pollOptionsCellVerticalPadding
+        let pollOptionsCellHeight = LayoutConstants.verticalMCOptionCellHeight * CGFloat(numOptions) + pollOptionsCellVerticalPadding
         let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
         let hasButtonCell = userRole == .admin && (poll.state == .live || poll.state == .ended)
         let pollButtonCellHeight = hasButtonCell ? LayoutConstants.pollButtonCellHeight : 0

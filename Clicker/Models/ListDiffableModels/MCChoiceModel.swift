@@ -8,23 +8,19 @@
 
 import IGListKit
 
-class MCChoiceModel {
+class MCChoiceModel: OptionModel {
     
-    var option: String
     var isSelected: Bool
-    var isAnswer: Bool
     let identifier = UUID().uuidString
     
     init(option: String, isSelected: Bool) {
-        self.option = option
         self.isSelected = isSelected
-        self.isAnswer = false
+        super.init(option: option, isAnswer: false)
     }
     
-    init(option: String, isAnswer: Bool) {
-        self.option = option
+    override init(option: String, isAnswer: Bool) {
         self.isSelected = false
-        self.isAnswer = isAnswer
+        super.init(option: option, isAnswer: false)
     }
 }
 

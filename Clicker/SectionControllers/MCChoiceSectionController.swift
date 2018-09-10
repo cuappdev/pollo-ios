@@ -30,8 +30,8 @@ class MCChoiceSectionController: ListSectionController {
             return .zero
         }
         let cellHeight = delegate.cardControllerState == .horizontal
-            ? LayoutConstants.horizontalOptionCellHeight
-            : LayoutConstants.verticalOptionCellHeight
+            ? LayoutConstants.horizontalMCOptionCellHeight
+            : LayoutConstants.verticalMCOptionCellHeight
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     

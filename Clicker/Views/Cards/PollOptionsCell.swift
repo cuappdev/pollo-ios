@@ -79,14 +79,18 @@ extension PollOptionsCell: ListAdapterDataSource {
             return mcResultModels
         case .mcChoice(choiceModels: let mcChoiceModels):
             return mcChoiceModels
+        case .frOption(optionModels: let frOptionModels):
+            return frOptionModels
         }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is MCResultModel {
             return MCResultSectionController(delegate: self)
-        } else {
+        } else if object is MCChoiceModel {
             return MCChoiceSectionController(delegate: self)
+        } else {
+            return FROptionSectionController(delegate: self)
         }
     }
     
@@ -96,7 +100,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     
 }
 
-extension PollOptionsCell: MCResultSectionControllerDelegate {
+extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionControllerDelegate {
     
     var cardControllerState: CardControllerState {
         return delegate.cardControllerState
