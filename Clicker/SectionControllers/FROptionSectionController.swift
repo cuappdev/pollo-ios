@@ -59,6 +59,7 @@ class FROptionSectionController: ListSectionController {
         let optionLabelHeight = frOptionModel.option.height(withConstrainedWidth: optionLabelWidth, font: .systemFont(ofSize: frOptionCellOptionLabelSize, weight: .medium))
         return optionLabelHeight + frOptionCellOptionLabelVerticalPadding * 2
     }
+
 }
 
 extension FROptionSectionController: FROptionCellDelegate {
