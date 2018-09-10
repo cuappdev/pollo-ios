@@ -255,7 +255,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         } else { // FREE RESPONSE
             
             let question = frPollBuilder.questionTextField.text
-            let isShared = frPollBuilder.dropDown.shareResponses
             startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
         }
         
@@ -349,14 +348,13 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     func fillDraft(_ draft: Draft) {
         if questionType == .multipleChoice {
-            mcPollBuilder.questionTextField.text = draft.text
             var optionsDict: [Int: String] = [:]
             if draft.options.count > 0 {
                 for i in 0...draft.options.count-1 {
                     optionsDict[i] = draft.options[i]
                 }
             }
-            mcPollBuilder.optionsDict = optionsDict
+            mcPollBuilder.fillDraft(title: draft.text, options: optionsDict)
             mcPollBuilder.optionsTableView.reloadData()
         } else { // FREE_RESPONSE
             frPollBuilder.questionTextField.text = draft.text
