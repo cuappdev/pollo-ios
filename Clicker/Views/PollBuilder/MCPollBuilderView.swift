@@ -175,6 +175,12 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         }
     }
     
+    func fillDraft(title: String, options: [Int: String]) {
+        questionTextField.text = title
+        optionsDict = options
+        numOptions = optionsDict.keys.count
+    }
+    
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
