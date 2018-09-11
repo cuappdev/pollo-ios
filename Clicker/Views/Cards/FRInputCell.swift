@@ -48,15 +48,18 @@ class FRInputCell: UICollectionViewCell {
         inputTextField.placeholder = textFieldPlaceholder
         inputTextField.returnKeyType = .send
         inputTextField.delegate = self
+        let rightView = UIView(frame: CGRect(x: 0, y: 0, width: textFieldTextInset * 2, height: textFieldHeight))
+        inputTextField.rightView = rightView
+        inputTextField.rightViewMode = .always
         contentView.addSubview(inputTextField)
     }
     
     override func updateConstraints() {
         inputTextField.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(textFieldVerticalPadding)
             make.leading.equalToSuperview().offset(textFieldHorizontalPadding)
             make.trailing.equalToSuperview().inset(textFieldHorizontalPadding)
-            make.bottom.equalToSuperview().inset(textFieldVerticalPadding)
+            make.height.equalTo(textFieldHeight)
+            make.centerY.equalToSuperview()
         }
         super.updateConstraints()
     }

@@ -101,7 +101,7 @@ class CardController: UIViewController {
         ]
         let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .freeResponse, options: options, results: results, state: .live, answer: "Moon name #2")
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        self.userRole = .admin
+        self.userRole = .member
         
         setupGradientViews()
         setupHorizontal()
