@@ -66,9 +66,9 @@ struct LayoutConstants {
     static let verticalMCOptionCellHeight: CGFloat = 44
     static let horizontalMCOptionCellHeight: CGFloat = 50
     static let horizontalFROptionCellHeight: CGFloat = 58
+    static let frInputCellHeight: CGFloat = 64
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let separatorLineCellHeight: CGFloat = 1
-    static let pollButtonCellHeight: CGFloat = 48
     static let hamburgerCardCellHeight: CGFloat = 25
     static let pollOptionsVerticalPadding: CGFloat = 10
 }

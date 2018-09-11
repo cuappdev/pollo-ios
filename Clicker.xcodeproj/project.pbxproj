@@ -80,8 +80,6 @@
 		C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */; };
 		C2A0F7CF213A115900A28D75 /* HamburgerCardSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */; };
 		C2A0F7D1213A11CE00A28D75 /* HamburgerCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */; };
-		C2A0F7D3213A198600A28D75 /* PollButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D2213A198600A28D75 /* PollButtonModel.swift */; };
-		C2A0F7D5213A1A5800A28D75 /* PollButtonSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */; };
 		C2A0F7D7213A1AE500A28D75 /* PollButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
 		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
@@ -204,8 +202,6 @@
 		C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardModel.swift; sourceTree = "<group>"; };
 		C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardSectionController.swift; sourceTree = "<group>"; };
 		C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardCell.swift; sourceTree = "<group>"; };
-		C2A0F7D2213A198600A28D75 /* PollButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollButtonModel.swift; sourceTree = "<group>"; };
-		C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollButtonSectionController.swift; sourceTree = "<group>"; };
 		C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollButtonCell.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
@@ -375,7 +371,6 @@
 				C20B571E2139E9F40091034F /* MCResultModel.swift */,
 				C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */,
 				C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */,
-				C2A0F7D2213A198600A28D75 /* PollButtonModel.swift */,
 				C22F66612141B75100D4E349 /* SeparatorLineModel.swift */,
 				C2649F742142314B00370454 /* PollOptionsModel.swift */,
 				C21C95BB2145D57000F58874 /* FROptionModel.swift */,
@@ -390,7 +385,6 @@
 				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
 				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
 				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
-				C2A0F7D4213A1A5800A28D75 /* PollButtonSectionController.swift */,
 				C20B5710213904C10091034F /* PollDateSectionController.swift */,
 				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
 				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
@@ -798,7 +792,6 @@
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
 				C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */,
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
-				C2A0F7D3213A198600A28D75 /* PollButtonModel.swift in Sources */,
 				C21C95BA2145D42F00F58874 /* OptionModel.swift in Sources */,
 				C2434CBB2134F29F00929C98 /* PollsCell+Extension.swift in Sources */,
 				C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */,
@@ -825,7 +818,6 @@
 				C22D5B5A21432411005A0E29 /* MCChoiceModel.swift in Sources */,
 				C20B57172139D9D70091034F /* QuestionModel.swift in Sources */,
 				C20B571B2139DEF90091034F /* QuestionCell.swift in Sources */,
-				C2A0F7D5213A1A5800A28D75 /* PollButtonSectionController.swift in Sources */,
 				C2649F752142314B00370454 /* PollOptionsModel.swift in Sources */,
 				C2A0F7D1213A11CE00A28D75 /* HamburgerCardCell.swift in Sources */,
 				C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */,

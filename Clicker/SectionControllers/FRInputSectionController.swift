@@ -20,9 +20,6 @@ class FRInputSectionController: ListSectionController {
     var delegate: FRInputSectionControllerDelegate!
     var frInputModel: FRInputModel!
     
-    // MARK: - Constants
-    let cellHeight: CGFloat = 64
-    
     init(delegate: FRInputSectionControllerDelegate) {
         self.delegate = delegate
     }
@@ -32,7 +29,7 @@ class FRInputSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: cellHeight)
+        return CGSize(width: containerSize.width, height: LayoutConstants.frInputCellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
