@@ -249,8 +249,12 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        objects.append(FRInputModel())
-        objects.append(miscellaneousModel)
+        if (userRole == .member && poll.questionType == .freeResponse) {
+            objects.append(FRInputModel())
+        }
+        if (userRole == .admin) {
+            objects.append(miscellaneousModel)
+        }
         objects.append(separatorLineModel)
         objects.append(pollOptionsModel)
         objects.append(bottomHamburgerCardModel)
