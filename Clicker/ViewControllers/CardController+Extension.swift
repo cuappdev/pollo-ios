@@ -119,6 +119,57 @@ extension CardController: NameViewDelegate {
     
 }
 
+extension CardController: UIScrollViewDelegate {
+    
+    // MARK: - Handle paging animation of horizontal collection view
+    private func indexOfHorizontalCard() -> Int {
+        let itemWidth = view.frame.width * 0.9
+        let proportionalOffset = collectionViewLayout.collectionView!.contentOffset.x / itemWidth
+        let index = Int(round(proportionalOffset))
+        let numberOfItems = objects(for: adapter).count
+        let safeIndex = max(0, min(numberOfItems - 1, index))
+        return safeIndex
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        indexOfCellBeforeDragging = indexOfHorizontalCard()
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // Stop scrollView sliding:
+        targetContentOffset.pointee = scrollView.contentOffset
+        
+        // calculate where scrollView should snap to:
+        let indexOfHorizontalCard = self.indexOfHorizontalCard()
+        
+        // calculate conditions:
+        let dataSourceCount = objects(for: adapter).count
+        let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
+        let hasEnoughVelocityToSlideToTheNextCell = indexOfCellBeforeDragging + 1 < dataSourceCount && velocity.x > swipeVelocityThreshold
+        let hasEnoughVelocityToSlideToThePreviousCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        let majorCellIsTheCellBeforeDragging = indexOfHorizontalCard == indexOfCellBeforeDragging
+        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
+        
+        if didUseSwipeToSkipCell {
+            
+            let snapToIndex = indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
+            let itemWidth = view.frame.width * 0.9
+            let toValue = itemWidth * CGFloat(snapToIndex)
+            
+            // Damping equal 1 => no oscillations => decay animation:
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
+                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
+                scrollView.layoutIfNeeded()
+            }, completion: nil)
+            
+        } else {
+            // Scroll to correct section
+            let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+}
+
 extension CardController: SocketDelegate {
     
     func sessionConnected() { }

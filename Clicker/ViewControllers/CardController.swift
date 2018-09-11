@@ -40,6 +40,7 @@ class CardController: UIViewController {
     var state: CardControllerState!
     var pollsDateArray: [PollsDateModel]!
     var currentIndex: Int!
+    var indexOfCellBeforeDragging: Int!
     
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
@@ -102,7 +103,7 @@ class CardController: UIViewController {
         ]
         let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .freeResponse, options: options, results: results, state: .live, answer: "Moon name #2")
         self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        self.userRole = .member
+        self.userRole = .admin
         
         setupGradientViews()
         setupHorizontal()
@@ -134,9 +135,10 @@ class CardController: UIViewController {
     // MARK: - Layout
     func setupCards() {
         collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.minimumInteritemSpacing = 10
-        collectionViewLayout.minimumLineSpacing = 10
+        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
+//        collectionViewLayout.sectionInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         let collectionViewInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
@@ -144,7 +146,7 @@ class CardController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.backgroundColor = .clear
-        collectionView.isPagingEnabled = true
+//        collectionView.isPagingEnabled = true
         view.addSubview(collectionView)
         view.sendSubview(toBack: collectionView)
         
@@ -154,6 +156,7 @@ class CardController: UIViewController {
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
