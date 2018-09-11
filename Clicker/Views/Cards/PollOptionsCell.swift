@@ -61,7 +61,7 @@ class PollOptionsCell: UICollectionViewCell {
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
-        adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
