@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK: - General Utils
 // CONVERT INT TO MC OPTIONS
 func intToMCOption(_ intOption: Int) -> String {
     return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
@@ -31,32 +32,26 @@ func decodeObjForKey(key: String) -> Any {
     return NSKeyedUnarchiver.unarchiveObject(with: decodedData)!
 }
 
-// Polls
+// MARK: - Utils for Polls
 func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
-    let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
+    var type: PollOptionsModelType
+    switch poll.questionType {
+    case .freeResponse:
+        type = buildFROptionModelType(from: poll)
+    case .multipleChoice:
+        switch poll.state {
+        case .live, .ended:
+            switch userRole {
+            case .member:
+                type = buildMCChoiceModelType(from: poll)
+            case .admin:
+                type = buildMCResultModelType(from: poll)
+            }
+        case .shared:
+            type = buildMCResultModelType(from: poll)
+        }
     }
-    let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
     return PollOptionsModel(type: type, pollState: poll.state)
-    
-    //        var mcResultModels: [MCResultModel] = []
-    //        let totalNumResults = Float(poll.getTotalResults())
-    //        poll.options.enumerated().forEach { (index, option) in
-    //            let mcOptionKey = intToMCOption(index)
-    //            if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
-    //                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
-    //                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-    //                let isAnswer = option == poll.answer
-    //                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
-    //                mcResultModels.append(resultModel)
-    //            }
-    //        }
-    //        let type: PollOptionsModelType = .mcResult(resultModels: mcResultModels)
-    //        return PollOptionsModel(type: type, pollState: poll.state)
-    
-    //        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
-    //        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
-    //        return PollOptionsModel(type: type, pollState: poll.state)
 }
 
 func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, state: CardControllerState) -> CGFloat {
@@ -79,4 +74,33 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, stat
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
     let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
     return verticalPadding + optionsHeight
+}
+
+// MARK: - Helpers
+private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
+    let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
+        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
+    }
+    return .frOption(optionModels: frOptionModels)
+}
+
+private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
+    let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
+    return .mcChoice(choiceModels: mcChoiceModels)
+}
+
+func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
+    var mcResultModels: [MCResultModel] = []
+    let totalNumResults = Float(poll.getTotalResults())
+    poll.options.enumerated().forEach { (index, option) in
+        let mcOptionKey = intToMCOption(index)
+        if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
+            guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
+            let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+            let isAnswer = option == poll.answer
+            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+            mcResultModels.append(resultModel)
+        }
+    }
+    return .mcResult(resultModels: mcResultModels)
 }

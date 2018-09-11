@@ -80,7 +80,9 @@ class PollDateSectionController: ListSectionController {
     }
     
     override func didSelectItem(at index: Int) {
-        delegate.switchToHorizontalWith(index: pollDateModel.index)
+        if (itemTypes[index] == .card) {
+            delegate.switchToHorizontalWith(index: pollDateModel.index)
+        }
     }
     
     // MARK: - Helpers
