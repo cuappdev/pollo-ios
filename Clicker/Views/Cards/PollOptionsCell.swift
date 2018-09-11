@@ -132,18 +132,27 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     }
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
-        if mcSelectedIndex != NSNotFound {
-            switch pollOptionsModel.type {
-            case .mcChoice(choiceModels: var mcChoiceModels):
-                let currentChoiceModel = mcChoiceModels[mcSelectedIndex]
-                mcChoiceModels[mcSelectedIndex] = MCChoiceModel(option: currentChoiceModel.option, isSelected: false)
-                pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
-                adapter.performUpdates(animated: false, completion: nil)
-            default:
-                return
+        switch pollOptionsModel.type {
+        case .mcChoice(choiceModels: var mcChoiceModels):
+            if (mcSelectedIndex != NSNotFound) {
+                // Deselect former choice
+                mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }
+            // Select new choice
+            let selectedIndex = adapter.section(for: sectionController)
+            mcChoiceModels[selectedIndex] = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
+            pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
+            adapter.performUpdates(animated: false, completion: nil)
+            mcSelectedIndex = selectedIndex
+        default:
+            return
         }
-        mcSelectedIndex = adapter.section(for: sectionController)
+    }
+    
+    // MARK: - Helpers
+    private func updateMCChoiceModel(at index: Int, isSelected: Bool, mcChoiceModels: [MCChoiceModel]) -> MCChoiceModel {
+        let choiceModel = mcChoiceModels[index]
+        return MCChoiceModel(option: choiceModel.option, isSelected: isSelected)
     }
     
 }
