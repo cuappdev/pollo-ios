@@ -90,8 +90,12 @@ class PollDateSectionController: ListSectionController {
         let pollOptionsCellVerticalPadding = LayoutConstants.pollOptionsVerticalPadding * 2
         let numOptions = min(poll.options.count, 6)
         let pollOptionsCellHeight = LayoutConstants.verticalMCOptionCellHeight * CGFloat(numOptions) + pollOptionsCellVerticalPadding
-        let miscellaneousCellHeight = LayoutConstants.pollMiscellaneousCellHeight
-        return topBottomHamburgerCellHeight + questionCellHeight + pollOptionsCellHeight + miscellaneousCellHeight
+        
+        let isAdmin = userRole == .admin
+        let isMultipleChoice = poll.questionType == .multipleChoice
+        let miscellaneousCellHeight = isAdmin ? LayoutConstants.pollMiscellaneousCellHeight : 0
+        let frInputCellHeight = (!isAdmin && !isMultipleChoice) ? LayoutConstants.frInputCellHeight : 0
+        return topBottomHamburgerCellHeight + questionCellHeight + pollOptionsCellHeight + miscellaneousCellHeight + frInputCellHeight
     }
 }
 
