@@ -44,6 +44,7 @@ class CardController: UIViewController {
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
+    let horizontalCollectionViewTopPadding: CGFloat = 6
     let verticalCollectionViewBottomInset: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
@@ -166,24 +167,38 @@ class CardController: UIViewController {
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
+        
+        setupConstraints(for: state)
+    }
     
-        zoomOutButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-24)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.width.height.equalTo(20)
-        }
-        
-        countLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(zoomOutButton.snp.centerY)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth)
-        }
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(6)
-            make.bottom.equalToSuperview()
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
+    func setupConstraints(for state: CardControllerState) {
+        switch state {
+        case .horizontal:
+            zoomOutButton.snp.remakeConstraints { make in
+                make.right.equalToSuperview().offset(-24)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+                make.width.height.equalTo(20)
+            }
+            
+            countLabel.snp.remakeConstraints { make in
+                make.centerY.equalTo(zoomOutButton.snp.centerY)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(countLabelWidth)
+            }
+            
+            collectionView.snp.remakeConstraints { make in
+                make.top.equalTo(countLabel.snp.bottom).offset(horizontalCollectionViewTopPadding)
+                make.bottom.equalToSuperview()
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+            }
+        case .vertical:
+            collectionView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+            }
         }
     }
     
@@ -233,7 +248,6 @@ class CardController: UIViewController {
         self.navigationController?.view.backgroundColor = .clear
         self.navigationItem.titleView = UIView()
         self.navigationItem.rightBarButtonItems = []
-        setupGradientViews()
     }
     
     func setupGradientViews() {
@@ -266,6 +280,11 @@ class CardController: UIViewController {
         }
     }
     
+    func removeGradientViews() {
+        topGradientView.removeFromSuperview()
+        bottomGradientView.removeFromSuperview()
+    }
+    
     // MARK: SCROLLVIEW METHODS
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if (scrollView != collectionView) {
@@ -276,29 +295,28 @@ class CardController: UIViewController {
     
     // MARK: Helpers
     func switchTo(state: CardControllerState) {
-        zoomOutButton.isHidden = (state == .vertical)
-        countLabel.isHidden = (state == .vertical)
         self.state = state
         switch state {
         case .vertical:
+            setupGradientViews()
+            zoomOutButton.removeFromSuperview()
+            countLabel.removeFromSuperview()
             collectionViewLayout.scrollDirection = .vertical
             collectionView.isPagingEnabled = false
             let collectionViewXInset = view.frame.width * 0.1
             collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, verticalCollectionViewBottomInset, collectionViewXInset)
-            collectionView.snp.makeConstraints { make in
-                make.top.equalToSuperview()
-            }
             setupVerticalNavBar()
         case .horizontal:
+            removeGradientViews()
+            view.addSubview(zoomOutButton)
+            view.addSubview(countLabel)
             collectionViewLayout.scrollDirection = .horizontal
             collectionView.isPagingEnabled = true
             let collectionViewXInset = view.frame.width * 0.05
             collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
-            collectionView.snp.makeConstraints { make in
-                make.top.equalToSuperview()
-            }
             setupHorizontalNavBar()
         }
+        setupConstraints(for: state)
         adapter.performUpdates(animated: false, completion: nil)
     }
     

@@ -143,6 +143,7 @@ class CardCell: UICollectionViewCell {
         let isMember = userRole == .member
         shadowViewWidth = isVertical ? 15 : 0
         collectionViewRightPadding = isVertical ? 0 : collectionViewLeftPadding
+        collectionView.isUserInteractionEnabled = !isVertical
         questionButton.isHidden = poll.state == .shared || isVertical || isMember
         timerLabel.isHidden = !(poll.state == .live) || isVertical || isMember
         if poll.state == .live {
