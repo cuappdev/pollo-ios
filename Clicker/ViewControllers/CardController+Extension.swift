@@ -86,7 +86,7 @@ extension CardController: StartPollDelegate {
         socket.socket.emit(Routes.start, [socketQuestion])
         let newPoll = Poll(id: 0, text: text, questionType: type, options: options, results: [:], state: state, answer: nil)
         appendPoll(poll: newPoll)
-        adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
         let lastIndexPath = IndexPath(item: 0, section: 0) // TODO: implement scrolling to end of CV
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }

@@ -157,7 +157,7 @@ class CardCell: UICollectionViewCell {
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: 32)
-        adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: - Actions
