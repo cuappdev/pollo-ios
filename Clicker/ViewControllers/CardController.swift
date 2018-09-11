@@ -299,7 +299,7 @@ class CardController: UIViewController {
             }
             setupHorizontalNavBar()
         }
-        adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func updateDatePollsArr() {

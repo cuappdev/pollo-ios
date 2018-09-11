@@ -80,7 +80,6 @@
 		C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */; };
 		C2A0F7CF213A115900A28D75 /* HamburgerCardSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */; };
 		C2A0F7D1213A11CE00A28D75 /* HamburgerCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */; };
-		C2A0F7D7213A1AE500A28D75 /* PollButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */; };
 		C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */; };
 		C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */; };
 		C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B91808208CE3A80030822F /* FRSectionCell.swift */; };
@@ -202,7 +201,6 @@
 		C2A0F7CC213A106C00A28D75 /* HamburgerCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardModel.swift; sourceTree = "<group>"; };
 		C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardSectionController.swift; sourceTree = "<group>"; };
 		C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerCardCell.swift; sourceTree = "<group>"; };
-		C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollButtonCell.swift; sourceTree = "<group>"; };
 		C2AC3E1B1FA7F83E00CC9D29 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C2B3C0C7202A7153003A9D1C /* AddMoreOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreOptionCell.swift; sourceTree = "<group>"; };
 		C2B91808208CE3A80030822F /* FRSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
@@ -278,7 +276,6 @@
 				C20B571C2139E6080091034F /* MCResultCell.swift */,
 				C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */,
 				C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */,
-				C2A0F7D6213A1AE500A28D75 /* PollButtonCell.swift */,
 				C22F66632141B7AA00D4E349 /* SeparatorLineCell.swift */,
 				C2649F782142336D00370454 /* PollOptionsCell.swift */,
 				C22D5B5D214325BE005A0E29 /* MCChoiceCell.swift */,
@@ -844,7 +841,6 @@
 				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C22D5B5E214325BE005A0E29 /* MCChoiceCell.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
-				C2A0F7D7213A1AE500A28D75 /* PollButtonCell.swift in Sources */,
 				63A4A64E2094FD7800523AE6 /* DraftCell.swift in Sources */,
 				C2093141209ED1F6001A10CC /* CardView.swift in Sources */,
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,
