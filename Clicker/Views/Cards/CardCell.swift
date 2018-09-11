@@ -36,7 +36,6 @@ class CardCell: UICollectionViewCell {
     var separatorLineModel: SeparatorLineModel!
     var pollOptionsModel: PollOptionsModel!
     var miscellaneousModel: PollMiscellaneousModel!
-    var pollButtonModel: PollButtonModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var shadowViewWidth: CGFloat!
     var collectionViewRightPadding: CGFloat!
@@ -64,7 +63,6 @@ class CardCell: UICollectionViewCell {
         
         topHamburgerCardModel = HamburgerCardModel(state: .top)
         separatorLineModel = SeparatorLineModel()
-        pollButtonModel = PollButtonModel(state: .ended)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         setupViews()
     }
@@ -270,8 +268,6 @@ extension CardCell: ListAdapterDataSource {
             return PollOptionsSectionController(delegate: self)
         } else if object is PollMiscellaneousModel {
             return PollMiscellaneousSectionController()
-        } else if object is PollButtonModel {
-            return PollButtonSectionController()
         } else if object is HamburgerCardModel {
             return HamburgerCardSectionController()
         } else {
