@@ -21,9 +21,6 @@ class PollOptionsSectionController: ListSectionController {
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
     
-    // MARK: - Constants
-    let maximumNumberVisibleOptions = 6
-    
     init(delegate: PollOptionsSectionControllerDelegate) {
         self.delegate = delegate
     }
@@ -33,7 +30,8 @@ class PollOptionsSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: calculatePollOptionsCellHeight(for: pollOptionsModel))
+        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, state: delegate.cardControllerState)
+        return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -44,23 +42,6 @@ class PollOptionsSectionController: ListSectionController {
     
     override func didUpdate(to object: Any) {
         pollOptionsModel = object as? PollOptionsModel
-    }
-    
-    // MARK: - Helpers
-    private func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
-        let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
-        var optionModels: [OptionModel]
-        switch pollOptionsModel.type {
-        case .mcResult(resultModels: let mcResultModels):
-            optionModels = mcResultModels
-        case .mcChoice(choiceModels: let mcChoiceModels):
-            optionModels = mcChoiceModels
-        case .frOption(optionModels: let frOptionModels):
-            optionModels = frOptionModels
-        }
-        let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
-        let optionsHeight: CGFloat = CGFloat(numOptions) * LayoutConstants.horizontalMCOptionCellHeight
-        return verticalPadding + optionsHeight
     }
     
 }

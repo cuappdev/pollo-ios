@@ -87,9 +87,9 @@ class PollDateSectionController: ListSectionController {
     private func calculateCardCellHeight(poll: Poll, userRole: UserRole) -> CGFloat {
         let topBottomHamburgerCellHeight = LayoutConstants.hamburgerCardCellHeight * 2
         let questionCellHeight = LayoutConstants.verticalQuestionCellHeight
-        let pollOptionsCellVerticalPadding = LayoutConstants.pollOptionsVerticalPadding * 2
-        let numOptions = min(poll.options.count, 6)
-        let pollOptionsCellHeight = LayoutConstants.verticalMCOptionCellHeight * CGFloat(numOptions) + pollOptionsCellVerticalPadding
+        
+        let pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
+        let pollOptionsCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, state: delegate.cardControllerState)
         
         let isAdmin = userRole == .admin
         let isMultipleChoice = poll.questionType == .multipleChoice

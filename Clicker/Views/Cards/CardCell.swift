@@ -203,33 +203,6 @@ class CardCell: UICollectionViewCell {
     }
     
     // MARK: - Helpers
-    private func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
-        let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-            return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
-        }
-        let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
-        return PollOptionsModel(type: type, pollState: poll.state)
-        
-//        var mcResultModels: [MCResultModel] = []
-//        let totalNumResults = Float(poll.getTotalResults())
-//        poll.options.enumerated().forEach { (index, option) in
-//            let mcOptionKey = intToMCOption(index)
-//            if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
-//                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
-//                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-//                let isAnswer = option == poll.answer
-//                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
-//                mcResultModels.append(resultModel)
-//            }
-//        }
-//        let type: PollOptionsModelType = .mcResult(resultModels: mcResultModels)
-//        return PollOptionsModel(type: type, pollState: poll.state)
-        
-//        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
-//        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
-//        return PollOptionsModel(type: type, pollState: poll.state)
-    }
-    
     private func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
     }

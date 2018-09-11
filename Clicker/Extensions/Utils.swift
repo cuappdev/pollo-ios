@@ -30,3 +30,53 @@ func decodeObjForKey(key: String) -> Any {
     let decodedData = UserDefaults.standard.value(forKey: key) as! Data
     return NSKeyedUnarchiver.unarchiveObject(with: decodedData)!
 }
+
+// Polls
+func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
+    let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
+        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
+    }
+    let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
+    return PollOptionsModel(type: type, pollState: poll.state)
+    
+    //        var mcResultModels: [MCResultModel] = []
+    //        let totalNumResults = Float(poll.getTotalResults())
+    //        poll.options.enumerated().forEach { (index, option) in
+    //            let mcOptionKey = intToMCOption(index)
+    //            if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
+    //                guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
+    //                let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+    //                let isAnswer = option == poll.answer
+    //                let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+    //                mcResultModels.append(resultModel)
+    //            }
+    //        }
+    //        let type: PollOptionsModelType = .mcResult(resultModels: mcResultModels)
+    //        return PollOptionsModel(type: type, pollState: poll.state)
+    
+    //        let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
+    //        let type: PollOptionsModelType = .mcChoice(choiceModels: mcChoiceModels)
+    //        return PollOptionsModel(type: type, pollState: poll.state)
+}
+
+func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, state: CardControllerState) -> CGFloat {
+    let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
+    var optionModels: [OptionModel]
+    var optionHeight: CGFloat
+    let isHorizontal = state == .horizontal
+    switch pollOptionsModel.type {
+    case .mcResult(resultModels: let mcResultModels):
+        optionModels = mcResultModels
+        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+    case .mcChoice(choiceModels: let mcChoiceModels):
+        optionModels = mcChoiceModels
+        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+    case .frOption(optionModels: let frOptionModels):
+        optionModels = frOptionModels
+        optionHeight = isHorizontal ? LayoutConstants.horizontalFROptionCellHeight : LayoutConstants.verticalFROptionCellHeight
+    }
+    let maximumNumberVisibleOptions = 6
+    let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
+    let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
+    return verticalPadding + optionsHeight
+}
