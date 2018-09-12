@@ -75,6 +75,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         getDrafts()
     }
     
+    // MARK: Setup
+    
     func setupViews() {
         navigationController?.navigationBar.isHidden = true
         
@@ -199,7 +201,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
     }
     
-    
     func updateQuestionTypeButton() {
         let questionTypeText = questionType.description
         let otherTypeText = questionType.other.description
@@ -209,7 +210,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     // MARK - ACTIONS
-    
     
     @objc func saveAsDraft() {
         if canDraft {
@@ -316,7 +316,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
     }
     
-    // TODO: Show a dropdown of question types
     @objc func toggleQuestionType() {
         dropDown.isHidden = false
         
@@ -327,11 +326,16 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func updateQuestionType() {
         questionType = questionType.other
         updateQuestionTypeButton()
-        if questionType == .multipleChoice {
+        guard let type = questionType else {
+            print("question type must be initalized before updateQuestionTypeCalled.")
+            return
+        }
+        switch type {
+        case .multipleChoice :
             mcPollBuilder.isHidden = false
             frPollBuilder.isHidden = true
             
-        } else { //  FREE_RESPONSE
+        case .freeResponse:
             frPollBuilder.isHidden = false
             mcPollBuilder.isHidden = true
         }
