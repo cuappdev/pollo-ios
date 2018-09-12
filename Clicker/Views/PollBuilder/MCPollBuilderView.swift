@@ -17,8 +17,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     var questionDelegate: QuestionDelegate!
     var session: Session!
     var grayViewBottomConstraint: Constraint!
-    var optionsDict: [Int:String] = [Int:String]()
-    var numOptions: Int = 2
+    var options: [String] = [String](repeating: "", count: 2)
     
     var questionTextField: UITextField!
     var optionsTableView: UITableView!
@@ -30,23 +29,19 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        clearOptionsDict()
         setupViews()
         layoutSubviews()
         editable = false
     }
     
     // MARK: - POLLING
-    func clearOptionsDict() {
-        optionsDict.removeAll()
-        for i in 0...numOptions - 1 {
-            optionsDict[i] = ""
-        }
+    func clearOptions() {
+        options = []
     }
     
     // MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row == numOptions && numOptions <= 25) {
+        if (indexPath.row == (tableView.numberOfRows(inSection: 0) - 1)) {
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.addMoreOptionCellIdentifier) as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
@@ -54,10 +49,10 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.createMCOptionCellIdentifier) as! CreateMCOptionCell
         cell.choiceTag = indexPath.row
         cell.mcOptionDelegate = self
-        cell.addOptionTextField.text = optionsDict[indexPath.row]
+        cell.addOptionTextField.text = indexPath.row < options.count ? options[indexPath.row] : ""
         cell.selectionStyle = .none
         
-        if numOptions <= 2 {
+        if options.count <= 2 {
             cell.trashButton.isUserInteractionEnabled = false
             cell.trashButton.alpha = 0.0
         } else {
@@ -69,10 +64,9 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.row == numOptions && numOptions <= 25) {
-            numOptions += 1
-            optionsDict[numOptions - 1] = ""
-            if (numOptions < 26) {
+        if (indexPath.row == options.count && options.count <= 25) {
+            options.append("")
+            if (options.count < 26) {
                 tableView.beginUpdates()
                 tableView.insertRows(at: [indexPath], with: .none)
                 tableView.reloadData()
@@ -87,14 +81,20 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (numOptions <= 25) {
-            return numOptions + 1
-        }
-        return numOptions
+        fixOptions()
+        return (options.count <= 25) ? options.count + 1 : options.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 53
+    }
+    
+    func fixOptions() {
+        if options.count == 0 {
+            options = [String](repeating: "", count: 2)
+        } else if options.count == 1 {
+            options.append("")
+        }
     }
     
     // MARK: - LAYOUT
@@ -139,26 +139,19 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     // MARK: - MC OPTION DELEGATE
     
     func deleteOption(index: Int) {
-        numOptions -= 1
         let indexPath = IndexPath(row: index, section: 0)
-        optionsDict.removeValue(forKey: index)
-        for (key, value) in optionsDict {
-            if (key > index) {
-                optionsDict.removeValue(forKey: key)
-                optionsDict[key - 1] = value
-            }
+        options.remove(at: index)
+        
+        optionsTableView.performBatchUpdates({
+            optionsTableView.deleteRows(at: [indexPath], with: .fade)
+        }) { _ in
+            self.optionsTableView.reloadData()
         }
-        let deleteCell = optionsTableView.cellForRow(at: indexPath) as! CreateMCOptionCell
-        deleteCell.addOptionTextField.text = ""
-        optionsTableView.beginUpdates()
-        optionsTableView.deleteRows(at: [indexPath], with: .fade)
-        optionsTableView.reloadData()
-        optionsTableView.endUpdates()
         
     }
     
     func updatedTextField(index: Int, text: String) {
-        optionsDict[index] = text
+        options[index] = text
     }
     
     @objc func updateEditable() {
@@ -173,6 +166,11 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
                 editable = true
             }
         }
+    }
+    
+    func fillDraft(title: String, options: [String]) {
+        questionTextField.text = title
+        self.options = options
     }
     
     // MARK: - KEYBOARD
