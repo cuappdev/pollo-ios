@@ -93,7 +93,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(questionTypeButton)
         
         draftsButton = UIButton()
-        draftsButton.setTitle("Drafts (\((drafts ?? []).count))", for: .normal)
+        updateDraftsCount()
         draftsButton.setTitleColor(.clickerBlack0, for: .normal)
         draftsButton.titleLabel?.font = ._16MediumFont
         draftsButton.contentHorizontalAlignment = .right
@@ -235,7 +235,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                     CreateDraft(text: question!, options: options).make()
                         .done { draft in
                             self.drafts.append(draft)
-                            self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
+                            self.updateDraftsCount()
                         }.catch { error in
                             print("error: ", error)
                     }
@@ -257,7 +257,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                     CreateDraft(text: question!, options: []).make()
                         .done { draft in
                             self.drafts.append(draft)
-                            self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
+                            self.updateDraftsCount()
                         }.catch { error in
                             print("error: ", error)
                     }
@@ -269,17 +269,16 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func startQuestion() {
-        // TODO: Start question session
-        print("start question")
-        
         // MULTIPLE CHOICE
-        if (questionType == .multipleChoice) {
-
+        guard let qType = questionType else {
+            print("cannot start question before viewdidload")
+            return
+        }
+        switch qType {
+        case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text
-            
             startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
-        } else { // FREE RESPONSE
-            
+        case .freeResponse:
             let question = frPollBuilder.questionTextField.text
             startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
         }
@@ -393,9 +392,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         GetDrafts().make()
             .done { drafts in
                 self.drafts = drafts
-                self.draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
+                self.updateDraftsCount()
             } .catch { error in
                 print("error: ", error)
+        }
+    }
+    
+    func updateDraftsCount() {
+        if let _ = drafts {
+            draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
+        } else {
+            draftsButton.setTitle("Drafts (0)", for: .normal)
         }
     }
     
