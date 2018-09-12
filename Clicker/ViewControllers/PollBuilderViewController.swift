@@ -227,6 +227,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 }
                 CreateDraft(text: question!, options: options).make()
                     .done { draft in
+                        self.drafts.append(draft)
+                        self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
                     }.catch { error in
                         print("error: ", error)
                     }
@@ -244,8 +246,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 }
             }
             self.updateCanDraft(false)
-
-            self.getDrafts()
             }
     }
     
