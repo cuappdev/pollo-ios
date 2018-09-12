@@ -240,13 +240,15 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 let question = frPollBuilder.questionTextField.text
                 CreateDraft(text: question!, options: []).make()
                     .done { draft in
+                        self.drafts.append(draft)
+                        self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
                     }.catch { error in
                         print("error: ", error)
-                self.mcPollBuilder.questionTextField.text = ""
                 }
+                self.frPollBuilder.questionTextField.text = ""
             }
             self.updateCanDraft(false)
-            }
+        }
     }
     
     @objc func startQuestion() {
@@ -371,7 +373,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         GetDrafts().make()
             .done { drafts in
                 self.drafts = drafts
-                print("got drafts!: ", drafts)
                 self.draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
             } .catch { error in
                 print("error: ", error)
