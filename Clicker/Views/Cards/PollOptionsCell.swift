@@ -13,6 +13,8 @@ protocol PollOptionsCellDelegate {
     
     var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
+    
+    func pollOptionsCellDidSubmitChoice(choice: String)
 }
 
 class PollOptionsCell: UICollectionViewCell {
@@ -140,10 +142,12 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
             }
             // Select new choice
             let selectedIndex = adapter.section(for: sectionController)
-            mcChoiceModels[selectedIndex] = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
+            let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
+            mcChoiceModels[selectedIndex] = updatedMCChoiceModel
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
             adapter.performUpdates(animated: false, completion: nil)
             mcSelectedIndex = selectedIndex
+            delegate.pollOptionsCellDidSubmitChoice(choice: updatedMCChoiceModel.option)
         default:
             return
         }

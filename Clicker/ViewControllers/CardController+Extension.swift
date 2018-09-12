@@ -60,6 +60,11 @@ extension CardController: PollSectionControllerDelegate {
         return userRole
     }
     
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
+        let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
+        emitAnswer(answer: answer)
+    }
+    
 }
 
 extension CardController: PollDateSectionControllerDelegate {
@@ -67,6 +72,11 @@ extension CardController: PollDateSectionControllerDelegate {
     func switchToHorizontalWith(index: Int) {
         currentIndex = index
         switchTo(state: .horizontal)
+    }
+    
+    func pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: PollDateSectionController, choice: String, poll: Poll) {
+        let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
+        emitAnswer(answer: answer)
     }
     
 }
@@ -191,4 +201,16 @@ extension CardController: SocketDelegate {
     func saveSession(_ session: Session) { }
     
     func updatedTally(_ currentState: CurrentState) { }
+
+    // MARK: Helpers
+    func emitAnswer(answer: Answer) {
+        let data: [String:Any] = [
+            RequestKeys.googleIdKey: User.currentUser?.id,
+            RequestKeys.pollKey: answer.pollId,
+            RequestKeys.choiceKey: answer.choice,
+            RequestKeys.textKey: answer.text
+        ]
+        socket.socket.emit(Routes.tally, data)
+    }
+    
 }
