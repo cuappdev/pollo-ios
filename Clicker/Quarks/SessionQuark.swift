@@ -426,7 +426,7 @@ struct StartSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {

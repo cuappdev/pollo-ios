@@ -8,17 +8,15 @@
 
 class Answer {
     
-    var id: Int
-    var deviceId: Int
-    var questionId: Int
-    var choice: String!
-    var text: String!
+    var id: Int?
+    var text: String
+    var choice: String
+    var pollId: Int
 
-    init(_ id: Int, _ deviceId: Int, _ questionId: Int, _ choice: String, _ text: String) {
-        self.id = id
-        self.deviceId = deviceId
-        self.questionId = questionId
-        self.choice = choice
+    init(text: String, choice: String, pollId: Int) {
         self.text = text
+        self.choice = choice
+        self.pollId = pollId
     }
+    
 }

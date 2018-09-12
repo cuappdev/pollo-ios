@@ -85,6 +85,13 @@ struct ParserKeys {
     static let typeKey = "type"
 }
 
+struct RequestKeys {
+    static let googleIdKey = "googleId"
+    static let pollKey = "poll"
+    static let choiceKey = "choice"
+    static let textKey = "text"
+}
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"

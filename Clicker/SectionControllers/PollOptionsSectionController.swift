@@ -13,6 +13,8 @@ protocol PollOptionsSectionControllerDelegate {
     var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
     
+    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String)
+    
 }
 
 class PollOptionsSectionController: ListSectionController {
@@ -54,6 +56,10 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     
     var userRole: UserRole {
         return delegate.userRole
+    }
+
+    func pollOptionsCellDidSubmitChoice(choice: String) {
+        delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, choice: choice)
     }
 
 }

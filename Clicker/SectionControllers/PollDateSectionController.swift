@@ -9,9 +9,12 @@
 import IGListKit
 
 protocol PollDateSectionControllerDelegate {
+    
     var cardControllerState: CardControllerState { get }
     var role: UserRole { get }
+    
     func switchToHorizontalWith(index: Int)
+    func pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: PollDateSectionController, choice: String, poll: Poll)
 }
 
 enum PollDateSectionControllerItemType {
@@ -109,6 +112,10 @@ extension PollDateSectionController: CardCellDelegate {
     
     var userRole: UserRole {
         return delegate.role
+    }
+    
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String) {
+        delegate.pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: pollDateModel.poll)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {}

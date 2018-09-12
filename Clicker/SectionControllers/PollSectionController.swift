@@ -14,6 +14,8 @@ protocol PollSectionControllerDelegate {
     var cardControllerState: CardControllerState { get }
     var role: UserRole { get }
     
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    
 }
 
 class PollSectionController: ListSectionController {
@@ -56,6 +58,10 @@ extension PollSectionController: CardCellDelegate {
     
     var userRole: UserRole {
         return delegate.role
+    }
+    
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String) {
+        delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
