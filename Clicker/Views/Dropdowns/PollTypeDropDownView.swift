@@ -68,12 +68,10 @@ class PollTypeDropDownView: UIView {
     }
     
     @objc func selectedTop() {
-        print("top pressed")
         self.isHidden = true
     }
     
     @objc func selectedBottom() {
-        print("bottom pressed")
         self.isHidden = true
         delegate.updateQuestionType()
     }

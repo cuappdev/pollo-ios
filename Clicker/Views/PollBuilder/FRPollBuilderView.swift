@@ -25,6 +25,8 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     var responseOptionsLabel: UILabel!
     var changeButton: UIButton!
     
+    var editable: Bool!
+    
     var dropDown: FROptionsDropDownView!
     
     // MARK: - INITIALIZATION
@@ -33,6 +35,8 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         setupViews()
         layoutSubviews()
         setupDropDown()
+        
+        editable = false
     }
     
     // MARK: - LAYOUT
@@ -42,6 +46,7 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         questionTextField.font = ._18RegularFont
         questionTextField.returnKeyType = .done
         questionTextField.delegate = self
+        questionTextField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
         addSubview(questionTextField)
         
         line = UIView()
@@ -111,6 +116,20 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     @objc func changeButtonPressed() {
         dropDown.isHidden = !dropDown.isHidden
         changeButton.isSelected = !changeButton.isSelected
+    }
+    
+    @objc func updateEditable() {
+        if editable {
+            if questionTextField.text == "" {
+                pollBuilderDelegate.updateCanDraft(false)
+                editable = false
+            }
+        } else {
+            if questionTextField.text != "" {
+                pollBuilderDelegate.updateCanDraft(true)
+                editable = true
+            }
+        }
     }
     
     required init?(coder _: NSCoder) {
