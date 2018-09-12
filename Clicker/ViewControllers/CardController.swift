@@ -280,7 +280,7 @@ class CardController: UIViewController {
         pollBuilderVC.startPollDelegate = self
         
         let width = Float(view.safeAreaLayoutGuide.layoutFrame.size.width)
-        let height = Float(view.safeAreaLayoutGuide.layoutFrame.size.height)// - UIApplication.shared.statusBarFrame.height)
+        let height = Float(view.safeAreaLayoutGuide.layoutFrame.size.height)
         let center = CGPoint(x: view.safeAreaLayoutGuide.layoutFrame.midX, y: UIApplication.shared.statusBarFrame.height + view.safeAreaLayoutGuide.layoutFrame.midY)
         let presenter = Presentr(presentationType: .custom(width: .custom(size: width), height: .custom(size: height), center: .custom(centerPoint: center)))
         presenter.backgroundOpacity = 0.6

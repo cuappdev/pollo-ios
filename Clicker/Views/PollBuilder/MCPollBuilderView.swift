@@ -41,7 +41,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     
     // MARK: - TABLEVIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row == (tableView.numberOfRows(inSection: 0)-1)) {
+        if (indexPath.row == (tableView.numberOfRows(inSection: 0) - 1)) {
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.addMoreOptionCellIdentifier) as! AddMoreOptionCell
             cell.selectionStyle = .none
             return cell
@@ -51,7 +51,6 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         cell.mcOptionDelegate = self
         cell.addOptionTextField.text = indexPath.row < options.count ? options[indexPath.row] : ""
         cell.selectionStyle = .none
-        print("setting cell \(indexPath.row < options.count ? options[indexPath.row] : "")'s choiceTag to \(indexPath.row)")
         
         if options.count <= 2 {
             cell.trashButton.isUserInteractionEnabled = false
@@ -83,10 +82,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         fixOptions()
-        if (options.count <= 25) {
-            return options.count + 1
-        }
-        return options.count
+        return (options.count <= 25) ? options.count + 1 : options.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -143,7 +139,6 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     // MARK: - MC OPTION DELEGATE
     
     func deleteOption(index: Int) {
-        print("deleting optino at \(index)")
         let indexPath = IndexPath(row: index, section: 0)
         options.remove(at: index)
         

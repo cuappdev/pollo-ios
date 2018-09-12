@@ -30,10 +30,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     let buttonHeight: CGFloat = 47.5
 
     // MARK: subviews and VC's
-    var pickQTypeVC: PickQTypeViewController!
     var dropDown: PollTypeDropDownView!
     var dropDownArrow: UIImageView!
-    var dismissController: UIViewController!
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
     var draftsButton: UIButton!
@@ -219,20 +217,20 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             }
             switch type {
             case .multipleChoice:
-                let question = mcPollBuilder.questionTextField.text
+                let question = mcPollBuilder.questionTextField.text ?? ""
                 var options = mcPollBuilder.options.filter { $0 != "" }
-                if options == [] {
+                if options.isEmpty {
                     options.append("")
                 }
                 if let loadedDraft = loadedMCDraft {
-                    UpdateDraft(id: "\(loadedDraft.id)", text: question!, options: options).make()
+                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
                         .done { draft in
                             self.getDrafts()
                         }.catch { error in
                             print("error: ", error)
                     }
                 } else {
-                    CreateDraft(text: question!, options: options).make()
+                    CreateDraft(text: question, options: options).make()
                         .done { draft in
                             self.drafts.append(draft)
                             self.updateDraftsCount()
@@ -245,16 +243,16 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 self.mcPollBuilder.optionsTableView.reloadData()
             
             case .freeResponse:
-                let question = frPollBuilder.questionTextField.text
+                let question = frPollBuilder.questionTextField.text ?? ""
                 if let loadedDraft = loadedFRDraft {
-                    UpdateDraft(id: "\(loadedDraft.id )", text: question!, options: []).make()
+                    UpdateDraft(id: "\(loadedDraft.id )", text: question, options: []).make()
                         .done { draft in
                             self.getDrafts()
                         }.catch { error in
                             print("error: ", error)
                     }
                 } else {
-                    CreateDraft(text: question!, options: []).make()
+                    CreateDraft(text: question, options: []).make()
                         .done { draft in
                             self.drafts.append(draft)
                             self.updateDraftsCount()
@@ -270,17 +268,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     @objc func startQuestion() {
         // MULTIPLE CHOICE
-        guard let qType = questionType else {
+        guard let questionType = questionType else {
             print("cannot start question before viewdidload")
             return
         }
-        switch qType {
+        switch questionType {
         case .multipleChoice:
-            let question = mcPollBuilder.questionTextField.text
-            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
+            let question = mcPollBuilder.questionTextField.text ?? ""
+            startPollDelegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
         case .freeResponse:
-            let question = frPollBuilder.questionTextField.text
-            startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
+            let question = frPollBuilder.questionTextField.text ?? ""
+            startPollDelegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)
@@ -330,15 +328,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             print("question type must be initalized before updateQuestionTypeCalled.")
             return
         }
-        switch type {
-        case .multipleChoice :
-            mcPollBuilder.isHidden = false
-            frPollBuilder.isHidden = true
-            
-        case .freeResponse:
-            frPollBuilder.isHidden = false
-            mcPollBuilder.isHidden = true
-        }
+        mcPollBuilder.isHidden = type == .freeResponse
+        frPollBuilder.isHidden = type == .multipleChoice
     }
     
     @objc func showDrafts() {
