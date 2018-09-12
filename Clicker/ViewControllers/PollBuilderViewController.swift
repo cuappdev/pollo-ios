@@ -214,13 +214,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     @objc func saveAsDraft() {
         if canDraft {
-            print("save as draft")
-            // MULTIPLE CHOICE
-            if (questionType == .multipleChoice) {
+            guard let type = questionType else {
+                print("warning! cannot save as draft before viewDidLoad")
+                return
+            }
+            switch type {
+            case .multipleChoice:
                 let question = mcPollBuilder.questionTextField.text
-                let options = mcPollBuilder.options.filter { $0 != "" }
-                
-                
+                var options = mcPollBuilder.options.filter { $0 != "" }
+                if options == [] {
+                    options.append("")
+                }
                 CreateDraft(text: question!, options: options).make()
                     .done { draft in
                     }.catch { error in
@@ -230,17 +234,19 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 self.mcPollBuilder.questionTextField.text = ""
                 self.mcPollBuilder.optionsTableView.reloadData()
             
-            } else { // FREE RESPONSE
-                //let question = frPollBuilder.questionTextField.text
-
+            case .freeResponse:
+                let question = frPollBuilder.questionTextField.text
+                CreateDraft(text: question!, options: []).make()
+                    .done { draft in
+                    }.catch { error in
+                        print("error: ", error)
+                self.mcPollBuilder.questionTextField.text = ""
+                }
             }
             self.updateCanDraft(false)
 
             self.getDrafts()
-            }  else {
-            print("empty, drafts disabled")
-        }
-        
+            }
     }
     
     @objc func startQuestion() {
@@ -318,7 +324,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
         draftsVC.delegate = self
-        draftsVC.modalPresentationStyle = .overFullScreen
+        draftsVC.modalPresentationStyle = .overCurrentContext
         present(draftsVC, animated: true, completion: nil)
     }
     
@@ -348,6 +354,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     func fillDraft(_ draft: Draft) {
+        let qType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
+        if questionType != qType {
+            updateQuestionType()
+        }
         if questionType == .multipleChoice {
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             mcPollBuilder.optionsTableView.reloadData()

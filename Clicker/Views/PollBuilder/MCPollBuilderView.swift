@@ -82,6 +82,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        fixOptions()
         if (options.count <= 25) {
             return options.count + 1
         }
@@ -90,6 +91,14 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 53
+    }
+    
+    func fixOptions() {
+        if options.count == 0 {
+            options = [String](repeating: "", count: 2)
+        } else if options.count == 1 {
+            options.append("")
+        }
     }
     
     // MARK: - LAYOUT
