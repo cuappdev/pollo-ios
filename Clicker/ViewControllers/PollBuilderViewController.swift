@@ -19,41 +19,40 @@ protocol PollBuilderDelegate {
 
 class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
     
+    // MARK: layout constants
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
-    var pickQTypeVC: PickQTypeViewController!
-    
-    var dropDown: PollTypeDropDownView!
-    var dropDownArrow: UIImageView!
-    
     let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
     let dropdownArrowHeight: CGFloat = 5.5
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
-    
+
+    // MARK: subviews and VC's
+    var pickQTypeVC: PickQTypeViewController!
+    var dropDown: PollTypeDropDownView!
+    var dropDownArrow: UIImageView!
     var dismissController: UIViewController!
-    
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
     var draftsButton: UIButton!
-    var drafts: [Draft]!
-    var questionType: QuestionType!
-    
-    var startPollDelegate: StartPollDelegate!
-    var isFollowUpQuestion: Bool = false
-    
     var centerView: UIView!
-    var mcPollBuilder: MCPollBuilderView!
-    var frPollBuilder: FRPollBuilderView!
-    
-    var canDraft: Bool!
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
+    var mcPollBuilder: MCPollBuilderView!
+    var frPollBuilder: FRPollBuilderView!
     
+    // MARK: data
+    var drafts: [Draft]!
+    var questionType: QuestionType!
+    var startPollDelegate: StartPollDelegate!
+    var isFollowUpQuestion: Bool = false
+    var canDraft: Bool!
     var presented: Bool = false
+    var loadedMCDraft: Draft?
+    var loadedFRDraft: Draft?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,25 +224,43 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 if options == [] {
                     options.append("")
                 }
-                CreateDraft(text: question!, options: options).make()
-                    .done { draft in
-                        self.drafts.append(draft)
-                        self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
-                    }.catch { error in
-                        print("error: ", error)
+                if let loadedDraft = loadedMCDraft {
+                    UpdateDraft(id: "\(loadedDraft.id)", text: question!, options: options).make()
+                        .done { draft in
+                            self.getDrafts()
+                        }.catch { error in
+                            print("error: ", error)
                     }
+                } else {
+                    CreateDraft(text: question!, options: options).make()
+                        .done { draft in
+                            self.drafts.append(draft)
+                            self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
+                        }.catch { error in
+                            print("error: ", error)
+                    }
+                }
                 self.mcPollBuilder.clearOptions()
                 self.mcPollBuilder.questionTextField.text = ""
                 self.mcPollBuilder.optionsTableView.reloadData()
             
             case .freeResponse:
                 let question = frPollBuilder.questionTextField.text
-                CreateDraft(text: question!, options: []).make()
-                    .done { draft in
-                        self.drafts.append(draft)
-                        self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
-                    }.catch { error in
-                        print("error: ", error)
+                if let loadedDraft = loadedFRDraft {
+                    UpdateDraft(id: "\(loadedDraft.id )", text: question!, options: []).make()
+                        .done { draft in
+                            self.getDrafts()
+                        }.catch { error in
+                            print("error: ", error)
+                    }
+                } else {
+                    CreateDraft(text: question!, options: []).make()
+                        .done { draft in
+                            self.drafts.append(draft)
+                            self.draftsButton.setTitle("Drafts (\(self.drafts.count))", for: .normal)
+                        }.catch { error in
+                            print("error: ", error)
+                    }
                 }
                 self.frPollBuilder.questionTextField.text = ""
             }
@@ -360,13 +377,16 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         if questionType != qType {
             updateQuestionType()
         }
-        if questionType == .multipleChoice {
+        switch qType {
+        case .multipleChoice:
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             mcPollBuilder.optionsTableView.reloadData()
-        } else { // FREE_RESPONSE
+            loadedMCDraft = draft
+        case .freeResponse:
             frPollBuilder.questionTextField.text = draft.text
+            loadedFRDraft = draft
         }
-            updateCanDraft(true)
+        updateCanDraft(true)
     }
     
     func getDrafts() {
