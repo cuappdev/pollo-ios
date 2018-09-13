@@ -78,7 +78,7 @@ class MCResultCell: UICollectionViewCell {
             make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
         }
         
-        highlightView.snp.makeConstraints { make in
+        highlightView.snp.remakeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(percentSelected)
         }
