@@ -54,12 +54,8 @@ class Poll {
     }
     
     func getTotalResults() -> Int {
-        return results.reduce(0) { (res, arg1) -> Int in
-            let (_, value) = arg1
-            if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[ParserKeys.countKey] as? Int {
-                return res + numSelected
-            }
-            return 0
+        return results.values.reduce(0) { (currentTotalResults, json) -> Int in
+            return currentTotalResults + json[ParserKeys.countKey].intValue
         }
     }
 
