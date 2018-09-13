@@ -32,7 +32,7 @@ class Socket {
         }
         
         socket.on(clientEvent: .disconnect) { data, ack in
-            self.delegates.forEach { $0.sessionConnected() }
+            self.delegates.forEach { $0.sessionDisconnected() }
         }
         
         socket.on("user/poll/start") { data, ack in
@@ -52,28 +52,27 @@ class Socket {
         }
         
         socket.on("user/poll/results") { data, ack in
-            guard let json = data[0] as? [String:Any] else {
+            guard let dict = data[0] as? [String:Any] else {
                 return
             }
-            let currentState = CurrentState(json: json)
+            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
             self.delegates.forEach { $0.receivedResults(currentState) }
         }
         
-        socket.on("user/session/save") { data, ack in
-            guard let json = data[0] as? [String:Any] else {
+        socket.on("admin/poll/updateTally") { data, ack in
+            guard let dict = data[0] as? [String:Any] else {
                 return
             }
-            let session = Session(json: json)
-            self.delegates.forEach { $0.saveSession(session) }
+            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
+            self.delegates.forEach { $0.updatedTally(currentState) }
         }
         
-        socket.on("admin/poll/updateTally") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any] else {
+        socket.on("admin/poll/ended") { data, ack in
+            guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let currentState = CurrentState(json: json)
-            self.delegates.forEach { $0.updatedTally(currentState) }
+            let poll = PollParser.parseItem(json: JSON(pollDict))
+            self.delegates.forEach { $0.pollEnded(poll) }
         }
         
         socket.on("user/count") { data, ack in

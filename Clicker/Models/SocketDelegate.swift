@@ -10,12 +10,11 @@ protocol SocketDelegate {
     func sessionConnected()
     func sessionDisconnected()
     func receivedUserCount(_ count: Int)
+    func pollEnded(_ poll: Poll)
     
     // USER RECEIVES
     func pollStarted(_ poll: Poll)
-    func pollEnded(_ poll: Poll)
     func receivedResults(_ currentState: CurrentState)
-    func saveSession(_ session: Session)
     
     // ADMIN RECEIVES
     func updatedTally(_ currentState: CurrentState)

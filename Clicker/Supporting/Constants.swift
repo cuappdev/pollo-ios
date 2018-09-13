@@ -15,8 +15,8 @@ enum QuestionType: CustomStringConvertible {
     
     var description : String {
         switch self {
-        case .multipleChoice: return "Multiple Choice"
-        case .freeResponse: return "Free Response"
+        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
+        case .freeResponse: return Identifiers.freeResponseIdentifier
         }
     }
     
@@ -76,9 +76,11 @@ struct LayoutConstants {
 
 struct ParserKeys {
     static let answerKey = "answer"
+    static let answersKey = "answers"
     static let countKey = "count"
     static let idKey = "key"
     static let optionsKey = "options"
+    static let pollKey = "poll"
     static let resultsKey = "results"
     static let sharedKey = "shared"
     static let textKey = "text"
@@ -87,9 +89,12 @@ struct ParserKeys {
 
 struct RequestKeys {
     static let googleIdKey = "googleId"
+    static let optionsKey = "options"
     static let pollKey = "poll"
     static let choiceKey = "choice"
     static let textKey = "text"
+    static let typeKey = "type"
+    static let sharedKey = "shared"
 }
 
 enum Keys: String {

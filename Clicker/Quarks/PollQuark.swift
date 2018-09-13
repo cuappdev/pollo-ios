@@ -12,12 +12,14 @@ import SwiftyJSON
 struct CreatePoll: ClickerQuark {
 
     typealias ResponseType = Poll
-    let id: Int
+    let sessionId: Int
     let text: String
     let results: [String:Any]
+    let type: QuestionType
+    let isShared: Bool
 
     var route: String {
-        return "/sessions/\(id)/polls"
+        return "/sessions/\(sessionId)/polls"
     }
     var headers: HTTPHeaders {
         return [
@@ -27,7 +29,9 @@ struct CreatePoll: ClickerQuark {
     var parameters: Parameters {
         return [
             "text": text,
-            "results": results
+            "results": results,
+            "type": type.descriptionForServer,
+            "shared": isShared
         ]
     }
     let method: HTTPMethod = .post

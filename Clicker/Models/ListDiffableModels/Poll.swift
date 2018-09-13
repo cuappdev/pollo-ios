@@ -30,7 +30,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int, text: String, questionType: QuestionType, options: [String], results: [String:Any], state: PollState, answer: String?) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:Any], state: PollState, answer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
