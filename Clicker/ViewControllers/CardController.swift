@@ -54,14 +54,54 @@ class CardController: UIViewController {
     
     init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
-        
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
-        self.pollsDateArray = pollsDateArray
+//        self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        
         // REMOVE LATER
+        let options = [
+            "This is going to be a very long question for the sake of being a long question?",
+            "Moon name #2?",
+            "Moon name #3?",
+            "Moon name #4?",
+            "Moon name #5?",
+            "Moon name #6?",
+            "Moon name #7?",
+            ]
+        let results = [
+            "This is going to be a very long question for the sake of being a long question?": [
+                "text": "This is going to be a very long question for the sake of being a long question?",
+                "count": 3
+            ],
+            "Moon name #2?": [
+                "text": "Moon name #2?",
+                "count": 2
+            ],
+            "Moon name #3?": [
+                "text": "Moon name #3?",
+                "count": 2
+            ],
+            "Moon name #4?": [
+                "text": "Moon name #4?",
+                "count": 2
+            ],
+            "Moon name #5?": [
+                "text": "Moon name #5?",
+                "count": 2
+            ],
+            "Moon name #6?": [
+                "text": "Moon name #6?",
+                "count": 2
+            ],
+            "Moon name #7?": [
+                "text": "Moon name #7?",
+                "count": 2
+            ]
+        ]
+        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .freeResponse, options: options, results: results, state: .live, answer: "Moon name #2")
+        self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
+        self.userRole = .member
 //        let options = [
 //            "Moon name #1",
 //            "Moon name #2",
@@ -108,15 +148,13 @@ class CardController: UIViewController {
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
-//        collectionViewLayout.sectionInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         let collectionViewInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        collectionView.bounces = true
         collectionView.backgroundColor = .clear
-//        collectionView.isPagingEnabled = true
         view.addSubview(collectionView)
         view.sendSubview(toBack: collectionView)
         
@@ -329,7 +367,7 @@ class CardController: UIViewController {
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
         let pollBuilderVC = PollBuilderViewController()
-        pollBuilderVC.startPollDelegate = self
+        pollBuilderVC.delegate = self
         let nc = UINavigationController(rootViewController: pollBuilderVC)
         let presenter = Presentr(presentationType: .fullScreen)
         presenter.backgroundOpacity = 0.6

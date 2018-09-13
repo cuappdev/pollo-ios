@@ -9,15 +9,15 @@
 import UIKit
 import Presentr
 
-protocol StartPollDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
-}
-
-protocol PollBuilderDelegate {
+protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
+protocol PollBuilderViewControllerDelegate {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+}
+
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
     
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
@@ -41,7 +41,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var drafts: [Draft]!
     var questionType: QuestionType!
     
-    var startPollDelegate: StartPollDelegate!
+    var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
     
     var centerView: UIView!
@@ -251,12 +251,12 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = mcPollBuilder.questionTextField.text
             let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
             
-            startPollDelegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
+            delegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
         } else { // FREE RESPONSE
             
             let question = frPollBuilder.questionTextField.text
             let isShared = frPollBuilder.dropDown.shareResponses
-            startPollDelegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
+            delegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)

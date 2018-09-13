@@ -14,7 +14,7 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     
     let popupViewHeight: CGFloat = 95
     
-    var pollBuilderDelegate: PollBuilderDelegate!
+    var pollBuilderDelegate: PollBuilderViewDelegate!
     
     var session: Session!
     var grayViewBottomConstraint: Constraint!

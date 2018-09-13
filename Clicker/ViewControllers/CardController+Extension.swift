@@ -81,44 +81,26 @@ extension CardController: PollDateSectionControllerDelegate {
     
 }
 
-extension CardController: StartPollDelegate {
+extension CardController: PollBuilderViewControllerDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
         createPollButton.isUserInteractionEnabled = false
         
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
-            "text": text,
-            "type": type.descriptionForServer,
-            "options": options,
-            "shared": state == .shared
+            RequestKeys.textKey: text,
+            RequestKeys.typeKey: type.descriptionForServer,
+            RequestKeys.optionsKey: options,
+            RequestKeys.sharedKey: state == .shared
         ]
         socket.socket.emit(Routes.start, [socketQuestion])
-        let newPoll = Poll(id: 0, text: text, questionType: type, options: options, results: [:], state: state, answer: nil)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: [:], state: state, answer: nil)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
-        let lastIndexPath = IndexPath(item: 0, section: 0) // TODO: implement scrolling to end of CV
+        let lastIndexPath = IndexPath(item: 0, section: pollsDateArray[currentIndex].polls.count - 1) // TODO: implement scrolling to end of CV
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
     
-    func appendPoll(poll: Poll) {
-        let date = "today"
-        let newPollDate = PollsDateModel(date: date, polls: [poll])
-        
-        if pollsDateArray == nil {
-            pollsDateArray = [newPollDate]
-            currentIndex = 0
-            return
-        }
-        if (currentIndex != pollsDateArray.count - 1) || (currentIndex == -1) {
-            pollsDateArray.append(newPollDate)
-            currentIndex = pollsDateArray.count - 1
-        } else {
-            pollsDateArray[currentIndex].polls.append(poll)
-        }
-        updateCount()
-    }
-
 }
 
 extension CardController: NameViewDelegate {
@@ -146,6 +128,9 @@ extension CardController: UIScrollViewDelegate {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if state == .vertical {
+            return
+        }
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
         
@@ -182,25 +167,34 @@ extension CardController: UIScrollViewDelegate {
 
 extension CardController: SocketDelegate {
     
-    func sessionConnected() { }
+    func sessionConnected() {}
     
-    func sessionDisconnected() { }
+    func sessionDisconnected() {}
     
     func receivedUserCount(_ count: Int) {
         peopleButton.setTitle("\(count)", for: .normal)
     }
     
     func pollStarted(_ poll: Poll) {
-        // TODO
+        if (userRole == .admin) { return }
+        appendPoll(poll: poll)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
-    func pollEnded(_ poll: Poll) { }
+    func pollEnded(_ poll: Poll) {
+        endPoll(poll: poll)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
     
-    func receivedResults(_ currentState: CurrentState) { }
-    
-    func saveSession(_ session: Session) { }
-    
-    func updatedTally(_ currentState: CurrentState) { }
+    func receivedResults(_ currentState: CurrentState) {
+        updateWithCurrentState(currentState: currentState)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+        
+    func updatedTally(_ currentState: CurrentState) {
+        updateWithCurrentState(currentState: currentState)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
 
     // MARK: Helpers
     func emitAnswer(answer: Answer) {
@@ -213,4 +207,50 @@ extension CardController: SocketDelegate {
         socket.socket.emit(Routes.tally, data)
     }
     
+    func appendPoll(poll: Poll) {
+        let date = getTodaysDate()
+        let newPollDate = PollsDateModel(date: date, polls: [poll])
+        
+        if pollsDateArray == nil {
+            pollsDateArray = [newPollDate]
+            currentIndex = 0
+            return
+        }
+        if (currentIndex != pollsDateArray.count - 1) || (currentIndex == -1) {
+            pollsDateArray.append(newPollDate)
+            currentIndex = pollsDateArray.count - 1
+        } else {
+            pollsDateArray[currentIndex].polls.append(poll)
+        }
+        updateCount()
+    }
+    
+    func endPoll(poll: Poll) {
+        updateLatestPoll(with: poll)
+    }
+    
+    func updateWithCurrentState(currentState: CurrentState) {
+        guard let latestPoll = getLatestPoll() else { return }
+        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: latestPoll.state, answer: latestPoll.answer)
+        updateLatestPoll(with: updatedPoll)
+    }
+    
+    func updateLatestPoll(with poll: Poll) {
+        guard let latestPollsDateModel = pollsDateArray.last else { return }
+        let todaysDate = getTodaysDate()
+        if (latestPollsDateModel.date != todaysDate) {
+            // User has no polls for today yet
+            let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
+            pollsDateArray.append(todayPollsDateModel)
+        } else {
+            // User has polls for today, so just update latest poll for today
+            let todayPolls = latestPollsDateModel.polls
+            pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
+        }
+    }
+    
+    func getLatestPoll() -> Poll? {
+        guard let latestPollsDateModel = pollsDateArray.last else { return nil }
+        return latestPollsDateModel.polls.last
+    }
 }
