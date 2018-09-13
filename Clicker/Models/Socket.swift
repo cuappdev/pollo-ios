@@ -39,7 +39,7 @@ class Socket {
             guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let poll = PollParser.parseItem(json: JSON(pollDict))
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
             self.delegates.forEach { $0.pollStarted(poll) }
         }
         
@@ -47,7 +47,7 @@ class Socket {
             guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let poll = PollParser.parseItem(json: JSON(pollDict))
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
             self.delegates.forEach { $0.pollEnded(poll) }
         }
         
@@ -71,7 +71,7 @@ class Socket {
             guard let json = data[0] as? [String:Any], let pollDict = json["poll"] as? [String:Any] else {
                 return
             }
-            let poll = PollParser.parseItem(json: JSON(pollDict))
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
             self.delegates.forEach { $0.pollEnded(poll) }
         }
         
