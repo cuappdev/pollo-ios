@@ -45,7 +45,7 @@ class CardController: UIViewController {
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
-    let horizontalCollectionViewTopPadding: CGFloat = 6
+    let horizontalCollectionViewTopPadding: CGFloat = 15
     let verticalCollectionViewBottomInset: CGFloat = 50.0
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
@@ -157,7 +157,7 @@ class CardController: UIViewController {
             
             collectionView.snp.remakeConstraints { make in
                 make.top.equalTo(countLabel.snp.bottom).offset(horizontalCollectionViewTopPadding)
-                make.bottom.equalToSuperview()
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
                 make.width.equalToSuperview()
                 make.centerX.equalToSuperview()
             }

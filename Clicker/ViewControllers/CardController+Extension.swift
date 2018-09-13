@@ -94,7 +94,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             RequestKeys.optionsKey: options,
             RequestKeys.sharedKey: state == .shared
         ]
-        socket.socket.emit(Routes.start, [socketQuestion])
+        socket.socket.emit(Routes.start, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
         appendPoll(poll: newPoll)
