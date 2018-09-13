@@ -92,6 +92,7 @@ struct RequestKeys {
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let choiceKey = "choice"
+    static let countKey = "count"
     static let textKey = "text"
     static let typeKey = "type"
     static let sharedKey = "shared"

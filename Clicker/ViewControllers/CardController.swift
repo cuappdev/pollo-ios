@@ -57,51 +57,9 @@ class CardController: UIViewController {
         self.session = session
         self.userRole = userRole
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
-//        self.pollsDateArray = pollsDateArray
+        self.pollsDateArray = pollsDateArray
         self.state = .horizontal
         // REMOVE LATER
-        let options = [
-            "This is going to be a very long question for the sake of being a long question?",
-            "Moon name #2?",
-            "Moon name #3?",
-            "Moon name #4?",
-            "Moon name #5?",
-            "Moon name #6?",
-            "Moon name #7?",
-            ]
-        let results = [
-            "This is going to be a very long question for the sake of being a long question?": [
-                "text": "This is going to be a very long question for the sake of being a long question?",
-                "count": 3
-            ],
-            "Moon name #2?": [
-                "text": "Moon name #2?",
-                "count": 2
-            ],
-            "Moon name #3?": [
-                "text": "Moon name #3?",
-                "count": 2
-            ],
-            "Moon name #4?": [
-                "text": "Moon name #4?",
-                "count": 2
-            ],
-            "Moon name #5?": [
-                "text": "Moon name #5?",
-                "count": 2
-            ],
-            "Moon name #6?": [
-                "text": "Moon name #6?",
-                "count": 2
-            ],
-            "Moon name #7?": [
-                "text": "Moon name #7?",
-                "count": 2
-            ]
-        ]
-        let poll = Poll(id: 1, text: "What is the name of Saturn's largest moon?", questionType: .freeResponse, options: options, results: results, state: .live, answer: "Moon name #2")
-        self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-        self.userRole = .member
 //        let options = [
 //            "Moon name #1",
 //            "Moon name #2",
@@ -115,7 +73,6 @@ class CardController: UIViewController {
 //        self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
 //        self.userRole = .member
         
-        setupGradientViews()
         setupHorizontal()
     }
     
@@ -131,6 +88,7 @@ class CardController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        guard let _ = topGradientView, let _ = bottomGradientView else { return }
         if (topGradientView.isDescendant(of: view) && bottomGradientView.isDescendant(of: view)) {
             topGradientLayer.frame = topGradientView.bounds
             bottomGradientLayer.frame = bottomGradientView.bounds
@@ -360,7 +318,6 @@ class CardController: UIViewController {
             let total = pollsDateArray[currentIndex].polls.count
             countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
             zoomOutButton.isUserInteractionEnabled = total > 0
-            
         }
     }
     
