@@ -85,6 +85,7 @@ extension CardController: PollBuilderViewControllerDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
         createPollButton.isUserInteractionEnabled = false
+        createPollButton.isHidden = true
         
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
@@ -94,13 +95,28 @@ extension CardController: PollBuilderViewControllerDelegate {
             RequestKeys.sharedKey: state == .shared
         ]
         socket.socket.emit(Routes.start, [socketQuestion])
-        let newPoll = Poll(text: text, questionType: type, options: options, results: [:], state: state, answer: nil)
+        let results = buildEmptyResultsFromOptions(options: options, questionType: type)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         let lastIndexPath = IndexPath(item: 0, section: pollsDateArray[currentIndex].polls.count - 1) // TODO: implement scrolling to end of CV
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
     }
     
+    // MARK: - Helpers
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:Any] {
+        var results: [String:Any] = [:]
+        options.enumerated().forEach { (index, option) in
+            let infoDict: [String:Any] = [
+                RequestKeys.textKey: option,
+                RequestKeys.countKey: 0
+            ]
+            let letterChoice = intToMCOption(index) // i.e. A, B, C, ...
+            let key = questionType == .multipleChoice ? letterChoice : option
+            results[key] = infoDict
+        }
+        return results
+    }
 }
 
 extension CardController: NameViewDelegate {
@@ -209,19 +225,14 @@ extension CardController: SocketDelegate {
     
     func appendPoll(poll: Poll) {
         let date = getTodaysDate()
-        let newPollDate = PollsDateModel(date: date, polls: [poll])
+        let newPollsDate = PollsDateModel(date: date, polls: [poll])
         
-        if pollsDateArray == nil {
-            pollsDateArray = [newPollDate]
+        if (currentIndex == -1) {
+            pollsDateArray.append(newPollsDate)
             currentIndex = 0
             return
         }
-        if (currentIndex != pollsDateArray.count - 1) || (currentIndex == -1) {
-            pollsDateArray.append(newPollDate)
-            currentIndex = pollsDateArray.count - 1
-        } else {
-            pollsDateArray[currentIndex].polls.append(poll)
-        }
+        pollsDateArray.last?.polls.append(poll)
         updateCount()
     }
     
