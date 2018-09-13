@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import SwiftyJSON
 
 enum PollState {
     case live
@@ -20,7 +21,7 @@ class Poll {
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String:Any]
+    var results: [String:JSON]
     var state: PollState
     var answer: String?
     // results format:
@@ -30,7 +31,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:Any], state: PollState, answer: String?) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, answer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType

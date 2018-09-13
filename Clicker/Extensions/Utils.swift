@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 // MARK: - General Utils
 // CONVERT INT TO MC OPTIONS
@@ -94,8 +95,8 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     let totalNumResults = Float(poll.getTotalResults())
     poll.options.enumerated().forEach { (index, option) in
         let mcOptionKey = intToMCOption(index)
-        if let infoDict = poll.results[mcOptionKey] as? [String:Any] {
-            guard let option = infoDict["text"] as? String, let numSelected = infoDict["count"] as? Int else { return }
+        if let infoDict = poll.results[mcOptionKey] {
+            guard let option = infoDict["text"].string, let numSelected = infoDict["count"].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             let isAnswer = option == poll.answer
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)

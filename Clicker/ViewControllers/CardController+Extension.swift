@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import SwiftyJSON
 import UIKit
 
 extension CardController: ListAdapterDataSource {
@@ -61,6 +62,9 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
+        guard let indexOfChoice = poll.options.index(of: choice) else { return }
+        // Choice should be "A" or "B" for multiple choice and the actual response for free response
+        let choice = poll.questionType == .multipleChoice ? intToMCOption(indexOfChoice) : choice
         let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
         emitAnswer(answer: answer)
     }
@@ -104,10 +108,10 @@ extension CardController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:Any] {
-        var results: [String:Any] = [:]
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
+        var results: [String:JSON] = [:]
         options.enumerated().forEach { (index, option) in
-            let infoDict: [String:Any] = [
+            let infoDict: JSON = [
                 RequestKeys.textKey: option,
                 RequestKeys.countKey: 0
             ]
