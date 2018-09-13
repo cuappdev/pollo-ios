@@ -46,10 +46,12 @@ class MCResultCell: UICollectionViewCell {
         
         optionLabel = UILabel()
         optionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
+        optionLabel.backgroundColor = .clear
         containerView.addSubview(optionLabel)
         
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
+        numSelectedLabel.backgroundColor = .clear
         containerView.addSubview(numSelectedLabel)
         
         highlightView = UIView()
