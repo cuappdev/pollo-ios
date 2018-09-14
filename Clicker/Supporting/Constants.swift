@@ -75,7 +75,6 @@ enum Keys: String {
     case fabricAPIKey = "fabric-api-key"
     
     var value: String {
-        print(Keys.keyDict)
         return Keys.keyDict[rawValue] as! String
     }
     
