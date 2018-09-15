@@ -18,6 +18,20 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     var appNameLabel: UILabel!
     var pronunciationLabel: UILabel!
     
+    // MARK: - CONSTANTS
+    let welcomeLabelText: String = "Welcome to"
+    let appNameLabelText: String = "Pollo"
+    let pronunciationLabelText: String = "\"Poh-loh\""
+    let welcomeLabelWidth: CGFloat = 249.5
+    let welcomeLabelHeight: CGFloat = 31.5
+    let welcomeLabelTopOffset: CGFloat = 194.5
+    let appNameLabelHeight: CGFloat = 71.5
+    let pronunciationLabelHeight: CGFloat = 19
+    let pronunciationLabelTopOffset: CGFloat = 14.5
+    let signInButtonWidth: CGFloat = 200
+    let signInButtonHeight: CGFloat = 40
+    let signInButtonTopOffset: CGFloat = 28
+    
     // MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +44,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         view.layer.addSublayer(gradient)
         
         welcomeLabel = UILabel()
-        welcomeLabel.text = "Welcome to"
+        welcomeLabel.text = welcomeLabelText
         welcomeLabel.font = ._26MediumFont
         welcomeLabel.textColor = .white
         welcomeLabel.adjustsFontSizeToFitWidth = true
@@ -38,7 +52,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         view.addSubview(welcomeLabel)
         
         appNameLabel = UILabel()
-        appNameLabel.text = "Pollo"
+        appNameLabel.text = appNameLabelText
         appNameLabel.font = ._60HeavyFont
         appNameLabel.textColor = .white
         appNameLabel.adjustsFontSizeToFitWidth = true
@@ -46,7 +60,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         view.addSubview(appNameLabel)
         
         pronunciationLabel = UILabel()
-        pronunciationLabel.text = "\"Poh-loh\""
+        pronunciationLabel.text = pronunciationLabelText
         pronunciationLabel.font = ._18MediumItalicFont
         pronunciationLabel.textColor = .white
         pronunciationLabel.adjustsFontSizeToFitWidth = true
@@ -67,30 +81,30 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     func setupConstraints() {
         
         welcomeLabel.snp.makeConstraints { make in
-            make.width.equalTo(249.5)
-            make.height.equalTo(31.5)
-            make.top.equalToSuperview().offset(194.5)
+            make.width.equalTo(welcomeLabelWidth)
+            make.height.equalTo(welcomeLabelHeight)
+            make.top.equalToSuperview().offset(welcomeLabelTopOffset)
             make.centerX.equalToSuperview()
         }
         
         appNameLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
-            make.height.equalTo(71.5)
+            make.height.equalTo(appNameLabelHeight)
             make.top.equalTo(welcomeLabel.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
         pronunciationLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
-            make.height.equalTo(19)
-            make.top.equalTo(appNameLabel.snp.bottom).offset(14.5)
+            make.height.equalTo(pronunciationLabelHeight)
+            make.top.equalTo(appNameLabel.snp.bottom).offset(pronunciationLabelTopOffset)
             make.centerX.equalToSuperview()
         }
         
         signInButton.snp.makeConstraints { make in
-            make.width.equalTo(200)
-            make.height.equalTo(40)
-            make.top.equalTo(pronunciationLabel.snp.bottom).offset(28)
+            make.width.equalTo(signInButtonWidth)
+            make.height.equalTo(signInButtonHeight)
+            make.top.equalTo(pronunciationLabel.snp.bottom).offset(signInButtonTopOffset)
             make.centerX.equalToSuperview()
         }
         
