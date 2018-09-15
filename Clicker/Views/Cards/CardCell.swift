@@ -268,6 +268,7 @@ extension CardCell: FRInputSectionControllerDelegate {
             let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
             self.pollOptionsModel = PollOptionsModel(type: type, pollState: pollOptionsModel.pollState)
             adapter.performUpdates(animated: false, completion: nil)
+            delegate.cardCellDidSubmitChoice(cardCell: self, choice: response)
         default:
             return
         }

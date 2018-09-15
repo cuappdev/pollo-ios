@@ -62,11 +62,17 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        guard let indexOfChoice = poll.options.index(of: choice) else { return }
-        // Choice should be "A" or "B" for multiple choice and the actual response for free response
         poll.answer = choice
-        let choice = poll.questionType == .multipleChoice ? intToMCOption(indexOfChoice) : choice
-        let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
+        var choiceForAnswer: String
+        // choiceForAnswer should be "A" or "B" for multiple choice and the actual response for free response
+        switch poll.questionType {
+        case .multipleChoice:
+            guard let indexOfChoice = poll.options.index(of: choice) else { return }
+            choiceForAnswer = intToMCOption(indexOfChoice)
+        case .freeResponse:
+            choiceForAnswer = choice
+        }
+        let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
         emitAnswer(answer: answer)
     }
     
@@ -115,9 +121,12 @@ extension CardController: PollBuilderViewControllerDelegate {
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
         appendPoll(poll: newPoll)
-        adapter.performUpdates(animated: false, completion: nil)
-        let lastIndexPath = IndexPath(item: 0, section: pollsDateArray[currentIndex].polls.count - 1) // TODO: implement scrolling to end of CV
-        self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        adapter.performUpdates(animated: false) { (completed) in
+            if (completed) {
+                let lastIndexPath = IndexPath(item: 0, section: self.pollsDateArray[self.currentIndex].polls.count - 1)
+                self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        }
     }
     
     // MARK: - Helpers
@@ -268,6 +277,11 @@ extension CardController: SocketDelegate {
     func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
         guard let latestPoll = getLatestPoll() else { return }
         let updatedPollState = pollState ?? latestPoll.state
+        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results
+        if latestPoll.questionType == .freeResponse {
+            let newOptions = currentState.results.keys.filter { return !latestPoll.options.contains($0) }
+            latestPoll.options.insert(contentsOf: newOptions, at: 0)
+        }
         let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
         updateLatestPoll(with: updatedPoll)
     }
