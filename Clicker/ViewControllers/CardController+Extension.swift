@@ -73,7 +73,14 @@ extension CardController: PollSectionControllerDelegate {
             choiceForAnswer = choice
         }
         let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
-        emitAnswer(answer: answer)
+        emitAnswer(answer: answer, message: Routes.tally)
+    }
+    
+    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
+        // You can only upvote for FR questions
+        if poll.questionType == .multipleChoice { return }
+        let answer = Answer(text: choice, choice: choice, pollId: poll.id)
+        emitAnswer(answer: answer, message: Routes.upvote)
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -96,7 +103,7 @@ extension CardController: PollDateSectionControllerDelegate {
     
     func pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: PollDateSectionController, choice: String, poll: Poll) {
         let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer)
+        emitAnswer(answer: answer, message: Routes.tally)
     }
     
     func pollDateSectionControllerDidEndPoll(sectionController: PollDateSectionController, poll: Poll) {
@@ -239,14 +246,14 @@ extension CardController: SocketDelegate {
     }
 
     // MARK: Helpers
-    func emitAnswer(answer: Answer) {
+    func emitAnswer(answer: Answer, message: String) {
         let data: [String:Any] = [
             RequestKeys.googleIdKey: User.currentUser?.id,
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text
         ]
-        socket.socket.emit(Routes.tally, data)
+        socket.socket.emit(message, data)
     }
     
     func emitEndPoll() {
