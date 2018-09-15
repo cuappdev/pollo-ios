@@ -168,14 +168,15 @@ class CardCell: UICollectionViewCell {
             questionButton.setTitle(shareResultsText, for: .normal)
             timer.invalidate()
             timerLabel.isHidden = true
-            delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
             miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: miscellaneousModel.totalVotes)
             adapter.performUpdates(animated: false, completion: nil)
+            delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(pollState: .shared, totalVotes: miscellaneousModel.totalVotes)
             adapter.performUpdates(animated: false, completion: nil)
+            delegate.cardCellDidShareResults(cardCell: self, poll: poll)
         }
     }
     
