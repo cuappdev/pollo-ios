@@ -40,14 +40,11 @@ class SettingsViewController: UIViewController {
         let s4 = SettingsDataModel(state: .link, title: "Visit Our Website")
         
         data = [s1,s2,s3,s4]
-        
-        
     }
     
     func setupNavBar() {
         let gradientLayer = CAGradientLayer()
 
-        
         var bounds = navigationController?.navigationBar.bounds ?? CGRect()
         bounds.size.height += UIApplication.shared.statusBarFrame.size.height
         gradientLayer.frame = bounds
@@ -97,7 +94,7 @@ class SettingsViewController: UIViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(61)
         }
@@ -121,6 +118,7 @@ class SettingsViewController: UIViewController {
     // MARK: Actions
     @objc func logOutAction() {
         GIDSignIn.sharedInstance().signOut()
+        navigationController?.popToRootViewController(animated: true)
     }
     
     @objc func goBack() {
@@ -129,7 +127,6 @@ class SettingsViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillDisappear(_ animated: Bool) {

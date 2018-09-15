@@ -19,12 +19,6 @@ class SettingsLinkCell: UICollectionViewCell {
         
         setupViews()
         setupConstraints()
-        
-    }
-    
-    func configureWith(settingsDataModel: SettingsDataModel) {
-        linkButton.setTitle(settingsDataModel.title, for: .normal)
-        linkURL = URL(string: settingsDataModel.description ?? "")
     }
     
     func setupViews() {
@@ -43,6 +37,11 @@ class SettingsLinkCell: UICollectionViewCell {
             make.right.equalToSuperview()
             make.centerY.equalToSuperview()
         }
+    }
+    
+    func configureWith(settingsDataModel: SettingsDataModel) {
+        linkButton.setTitle(settingsDataModel.title, for: .normal)
+        linkURL = URL(string: settingsDataModel.description ?? "")
     }
     
     // MARK: Actions

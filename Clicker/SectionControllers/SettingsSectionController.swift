@@ -19,7 +19,7 @@ class SettingsSectionController: ListSectionController {
         }
         switch settingsDataModel.state {
         case .info:
-            return CGSize(width: containerSize.width, height: 103.5)
+            return CGSize(width: containerSize.width, height: settingsDataModel.title == "About" ? 110 : 87)
         case .link:
             return CGSize(width: containerSize.width, height: 39.5)
         }
