@@ -80,7 +80,9 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, stat
 // MARK: - Helpers
 private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
     let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
+        // numUpvoted is the count - 1 because submitting a response does not count as an upvote
+        let numUpvoted = count - 1
+        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: numUpvoted, didUpvote: false)
     }
     return .frOption(optionModels: frOptionModels)
 }

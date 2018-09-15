@@ -15,6 +15,8 @@ protocol PollOptionsCellDelegate {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String)
+    func pollOptionsCellDidUpvoteChoice(choice: String)
+    
 }
 
 class PollOptionsCell: UICollectionViewCell {
@@ -120,6 +122,7 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
             frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
             pollOptionsModel.type = .frOption(optionModels: frOptionModels)
             adapter.performUpdates(animated: false, completion: nil)
+            delegate.pollOptionsCellDidUpvoteChoice(choice: upvotedFROptionModel.option)
         default:
             return
         }

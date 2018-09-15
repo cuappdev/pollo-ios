@@ -119,6 +119,9 @@ extension PollDateSectionController: CardCellDelegate {
         delegate.pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: pollDateModel.poll)
     }
     
+    func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String) {
+    }
+    
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
         delegate.pollDateSectionControllerDidEndPoll(sectionController: self, poll: poll)
     }
