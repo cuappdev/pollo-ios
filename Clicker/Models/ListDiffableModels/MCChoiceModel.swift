@@ -20,7 +20,7 @@ class MCChoiceModel: OptionModel {
     
     override init(option: String, isAnswer: Bool) {
         self.isSelected = false
-        super.init(option: option, isAnswer: false)
+        super.init(option: option, isAnswer: isAnswer)
     }
 }
 

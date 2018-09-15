@@ -64,11 +64,15 @@ extension CardController: PollSectionControllerDelegate {
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
         guard let indexOfChoice = poll.options.index(of: choice) else { return }
         // Choice should be "A" or "B" for multiple choice and the actual response for free response
+        poll.answer = choice
         let choice = poll.questionType == .multipleChoice ? intToMCOption(indexOfChoice) : choice
         let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
         emitAnswer(answer: answer)
     }
     
+    func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
+        emitEndPoll()
+    }
 }
 
 extension CardController: PollDateSectionControllerDelegate {
@@ -83,6 +87,9 @@ extension CardController: PollDateSectionControllerDelegate {
         emitAnswer(answer: answer)
     }
     
+    func pollDateSectionControllerDidEndPoll(sectionController: PollDateSectionController, poll: Poll) {
+        emitEndPoll()
+    }
 }
 
 extension CardController: PollBuilderViewControllerDelegate {
@@ -227,6 +234,10 @@ extension CardController: SocketDelegate {
         socket.socket.emit(Routes.tally, data)
     }
     
+    func emitEndPoll() {
+        socket.socket.emit(Routes.end, [])
+    }
+    
     func appendPoll(poll: Poll) {
         let date = getTodaysDate()
         let newPollsDate = PollsDateModel(date: date, polls: [poll])
@@ -260,6 +271,7 @@ extension CardController: SocketDelegate {
         } else {
             // User has polls for today, so just update latest poll for today
             let todayPolls = latestPollsDateModel.polls
+            poll.answer = pollsDateArray.last?.polls.last?.answer
             pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
         }
     }
