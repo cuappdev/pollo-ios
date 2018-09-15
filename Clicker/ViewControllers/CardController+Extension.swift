@@ -71,7 +71,13 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
+        createPollButton.isUserInteractionEnabled = true
+        createPollButton.isHidden = false
         emitEndPoll()
+    }
+    
+    func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll) {
+        emitShareResults()
     }
 }
 
@@ -214,12 +220,12 @@ extension CardController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState)
+        updateWithCurrentState(currentState: currentState, pollState: .shared)
         adapter.performUpdates(animated: false, completion: nil)
     }
         
     func updatedTally(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState)
+        updateWithCurrentState(currentState: currentState, pollState: nil)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -236,6 +242,10 @@ extension CardController: SocketDelegate {
     
     func emitEndPoll() {
         socket.socket.emit(Routes.end, [])
+    }
+    
+    func emitShareResults() {
+        socket.socket.emit(Routes.share, [])
     }
     
     func appendPoll(poll: Poll) {
@@ -255,9 +265,10 @@ extension CardController: SocketDelegate {
         updateLatestPoll(with: poll)
     }
     
-    func updateWithCurrentState(currentState: CurrentState) {
+    func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
         guard let latestPoll = getLatestPoll() else { return }
-        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: latestPoll.state, answer: latestPoll.answer)
+        let updatedPollState = pollState ?? latestPoll.state
+        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
         updateLatestPoll(with: updatedPoll)
     }
     

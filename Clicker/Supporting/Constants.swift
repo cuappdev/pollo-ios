@@ -55,7 +55,7 @@ struct Identifiers {
 
 struct Routes {
     static let end = "server/poll/end"
-    static let results = "server/poll/results"
+    static let share = "server/poll/results"
     static let start = "server/poll/start"
     static let tally = "server/poll/tally"
     static let upvote = "server/poll/upvote"
