@@ -44,13 +44,12 @@ class Poll {
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
     func getFRResultsArray() -> [(String, Int)] {
-        var resultsArr: [(String, Int)] = []
-        results.forEach { (key, val) in
-            if let choiceJSON = val as? [String:Any], let numSelected = choiceJSON[ParserKeys.countKey] as? Int {
-                resultsArr.append((key, numSelected))
+        return options.map({ (option) -> (String, Int) in
+            if let choiceJSON = results[option], let numSelected = choiceJSON[ParserKeys.countKey].int {
+                return (option, numSelected)
             }
-        }
-        return resultsArr
+            return (option, 0)
+        })
     }
     
     func getTotalResults() -> Int {
