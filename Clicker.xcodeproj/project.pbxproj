@@ -25,6 +25,8 @@
 		63ACEC70214B378E00D555F1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */; };
 		63ACEC72214B3D2A00D555F1 /* SettingsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC71214B3D2A00D555F1 /* SettingsDataModel.swift */; };
 		63ACEC74214B401600D555F1 /* SettingsSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC73214B401600D555F1 /* SettingsSectionController.swift */; };
+		63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */; };
+		63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */; };
 		63D19CC3208D72E40041C774 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63D19CC2208D72E40041C774 /* Keys.plist */; };
 		63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4DAF72097DE94000808EB /* NavigationTitleView.swift */; };
 		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
@@ -132,6 +134,8 @@
 		63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		63ACEC71214B3D2A00D555F1 /* SettingsDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDataModel.swift; sourceTree = "<group>"; };
 		63ACEC73214B401600D555F1 /* SettingsSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionController.swift; sourceTree = "<group>"; };
+		63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInfoCell.swift; sourceTree = "<group>"; };
+		63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkCell.swift; sourceTree = "<group>"; };
 		63D19CC2208D72E40041C774 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Keys.plist; path = Secrets/Keys.plist; sourceTree = SOURCE_ROOT; };
 		63E4DAF72097DE94000808EB /* NavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -293,6 +297,15 @@
 			path = Drafts;
 			sourceTree = "<group>";
 		};
+		63ACEC75214D617800D555F1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */,
+				63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		63C36F2120994148004EBB16 /* Dropdowns */ = {
 			isa = PBXGroup;
 			children = (
@@ -445,6 +458,7 @@
 		C7D6AF5D1F93DED9003ABA10 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				63ACEC75214D617800D555F1 /* Settings */,
 				6389C94C20858D3300F78003 /* HomeScreen */,
 				638406D12083CBC700483645 /* Cards */,
 				C2BF44D22034027A0067505A /* FreeResponse */,
@@ -751,6 +765,7 @@
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
+				63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */,
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
 				C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */,
 				C2B3C0C8202A7153003A9D1C /* AddMoreOptionCell.swift in Sources */,
@@ -815,6 +830,7 @@
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
 				C203E564213330AC0016A147 /* DraftsViewController+Extension.swift in Sources */,
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
+				63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */,
 				63A4A6482094D5EF00523AE6 /* FRPollBuilderView.swift in Sources */,
 				C25F21E4203F75CB001F540E /* MCSectionCell.swift in Sources */,
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,

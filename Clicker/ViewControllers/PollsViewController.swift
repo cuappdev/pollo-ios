@@ -88,7 +88,7 @@ class PollsViewController: UIViewController {
         view.addSubview(joinSessionButton)
         
         settingsButton = UIButton()
-        settingsButton.setImage(#imageLiteral(resourceName: "JoinTabBarIcon"), for: .normal)
+        settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
         view.addSubview(settingsButton)
         
