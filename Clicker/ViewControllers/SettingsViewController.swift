@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController {
     }
     
     func loadData() {
-        let s1 = SettingsDataModel(state: .info, title: "Account", description: "jes543@cornell.edu")
+        let s1 = SettingsDataModel(state: .info, title: "Account", description: User.currentUser?.email)
         let s2 = SettingsDataModel(state: .info, title: "About", description:
             "Pollo is made by Cornell AppDev, an engineering project team at Cornell University.")
         let s3 = SettingsDataModel(state: .link, title: "More Apps", description: "https://www.cornellappdev.com/")
