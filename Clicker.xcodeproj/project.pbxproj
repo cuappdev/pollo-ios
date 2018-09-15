@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C01034E2146FE8E008850F0 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C01034D2146FE8D008850F0 /* Keys.plist */; };
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */; };
 		6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812A2086B645008BD455 /* LiveOptionCell.swift */; };
@@ -116,6 +117,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C01034D2146FE8D008850F0 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Keys.plist; path = Secrets/Keys.plist; sourceTree = SOURCE_ROOT; };
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionsDropDownView.swift; sourceTree = "<group>"; };
 		6333812A2086B645008BD455 /* LiveOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveOptionCell.swift; sourceTree = "<group>"; };
@@ -240,6 +242,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C01034C2146FE80008850F0 /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+				0C01034D2146FE8D008850F0 /* Keys.plist */,
+			);
+			path = Secrets;
+			sourceTree = "<group>";
+		};
 		2B4C2EA7BDB8502F608CE492 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -313,14 +323,6 @@
 				6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */,
 			);
 			path = Dropdowns;
-			sourceTree = "<group>";
-		};
-		63D19CC4208D72EC0041C774 /* Secrets */ = {
-			isa = PBXGroup;
-			children = (
-				63D19CC2208D72E40041C774 /* Keys.plist */,
-			);
-			path = Secrets;
 			sourceTree = "<group>";
 		};
 		652915081F78124700882CBB /* ClickerTests */ = {
@@ -477,7 +479,6 @@
 			isa = PBXGroup;
 			children = (
 				C2434C8D2133346C00929C98 /* Clicker-Bridging-Header.h */,
-				63D19CC4208D72EC0041C774 /* Secrets */,
 				C7F923C41F73540600B1E975 /* Clicker */,
 				652915081F78124700882CBB /* ClickerTests */,
 				C7F923C31F73540600B1E975 /* Products */,
@@ -498,6 +499,7 @@
 		C7F923C41F73540600B1E975 /* Clicker */ = {
 			isa = PBXGroup;
 			children = (
+				0C01034C2146FE80008850F0 /* Secrets */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
 				C27429E11F8C252D006FAD31 /* Quarks */,
@@ -628,10 +630,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C01034E2146FE8E008850F0 /* Keys.plist in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
-				63D19CC3208D72E40041C774 /* Keys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
