@@ -14,6 +14,9 @@ class SettingsLinkCell: UICollectionViewCell {
     var linkButton: UIButton!
     var linkURL: URL!
     
+    // MARK: Layout constants
+    let standardInset = 18
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -33,7 +36,7 @@ class SettingsLinkCell: UICollectionViewCell {
     
     func setupConstraints() {
         linkButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
+            make.left.equalToSuperview().offset(standardInset)
             make.right.equalToSuperview()
             make.centerY.equalToSuperview()
         }
