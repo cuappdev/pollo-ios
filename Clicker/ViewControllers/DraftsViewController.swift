@@ -24,7 +24,6 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("vc pushed")
         view.backgroundColor = .clear
         
         setupViews()
