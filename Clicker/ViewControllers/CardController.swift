@@ -292,6 +292,7 @@ class CardController: UIViewController {
         let nc = UINavigationController(rootViewController: pollBuilderVC)
         customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
     }
+    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.popViewController(animated: true)
