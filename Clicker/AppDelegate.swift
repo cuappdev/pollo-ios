@@ -98,7 +98,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        // Perform any operations when the user disconnects from app here.
+        // ToDo
+        // Note: This isn't getting run when we call GIDSignIn.sharedInstance().signOut()
     }
     
     func requestReview() {
