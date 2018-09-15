@@ -8,6 +8,7 @@
 
 import UIKit
 import IGListKit
+import GoogleSignIn
 
 class SettingsViewController: UIViewController {
 
@@ -54,6 +55,7 @@ class SettingsViewController: UIViewController {
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         navigationController?.navigationBar.setBackgroundImage(image(fromLayer: gradientLayer), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         
         let backImage = UIImage(named: "exit")?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
@@ -118,7 +120,7 @@ class SettingsViewController: UIViewController {
     
     // MARK: Actions
     @objc func logOutAction() {
-        print("logging out")
+        GIDSignIn.sharedInstance().signOut()
     }
     
     @objc func goBack() {
