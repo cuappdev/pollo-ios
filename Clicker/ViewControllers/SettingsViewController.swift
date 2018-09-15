@@ -21,8 +21,6 @@ class SettingsViewController: UIViewController {
     // MARK: Data
     var data: [SettingsDataModel]!
     
-    // MARK: Layout constants
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,13 +31,16 @@ class SettingsViewController: UIViewController {
     }
     
     func loadData() {
-        let s1 = SettingsDataModel(state: .info, title: "Account", description: User.currentUser?.email)
-        let s2 = SettingsDataModel(state: .info, title: "About", description:
+        let settingsModel1 = SettingsDataModel(state: .info, title: "Account", description:
+            User.currentUser?.email)
+        let settingsModel2 = SettingsDataModel(state: .info, title: "About", description:
             "Pollo is made by Cornell AppDev, an engineering project team at Cornell University.")
-        let s3 = SettingsDataModel(state: .link, title: "More Apps", description: "https://www.cornellappdev.com/")
-        let s4 = SettingsDataModel(state: .link, title: "Visit Our Website")
+        let settingsModel3 = SettingsDataModel(state: .link, title: "More Apps", description:
+            Links.allApps)
+        let settingsModel4 = SettingsDataModel(state: .link, title: "Visit Our Website",description:
+            Links.appDevSite)
         
-        data = [s1,s2,s3,s4]
+        data = [settingsModel1,settingsModel2,settingsModel3,settingsModel4]
     }
     
     func setupNavBar() {
@@ -100,7 +101,7 @@ class SettingsViewController: UIViewController {
         }
         
         lineView.snp.makeConstraints { make in
-            make.height.equalTo(1.5)
+            make.height.equalTo(1)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
             make.top.equalTo(collectionView.snp.bottom)

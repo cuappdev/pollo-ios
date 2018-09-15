@@ -12,6 +12,11 @@ class SettingsSectionController: ListSectionController {
     
     var settingsDataModel: SettingsDataModel!
     
+    // MARK: Layout constants
+    let tallInfoCellHeight: CGFloat = 110.0
+    let shortInfoCellHeight: CGFloat = 87.0
+    let linkCellHeight: CGFloat = 39.5
+    
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
         guard let containerSize = collectionContext?.containerSize else {
@@ -19,9 +24,10 @@ class SettingsSectionController: ListSectionController {
         }
         switch settingsDataModel.state {
         case .info:
-            return CGSize(width: containerSize.width, height: settingsDataModel.title == "About" ? 110 : 87)
+            return CGSize(width: containerSize.width, height: settingsDataModel.title == "About" ?
+                tallInfoCellHeight : shortInfoCellHeight)
         case .link:
-            return CGSize(width: containerSize.width, height: 39.5)
+            return CGSize(width: containerSize.width, height: linkCellHeight)
         }
     }
     

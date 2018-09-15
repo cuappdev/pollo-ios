@@ -15,11 +15,12 @@ enum SettingsDataState {
 
 class SettingsDataModel {
     
-    let identifier = UUID().uuidString
     var state: SettingsDataState
     var title: String
     var description: String?
     
+    let identifier = UUID().uuidString
+
     init(state: SettingsDataState, title: String, description: String? = nil) {
         self.state = state
         self.title = title

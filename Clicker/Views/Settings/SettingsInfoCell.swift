@@ -15,6 +15,9 @@ class SettingsInfoCell: UICollectionViewCell {
     var descriptionView: UILabel!
     var lineView: UIView!
     
+    // MARK: Layout constants
+    let standardInset = 18
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -44,8 +47,8 @@ class SettingsInfoCell: UICollectionViewCell {
     func setupConstraints() {
         titleView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
-            make.left.equalToSuperview().offset(18)
-            make.right.equalToSuperview().inset(18)
+            make.left.equalToSuperview().offset(standardInset)
+            make.right.equalToSuperview().inset(standardInset)
             make.height.equalTo(21.5)
         }
         
@@ -58,7 +61,7 @@ class SettingsInfoCell: UICollectionViewCell {
         
         lineView.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.left.equalToSuperview().offset(18)
+            make.left.equalToSuperview().offset(standardInset)
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
