@@ -86,7 +86,9 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
-    let mcChoiceModels = poll.options.map { return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer) }
+    let mcChoiceModels = poll.options.map {
+        return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer)
+    }
     return .mcChoice(choiceModels: mcChoiceModels)
 }
 

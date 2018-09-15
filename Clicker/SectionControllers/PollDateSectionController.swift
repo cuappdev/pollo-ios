@@ -15,6 +15,7 @@ protocol PollDateSectionControllerDelegate {
     
     func switchToHorizontalWith(index: Int)
     func pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: PollDateSectionController, choice: String, poll: Poll)
+    func pollDateSectionControllerDidEndPoll(sectionController: PollDateSectionController, poll: Poll)
 }
 
 enum PollDateSectionControllerItemType {
@@ -118,7 +119,9 @@ extension PollDateSectionController: CardCellDelegate {
         delegate.pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: pollDateModel.poll)
     }
     
-    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {}
+    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
+        delegate.pollDateSectionControllerDidEndPoll(sectionController: self, poll: poll)
+    }
     
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {}
     
