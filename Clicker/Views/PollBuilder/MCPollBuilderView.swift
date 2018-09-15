@@ -185,6 +185,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
             layoutIfNeeded()
+            pollBuilderDelegate.updateButtonsViewPosition(hideKeyboard: false)
         }
     }
     
@@ -193,6 +194,7 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
             layoutIfNeeded()
+            pollBuilderDelegate.updateButtonsViewPosition(hideKeyboard: true)
         }
     }
     

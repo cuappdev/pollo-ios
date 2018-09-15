@@ -15,6 +15,7 @@ protocol StartPollDelegate {
 
 protocol PollBuilderDelegate {
     func updateCanDraft(_ canDraft: Bool)
+    func updateButtonsViewPosition(hideKeyboard: Bool)
 }
 
 class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
@@ -342,6 +343,9 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func exit() {
+        guard let nav = self.presentingViewController as? UINavigationController else { return }
+        guard let cardController = nav.topViewController as? CardController else { return }
+        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -363,6 +367,16 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             saveDraftButton.backgroundColor = .clickerGrey6
             saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
             draftsButton.titleLabel?.font = ._16MediumFont
+        }
+    }
+    
+    func updateButtonsViewPosition(hideKeyboard: Bool) {
+        if hideKeyboard {
+            print("hide keyboard")
+            NotificationCenter.default.post(name: Notification.Name.UIKeyboardWillHide, object: nil)
+        } else {
+            print("show keyboard")
+            NotificationCenter.default.post(name: Notification.Name.UIKeyboardWillShow, object: nil)
         }
     }
     
@@ -404,12 +418,14 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            print("keyboard will show")
             buttonsView.frame.origin.y = view.frame.height - keyboardSize.height - buttonsViewHeight
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            print("keyboard will hide")
             buttonsView.frame.origin.y += keyboardSize.height
         }
     }
