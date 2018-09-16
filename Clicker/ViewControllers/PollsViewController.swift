@@ -192,5 +192,6 @@ class PollsViewController: UIViewController {
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+
     }
 }

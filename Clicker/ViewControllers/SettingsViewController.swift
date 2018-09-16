@@ -119,7 +119,8 @@ class SettingsViewController: UIViewController {
     // MARK: Actions
     @objc func logOutAction() {
         GIDSignIn.sharedInstance().signOut()
-        navigationController?.popToRootViewController(animated: true)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.logout()
     }
     
     @objc func goBack() {
