@@ -297,7 +297,7 @@ extension CardCell: FRInputSectionControllerDelegate {
     }
     
     private func addFRResponseToPoll(response: String, poll: Poll) {
-        poll.options.append(response)
+        poll.options = [response]
         poll.results[response] = [
             ParserKeys.textKey: response,
             ParserKeys.countKey: 1

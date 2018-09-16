@@ -68,6 +68,7 @@ extension PollSectionController: CardCellDelegate {
     }
     
     func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String) {
+        increaseCountForChoice(choice: choice)
         delegate.pollSectionControllerDidUpvoteChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
     
@@ -79,4 +80,13 @@ extension PollSectionController: CardCellDelegate {
         delegate.pollSectionControllerDidShareResultsForPoll(sectionController: self, poll: poll)
     }
     
+    // MARK: - Helpers
+    private func increaseCountForChoice(choice: String) {
+        if let choiceJSON = poll.results[choice], let count = choiceJSON[ParserKeys.countKey].int {
+            poll.results[choice] = [
+                ParserKeys.textKey: choice,
+                ParserKeys.countKey: count + 1
+            ]
+        }
+    }
 }

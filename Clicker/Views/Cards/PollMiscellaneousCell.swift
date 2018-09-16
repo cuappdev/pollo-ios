@@ -71,6 +71,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
         switch miscellaneousModel.pollState {
         case .live:
             iconImageView.image = #imageLiteral(resourceName: "liveIcon")
+            descriptionLabel.text = ""
         case .ended:
             iconImageView.image = #imageLiteral(resourceName: "solo_eye")
             descriptionLabel.text = endedDescriptionText
