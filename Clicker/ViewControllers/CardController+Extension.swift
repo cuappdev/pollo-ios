@@ -300,13 +300,21 @@ extension CardController: SocketDelegate {
         updateLatestPoll(with: poll)
     }
     
+    func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
+        var updatedOptions = poll.options.filter { (option) -> Bool in
+            return currentState.results[option] != nil
+        }
+        let newOptions = currentState.results.keys.filter { return !poll.options.contains($0) }
+        updatedOptions.insert(contentsOf: newOptions, at: 0)
+        return updatedOptions
+    }
+    
     func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
         guard let latestPoll = getLatestPoll() else { return }
         let updatedPollState = pollState ?? latestPoll.state
-        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results
+        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
         if latestPoll.questionType == .freeResponse {
-            let newOptions = currentState.results.keys.filter { return !latestPoll.options.contains($0) }
-            latestPoll.options.insert(contentsOf: newOptions, at: 0)
+            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
         let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
         updateLatestPoll(with: updatedPoll)
@@ -331,4 +339,5 @@ extension CardController: SocketDelegate {
         guard let latestPollsDateModel = pollsDateArray.last else { return nil }
         return latestPollsDateModel.polls.last
     }
+    
 }

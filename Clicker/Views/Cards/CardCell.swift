@@ -264,21 +264,36 @@ extension CardCell: FRInputSectionControllerDelegate {
         guard let pollOptionsModel = pollOptionsModel else { return }
         switch pollOptionsModel.type {
         case .frOption(optionModels: var frOptionModels):
+            let isNewResponse = checkIfResponseIsNew(for: response, frOptionModels: frOptionModels)
+            if isNewResponse {
+                if let previousAnswer = poll.answer, let previousIndex = indexOfFROptionModel(for: previousAnswer, frOptionModels: frOptionModels) {
+                    frOptionModels.remove(at: previousIndex)
+                }
+                let frOptionModel = FROptionModel(option: response, isAnswer: true, numUpvoted: 0, didUpvote: false)
+                frOptionModels.insert(frOptionModel, at: 0)
+                let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
+                self.pollOptionsModel = PollOptionsModel(type: type, pollState: pollOptionsModel.pollState)
+                adapter.performUpdates(animated: false, completion: nil)
+            }
             delegate.cardCellDidSubmitChoice(cardCell: self, choice: response)
-            let responseAlreadyExists = frOptionModels.first { (frOptionModel) -> Bool in
-                return response == frOptionModel.option
-            } != nil
-            if responseAlreadyExists { return }
-            let frOptionModel = FROptionModel(option: response, isAnswer: true, numUpvoted: 0, didUpvote: false)
-            frOptionModels.insert(frOptionModel, at: 0)
-            let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
-            self.pollOptionsModel = PollOptionsModel(type: type, pollState: pollOptionsModel.pollState)
-            adapter.performUpdates(animated: false, completion: nil)
         default:
             return
         }
     }
     
+    // MARK: - Helpers
+    private func checkIfResponseIsNew(for response: String, frOptionModels: [FROptionModel]) -> Bool {
+        return frOptionModels.first { (frOptionModel) -> Bool in
+            return response == frOptionModel.option
+            } == nil
+    }
+    
+    private func indexOfFROptionModel(for answer: String, frOptionModels: [FROptionModel]) -> Int? {
+        let indexOptionPair = frOptionModels.enumerated().first { (index, frOptionModel) -> Bool in
+            return answer == frOptionModel.option
+        }
+        return indexOptionPair?.offset
+    }
 }
 
 extension CardCell: PollOptionsSectionControllerDelegate {
