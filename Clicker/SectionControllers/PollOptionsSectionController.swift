@@ -66,5 +66,5 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     func pollOptionsCellDidUpvoteChoice(choice: String) {
         delegate.pollOptionsSectionControllerDidUpvoteChoice(sectionController: self, choice: choice)
     }
-
+    
 }
