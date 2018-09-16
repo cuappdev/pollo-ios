@@ -34,6 +34,13 @@ class PollsCell: UICollectionViewCell {
         setupConstraints()
     }
     
+    func configureWith(pollType: PollType, delegate: PollsCellDelegate) {
+        self.pollType = pollType
+        self.delegate = delegate
+        
+        getPollSessions()
+    }
+    
     // MARK: - LAYOUT
     func setupViews() {
         pollsTableView = UITableView()
