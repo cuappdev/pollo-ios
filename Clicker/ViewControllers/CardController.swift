@@ -59,20 +59,6 @@ class CardController: UIViewController {
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
         self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        // REMOVE LATER
-//        let options = [
-//            "Moon name #1",
-//            "Moon name #2",
-//            "Moon name #3",
-//            "Moon name #4",
-//            "Moon name #5",
-//            "Moon name #6",
-//            "Moon name #7",
-//            ]
-//        let poll = Poll(id: 0, text: "What is the name of Saturn's largest moon?", questionType: .multipleChoice, options: options, results: [:], state: .live, answer: nil)
-//        self.pollsDateArray = [PollsDateModel(date: "08/29/18", polls: [poll]), PollsDateModel(date: "08/30/18", polls: [poll]), PollsDateModel(date: "08/31/18", polls: [poll])]
-//        self.userRole = .member
-        
         setupHorizontal()
     }
     
@@ -314,7 +300,6 @@ class CardController: UIViewController {
     func updateCountLabelText(with index: Int) {
         let total = pollsDateArray[currentIndex].polls.count
         countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
-        zoomOutButton.isUserInteractionEnabled = total > 0
     }
     
     // MARK: ACTIONS
