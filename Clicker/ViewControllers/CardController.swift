@@ -111,6 +111,7 @@ class CardController: UIViewController {
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.scrollIndicatorInsets = .zero
         collectionView.bounces = true
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
@@ -127,10 +128,10 @@ class CardController: UIViewController {
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
+        zoomOutButton.isUserInteractionEnabled = false
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        updateCount()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
@@ -310,15 +311,10 @@ class CardController: UIViewController {
         return attributedString
     }
     
-    func updateCount(_ current: Int = 1) {
-        if currentIndex == -1 {
-            countLabel.text = ""
-            zoomOutButton.isUserInteractionEnabled = false
-        } else {
-            let total = pollsDateArray[currentIndex].polls.count
-            countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
-            zoomOutButton.isUserInteractionEnabled = total > 0
-        }
+    func updateCountLabelText(with index: Int) {
+        let total = pollsDateArray[currentIndex].polls.count
+        countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
+        zoomOutButton.isUserInteractionEnabled = total > 0
     }
     
     // MARK: ACTIONS
