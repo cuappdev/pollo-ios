@@ -246,12 +246,13 @@ extension CardController: SocketDelegate {
             updateLatestPoll(with: latestPoll)
             return
         }
-        if poll.questionType == .freeResponse {
-            latestPoll.state = .ended
-            updateLatestPoll(with: latestPoll)
-            return
+        switch poll.questionType {
+        case .freeResponse:
+            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
+            updateLatestPoll(with: updatedPoll)
+        case .multipleChoice:
+            endPoll(poll: poll)
         }
-        endPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
     
