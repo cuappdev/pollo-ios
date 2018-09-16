@@ -89,15 +89,14 @@ class MCResultCell: UICollectionViewCell {
     func configure(for resultModel: MCResultModel, userRole: UserRole) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
+        numSelectedLabel.textColor = .black
         percentSelected = resultModel.percentSelected
         switch userRole {
         case .admin:
             highlightView.backgroundColor = .clickerGreen0
-            numSelectedLabel.textColor = .clickerGrey2
         case .member:
             let isAnswer = resultModel.isAnswer
             highlightView.backgroundColor = isAnswer ? .clickerGreen0 : .clickerGreen1
-            numSelectedLabel.textColor = isAnswer ? .black : .clickerGrey2
         }
     }
     

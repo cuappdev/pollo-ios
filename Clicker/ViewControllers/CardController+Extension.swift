@@ -16,10 +16,8 @@ extension CardController: ListAdapterDataSource {
         switch state {
         case .horizontal:
             if (currentIndex > -1) {
-                collectionView.isScrollEnabled = true
                 return pollsDateArray[currentIndex].polls
             } else {
-                collectionView.isScrollEnabled = false
                 return [EmptyStateModel(userRole: userRole)]
             }
         default:
@@ -130,8 +128,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false) { (completed) in
             if (completed) {
-                let lastIndexPath = IndexPath(item: 0, section: self.pollsDateArray[self.currentIndex].polls.count - 1)
-                self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+                self.scrollToLatestPoll()
             }
         }
     }
@@ -171,21 +168,21 @@ extension CardController: UIScrollViewDelegate {
         let safeIndex = max(0, min(numberOfItems - 1, index))
         return safeIndex
     }
-    
+
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         indexOfCellBeforeDragging = indexOfHorizontalCard()
     }
-    
+
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if state == .vertical {
             return
         }
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
-        
+
         // calculate where scrollView should snap to:
         let indexOfHorizontalCard = self.indexOfHorizontalCard()
-        
+
         // calculate conditions:
         let dataSourceCount = objects(for: adapter).count
         let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
@@ -193,24 +190,32 @@ extension CardController: UIScrollViewDelegate {
         let hasEnoughVelocityToSlideToThePreviousCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
         let majorCellIsTheCellBeforeDragging = indexOfHorizontalCard == indexOfCellBeforeDragging
         let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
-        
+
         if didUseSwipeToSkipCell {
-            
+
             let snapToIndex = indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
             let itemWidth = view.frame.width * 0.9
             let toValue = itemWidth * CGFloat(snapToIndex)
-            
+
             // Damping equal 1 => no oscillations => decay animation:
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
                 scrollView.contentOffset = CGPoint(x: toValue, y: 0)
                 scrollView.layoutIfNeeded()
             }, completion: nil)
-            
+
         } else {
             // Scroll to correct section
             let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            updateCountLabelText(with: indexOfHorizontalCard)
         }
+    }
+
+    func scrollToLatestPoll() {
+        let indexOfLatestSection = pollsDateArray[currentIndex].polls.count - 1
+        let lastIndexPath = IndexPath(item: 0, section: indexOfLatestSection)
+        self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
+        updateCountLabelText(with: indexOfLatestSection)
     }
 }
 
@@ -227,10 +232,25 @@ extension CardController: SocketDelegate {
     func pollStarted(_ poll: Poll) {
         if (userRole == .admin) { return }
         appendPoll(poll: poll)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: false) { (completed) in
+            if (completed) {
+                self.scrollToLatestPoll()
+            }
+        }
     }
     
-    func pollEnded(_ poll: Poll) {
+    func pollEnded(_ poll: Poll, userRole: UserRole) {
+        guard let latestPoll = getLatestPoll() else { return }
+        if userRole == .admin {
+            latestPoll.id = poll.id
+            updateLatestPoll(with: latestPoll)
+            return
+        }
+        if poll.questionType == .freeResponse {
+            latestPoll.state = .ended
+            updateLatestPoll(with: latestPoll)
+            return
+        }
         endPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -265,16 +285,14 @@ extension CardController: SocketDelegate {
     }
     
     func appendPoll(poll: Poll) {
-        let date = getTodaysDate()
-        let newPollsDate = PollsDateModel(date: date, polls: [poll])
-        
         if (currentIndex == -1) {
+            let date = getTodaysDate()
+            let newPollsDate = PollsDateModel(date: date, polls: [poll])
             pollsDateArray.append(newPollsDate)
             currentIndex = 0
             return
         }
         pollsDateArray.last?.polls.append(poll)
-        updateCount()
     }
     
     func endPoll(poll: Poll) {

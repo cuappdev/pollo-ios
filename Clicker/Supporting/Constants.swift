@@ -139,6 +139,3 @@ struct Google {
     
     private init() {}
 }
-
-// let hostURL = "http://clicker-backend.cornellappdev.com"
-let hostURL = "http://localhost:3000"

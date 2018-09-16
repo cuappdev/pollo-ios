@@ -18,7 +18,7 @@ class Socket {
     init(id: String, userType: String) {
         self.id = id
         
-        let url = URL(string: hostURL)!
+        let url = URL(string: Keys.hostURL.value)!
         if let googleId = User.currentUser?.id {
             manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": googleId])])
         } else {
@@ -48,7 +48,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
-            self.delegates.forEach { $0.pollEnded(poll) }
+            self.delegates.forEach { $0.pollEnded(poll, userRole: .member) }
         }
         
         socket.on("user/poll/results") { data, ack in
@@ -72,7 +72,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
-            self.delegates.forEach { $0.pollEnded(poll) }
+            self.delegates.forEach { $0.pollEnded(poll, userRole: .admin) }
         }
         
         socket.on("user/count") { data, ack in
