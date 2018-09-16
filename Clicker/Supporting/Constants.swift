@@ -78,7 +78,7 @@ struct ParserKeys {
     static let answerKey = "answer"
     static let answersKey = "answers"
     static let countKey = "count"
-    static let idKey = "key"
+    static let idKey = "id"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let resultsKey = "results"
