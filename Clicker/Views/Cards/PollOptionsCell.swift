@@ -116,7 +116,7 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
     
     func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController) {
         // Only members can upvote free responses
-        if delegate.userRole == .admin { return }
+        if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
         switch pollOptionsModel.type {
         case .frOption(optionModels: var frOptionModels):
             let upvoteIndex = adapter.section(for: sectionController)
