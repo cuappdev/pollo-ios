@@ -182,33 +182,9 @@ extension CardController: UIScrollViewDelegate {
 
         // calculate where scrollView should snap to:
         let indexOfHorizontalCard = self.indexOfHorizontalCard()
-
-        // calculate conditions:
-        let dataSourceCount = objects(for: adapter).count
-        let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
-        let hasEnoughVelocityToSlideToTheNextCell = indexOfCellBeforeDragging + 1 < dataSourceCount && velocity.x > swipeVelocityThreshold
-        let hasEnoughVelocityToSlideToThePreviousCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
-        let majorCellIsTheCellBeforeDragging = indexOfHorizontalCard == indexOfCellBeforeDragging
-        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
-
-        if didUseSwipeToSkipCell {
-
-            let snapToIndex = indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
-            let itemWidth = view.frame.width * 0.9
-            let toValue = itemWidth * CGFloat(snapToIndex)
-
-            // Damping equal 1 => no oscillations => decay animation:
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
-                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
-                scrollView.layoutIfNeeded()
-            }, completion: nil)
-
-        } else {
-            // Scroll to correct section
-            let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
-            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            updateCountLabelText(with: indexOfHorizontalCard)
-        }
+        let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        updateCountLabelText(with: indexOfHorizontalCard)
     }
 
     func scrollToLatestPoll() {
