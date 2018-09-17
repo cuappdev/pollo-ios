@@ -86,27 +86,11 @@ extension CardController: PollSectionControllerDelegate {
     }
 }
 
-extension CardController: PollDateSectionControllerDelegate {
-    
-    func switchToHorizontalWith(index: Int) {
-        currentIndex = index
-        switchTo(state: .horizontal)
-    }
-    
-    func pollDateSectionControllerDidSubmitChoiceForPoll(sectionController: PollDateSectionController, choice: String, poll: Poll) {
-        let answer = Answer(text: poll.text, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.tally)
-    }
-    
-    func pollDateSectionControllerDidEndPoll(sectionController: PollDateSectionController, poll: Poll) {
-        emitEndPoll()
-    }
-}
-
 extension CardController: PollsDateSectionControllerDelegate {
  
     func pollsDateSectionControllerSwitchToHorizontalWith(index: Int) {
-        switchToHorizontalWith(index: index)
+        currentIndex = index
+        switchTo(state: .horizontal)
     }
     
 }
