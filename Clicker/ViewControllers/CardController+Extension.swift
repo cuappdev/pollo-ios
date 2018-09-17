@@ -21,13 +21,7 @@ extension CardController: ListAdapterDataSource {
                 return [EmptyStateModel(userRole: userRole)]
             }
         default:
-            return pollsDateArray.enumerated().compactMap({ index,pollsDateModel -> PollDateModel? in
-                if let latestPoll = pollsDateModel.polls.last {
-                    collectionView.isScrollEnabled = true
-                    return PollDateModel(date: pollsDateModel.date, poll: latestPoll, index: index)
-                }
-                return nil
-            })
+            return pollsDateArray
         }
     }
     
@@ -35,9 +29,9 @@ extension CardController: ListAdapterDataSource {
         if object is Poll {
             let pollSectionController = PollSectionController(delegate: self)
             return pollSectionController
-        } else if object is PollDateModel {
-            let pollDateSectionController = PollDateSectionController(delegate: self)
-            return pollDateSectionController
+        } else if object is PollsDateModel {
+            let pollsDateSectionController = PollsDateSectionController(delegate: self)
+            return pollsDateSectionController
         } else {
             let emptyStateController = EmptyStateSectionController(session: session, userRole: userRole, nameViewDelegate: self)
             return emptyStateController
@@ -107,6 +101,14 @@ extension CardController: PollDateSectionControllerDelegate {
     func pollDateSectionControllerDidEndPoll(sectionController: PollDateSectionController, poll: Poll) {
         emitEndPoll()
     }
+}
+
+extension CardController: PollsDateSectionControllerDelegate {
+ 
+    func pollsDateSectionControllerSwitchToHorizontalWith(index: Int) {
+        switchToHorizontalWith(index: index)
+    }
+    
 }
 
 extension CardController: PollBuilderViewControllerDelegate {

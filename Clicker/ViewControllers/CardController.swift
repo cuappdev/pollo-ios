@@ -46,7 +46,8 @@ class CardController: UIViewController {
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
     let horizontalCollectionViewTopPadding: CGFloat = 15
-    let verticalCollectionViewBottomInset: CGFloat = 50.0
+    let verticalCollectionViewBottomInset: CGFloat = 50
+    let verticalCollectionViewTopPadding: CGFloat = 20
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -149,8 +150,8 @@ class CardController: UIViewController {
             }
         case .vertical:
             collectionView.snp.remakeConstraints { make in
-                make.top.equalToSuperview()
-                make.bottom.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(verticalCollectionViewTopPadding)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
                 make.width.equalToSuperview()
                 make.centerX.equalToSuperview()
             }
@@ -194,15 +195,6 @@ class CardController: UIViewController {
         } else {
             self.navigationItem.rightBarButtonItems = [peopleBarButton]
         }
-    }
-    
-    func setupVerticalNavBar() {
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.view.backgroundColor = .clear
-        self.navigationItem.titleView = UIView()
-        self.navigationItem.rightBarButtonItems = []
     }
     
     func setupGradientViews() {
@@ -253,23 +245,16 @@ class CardController: UIViewController {
         self.state = state
         switch state {
         case .vertical:
-            setupGradientViews()
             zoomOutButton.removeFromSuperview()
             countLabel.removeFromSuperview()
             collectionViewLayout.scrollDirection = .vertical
-            collectionView.isPagingEnabled = false
-            let collectionViewXInset = view.frame.width * 0.1
-            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, verticalCollectionViewBottomInset, collectionViewXInset)
-            setupVerticalNavBar()
+            collectionView.contentInset = .zero
         case .horizontal:
-            removeGradientViews()
             view.addSubview(zoomOutButton)
             view.addSubview(countLabel)
             collectionViewLayout.scrollDirection = .horizontal
-            collectionView.isPagingEnabled = true
             let collectionViewXInset = view.frame.width * 0.05
             collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
-            setupHorizontalNavBar()
         }
         setupConstraints(for: state)
         adapter.performUpdates(animated: false, completion: nil)
@@ -289,6 +274,7 @@ class CardController: UIViewController {
     func updateCountLabelText(with index: Int) {
         let total = pollsDateArray[currentIndex].polls.count
         countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
+        zoomOutButton.isUserInteractionEnabled = total > 0
     }
     
     // MARK: ACTIONS
