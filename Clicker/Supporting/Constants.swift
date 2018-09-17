@@ -49,16 +49,21 @@ struct Identifiers {
     static let pollPreviewIdentifier = "pollPreviewCellId"
     static let questionOptionCellIdentifier = "questionOptionCellId"
     static let resultMCIdentifier = "resultMCCellId"
-    static let resultFRIdentifier = "resultFRCellId"
     static let significantEventsIdentifier = "significantEvents"
 }
 
 struct Routes {
-    static let end = "server/poll/end"
-    static let share = "server/poll/results"
-    static let start = "server/poll/start"
-    static let tally = "server/poll/tally"
-    static let upvote = "server/poll/upvote"
+    static let serverEnd = "server/poll/end"
+    static let serverShare = "server/poll/results"
+    static let serverStart = "server/poll/start"
+    static let serverTally = "server/poll/tally"
+    static let serverUpvote = "server/poll/upvote"
+    static let userStart = "user/poll/start"
+    static let userEnd = "user/poll/end"
+    static let userShare = "user/poll/results"
+    static let adminUpdateTally = "admin/poll/updateTally"
+    static let adminEnded = "admin/poll/ended"
+    static let count = "user/count"
 }
 
 struct LayoutConstants {
@@ -96,6 +101,7 @@ struct RequestKeys {
     static let textKey = "text"
     static let typeKey = "type"
     static let sharedKey = "shared"
+    static let userTypeKey = "userType"
 }
 
 enum Keys: String {

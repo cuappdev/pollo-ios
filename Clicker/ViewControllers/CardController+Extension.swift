@@ -65,14 +65,14 @@ extension CardController: PollSectionControllerDelegate {
             choiceForAnswer = choice
         }
         let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.tally)
+        emitAnswer(answer: answer, message: Routes.serverTally)
     }
     
     func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
         // You can only upvote for FR questions
         if poll.questionType == .multipleChoice { return }
         let answer = Answer(text: choice, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.upvote)
+        emitAnswer(answer: answer, message: Routes.serverUpvote)
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -108,7 +108,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             RequestKeys.optionsKey: options,
             RequestKeys.sharedKey: state == .shared
         ]
-        socket.socket.emit(Routes.start, socketQuestion)
+        socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
         appendPoll(poll: newPoll)
@@ -240,11 +240,11 @@ extension CardController: SocketDelegate {
     }
     
     func emitEndPoll() {
-        socket.socket.emit(Routes.end, [])
+        socket.socket.emit(Routes.serverEnd, [])
     }
     
     func emitShareResults() {
-        socket.socket.emit(Routes.share, [])
+        socket.socket.emit(Routes.serverShare, [])
     }
     
     func appendPoll(poll: Poll) {

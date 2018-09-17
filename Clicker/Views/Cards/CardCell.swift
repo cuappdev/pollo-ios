@@ -12,6 +12,7 @@ import SwiftyJSON
 import UIKit
 
 protocol CardCellDelegate {
+    
     var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
     
@@ -19,6 +20,7 @@ protocol CardCellDelegate {
     func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
+
 }
 
 class CardCell: UICollectionViewCell {

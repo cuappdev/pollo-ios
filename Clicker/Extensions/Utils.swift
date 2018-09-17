@@ -100,7 +100,7 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     poll.options.enumerated().forEach { (index, option) in
         let mcOptionKey = intToMCOption(index)
         if let infoDict = poll.results[mcOptionKey] {
-            guard let option = infoDict["text"].string, let numSelected = infoDict["count"].int else { return }
+            guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             let isAnswer = option == poll.answer
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)

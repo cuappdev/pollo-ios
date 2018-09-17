@@ -57,7 +57,6 @@ class CardController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.session = session
         self.userRole = userRole
-        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
         self.pollsDateArray = pollsDateArray
         self.state = .horizontal
     }
@@ -67,10 +66,10 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBlack1
-        socket.addDelegate(self)
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
         setupHorizontal()
+        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue, delegate: self)
     }
     
     override func viewDidLayoutSubviews() {
