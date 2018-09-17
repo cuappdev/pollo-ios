@@ -59,7 +59,6 @@ class CardController: UIViewController {
         self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
         self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        setupHorizontal()
     }
     
     // MARK: - View lifecycle
@@ -68,9 +67,9 @@ class CardController: UIViewController {
         
         view.backgroundColor = .clickerBlack1
         socket.addDelegate(self)
-        setupHorizontalNavBar()
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
+        setupHorizontal()
     }
     
     override func viewDidLayoutSubviews() {
@@ -131,7 +130,7 @@ class CardController: UIViewController {
         switch state {
         case .horizontal:
             zoomOutButton.snp.remakeConstraints { make in
-                make.right.equalToSuperview().offset(-24)
+                make.right.equalToSuperview().inset(24)
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
                 make.width.height.equalTo(20)
             }
@@ -274,16 +273,6 @@ class CardController: UIViewController {
         }
         setupConstraints(for: state)
         adapter.performUpdates(animated: false, completion: nil)
-    }
-    
-    func updateDatePollsArr() {
-        GetSortedPolls(id: session.id).make()
-            .done { pollsDateArray in
-                self.pollsDateArray = pollsDateArray
-                DispatchQueue.main.async { self.collectionView.reloadData() }
-            }.catch { error in
-                print(error)
-        }
     }
     
     func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
