@@ -69,7 +69,7 @@ class CardController: UIViewController {
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
         setupHorizontal()
-        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue, delegate: self)
+        self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -185,7 +185,7 @@ class CardController: UIViewController {
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         
-        if (userRole == .admin) {
+        if userRole == .admin {
             createPollButton = UIButton()
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
@@ -229,14 +229,6 @@ class CardController: UIViewController {
     func removeGradientViews() {
         topGradientView.removeFromSuperview()
         bottomGradientView.removeFromSuperview()
-    }
-    
-    // MARK: SCROLLVIEW METHODS
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView != collectionView) {
-            return
-        }
-        // TODO: Add logic for updating countLabel to display current question # / total num questions
     }
     
     // MARK: Helpers

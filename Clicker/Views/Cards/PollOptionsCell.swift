@@ -79,11 +79,11 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
-        case .mcResult(resultModels: let mcResultModels):
+        case .mcResult(let mcResultModels):
             return mcResultModels
-        case .mcChoice(choiceModels: let mcChoiceModels):
+        case .mcChoice(let mcChoiceModels):
             return mcChoiceModels
-        case .frOption(optionModels: let frOptionModels):
+        case .frOption(let frOptionModels):
             return frOptionModels
         }
     }

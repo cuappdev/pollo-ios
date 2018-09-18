@@ -37,7 +37,7 @@ class PollParser: Parser {
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse
-        var answer: String? = nil
+        var answer: String?
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             answer = answerText
         }

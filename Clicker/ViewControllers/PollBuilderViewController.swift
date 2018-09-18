@@ -254,9 +254,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             delegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
         } else { // FREE RESPONSE
             
-            let question = frPollBuilder.questionTextField.text
-            let isShared = frPollBuilder.dropDown.shareResponses
-            delegate.startPoll(text: question!, type: .freeResponse, options: [], state: .live)
+            let question = frPollBuilder.questionTextField.text ?? ""
+            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)

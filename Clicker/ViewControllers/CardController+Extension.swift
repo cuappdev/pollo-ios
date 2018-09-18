@@ -112,8 +112,8 @@ extension CardController: PollBuilderViewControllerDelegate {
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
         appendPoll(poll: newPoll)
-        adapter.performUpdates(animated: false) { (completed) in
-            if (completed) {
+        adapter.performUpdates(animated: false) { completed in
+            if completed {
                 self.scrollToLatestPoll()
             }
         }
@@ -160,9 +160,7 @@ extension CardController: UIScrollViewDelegate {
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if state == .vertical {
-            return
-        }
+        if state == .vertical { return }
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
 
@@ -192,10 +190,10 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll) {
-        if (userRole == .admin) { return }
+        if userRole == .admin { return }
         appendPoll(poll: poll)
-        adapter.performUpdates(animated: false) { (completed) in
-            if (completed) {
+        adapter.performUpdates(animated: false) { completed in
+            if completed {
                 self.scrollToLatestPoll()
             }
         }
@@ -248,7 +246,7 @@ extension CardController: SocketDelegate {
     }
     
     func appendPoll(poll: Poll) {
-        if (currentIndex == -1) {
+        if currentIndex == -1 {
             let date = getTodaysDate()
             let newPollsDate = PollsDateModel(date: date, polls: [poll])
             pollsDateArray.append(newPollsDate)

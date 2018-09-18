@@ -15,14 +15,14 @@ class Socket {
     var socket: SocketIOClient
     var manager: SocketManager
     
-    init(id: String, userType: String, delegate: SocketDelegate) {
+    init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
         let url = URL(string: Keys.hostURL.value)!
         if let googleId = User.currentUser?.id {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userType, RequestKeys.googleIdKey: googleId])])
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIdKey: googleId])])
         } else {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userType])])
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue])])
         }
         
         socket = manager.socket(forNamespace: "/\(id)")

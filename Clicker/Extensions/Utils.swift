@@ -61,13 +61,13 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, stat
     var optionHeight: CGFloat
     let isHorizontal = state == .horizontal
     switch pollOptionsModel.type {
-    case .mcResult(resultModels: let mcResultModels):
+    case .mcResult(let mcResultModels):
         optionModels = mcResultModels
         optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
-    case .mcChoice(choiceModels: let mcChoiceModels):
+    case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
         optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
-    case .frOption(optionModels: let frOptionModels):
+    case .frOption(let frOptionModels):
         optionModels = frOptionModels
         optionHeight = isHorizontal ? LayoutConstants.horizontalFROptionCellHeight : LayoutConstants.verticalFROptionCellHeight
     }
