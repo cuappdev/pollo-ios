@@ -56,7 +56,7 @@ class SessionSectionController: ListSectionController {
 extension SessionSectionController: PollPreviewCellDelegate {
     
     func pollPreviewCellShouldEditSession() {
-        delegate.sessionSectionControllerShouldOpenSession(sectionController: self, session: session)
+        delegate.sessionSectionControllerShouldEditSession(sectionController: self, session: session)
     }
     
 }

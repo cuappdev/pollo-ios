@@ -34,6 +34,7 @@ class PollPreviewCell: UICollectionViewCell {
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
     let dotsButtonRightPadding: CGFloat = 12
+    let dotsButtonLength: CGFloat = 30
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,12 +86,14 @@ class PollPreviewCell: UICollectionViewCell {
         dotsButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(dotsButtonRightPadding)
             make.centerY.equalToSuperview()
+            make.width.height.equalTo(dotsButtonLength)
         }
         super.updateConstraints()
     }
     
     // MARK: - Configure
     func configure(for session: Session, delegate: PollPreviewCellDelegate) {
+        self.delegate = delegate
         nameLabel.text = session.name
         codeLabel.text = "CODE: \(session.code)"
     }
