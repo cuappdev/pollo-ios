@@ -10,7 +10,7 @@ import Foundation
 
 enum UserRole: String {
     case admin
-    case member
+    case member = "user"
 }
 
 class User {

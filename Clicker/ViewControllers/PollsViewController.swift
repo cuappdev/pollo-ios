@@ -20,6 +20,7 @@ class PollsViewController: UIViewController {
     var titleLabel: UILabel!
     var newPollButton: UIButton!
     var bottomBarView: UIView!
+    var bottomPaddingView: UIView!
     var joinSessionButton: UIButton!
     var settingsButton: UIButton!
     
@@ -81,6 +82,10 @@ class PollsViewController: UIViewController {
         bottomBarView.backgroundColor = .clickerBlack1
         view.addSubview(bottomBarView)
         
+        bottomPaddingView = UIView()
+        bottomPaddingView.backgroundColor = .clickerBlack1
+        view.addSubview(bottomPaddingView)
+        
         joinSessionButton = UIButton()
         joinSessionButton.backgroundColor = .clear
         joinSessionButton.addTarget(self, action: #selector(showJoinSessionPopup), for: .touchUpInside)
@@ -110,9 +115,14 @@ class PollsViewController: UIViewController {
         
         bottomBarView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
+            make.width.centerX.equalToSuperview()
             make.height.equalTo(54)
+        }
+        
+        bottomPaddingView.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            make.top.equalTo(bottomBarView.snp.bottom)
+            make.bottom.equalToSuperview()
         }
         
         pollsCollectionView.snp.makeConstraints { make in

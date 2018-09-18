@@ -40,10 +40,14 @@ class CardController: UIViewController {
     var state: CardControllerState!
     var pollsDateArray: [PollsDateModel]!
     var currentIndex: Int!
+    var indexOfCellBeforeDragging: Int!
     
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
+    let horizontalCollectionViewTopPadding: CGFloat = 15
+    let verticalCollectionViewBottomInset: CGFloat = 50
+    let verticalCollectionViewTopPadding: CGFloat = 20
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -51,15 +55,10 @@ class CardController: UIViewController {
     
     init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
-        
         self.session = session
         self.userRole = userRole
-        self.socket = Socket(id: "\(session.id)", userType: userRole.rawValue)
         self.pollsDateArray = pollsDateArray
         self.state = .horizontal
-        setupGradientViews()
-        setupHorizontal()
-
     }
     
     // MARK: - View lifecycle
@@ -67,37 +66,39 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBlack1
-        socket.addDelegate(self)
-        setupHorizontalNavBar()
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(detectedPinchAction))
         view.addGestureRecognizer(pinchRecognizer)
+        setupHorizontal()
+        self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
     }
     
     override func viewDidLayoutSubviews() {
+        guard let _ = topGradientView, let _ = bottomGradientView else { return }
         if (topGradientView.isDescendant(of: view) && bottomGradientView.isDescendant(of: view)) {
             topGradientLayer.frame = topGradientView.bounds
             bottomGradientLayer.frame = bottomGradientView.bounds
         }
     }
     
-    func setupHorizontal() {
-        setupCards()
-        setupHorizontalNavBar()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    // MARK: - Layout
     func setupCards() {
         collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.minimumInteritemSpacing = 10
-        collectionViewLayout.minimumLineSpacing = 10
+        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         let collectionViewInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewInset, 0, collectionViewInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        collectionView.scrollIndicatorInsets = .zero
+        collectionView.bounces = true
         collectionView.backgroundColor = .clear
-        collectionView.isPagingEnabled = true
         view.addSubview(collectionView)
         view.sendSubview(toBack: collectionView)
         
@@ -107,46 +108,92 @@ class CardController: UIViewController {
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
         
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
+        zoomOutButton.isUserInteractionEnabled = false
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
-        updateCount()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10
         countLabel.layer.cornerRadius = 12
         countLabel.clipsToBounds = true
         view.addSubview(countLabel)
+        
+        setupConstraints(for: state)
+    }
     
-        zoomOutButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-24)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.width.height.equalTo(20)
-        }
-        
-        countLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(zoomOutButton.snp.centerY)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth)
-        }
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(6)
-            make.bottom.equalToSuperview()
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
+    func setupConstraints(for state: CardControllerState) {
+        switch state {
+        case .horizontal:
+            zoomOutButton.snp.remakeConstraints { make in
+                make.right.equalToSuperview().inset(24)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+                make.width.height.equalTo(20)
+            }
+            
+            countLabel.snp.remakeConstraints { make in
+                make.centerY.equalTo(zoomOutButton.snp.centerY)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(countLabelWidth)
+            }
+            
+            collectionView.snp.remakeConstraints { make in
+                make.top.equalTo(countLabel.snp.bottom).offset(horizontalCollectionViewTopPadding)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+            }
+        case .vertical:
+            collectionView.snp.remakeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(verticalCollectionViewTopPadding)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+            }
         }
     }
     
-    // MARK: - Vertical Collection View
-    func setupVerticalNavBar() {
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationItem.titleView = UIView()
-        self.navigationItem.rightBarButtonItems = []
-        setupGradientViews()
+    func setupHorizontal() {
+        setupCards()
+        setupHorizontalNavBar()
+    }
+    
+    func setupHorizontalNavBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // REMOVE BOTTOM SHADOW
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
+        navigationTitleView.snp.makeConstraints { make in
+            make.height.equalTo(36)
+        }
+        self.navigationItem.titleView = navigationTitleView
+        
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+        
+        peopleButton = UIButton()
+        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
+        peopleButton.setTitle("0", for: .normal)
+        peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.sizeToFit()
+        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
+        
+        if userRole == .admin {
+            createPollButton = UIButton()
+            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
+        } else {
+            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+        }
     }
     
     func setupGradientViews() {
@@ -179,74 +226,29 @@ class CardController: UIViewController {
         }
     }
     
-    // MARK: Switching between vertical and horizontal
-    func switchTo(state: CardControllerState) {
-        zoomOutButton.isHidden = (state == .vertical)
-        countLabel.isHidden = (state == .vertical)
-        self.state = state
-        switch state {
-        case .vertical:
-            collectionViewLayout.scrollDirection = .vertical
-            setupVerticalNavBar()
-        case .horizontal:
-            collectionViewLayout.scrollDirection = .horizontal
-            setupHorizontalNavBar()
-        }
-        adapter.performUpdates(animated: true, completion: nil)
-    }
-    
-    // MARK: SCROLLVIEW METHODS
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView != collectionView) {
-            return
-        }
-        // TODO: Add logic for updating countLabel to display current question # / total num questions
-    }
-
-    func setupHorizontalNavBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        // REMOVE BOTTOM SHADOW
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        
-        navigationTitleView = NavigationTitleView()
-        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
-        navigationTitleView.snp.makeConstraints { make in
-            make.height.equalTo(36)
-        }
-        self.navigationItem.titleView = navigationTitleView
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
-        
-        peopleButton = UIButton()
-        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("0", for: .normal)
-        peopleButton.titleLabel?.font = UIFont._16RegularFont
-        peopleButton.sizeToFit()
-        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        
-        if (userRole == .admin) {
-            createPollButton = UIButton()
-            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
-            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
-        } else {
-            self.navigationItem.rightBarButtonItems = [peopleBarButton]
-        }
+    func removeGradientViews() {
+        topGradientView.removeFromSuperview()
+        bottomGradientView.removeFromSuperview()
     }
     
     // MARK: Helpers
-    func updateDatePollsArr() {
-        GetSortedPolls(id: session.id).make()
-            .done { pollsDateArray in
-                self.pollsDateArray = pollsDateArray
-                DispatchQueue.main.async { self.collectionView.reloadData() }
-            }.catch { error in
-                print(error)
+    func switchTo(state: CardControllerState) {
+        self.state = state
+        switch state {
+        case .vertical:
+            zoomOutButton.removeFromSuperview()
+            countLabel.removeFromSuperview()
+            collectionViewLayout.scrollDirection = .vertical
+            collectionView.contentInset = .zero
+        case .horizontal:
+            view.addSubview(zoomOutButton)
+            view.addSubview(countLabel)
+            collectionViewLayout.scrollDirection = .horizontal
+            let collectionViewXInset = view.frame.width * 0.05
+            collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
         }
+        setupConstraints(for: state)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
@@ -260,25 +262,15 @@ class CardController: UIViewController {
         return attributedString
     }
     
-    func updateCount(_ current: Int = 1) {
-        if currentIndex == -1 {
-            countLabel.text = ""
-            zoomOutButton.isUserInteractionEnabled = false
-        } else {
-            let total = pollsDateArray[currentIndex].polls.count
-            countLabel.attributedText = getCountLabelAttributedString("\(current)/\(total)")
-            zoomOutButton.isUserInteractionEnabled = total > 0
-            
-        }
-        
-        
+    func updateCountLabelText(with index: Int) {
+        let total = pollsDateArray[currentIndex].polls.count
+        countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
+        zoomOutButton.isUserInteractionEnabled = total > 0
     }
     
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
-        let pollBuilderVC = PollBuilderViewController()
-        pollBuilderVC.startPollDelegate = self
-        
+        let pollBuilderVC = PollBuilderViewController(delegate: self)
         let width = Float(view.safeAreaLayoutGuide.layoutFrame.size.width)
         let height = Float(view.safeAreaLayoutGuide.layoutFrame.size.height)
         let center = CGPoint(x: view.safeAreaLayoutGuide.layoutFrame.midX, y: UIApplication.shared.statusBarFrame.height + view.safeAreaLayoutGuide.layoutFrame.midY)
@@ -307,12 +299,6 @@ class CardController: UIViewController {
         if isPinchOut {
             zoomOutBtnPressed()
         }
-    }
-    
-    // MARK: - View lifecycle
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     required init?(coder aDecoder: NSCoder) {

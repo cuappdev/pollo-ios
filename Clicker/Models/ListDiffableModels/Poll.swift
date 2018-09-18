@@ -6,8 +6,8 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
+import SwiftyJSON
 
 enum PollState {
     case live
@@ -17,97 +17,53 @@ enum PollState {
 
 class Poll {
     
-    let identifier = UUID().uuidString
-    var id: Int!
+    var id: Int
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String:Any]
-    var state: PollState!
+    var results: [String:JSON]
+    var state: PollState
+    var answer: String?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     
     // MARK: - Constants
-    let defaultIdentifier = UUID().uuidString
-    let idKey = "key"
-    let textKey = "text"
-    let countKey = "count"
-    let optionsKey = "options"
-    let typeKey = "type"
+    let identifier = UUID().uuidString
     
-    // MARK: SORTED BY DATE POLL INITIALIZER
-    init(id: Int, text: String, results: [String:Any], type: QuestionType, state: PollState) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, answer: String?) {
         self.id = id
         self.text = text
-        self.results = results
-        self.options = Array(results.keys)
-        self.questionType = type
-        self.state = state
-    }
-    
-    // MARK: SEND START POLL INITIALIZER
-    init(text: String, options: [String], type: QuestionType, state: PollState) {
-        self.text = text
+        self.questionType = questionType
         self.options = options
-        self.results = [:]
-        self.questionType = type
-        options.enumerated().forEach { (index, option) in
-            let mcOption = intToMCOption(index)
-            results[mcOption] = [textKey: option, countKey: 0]
-        }
+        self.results = results
         self.state = state
-    }
-    
-    // MARK: RECEIVE START POLL INITIALIZER
-    init(json: [String:Any]){
-        self.id = json[idKey] as? Int
-        if let text = json[textKey] as? String {
-            self.text = text
-        } else {
-            self.text = ""
-        }
-        if let options = json[optionsKey] as? [String] {
-            self.options = options
-        } else {
-            self.options = []
-        }
-        self.results = [:]
-        let type = json[typeKey] as? String
-        self.questionType = (type == Identifiers.multipleChoiceIdentifier) ? .multipleChoice : .freeResponse
-        self.state = .live
+        self.answer = answer
     }
     
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
     func getFRResultsArray() -> [(String, Int)] {
-        var resultsArr: [(String, Int)] = []
-        results.forEach { (key, val) in
-            if let choiceJSON = val as? [String:Any], let numSelected = choiceJSON[countKey] as? Int {
-                resultsArr.append((key, numSelected))
+        return options.map { (option) -> (String, Int) in
+            if let choiceJSON = results[option], let numSelected = choiceJSON[ParserKeys.countKey].int {
+                return (option, numSelected)
             }
+            return (option, 0)
         }
-        return resultsArr
     }
     
-    func getTotalResults() -> Float {
-        return results.reduce(0) { (res, arg1) -> Float in
-            let (_, value) = arg1
-            if let choiceJSON = value as? [String:Any], let numSelected = choiceJSON[countKey] as? Float {
-                return res + numSelected
-            }
-            return 0
+    func getTotalResults() -> Int {
+        return results.values.reduce(0) { (currentTotalResults, json) -> Int in
+            return currentTotalResults + json[ParserKeys.countKey].intValue
         }
     }
+
 }
 
 extension Poll: ListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
-        guard let id = id else {
-            return defaultIdentifier as NSString
-        }
-        return "\(id)" as NSString
+        return identifier as NSString
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
