@@ -9,61 +9,84 @@
 import Foundation
 import IGListKit
 
+protocol PollSectionControllerDelegate {
+    
+    var cardControllerState: CardControllerState { get }
+    var role: UserRole { get }
+    
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
+    func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
+}
 
 class PollSectionController: ListSectionController {
     
-    // MARK: these refrences must be passed to each cell in the section
-    var session: Session!
-    var userRole: UserRole!
-    var socket: Socket!
-    var askedCardDelegate: AskedCardDelegate!
-    
-    
     var poll: Poll!
-    let widthScaleFactor: CGFloat = 0.9
+    var delegate: PollSectionControllerDelegate!
+    let heightScaleFactor: CGFloat = 0.95
     
-    override init() {
+    init(delegate: PollSectionControllerDelegate) {
         super.init()
-        self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-    }
-    
-    func configureWith(session: Session, userRole: UserRole, askedCardDelegate: AskedCardDelegate, socket: Socket)
-    {
-        self.session = session
-        self.userRole = userRole
-        self.askedCardDelegate = askedCardDelegate
-        self.socket = socket
+        self.delegate = delegate
     }
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
-        guard let containerSize = collectionContext?.containerSize else {
+        guard let containerSize = collectionContext?.insetContainerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width * widthScaleFactor, height: containerSize.height)
+        return CGSize(width: containerSize.width, height: containerSize.height * heightScaleFactor)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        switch userRole {
-        case .admin:
-            let cell = collectionContext?.dequeueReusableCell(of: AskedCard.self, for: self, at: index) as! AskedCard
-            socket.addDelegate(cell)
-            cell.configureWith(socket: socket, delegate: askedCardDelegate, poll: poll)
-            return cell
-        case .member:
-            let cell = collectionContext?.dequeueReusableCell(of: AnswerCard.self, for: self, at: index) as! AnswerCard
-            cell.socket = socket
-            socket.addDelegate(cell)
-            cell.configureWith(socket: socket, poll: poll)
-            return cell
-        default:
-            print("userRole was not initialized!")
-            return UICollectionViewCell()
-        }
+        let cell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
+        cell.configure(with: self, poll: poll, userRole: delegate.role)
+        cell.setNeedsUpdateConstraints()
+        return cell
     }
     
     override func didUpdate(to object: Any) {
         poll = object as? Poll
     }
         
+}
+
+extension PollSectionController: CardCellDelegate {
+    
+    var cardControllerState: CardControllerState {
+        return delegate.cardControllerState
+    }
+    
+    var userRole: UserRole {
+        return delegate.role
+    }
+    
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String) {
+        poll.answer = choice
+        delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
+    }
+    
+    func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String) {
+        increaseCountForChoice(choice: choice)
+        delegate.pollSectionControllerDidUpvoteChoiceForPoll(sectionController: self, choice: choice, poll: poll)
+    }
+    
+    func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
+        delegate.pollSectionControllerDidEndPoll(sectionController: self, poll: poll)
+    }
+    
+    func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {
+        delegate.pollSectionControllerDidShareResultsForPoll(sectionController: self, poll: poll)
+    }
+    
+    // MARK: - Helpers
+    private func increaseCountForChoice(choice: String) {
+        if let choiceJSON = poll.results[choice], let count = choiceJSON[ParserKeys.countKey].int {
+            poll.results[choice] = [
+                ParserKeys.textKey: choice,
+                ParserKeys.countKey: count + 1
+            ]
+        }
+    }
 }

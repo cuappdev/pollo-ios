@@ -46,15 +46,15 @@ class MCResultCell: UICollectionViewCell {
         
         optionLabel = UILabel()
         optionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
+        optionLabel.backgroundColor = .clear
         containerView.addSubview(optionLabel)
         
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
-        numSelectedLabel.textColor = .clickerGrey2
+        numSelectedLabel.backgroundColor = .clear
         containerView.addSubview(numSelectedLabel)
         
         highlightView = UIView()
-        highlightView.backgroundColor = .clickerGreen0
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
     }
@@ -62,7 +62,7 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(containerViewHorizontalPadding)
-            make.trailing.equalToSuperview().offset(containerViewHorizontalPadding * -1)
+            make.trailing.equalToSuperview().inset(containerViewHorizontalPadding)
             make.top.equalToSuperview().offset(containerViewTopPadding)
             make.bottom.equalToSuperview()
         }
@@ -70,15 +70,15 @@ class MCResultCell: UICollectionViewCell {
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(numSelectedLabel.snp.leading).offset(optionLabelHorizontalPadding * -1)
+            make.trailing.equalTo(numSelectedLabel.snp.leading).inset(optionLabelHorizontalPadding)
         }
         
         numSelectedLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(numSelectedLabelTrailingPadding * -1)
+            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
         }
         
-        highlightView.snp.makeConstraints { make in
+        highlightView.snp.remakeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(percentSelected)
         }
@@ -86,10 +86,18 @@ class MCResultCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for resultModel: MCResultModel) {
+    func configure(for resultModel: MCResultModel, userRole: UserRole) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
+        numSelectedLabel.textColor = .black
         percentSelected = resultModel.percentSelected
+        switch userRole {
+        case .admin:
+            highlightView.backgroundColor = .clickerGreen0
+        case .member:
+            let isAnswer = resultModel.isAnswer
+            highlightView.backgroundColor = isAnswer ? .clickerGreen0 : .clickerGreen1
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

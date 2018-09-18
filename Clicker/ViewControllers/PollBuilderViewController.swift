@@ -9,15 +9,15 @@
 import UIKit
 import Presentr
 
-protocol StartPollDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
-}
-
-protocol PollBuilderDelegate {
+protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
+protocol PollBuilderViewControllerDelegate {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+}
+
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
     
     // MARK: layout constants
     let questionTypeButtonWidth: CGFloat = 150
@@ -45,12 +45,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     // MARK: data
     var drafts: [Draft]!
     var questionType: QuestionType!
-    var startPollDelegate: StartPollDelegate!
+    var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
     var canDraft: Bool!
     var presented: Bool = false
     var loadedMCDraft: Draft?
     var loadedFRDraft: Draft?
+    
+    init(delegate: PollBuilderViewControllerDelegate) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -275,10 +280,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text ?? ""
-            startPollDelegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
+            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
         case .freeResponse:
             let question = frPollBuilder.questionTextField.text ?? ""
-            startPollDelegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
+            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)
@@ -412,6 +417,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             buttonsView.frame.origin.y += keyboardSize.height
         }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

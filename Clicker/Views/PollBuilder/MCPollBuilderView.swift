@@ -11,7 +11,7 @@ import SnapKit
 
 class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, UITextFieldDelegate {
     
-    var pollBuilderDelegate: PollBuilderDelegate!
+    var pollBuilderDelegate: PollBuilderViewDelegate!
     var editable: Bool!
     
     var questionDelegate: QuestionDelegate!

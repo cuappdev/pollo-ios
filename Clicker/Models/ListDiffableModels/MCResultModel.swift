@@ -8,17 +8,16 @@
 
 import IGListKit
 
-class MCResultModel {
+class MCResultModel: OptionModel {
     
-    var option: String
     var numSelected: Int
     var percentSelected: Float
     let identifier = UUID().uuidString
     
-    init(option: String, numSelected: Int, percentSelected: Float) {
-        self.option = option
+    init(option: String, numSelected: Int, percentSelected: Float, isAnswer: Bool) {
         self.numSelected = numSelected
         self.percentSelected = percentSelected
+        super.init(option: option, isAnswer: false)
     }
 }
 
