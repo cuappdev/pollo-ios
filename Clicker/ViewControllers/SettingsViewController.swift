@@ -118,7 +118,6 @@ class SettingsViewController: UIViewController {
     
     // MARK: Actions
     @objc func logOutAction() {
-        GIDSignIn.sharedInstance().signOut()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.logout()
     }

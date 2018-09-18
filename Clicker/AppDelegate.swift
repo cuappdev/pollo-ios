@@ -23,28 +23,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.tintColor = .clickerGreen0
-        window?.makeKeyAndVisible()
         
+        setupWindow()
         setupViewControllers()
         setupGoogleSignin()
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        UINavigationBar.appearance().backIndicatorImage = backImage
-        UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
-        
-        // FABRIC
-        #if DEBUG
-        print("[Running Clicker in debug configuration]")
-        #else
-        print("[Running Clicker in release configuration]")
-        Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
-        #endif
+        setupNavBar()
+        setupFabric()
         
         return true
     }
-    
+    func setupWindow() {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.tintColor = .clickerGreen0
+        window?.makeKeyAndVisible()
+    }
     func setupViewControllers() {
         pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
@@ -65,6 +57,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         } else {
             window?.rootViewController = loginViewController
         }
+    }
+    
+    func setupNavBar() {
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        UINavigationBar.appearance().backIndicatorImage = backImage
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
+    }
+    
+    func setupFabric() {
+        #if DEBUG
+        print("[Running Clicker in debug configuration]")
+        #else
+        print("[Running Clicker in release configuration]")
+        Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
+        #endif
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -103,12 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
     }
     
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        // ToDo
-        // Note: This isn't getting run when we call GIDSignIn.sharedInstance().signOut()
-    }
-    
     func logout() {
+        GIDSignIn.sharedInstance().signOut()
+        
+        
         setupViewControllers()
         setupGoogleSignin()
     }
