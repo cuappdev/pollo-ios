@@ -336,6 +336,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         case .multipleChoice:
             mcPollBuilder.isHidden = false
             frPollBuilder.isHidden = true
+            break
         case .freeResponse:
             mcPollBuilder.isHidden = true
             frPollBuilder.isHidden = false
