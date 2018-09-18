@@ -329,18 +329,11 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         customPresentViewController(presenter, viewController: editQuestionTypeVC, animated: true, completion: nil)
     }
     
-    func didPick(questionType: QuestionType) {
+    func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
         self.questionType = questionType
         updateQuestionTypeButton()
-        switch questionType {
-        case .multipleChoice:
-            mcPollBuilder.isHidden = false
-            frPollBuilder.isHidden = true
-            break
-        case .freeResponse:
-            mcPollBuilder.isHidden = true
-            frPollBuilder.isHidden = false
-        }
+        mcPollBuilder.isHidden = questionType == .multipleChoice
+        frPollBuilder.isHidden = questionType == .freeResponse
     }
     
     // MARK - PickQTypeDelegate
