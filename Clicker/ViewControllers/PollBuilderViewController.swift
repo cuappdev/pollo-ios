@@ -242,18 +242,13 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func startQuestion() {
-        // TODO: Start question session
-        print("start question")
-        
         // MULTIPLE CHOICE
         if (questionType == .multipleChoice) {
-
-            let question = mcPollBuilder.questionTextField.text
+            let question = mcPollBuilder.questionTextField.text ?? ""
             let options = mcPollBuilder.optionsDict.keys.sorted().map { mcPollBuilder.optionsDict[$0]! }
-            
-            delegate.startPoll(text: question!, type: .multipleChoice, options: options, state: .live)
-        } else { // FREE RESPONSE
-            
+            delegate.startPoll(text: question, type: .multipleChoice, options: options, state: .live)
+        } else {
+            // FREE RESPONSE
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
