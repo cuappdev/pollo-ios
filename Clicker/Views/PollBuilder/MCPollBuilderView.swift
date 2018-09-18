@@ -115,6 +115,8 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         optionsTableView.backgroundColor = .clickerWhite
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
+        optionsTableView.showsVerticalScrollIndicator = false
+        optionsTableView.showsHorizontalScrollIndicator = false
         
         addSubview(optionsTableView)
     }
@@ -185,7 +187,6 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
             self.optionsTableView.contentInset = contentInsets;
             self.optionsTableView.scrollIndicatorInsets = contentInsets;
             layoutIfNeeded()
-            pollBuilderDelegate.updateButtonsViewPosition(hideKeyboard: false)
         }
     }
     
@@ -194,7 +195,6 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
             self.optionsTableView.contentInset = UIEdgeInsets.zero;
             self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
             layoutIfNeeded()
-            pollBuilderDelegate.updateButtonsViewPosition(hideKeyboard: true)
         }
     }
     

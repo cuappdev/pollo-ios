@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C41C958214DB7AA00F559C9 /* Keys.plist */; };
+		0C76348F215152A600956E27 /* EditQuestionTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */; };
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */; };
 		6333812B2086B645008BD455 /* LiveOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6333812A2086B645008BD455 /* LiveOptionCell.swift */; };
@@ -112,6 +113,7 @@
 
 /* Begin PBXFileReference section */
 		0C41C958214DB7AA00F559C9 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQuestionTypeViewController.swift; sourceTree = "<group>"; };
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionsDropDownView.swift; sourceTree = "<group>"; };
 		6333812A2086B645008BD455 /* LiveOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveOptionCell.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				D13E9091208712A300856DD4 /* PollBuilderViewController.swift */,
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
+				0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -727,6 +730,7 @@
 			files = (
 				C2A0F7CB213A0BC200A28D75 /* PollMiscellaneousCell.swift in Sources */,
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
+				0C76348F215152A600956E27 /* EditQuestionTypeViewController.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
