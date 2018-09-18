@@ -22,15 +22,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         setupWindow()
         setupNavigationController()
         setupGoogleSignin()
         setupNavBar()
         setupFabric()
-        
+
         return true
     }
+    
     func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.tintColor = .clickerGreen0
@@ -78,18 +78,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
-            let userId = user.userID // For client-side use only!
-            let fullName = user.profile.name
-            let givenName = user.profile.givenName
-            let familyName = user.profile.familyName
-            let email = user.profile.email
-            let netId = String(email?.split(separator: "@")[0] ?? "")
-            User.currentUser = User(id: userId!, name: fullName!, netId: netId, givenName: givenName!, familyName: familyName!, email: email!)
+            let userId = user.userID ?? "ID" // For client-side use only!
+            let fullName = user.profile.name ?? "First Last"
+            let givenName = user.profile.givenName ?? "First"
+            let familyName = user.profile.familyName ?? "Last"
+            let email = user.profile.email ?? "pollo@defaultvalue.com"
+            let netId = String(email.split(separator: "@")[0])
+            User.currentUser = User(id: userId, name: fullName, netId: netId, givenName: givenName, familyName: familyName, email: email)
             
             let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
             UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
             
-            UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
+            UserAuthenticate(userId: userId, givenName: givenName, familyName: familyName, email: email).make()
                 .done { userSession in
                     print(userSession)
                     User.userSession = userSession
