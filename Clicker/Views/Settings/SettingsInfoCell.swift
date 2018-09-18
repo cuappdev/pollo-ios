@@ -55,7 +55,6 @@ class SettingsInfoCell: UICollectionViewCell {
         descriptionView.snp.makeConstraints { make in
             make.top.equalTo(titleView.snp.bottom).offset(6)
             make.left.equalTo(titleView.snp.left)
-            make.bottom.equalToSuperview().inset(20.5)
             make.right.equalTo(titleView.snp.right)
         }
         

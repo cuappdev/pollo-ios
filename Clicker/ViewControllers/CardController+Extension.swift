@@ -18,7 +18,8 @@ extension CardController: ListAdapterDataSource {
             if (currentIndex > -1) {
                 return pollsDateArray[currentIndex].polls
             } else {
-                return [EmptyStateModel(userRole: userRole)]
+                let type: EmptyStateType = .cardController(userRole: userRole)
+                return [EmptyStateModel(type: type)]
             }
         default:
             return pollsDateArray
@@ -33,7 +34,8 @@ extension CardController: ListAdapterDataSource {
             let pollsDateSectionController = PollsDateSectionController(delegate: self)
             return pollsDateSectionController
         } else {
-            let emptyStateController = EmptyStateSectionController(session: session, userRole: userRole, nameViewDelegate: self)
+            let shouldDisplayNameView = userRole == .admin && session.name == session.code
+            let emptyStateController = EmptyStateSectionController(session: session, shouldDisplayNameView: shouldDisplayNameView, nameViewDelegate: self)
             return emptyStateController
         }
     }

@@ -9,13 +9,18 @@
 import Foundation
 import IGListKit
 
+enum EmptyStateType {
+    case pollsViewController(pollType: PollType)
+    case cardController(userRole: UserRole)
+}
+
 class EmptyStateModel {
     
-    var userRole: UserRole
+    var type: EmptyStateType
     let identifier = UUID().uuidString
     
-    init(userRole: UserRole) {
-        self.userRole = userRole
+    init(type: EmptyStateType) {
+        self.type = type
     }
 
 }
