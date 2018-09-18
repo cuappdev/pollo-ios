@@ -19,13 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     var window: UIWindow?
     var pollsNavigationController: UINavigationController!
-    var loginViewController: LoginViewController!
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         setupWindow()
-        setupViewControllers()
+        setupNavigationController()
         setupGoogleSignin()
         setupNavBar()
         setupFabric()
@@ -37,12 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window?.tintColor = .clickerGreen0
         window?.makeKeyAndVisible()
     }
-    func setupViewControllers() {
-        pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
-        pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
-        pollsNavigationController.navigationBar.isTranslucent = false
-        loginViewController = LoginViewController()
+    func setupNavigationController() {
+        pollsNavigationController = UINavigationController(rootViewController: LoginViewController())
+        window?.rootViewController = pollsNavigationController
     }
     
     func setupGoogleSignin() {
@@ -53,13 +49,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             DispatchQueue.main.async {
                 GIDSignIn.sharedInstance().signInSilently()
             }
-            window?.rootViewController = pollsNavigationController
-        } else {
-            window?.rootViewController = loginViewController
+            pollsNavigationController.pushViewController(PollsViewController(), animated: false)
         }
     }
     
     func setupNavBar() {
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
+        pollsNavigationController.navigationBar.isTranslucent = false
+        
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         UINavigationBar.appearance().backIndicatorImage = backImage
         UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
@@ -88,19 +86,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let netId = String(email?.split(separator: "@")[0] ?? "")
             User.currentUser = User(id: userId!, name: fullName!, netId: netId, givenName: givenName!, familyName: familyName!, email: email!)
             
-            if let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier){
-                UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
-            }
+            let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
+            UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
             
             UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
                 .done { userSession in
                     print(userSession)
                     User.userSession = userSession
-                    self.pollsNavigationController = UINavigationController(rootViewController: PollsViewController())
-                    self.pollsNavigationController.setNavigationBarHidden(true, animated: false)
-                    self.pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
-                    self.pollsNavigationController.navigationBar.isTranslucent = false
-                    self.window?.rootViewController?.present(self.pollsNavigationController, animated: true, completion: nil)
+                    self.pollsNavigationController.pushViewController(PollsViewController(), animated: true)
                 } .catch { error in
                     print(error)
             }
@@ -112,9 +105,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func logout() {
         GIDSignIn.sharedInstance().signOut()
-        
-        
-        setupViewControllers()
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.popToRootViewController(animated: true)
         setupGoogleSignin()
     }
     
