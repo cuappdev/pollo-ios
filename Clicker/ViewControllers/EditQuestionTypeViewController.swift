@@ -9,13 +9,10 @@
 import UIKit
 
 protocol EditQuestionTypeDelegate {
-    func didPick(questionType: QuestionType)
+    func editQuestionTypeViewControllerDidPick(questionType: QuestionType)
 }
 
 class EditQuestionTypeViewController: UIViewController {
-
-    var delegate: EditQuestionTypeDelegate?
-    var selectedQuestionType: QuestionType!
     
     // MARK: - View vars
     var multipleChoiceButton: UIButton!
@@ -24,12 +21,18 @@ class EditQuestionTypeViewController: UIViewController {
     var freeResponseLabel: UILabel!
     var selectedDot: UIView!
     
+    // MARK: - Data vars
+    var delegate: EditQuestionTypeDelegate?
+    var selectedQuestionType: QuestionType!
+    
     // MARK: - Constants
     let dotDiameter: CGFloat = 15
     let dotPadding: CGFloat = 15
     let labelRightPadding: CGFloat = 45
     let labelLeftPadding: CGFloat = 15
     let buttonHeight: CGFloat = 50
+    let multipleChoiceLabelText: String = "Multiple Choice"
+    let freeResponseLabelText: String = "Free Response"
     
     init(selectedQuestionType: QuestionType) {
         super.init(nibName: nil, bundle: nil)
@@ -50,7 +53,7 @@ class EditQuestionTypeViewController: UIViewController {
         view.addSubview(multipleChoiceButton)
         
         multipleChoiceLabel = UILabel()
-        multipleChoiceLabel.text = "Multiple Choice"
+        multipleChoiceLabel.text = multipleChoiceLabelText
         multipleChoiceLabel.textColor = selectedQuestionType == .multipleChoice ? .aquaMarine : .clickerBlack0
         multipleChoiceLabel.font = selectedQuestionType == .multipleChoice ? ._16SemiboldFont : ._16RegularFont
         view.addSubview(multipleChoiceLabel)
@@ -60,7 +63,7 @@ class EditQuestionTypeViewController: UIViewController {
         view.addSubview(freeResponseButton)
         
         freeResponseLabel = UILabel()
-        freeResponseLabel.text = "Free Response"
+        freeResponseLabel.text = freeResponseLabelText
         freeResponseLabel.textColor = selectedQuestionType == .freeResponse ? .aquaMarine : .clickerBlack0
         freeResponseLabel.font = selectedQuestionType == .freeResponse ? ._16SemiboldFont : ._16RegularFont
         view.addSubview(freeResponseLabel)
@@ -71,10 +74,10 @@ class EditQuestionTypeViewController: UIViewController {
         selectedDot.layer.cornerRadius = dotDiameter / 2
         view.addSubview(selectedDot)
         
-        layoutSubviews()
+        setupConstraints()
     }
     
-    func layoutSubviews() {
+    func setupConstraints() {
         
         multipleChoiceButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
@@ -113,12 +116,12 @@ class EditQuestionTypeViewController: UIViewController {
     
     @objc func didPickMultipleChoice() {
         dismiss(animated: true, completion: nil)
-        delegate?.didPick(questionType: .multipleChoice)
+        delegate?.editQuestionTypeViewControllerDidPick(questionType: .multipleChoice)
     }
     
     @objc func didPickFreeResponse() {
         dismiss(animated: true, completion: nil)
-        delegate?.didPick(questionType: .freeResponse)
+        delegate?.editQuestionTypeViewControllerDidPick(questionType: .freeResponse)
     }
 
 }

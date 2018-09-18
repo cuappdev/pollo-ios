@@ -289,10 +289,9 @@ class CardController: UIViewController {
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
         
-        let nc = UINavigationController(rootViewController: pollBuilderVC)
-        nc.isNavigationBarHidden = true
-        present(nc, animated: true, completion: nil)
-        // customPresentViewController(presenter, viewController: nc, animated: true, completion: nil)
+        let pollBuilderNavigationController = UINavigationController(rootViewController: pollBuilderVC)
+        pollBuilderNavigationController.isNavigationBarHidden = true
+        present(pollBuilderNavigationController, animated: true, completion: nil)
     }
     @objc func goBack() {
         socket.socket.disconnect()
