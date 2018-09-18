@@ -16,7 +16,7 @@ extension DraftsViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: "draftCellID", for: indexPath) as! DraftCell
+        let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.draftCellIdentifier, for: indexPath) as! DraftCell
         cell.draft = drafts[drafts.count - (indexPath.row + 1)]
         cell.setupCell()
         return cell
