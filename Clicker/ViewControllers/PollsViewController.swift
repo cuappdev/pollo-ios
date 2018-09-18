@@ -22,6 +22,7 @@ class PollsViewController: UIViewController {
     var bottomBarView: UIView!
     var bottomPaddingView: UIView!
     var joinSessionButton: UIButton!
+    var settingsButton: UIButton!
     
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
@@ -91,6 +92,11 @@ class PollsViewController: UIViewController {
         joinSessionButton.setImage(UIImage(named: "JoinTabBarIcon"), for: .normal)
         view.addSubview(joinSessionButton)
         
+        settingsButton = UIButton()
+        settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
+        view.addSubview(settingsButton)
+        
     }
     
     func setupConstraints() {
@@ -130,7 +136,14 @@ class PollsViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             make.width.equalTo(19)
             make.height.equalTo(19)
-            make.right.equalToSuperview().offset(-15)
+            make.right.equalToSuperview().inset(15)
+        }
+        
+        settingsButton.snp.makeConstraints { make in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.centerY.equalTo(newPollButton.snp.centerY)
+            make.left.equalToSuperview().offset(15)
         }
         
         joinSessionButton.snp.makeConstraints { make in
@@ -177,11 +190,19 @@ class PollsViewController: UIViewController {
         customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
+    @objc func settingsAction() {
+        let settingsVC = SettingsViewController()
+        navigationController?.pushViewController(settingsVC, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
+        pollsCollectionView.reloadData()
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+
     }
 }

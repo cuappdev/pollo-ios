@@ -35,6 +35,11 @@ enum QuestionType: CustomStringConvertible {
     }
 }
 
+struct Links {
+    static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
+    static let appDevSite = "https://www.cornellappdev.com/"
+}
+
 struct Identifiers {
     static let addMoreOptionCellIdentifier = "addMoreOptionCellId"
     static let adminIdentifier = "admin"
