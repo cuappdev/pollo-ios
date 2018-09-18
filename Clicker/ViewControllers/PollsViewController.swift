@@ -188,9 +188,11 @@ class PollsViewController: UIViewController {
     
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
+        pollsCollectionView.reloadData()
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+
     }
 }

@@ -79,34 +79,29 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     // MARK: - CONSTRAINTS
     func setupConstraints() {
-        
         welcomeLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabelWidth)
             make.height.equalTo(welcomeLabelHeight)
             make.top.equalToSuperview().offset(welcomeLabelTopOffset)
             make.centerX.equalToSuperview()
         }
-        
         appNameLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
             make.height.equalTo(appNameLabelHeight)
             make.top.equalTo(welcomeLabel.snp.bottom)
             make.centerX.equalToSuperview()
         }
-        
         pronunciationLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
             make.height.equalTo(pronunciationLabelHeight)
             make.top.equalTo(appNameLabel.snp.bottom).offset(pronunciationLabelTopOffset)
             make.centerX.equalToSuperview()
         }
-        
         signInButton.snp.makeConstraints { make in
             make.width.equalTo(signInButtonWidth)
             make.height.equalTo(signInButtonHeight)
             make.top.equalTo(pronunciationLabel.snp.bottom).offset(signInButtonTopOffset)
             make.centerX.equalToSuperview()
         }
-        
     }
 }
