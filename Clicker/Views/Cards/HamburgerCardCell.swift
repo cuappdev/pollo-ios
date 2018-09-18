@@ -16,7 +16,6 @@ class HamburgerCardCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = contentViewCornerRadius
         contentView.layer.borderWidth = 0
     }
@@ -26,8 +25,10 @@ class HamburgerCardCell: UICollectionViewCell {
         switch hamburgerCardModel.state {
         case .top:
             contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            contentView.backgroundColor = .clickerWhite
         case .bottom:
             contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            contentView.backgroundColor = .white
         }
     }
     
