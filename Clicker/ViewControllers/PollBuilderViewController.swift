@@ -17,8 +17,8 @@ protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate{
-    
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
+
     // MARK: layout constants
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
@@ -28,6 +28,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     let dropdownArrowHeight: CGFloat = 5.5
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
+    let editQuestionTypeModalHeight: Float = 100 + Float(UIApplication.shared.statusBarFrame.height)
 
     // MARK: subviews and VC's
     var dropDown: PollTypeDropDownView!
@@ -148,21 +149,21 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
             make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding)
+            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height)
             make.width.equalTo(topBarHeight)
             make.height.equalTo(topBarHeight)
         }
         
         questionTypeButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(edgePadding)
+            make.top.equalTo(exitButton.snp.top)
             make.width.equalTo(questionTypeButtonWidth)
             make.height.equalTo(topBarHeight)
         }
         
         draftsButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(edgePadding)
-            make.top.equalTo(edgePadding)
+            make.top.equalTo(exitButton.snp.top)
             make.width.equalTo(draftsButtonWidth)
             make.height.equalTo(topBarHeight)
         }
@@ -320,8 +321,24 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func toggleQuestionType() {
-        dropDown.isHidden = false
-        
+        let width = ModalSize.full
+        let height = ModalSize.custom(size: editQuestionTypeModalHeight)
+        let originY = 0
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        let presenter = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.transitionType = .coverVerticalFromTop
+        let editQuestionTypeVC = EditQuestionTypeViewController(selectedQuestionType: questionType)
+        editQuestionTypeVC.delegate = self
+        customPresentViewController(presenter, viewController: editQuestionTypeVC, animated: true, completion: nil)
+    }
+    
+    func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
+        self.questionType = questionType
+        updateQuestionTypeButton()
+        mcPollBuilder.isHidden = questionType == .multipleChoice
+        frPollBuilder.isHidden = questionType == .freeResponse
     }
     
     // MARK - PickQTypeDelegate
@@ -347,6 +364,9 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func exit() {
+        guard let nav = self.presentingViewController as? UINavigationController else { return }
+        guard let cardController = nav.topViewController as? CardController else { return }
+        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -409,13 +429,25 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            buttonsView.frame.origin.y = view.frame.height - keyboardSize.height - buttonsViewHeight
+            buttonsView.snp.updateConstraints { update in
+                update.left.equalToSuperview()
+                update.width.equalToSuperview()
+                update.height.equalTo(buttonsViewHeight)
+                update.bottom.equalToSuperview().offset(-keyboardSize.height)
+            }
+            buttonsView.superview?.layoutIfNeeded()
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            buttonsView.frame.origin.y += keyboardSize.height
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            buttonsView.snp.updateConstraints { update in
+                update.left.equalToSuperview()
+                update.width.equalToSuperview()
+                update.height.equalTo(buttonsViewHeight)
+                update.bottom.equalToSuperview()
+            }
+            buttonsView.superview?.layoutIfNeeded()
         }
     }
     
