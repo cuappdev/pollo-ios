@@ -115,6 +115,8 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         optionsTableView.backgroundColor = .clickerWhite
         optionsTableView.clipsToBounds = true
         optionsTableView.separatorStyle = .none
+        optionsTableView.showsVerticalScrollIndicator = false
+        optionsTableView.showsHorizontalScrollIndicator = false
         
         addSubview(optionsTableView)
     }
