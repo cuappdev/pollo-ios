@@ -26,7 +26,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .clickerWhite
         setupViews()
     }
     
@@ -60,7 +60,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
         }
         
         totalVotesLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(totalVotesLabelTrailingPadding * -1)
+            make.trailing.equalToSuperview().inset(totalVotesLabelTrailingPadding)
             make.centerY.equalToSuperview()
         }
         super.updateConstraints()
@@ -71,6 +71,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
         switch miscellaneousModel.pollState {
         case .live:
             iconImageView.image = #imageLiteral(resourceName: "liveIcon")
+            descriptionLabel.text = ""
         case .ended:
             iconImageView.image = #imageLiteral(resourceName: "solo_eye")
             descriptionLabel.text = endedDescriptionText

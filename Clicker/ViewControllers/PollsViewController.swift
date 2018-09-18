@@ -20,7 +20,9 @@ class PollsViewController: UIViewController {
     var titleLabel: UILabel!
     var newPollButton: UIButton!
     var bottomBarView: UIView!
+    var bottomPaddingView: UIView!
     var joinSessionButton: UIButton!
+    var settingsButton: UIButton!
     
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
@@ -80,11 +82,20 @@ class PollsViewController: UIViewController {
         bottomBarView.backgroundColor = .clickerBlack1
         view.addSubview(bottomBarView)
         
+        bottomPaddingView = UIView()
+        bottomPaddingView.backgroundColor = .clickerBlack1
+        view.addSubview(bottomPaddingView)
+        
         joinSessionButton = UIButton()
         joinSessionButton.backgroundColor = .clear
         joinSessionButton.addTarget(self, action: #selector(showJoinSessionPopup), for: .touchUpInside)
         joinSessionButton.setImage(UIImage(named: "JoinTabBarIcon"), for: .normal)
         view.addSubview(joinSessionButton)
+        
+        settingsButton = UIButton()
+        settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
+        view.addSubview(settingsButton)
         
     }
     
@@ -104,9 +115,14 @@ class PollsViewController: UIViewController {
         
         bottomBarView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
+            make.width.centerX.equalToSuperview()
             make.height.equalTo(54)
+        }
+        
+        bottomPaddingView.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            make.top.equalTo(bottomBarView.snp.bottom)
+            make.bottom.equalToSuperview()
         }
         
         pollsCollectionView.snp.makeConstraints { make in
@@ -120,7 +136,14 @@ class PollsViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             make.width.equalTo(19)
             make.height.equalTo(19)
-            make.right.equalToSuperview().offset(-15)
+            make.right.equalToSuperview().inset(15)
+        }
+        
+        settingsButton.snp.makeConstraints { make in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.centerY.equalTo(newPollButton.snp.centerY)
+            make.left.equalToSuperview().offset(15)
         }
         
         joinSessionButton.snp.makeConstraints { make in
@@ -167,11 +190,19 @@ class PollsViewController: UIViewController {
         customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
+    @objc func settingsAction() {
+        let settingsVC = SettingsViewController()
+        navigationController?.pushViewController(settingsVC, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
+        pollsCollectionView.reloadData()
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+
     }
 }

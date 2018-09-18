@@ -7,88 +7,82 @@
 //
 
 import SocketIO
+import SwiftyJSON
 
 class Socket {
     let id: String
-    var delegates: [SocketDelegate] = [SocketDelegate]()
+    var delegate: SocketDelegate
     var socket: SocketIOClient
     var manager: SocketManager
     
-    init(id: String, userType: String) {
+    init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
-        
-        let url = URL(string: hostURL)!
+        self.delegate = delegate
+        let url = URL(string: Keys.hostURL.value)!
         if let googleId = User.currentUser?.id {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType, "googleId": googleId])])
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIdKey: googleId])])
         } else {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams(["userType": userType])])
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue])])
         }
         
         socket = manager.socket(forNamespace: "/\(id)")
         
         socket.on(clientEvent: .connect) { data, ack in
-            self.delegates.forEach{ $0.sessionConnected() }
+            self.delegate.sessionConnected()
         }
         
         socket.on(clientEvent: .disconnect) { data, ack in
-            self.delegates.forEach { $0.sessionConnected() }
+            self.delegate.sessionDisconnected()
         }
         
-        socket.on("user/poll/start") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any], let questionJSON = json["poll"] as? [String:Any] else {
+        socket.on(Routes.userStart) { data, ack in
+            guard let json = data[0] as? [String:Any], let pollDict = json[ParserKeys.pollKey] as? [String:Any] else {
                 return
             }
-            let poll = Poll(json: pollJSON)
-            self.delegates.forEach { $0.pollStarted(poll) }
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
+            self.delegate.pollStarted(poll)
         }
         
-        socket.on("user/poll/end") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any], let pollJSON = json["poll"] as? [String:Any] else {
+        socket.on(Routes.userEnd) { data, ack in
+            guard let json = data[0] as? [String:Any], let pollDict = json[ParserKeys.pollKey] as? [String:Any] else {
                 return
             }
-            let poll = Poll(json: pollJSON)
-            self.delegates.forEach { $0.pollEnded(poll) }
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
+            self.delegate.pollEnded(poll, userRole: .member)
         }
         
-        socket.on("user/poll/results") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any] else {
+        socket.on(Routes.userShare) { data, ack in
+            guard let dict = data[0] as? [String:Any] else {
                 return
             }
-            let currentState = CurrentState(json: json)
-            self.delegates.forEach { $0.receivedResults(currentState) }
+            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
+            self.delegate.receivedResults(currentState)
         }
         
-        socket.on("user/session/save") { data, ack in
-            guard let json = data[0] as? [String:Any] else {
+        socket.on(Routes.adminUpdateTally) { data, ack in
+            guard let dict = data[0] as? [String:Any] else {
                 return
             }
-            let session = Session(json: json)
-            self.delegates.forEach { $0.saveSession(session) }
+            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
+            self.delegate.updatedTally(currentState)
         }
         
-        socket.on("admin/poll/updateTally") { data, ack in
-            print(data)
-            guard let json = data[0] as? [String:Any] else {
+        socket.on(Routes.adminEnded) { data, ack in
+            guard let json = data[0] as? [String:Any], let pollDict = json[ParserKeys.pollKey] as? [String:Any] else {
                 return
             }
-            let currentState = CurrentState(json: json)
-            self.delegates.forEach { $0.updatedTally(currentState) }
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
+            self.delegate.pollEnded(poll, userRole: .admin)
         }
         
-        socket.on("user/count") { data, ack in
-            guard let json = data[0] as? [String:Any], let count = json["count"] as? Int else {
+        socket.on(Routes.count) { data, ack in
+            guard let json = data[0] as? [String:Any], let count = json[ParserKeys.countKey] as? Int else {
                 return
             }
-            self.delegates.forEach { $0.receivedUserCount(count) }
+            self.delegate.receivedUserCount(count)
         }
         
         socket.connect()
     }
-    
-    func addDelegate(_ delegate: SocketDelegate) {
-        self.delegates.append(delegate)
-    }
+
 }

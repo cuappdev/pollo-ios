@@ -15,8 +15,8 @@ enum QuestionType: CustomStringConvertible {
     
     var description : String {
         switch self {
-        case .multipleChoice: return "Multiple Choice"
-        case .freeResponse: return "Free Response"
+        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
+        case .freeResponse: return Identifiers.freeResponseIdentifier
         }
     }
     
@@ -35,6 +35,11 @@ enum QuestionType: CustomStringConvertible {
     }
 }
 
+struct Links {
+    static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
+    static let appDevSite = "https://www.cornellappdev.com/"
+}
+
 struct Identifiers {
     static let addMoreOptionCellIdentifier = "addMoreOptionCellId"
     static let adminIdentifier = "admin"
@@ -49,24 +54,59 @@ struct Identifiers {
     static let pollPreviewIdentifier = "pollPreviewCellId"
     static let questionOptionCellIdentifier = "questionOptionCellId"
     static let resultMCIdentifier = "resultMCCellId"
-    static let resultFRIdentifier = "resultFRCellId"
     static let significantEventsIdentifier = "significantEvents"
 }
 
 struct Routes {
-    static let end = "server/poll/end"
-    static let results = "server/poll/results"
-    static let start = "server/poll/start"
-    static let tally = "server/poll/tally"
-    static let upvote = "server/poll/upvote"
+    static let serverEnd = "server/poll/end"
+    static let serverShare = "server/poll/results"
+    static let serverStart = "server/poll/start"
+    static let serverTally = "server/poll/tally"
+    static let serverUpvote = "server/poll/upvote"
+    static let userStart = "user/poll/start"
+    static let userEnd = "user/poll/end"
+    static let userShare = "user/poll/results"
+    static let adminUpdateTally = "admin/poll/updateTally"
+    static let adminEnded = "admin/poll/ended"
+    static let count = "user/count"
 }
 
 struct LayoutConstants {
-    static let questionCellHeight: CGFloat = 40
-    static let optionCellHeight: CGFloat = 44
+    static let verticalQuestionCellHeight: CGFloat = 40
+    static let verticalMCOptionCellHeight: CGFloat = 44
+    static let horizontalMCOptionCellHeight: CGFloat = 50
+    static let horizontalFROptionCellHeight: CGFloat = 58
+    static let verticalFROptionCellHeight: CGFloat = 52
+    static let frInputCellHeight: CGFloat = 64
     static let pollMiscellaneousCellHeight: CGFloat = 30
-    static let pollButtonCellHeight: CGFloat = 45
+    static let separatorLineCellHeight: CGFloat = 1
     static let hamburgerCardCellHeight: CGFloat = 25
+    static let pollOptionsVerticalPadding: CGFloat = 10
+}
+
+struct ParserKeys {
+    static let answerKey = "answer"
+    static let answersKey = "answers"
+    static let countKey = "count"
+    static let idKey = "id"
+    static let optionsKey = "options"
+    static let pollKey = "poll"
+    static let resultsKey = "results"
+    static let sharedKey = "shared"
+    static let textKey = "text"
+    static let typeKey = "type"
+}
+
+struct RequestKeys {
+    static let googleIdKey = "googleId"
+    static let optionsKey = "options"
+    static let pollKey = "poll"
+    static let choiceKey = "choice"
+    static let countKey = "count"
+    static let textKey = "text"
+    static let typeKey = "type"
+    static let sharedKey = "shared"
+    static let userTypeKey = "userType"
 }
 
 enum Keys: String {
@@ -110,6 +150,3 @@ struct Google {
     
     private init() {}
 }
-
-// let hostURL = "http://clicker-backend.cornellappdev.com"
-let hostURL = "http://localhost:3000"
