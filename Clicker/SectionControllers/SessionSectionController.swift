@@ -1,0 +1,62 @@
+//
+//  SessionSectionController.swift
+//  Clicker
+//
+//  Created by Kevin Chan on 9/18/18.
+//  Copyright © 2018 CornellAppDev. All rights reserved.
+//
+
+import IGListKit
+
+protocol SessionSectionControllerDelegate {
+    
+    func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session)
+    func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session)
+    
+}
+
+class SessionSectionController: ListSectionController {
+    
+    // MARK: - Data vars
+    var session: Session!
+    var delegate: SessionSectionControllerDelegate!
+    
+    // MARK: - Constants
+    let cellHeight: CGFloat = 82.5
+    
+    init(delegate: SessionSectionControllerDelegate) {
+        self.delegate = delegate
+    }
+    
+    // MARK: - ListSectionController overrides
+    override func sizeForItem(at index: Int) -> CGSize {
+        guard let containerSize = collectionContext?.containerSize else {
+            return .zero
+        }
+        return CGSize(width: containerSize.width, height: cellHeight)
+    }
+    
+    override func cellForItem(at index: Int) -> UICollectionViewCell {
+        let cell = collectionContext?.dequeueReusableCell(of: PollPreviewCell.self, for: self, at: index) as! PollPreviewCell
+        cell.configure(for: session, delegate: self)
+        cell.setNeedsUpdateConstraints()
+        return cell
+    }
+    
+    override func didUpdate(to object: Any) {
+        session = object as? Session
+    }
+    
+    override func didSelectItem(at index: Int) {
+        delegate.sessionSectionControllerShouldOpenSession(sectionController: self, session: session)
+    }
+
+}
+
+extension SessionSectionController: PollPreviewCellDelegate {
+    
+    func pollPreviewCellShouldEditSession() {
+        delegate.sessionSectionControllerShouldOpenSession(sectionController: self, session: session)
+    }
+    
+}

@@ -24,11 +24,6 @@ class NameView: UIView, UITextFieldDelegate {
         self.session = session
         self.delegate = delegate
         backgroundColor = .clickerBlack2
-        
-        setup()
-    }
-    
-    func setup() {
         setupViews()
         setupConstraints()
     }

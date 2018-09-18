@@ -10,26 +10,34 @@ import UIKit
 
 protocol PollPreviewCellDelegate {
     
-    func shouldEditPoll(atIndex index: Int)
+    func pollPreviewCellShouldEditSession()
 
 }
 
-class PollPreviewCell: UITableViewCell {
+class PollPreviewCell: UICollectionViewCell {
     
-    var session: Session!
-    var index: Int!
-    var delegate: PollPreviewCellDelegate!
-    
+    // MARK: - View vars
     var nameLabel: UILabel!
     var codeLabel: UILabel!
-    var line: UIView!
+    var lineView: UIView!
     var dotsButton: UIButton!
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+    // MARK: - Data vars
+    var delegate: PollPreviewCellDelegate!
+    var index: Int!
+    
+    // MARK: - Constants
+    let nameLabelTopPadding: CGFloat = 19.5
+    let nameLabelWidth: CGFloat = 300
+    let nameLabelLeftPadding: CGFloat = 17
+    let codeLabelTopPadding: CGFloat = 4
+    let lineViewHeight: CGFloat = 1
+    let lineViewLeftPadding: CGFloat = 18
+    let dotsButtonRightPadding: CGFloat = 12
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupViews()
-        setupConstraints()
     }
     
     // MARK - Layout
@@ -43,9 +51,9 @@ class PollPreviewCell: UITableViewCell {
         codeLabel.textColor = .clickerGrey2
         contentView.addSubview(codeLabel)
         
-        line = UIView()
-        line.backgroundColor = .clickerGrey5
-        contentView.addSubview(line)
+        lineView = UIView()
+        lineView.backgroundColor = .clickerGrey5
+        contentView.addSubview(lineView)
         
         dotsButton = UIButton()
         dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
@@ -54,41 +62,42 @@ class PollPreviewCell: UITableViewCell {
         contentView.addSubview(dotsButton)
     }
     
-    func setupConstraints() {
+    override func updateConstraints() {
         nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(19.5)
-            make.height.equalTo(21.5)
-            make.width.equalTo(300)
-            make.left.equalToSuperview().offset(17)
+            make.top.equalToSuperview().offset(nameLabelTopPadding)
+            make.width.equalTo(nameLabelWidth)
+            make.left.equalToSuperview().offset(nameLabelLeftPadding)
         }
         
         codeLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(4)
-            make.height.equalTo(17)
             make.left.equalTo(nameLabel.snp.left)
             make.width.equalTo(nameLabel.snp.width)
         }
         
-        line.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.left.equalToSuperview().offset(18)
+        lineView.snp.makeConstraints { make in
+            make.height.equalTo(lineViewHeight)
+            make.left.equalToSuperview().offset(lineViewLeftPadding)
             make.bottom.equalToSuperview()
             make.right.equalToSuperview()
         }
         
         dotsButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-12)
+            make.right.equalToSuperview().inset(dotsButtonRightPadding)
             make.centerY.equalToSuperview()
         }
+        super.updateConstraints()
     }
     
-    @objc func dotsBtnPressed() {
-        delegate.shouldEditPoll(atIndex: index)
-    }
-    
-    func updateLabels() {
+    // MARK: - Configure
+    func configure(for session: Session, delegate: PollPreviewCellDelegate) {
         nameLabel.text = session.name
         codeLabel.text = "CODE: \(session.code)"
+    }
+    
+    // MARK: - Action
+    @objc func dotsBtnPressed() {
+        delegate.pollPreviewCellShouldEditSession()
     }
     
     required init?(coder aDecoder: NSCoder) {

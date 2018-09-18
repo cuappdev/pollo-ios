@@ -50,7 +50,19 @@ extension PollsViewController: UIScrollViewDelegate {
 }
 
 extension PollsViewController: PollsCellDelegate {
-    func shouldEditSession(session: Session) {
+    
+    func pollsCellShouldOpenSession(session: Session, userRole: UserRole) {
+        GetSortedPolls(id: session.id).make()
+            .done { pollsDateArray in
+                let cardController = CardController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                self.navigationController?.pushViewController(cardController, animated: true)
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+            } .catch { error in
+                print(error)
+        }
+    }
+    
+    func pollsCellShouldEditSession(session: Session) {
         let width = ModalSize.full
         let height = ModalSize.custom(size: editModalHeight)
         let originY = view.frame.height - CGFloat(editModalHeight)
@@ -67,10 +79,6 @@ extension PollsViewController: PollsCellDelegate {
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
     }
     
-    func shouldPushCardController(cardController: CardController) {
-        self.navigationController?.pushViewController(cardController, animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
 }
 
 extension PollsViewController: SliderBarDelegate {

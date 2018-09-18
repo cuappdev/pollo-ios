@@ -7,47 +7,43 @@
 //
 
 import GoogleSignIn
+import IGListKit
 import UIKit
 
-extension PollsCell: UITableViewDelegate, UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.pollPreviewIdentifier) as! PollPreviewCell
-        cell.session = sessions[sessions.count - indexPath.row - 1]
-        cell.index = indexPath.row
-        cell.delegate = self
-        cell.updateLabels()
-        cell.selectionStyle = .none
-        return cell
+extension PollsCell: ListAdapterDataSource {
+    
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        if !sessions.isEmpty {
+            return sessions.reversed()
+        }
+        guard let pollType = pollType else { return [] }
+        let emptyStateType: EmptyStateType = .pollsViewController(pollType: pollType)
+        return [EmptyStateModel(type: emptyStateType)]
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sessions.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return pollPreviewCellHeight
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let session: Session = sessions[sessions.count - indexPath.row - 1]
-        GetSortedPolls(id: session.id).make()
-            .done { pollsDateArray in
-                let userRole: UserRole = self.pollType == .created ? .admin : .member
-                let cardController = CardController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                self.delegate.shouldPushCardController(cardController: cardController)
-            } .catch { error in
-                print(error)
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        if object is Session {
+            return SessionSectionController(delegate: self)
+        } else {
+            return EmptyStateSectionController()
         }
     }
-
+    
+    func emptyView(for listAdapter: ListAdapter) -> UIView? {
+        return nil
+    }
+    
 }
 
-extension PollsCell: PollPreviewCellDelegate {
+extension PollsCell: SessionSectionControllerDelegate {
     
-    func shouldEditPoll(atIndex index: Int) {
-        let session = sessions[sessions.count - index - 1]
-        self.delegate.shouldEditSession(session: session)
+    func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session) {
+        let userRole: UserRole = pollType == .created ? .admin : .member
+        delegate.pollsCellShouldOpenSession(session: session, userRole: userRole)
+    }
+    
+    func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session) {
+        delegate.pollsCellShouldEditSession(session: session)
     }
     
 }
