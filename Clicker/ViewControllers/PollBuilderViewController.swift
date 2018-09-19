@@ -17,7 +17,7 @@ protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
 
     // MARK: layout constants
     let questionTypeButtonWidth: CGFloat = 150

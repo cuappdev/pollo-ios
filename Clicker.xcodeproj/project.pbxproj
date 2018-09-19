@@ -565,7 +565,7 @@
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
 				0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */,
-				63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */
+				63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1010,12 +1010,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NVY52276C4;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEV_SERVER\"";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo12345;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
@@ -1157,11 +1157,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NVY52276C4;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo12345;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
@@ -1181,12 +1181,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NVY52276C4;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo12345;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
