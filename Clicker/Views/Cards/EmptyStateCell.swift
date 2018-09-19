@@ -9,26 +9,27 @@
 import UIKit
 
 class EmptyStateCell: UICollectionViewCell {
-   
-    //MARK: views!
-    var monkeyView: UIImageView!
-    var nothingToSeeLabel: UILabel!
-    var waitingLabel: UILabel!
+    
+    //MARK: View vars
+    var iconImageView: UIImageView!
+    var titleLabel: UILabel!
+    var subtitleLabel: UILabel!
     var nameView: NameView!
     
-    //MARK: TODO- implement these
-    var session: Session!
-    var userRole: UserRole!
-    var nameViewDelegate: NameViewDelegate!
+    // MARK: - Data vars
+    var emptyStateModel: EmptyStateModel!
 
     // MARK: - Constants
-    let monkeyViewLength: CGFloat = 32.0
-    let monkeyViewTopPadding: CGFloat = 142.0
-    let nothingToSeeLabelWidth: CGFloat = 200.0
-    let nothingToSeeLabelTopPadding: CGFloat = 20.0
-    let waitingLabelWidth: CGFloat = 220.0
-    let waitingLabelTopPadding: CGFloat = 10.0
+    let pollsViewControllerIconImageViewLength: CGFloat = 45.0
+    let cardControllerIconImageViewLength: CGFloat = 32.0
+    let iconImageViewTopPadding: CGFloat = 142.0
+    let titleLabelWidth: CGFloat = 200.0
+    let titleLabelTopPadding: CGFloat = 20.0
+    let subtitleLabelWidth: CGFloat = 220.0
+    let subtitleLabelTopPadding: CGFloat = 10.0
     let countLabelWidth: CGFloat = 42.0
+    let createNewQuestionText = "Create a new question above!"
+    let enterCodeText = "Enter a code below to join!"
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -36,6 +37,7 @@ class EmptyStateCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,56 +46,76 @@ class EmptyStateCell: UICollectionViewCell {
     
     func setup() {
         setupViews()
-        setupConstraints()
-        // TODO: Add logic for setting up empty state or nonempty state
-        if userRole == .admin && session.name == session.code {
-            setupNameView()
-        }
     }
     
     func setupViews() {
-        monkeyView = UIImageView(image: #imageLiteral(resourceName: "monkey_emoji"))
-        monkeyView.contentMode = .scaleAspectFit
-        contentView.addSubview(monkeyView)
+        iconImageView = UIImageView()
+        iconImageView.contentMode = .scaleAspectFit
+        contentView.addSubview(iconImageView)
         
-        nothingToSeeLabel = UILabel()
-        nothingToSeeLabel.font = ._16SemiboldFont
-        nothingToSeeLabel.textColor = .clickerGrey5
-        nothingToSeeLabel.textAlignment = .center
-        nothingToSeeLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-        contentView.addSubview(nothingToSeeLabel)
+        titleLabel = UILabel()
+        titleLabel.font = ._16SemiboldFont
+        titleLabel.textAlignment = .center
+        contentView.addSubview(titleLabel)
         
-        waitingLabel = UILabel()
-        waitingLabel.font = ._14MediumFont
-        waitingLabel.textColor = .clickerGrey2
-        waitingLabel.textAlignment = .center
-        waitingLabel.lineBreakMode = .byWordWrapping
-        waitingLabel.numberOfLines = 0
-        waitingLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-        contentView.addSubview(waitingLabel)
-        
+        subtitleLabel = UILabel()
+        subtitleLabel.font = ._14MediumFont
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.lineBreakMode = .byWordWrapping
+        subtitleLabel.numberOfLines = 0
+        contentView.addSubview(subtitleLabel)
     }
-    func setupConstraints() {
-        monkeyView.snp.makeConstraints { make in
-            make.width.height.equalTo(monkeyViewLength)
+    
+    override func updateConstraints() {
+        iconImageView.snp.makeConstraints { make in
+            switch emptyStateModel.type {
+            case .pollsViewController(_):
+                make.width.height.equalTo(pollsViewControllerIconImageViewLength)
+            case .cardController(_):
+                make.width.height.equalTo(cardControllerIconImageViewLength)
+            }
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(monkeyViewTopPadding)
+            make.top.equalToSuperview().offset(iconImageViewTopPadding)
         }
         
-        nothingToSeeLabel.snp.makeConstraints { make in
-            make.width.equalTo(nothingToSeeLabelWidth)
+        titleLabel.snp.makeConstraints { make in
+            make.width.equalTo(titleLabelWidth)
             make.centerX.equalToSuperview()
-            make.top.equalTo(monkeyView.snp.bottom).offset(nothingToSeeLabelTopPadding)
+            make.top.equalTo(iconImageView.snp.bottom).offset(titleLabelTopPadding)
         }
         
-        waitingLabel.snp.makeConstraints { make in
-            make.width.equalTo(waitingLabelWidth)
+        subtitleLabel.snp.makeConstraints { make in
+            make.width.equalTo(subtitleLabelWidth)
             make.centerX.equalToSuperview()
-            make.top.equalTo(nothingToSeeLabel.snp.bottom).offset(waitingLabelTopPadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(subtitleLabelTopPadding)
         }
+        super.updateConstraints()
     }
+    
+    // MARK: - Configure
+    func configure(for emptyStateModel: EmptyStateModel, session: Session?, shouldDisplayNameView: Bool?, nameViewDelegate: NameViewDelegate?) {
+        self.emptyStateModel = emptyStateModel
+        switch emptyStateModel.type {
+        case .pollsViewController(let pollType):
+            iconImageView.image = #imageLiteral(resourceName: "shrug_emoji")
+            titleLabel.textColor = .black
+            let pollTypeString = pollType == .created ? "created" : "joined"
+            titleLabel.text = "No polls \(pollTypeString)"
+            subtitleLabel.text = pollType == .created ? createNewQuestionText : enterCodeText
+        case .cardController(let userRole):
+            if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
+                setupNameView(with: session, nameViewDelegate: nameViewDelegate)
+            }
+            iconImageView.image = #imageLiteral(resourceName: "monkey_emoji")
+            titleLabel.textColor = .clickerGrey5
+            titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
+            subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
+        }
+        subtitleLabel.textColor = .clickerGrey2
+    }
+    
     // MARK - NAME THE POLL
-    func setupNameView() {
+    func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
         

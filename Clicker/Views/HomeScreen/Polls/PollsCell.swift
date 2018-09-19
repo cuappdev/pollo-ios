@@ -7,18 +7,24 @@
 //
 
 import GoogleSignIn
+import IGListKit
 import Presentr
 import UIKit
 
 protocol PollsCellDelegate {
-    func shouldEditSession(session: Session)
-    func shouldPushCardController(cardController: CardController)
+    
+    func pollsCellShouldOpenSession(session: Session, userRole: UserRole)
+    func pollsCellShouldEditSession(session: Session)
+    
 }
 
 class PollsCell: UICollectionViewCell {
     
-    var pollsTableView: UITableView!
+    // MARK: - View vars
+    var collectionView: UICollectionView!
+    var adapter: ListAdapter!
     
+    // MARK: - Data vars
     var delegate: PollsCellDelegate!
     var sessions: [Session] = []
     var pollType: PollType!
@@ -29,46 +35,44 @@ class PollsCell: UICollectionViewCell {
         super.init(frame: frame)
         
         GIDSignIn.sharedInstance().delegate = self
-        getPollSessions()
         setupViews()
-        setupConstraints()
     }
     
     func configureWith(pollType: PollType, delegate: PollsCellDelegate) {
         self.pollType = pollType
         self.delegate = delegate
-        
         getPollSessions()
     }
     
     // MARK: - LAYOUT
     func setupViews() {
-        pollsTableView = UITableView()
-        pollsTableView.delegate = self
-        pollsTableView.dataSource = self
-        pollsTableView.register(PollPreviewCell.self, forCellReuseIdentifier: Identifiers.pollPreviewIdentifier)
-        pollsTableView.separatorStyle = .none
-        addSubview(pollsTableView)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        contentView.addSubview(collectionView)
+        
+        let updater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: nil)
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
     }
     
-    func setupConstraints() {
-        pollsTableView.snp.makeConstraints { make in
+    override func updateConstraints() {
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        super.updateConstraints()
     }
     
     func getPollSessions() {
-        if (User.userSession == nil) { return }
-        let role: UserRole
-        if (pollType == .created) {
-            role = .admin
-        } else {
-            role = .member
-        }
+        let role: UserRole = pollType == .created ? .admin : .member
         GetPollSessions(role: String(describing: role)).make()
             .done { sessions in
                 self.sessions = sessions
-                DispatchQueue.main.async { self.pollsTableView.reloadData() }
+                self.adapter.performUpdates(animated: false, completion: nil)
             } .catch { error in
                 print(error)
         }

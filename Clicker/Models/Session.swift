@@ -6,7 +6,7 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import Foundation
+import IGListKit
 
 class Session {
     
@@ -14,6 +14,7 @@ class Session {
     var name: String
     var code: String
     var isLive: Bool?
+    let identifier = UUID().uuidString
     
     init(id: Int, name: String, code: String) {
         self.id = id
@@ -33,4 +34,19 @@ class Session {
         self.name = json["name"] as! String
         self.code = json["code"] as! String
     }
+    
+}
+
+extension Session: ListDiffable {
+    
+    func diffIdentifier() -> NSObjectProtocol {
+        return identifier as NSString
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        if (self === object) { return true }
+        guard let object = object as? Session else { return false }
+        return identifier == object.identifier
+    }
+    
 }

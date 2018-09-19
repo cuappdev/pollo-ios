@@ -24,7 +24,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     let pronunciationLabelText: String = "\"Poh-loh\""
     let welcomeLabelWidth: CGFloat = 249.5
     let welcomeLabelHeight: CGFloat = 31.5
-    let welcomeLabelTopOffset: CGFloat = 194.5
+    let welcomeLabelTopScaleFactor: CGFloat = 0.3
     let appNameLabelHeight: CGFloat = 71.5
     let pronunciationLabelHeight: CGFloat = 19
     let pronunciationLabelTopOffset: CGFloat = 14.5
@@ -82,7 +82,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         welcomeLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabelWidth)
             make.height.equalTo(welcomeLabelHeight)
-            make.top.equalToSuperview().offset(welcomeLabelTopOffset)
+            make.top.equalToSuperview().offset(view.frame.height * welcomeLabelTopScaleFactor)
             make.centerX.equalToSuperview()
         }
         appNameLabel.snp.makeConstraints { make in
