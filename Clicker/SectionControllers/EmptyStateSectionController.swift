@@ -11,17 +11,16 @@ import IGListKit
 
 class EmptyStateSectionController: ListSectionController {
     
+    // MARK: - Data vars
     var emptyStateModel: EmptyStateModel!
-    
-    // MARK: Must pass these to the EmptyStateCell
-    var session: Session!
-    var userRole: UserRole!
-    var nameViewDelegate: NameViewDelegate!
-    
-    init(session: Session, userRole: UserRole, nameViewDelegate: NameViewDelegate) {
-        super.init()
+    var session: Session?
+    var shouldDisplayNameView: Bool?
+    var nameViewDelegate: NameViewDelegate?
+
+    convenience init(session: Session, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate) {
+        self.init()
         self.session = session
-        self.userRole = userRole
+        self.shouldDisplayNameView = shouldDisplayNameView
         self.nameViewDelegate = nameViewDelegate
     }
     
@@ -35,10 +34,8 @@ class EmptyStateSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: EmptyStateCell.self, for: self, at: index) as! EmptyStateCell
-        cell.session = session
-        cell.userRole = userRole
-        cell.nameViewDelegate = nameViewDelegate
-        cell.setup()
+        cell.configure(for: emptyStateModel, session: session, shouldDisplayNameView: shouldDisplayNameView, nameViewDelegate: nameViewDelegate)
+        cell.setNeedsUpdateConstraints()
         return cell
     }
     
