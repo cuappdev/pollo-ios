@@ -14,7 +14,7 @@ extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         switch state {
-        case .horizontal:
+        case .horizontal?:
             if (currentIndex > -1) {
                 return pollsDateArray[currentIndex].polls
             } else {
