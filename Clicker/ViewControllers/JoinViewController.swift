@@ -116,7 +116,6 @@ class JoinViewController: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - KEYBOARD
-    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.view.frame.origin.y -= keyboardSize.height
