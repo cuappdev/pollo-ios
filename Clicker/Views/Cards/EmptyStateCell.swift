@@ -24,9 +24,9 @@ class EmptyStateCell: UICollectionViewCell {
     let cardControllerIconImageViewLength: CGFloat = 32.0
     let iconImageViewTopPadding: CGFloat = 142.0
     let titleLabelWidth: CGFloat = 200.0
-    let titleLabelTopPadding: CGFloat = 20.0
+    let titleLabelTopPadding: CGFloat = 18.0
     let subtitleLabelWidth: CGFloat = 220.0
-    let subtitleLabelTopPadding: CGFloat = 10.0
+    let subtitleLabelTopPadding: CGFloat = 7.5
     let countLabelWidth: CGFloat = 42.0
     let createNewQuestionText = "Create a new question above!"
     let enterCodeText = "Enter a code below to join!"

@@ -82,8 +82,27 @@ extension PollsViewController: PollsCellDelegate {
 }
 
 extension PollsViewController: SliderBarDelegate {
+    
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: 0, section: index)
         pollsCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
+
+}
+
+extension PollsViewController: UITextFieldDelegate {
+ 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+}
+
+extension PollsViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return isKeyboardShown
+    }
+    
 }
