@@ -40,6 +40,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
+    var bottomPaddingView: UIView!
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
     
@@ -144,6 +145,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         startQuestionButton.layer.cornerRadius = buttonHeight / 2
         startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
         buttonsView.addSubview(startQuestionButton)
+        
+        bottomPaddingView = UIView()
+        bottomPaddingView.backgroundColor = .white
+        view.addSubview(bottomPaddingView)
     }
     
     func setupConstraints() {
@@ -170,7 +175,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         
         buttonsView.snp.makeConstraints { make in
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.height.equalTo(buttonsViewHeight)
         }
@@ -203,6 +208,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             make.bottom.equalTo(mcPollBuilder.snp.bottom)
         }
         
+        bottomPaddingView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(buttonsView.snp.bottom)
+        }
     }
     
     func updateQuestionTypeButton() {
@@ -337,8 +346,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
         self.questionType = questionType
         updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .multipleChoice
-        frPollBuilder.isHidden = questionType == .freeResponse
+        mcPollBuilder.isHidden = questionType == .freeResponse
+        frPollBuilder.isHidden = questionType == .multipleChoice
     }
     
     // MARK - PickQTypeDelegate
@@ -429,11 +438,12 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let iphoneXBottomPadding = view.safeAreaInsets.bottom
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()
                 update.height.equalTo(buttonsViewHeight)
-                update.bottom.equalToSuperview().offset(-keyboardSize.height)
+                update.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
             }
             buttonsView.superview?.layoutIfNeeded()
         }
@@ -445,7 +455,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()
                 update.height.equalTo(buttonsViewHeight)
-                update.bottom.equalToSuperview()
+                update.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
             buttonsView.superview?.layoutIfNeeded()
         }

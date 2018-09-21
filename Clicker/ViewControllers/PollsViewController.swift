@@ -37,7 +37,7 @@ class PollsViewController: UIViewController {
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
-    let codeTextFieldPlaceHolder = "Enter a code"
+    let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
     
     override func viewDidLoad() {
@@ -290,8 +290,9 @@ class PollsViewController: UIViewController {
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let iphoneXBottomPadding = view.safeAreaInsets.bottom
             joinSessionContainerView.snp.remakeConstraints { make in
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(joinSessionContainerViewHeight)
             }
