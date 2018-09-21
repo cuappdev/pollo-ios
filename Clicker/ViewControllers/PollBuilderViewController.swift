@@ -19,7 +19,7 @@ protocol PollBuilderViewControllerDelegate {
 
 class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
 
-    // MARK: layout constants
+    // MARK: Constants
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
@@ -29,8 +29,10 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
     let editQuestionTypeModalHeight: Float = 100 + Float(UIApplication.shared.statusBarFrame.height)
+    let saveDraftButtonTitle = "Save as draft"
+    let startQuestionButtonTitle = "Start Question"
 
-    // MARK: subviews and VC's
+    // MARK: View vars
     var dropDown: PollTypeDropDownView!
     var dropDownArrow: UIImageView!
     var exitButton: UIButton!
@@ -44,7 +46,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
     
-    // MARK: data
+    // MARK: Data vars
     var drafts: [Draft]!
     var questionType: QuestionType!
     var delegate: PollBuilderViewControllerDelegate!
@@ -81,7 +83,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     // MARK: Setup
-    
     func setupViews() {
         navigationController?.navigationBar.isHidden = true
         
@@ -91,7 +92,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(exitButton)
         
         questionTypeButton = UIButton()
-        questionTypeButton.setTitle("Multiple Choice", for: .normal)
+        questionTypeButton.setTitle(StringConstants.multipleChoice, for: .normal)
         questionTypeButton.setTitleColor(.clickerBlack0, for: .normal)
         questionTypeButton.titleLabel?.font = ._16SemiboldFont
         questionTypeButton.contentHorizontalAlignment = .center
@@ -128,7 +129,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         buttonsView.addSubview(divider)
         
         saveDraftButton = UIButton()
-        saveDraftButton.setTitle("Save as draft", for: .normal)
+        saveDraftButton.setTitle(saveDraftButtonTitle, for: .normal)
         canDraft = false
         updateCanDraft(canDraft)
         saveDraftButton.titleLabel?.font = ._16SemiboldFont
@@ -138,7 +139,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         buttonsView.addSubview(saveDraftButton)
         
         startQuestionButton = UIButton()
-        startQuestionButton.setTitle("Start Question", for: .normal)
+        startQuestionButton.setTitle(startQuestionButtonTitle, for: .normal)
         startQuestionButton.setTitleColor(.white, for: .normal)
         startQuestionButton.titleLabel?.font = ._16SemiboldFont
         startQuestionButton.backgroundColor = .clickerGreen0
