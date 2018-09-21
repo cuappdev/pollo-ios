@@ -14,13 +14,23 @@ protocol FillsDraftDelegate {
 
 class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - View vars
     var visualEffectView: UIVisualEffectView!
     var backButton: UIButton!
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
     var drafts: [Draft]!
     
+    // MARK: - Data vars
     var delegate: FillsDraftDelegate!
+    
+    // MARK: - Constants
+    let titleLabelTopPadding: CGFloat = 16
+    let backButtonLeftPadding: CGFloat = 18
+    let backButtonLength: CGFloat = 13
+    let draftsCollectionViewTopPadding: CGFloat = 32
+    let draftsCollectionViewWidthInset: CGFloat = 36
+    let titleLabelText = "Drafts"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,12 +47,13 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         backButton = UIButton()
         backButton.setImage(#imageLiteral(resourceName: "whiteExit"), for: .normal)
         backButton.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
+        backButton.contentMode = .scaleAspectFit
         view.addSubview(backButton)
         
         titleLabel = UILabel()
-        titleLabel.text = "Drafts"
+        titleLabel.text = titleLabelText
         titleLabel.textColor = .white
-        titleLabel.font = UIFont._16SemiboldFont
+        titleLabel.font = UIFont._18SemiboldFont
         titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
         
@@ -67,21 +78,21 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
             make.edges.equalToSuperview()
         }
         
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.top.equalToSuperview().offset(32)
-            make.width.height.equalTo(16)
-        }
-        
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(backButton)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(titleLabelTopPadding)
+        }
+        
+        backButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(backButtonLeftPadding)
+            make.width.height.equalTo(backButtonLength)
+            make.centerY.equalTo(titleLabel.snp.centerY)
         }
         
         draftsCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
+            make.top.equalTo(titleLabel.snp.bottom).offset(draftsCollectionViewTopPadding)
             make.bottom.equalToSuperview()
-            make.width.equalToSuperview().inset(36)
+            make.width.equalToSuperview().inset(draftsCollectionViewWidthInset)
             make.centerX.equalToSuperview()
         }
     }
