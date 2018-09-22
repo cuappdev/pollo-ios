@@ -17,7 +17,7 @@ protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
+class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, DraftsViewControllerDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
 
     // MARK: Constants
     let questionTypeButtonWidth: CGFloat = 150
@@ -45,6 +45,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var bottomPaddingView: UIView!
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
+    var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: Data vars
     var drafts: [Draft]!
@@ -52,9 +53,9 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
     var canDraft: Bool!
-    var presented: Bool = false
     var loadedMCDraft: Draft?
     var loadedFRDraft: Draft?
+    var isKeyboardShown: Bool = false
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
@@ -70,15 +71,14 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if !presented {
-            setupViews()
-            setupConstraints()
-            setupDropDown()
-        }
-        presented = true
+        
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGestureRecognizer.delegate = self
+        view.addGestureRecognizer(tapGestureRecognizer)
+        
+        setupViews()
+        setupConstraints()
+        setupDropDown()
         getDrafts()
     }
     
@@ -234,7 +234,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             switch type {
             case .multipleChoice:
                 let question = mcPollBuilder.questionTextField.text ?? ""
-                var options = mcPollBuilder.options.filter { $0 != "" }
+                var options = mcPollBuilder.getOptions()
                 if options.isEmpty {
                     options.append("")
                 }
@@ -254,9 +254,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                             print("error: ", error)
                     }
                 }
-                self.mcPollBuilder.clearOptions()
-                self.mcPollBuilder.questionTextField.text = ""
-                self.mcPollBuilder.optionsTableView.reloadData()
+                loadedMCDraft = nil
+                self.mcPollBuilder.reset()
             
             case .freeResponse:
                 let question = frPollBuilder.questionTextField.text ?? ""
@@ -276,6 +275,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                             print("error: ", error)
                     }
                 }
+                loadedFRDraft = nil
                 self.frPollBuilder.questionTextField.text = ""
             }
             self.updateCanDraft(false)
@@ -291,13 +291,17 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text ?? ""
-            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.options, state: .live)
+            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live)
         case .freeResponse:
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
         
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     // MARK - DROP DOWN
@@ -366,9 +370,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     @objc func showDrafts() {
         
-        let draftsVC = DraftsViewController()
-        draftsVC.drafts = drafts
-        draftsVC.delegate = self
+        let draftsVC = DraftsViewController(delegate: self, drafts: drafts)
         draftsVC.modalPresentationStyle = .overCurrentContext
         present(draftsVC, animated: true, completion: nil)
     }
@@ -409,7 +411,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         switch qType {
         case .multipleChoice:
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
-            mcPollBuilder.optionsTableView.reloadData()
             loadedMCDraft = draft
         case .freeResponse:
             frPollBuilder.questionTextField.text = draft.text
@@ -447,6 +448,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 update.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
             }
             buttonsView.superview?.layoutIfNeeded()
+            isKeyboardShown = true
         }
     }
     
@@ -459,11 +461,20 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
                 update.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
             buttonsView.superview?.layoutIfNeeded()
+            isKeyboardShown = false
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+}
+
+extension PollBuilderViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return isKeyboardShown
     }
 
 }

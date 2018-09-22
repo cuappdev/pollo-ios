@@ -30,6 +30,7 @@ class SettingsDataModel {
 }
 
 extension SettingsDataModel: ListDiffable {
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
@@ -39,6 +40,5 @@ extension SettingsDataModel: ListDiffable {
         guard let object = object as? SettingsDataModel else { return false }
         return identifier == object.identifier
     }
-    
-    
+
 }
