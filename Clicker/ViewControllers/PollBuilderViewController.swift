@@ -15,6 +15,7 @@ protocol PollBuilderViewDelegate {
 
 protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+    func showNavigationBar()
 }
 
 class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
@@ -283,10 +284,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        guard let nav = self.presentingViewController as? UINavigationController else { return }
-        guard let cardController = nav.topViewController as? CardController else { return }
-        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK - DROP DOWN
@@ -362,10 +361,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func exit() {
-        guard let nav = self.presentingViewController as? UINavigationController else { return }
-        guard let cardController = nav.topViewController as? CardController else { return }
-        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - QUESTION DELEGATE

@@ -31,9 +31,7 @@ extension Draft: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if self === object {
-            return true
-        }
+        if self === object { return true }
         guard let object = object as? Draft else { return false }
         return object.identifier == identifier
     }

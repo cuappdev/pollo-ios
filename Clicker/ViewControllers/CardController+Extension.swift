@@ -121,6 +121,10 @@ extension CardController: PollBuilderViewControllerDelegate {
         }
     }
     
+    func showNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     // MARK: - Helpers
     private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
         var results: [String:JSON] = [:]
