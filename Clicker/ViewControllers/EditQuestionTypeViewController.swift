@@ -22,7 +22,7 @@ class EditQuestionTypeViewController: UIViewController {
     var selectedDot: UIView!
     
     // MARK: - Data vars
-    var delegate: EditQuestionTypeDelegate?
+    var delegate: EditQuestionTypeDelegate!
     var selectedQuestionType: QuestionType!
     
     // MARK: - Constants
@@ -34,8 +34,9 @@ class EditQuestionTypeViewController: UIViewController {
     let multipleChoiceLabelText: String = "Multiple Choice"
     let freeResponseLabelText: String = "Free Response"
     
-    init(selectedQuestionType: QuestionType) {
+    init(delegate: EditQuestionTypeDelegate, selectedQuestionType: QuestionType) {
         super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
         self.selectedQuestionType = selectedQuestionType
     }
     
@@ -115,12 +116,12 @@ class EditQuestionTypeViewController: UIViewController {
     }
     
     @objc func didPickMultipleChoice() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
         delegate?.editQuestionTypeViewControllerDidPick(questionType: .multipleChoice)
     }
     
     @objc func didPickFreeResponse() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
         delegate?.editQuestionTypeViewControllerDidPick(questionType: .freeResponse)
     }
 
