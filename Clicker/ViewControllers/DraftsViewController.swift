@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FillsDraftDelegate {
+protocol DraftsViewControllerDelegate {
     func fillDraft(_ draft: Draft)
 }
 
@@ -22,7 +22,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     var drafts: [Draft]!
     
     // MARK: - Data vars
-    var delegate: FillsDraftDelegate!
+    var delegate: DraftsViewControllerDelegate!
     
     // MARK: - Constants
     let titleLabelTopPadding: CGFloat = 16
@@ -31,6 +31,12 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
     let draftsCollectionViewTopPadding: CGFloat = 32
     let draftsCollectionViewWidthInset: CGFloat = 36
     let titleLabelText = "Drafts"
+    
+    init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+        self.drafts = drafts
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,4 +112,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         super.didReceiveMemoryWarning()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
