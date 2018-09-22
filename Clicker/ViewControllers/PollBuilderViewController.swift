@@ -356,7 +356,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     // MARK - PickQTypeDelegate
-    
     func updateQuestionType() {
         questionType = questionType.other
         updateQuestionTypeButton()
