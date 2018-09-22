@@ -17,7 +17,6 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
     var tapGestureRecognizer: UITapGestureRecognizer!
-    var overlayView: UIView!
     
     // MARK: - Data vars
     var pollBuilderDelegate: PollBuilderViewDelegate!
@@ -93,9 +92,6 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
         adapter = ListAdapter(updater: updater, viewController: nil)
         adapter.collectionView = collectionView
         adapter.dataSource = self
-        
-        overlayView = UIView()
-        overlayView.backgroundColor = .clear
     }
     
     func setupConstraints() {
@@ -146,10 +142,6 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
             isKeyboardShown = true
-            addSubview(overlayView)
-            overlayView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
         }
     }
     
@@ -158,7 +150,6 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
             isKeyboardShown = false
-            overlayView.removeFromSuperview()
         }
     }
     
@@ -198,6 +189,10 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     }
     
     func pollBuilderSectionControllerDidDeleteOption(sectionController: PollBuilderMCOptionSectionController, index: Int) {
+        if isKeyboardShown {
+            hideKeyboard()
+            return
+        }
         if mcOptionModels.count <= 3 { return }
         mcOptionModels.remove(at: index)
         var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
