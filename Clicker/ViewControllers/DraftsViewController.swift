@@ -7,19 +7,23 @@
 //
 
 import UIKit
+import IGListKit
 
 protocol FillsDraftDelegate {
     func fillDraft(_ draft: Draft)
 }
 
-class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class DraftsViewController: UIViewController {
     
+    // MARK: - View vars
     var visualEffectView: UIVisualEffectView!
     var backButton: UIButton!
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
-    var drafts: [Draft]!
+    var adapter: ListAdapter!
     
+    // MARK: - Data vars
+    var drafts: [Draft]!
     var delegate: FillsDraftDelegate!
     
     override func viewDidLoad() {
@@ -51,14 +55,17 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         layout.scrollDirection = .vertical
         draftsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         draftsCollectionView.backgroundColor = .clear
-        draftsCollectionView.delegate = self
-        draftsCollectionView.dataSource = self
         draftsCollectionView.isScrollEnabled = true
         draftsCollectionView.allowsSelection = true
         draftsCollectionView.showsVerticalScrollIndicator = false
         draftsCollectionView.showsHorizontalScrollIndicator = false
         draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: Identifiers.draftCellIdentifier)
         view.addSubview(draftsCollectionView)
+        
+        let updater: ListAdapterUpdater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = draftsCollectionView
+        adapter.dataSource = self
         
     }
     
@@ -78,10 +85,11 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
             make.centerY.equalTo(backButton)
         }
         
+        guard let nav = presentingViewController as? UINavigationController else { return }
         draftsCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
+            make.top.equalToSuperview().offset(UIApplication.shared.statusBarFrame.height + nav.navigationBar.frame.height + 7.5)
             make.bottom.equalToSuperview()
-            make.width.equalToSuperview().inset(36)
+            make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
     }
