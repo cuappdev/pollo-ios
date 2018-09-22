@@ -36,6 +36,7 @@ class SettingsSectionController: ListSectionController {
             print("settingsDataModel not initialized")
             return UICollectionViewCell()
         }
+        
         switch settingsDataModel.state {
         case .info:
             let cell = collectionContext?.dequeueReusableCell(of: SettingsInfoCell.self, for: self, at: index) as! SettingsInfoCell

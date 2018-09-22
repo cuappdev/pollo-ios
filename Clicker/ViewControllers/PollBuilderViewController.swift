@@ -15,6 +15,7 @@ protocol PollBuilderViewDelegate {
 
 protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+    func showNavigationBar()
 }
 
 class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, FillsDraftDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
@@ -206,11 +207,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     func updateQuestionTypeButton() {
-        let questionTypeText = questionType.description
-        let otherTypeText = questionType.other.description
+        let questionTypeText: String = questionType == .multipleChoice ? "Multiple Choice" : "Free Response"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
-        dropDown.topButton.setTitle(questionTypeText, for: .normal)
-        dropDown.bottomButton.setTitle(otherTypeText, for: .normal)
     }
     
     // MARK - ACTIONS
@@ -286,8 +284,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK - DROP DOWN
@@ -337,8 +335,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
         self.questionType = questionType
         updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .multipleChoice
-        frPollBuilder.isHidden = questionType == .freeResponse
+        mcPollBuilder.isHidden = questionType == .freeResponse
+        frPollBuilder.isHidden = questionType == .multipleChoice
     }
     
     // MARK - PickQTypeDelegate
@@ -355,7 +353,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func showDrafts() {
-        
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
         draftsVC.delegate = self
@@ -364,10 +361,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func exit() {
-        guard let nav = self.presentingViewController as? UINavigationController else { return }
-        guard let cardController = nav.topViewController as? CardController else { return }
-        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - QUESTION DELEGATE
