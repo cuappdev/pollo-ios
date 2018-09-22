@@ -23,7 +23,7 @@ struct CreatePoll: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -55,7 +55,7 @@ struct GetPoll: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -79,7 +79,7 @@ struct GetSortedPolls: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -114,7 +114,7 @@ struct GetPollsForSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -143,7 +143,7 @@ struct UpdatePoll: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -174,7 +174,7 @@ struct DeletePoll: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .delete

@@ -17,7 +17,7 @@ struct GetDrafts: ClickerQuark {
 
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var route: String {
@@ -56,7 +56,7 @@ struct CreateDraft: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
 
@@ -100,7 +100,7 @@ struct UpdateDraft: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -131,7 +131,7 @@ struct DeleteDraft: ClickerQuark {
     
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var route: String {
