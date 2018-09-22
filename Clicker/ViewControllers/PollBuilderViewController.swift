@@ -343,8 +343,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         let presenter = Presentr(presentationType: customType)
         presenter.backgroundOpacity = 0.6
         presenter.transitionType = .coverVerticalFromTop
-        let editQuestionTypeVC = EditQuestionTypeViewController(selectedQuestionType: questionType)
-        editQuestionTypeVC.delegate = self
+        let editQuestionTypeVC = EditQuestionTypeViewController(delegate: self, selectedQuestionType: questionType)
         customPresentViewController(presenter, viewController: editQuestionTypeVC, animated: true, completion: nil)
     }
     
