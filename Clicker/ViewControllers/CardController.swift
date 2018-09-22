@@ -288,6 +288,15 @@ class CardController: UIViewController {
     
     @objc func goBack() {
         socket.socket.disconnect()
+        if pollsDateArray.isEmpty {
+            DeleteSession(id: session.id).make()
+                .done {
+                    self.navigationController?.popViewController(animated: true)
+                    return
+                }.catch { (error) in
+                    print(error)
+                }
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
