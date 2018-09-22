@@ -206,11 +206,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     func updateQuestionTypeButton() {
-        let questionTypeText = questionType.description
-        let otherTypeText = questionType.other.description
+        let questionTypeText: String = questionType == .multipleChoice ? "Multiple Choice" : "Free Response"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
-        dropDown.topButton.setTitle(questionTypeText, for: .normal)
-        dropDown.bottomButton.setTitle(otherTypeText, for: .normal)
     }
     
     // MARK - ACTIONS
@@ -286,7 +283,9 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        
+        guard let nav = self.presentingViewController as? UINavigationController else { return }
+        guard let cardController = nav.topViewController as? CardController else { return }
+        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -337,8 +336,8 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
         self.questionType = questionType
         updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .multipleChoice
-        frPollBuilder.isHidden = questionType == .freeResponse
+        mcPollBuilder.isHidden = questionType == .freeResponse
+        frPollBuilder.isHidden = questionType == .multipleChoice
     }
     
     // MARK - PickQTypeDelegate
@@ -355,7 +354,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     @objc func showDrafts() {
-        
         let draftsVC = DraftsViewController()
         draftsVC.drafts = drafts
         draftsVC.delegate = self
