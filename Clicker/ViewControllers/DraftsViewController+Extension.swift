@@ -18,15 +18,27 @@ extension DraftsViewController: DraftCellDelegate {
 extension DraftsViewController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return drafts
+        if drafts.count > 0 {
+            return drafts
+        }
+        return [EmptyStateModel(type: .draftsViewController(delegate: self))]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return DraftSectionController(delegate: self)
+        if object is Draft {
+            return DraftSectionController(delegate: self)
+        }
+        return EmptyStateSectionController(session: nil, shouldDisplayNameView: false, nameViewDelegate: nil)
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
+    }
+}
+
+extension DraftsViewController: EmptyStateCellDelegate {
+    func emptyStateCellDidTapCreateDraftButton() {
+        backBtnPressed()
     }
 }
 
