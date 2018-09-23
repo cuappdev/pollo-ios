@@ -250,9 +250,8 @@ class PollsViewController: UIViewController {
     }
     
     @objc func settingsAction() {
-        let settingsVC = SettingsViewController()
-        navigationController?.pushViewController(settingsVC, animated: true)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        let settingsNavigationController = UINavigationController(rootViewController: SettingsViewController())
+        self.present(settingsNavigationController, animated: true, completion: nil)
     }
     
     @objc func didStartTyping(_ textField: UITextField) {
