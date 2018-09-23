@@ -19,7 +19,7 @@ struct GenerateCode : ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -48,7 +48,7 @@ struct CreateSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -83,7 +83,7 @@ struct GetSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -112,7 +112,7 @@ struct GetJoinedSessions: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -172,7 +172,7 @@ struct GetGroupSessions: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -209,7 +209,7 @@ struct UpdateSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -245,7 +245,7 @@ struct DeleteSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .delete
@@ -263,7 +263,7 @@ struct GetMembers: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -293,7 +293,7 @@ struct GetAdmins: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -325,7 +325,7 @@ struct AddMembers: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -349,7 +349,7 @@ struct RemoveMembers: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -375,7 +375,7 @@ struct AddAdmins: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {
@@ -399,7 +399,7 @@ struct DeleteAdmins: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     var parameters: Parameters {

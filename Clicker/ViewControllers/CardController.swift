@@ -288,7 +288,18 @@ class CardController: UIViewController {
     
     @objc func goBack() {
         socket.socket.disconnect()
-        self.navigationController?.popViewController(animated: true)
+        if pollsDateArray.isEmpty && session.name == session.code {
+            DeleteSession(id: session.id).make()
+                .done {
+                    self.navigationController?.popViewController(animated: true)
+                    return
+                }.catch { (error) in
+                    print(error)
+                    self.navigationController?.popViewController(animated: true)
+                }
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func zoomOutBtnPressed() {

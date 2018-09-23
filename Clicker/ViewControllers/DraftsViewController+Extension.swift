@@ -11,7 +11,7 @@ import IGListKit
 
 extension DraftsViewController: DraftCellDelegate {
     func draftCellDidSelectDraft(draft: Draft) {
-        self.delegate.fillDraft(draft)
+        self.delegate.draftsViewControllerShouldStartDraft(draft)
     }
 }
 
@@ -32,7 +32,7 @@ extension DraftsViewController: ListAdapterDataSource {
 
 extension DraftsViewController: DraftSectionControllerDelegate {
     func draftSectionControllerDidFillDraft(draft: Draft) {
-        delegate.fillDraft(draft)
+        delegate.draftsViewControllerShouldStartDraft(draft)
         self.dismiss(animated: true, completion: nil)
     }
 }

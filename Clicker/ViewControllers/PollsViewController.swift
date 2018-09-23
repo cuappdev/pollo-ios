@@ -19,17 +19,26 @@ class PollsViewController: UIViewController {
     var adapter: ListAdapter!
     var titleLabel: UILabel!
     var newPollButton: UIButton!
-    var bottomBarView: UIView!
     var bottomPaddingView: UIView!
+    var joinSessionContainerView: UIView!
+    var codeTextField: UITextField!
     var joinSessionButton: UIButton!
     var settingsButton: UIButton!
+    var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
+    var isKeyboardShown: Bool = false
     
     // MARK: - Constants
     let popupViewHeight: CGFloat = 140
     let editModalHeight: Float = 205
+    let joinSessionContainerViewHeight: CGFloat = 64
+    let codeTextFieldEdgePadding: CGFloat = 18
+    let codeTextFieldHeight: CGFloat = 40
+    let codeTextFieldHorizontalPadding: CGFloat = 12
+    let codeTextFieldPlaceHolder = "Enter a code..."
+    let joinSessionButtonTitle = "Join"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,12 +48,19 @@ class PollsViewController: UIViewController {
         let joinedPollTypeModel = PollTypeModel(pollType: .joined)
         pollTypeModels = [createdPollTypeModel, joinedPollTypeModel]
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         setupViews()
         setupConstraints()
     }
     
     // MARK: - LAYOUT
     func setupViews() {
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGestureRecognizer.delegate = self
+        view.addGestureRecognizer(tapGestureRecognizer)
+
         titleLabel = UILabel()
         titleLabel.text = "Polls"
         titleLabel.font = ._30SemiboldFont
@@ -78,19 +94,40 @@ class PollsViewController: UIViewController {
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
         
-        bottomBarView = UIView()
-        bottomBarView.backgroundColor = .clickerBlack1
-        view.addSubview(bottomBarView)
+        joinSessionContainerView = UIView()
+        joinSessionContainerView.backgroundColor = .clickerBlack1
+        view.addSubview(joinSessionContainerView)
+        
+        joinSessionButton = UIButton()
+        joinSessionButton.setTitle(joinSessionButtonTitle, for: .normal)
+        joinSessionButton.setTitleColor(.white, for: .normal)
+        joinSessionButton.titleLabel?.font = ._16SemiboldFont
+        joinSessionButton.titleLabel?.textAlignment = .center
+        joinSessionButton.backgroundColor = .clickerGrey2
+        joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
+        joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
+        joinSessionButton.addTarget(self, action: #selector(reduceOpacity), for: .touchDown)
+        joinSessionButton.addTarget(self, action: #selector(resetOpacity), for: .touchUpOutside)
+        joinSessionButton.addTarget(self, action: #selector(resetOpacity), for: .touchUpInside)
+        
+        codeTextField = UITextField()
+        codeTextField.delegate = self
+        codeTextField.layer.cornerRadius = codeTextFieldHeight / 2
+        codeTextField.borderStyle = .none
+        codeTextField.font = ._16MediumFont
+        codeTextField.backgroundColor = .clickerGrey12
+        codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
+        codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: codeTextFieldEdgePadding, height: codeTextFieldHeight))
+        codeTextField.leftViewMode = .always
+        codeTextField.rightView = joinSessionButton
+        codeTextField.rightViewMode = .always
+        codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey13, NSAttributedStringKey.font: UIFont._16MediumFont])
+        codeTextField.textColor = .clickerGrey13
+        joinSessionContainerView.addSubview(codeTextField)
         
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .clickerBlack1
         view.addSubview(bottomPaddingView)
-        
-        joinSessionButton = UIButton()
-        joinSessionButton.backgroundColor = .clear
-        joinSessionButton.addTarget(self, action: #selector(showJoinSessionPopup), for: .touchUpInside)
-        joinSessionButton.setImage(UIImage(named: "JoinTabBarIcon"), for: .normal)
-        view.addSubview(joinSessionButton)
         
         settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
@@ -113,20 +150,32 @@ class PollsViewController: UIViewController {
             make.height.equalTo(40)
         }
         
-        bottomBarView.snp.makeConstraints { make in
+        joinSessionContainerView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.centerX.equalToSuperview()
-            make.height.equalTo(54)
+            make.height.equalTo(joinSessionContainerViewHeight)
+        }
+
+        joinSessionButton.snp.makeConstraints { make in
+            make.width.equalTo(83.5)
+            make.height.equalTo(codeTextFieldHeight)
+        }
+        
+        codeTextField.snp.makeConstraints { make in
+            make.height.equalTo(codeTextFieldHeight)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(codeTextFieldHorizontalPadding)
+            make.trailing.equalToSuperview().inset(codeTextFieldHorizontalPadding)
         }
         
         bottomPaddingView.snp.makeConstraints { make in
             make.width.centerX.equalToSuperview()
-            make.top.equalTo(bottomBarView.snp.bottom)
+            make.top.equalTo(joinSessionContainerView.snp.bottom)
             make.bottom.equalToSuperview()
         }
         
         pollsCollectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(bottomBarView.snp.top)
+            make.bottom.equalTo(joinSessionContainerView.snp.top)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.top.equalTo(pollsOptionsView.snp.bottom)
@@ -145,13 +194,6 @@ class PollsViewController: UIViewController {
             make.centerY.equalTo(newPollButton.snp.centerY)
             make.left.equalToSuperview().offset(15)
         }
-        
-        joinSessionButton.snp.makeConstraints { make in
-            make.centerX.equalTo(bottomBarView.snp.centerX)
-            make.width.equalTo(bottomBarView.snp.height)
-            make.height.equalTo(bottomBarView.snp.height)
-            make.centerY.equalTo(bottomBarView.snp.centerY)
-        }
     }
     
     // MARK - Actions
@@ -165,6 +207,23 @@ class PollsViewController: UIViewController {
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print("error: ", error)
+                }
+            }.catch { error in
+                print(error)
+        }
+    }
+    
+    @objc func joinSession() {
+        guard let code = codeTextField.text, code != "" else { return }
+        StartSession(code: code, name: nil, isGroup: nil).make()
+            .done { session in
+                GetSortedPolls(id: session.id).make()
+                    .done { pollsDateArray in
+                        let cardVC = CardController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        self.navigationController?.pushViewController(cardVC, animated: true)
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    }.catch { error in
+                        print(error)
                 }
             }.catch { error in
                 print(error)
@@ -196,6 +255,29 @@ class PollsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    @objc func didStartTyping(_ textField: UITextField) {
+        if let text = textField.text {
+            textField.text = text.uppercased()
+        }
+    }
+    
+    @objc func hideKeyboard() {
+        // Hide keyboard when user taps outside of text field on popup view
+        codeTextField.resignFirstResponder()
+    }
+    
+    @objc func reduceOpacity(sender: UIButton) {
+        UIView.animate(withDuration: 0.35) {
+            sender.alpha = 0.7
+        }
+    }
+    
+    @objc func resetOpacity(sender: UIButton) {
+        UIView.animate(withDuration: 0.35) {
+            sender.alpha = 1
+        }
+    }
+    
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         pollsCollectionView.reloadData()
@@ -203,6 +285,32 @@ class PollsViewController: UIViewController {
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
-
     }
+    
+    // MARK: - KEYBOARD
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let iphoneXBottomPadding = view.safeAreaInsets.bottom
+            joinSessionContainerView.snp.remakeConstraints { make in
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(joinSessionContainerViewHeight)
+            }
+            joinSessionContainerView.superview?.layoutIfNeeded()
+            isKeyboardShown = true
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            joinSessionContainerView.snp.remakeConstraints { make in
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(joinSessionContainerViewHeight)
+            }
+            joinSessionContainerView.superview?.layoutIfNeeded()
+            isKeyboardShown = false
+        }
+    }
+
 }

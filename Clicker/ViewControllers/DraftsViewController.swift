@@ -9,8 +9,8 @@
 import UIKit
 import IGListKit
 
-protocol FillsDraftDelegate {
-    func fillDraft(_ draft: Draft)
+protocol DraftsViewControllerDelegate {
+    func draftsViewControllerShouldStartDraft(_ draft: Draft)
 }
 
 class DraftsViewController: UIViewController {
@@ -23,8 +23,22 @@ class DraftsViewController: UIViewController {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
+    var delegate: DraftsViewControllerDelegate!
     var drafts: [Draft]!
-    var delegate: FillsDraftDelegate!
+    
+    // MARK: - Constants
+    let titleLabelTopPadding: CGFloat = 16
+    let backButtonLeftPadding: CGFloat = 18
+    let backButtonLength: CGFloat = 13
+    let draftsCollectionViewTopPadding: CGFloat = 32
+    let draftsCollectionViewWidthInset: CGFloat = 36
+    let titleLabelText = "Drafts"
+    
+    init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+        self.drafts = drafts
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +55,13 @@ class DraftsViewController: UIViewController {
         backButton = UIButton()
         backButton.setImage(#imageLiteral(resourceName: "whiteExit"), for: .normal)
         backButton.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
+        backButton.contentMode = .scaleAspectFit
         view.addSubview(backButton)
         
         titleLabel = UILabel()
-        titleLabel.text = "Drafts"
+        titleLabel.text = titleLabelText
         titleLabel.textColor = .white
-        titleLabel.font = UIFont._16SemiboldFont
+        titleLabel.font = UIFont._18SemiboldFont
         titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
         
@@ -74,20 +89,19 @@ class DraftsViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.top.equalToSuperview().offset(32)
-            make.width.height.equalTo(16)
-        }
-        
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(backButton)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(titleLabelTopPadding)
         }
         
-        guard let nav = presentingViewController as? UINavigationController else { return }
+        backButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(backButtonLeftPadding)
+            make.width.height.equalTo(backButtonLength)
+            make.centerY.equalTo(titleLabel.snp.centerY)
+        }
+        
         draftsCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UIApplication.shared.statusBarFrame.height + nav.navigationBar.frame.height + 7.5)
+            make.top.equalTo(titleLabel.snp.bottom).offset(draftsCollectionViewTopPadding)
             make.bottom.equalToSuperview()
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -103,4 +117,7 @@ class DraftsViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

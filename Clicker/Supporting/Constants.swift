@@ -15,8 +15,8 @@ enum QuestionType: CustomStringConvertible {
     
     var description : String {
         switch self {
-        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
-        case .freeResponse: return Identifiers.freeResponseIdentifier
+        case .multipleChoice: return StringConstants.multipleChoice
+        case .freeResponse: return StringConstants.freeResponse
         }
     }
     
@@ -107,6 +107,11 @@ struct RequestKeys {
     static let typeKey = "type"
     static let sharedKey = "shared"
     static let userTypeKey = "userType"
+}
+
+struct StringConstants {
+    static let multipleChoice = "Multiple Choice"
+    static let freeResponse = "Free Response"
 }
 
 enum Keys: String {

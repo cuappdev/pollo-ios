@@ -19,7 +19,7 @@ struct GetMe: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
@@ -81,7 +81,7 @@ struct UserRefreshSession: ClickerQuark {
     }
     var headers: HTTPHeaders {
         return [
-            "Authorization": "Bearer \(User.userSession!.accessToken)"
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
     let method: HTTPMethod = .get
