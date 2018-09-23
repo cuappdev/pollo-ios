@@ -108,17 +108,8 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     }
     
     @objc func updateEditable() {
-        if editable {
-            if questionTextField.text == "" {
-                pollBuilderDelegate.updateCanDraft(false)
-                editable = false
-            }
-        } else {
-            if questionTextField.text != "" {
-                pollBuilderDelegate.updateCanDraft(true)
-                editable = true
-            }
-        }
+        pollBuilderDelegate.updateCanDraft(questionTextField.text == "" ? false : true)
+        editable = questionTextField.text == "" ? false : true
     }
     
     @objc func hideKeyboard() {

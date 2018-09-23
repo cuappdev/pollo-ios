@@ -15,9 +15,10 @@ protocol PollBuilderViewDelegate {
 
 protocol PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+    func showNavigationBar()
 }
 
-class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilderViewDelegate, DraftsViewControllerDelegate, PollTypeDropDownDelegate, EditQuestionTypeDelegate {
+class PollBuilderViewController: UIViewController {
 
     // MARK: Constants
     let questionTypeButtonWidth: CGFloat = 150
@@ -82,7 +83,7 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         getDrafts()
     }
     
-    // MARK: Setup
+    // MARK: - Layout
     func setupViews() {
         navigationController?.navigationBar.isHidden = true
         
@@ -152,6 +153,33 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         view.addSubview(bottomPaddingView)
     }
     
+    func setupDropDown() {
+        dropDownArrow = UIImageView(image: UIImage(named: "DropdownArrowIcon"))
+        view.addSubview(dropDownArrow)
+        
+        dropDown = PollTypeDropDownView()
+        let topTitle = questionType.description
+        let bottomTitle = questionType.other.description
+        dropDown.topButton.setTitle(topTitle, for: .normal)
+        dropDown.bottomButton.setTitle(bottomTitle, for: .normal)
+        dropDown.delegate = self
+        view.addSubview(dropDown)
+        
+        dropDown.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(questionTypeButton.snp.height).multipliedBy(2)
+            make.centerY.equalTo(questionTypeButton.snp.bottom)
+            make.centerX.equalToSuperview()
+        }
+        dropDownArrow.snp.makeConstraints { make in
+            make.height.equalTo(6.5)
+            make.width.equalTo(6.5)
+            make.centerY.equalTo(questionTypeButton.snp.centerY)
+            make.left.equalTo(questionTypeButton.snp.right)
+        }
+        dropDown.isHidden = true
+    }
+    
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
             make.left.equalTo(edgePadding)
@@ -216,15 +244,11 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     }
     
     func updateQuestionTypeButton() {
-        let questionTypeText = questionType.description
-        let otherTypeText = questionType.other.description
+        let questionTypeText: String = questionType == .multipleChoice ? "Multiple Choice" : "Free Response"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
-        dropDown.topButton.setTitle(questionTypeText, for: .normal)
-        dropDown.bottomButton.setTitle(otherTypeText, for: .normal)
     }
     
-    // MARK - ACTIONS
-    
+    // MARK: - Actions
     @objc func saveAsDraft() {
         if canDraft {
             guard let type = questionType else {
@@ -296,42 +320,12 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func hideKeyboard() {
         view.endEditing(true)
-    }
-    
-    // MARK - DROP DOWN
-    
-    func setupDropDown() {
-        dropDownArrow = UIImageView(image: UIImage(named: "DropdownArrowIcon"))
-        view.addSubview(dropDownArrow)
-        
-        dropDown = PollTypeDropDownView()
-        let topTitle = questionType.description
-        let bottomTitle = questionType.other.description
-        dropDown.topButton.setTitle(topTitle, for: .normal)
-        dropDown.bottomButton.setTitle(bottomTitle, for: .normal)
-        dropDown.delegate = self
-        view.addSubview(dropDown)
-        
-        dropDown.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(questionTypeButton.snp.height).multipliedBy(2)
-            make.centerY.equalTo(questionTypeButton.snp.bottom)
-            make.centerX.equalToSuperview()
-        }
-        dropDownArrow.snp.makeConstraints { make in
-            make.height.equalTo(6.5)
-            make.width.equalTo(6.5)
-            make.centerY.equalTo(questionTypeButton.snp.centerY)
-            make.left.equalTo(questionTypeButton.snp.right)
-        }
-        dropDown.isHidden = true
-        
     }
     
     @objc func toggleQuestionType() {
@@ -347,76 +341,18 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
         customPresentViewController(presenter, viewController: editQuestionTypeVC, animated: true, completion: nil)
     }
     
-    func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
-        self.questionType = questionType
-        updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .freeResponse
-        frPollBuilder.isHidden = questionType == .multipleChoice
-    }
-    
-    // MARK - PickQTypeDelegate
-    func updateQuestionType() {
-        questionType = questionType.other
-        updateQuestionTypeButton()
-        guard let type = questionType else {
-            print("question type must be initalized before updateQuestionTypeCalled.")
-            return
-        }
-        mcPollBuilder.isHidden = type == .freeResponse
-        frPollBuilder.isHidden = type == .multipleChoice
-    }
-    
     @objc func showDrafts() {
-        
         let draftsVC = DraftsViewController(delegate: self, drafts: drafts)
         draftsVC.modalPresentationStyle = .overCurrentContext
         present(draftsVC, animated: true, completion: nil)
     }
     
     @objc func exit() {
-        guard let nav = self.presentingViewController as? UINavigationController else { return }
-        guard let cardController = nav.topViewController as? CardController else { return }
-        cardController.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.dismiss(animated: true, completion: nil)
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
     }
     
-    // MARK: - QUESTION DELEGATE
-    
-    func inFollowUpQuestion() {
-        isFollowUpQuestion = true
-    }
-    
-    // MARK: POLLBUILDER DELEGATE
-    func updateCanDraft(_ canDraft: Bool) {
-        self.canDraft = canDraft
-        if canDraft {
-            saveDraftButton.setTitleColor(.clickerGreen0, for: .normal)
-            saveDraftButton.backgroundColor = .clear
-            saveDraftButton.layer.borderColor = UIColor.clickerGreen0.cgColor
-        } else {
-            saveDraftButton.setTitleColor(.clickerGrey2, for: .normal)
-            saveDraftButton.backgroundColor = .clickerGrey6
-            saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
-            draftsButton.titleLabel?.font = ._16MediumFont
-        }
-    }
-    
-    func fillDraft(_ draft: Draft) {
-        let qType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
-        if questionType != qType {
-            updateQuestionType()
-        }
-        switch qType {
-        case .multipleChoice:
-            mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
-            loadedMCDraft = draft
-        case .freeResponse:
-            frPollBuilder.questionTextField.text = draft.text
-            loadedFRDraft = draft
-        }
-        updateCanDraft(true)
-    }
-    
+    // MARK: - Helpers
     func getDrafts() {
         GetDrafts().make()
             .done { drafts in
@@ -465,14 +401,6 @@ class PollBuilderViewController: UIViewController, QuestionDelegate, PollBuilder
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-}
-
-extension PollBuilderViewController: UIGestureRecognizerDelegate {
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return isKeyboardShown
     }
 
 }

@@ -7,28 +7,32 @@
 //
 
 import UIKit
+import IGListKit
 
-extension DraftsViewController {
+extension DraftsViewController: DraftCellDelegate {
+    func draftCellDidSelectDraft(draft: Draft) {
+        self.delegate.draftsViewControllerShouldStartDraft(draft)
+    }
+}
+
+extension DraftsViewController: ListAdapterDataSource {
     
-    // MARK - COLLECTION VIEW
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return drafts.count
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        return drafts
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = draftsCollectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.draftCellIdentifier, for: indexPath) as! DraftCell
-        cell.draft = drafts[drafts.count - (indexPath.row + 1)]
-        cell.setupCell()
-        return cell
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        return DraftSectionController(delegate: self)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: draftsCollectionView.frame.width, height: 82.0)
+    func emptyView(for listAdapter: ListAdapter) -> UIView? {
+        return nil
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate.fillDraft(drafts[drafts.count - (indexPath.row + 1)])
-        
+}
+
+extension DraftsViewController: DraftSectionControllerDelegate {
+    func draftSectionControllerDidFillDraft(draft: Draft) {
+        delegate.draftsViewControllerShouldStartDraft(draft)
         self.dismiss(animated: true, completion: nil)
     }
 }
