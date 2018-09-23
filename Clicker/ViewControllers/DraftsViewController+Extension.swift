@@ -18,10 +18,7 @@ extension DraftsViewController: DraftCellDelegate {
 extension DraftsViewController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if drafts.count > 0 {
-            return drafts
-        }
-        return [EmptyStateModel(type: .draftsViewController(delegate: self))]
+        return drafts.count > 0 ? drafts : [EmptyStateModel(type: .draftsViewController(delegate: self))]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
