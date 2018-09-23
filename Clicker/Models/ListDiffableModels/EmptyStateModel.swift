@@ -12,6 +12,7 @@ import IGListKit
 enum EmptyStateType {
     case pollsViewController(pollType: PollType)
     case cardController(userRole: UserRole)
+    case draftsViewController(delegate: EmptyStateCellDelegate)
 }
 
 class EmptyStateModel {
