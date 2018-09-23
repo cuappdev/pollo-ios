@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window?.tintColor = .clickerGreen0
         window?.makeKeyAndVisible()
     }
+
     func setupNavigationController() {
         pollsNavigationController = UINavigationController(rootViewController: LoginViewController())
         window?.rootViewController = pollsNavigationController
