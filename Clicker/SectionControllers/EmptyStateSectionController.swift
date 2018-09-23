@@ -17,7 +17,7 @@ class EmptyStateSectionController: ListSectionController {
     var shouldDisplayNameView: Bool?
     var nameViewDelegate: NameViewDelegate?
 
-    convenience init(session: Session, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate) {
+    convenience init(session: Session?, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate?) {
         self.init()
         self.session = session
         self.shouldDisplayNameView = shouldDisplayNameView
