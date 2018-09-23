@@ -7,22 +7,24 @@
 //
 
 import UIKit
+import IGListKit
 
 protocol DraftsViewControllerDelegate {
-    func fillDraft(_ draft: Draft)
+    func draftsViewControllerShouldStartDraft(_ draft: Draft)
 }
 
-class DraftsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class DraftsViewController: UIViewController {
     
     // MARK: - View vars
     var visualEffectView: UIVisualEffectView!
     var backButton: UIButton!
     var titleLabel: UILabel!
     var draftsCollectionView: UICollectionView!
-    var drafts: [Draft]!
+    var adapter: ListAdapter!
     
     // MARK: - Data vars
     var delegate: DraftsViewControllerDelegate!
+    var drafts: [Draft]!
     
     // MARK: - Constants
     let titleLabelTopPadding: CGFloat = 16
@@ -68,14 +70,17 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         layout.scrollDirection = .vertical
         draftsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         draftsCollectionView.backgroundColor = .clear
-        draftsCollectionView.delegate = self
-        draftsCollectionView.dataSource = self
         draftsCollectionView.isScrollEnabled = true
         draftsCollectionView.allowsSelection = true
         draftsCollectionView.showsVerticalScrollIndicator = false
         draftsCollectionView.showsHorizontalScrollIndicator = false
         draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: Identifiers.draftCellIdentifier)
         view.addSubview(draftsCollectionView)
+        
+        let updater: ListAdapterUpdater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = draftsCollectionView
+        adapter.dataSource = self
         
     }
     
@@ -98,7 +103,7 @@ class DraftsViewController: UIViewController, UICollectionViewDataSource, UIColl
         draftsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(draftsCollectionViewTopPadding)
             make.bottom.equalToSuperview()
-            make.width.equalToSuperview().inset(draftsCollectionViewWidthInset)
+            make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
     }
