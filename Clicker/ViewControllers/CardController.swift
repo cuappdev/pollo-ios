@@ -113,7 +113,7 @@ class CardController: UIViewController {
         zoomOutButton = UIButton()
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
-        zoomOutButton.isUserInteractionEnabled = false
+        zoomOutButton.isUserInteractionEnabled = !pollsDateArray.isEmpty
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
