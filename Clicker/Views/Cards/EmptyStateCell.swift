@@ -32,10 +32,10 @@ class EmptyStateCell: UICollectionViewCell {
     let iconImageViewTopPadding: CGFloat = 142.0
     let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
     let titleLabelWidth: CGFloat = 200.0
-    let titleLabelTopPadding: CGFloat = 20.0
+    let titleLabelTopPadding: CGFloat = 18.5
     let subtitleLabelWidth: CGFloat = 220.0
-    let subtitleLabelTopPadding: CGFloat = 10.0
     let createDraftButtonTopPadding: CGFloat = 15.0
+    let subtitleLabelTopPadding: CGFloat = 7.5
     let countLabelWidth: CGFloat = 42.0
     let createDraftButtonWidth: CGFloat = 169.5
     let createDraftButtonHeight: CGFloat = 47

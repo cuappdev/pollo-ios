@@ -18,7 +18,7 @@ class PollsDateCell: UICollectionViewCell {
     var bottomSeparatorView: UIView!
     
     // MARK: - Constants
-    let dateLabelFontSize: CGFloat = 24
+    let dateLabelFontSize: CGFloat = 20
     let numQuestionsLabelFontSize: CGFloat = 14
     let dateLabelLeftPadding: CGFloat = 26
     let rightArrowButtonImageViewRightPadding: CGFloat = 18
@@ -37,7 +37,7 @@ class PollsDateCell: UICollectionViewCell {
     func setupViews() {
         dateLabel = UILabel()
         dateLabel.textColor = .white
-        dateLabel.font = UIFont.systemFont(ofSize: dateLabelFontSize)
+        dateLabel.font = UIFont.boldSystemFont(ofSize: dateLabelFontSize)
         contentView.addSubview(dateLabel)
         
         numQuestionsLabel = UILabel()
@@ -91,8 +91,18 @@ class PollsDateCell: UICollectionViewCell {
     
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
-        dateLabel.text = pollsDateModel.date
+        dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
         numQuestionsLabel.text = "\(pollsDateModel.polls.count) Questions"
+    }
+    
+    // MARK: - Helpers
+    // Converts MM/dd/yy to MMMMd format
+    func reformatDateString(dateString: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy"
+        let date = dateFormatter.date(from: dateString) ?? Date()
+        dateFormatter.dateFormat = "MMMM d"
+        return dateFormatter.string(from: date)
     }
     
     required init?(coder aDecoder: NSCoder) {

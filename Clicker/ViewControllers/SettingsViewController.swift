@@ -21,9 +21,12 @@ class SettingsViewController: UIViewController {
     // MARK: Data
     var data: [SettingsDataModel]!
     
+    // MARK: - Constants
+    let navBarTitle = "Settings"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.title = navBarTitle
         loadData()
         setupNavBar()
         setupViews()
@@ -122,11 +125,12 @@ class SettingsViewController: UIViewController {
             print("cannot log out without AppDelegate!")
             return
         }
+        self.dismiss(animated: true, completion: nil)
         appDelegate.logout()
     }
     
     @objc func goBack() {
-         self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
