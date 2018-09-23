@@ -6,21 +6,26 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
+import IGListKit
 import SnapKit
+import UIKit
 
-class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, MultipleChoiceOptionDelegate, UITextFieldDelegate {
+class MCPollBuilderView: UIView, UITextFieldDelegate {
     
+    // MARK: - View vars
+    var questionTextField: UITextField!
+    var collectionView: UICollectionView!
+    var adapter: ListAdapter!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    
+    // MARK: - Data vars
     var pollBuilderDelegate: PollBuilderViewDelegate!
-    var editable: Bool!
-    
     var questionDelegate: QuestionDelegate!
     var session: Session!
     var grayViewBottomConstraint: Constraint!
-    var options: [String] = [String](repeating: "", count: 2)
-    
-    var questionTextField: UITextField!
-    var optionsTableView: UITableView!
+    var editable: Bool!
+    var mcOptionModels: [PollBuilderMCOptionModel]!
+    var isKeyboardShown: Bool = false
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -29,71 +34,39 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        clearMCOptionModels()
+        
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGestureRecognizer.delegate = self
+        self.addGestureRecognizer(tapGestureRecognizer)
+        
         setupViews()
-        layoutSubviews()
+        setupConstraints()
         editable = false
     }
     
     // MARK: - POLLING
-    func clearOptions() {
-        options = []
+    func reset() {
+        questionTextField.text = ""
+        clearMCOptionModels()
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
-    // MARK: - TABLEVIEW
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row == (tableView.numberOfRows(inSection: 0) - 1)) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.addMoreOptionCellIdentifier) as! AddMoreOptionCell
-            cell.selectionStyle = .none
-            return cell
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.createMCOptionCellIdentifier) as! CreateMCOptionCell
-        cell.choiceTag = indexPath.row
-        cell.mcOptionDelegate = self
-        cell.addOptionTextField.text = indexPath.row < options.count ? options[indexPath.row] : ""
-        cell.selectionStyle = .none
-        
-        if options.count <= 2 {
-            cell.trashButton.isUserInteractionEnabled = false
-            cell.trashButton.alpha = 0.0
-        } else {
-            cell.trashButton.isUserInteractionEnabled = true
-            cell.trashButton.alpha = 1.0
-        }
-        
-        return cell
+    func clearMCOptionModels() {
+        let firstOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 0))
+        let secondOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 1))
+        let addOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.addOption)
+        mcOptionModels = [firstOptionModel, secondOptionModel, addOptionModel]
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.row == options.count && options.count <= 25) {
-            options.append("")
-            if (options.count < 26) {
-                tableView.beginUpdates()
-                tableView.insertRows(at: [indexPath], with: .none)
-                tableView.reloadData()
-                tableView.endUpdates()
-                let bottomIndexPath: IndexPath
-                bottomIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
-                tableView.scrollToRow(at: bottomIndexPath, at: .bottom, animated: false)
-            } else {
-                tableView.reloadData()
+    func getOptions() -> [String] {
+        return mcOptionModels.compactMap { (mcOptionModel) -> String? in
+            switch mcOptionModel.type {
+            case .newOption(option: let option, index: _):
+                return option != "" ? option : nil
+            case .addOption:
+                return nil
             }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fixOptions()
-        return (options.count <= 25) ? options.count + 1 : options.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 53
-    }
-    
-    func fixOptions() {
-        if options.count == 0 {
-            options = [String](repeating: "", count: 2)
-        } else if options.count == 1 {
-            options.append("")
         }
     }
     
@@ -107,53 +80,31 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         questionTextField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
         addSubview(questionTextField)
         
-        optionsTableView = UITableView()
-        optionsTableView.delegate = self
-        optionsTableView.dataSource = self
-        optionsTableView.register(CreateMCOptionCell.self, forCellReuseIdentifier: Identifiers.createMCOptionCellIdentifier)
-        optionsTableView.register(AddMoreOptionCell.self, forCellReuseIdentifier: Identifiers.addMoreOptionCellIdentifier)
-        optionsTableView.backgroundColor = .clickerWhite
-        optionsTableView.clipsToBounds = true
-        optionsTableView.separatorStyle = .none
-        optionsTableView.showsVerticalScrollIndicator = false
-        optionsTableView.showsHorizontalScrollIndicator = false
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clickerWhite
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.bounces = true
+        addSubview(collectionView)
         
-        addSubview(optionsTableView)
+        let updater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: nil)
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        questionTextField.snp.updateConstraints{ make in
-            make.size.equalTo(CGSize(width: frame.width, height: 48))
-            make.top.equalToSuperview()
-            make.left.equalToSuperview()
+    func setupConstraints() {
+        questionTextField.snp.makeConstraints{ make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(48)
         }
         
-        optionsTableView.snp.updateConstraints { make in
-            make.width.equalToSuperview()
+        collectionView.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
             make.top.equalTo(questionTextField.snp.bottom).offset(5)
             make.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
         }
-    }
-    
-    // MARK: - MC OPTION DELEGATE
-    
-    func deleteOption(index: Int) {
-        let indexPath = IndexPath(row: index, section: 0)
-        options.remove(at: index)
-        
-        optionsTableView.performBatchUpdates({
-            optionsTableView.deleteRows(at: [indexPath], with: .fade)
-        }) { _ in
-            self.optionsTableView.reloadData()
-        }
-        
-    }
-    
-    func updatedTextField(index: Int, text: String) {
-        options[index] = text
     }
     
     @objc func updateEditable() {
@@ -161,31 +112,35 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         editable = questionTextField.text == "" ? false : true
     }
     
+    @objc func hideKeyboard() {
+        self.endEditing(true)
+    }
+    
     func fillDraft(title: String, options: [String]) {
         questionTextField.text = title
-        self.options = options
+        mcOptionModels = []
+        options.enumerated().forEach { (index, option) in
+            mcOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index)))
+        }
+        mcOptionModels.append(PollBuilderMCOptionModel(type: .addOption))
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let contentInsets:UIEdgeInsets!
-            if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height - 6), 0.0)
-            } else {
-                contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0)
-            }
-            self.optionsTableView.contentInset = contentInsets;
-            self.optionsTableView.scrollIndicatorInsets = contentInsets;
-            layoutIfNeeded()
+            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
+            collectionView.contentInset = contentInsets
+            collectionView.superview?.layoutIfNeeded()
+            isKeyboardShown = true
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            self.optionsTableView.contentInset = UIEdgeInsets.zero;
-            self.optionsTableView.scrollIndicatorInsets = UIEdgeInsets.zero;
-            layoutIfNeeded()
+            collectionView.contentInset = .zero
+            collectionView.superview?.layoutIfNeeded()
+            isKeyboardShown = false
         }
     }
     
@@ -193,4 +148,63 @@ class MCPollBuilderView: UIView, UITableViewDelegate, UITableViewDataSource, Mul
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension MCPollBuilderView: ListAdapterDataSource {
+    
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        return mcOptionModels
+    }
+    
+    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        return PollBuilderMCOptionSectionController(delegate: self)
+    }
+    
+    func emptyView(for listAdapter: ListAdapter) -> UIView? {
+        return nil
+    }
+    
+}
+
+extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
+    
+    func pollBuilderSectionControllerShouldAddOption(sectionController: PollBuilderMCOptionSectionController) {
+        if mcOptionModels.count >= 27 { return }
+        let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1))
+        mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+    
+    func pollBuilderSectionControllerDidUpdateOption(sectionController: PollBuilderMCOptionSectionController, option: String, index: Int) {
+        mcOptionModels[index].type = .newOption(option: option, index: index)
+    }
+    
+    func pollBuilderSectionControllerDidDeleteOption(sectionController: PollBuilderMCOptionSectionController, index: Int) {
+        if isKeyboardShown {
+            hideKeyboard()
+            return
+        }
+        if mcOptionModels.count <= 3 { return }
+        mcOptionModels.remove(at: index)
+        var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
+        mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
+            switch mcOptionModel.type {
+            case .newOption(option: let option, index: _):
+                updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index)))
+            case .addOption:
+                updatedMCOptionModels.append(mcOptionModel)
+            }
+        }
+        mcOptionModels = updatedMCOptionModels
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+    
+}
+
+extension MCPollBuilderView: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return isKeyboardShown
+    }
+    
 }
