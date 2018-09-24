@@ -37,6 +37,9 @@ class PollsViewController: UIViewController {
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
+    let titleLabelText = "Groups"
+    let createdPollsOptionsText = "Created"
+    let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
     
@@ -62,12 +65,12 @@ class PollsViewController: UIViewController {
         view.addGestureRecognizer(tapGestureRecognizer)
 
         titleLabel = UILabel()
-        titleLabel.text = "Polls"
+        titleLabel.text = titleLabelText
         titleLabel.font = ._30SemiboldFont
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
-        pollsOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
+        pollsOptionsView = OptionsView(frame: .zero, options: [createdPollsOptionsText, joinedPollsOptionsText], sliderBarDelegate: self)
         pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         

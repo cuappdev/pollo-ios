@@ -19,6 +19,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let iconImageViewLength: CGFloat = 15
     let descriptionLabelXPadding: CGFloat = 10
     let totalVotesLabelTrailingPadding: CGFloat = 14
+    let labelFontSize: CGFloat = 12
     let endedDescriptionText = "Only you can see results"
     let sharedDescriptionText = "Shared with group"
     
@@ -38,12 +39,12 @@ class PollMiscellaneousCell: UICollectionViewCell {
         
         descriptionLabel = UILabel()
         descriptionLabel.textColor = .clickerGrey2
-        descriptionLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        descriptionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(descriptionLabel)
         
         totalVotesLabel = UILabel()
         totalVotesLabel.textColor = .clickerGrey2
-        totalVotesLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        totalVotesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(totalVotesLabel)
     }
     

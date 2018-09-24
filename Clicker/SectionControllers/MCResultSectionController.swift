@@ -28,9 +28,7 @@ class MCResultSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = delegate.cardControllerState == .horizontal
-            ? LayoutConstants.horizontalMCOptionCellHeight
-            : LayoutConstants.verticalMCOptionCellHeight
+        let cellHeight = LayoutConstants.mcOptionCellHeight
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     

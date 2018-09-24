@@ -63,13 +63,13 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, stat
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+        optionHeight = LayoutConstants.mcOptionCellHeight
     case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+        optionHeight = LayoutConstants.mcOptionCellHeight
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalFROptionCellHeight : LayoutConstants.verticalFROptionCellHeight
+        optionHeight = LayoutConstants.frOptionCellHeight
     }
     let maximumNumberVisibleOptions = 6
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
