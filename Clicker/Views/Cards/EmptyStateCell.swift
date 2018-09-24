@@ -169,7 +169,7 @@ class EmptyStateCell: UICollectionViewCell {
             iconImageView.image = #imageLiteral(resourceName: "shrug_emoji")
             titleLabel.textColor = .black
             let pollTypeString = pollType == .created ? "created" : "joined"
-            titleLabel.text = "No polls \(pollTypeString)"
+            titleLabel.text = "No groups \(pollTypeString)"
             subtitleLabel.text = pollType == .created ? createNewQuestionText : enterCodeText
             break
         case .cardController(let userRole):

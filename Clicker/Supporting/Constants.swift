@@ -72,11 +72,9 @@ struct Routes {
 }
 
 struct LayoutConstants {
-    static let verticalQuestionCellHeight: CGFloat = 40
-    static let verticalMCOptionCellHeight: CGFloat = 44
-    static let horizontalMCOptionCellHeight: CGFloat = 50
-    static let horizontalFROptionCellHeight: CGFloat = 58
-    static let verticalFROptionCellHeight: CGFloat = 52
+    static let questionCellHeight: CGFloat = 46
+    static let mcOptionCellHeight: CGFloat = 50
+    static let frOptionCellHeight: CGFloat = 58
     static let frInputCellHeight: CGFloat = 64
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let separatorLineCellHeight: CGFloat = 1
