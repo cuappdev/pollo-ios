@@ -62,7 +62,7 @@ extension PollsViewController: PollsCellDelegate {
         }
     }
     
-    func pollsCellShouldEditSession(session: Session) {
+    func pollsCellShouldEditSession(session: Session, userRole: UserRole) {
         let width = ModalSize.full
         let height = ModalSize.custom(size: editModalHeight)
         let originY = view.frame.height - CGFloat(editModalHeight)
@@ -72,11 +72,23 @@ extension PollsViewController: PollsCellDelegate {
         presenter.backgroundOpacity = 0.6
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
-        let editPollVC = EditPollViewController()
-        editPollVC.session = session
-        editPollVC.homeViewController = self
+        let editPollVC = EditPollViewController(delegate: self, session: session, userRole: userRole)
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
+    }
+    
+}
+
+extension PollsViewController: EditPollViewControllerDelegate {
+    
+    func editPollViewControllerDidDeleteSession(for userRole: UserRole) {
+        switch userRole {
+        case .admin:
+            pollTypeModels[0] = PollTypeModel(pollType: .created)
+        case .member:
+            pollTypeModels[1] = PollTypeModel(pollType: .joined)
+        }
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
 }

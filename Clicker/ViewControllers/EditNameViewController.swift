@@ -19,6 +19,11 @@ class EditNameViewController: UIViewController {
     let edgePadding = 18
     let textFieldHeight = 50
     
+    init(session: Session) {
+        super.init(nibName: nil, bundle: nil)
+        self.session = session
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerWhite
@@ -122,4 +127,8 @@ class EditNameViewController: UIViewController {
         }
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }

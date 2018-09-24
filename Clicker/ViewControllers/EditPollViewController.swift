@@ -9,13 +9,15 @@
 import UIKit
 import SnapKit
 
+protocol EditPollViewControllerDelegate {
+    
+    func editPollViewControllerDidDeleteSession(for userRole: UserRole)
+    
+}
+
 class EditPollViewController: UIViewController {
     
-    var session: Session!
-    var homeViewController: UIViewController!
-    var index: Int!
-    var deleteSessionDelegate: DeleteSessionDelegate!
-    
+    // MARK: - View vars
     var buttonStackView: UIStackView!
     var editView: UIView!
     var editNameImageView: UIImageView!
@@ -23,6 +25,18 @@ class EditPollViewController: UIViewController {
     var deleteView: UIView!
     var deleteImageView: UIImageView!
     var deleteButton: UIButton!
+    
+    // MARK: - Data vars
+    var delegate: EditPollViewControllerDelegate!
+    var session: Session!
+    var userRole: UserRole!
+    
+    init(delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+        self.session = session
+        self.userRole = userRole
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,17 +121,12 @@ class EditPollViewController: UIViewController {
     // MARK: ACTIONS
     
     @objc func deleteBtnPressed() {
-        let deleteVC = DeletePollViewController()
-//        deleteVC.deleteSessionDelegate = deleteSessionDelegate
-        deleteVC.session = session
-        deleteVC.homeViewController = homeViewController
+        let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
         self.navigationController?.pushViewController(deleteVC, animated: true)
     }
     
     @objc func editNameBtnPressed() {
-        let editNameVC = EditNameViewController()
-        editNameVC.session = session
-        editNameVC.homeViewController = homeViewController
+        let editNameVC = EditNameViewController(session: session)
         self.navigationController?.pushViewController(editNameVC, animated: true)
     }
     
@@ -136,6 +145,18 @@ class EditPollViewController: UIViewController {
         exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
         exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+extension EditPollViewController: DeletePollViewControllerDelegate {
+    
+    func deletePollViewControllerDidDeleteSession(for userRole: UserRole) {
+        self.delegate.editPollViewControllerDidDeleteSession(for: userRole)
     }
     
 }
