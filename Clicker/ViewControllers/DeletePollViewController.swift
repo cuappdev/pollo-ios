@@ -27,6 +27,14 @@ class DeletePollViewController: UIViewController {
     var userRole: UserRole!
     
     // MARK: - Constants
+    let deleteLabelWidthScale: CGFloat = 0.9
+    let deleteLabelTopPadding: CGFloat = 26
+    let deleteLabelHeight: CGFloat = 40
+    let cancelButtonLeftPadding: CGFloat = 16
+    let cancelButtonHeight: CGFloat = 48
+    let cancelButtonBottomPadding: CGFloat = 18
+    let deleteButtonRightPadding: CGFloat = 16
+    let buttonCenterYOffset: CGFloat = 9
     let navBarTitle = "Are you sure?"
     let adminDeleteLabelText = "Deleting will permanently close the group for all participants and all poll data will be lost."
     let memberDeleteLabelText = "Leaving will remove you from the group and you will no longer have access to its polls."
@@ -77,22 +85,22 @@ class DeletePollViewController: UIViewController {
     
     func setupConstraints() {
         deleteLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.92)
-            make.height.equalTo(40)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(26)
+            make.width.equalToSuperview().multipliedBy(deleteLabelWidthScale)
+            make.height.equalTo(deleteLabelHeight)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(deleteLabelTopPadding)
             make.centerX.equalToSuperview()
         }
         
         cancelButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().offset(-18)
+            make.leading.equalToSuperview().offset(cancelButtonLeftPadding)
+            make.trailing.equalTo(view.snp.centerX).offset(buttonCenterYOffset * -1)
+            make.height.equalTo(cancelButtonHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(cancelButtonBottomPadding)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-16)
-            make.width.equalTo(cancelButton.snp.width)
+            make.trailing.equalToSuperview().inset(deleteButtonRightPadding)
+            make.leading.equalTo(view.snp.centerX).offset(buttonCenterYOffset)
             make.height.equalTo(cancelButton.snp.height)
             make.bottom.equalTo(cancelButton.snp.bottom)
         }

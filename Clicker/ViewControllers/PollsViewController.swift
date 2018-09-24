@@ -32,7 +32,7 @@ class PollsViewController: UIViewController {
     
     // MARK: - Constants
     let popupViewHeight: CGFloat = 140
-    let editModalHeight: Float = 205
+    let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
@@ -219,6 +219,7 @@ class PollsViewController: UIViewController {
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
+                        self.codeTextField.text = ""
                         let cardVC = CardController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)

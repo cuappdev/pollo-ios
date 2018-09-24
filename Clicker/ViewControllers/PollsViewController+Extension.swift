@@ -64,8 +64,9 @@ extension PollsViewController: PollsCellDelegate {
     
     func pollsCellShouldEditSession(session: Session, userRole: UserRole) {
         let width = ModalSize.full
-        let height = ModalSize.custom(size: editModalHeight)
-        let originY = view.frame.height - CGFloat(editModalHeight)
+        let modalHeight = editModalHeight + view.safeAreaInsets.bottom
+        let height = ModalSize.custom(size: Float(modalHeight))
+        let originY = view.frame.height - modalHeight
         let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
         let customType = PresentationType.custom(width: width, height: height, center: center)
         let presenter = Presentr(presentationType: customType)

@@ -17,7 +17,12 @@ class EditNameViewController: UIViewController {
     var saveButton: UIButton!
     
     let edgePadding = 18
-    let textFieldHeight = 50
+    let nameTextFieldHeight = 50
+    let nameTextFieldTopPadding: CGFloat = 26
+    let nameTextFieldWidthScale: CGFloat = 0.9
+    let saveButtonWidthScale: CGFloat = 0.5
+    let saveButtonHeight: CGFloat = 48
+    let saveButtonBottomPadding: CGFloat = 16
     
     init(session: Session) {
         super.init(nibName: nil, bundle: nil)
@@ -44,7 +49,7 @@ class EditNameViewController: UIViewController {
         nameTextField.layer.cornerRadius = 5
         nameTextField.layer.borderWidth = 1
         nameTextField.layer.borderColor = UIColor.clickerGrey5.cgColor
-        nameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: textFieldHeight))
+        nameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: nameTextFieldHeight))
         nameTextField.leftViewMode = .always
         view.addSubview(nameTextField)
         
@@ -59,19 +64,18 @@ class EditNameViewController: UIViewController {
     }
     
     func setupConstraints() {
-        
         nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(26)
-            make.width.equalToSuperview().multipliedBy(0.92)
-            make.height.equalTo(textFieldHeight)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(nameTextFieldTopPadding)
+            make.width.equalToSuperview().multipliedBy(nameTextFieldWidthScale)
+            make.height.equalTo(nameTextFieldHeight)
             make.centerX.equalToSuperview()
         }
         
         saveButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalTo(160)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().offset(-16)
+            make.width.equalToSuperview().multipliedBy(saveButtonWidthScale)
+            make.height.equalTo(saveButtonHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(saveButtonBottomPadding)
         }
 
     }
