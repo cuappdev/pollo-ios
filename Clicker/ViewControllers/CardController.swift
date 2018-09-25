@@ -193,7 +193,7 @@ class CardController: UIViewController {
     
     @objc func goBack() {
         delegate.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
-        self.navigationController?.popViewController(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
