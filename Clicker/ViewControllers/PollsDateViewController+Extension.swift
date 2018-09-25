@@ -203,7 +203,10 @@ extension PollsDateViewController: SocketDelegate {
         let todaysDate = getTodaysDate()
         if let lastPollDateModel = pollsDateArray.last {
             if lastPollDateModel.date == todaysDate {
-                pollsDateArray.last?.polls.append(poll)
+                var updatedPolls = lastPollDateModel.polls
+                updatedPolls.append(poll)
+                let updatedPollsDateModel = PollsDateModel(date: lastPollDateModel.date, polls: updatedPolls)
+                pollsDateArray[pollsDateArray.count - 1] = updatedPollsDateModel
                 return
             }
         }

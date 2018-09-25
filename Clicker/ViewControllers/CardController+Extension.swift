@@ -178,7 +178,7 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
-        guard let latestPoll = getLatestPoll() else { return }
+        guard let latestPoll = pollsDateModel.polls.last else { return }
         if userRole == .admin {
             latestPoll.id = poll.id
             updateLatestPoll(with: latestPoll)
@@ -189,7 +189,7 @@ extension CardController: SocketDelegate {
             let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
             updateLatestPoll(with: updatedPoll)
         case .multipleChoice:
-            endPoll(poll: poll)
+            updateLatestPoll(with: poll)
         }
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -223,10 +223,6 @@ extension CardController: SocketDelegate {
         socket.socket.emit(Routes.serverShare, [])
     }
     
-    func endPoll(poll: Poll) {
-        updateLatestPoll(with: poll)
-    }
-    
     func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
         var updatedOptions = poll.options.filter { (option) -> Bool in
             return currentState.results[option] != nil
@@ -237,7 +233,7 @@ extension CardController: SocketDelegate {
     }
     
     func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
-        guard let latestPoll = getLatestPoll() else { return }
+        guard let latestPoll = pollsDateModel.polls.last else { return }
         let updatedPollState = pollState ?? latestPoll.state
         // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
         if latestPoll.questionType == .freeResponse {
@@ -248,24 +244,9 @@ extension CardController: SocketDelegate {
     }
     
     func updateLatestPoll(with poll: Poll) {
-//        guard let latestPollsDateModel = pollsDateArray.last else { return }
-//        let todaysDate = getTodaysDate()
-//        if (latestPollsDateModel.date != todaysDate) {
-//            // User has no polls for today yet
-//            let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
-//            pollsDateArray.append(todayPollsDateModel)
-//        } else {
-//            // User has polls for today, so just update latest poll for today
-//            let todayPolls = latestPollsDateModel.polls
-//            poll.answer = pollsDateArray.last?.polls.last?.answer
-//            pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
-//        }
-    }
-    
-    func getLatestPoll() -> Poll? {
-        return nil
-//        guard let latestPollsDateModel = pollsDateArray.last else { return nil }
-//        return latestPollsDateModel.polls.last
+        if pollsDateModel.polls.isEmpty { return }
+        let numPolls = pollsDateModel.polls.count
+        pollsDateModel.polls[numPolls - 1] = poll
     }
     
 }
