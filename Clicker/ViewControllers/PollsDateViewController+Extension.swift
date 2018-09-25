@@ -48,7 +48,7 @@ extension PollsDateViewController: CardControllerDelegate {
     func cardControllerDidStartNewPoll(poll: Poll) {
         let newPollsDateModel = PollsDateModel(date: getTodaysDate(), polls: [poll])
         pollsDateArray.append(newPollsDateModel)
-        let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, userRole: userRole)
+        let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, socket: socket, userRole: userRole)
         self.navigationController?.pushViewController(cardController, animated: false)
     }
     
@@ -96,7 +96,7 @@ extension PollsDateViewController: PollSectionControllerDelegate {
 extension PollsDateViewController: PollsDateSectionControllerDelegate {
     
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
-        let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, userRole: userRole)
+        let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, socket: socket, userRole: userRole)
         self.navigationController?.pushViewController(cardController, animated: false)
     }
     
@@ -121,7 +121,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
-            let cardController = CardController(delegate: self, pollsDateModel: lastPollsDateModel, session: session, userRole: userRole)
+            let cardController = CardController(delegate: self, pollsDateModel: lastPollsDateModel, session: session, socket: socket, userRole: userRole)
             self.navigationController?.pushViewController(cardController, animated: false)
         }
     }
