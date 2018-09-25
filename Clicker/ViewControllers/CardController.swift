@@ -40,14 +40,7 @@ class CardController: UIViewController {
     
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
-    let gradientViewHeight: CGFloat = 50.0
-    let horizontalCollectionViewTopPadding: CGFloat = 15
-    let verticalCollectionViewBottomInset: CGFloat = 50
-    let verticalCollectionViewTopPadding: CGFloat = 20
-    let adminNothingToSeeText = "Nothing to see here."
-    let userNothingToSeeText = "Nothing to see yet."
-    let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
-    let userWaitingText = "Waiting for the host to post a poll."
+    let collectionViewTopPadding: CGFloat = 15
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -84,8 +77,8 @@ class CardController: UIViewController {
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        let collectionViewXInset = view.frame.width * 0.05
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
+        let collectionViewHorizontalInset = view.frame.width * 0.05
+        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.scrollIndicatorInsets = .zero
@@ -115,7 +108,7 @@ class CardController: UIViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(horizontalCollectionViewTopPadding)
+            make.top.equalTo(countLabel.snp.bottom).offset(collectionViewTopPadding)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()

@@ -19,28 +19,5 @@ class CurrentState {
         self.results = results
         self.answers = answers
     }
-    
-    // GET TOTAL ANSWERS SUBMITTED
-    func getTotalCount() -> Int {
-        var counter = 0
-        for dict in results.values {
-            if let d = dict as? [String:Any], let val = d["count"] as? Int {
-                counter += val
-            }
-        }
-        return counter
-    }
-    
-    // Returns array representation of results
-    // Ex) [('Blah', 3), ('Jupiter', 2)...]
-    func getFRResultsArray() -> [(String, Int)] {
-        var resultsArr: [(String, Int)] = []
-        results.forEach { (key, val) in
-            if let choiceJSON = val as? [String:Any] {
-                resultsArr.append((key, (choiceJSON["count"] as! Int)))
-            }
-        }
-        return resultsArr
-    }
-    
+
 }
