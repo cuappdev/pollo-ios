@@ -165,7 +165,8 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll) {
-
+        appendPoll(poll: poll)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
