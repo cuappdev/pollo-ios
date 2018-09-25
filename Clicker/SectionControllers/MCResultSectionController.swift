@@ -10,8 +10,8 @@ import IGListKit
 
 protocol MCResultSectionControllerDelegate {
     
-    var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
+
 }
 
 class MCResultSectionController: ListSectionController {

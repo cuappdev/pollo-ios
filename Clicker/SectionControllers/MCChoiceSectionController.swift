@@ -9,7 +9,6 @@
 import IGListKit
 
 protocol MCChoiceSectionControllerDelegate {
-    var cardControllerState: CardControllerState { get }
     var pollState: PollState { get }
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController)

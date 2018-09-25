@@ -10,7 +10,6 @@ import IGListKit
 
 protocol PollOptionsSectionControllerDelegate {
     
-    var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String)
@@ -33,7 +32,7 @@ class PollOptionsSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, state: delegate.cardControllerState)
+        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
@@ -50,10 +49,6 @@ class PollOptionsSectionController: ListSectionController {
 }
 
 extension PollOptionsSectionController: PollOptionsCellDelegate {
-    
-    var cardControllerState: CardControllerState {
-        return delegate.cardControllerState
-    }
     
     var userRole: UserRole {
         return delegate.userRole

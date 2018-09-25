@@ -54,7 +54,7 @@ extension PollsViewController: PollsCellDelegate {
     func pollsCellShouldOpenSession(session: Session, userRole: UserRole) {
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
-                let cardController = CardController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                let cardController = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
                 self.navigationController?.pushViewController(cardController, animated: true)
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
             } .catch { error in

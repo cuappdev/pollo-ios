@@ -55,11 +55,10 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
     return PollOptionsModel(type: type, pollState: poll.state)
 }
 
-func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, state: CardControllerState) -> CGFloat {
+func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
     let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
-    let isHorizontal = state == .horizontal
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels

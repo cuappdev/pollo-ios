@@ -10,7 +10,6 @@ import IGListKit
 
 protocol FROptionSectionControllerDelegate {
     
-    var cardControllerState: CardControllerState { get }
     var pollState: PollState { get }
     
     func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController)
