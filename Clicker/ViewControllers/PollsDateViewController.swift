@@ -109,7 +109,7 @@ class PollsDateViewController: UIViewController {
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("0", for: .normal)
+        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
