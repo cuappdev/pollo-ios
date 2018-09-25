@@ -16,8 +16,13 @@ class PollParser: Parser {
     static func parseItem(json: JSON) -> Poll {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
-        let options = json[ParserKeys.optionsKey].arrayValue.map { $0.stringValue }
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        var options: [String]
+        if let optionsArray = json[ParserKeys.optionsKey].array {
+            options = optionsArray.map { $0.stringValue }
+        } else {
+            options = results.keys.sorted()
+        }
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse
@@ -32,8 +37,13 @@ class PollParser: Parser {
     static func parseItem(json: JSON, state: PollState) -> Poll {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
-        let options = json[ParserKeys.optionsKey].arrayValue.map { $0.stringValue }
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        var options: [String]
+        if let optionsArray = json[ParserKeys.optionsKey].array {
+            options = optionsArray.map { $0.stringValue }
+        } else {
+            options = results.keys.sorted()
+        }
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse

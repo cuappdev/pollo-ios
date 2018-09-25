@@ -36,6 +36,24 @@ extension PollsDateViewController: ListAdapterDataSource {
     }
 }
 
+extension PollsDateViewController: CardControllerDelegate {
+    
+    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel) {
+        if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
+            pollsDateArray[indexOfPollsDateModel] = pollsDateModel
+            adapter.performUpdates(animated: false, completion: nil)
+        }
+    }
+    
+    func cardControllerDidStartNewPoll(poll: Poll) {
+        let newPollsDateModel = PollsDateModel(date: getTodaysDate(), polls: [poll])
+        pollsDateArray.append(newPollsDateModel)
+        let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, userRole: userRole)
+        self.navigationController?.pushViewController(cardController, animated: false)
+    }
+    
+}
+
 extension PollsDateViewController: PollSectionControllerDelegate {
     
     var role: UserRole {
@@ -78,8 +96,8 @@ extension PollsDateViewController: PollSectionControllerDelegate {
 extension PollsDateViewController: PollsDateSectionControllerDelegate {
     
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
-        let cardContorller = CardController(pollsDateModel: pollsDateModel, session: session, userRole: userRole)
-        self.navigationController?.pushViewController(cardContorller, animated: false)
+        let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, userRole: userRole)
+        self.navigationController?.pushViewController(cardController, animated: false)
     }
     
 }
@@ -87,7 +105,25 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
     
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
-
+        createPollButton.isUserInteractionEnabled = false
+        createPollButton.isHidden = true
+        
+        // EMIT START QUESTION
+        let socketQuestion: [String:Any] = [
+            RequestKeys.textKey: text,
+            RequestKeys.typeKey: type.descriptionForServer,
+            RequestKeys.optionsKey: options,
+            RequestKeys.sharedKey: state == .shared
+        ]
+        socket.socket.emit(Routes.serverStart, socketQuestion)
+        let results = buildEmptyResultsFromOptions(options: options, questionType: type)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
+        appendPoll(poll: newPoll)
+        adapter.performUpdates(animated: false, completion: nil)
+        if let lastPollsDateModel = pollsDateArray.last {
+            let cardController = CardController(delegate: self, pollsDateModel: lastPollsDateModel, session: session, userRole: userRole)
+            self.navigationController?.pushViewController(cardController, animated: false)
+        }
     }
     
     func showNavigationBar() {
@@ -163,7 +199,15 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func appendPoll(poll: Poll) {
-        
+        let todaysDate = getTodaysDate()
+        if let lastPollDateModel = pollsDateArray.last {
+            if lastPollDateModel.date == todaysDate {
+                pollsDateArray.last?.polls.append(poll)
+                return
+            }
+        }
+        let newPollsDate = PollsDateModel(date: todaysDate, polls: [poll])
+        pollsDateArray.append(newPollsDate)
     }
     
     func endPoll(poll: Poll) {
