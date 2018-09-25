@@ -1,8 +1,8 @@
 //
-//  CardController.swift
+//  PollsDateViewController.swift
 //  Clicker
 //
-//  Created by eoin on 4/15/18.
+//  Created by Kevin Chan on 9/23/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
@@ -10,13 +10,12 @@ import IGListKit
 import Presentr
 import UIKit
 
-class CardController: UIViewController {
+class PollsDateViewController: UIViewController {
     
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
     var createPollButton: UIButton!
-    var countLabel: UILabel!
     var collectionViewLayout: UICollectionViewFlowLayout!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
@@ -25,11 +24,9 @@ class CardController: UIViewController {
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
-    var pollsDateModel: PollsDateModel!
-    var currentIndex: Int!
-    var indexOfCellBeforeDragging: Int!
+    var pollsDateArray: [PollsDateModel]!
     
-    // MARK: - Constants    
+    // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
     let gradientViewHeight: CGFloat = 50.0
     let horizontalCollectionViewTopPadding: CGFloat = 15
@@ -40,11 +37,11 @@ class CardController: UIViewController {
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
     let userWaitingText = "Waiting for the host to post a poll."
     
-    init(pollsDateModel: PollsDateModel, session: Session, userRole: UserRole) {
+    init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
         self.session = session
         self.userRole = userRole
-        self.pollsDateModel = pollsDateModel
+        self.pollsDateArray = pollsDateArray
     }
     
     // MARK: - View lifecycle
@@ -52,8 +49,8 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBlack1
-        setupNavBar()
         setupViews()
+        setupNavBar()
         self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
     }
     
@@ -62,10 +59,8 @@ class CardController: UIViewController {
         collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.minimumLineSpacing = 0
-        collectionViewLayout.scrollDirection = .horizontal
+        collectionViewLayout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        let collectionViewXInset = view.frame.width * 0.05
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewXInset, 0, collectionViewXInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.scrollIndicatorInsets = .zero
@@ -78,24 +73,9 @@ class CardController: UIViewController {
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
-        adapter.scrollViewDelegate = self
-        
-        countLabel = UILabel()
-        countLabel.textAlignment = .center
-        countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.layer.cornerRadius = 12
-        countLabel.clipsToBounds = true
-        updateCountLabelText(with: 0)
-        view.addSubview(countLabel)
-        
-        countLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth)
-        }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(horizontalCollectionViewTopPadding)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(verticalCollectionViewTopPadding)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -135,25 +115,8 @@ class CardController: UIViewController {
             self.navigationItem.rightBarButtonItems = [peopleBarButton]
         }
     }
-    
-    // MARK: Helpers
-    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerGrey2,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
-    
-    func updateCountLabelText(with index: Int) {
-        let total = pollsDateModel.polls.count
-        countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
-    }
-    
-    // MARK: - Actions
+        
+    // MARK: ACTIONS
     @objc func createPollBtnPressed() {
         let pollBuilderVC = PollBuilderViewController(delegate: self)
         let width = Float(view.safeAreaLayoutGuide.layoutFrame.size.width)
@@ -172,11 +135,24 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-        self.navigationController?.popViewController(animated: false)
+        socket.socket.disconnect()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        if pollsDateArray.isEmpty && session.name == session.code {
+            DeleteSession(id: session.id).make()
+                .done {
+                    self.navigationController?.popViewController(animated: true)
+                    return
+                }.catch { (error) in
+                    print(error)
+                    self.navigationController?.popViewController(animated: true)
+            }
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

@@ -13,7 +13,6 @@ import UIKit
 
 protocol CardCellDelegate {
     
-    var cardControllerState: CardControllerState { get }
     var userRole: UserRole { get }
     
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String)
@@ -41,15 +40,12 @@ class CardCell: UICollectionViewCell {
     var pollOptionsModel: PollOptionsModel!
     var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
-    var shadowViewWidth: CGFloat!
     var collectionViewRightPadding: CGFloat!
     var timer: Timer!
     var elapsedSeconds: Int = 0
     
     // MARK: - Constants
-    let collectionViewLeftPadding: CGFloat = 5.0
-    let shadowViewCornerRadius: CGFloat = 11.0
-    let shadowHeightScaleFactor: CGFloat = 0.9
+    let collectionViewHorizontalPadding: CGFloat = 5.0
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonCornerRadius: CGFloat = 23.0
     let questionButtonBorderWidth: CGFloat = 1.0
@@ -88,12 +84,6 @@ class CardCell: UICollectionViewCell {
         adapter.collectionView = collectionView
         adapter.dataSource = self
         
-        shadowView = UIView()
-        shadowView.backgroundColor = .clickerGrey3
-        shadowView.layer.cornerRadius = shadowViewCornerRadius
-        shadowView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
-        contentView.addSubview(shadowView)
-        
         questionButton = UIButton()
         questionButton.titleLabel?.font = UIFont.systemFont(ofSize: questionButtonFontSize, weight: .semibold)
         questionButton.setTitleColor(.white, for: .normal)
@@ -114,15 +104,8 @@ class CardCell: UICollectionViewCell {
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview().offset(collectionViewLeftPadding)
-            make.trailing.equalToSuperview().inset(collectionViewRightPadding)
-        }
-        
-        shadowView.snp.updateConstraints { make in
-            make.leading.equalTo(collectionView.snp.trailing)
-            make.width.equalTo(shadowViewWidth)
-            make.centerY.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(shadowHeightScaleFactor)
+            make.leading.equalToSuperview().offset(collectionViewHorizontalPadding)
+            make.trailing.equalToSuperview().inset(collectionViewHorizontalPadding)
         }
         
         timerLabel.snp.makeConstraints { make in
@@ -143,13 +126,9 @@ class CardCell: UICollectionViewCell {
     func configure(with delegate: CardCellDelegate, poll: Poll, userRole: UserRole) {
         self.delegate = delegate
         self.poll = poll
-        let isVertical = delegate.cardControllerState == .vertical
         let isMember = userRole == .member
-        shadowViewWidth = isVertical ? 15 : 0
-        collectionViewRightPadding = isVertical ? 0 : collectionViewLeftPadding
-        collectionView.isUserInteractionEnabled = !isVertical
-        questionButton.isHidden = poll.state == .shared || isVertical || isMember
-        timerLabel.isHidden = !(poll.state == .live) || isVertical || isMember
+        questionButton.isHidden = poll.state == .shared || isMember
+        timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
             timerLabel.text = initialTimerLabelText
@@ -308,10 +287,6 @@ extension CardCell: FRInputSectionControllerDelegate {
 }
 
 extension CardCell: PollOptionsSectionControllerDelegate {
-    
-    var cardControllerState: CardControllerState {
-        return delegate.cardControllerState
-    }
     
     var userRole: UserRole {
         return delegate.userRole

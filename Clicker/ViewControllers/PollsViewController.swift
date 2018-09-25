@@ -205,7 +205,7 @@ class PollsViewController: UIViewController {
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
-                        let cardVC = CardController(pollsDateArray: [], session: session, userRole: .admin)
+                        let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
@@ -223,7 +223,7 @@ class PollsViewController: UIViewController {
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
-                        let cardVC = CardController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        let cardVC = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in

@@ -11,7 +11,6 @@ import IGListKit
 
 protocol PollSectionControllerDelegate {
     
-    var cardControllerState: CardControllerState { get }
     var role: UserRole { get }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
@@ -53,10 +52,6 @@ class PollSectionController: ListSectionController {
 }
 
 extension PollSectionController: CardCellDelegate {
-    
-    var cardControllerState: CardControllerState {
-        return delegate.cardControllerState
-    }
     
     var userRole: UserRole {
         return delegate.role
