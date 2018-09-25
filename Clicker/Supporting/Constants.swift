@@ -58,6 +58,9 @@ struct Identifiers {
 }
 
 struct Routes {
+    static let adminEnded = "admin/poll/ended"
+    static let adminUpdateTally = "admin/poll/updateTally"
+    static let count = "user/count"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
     static let serverStart = "server/poll/start"
@@ -66,20 +69,17 @@ struct Routes {
     static let userStart = "user/poll/start"
     static let userEnd = "user/poll/end"
     static let userShare = "user/poll/results"
-    static let adminUpdateTally = "admin/poll/updateTally"
-    static let adminEnded = "admin/poll/ended"
-    static let count = "user/count"
 }
 
 struct LayoutConstants {
-    static let questionCellHeight: CGFloat = 46
-    static let mcOptionCellHeight: CGFloat = 50
-    static let frOptionCellHeight: CGFloat = 58
     static let frInputCellHeight: CGFloat = 64
-    static let pollMiscellaneousCellHeight: CGFloat = 30
-    static let separatorLineCellHeight: CGFloat = 1
+    static let frOptionCellHeight: CGFloat = 58
     static let hamburgerCardCellHeight: CGFloat = 25
+    static let mcOptionCellHeight: CGFloat = 50
+    static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsVerticalPadding: CGFloat = 10
+    static let questionCellHeight: CGFloat = 46
+    static let separatorLineCellHeight: CGFloat = 1
 }
 
 struct ParserKeys {
@@ -96,20 +96,20 @@ struct ParserKeys {
 }
 
 struct RequestKeys {
+    static let choiceKey = "choice"
+    static let countKey = "count"
     static let googleIdKey = "googleId"
     static let optionsKey = "options"
     static let pollKey = "poll"
-    static let choiceKey = "choice"
-    static let countKey = "count"
+    static let sharedKey = "shared"
     static let textKey = "text"
     static let typeKey = "type"
-    static let sharedKey = "shared"
     static let userTypeKey = "userType"
 }
 
 struct StringConstants {
-    static let multipleChoice = "Multiple Choice"
     static let freeResponse = "Free Response"
+    static let multipleChoice = "Multiple Choice"
 }
 
 enum Keys: String {

@@ -29,14 +29,7 @@ class PollsDateViewController: UIViewController {
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
-    let gradientViewHeight: CGFloat = 50.0
-    let horizontalCollectionViewTopPadding: CGFloat = 15
-    let verticalCollectionViewBottomInset: CGFloat = 50
-    let verticalCollectionViewTopPadding: CGFloat = 20
-    let adminNothingToSeeText = "Nothing to see here."
-    let userNothingToSeeText = "Nothing to see yet."
-    let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
-    let userWaitingText = "Waiting for the host to post a poll."
+    let collectionViewTopPadding: CGFloat = 20
     
     init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -84,7 +77,7 @@ class PollsDateViewController: UIViewController {
         adapter.dataSource = self
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(verticalCollectionViewTopPadding)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(collectionViewTopPadding)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -145,17 +138,19 @@ class PollsDateViewController: UIViewController {
     
     @objc func goBack() {
         socket.socket.disconnect()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
+                    self.navigationController?.setNavigationBarHidden(true, animated: false)
                     self.navigationController?.popViewController(animated: true)
                     return
                 }.catch { (error) in
                     print(error)
+                    self.navigationController?.setNavigationBarHidden(true, animated: false)
                     self.navigationController?.popViewController(animated: true)
             }
         } else {
+            self.navigationController?.setNavigationBarHidden(true, animated: false)
             self.navigationController?.popViewController(animated: true)
         }
     }
