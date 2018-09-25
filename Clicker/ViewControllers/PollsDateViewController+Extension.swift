@@ -45,6 +45,7 @@ extension PollsDateViewController: CardControllerDelegate {
             pollsDateArray[indexOfPollsDateModel] = pollsDateModel
             adapter.performUpdates(animated: false, completion: nil)
         }
+        self.socket.updateDelegate(self)
     }
     
     func cardControllerDidStartNewPoll(poll: Poll) {
@@ -173,14 +174,30 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
-
+        guard let latestPoll = getLatestPoll() else { return }
+        if userRole == .admin {
+            latestPoll.id = poll.id
+            updateLatestPoll(with: latestPoll)
+            return
+        }
+        switch poll.questionType {
+        case .freeResponse:
+            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
+            updateLatestPoll(with: updatedPoll)
+        case .multipleChoice:
+            updateLatestPoll(with: poll)
+        }
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func receivedResults(_ currentState: CurrentState) {
-
+        updateWithCurrentState(currentState: currentState, pollState: .shared)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func updatedTally(_ currentState: CurrentState) {
+        updateWithCurrentState(currentState: currentState, pollState: nil)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: Helpers
@@ -217,25 +234,43 @@ extension PollsDateViewController: SocketDelegate {
         pollsDateArray.append(newPollsDate)
     }
     
-    func endPoll(poll: Poll) {
-        updateLatestPoll(with: poll)
-    }
-    
     func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
-        return []
+        var updatedOptions = poll.options.filter { (option) -> Bool in
+            return currentState.results[option] != nil
+        }
+        let newOptions = currentState.results.keys.filter { return !poll.options.contains($0) }
+        updatedOptions.insert(contentsOf: newOptions, at: 0)
+        return updatedOptions
     }
     
     func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
-       
+        guard let latestPoll = getLatestPoll() else { return }
+        let updatedPollState = pollState ?? latestPoll.state
+        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
+        if latestPoll.questionType == .freeResponse {
+            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
+        }
+        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
+        updateLatestPoll(with: updatedPoll)
     }
     
     func updateLatestPoll(with poll: Poll) {
-        
+        guard let latestPollsDateModel = pollsDateArray.last else { return }
+        let todaysDate = getTodaysDate()
+        if (latestPollsDateModel.date != todaysDate) {
+            // User has no polls for today yet
+            let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
+            pollsDateArray.append(todayPollsDateModel)
+        } else {
+            // User has polls for today, so just update latest poll for today
+            let todayPolls = latestPollsDateModel.polls
+            poll.answer = pollsDateArray.last?.polls.last?.answer
+            pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
+        }
     }
     
     func getLatestPoll() -> Poll? {
-        guard let latestPollsDateModel = pollsDateArray.last else { return nil }
-        return latestPollsDateModel.polls.last
+        return pollsDateArray.last?.polls.last
     }
     
 }
