@@ -52,55 +52,16 @@ extension PollsDateViewController: CardControllerDelegate {
         let newPollsDateModel = PollsDateModel(date: getTodaysDate(), polls: [poll])
         pollsDateArray.append(newPollsDateModel)
         let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
-        self.navigationController?.pushViewController(cardController, animated: false)
+        self.navigationController?.pushViewController(cardController, animated: true)
     }
     
-}
-
-extension PollsDateViewController: PollSectionControllerDelegate {
-    
-    var role: UserRole {
-        return userRole
-    }
-    
-    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        poll.answer = choice
-        var choiceForAnswer: String
-        // choiceForAnswer should be "A" or "B" for multiple choice and the actual response for free response
-        switch poll.questionType {
-        case .multipleChoice:
-            guard let indexOfChoice = poll.options.index(of: choice) else { return }
-            choiceForAnswer = intToMCOption(indexOfChoice)
-        case .freeResponse:
-            choiceForAnswer = choice
-        }
-        let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.serverTally)
-    }
-    
-    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        // You can only upvote for FR questions
-        if poll.questionType == .multipleChoice { return }
-        let answer = Answer(text: choice, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.serverUpvote)
-    }
-    
-    func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
-        createPollButton.isUserInteractionEnabled = true
-        createPollButton.isHidden = false
-        emitEndPoll()
-    }
-    
-    func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll) {
-        emitShareResults()
-    }
 }
 
 extension PollsDateViewController: PollsDateSectionControllerDelegate {
     
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
         let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
-        self.navigationController?.pushViewController(cardController, animated: false)
+        self.navigationController?.pushViewController(cardController, animated: true)
     }
     
 }
@@ -125,7 +86,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
             let cardController = CardController(delegate: self, pollsDateModel: lastPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
-            self.navigationController?.pushViewController(cardController, animated: false)
+            self.navigationController?.pushViewController(cardController, animated: true)
         }
     }
     
