@@ -81,12 +81,17 @@ extension CardController: PollBuilderViewControllerDelegate {
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
-        appendPoll(poll: newPoll)
-        adapter.performUpdates(animated: false) { completed in
-            if completed {
-                self.scrollToLatestPoll()
+        pollsDateModel.polls.append(newPoll)
+        if pollsDateModel.date == getTodaysDate() {
+            adapter.performUpdates(animated: false) { completed in
+                if completed {
+                    self.scrollToLatestPoll()
+                }
             }
+            return
         }
+        self.navigationController?.popViewController(animated: false)
+        delegate.cardControllerDidStartNewPoll(poll: newPoll)
     }
     
     func showNavigationBar() {
@@ -164,7 +169,7 @@ extension CardController: SocketDelegate {
     
     func pollStarted(_ poll: Poll) {
         if userRole == .admin { return }
-        appendPoll(poll: poll)
+        pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
             if completed {
                 self.scrollToLatestPoll()
@@ -216,17 +221,6 @@ extension CardController: SocketDelegate {
     
     func emitShareResults() {
         socket.socket.emit(Routes.serverShare, [])
-    }
-    
-    func appendPoll(poll: Poll) {
-//        if currentIndex == -1 {
-//            let date = getTodaysDate()
-//            let newPollsDate = PollsDateModel(date: date, polls: [poll])
-//            pollsDateArray.append(newPollsDate)
-//            currentIndex = 0
-//            return
-//        }
-//        pollsDateArray.last?.polls.append(poll)
     }
     
     func endPoll(poll: Poll) {

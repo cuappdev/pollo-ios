@@ -10,6 +10,13 @@ import IGListKit
 import Presentr
 import UIKit
 
+protocol CardControllerDelegate {
+    
+    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel)
+    func cardControllerDidStartNewPoll(poll: Poll)
+    
+}
+
 class CardController: UIViewController {
     
     // MARK: - View vars
@@ -22,6 +29,7 @@ class CardController: UIViewController {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
+    var delegate: CardControllerDelegate!
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
@@ -40,8 +48,9 @@ class CardController: UIViewController {
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
     let userWaitingText = "Waiting for the host to post a poll."
     
-    init(pollsDateModel: PollsDateModel, session: Session, userRole: UserRole) {
+    init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
         self.session = session
         self.userRole = userRole
         self.pollsDateModel = pollsDateModel
@@ -172,6 +181,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
+        delegate.cardControllerWillDisappear(with: pollsDateModel)
         self.navigationController?.popViewController(animated: false)
     }
     
