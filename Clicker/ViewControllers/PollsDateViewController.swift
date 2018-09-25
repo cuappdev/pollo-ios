@@ -54,6 +54,12 @@ class PollsDateViewController: UIViewController {
         self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let livePollExists = pollsDateArray.last?.polls.last?.state == .live
+        createPollButton.isUserInteractionEnabled = !livePollExists
+        createPollButton.isHidden = livePollExists
+    }
+    
     // MARK: - Layout
     func setupViews() {
         collectionViewLayout = UICollectionViewFlowLayout()

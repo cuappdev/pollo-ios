@@ -67,6 +67,12 @@ class CardController: UIViewController {
         socket.updateDelegate(self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let livePollExists = pollsDateModel.polls.last?.state == .live
+        createPollButton.isUserInteractionEnabled = !livePollExists
+        createPollButton.isHidden = livePollExists
+    }
+    
     // MARK: - Layout
     func setupViews() {
         collectionViewLayout = UICollectionViewFlowLayout()
