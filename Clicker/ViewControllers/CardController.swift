@@ -12,7 +12,7 @@ import UIKit
 
 protocol CardControllerDelegate {
     
-    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel)
+    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
     
 }
@@ -36,6 +36,7 @@ class CardController: UIViewController {
     var pollsDateModel: PollsDateModel!
     var currentIndex: Int!
     var indexOfCellBeforeDragging: Int!
+    var numberOfPeople: Int!
     
     // MARK: - Constants    
     let countLabelWidth: CGFloat = 42.0
@@ -48,13 +49,14 @@ class CardController: UIViewController {
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
     let userWaitingText = "Waiting for the host to post a poll."
     
-    init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole) {
+    init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.pollsDateModel = pollsDateModel
         self.session = session
         self.socket = socket
         self.userRole = userRole
+        self.numberOfPeople = numberOfPeople
     }
     
     // MARK: - View lifecycle
@@ -138,7 +140,7 @@ class CardController: UIViewController {
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("0", for: .normal)
+        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
@@ -190,7 +192,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-        delegate.cardControllerWillDisappear(with: pollsDateModel)
+        delegate.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: false)
     }
     

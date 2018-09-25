@@ -164,6 +164,7 @@ extension CardController: SocketDelegate {
     func sessionDisconnected() {}
     
     func receivedUserCount(_ count: Int) {
+        numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
     }
     

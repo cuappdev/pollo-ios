@@ -25,6 +25,7 @@ class PollsDateViewController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
+    var numberOfPeople: Int = 0
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
