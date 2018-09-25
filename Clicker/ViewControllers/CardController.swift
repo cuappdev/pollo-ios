@@ -68,9 +68,11 @@ class CardController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let livePollExists = pollsDateModel.polls.last?.state == .live
-        createPollButton.isUserInteractionEnabled = !livePollExists
-        createPollButton.isHidden = livePollExists
+        if createPollButton != nil {
+            let livePollExists = pollsDateModel.polls.last?.state == .live
+            createPollButton.isUserInteractionEnabled = !livePollExists
+            createPollButton.isHidden = livePollExists
+        }
     }
     
     // MARK: - Layout

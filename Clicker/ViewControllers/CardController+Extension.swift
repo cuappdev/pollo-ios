@@ -246,6 +246,7 @@ extension CardController: SocketDelegate {
     func updateLatestPoll(with poll: Poll) {
         if pollsDateModel.polls.isEmpty { return }
         let numPolls = pollsDateModel.polls.count
+        poll.answer = pollsDateModel.polls.last?.answer
         pollsDateModel.polls[numPolls - 1] = poll
     }
     
