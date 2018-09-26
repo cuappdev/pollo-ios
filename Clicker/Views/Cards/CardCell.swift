@@ -41,8 +41,6 @@ class CardCell: UICollectionViewCell {
     var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
-    //var elapsedSeconds: Int = 0
-    var timer: Timer!
     
     // MARK: - Constants
     let collectionViewHorizontalPadding: CGFloat = 5.0
@@ -198,7 +196,7 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func runTimer() {
-        poll.startTimerWith(target: self, selector: #selector(updateTimerLabel))
+        poll.runTimerWith(target: self, selector: #selector(updateTimerLabel))
     }
     
     required init?(coder aDecoder: NSCoder) {
