@@ -41,8 +41,8 @@ class CardCell: UICollectionViewCell {
     var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
+    //var elapsedSeconds: Int = 0
     var timer: Timer!
-    var elapsedSeconds: Int = 0
     
     // MARK: - Constants
     let collectionViewHorizontalPadding: CGFloat = 5.0
@@ -131,7 +131,7 @@ class CardCell: UICollectionViewCell {
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
-            timerLabel.text = initialTimerLabelText
+            setTimerText(for: poll.timeLive)
             runTimer()
         } else if poll.state == .ended {
             questionButton.setTitle(shareResultsText, for: .normal)
@@ -148,7 +148,6 @@ class CardCell: UICollectionViewCell {
         if poll.state == .live {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
-            timer.invalidate()
             timerLabel.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: miscellaneousModel.totalVotes)
             adapter.performUpdates(animated: false, completion: nil)
@@ -163,7 +162,17 @@ class CardCell: UICollectionViewCell {
     }
     
     @objc func updateTimerLabel() {
-        elapsedSeconds += 1
+        if let _ = poll.timeLive  {
+            poll.timeLive! += 1
+        }
+        setTimerText(for: poll.timeLive)
+    }
+    
+    func setTimerText(for s: Int?) {
+        guard let elapsedSeconds = s else {
+            timerLabel.text = initialTimerLabelText
+            return
+        }
         if (elapsedSeconds < 10) {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if (elapsedSeconds < 60) {
@@ -189,7 +198,7 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
+        poll.startTimerWith(target: self, selector: #selector(updateTimerLabel))
     }
     
     required init?(coder aDecoder: NSCoder) {
