@@ -10,7 +10,7 @@ import IGListKit
 import SwiftyJSON
 
 protocol PollTimeKeeper {
-    func startTimerWith(target aTarget: Any, selector aSelector: Selector)
+    func runTimerWith(target aTarget: Any, selector aSelector: Selector)
 }
 
 enum PollState {
@@ -90,7 +90,7 @@ extension Poll: ListDiffable {
 
 extension Poll: PollTimeKeeper {
     
-    func startTimerWith(target aTarget: Any, selector aSelector: Selector) {
+    func runTimerWith(target aTarget: Any, selector aSelector: Selector) {
         if let t = timer {
             t.invalidate()
         }
