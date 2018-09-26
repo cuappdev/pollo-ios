@@ -32,6 +32,7 @@ class DraftsViewController: UIViewController {
     let backButtonLength: CGFloat = 13
     let draftsCollectionViewTopPadding: CGFloat = 32
     let draftsCollectionViewWidthInset: CGFloat = 36
+    let editDraftModalSize: CGFloat = 100
     let titleLabelText = "Drafts"
     
     init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
