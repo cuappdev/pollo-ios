@@ -42,7 +42,7 @@ extension PollsDateViewController: CardControllerDelegate {
         self.numberOfPeople = numberOfPeople
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
-            pollsDateArray[indexOfPollsDateModel] = pollsDateModel
+            pollsDateArray[indexOfPollsDateModel] = PollsDateModel(date: pollsDateModel.date, polls: pollsDateModel.polls)
             adapter.performUpdates(animated: false, completion: nil)
         }
         self.socket.updateDelegate(self)
