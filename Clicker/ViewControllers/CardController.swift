@@ -92,7 +92,7 @@ class CardController: UIViewController {
         adapter.collectionView = collectionView
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
-        
+
         countLabel = UILabel()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10

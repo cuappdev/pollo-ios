@@ -10,7 +10,7 @@ import UIKit
 import IGListKit
 
 protocol DraftSectionControllerDelegate {
-    func draftSectionControllerDidFillDraft(draft: Draft)
+    func draftSectionControllerDidSelectDraft(draft: Draft)
 }
 
 class DraftSectionController: ListSectionController, DraftCellDelegate {
@@ -48,7 +48,7 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     }
     
     func draftCellDidSelectDraft(draft: Draft) {
-        delegate.draftSectionControllerDidFillDraft(draft: draft)
+        delegate.draftSectionControllerDidSelectDraft(draft: draft)
     }
     
     override func didUpdate(to object: Any) {

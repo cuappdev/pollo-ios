@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C41C958214DB7AA00F559C9 /* Keys.plist */; };
 		0C76348F215152A600956E27 /* EditQuestionTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */; };
+		0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */; };
 		0C8E384521557D8000AB8633 /* DraftSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8E384421557D8000AB8633 /* DraftSectionController.swift */; };
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */; };
@@ -132,6 +133,7 @@
 /* Begin PBXFileReference section */
 		0C41C958214DB7AA00F559C9 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQuestionTypeViewController.swift; sourceTree = "<group>"; };
+		0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDraftViewController.swift; sourceTree = "<group>"; };
 		0C8E384421557D8000AB8633 /* DraftSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftSectionController.swift; sourceTree = "<group>"; };
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionsDropDownView.swift; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				C2F48EC22083051A0022FE6B /* PollsViewController.swift */,
 				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
 				0C76348E215152A600956E27 /* EditQuestionTypeViewController.swift */,
+				0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */,
 				63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */,
 			);
 			path = ViewControllers;
@@ -807,6 +810,7 @@
 				0C76348F215152A600956E27 /* EditQuestionTypeViewController.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
+				0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
 				C2BB14BA209469CD0081C35D /* Utils.swift in Sources */,
