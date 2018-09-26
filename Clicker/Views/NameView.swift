@@ -30,7 +30,7 @@ class NameView: UIView, UITextFieldDelegate {
     
     func setupViews() {
         titleField = UITextField()
-        titleField.attributedPlaceholder = NSAttributedString(string: "Give your poll a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
+        titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
         if (session.code != session.name) {
             titleField.text = session.name
         }

@@ -125,30 +125,27 @@ extension CardController: NameViewDelegate {
 extension CardController: UIScrollViewDelegate {
     
     // MARK: - Handle paging animation of horizontal collection view
-    private func indexOfHorizontalCard() -> Int {
+    private func indexOfHorizontalCard(offset: CGPoint) -> Int {
         let itemWidth = view.frame.width * 0.9
-        let proportionalOffset = collectionViewLayout.collectionView!.contentOffset.x / itemWidth
+        let proportionalOffset = offset.x / itemWidth
         let index = Int(round(proportionalOffset))
         let numberOfItems = objects(for: adapter).count
         let safeIndex = max(0, min(numberOfItems - 1, index))
         return safeIndex
     }
-
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        indexOfCellBeforeDragging = indexOfHorizontalCard()
-    }
-
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        // Stop scrollView sliding:
-        targetContentOffset.pointee = scrollView.contentOffset
-
+    
+   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // calculate where scrollView should snap to:
-        let indexOfHorizontalCard = self.indexOfHorizontalCard()
+        let indexOfHorizontalCard = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
         let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         updateCountLabelText(with: indexOfHorizontalCard)
+    
+        // Stop scrollView sliding:
+        targetContentOffset.pointee = scrollView.contentOffset
+    
     }
-
+    
     func scrollToLatestPoll() {
         let indexOfLatestSection = pollsDateModel.polls.count - 1
         let lastIndexPath = IndexPath(item: 0, section: indexOfLatestSection)
@@ -250,5 +247,5 @@ extension CardController: SocketDelegate {
         poll.answer = pollsDateModel.polls.last?.answer
         pollsDateModel.polls[numPolls - 1] = poll
     }
-    
 }
+
