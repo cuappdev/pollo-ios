@@ -218,7 +218,6 @@ class PollsViewController: UIViewController {
             }.catch { error in
                 print(error)
         }
-        newPollButton.isEnabled = true
     }
     
     @objc func joinSession() {
@@ -293,6 +292,7 @@ class PollsViewController: UIViewController {
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+        newPollButton?.isEnabled = true
     }
     
     // MARK: - KEYBOARD
