@@ -35,7 +35,6 @@ class CardController: UIViewController {
     var session: Session!
     var pollsDateModel: PollsDateModel!
     var currentIndex: Int!
-    var indexOfCellBeforeDragging: Int!
     var numberOfPeople: Int!
     
     // MARK: - Constants
@@ -84,6 +83,7 @@ class CardController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.scrollIndicatorInsets = .zero
         collectionView.bounces = true
+        collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
         view.sendSubview(toBack: collectionView)
