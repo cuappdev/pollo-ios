@@ -79,7 +79,7 @@ DEPENDENCIES:
   - Wormholy
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Alamofire
     - Crashlytics
     - Fabric
@@ -139,4 +139,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5d4117f9caac11aaa0768b85d45476a7977a89b4
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
