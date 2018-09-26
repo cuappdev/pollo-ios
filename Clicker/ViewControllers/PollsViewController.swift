@@ -201,6 +201,7 @@ class PollsViewController: UIViewController {
     
     // MARK - Actions
     @objc func newPollAction() {
+        newPollButton.isEnabled = false
         GenerateCode().make()
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
@@ -214,6 +215,7 @@ class PollsViewController: UIViewController {
             }.catch { error in
                 print(error)
         }
+        newPollButton.isEnabled = true
     }
     
     @objc func joinSession() {
