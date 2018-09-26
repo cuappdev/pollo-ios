@@ -10,7 +10,7 @@ import IGListKit
 
 protocol PollsDateSectionControllerDelegate {
     
-    func pollsDateSectionControllerSwitchToHorizontalWith(index: Int)
+    func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel)
     
 }
 
@@ -46,7 +46,7 @@ class PollsDateSectionController: ListSectionController {
     }
     
     override func didSelectItem(at index: Int) {
-        delegate.pollsDateSectionControllerSwitchToHorizontalWith(index: index)
+        delegate.pollsDateSectionControllerDidTap(for: pollsDateModel)
     }
     
 }

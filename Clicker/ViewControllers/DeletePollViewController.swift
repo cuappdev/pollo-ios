@@ -8,25 +8,48 @@
 
 import UIKit
 
-protocol DeleteSessionDelegate {
-    func deleteSession(at index: Int)
+protocol DeletePollViewControllerDelegate {
+    
+    func deletePollViewControllerDidDeleteSession(for userRole: UserRole)
+    
 }
 
 class DeletePollViewController: UIViewController {
     
-    var index: Int!
-    var deleteSessionDelegate: DeleteSessionDelegate!
-    var session: Session!
-    var homeViewController: UIViewController!
-    
+    // MARK: - View vars
     var deleteLabel: UILabel!
     var cancelButton: UIButton!
     var deleteButton: UIButton!
     
+    // MARK: - Data vars
+    var delegate: DeletePollViewControllerDelegate!
+    var session: Session!
+    var userRole: UserRole!
+    
+    // MARK: - Constants
+    let deleteLabelWidthScale: CGFloat = 0.9
+    let deleteLabelTopPadding: CGFloat = 26
+    let deleteLabelHeight: CGFloat = 40
+    let cancelButtonLeftPadding: CGFloat = 16
+    let cancelButtonHeight: CGFloat = 48
+    let cancelButtonBottomPadding: CGFloat = 18
+    let deleteButtonRightPadding: CGFloat = 16
+    let buttonCenterYOffset: CGFloat = 9
+    let navBarTitle = "Are you sure?"
+    let adminDeleteLabelText = "Deleting will permanently close the group for all participants and all poll data will be lost."
+    let memberDeleteLabelText = "Leaving will remove you from the group and you will no longer have access to its polls."
+    
+    init(delegate: DeletePollViewControllerDelegate, session: Session, userRole: UserRole) {
+        super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
+        self.session = session
+        self.userRole = userRole
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerWhite
-        self.title = "Are you sure?"
+        self.title = navBarTitle
         
         setupNavBar()
         setupViews()
@@ -35,7 +58,7 @@ class DeletePollViewController: UIViewController {
     
     func setupViews() {
         deleteLabel = UILabel()
-        deleteLabel.text = "Deleting will permanently close the group for all participants and all poll data will be lost."
+        deleteLabel.text = userRole == .admin ? adminDeleteLabelText : memberDeleteLabelText
         deleteLabel.textColor = .clickerGrey2
         deleteLabel.textAlignment = .center
         deleteLabel.font = UIFont._16RegularFont
@@ -62,22 +85,22 @@ class DeletePollViewController: UIViewController {
     
     func setupConstraints() {
         deleteLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.92)
-            make.height.equalTo(40)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(26)
+            make.width.equalToSuperview().multipliedBy(deleteLabelWidthScale)
+            make.height.equalTo(deleteLabelHeight)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(deleteLabelTopPadding)
             make.centerX.equalToSuperview()
         }
         
         cancelButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().offset(-18)
+            make.leading.equalToSuperview().offset(cancelButtonLeftPadding)
+            make.trailing.equalTo(view.snp.centerX).offset(buttonCenterYOffset * -1)
+            make.height.equalTo(cancelButtonHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(cancelButtonBottomPadding)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-16)
-            make.width.equalTo(cancelButton.snp.width)
+            make.trailing.equalToSuperview().inset(deleteButtonRightPadding)
+            make.leading.equalTo(view.snp.centerX).offset(buttonCenterYOffset)
             make.height.equalTo(cancelButton.snp.height)
             make.bottom.equalTo(cancelButton.snp.bottom)
         }
@@ -90,14 +113,8 @@ class DeletePollViewController: UIViewController {
     @objc func deleteBtnPressed() {
         DeleteSession(id: session.id).make()
             .done {
-                if let pollsVC = self.homeViewController as? PollsViewController {
-                    self.dismiss(animated: true, completion: nil)
-                    for cell in pollsVC.pollsCollectionView.visibleCells {
-                        if let pollsCell = cell as? PollsCell {
-                            DispatchQueue.main.async { pollsCell.getPollSessions() }
-                        }
-                    }
-                }
+                self.delegate.deletePollViewControllerDidDeleteSession(for: self.userRole)
+                self.dismiss(animated: true, completion: nil)
             }.catch { error in
                 print(error)
             }
@@ -117,4 +134,8 @@ class DeletePollViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }

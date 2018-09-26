@@ -76,6 +76,8 @@
 		C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524B209D51A600C7980F /* CardController+Extension.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
+		C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF52158747B00586D87 /* PollsDateViewController.swift */; };
+		C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF72158753800586D87 /* PollsDateViewController+Extension.swift */; };
 		C28679DD2155A5A300554F7B /* PollBuilderMCOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28679DC2155A5A300554F7B /* PollBuilderMCOptionModel.swift */; };
 		C28679DF2155A83000554F7B /* PollBuilderMCOptionSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28679DE2155A83000554F7B /* PollBuilderMCOptionSectionController.swift */; };
 		C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */; };
@@ -204,6 +206,8 @@
 		C270524B209D51A600C7980F /* CardController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardController+Extension.swift"; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
+		C2833DF52158747B00586D87 /* PollsDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateViewController.swift; sourceTree = "<group>"; };
+		C2833DF72158753800586D87 /* PollsDateViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsDateViewController+Extension.swift"; sourceTree = "<group>"; };
 		C28679DC2155A5A300554F7B /* PollBuilderMCOptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderMCOptionModel.swift; sourceTree = "<group>"; };
 		C28679DE2155A83000554F7B /* PollBuilderMCOptionSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderMCOptionSectionController.swift; sourceTree = "<group>"; };
 		C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionSectionCell.swift; sourceTree = "<group>"; };
@@ -562,6 +566,8 @@
 			children = (
 				6353FD392086DDC900E16EB2 /* CardController.swift */,
 				C270524B209D51A600C7980F /* CardController+Extension.swift */,
+				C2833DF52158747B00586D87 /* PollsDateViewController.swift */,
+				C2833DF72158753800586D87 /* PollsDateViewController+Extension.swift */,
 				C2504A56209956C600DC5EDC /* DeletePollViewController.swift */,
 				63A4A64A2094F26F00523AE6 /* DraftsViewController.swift */,
 				C203E563213330AC0016A147 /* DraftsViewController+Extension.swift */,
@@ -894,10 +900,12 @@
 				C203E564213330AC0016A147 /* DraftsViewController+Extension.swift in Sources */,
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
 				C2113B1F214AD72800BBBB82 /* CurrentStateParser.swift in Sources */,
+				C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */,
 				63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */,
 				63A4A6482094D5EF00523AE6 /* FRPollBuilderView.swift in Sources */,
 				C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */,
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,
+				C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
 				C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */,
 				C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */,

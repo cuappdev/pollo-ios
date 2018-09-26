@@ -32,11 +32,14 @@ class PollsViewController: UIViewController {
     
     // MARK: - Constants
     let popupViewHeight: CGFloat = 140
-    let editModalHeight: Float = 205
+    let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
+    let titleLabelText = "Groups"
+    let createdPollsOptionsText = "Created"
+    let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
     
@@ -62,12 +65,12 @@ class PollsViewController: UIViewController {
         view.addGestureRecognizer(tapGestureRecognizer)
 
         titleLabel = UILabel()
-        titleLabel.text = "Polls"
+        titleLabel.text = titleLabelText
         titleLabel.font = ._30SemiboldFont
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
-        pollsOptionsView = OptionsView(frame: .zero, options: ["Created", "Joined"], sliderBarDelegate: self)
+        pollsOptionsView = OptionsView(frame: .zero, options: [createdPollsOptionsText, joinedPollsOptionsText], sliderBarDelegate: self)
         pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         
@@ -202,7 +205,7 @@ class PollsViewController: UIViewController {
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
-                        let cardVC = CardController(pollsDateArray: [], session: session, userRole: .admin)
+                        let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
@@ -219,7 +222,8 @@ class PollsViewController: UIViewController {
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
-                        let cardVC = CardController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        self.codeTextField.text = ""
+                        let cardVC = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
