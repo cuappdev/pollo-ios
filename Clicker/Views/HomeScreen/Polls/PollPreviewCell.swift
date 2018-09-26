@@ -34,7 +34,7 @@ class PollPreviewCell: UICollectionViewCell {
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
     let dotsButtonRightPadding: CGFloat = 12
-    let dotsButtonLength: CGFloat = 30
+    let dotsButtonLength: CGFloat = 40
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,6 +58,7 @@ class PollPreviewCell: UICollectionViewCell {
         
         dotsButton = UIButton()
         dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
+        dotsButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
         dotsButton.clipsToBounds = true
         contentView.addSubview(dotsButton)

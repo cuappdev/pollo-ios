@@ -94,6 +94,7 @@ class PollsViewController: UIViewController {
         
         newPollButton = UIButton()
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+        newPollButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
         
@@ -186,8 +187,8 @@ class PollsViewController: UIViewController {
         
         newPollButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.width.equalTo(19)
-            make.height.equalTo(19)
+            make.width.equalTo(29)
+            make.height.equalTo(29)
             make.right.equalToSuperview().inset(15)
         }
         
