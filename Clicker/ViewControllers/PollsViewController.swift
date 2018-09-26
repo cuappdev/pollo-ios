@@ -31,6 +31,9 @@ class PollsViewController: UIViewController {
     var isKeyboardShown: Bool = false
     
     // MARK: - Constants
+    let newPollButtonLength: CGFloat = 29
+    let newPollButtonTopPadding: CGFloat = 15
+    let newPollButtonRightPadding: CGFloat = 15
     let popupViewHeight: CGFloat = 140
     let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
@@ -94,6 +97,7 @@ class PollsViewController: UIViewController {
         
         newPollButton = UIButton()
         newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+        newPollButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
         
@@ -185,10 +189,9 @@ class PollsViewController: UIViewController {
         }
         
         newPollButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.width.equalTo(19)
-            make.height.equalTo(19)
-            make.right.equalToSuperview().inset(15)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(newPollButtonTopPadding)
+            make.width.height.equalTo(newPollButtonLength)
+            make.trailing.equalToSuperview().inset(newPollButtonRightPadding)
         }
         
         settingsButton.snp.makeConstraints { make in
@@ -201,6 +204,7 @@ class PollsViewController: UIViewController {
     
     // MARK - Actions
     @objc func newPollAction() {
+        newPollButton.isEnabled = false
         GenerateCode().make()
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
@@ -214,6 +218,7 @@ class PollsViewController: UIViewController {
             }.catch { error in
                 print(error)
         }
+        newPollButton.isEnabled = true
     }
     
     @objc func joinSession() {
