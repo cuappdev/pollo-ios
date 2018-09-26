@@ -13,9 +13,10 @@ import SwiftyJSON
 
 extension UIViewController {
     func createAlert(title: String, message: String) -> UIAlertController {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-        return alert
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alertController.view.tintColor = .clickerGreen0
+        alertController.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+        return alertController
     }
     
     // KEYBOARD
