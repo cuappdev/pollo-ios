@@ -15,6 +15,7 @@ class QuestionCell: UICollectionViewCell {
     
     // MARK: - Constants
     let horizontalPadding: CGFloat = 18
+    let questionLabelFontSize: CGFloat = 20
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
     
@@ -28,7 +29,7 @@ class QuestionCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         questionLabel = UILabel()
-        questionLabel.font = UIFont.systemFont(ofSize: 14, weight: .heavy)
+        questionLabel.font = UIFont.systemFont(ofSize: questionLabelFontSize, weight: .heavy)
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(questionLabel)

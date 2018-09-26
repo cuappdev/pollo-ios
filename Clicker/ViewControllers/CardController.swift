@@ -38,7 +38,8 @@ class CardController: UIViewController {
     var indexOfCellBeforeDragging: Int!
     var numberOfPeople: Int!
     
-    // MARK: - Constants    
+    // MARK: - Constants
+    let countLabelCornerRadius: CGFloat = 8.0
     let countLabelWidth: CGFloat = 42.0
     let collectionViewTopPadding: CGFloat = 15
     
@@ -96,7 +97,7 @@ class CardController: UIViewController {
         countLabel = UILabel()
         countLabel.textAlignment = .center
         countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.layer.cornerRadius = 12
+        countLabel.layer.cornerRadius = countLabelCornerRadius
         countLabel.clipsToBounds = true
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
