@@ -14,7 +14,7 @@ import UIKit
 protocol PollsCellDelegate {
     
     func pollsCellShouldOpenSession(session: Session, userRole: UserRole)
-    func pollsCellShouldEditSession(session: Session)
+    func pollsCellShouldEditSession(session: Session, userRole: UserRole)
     
 }
 

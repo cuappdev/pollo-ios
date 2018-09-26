@@ -43,7 +43,8 @@ extension PollsCell: SessionSectionControllerDelegate {
     }
     
     func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session) {
-        delegate.pollsCellShouldEditSession(session: session)
+        let userRole: UserRole = pollType == .created ? .admin : .member
+        delegate.pollsCellShouldEditSession(session: session, userRole: userRole)
     }
     
 }

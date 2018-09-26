@@ -12,10 +12,9 @@ class QuestionCell: UICollectionViewCell {
     
     // MARK: - View vars
     var questionLabel: UILabel!
-    var moreButton: UIButton!
     
     // MARK: - Constants
-    let horizontalPadding: CGFloat = 14
+    let horizontalPadding: CGFloat = 18
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
     
@@ -33,24 +32,13 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(questionLabel)
-        
-        moreButton = UIButton()
-        moreButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
-        moreButton.contentMode = .scaleAspectFit
-        contentView.addSubview(moreButton)
     }
     
     override func updateConstraints() {
         questionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(horizontalPadding)
-            make.width.equalToSuperview().multipliedBy(questionLabelWidthScaleFactor)
-            make.top.equalToSuperview()
-        }
-        
-        moreButton.snp.makeConstraints { make in
-            make.width.equalTo(moreButtonWidth)
             make.trailing.equalToSuperview().inset(horizontalPadding)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
         }
         super.updateConstraints()
     }

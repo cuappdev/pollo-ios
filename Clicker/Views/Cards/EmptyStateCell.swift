@@ -41,7 +41,7 @@ class EmptyStateCell: UICollectionViewCell {
     let createDraftButtonHeight: CGFloat = 47
     let zoomTimeInterval: TimeInterval = 0.35
     let zoomInScale: CGFloat = 0.85
-    let createNewQuestionText = "Create a new question above!"
+    let createNewGroupText = "Create a new group above!"
     let enterCodeText = "Enter a code below to join!"
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
@@ -169,8 +169,8 @@ class EmptyStateCell: UICollectionViewCell {
             iconImageView.image = #imageLiteral(resourceName: "shrug_emoji")
             titleLabel.textColor = .black
             let pollTypeString = pollType == .created ? "created" : "joined"
-            titleLabel.text = "No polls \(pollTypeString)"
-            subtitleLabel.text = pollType == .created ? createNewQuestionText : enterCodeText
+            titleLabel.text = "No groups \(pollTypeString)"
+            subtitleLabel.text = pollType == .created ? createNewGroupText : enterCodeText
             break
         case .cardController(let userRole):
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {

@@ -15,10 +15,11 @@ func intToMCOption(_ intOption: Int) -> String {
     return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
 }
 
-// GET MM/DD/YYYY OF TODAY
+// GET M/DD/YYYY OF TODAY
+// Ex) 9/25/18, 10/27/18
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "MM/dd/yy"
+    formatter.dateFormat = "M/dd/yyyy"
     return formatter.string(from: Date())
 }
 
@@ -55,21 +56,20 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
     return PollOptionsModel(type: type, pollState: poll.state)
 }
 
-func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, state: CardControllerState) -> CGFloat {
+func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
     let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
-    let isHorizontal = state == .horizontal
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+        optionHeight = LayoutConstants.mcOptionCellHeight
     case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalMCOptionCellHeight : LayoutConstants.verticalMCOptionCellHeight
+        optionHeight = LayoutConstants.mcOptionCellHeight
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
-        optionHeight = isHorizontal ? LayoutConstants.horizontalFROptionCellHeight : LayoutConstants.verticalFROptionCellHeight
+        optionHeight = LayoutConstants.frOptionCellHeight
     }
     let maximumNumberVisibleOptions = 6
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
