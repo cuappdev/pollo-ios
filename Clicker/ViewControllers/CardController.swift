@@ -114,6 +114,8 @@ class CardController: UIViewController {
         zoomOutButton.setImage(#imageLiteral(resourceName: "zoomout"), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOutBtnPressed), for: .touchUpInside)
         zoomOutButton.isUserInteractionEnabled = !pollsDateArray.isEmpty
+        zoomOutButton.isHidden = pollsDateArray.isEmpty
+        zoomOutButton.isEnabled = !pollsDateArray.isEmpty
         view.addSubview(zoomOutButton)
         
         countLabel = UILabel()
@@ -124,6 +126,13 @@ class CardController: UIViewController {
         view.addSubview(countLabel)
         
         setupConstraints(for: state)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let zoomOutButton = zoomOutButton else { return }
+        zoomOutButton.isUserInteractionEnabled = !pollsDateArray.isEmpty
+        zoomOutButton.isHidden = pollsDateArray.isEmpty
+        zoomOutButton.isEnabled = !pollsDateArray.isEmpty
     }
     
     func setupConstraints(for state: CardControllerState) {
