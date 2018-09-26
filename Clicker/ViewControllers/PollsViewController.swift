@@ -218,7 +218,7 @@ class PollsViewController: UIViewController {
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        StartSession(code: code, name: nil, isGroup: nil).make()
+        JoinSession(code: code).make()
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
@@ -228,29 +228,12 @@ class PollsViewController: UIViewController {
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
-                }
+                    }
             }.catch { error in
                 print(error)
-        }
-    }
-    
-    @objc func showJoinSessionPopup() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(popupViewHeight))
-        let originY = view.frame.height - popupViewHeight
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        
-        let joinSessionVC = JoinViewController()
-        joinSessionVC.dismissController = self
-        joinSessionVC.popupHeight = popupViewHeight
-        customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
+                let alertController = self.createAlert(title: "Error", message: "Failed to join session with code \(code). Try again!")
+                self.present(alertController, animated: true, completion: nil)
+            }
     }
     
     @objc func settingsAction() {

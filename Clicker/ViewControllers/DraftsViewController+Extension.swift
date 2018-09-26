@@ -53,18 +53,11 @@ extension DraftsViewController: EditDraftViewControllerDelegate {
                 guard let pollBuilderViewController = nav.topViewController as? PollBuilderViewController else { return }
                 pollBuilderViewController.getDrafts()
             } .catch { error in
-                self.alertDeleteFailed()
+                let alertController = self.createAlert(title: "Error", message: "Failed to delete draft. Try again!")
+                self.present(alertController, animated: true, completion: nil)
         }
     }
     
-    func alertDeleteFailed() {
-        let alertController = UIAlertController(title: "Error", message: "Failed to delete draft. Try again!", preferredStyle: .alert)
-        alertController.view.tintColor = .clickerGreen0
-        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: { action in
-            alertController.dismiss(animated: true, completion: nil)
-        }))
-        present(alertController, animated: true, completion: nil)
-    }
 }
 
 extension DraftsViewController: EmptyStateCellDelegate {
