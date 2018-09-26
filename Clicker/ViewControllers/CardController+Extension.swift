@@ -143,7 +143,6 @@ extension CardController: UIScrollViewDelegate {
     
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
-    
     }
     
     func scrollToLatestPoll() {
