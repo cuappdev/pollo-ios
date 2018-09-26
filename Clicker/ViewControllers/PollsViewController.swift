@@ -31,6 +31,9 @@ class PollsViewController: UIViewController {
     var isKeyboardShown: Bool = false
     
     // MARK: - Constants
+    let newPollButtonLength: CGFloat = 29
+    let newPollButtonTopPadding: CGFloat = 15
+    let newPollButtonRightPadding: CGFloat = 15
     let popupViewHeight: CGFloat = 140
     let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
@@ -186,10 +189,9 @@ class PollsViewController: UIViewController {
         }
         
         newPollButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.width.equalTo(29)
-            make.height.equalTo(29)
-            make.right.equalToSuperview().inset(15)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(newPollButtonTopPadding)
+            make.width.height.equalTo(newPollButtonLength)
+            make.trailing.equalToSuperview().inset(newPollButtonRightPadding)
         }
         
         settingsButton.snp.makeConstraints { make in
