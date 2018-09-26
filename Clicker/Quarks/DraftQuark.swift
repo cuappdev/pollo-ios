@@ -127,7 +127,7 @@ struct UpdateDraft: ClickerQuark {
 struct DeleteDraft: ClickerQuark {
 
     typealias ResponseType = Void
-    let id: String
+    let id: Int
     
     var headers: HTTPHeaders {
         return [
