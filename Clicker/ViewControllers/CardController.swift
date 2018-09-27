@@ -38,8 +38,8 @@ class CardController: UIViewController {
     var numberOfPeople: Int!
     
     // MARK: - Constants
-    let countLabelCornerRadius: CGFloat = 8.0
     let countLabelWidth: CGFloat = 42.0
+    let countLabelHeight: CGFloat = 23.0
     let collectionViewTopPadding: CGFloat = 15
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
@@ -96,9 +96,10 @@ class CardController: UIViewController {
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
+        countLabel.font = ._12MediumFont
         countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.layer.cornerRadius = countLabelCornerRadius
         countLabel.clipsToBounds = true
+        countLabel.layer.cornerRadius = 0.5 * min(countLabelHeight, countLabelWidth)
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
         
@@ -106,6 +107,7 @@ class CardController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.centerX.equalToSuperview()
             make.width.equalTo(countLabelWidth)
+            make.height.equalTo(countLabelHeight)
         }
         
         collectionView.snp.makeConstraints { make in
