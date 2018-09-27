@@ -29,6 +29,7 @@ class PollsViewController: UIViewController {
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
     var isKeyboardShown: Bool = false
+    var isOpeningGroup: Bool = false
     
     // MARK: - Constants
     let newPollButtonLength: CGFloat = 29
@@ -293,6 +294,7 @@ class PollsViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         newPollButton?.isEnabled = true
+        isOpeningGroup = false
     }
     
     // MARK: - KEYBOARD
