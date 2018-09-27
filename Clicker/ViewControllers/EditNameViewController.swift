@@ -77,7 +77,6 @@ class EditNameViewController: UIViewController {
             make.height.equalTo(saveButtonHeight)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(saveButtonBottomPadding)
         }
-
     }
     
     @objc func saveBtnPressed() {
@@ -121,13 +120,15 @@ class EditNameViewController: UIViewController {
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            self.navigationController?.view.frame.origin.y -= keyboardSize.height
+            self.view.window?.frame.origin.y = -1 * keyboardSize.height
+            self.view.layoutIfNeeded()
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            self.navigationController?.view.frame.origin.y += keyboardSize.height
+            self.view.window?.frame.origin.y = 0
+            self.view.layoutIfNeeded()
         }
     }
     

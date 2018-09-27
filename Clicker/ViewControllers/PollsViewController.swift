@@ -29,6 +29,7 @@ class PollsViewController: UIViewController {
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
     var isKeyboardShown: Bool = false
+    var isListeningToKeyboard: Bool = true
     
     // MARK: - Constants
     let newPollButtonLength: CGFloat = 29
@@ -129,7 +130,7 @@ class PollsViewController: UIViewController {
         codeTextField.rightView = joinSessionButton
         codeTextField.rightViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey13, NSAttributedStringKey.font: UIFont._16MediumFont])
-        codeTextField.textColor = .clickerGrey13
+        codeTextField.textColor = .white
         joinSessionContainerView.addSubview(codeTextField)
         
         bottomPaddingView = UIView()
@@ -149,7 +150,6 @@ class PollsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.height.equalTo(35.5)
         }
-        
         
         pollsOptionsView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
@@ -182,7 +182,7 @@ class PollsViewController: UIViewController {
         }
         
         pollsCollectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(joinSessionContainerView.snp.top)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(joinSessionContainerViewHeight)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.top.equalTo(pollsOptionsView.snp.bottom)
@@ -209,6 +209,7 @@ class PollsViewController: UIViewController {
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
+                        self.isListeningToKeyboard = false
                         let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -237,25 +238,6 @@ class PollsViewController: UIViewController {
             }.catch { error in
                 print(error)
         }
-    }
-    
-    @objc func showJoinSessionPopup() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(popupViewHeight))
-        let originY = view.frame.height - popupViewHeight
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        
-        let joinSessionVC = JoinViewController()
-        joinSessionVC.dismissController = self
-        joinSessionVC.popupHeight = popupViewHeight
-        customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
     @objc func settingsAction() {
@@ -289,6 +271,7 @@ class PollsViewController: UIViewController {
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         pollsCollectionView.reloadData()
+        isListeningToKeyboard = true
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -297,6 +280,7 @@ class PollsViewController: UIViewController {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
+        if !isListeningToKeyboard || self.presentedViewController != nil { return }
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
             joinSessionContainerView.snp.remakeConstraints { make in
@@ -310,6 +294,7 @@ class PollsViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        if !isListeningToKeyboard || self.presentedViewController != nil { return }
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             joinSessionContainerView.snp.remakeConstraints { make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
