@@ -6,8 +6,8 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 protocol EditPollViewControllerDelegate {
     
