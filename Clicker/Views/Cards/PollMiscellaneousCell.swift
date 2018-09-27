@@ -15,7 +15,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
     var totalVotesLabel: UILabel!
     
     // MARK: - Constants
-    let iconImageViewXPadding: CGFloat = 14
     let iconImageViewLength: CGFloat = 15
     let descriptionLabelXPadding: CGFloat = 10
     let totalVotesLabelTrailingPadding: CGFloat = 14
@@ -50,7 +49,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     
     override func updateConstraints() {
         iconImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(iconImageViewXPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
             make.width.height.equalTo(iconImageViewLength)
             make.centerY.equalToSuperview()
         }
