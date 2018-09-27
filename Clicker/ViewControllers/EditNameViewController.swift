@@ -8,14 +8,21 @@
 
 import UIKit
 
+protocol EditNameViewControllerDelegate {
+    func editNameViewControllerDidUpdateName()
+}
+
 class EditNameViewController: UIViewController {
     
-    var session: Session!
-    var homeViewController: UIViewController!
-    
+    // MARK: - View vars
     var nameTextField: UITextField!
     var saveButton: UIButton!
     
+    // MARK: - Data vars
+    var delegate: EditNameViewControllerDelegate!
+    var session: Session!
+
+    // MARK: - Constants
     let edgePadding = 18
     let nameTextFieldHeight = 50
     let nameTextFieldTopPadding: CGFloat = 26
@@ -24,8 +31,9 @@ class EditNameViewController: UIViewController {
     let saveButtonHeight: CGFloat = 48
     let saveButtonBottomPadding: CGFloat = 16
     
-    init(session: Session) {
+    init(delegate: EditNameViewControllerDelegate, session: Session) {
         super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
         self.session = session
     }
     
@@ -84,14 +92,8 @@ class EditNameViewController: UIViewController {
             if (newName != "") {
                 UpdateSession(id: session.id, name: newName, code: session.code).make()
                     .done { code in
-                        if let pollsVC = self.homeViewController as? PollsViewController {
-                            self.dismiss(animated: true, completion: nil)
-                            for cell in pollsVC.pollsCollectionView.visibleCells {
-                                if let pollsCell = cell as? PollsCell {
-                                    DispatchQueue.main.async { pollsCell.getPollSessions() }
-                                }
-                            }
-                        }
+                        self.delegate.editNameViewControllerDidUpdateName()
+                        self.dismiss(animated: true, completion: nil)
                     }.catch { error in
                         print("error: ", error)
                 }
