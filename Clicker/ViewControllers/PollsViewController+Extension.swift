@@ -52,6 +52,10 @@ extension PollsViewController: UIScrollViewDelegate {
 extension PollsViewController: PollsCellDelegate {
     
     func pollsCellShouldOpenSession(session: Session, userRole: UserRole) {
+        if isOpeningGroup {
+            return
+        }
+        isOpeningGroup = true
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
                 let cardController = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
