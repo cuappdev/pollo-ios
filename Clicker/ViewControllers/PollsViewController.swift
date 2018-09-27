@@ -69,7 +69,7 @@ class PollsViewController: UIViewController {
 
         titleLabel = UILabel()
         titleLabel.text = titleLabelText
-        titleLabel.font = ._30SemiboldFont
+        titleLabel.font = ._30HeavyFont
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
