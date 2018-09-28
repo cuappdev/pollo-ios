@@ -42,7 +42,7 @@ class PollsViewController: UIViewController {
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
-    let titleLabelText = "Groups"
+    let titleLabelText = "Poll Groups"
     let createdPollsOptionsText = "Created"
     let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
