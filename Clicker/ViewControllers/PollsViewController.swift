@@ -49,6 +49,8 @@ class PollsViewController: UIViewController {
     let joinSessionButtonTitle = "Join"
     let newGroupAlertControllerTitle = "Error"
     let newGroupAlertControllerMessage = "Failed to create new group. Try again!"
+    let submitFeedbackTitle = "Submit Feedback"
+    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -348,8 +350,8 @@ class PollsViewController: UIViewController {
     // MARK: - Shake to send feedback
     open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            let alert = createAlert(title: "Submit Feedback", message: "You can help us make our app even better! Tap below to submit feedback.")
-            alert.addAction(UIAlertAction(title: "Submit Feedback", style: .default, handler: { action in
+            let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
                 self.isListeningToKeyboard = false
                 let feedbackVC = FeedbackViewController()
                 self.navigationController?.pushViewController(feedbackVC, animated: true)
