@@ -9,15 +9,17 @@
 import UIKit
 
 protocol DraftCellDelegate {
-    func draftCellDidSelectDraft(draft: Draft)
+    func draftCellDidTapLoadButton(draft: Draft)
+    func draftCellDidTapEditButton(draft: Draft)
 }
 
 class DraftCell: UICollectionViewCell {
 
     // MARK: - View vars
-    var selectDraftButton: UIButton!
+    var loadButton: UIButton!
     var questionLabel: UILabel!
     var borderView: UIView!
+    var editButton: UIButton!
     var editImageView: UIImageView!
     
     // MARK: - Data vars
@@ -28,7 +30,7 @@ class DraftCell: UICollectionViewCell {
     let questionLabelHorizontalPadding: CGFloat = 18.5
     let questionLabelVerticalPadding: CGFloat = 20
     let borderViewPadding: CGFloat = 18
-    let editImageViewWidth: CGFloat = 25
+    let editButtonWidth: CGFloat = 25
     let zoomInScale: CGFloat = 0.98
     let zoomDuration: TimeInterval = 0.25
     
@@ -53,14 +55,14 @@ class DraftCell: UICollectionViewCell {
         borderView.clipsToBounds = true
         addSubview(borderView)
         
-        selectDraftButton = UIButton()
-        selectDraftButton.addTarget(self, action: #selector(selectDraftButtonPressed), for: .touchUpInside)
-        selectDraftButton.addTarget(self, action: #selector(zoomIn), for: .touchDown)
-        selectDraftButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
-        selectDraftButton.addTarget(self, action: #selector(zoomOut), for: .touchUpOutside)
-        selectDraftButton.layer.cornerRadius = layer.cornerRadius
-        selectDraftButton.clipsToBounds = true
-        addSubview(selectDraftButton)
+        loadButton = UIButton()
+        loadButton.addTarget(self, action: #selector(loadButtonPressed), for: .touchUpInside)
+        loadButton.addTarget(self, action: #selector(zoomIn), for: .touchDown)
+        loadButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
+        loadButton.addTarget(self, action: #selector(zoomOut), for: .touchUpOutside)
+        loadButton.layer.cornerRadius = layer.cornerRadius
+        loadButton.clipsToBounds = true
+        addSubview(loadButton)
         
         questionLabel = UILabel()
         questionLabel.font = ._18SemiboldFont
@@ -70,6 +72,10 @@ class DraftCell: UICollectionViewCell {
         questionLabel.numberOfLines = 2
         questionLabel.lineBreakMode = .byTruncatingTail
         addSubview(questionLabel)
+        
+        editButton = UIButton()
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        addSubview(editButton)
         
         editImageView = UIImageView()
         editImageView.image = #imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate)
@@ -96,8 +102,12 @@ class DraftCell: UICollectionViewCell {
         }
     }
     
-    @objc func selectDraftButtonPressed() {
-        delegate?.draftCellDidSelectDraft(draft: draft)
+    @objc func editButtonPressed() {
+        delegate?.draftCellDidTapEditButton(draft: draft)
+    }
+    
+    @objc func loadButtonPressed() {
+        delegate?.draftCellDidTapLoadButton(draft: draft)
     }
     
     func setupConstraints() {
@@ -107,23 +117,29 @@ class DraftCell: UICollectionViewCell {
             make.center.equalToSuperview()
         }
         
-        selectDraftButton.snp.makeConstraints { make in
+        loadButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview()
             make.center.equalToSuperview()
         }
         
         questionLabel.snp.makeConstraints { make in
-            make.width.equalTo(borderView.snp.width).inset(questionLabelHorizontalPadding + editImageViewWidth)
+            make.width.equalTo(borderView.snp.width).inset(questionLabelHorizontalPadding + editButtonWidth)
             make.height.equalToSuperview()
             make.left.equalTo(borderView.snp.left).offset(questionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
         }
         
-        editImageView.snp.makeConstraints { make in
-            make.width.equalTo(editImageViewWidth)
-            make.right.equalTo(borderView.snp.right).inset(questionLabelHorizontalPadding)
+        editButton.snp.makeConstraints { make in
+            make.width.equalTo(editButtonWidth)
+            make.height.equalTo(editButtonWidth)
             make.centerY.equalToSuperview()
+            make.right.equalTo(borderView.snp.right).inset(questionLabelHorizontalPadding)
+        }
+        
+        editImageView.snp.makeConstraints { make in
+            make.width.equalTo(editButton.snp.width)
+            make.center.equalTo(editButton.snp.center)
         }
     }
     

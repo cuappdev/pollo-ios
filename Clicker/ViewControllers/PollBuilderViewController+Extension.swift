@@ -28,7 +28,7 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
 
 extension PollBuilderViewController: DraftsViewControllerDelegate {
     
-    func draftsViewControllerShouldStartDraft(_ draft: Draft) {
+    func draftsViewControllerLoadDraft(_ draft: Draft) {
         let qType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
         if questionType != qType {
             updateQuestionTypeButton()

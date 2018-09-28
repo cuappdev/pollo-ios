@@ -10,12 +10,6 @@ import UIKit
 import IGListKit
 import Presentr
 
-extension DraftsViewController: DraftCellDelegate {
-    func draftCellDidSelectDraft(draft: Draft) {
-        self.delegate.draftsViewControllerShouldStartDraft(draft)
-    }
-}
-
 extension DraftsViewController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
@@ -35,10 +29,6 @@ extension DraftsViewController: ListAdapterDataSource {
 }
 
 extension DraftsViewController: EditDraftViewControllerDelegate {
-    func editDraftViewControllerDidTapEditDraftButton(draft: Draft) {
-        delegate.draftsViewControllerShouldStartDraft(draft)
-        self.dismiss(animated: true, completion: nil)
-    }
     
     func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft) {
         DeleteDraft(id: draft.id).make()
@@ -74,7 +64,8 @@ extension DraftsViewController: EmptyStateCellDelegate {
 }
 
 extension DraftsViewController: DraftSectionControllerDelegate {
-    func draftSectionControllerDidSelectDraft(draft: Draft) {
+    
+    func draftSectionControllerEditDraft(draft: Draft) {
         let width = ModalSize.full
         let height = ModalSize.custom(size: Float(editDraftModalSize))
         let originY = UIScreen.main.bounds.height - editDraftModalSize
@@ -86,5 +77,10 @@ extension DraftsViewController: DraftSectionControllerDelegate {
         presenter.dismissOnSwipeDirection = .bottom
         let editDraftViewController = EditDraftViewController(delegate: self, draft: draft)
         customPresentViewController(presenter, viewController: editDraftViewController, animated: true, completion: nil)
+    }
+    
+    func draftSectionControllerLoadDraft(draft: Draft) {
+        delegate.draftsViewControllerLoadDraft(draft)
+        dismiss(animated: true, completion: nil)
     }
 }
