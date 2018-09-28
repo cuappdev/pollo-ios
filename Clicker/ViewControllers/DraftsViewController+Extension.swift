@@ -77,7 +77,7 @@ extension DraftsViewController: DraftSectionControllerDelegate {
     func draftSectionControllerDidSelectDraft(draft: Draft) {
         let width = ModalSize.full
         let height = ModalSize.custom(size: Float(editDraftModalSize))
-        let originY = view.bounds.height - editDraftModalSize
+        let originY = UIScreen.main.bounds.height - editDraftModalSize
         let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
         let customType = PresentationType.custom(width: width, height: height, center: center)
         let presenter = Presentr(presentationType: customType)

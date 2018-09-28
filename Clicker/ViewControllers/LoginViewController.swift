@@ -89,7 +89,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         appNameLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
             make.height.equalTo(appNameLabelHeight)
-            make.top.equalTo(welcomeLabel.snp.bottom).offset(-appNameLabelOffset)
+            make.top.equalTo(welcomeLabel.snp.bottom).inset(appNameLabelOffset)
             make.centerX.equalToSuperview()
         }
         pronunciationLabel.snp.makeConstraints { make in
