@@ -345,4 +345,16 @@ class PollsViewController: UIViewController {
         }
     }
 
+    // MARK: - Shake to send feedback
+    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            let alert = createAlert(title: "Submit Feedback", message: "You can help us make our app even better! Tap below to submit feedback.")
+            alert.addAction(UIAlertAction(title: "Submit Feedback", style: .default, handler: { action in
+                self.isListeningToKeyboard = false
+                let feedbackVC = FeedbackViewController()
+                self.navigationController?.pushViewController(feedbackVC, animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 }
