@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.tintColor = .clickerGreen0
         window?.makeKeyAndVisible()
     }
 
