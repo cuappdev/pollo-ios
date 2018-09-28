@@ -35,7 +35,7 @@ class NameView: UIView, UITextFieldDelegate {
             titleField.text = session.name
         }
         titleField.font = ._24MediumFont
-        titleField.textColor = .clickerGrey2
+        titleField.textColor = .clickerWhite
         titleField.textAlignment = .center
         titleField.delegate = self
         titleField.becomeFirstResponder()
