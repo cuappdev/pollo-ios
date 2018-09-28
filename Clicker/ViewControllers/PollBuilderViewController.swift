@@ -24,7 +24,7 @@ class PollBuilderViewController: UIViewController {
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
-    let edgePadding: CGFloat = 20
+    let edgePadding: CGFloat = UIApplication.shared.statusBarFrame.height + 10
     let topBarHeight: CGFloat = 24
     let dropDownHeight: CGFloat = 100
     let dropDownArrowLength: CGFloat = 6.5

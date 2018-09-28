@@ -10,7 +10,7 @@ import UIKit
 import IGListKit
 
 protocol DraftsViewControllerDelegate {
-    func draftsViewControllerShouldStartDraft(_ draft: Draft)
+    func draftsViewControllerLoadDraft(_ draft: Draft)
 }
 
 class DraftsViewController: UIViewController {
@@ -32,7 +32,7 @@ class DraftsViewController: UIViewController {
     let backButtonLength: CGFloat = 13
     let draftsCollectionViewTopPadding: CGFloat = 32
     let draftsCollectionViewWidthInset: CGFloat = 36
-    let editDraftModalSize: CGFloat = 100
+    let editDraftModalSize: CGFloat = 50
     let titleLabelText = "Drafts"
     
     init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
@@ -45,9 +45,6 @@ class DraftsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clear
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 15
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         setupViews()
         setupConstraints()
