@@ -43,7 +43,11 @@ class DraftsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .clear
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         setupViews()
         setupConstraints()

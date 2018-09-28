@@ -36,6 +36,13 @@ extension PollsDateViewController: ListAdapterDataSource {
     }
 }
 
+extension PollsDateViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 0.95)
+    }
+}
+
 extension PollsDateViewController: CardControllerDelegate {
     
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {

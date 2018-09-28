@@ -179,10 +179,11 @@ class CardController: UIViewController {
         presenter.cornerRadius = 15
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
+        customPresentViewController(presenter, viewController: pollBuilderVC, animated: true, completion: nil)
         
-        let pollBuilderNavigationController = UINavigationController(rootViewController: pollBuilderVC)
-        pollBuilderNavigationController.isNavigationBarHidden = true
-        present(pollBuilderNavigationController, animated: true, completion: nil)
+//        let pollBuilderNavigationController = UINavigationController(rootViewController: pollBuilderVC)
+//        pollBuilderNavigationController.isNavigationBarHidden = true
+//        present(pollBuilderNavigationController, animated: true, completion: nil)
     }
     
     @objc func goBack() {

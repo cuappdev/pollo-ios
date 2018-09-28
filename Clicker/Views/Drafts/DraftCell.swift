@@ -18,6 +18,7 @@ class DraftCell: UICollectionViewCell {
     var selectDraftButton: UIButton!
     var questionLabel: UILabel!
     var borderView: UIView!
+    var editImageView: UIImageView!
     
     // MARK: - Data vars
     var delegate: DraftCellDelegate?
@@ -27,8 +28,9 @@ class DraftCell: UICollectionViewCell {
     let questionLabelHorizontalPadding: CGFloat = 18.5
     let questionLabelVerticalPadding: CGFloat = 20
     let borderViewPadding: CGFloat = 18
-    let zoomInScale: CGFloat = 0.85
-    let zoomDuration: TimeInterval = 0.35
+    let editImageViewWidth: CGFloat = 25
+    let zoomInScale: CGFloat = 0.98
+    let zoomDuration: TimeInterval = 0.25
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,13 +70,20 @@ class DraftCell: UICollectionViewCell {
         questionLabel.numberOfLines = 2
         questionLabel.lineBreakMode = .byTruncatingTail
         addSubview(questionLabel)
+        
+        editImageView = UIImageView()
+        editImageView.image = #imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate)
+        editImageView.tintColor = .white
+        addSubview(editImageView)
     }
     
     @objc func zoomIn(sender: UIButton) {
         UIView.animate(withDuration: zoomDuration) {
             sender.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
-            self.borderView.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
-            self.questionLabel.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
+            let transform: CGAffineTransform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
+            self.borderView.transform = transform
+            self.questionLabel.transform = transform
+            self.editImageView.transform = transform
         }
     }
     
@@ -83,6 +92,7 @@ class DraftCell: UICollectionViewCell {
             sender.transform = .identity
             self.borderView.transform = .identity
             self.questionLabel.transform = .identity
+            self.editImageView.transform = .identity
         }
     }
     
@@ -104,9 +114,16 @@ class DraftCell: UICollectionViewCell {
         }
         
         questionLabel.snp.makeConstraints { make in
-            make.width.equalTo(borderView.snp.width).offset(-questionLabelHorizontalPadding * 2)
+            make.width.equalTo(borderView.snp.width).inset(questionLabelHorizontalPadding + editImageViewWidth)
             make.height.equalToSuperview()
-            make.center.equalToSuperview()
+            make.left.equalTo(borderView.snp.left).offset(questionLabelHorizontalPadding)
+            make.centerY.equalToSuperview()
+        }
+        
+        editImageView.snp.makeConstraints { make in
+            make.width.equalTo(editImageViewWidth)
+            make.right.equalTo(borderView.snp.right).inset(questionLabelHorizontalPadding)
+            make.centerY.equalToSuperview()
         }
     }
     
