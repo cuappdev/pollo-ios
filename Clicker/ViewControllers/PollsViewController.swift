@@ -25,6 +25,7 @@ class PollsViewController: UIViewController {
     var joinSessionButton: UIButton!
     var settingsButton: UIButton!
     var tapGestureRecognizer: UITapGestureRecognizer!
+    var dimmingView: UIView!
     
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
@@ -101,6 +102,13 @@ class PollsViewController: UIViewController {
         newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
         view.addSubview(newPollButton)
         
+        dimmingView = UIView()
+        dimmingView.translatesAutoresizingMaskIntoConstraints = false
+        dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        dimmingView.alpha = 1.0
+        dimmingView.isHidden = true
+        view.addSubview(dimmingView)
+        
         joinSessionContainerView = UIView()
         joinSessionContainerView.backgroundColor = .clickerBlack1
         view.addSubview(joinSessionContainerView)
@@ -130,6 +138,7 @@ class PollsViewController: UIViewController {
         codeTextField.rightViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey13, NSAttributedStringKey.font: UIFont._16MediumFont])
         codeTextField.textColor = .clickerGrey13
+        codeTextField.autocapitalizationType = .allCharacters
         joinSessionContainerView.addSubview(codeTextField)
         
         bottomPaddingView = UIView()
@@ -155,6 +164,11 @@ class PollsViewController: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.width.equalToSuperview()
             make.height.equalTo(40)
+        }
+        
+        dimmingView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
         }
         
         joinSessionContainerView.snp.makeConstraints { make in
@@ -299,6 +313,7 @@ class PollsViewController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
+            dimmingView.isHidden = false
             joinSessionContainerView.snp.remakeConstraints { make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
                 make.leading.trailing.equalToSuperview()
@@ -311,6 +326,7 @@ class PollsViewController: UIViewController {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            dimmingView.isHidden = true
             joinSessionContainerView.snp.remakeConstraints { make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
                 make.leading.trailing.equalToSuperview()
