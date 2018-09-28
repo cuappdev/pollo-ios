@@ -16,6 +16,13 @@ protocol PollPreviewCellDelegate {
 
 class PollPreviewCell: UICollectionViewCell {
     
+    // MARK: - Override vars
+    override var isSelected: Bool {
+        didSet {
+            self.contentView.backgroundColor = isSelected ? UIColor.lightGray : UIColor.white
+        }
+    }
+    
     // MARK: - View vars
     var nameLabel: UILabel!
     var codeLabel: UILabel!
