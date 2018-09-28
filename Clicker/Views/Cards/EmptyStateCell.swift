@@ -166,7 +166,7 @@ class EmptyStateCell: UICollectionViewCell {
         self.emptyStateModel = emptyStateModel
         switch emptyStateModel.type {
         case .pollsViewController(let pollType):
-            iconImageView.image = #imageLiteral(resourceName: "shrug_emoji")
+            iconImageView.image = UIImage(named: "man_shrugging")
             titleLabel.textColor = .black
             let pollTypeString = pollType == .created ? "created" : "joined"
             titleLabel.text = "No groups \(pollTypeString)"
@@ -176,13 +176,13 @@ class EmptyStateCell: UICollectionViewCell {
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
                 setupNameView(with: session, nameViewDelegate: nameViewDelegate)
             }
-            iconImageView.image = #imageLiteral(resourceName: "monkey_emoji")
+            iconImageView.image = UIImage(named: "monkey_emoji")
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
             break
         case .draftsViewController(let delegate):
-            iconImageView.image = #imageLiteral(resourceName: "woman_shrugging")
+            iconImageView.image = UIImage(named: "woman_shrugging")
             titleLabel.textColor = .white
             titleLabel.text = noDraftsText
             self.delegate = delegate

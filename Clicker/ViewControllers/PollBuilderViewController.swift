@@ -261,6 +261,7 @@ class PollBuilderViewController: UIViewController {
                 var options = mcPollBuilder.getOptions()
                 if options.isEmpty {
                     options.append("")
+                    options.append("")
                 }
                 if let loadedDraft = loadedMCDraft {
                     UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
@@ -268,7 +269,7 @@ class PollBuilderViewController: UIViewController {
                             self.getDrafts()
                         }.catch { error in
                             print("error: ", error)
-                    }
+                        }
                 } else {
                     CreateDraft(text: question, options: options).make()
                         .done { draft in
