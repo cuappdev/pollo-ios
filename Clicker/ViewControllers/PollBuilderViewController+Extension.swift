@@ -60,17 +60,6 @@ extension PollBuilderViewController: QuestionTypeDropDownViewDelegate {
 
 }
 
-extension PollBuilderViewController: EditQuestionTypeDelegate {
-    
-    func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
-        self.questionType = questionType
-        updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .freeResponse
-        frPollBuilder.isHidden = questionType == .multipleChoice
-    }
-
-}
-
 extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
