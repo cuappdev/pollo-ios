@@ -91,12 +91,19 @@ struct GetSortedPolls: ClickerQuark {
             var pollsDateArray: [PollsDateModel] = []
             for (date, pollsJSON) in node {
                 if let pollsArray = pollsJSON.array {
-                    let pollsArr: [Poll] = try pollsArray.map {
+                    let pollsArr: [Poll] = pollsArray.reversed().map {
                         return PollParser.parseItem(json: $0)
                     }
                     let pollsDateModel = PollsDateModel(date: date, polls: pollsArr)
                     pollsDateArray.append(pollsDateModel)
                 }
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd/MM/yyyy"
+            pollsDateArray.sort { (pollsDateModelA, pollsDateModelB) -> Bool in
+                let dateA = formatter.date(from: pollsDateModelA.date) ?? Date()
+                let dateB = formatter.date(from: pollsDateModelB.date) ?? Date()
+                return dateA.compare(dateB) == .orderedAscending
             }
             return pollsDateArray
         default:
