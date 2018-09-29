@@ -97,6 +97,7 @@ class PollBuilderViewController: UIViewController {
         
         exitButton = UIButton()
         exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
+        exitButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
         
@@ -209,10 +210,9 @@ class PollBuilderViewController: UIViewController {
     
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
-            make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height)
-            make.width.equalTo(topBarHeight)
-            make.height.equalTo(topBarHeight)
+            make.left.equalTo(edgePadding - LayoutConstants.buttonImageInsets.left)
+            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height - LayoutConstants.buttonImageInsets.top)
+            make.size.equalTo(LayoutConstants.buttonSize)
         }
         
         questionTypeButton.snp.makeConstraints { make in

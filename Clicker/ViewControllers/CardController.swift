@@ -127,9 +127,6 @@ class CardController: UIViewController {
         
         navigationTitleView = NavigationTitleView()
         navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
-        navigationTitleView.snp.makeConstraints { make in
-            make.height.equalTo(navigationTitleHeight)
-        }
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)

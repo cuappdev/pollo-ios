@@ -58,6 +58,7 @@ class DraftsViewController: UIViewController {
         
         backButton = UIButton()
         backButton.setImage(#imageLiteral(resourceName: "whiteExit"), for: .normal)
+        backButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         backButton.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
         backButton.contentMode = .scaleAspectFit
         view.addSubview(backButton)
@@ -99,9 +100,9 @@ class DraftsViewController: UIViewController {
         }
         
         backButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(backButtonLeftPadding)
-            make.width.height.equalTo(backButtonLength)
+            make.left.equalToSuperview().offset(backButtonLeftPadding - LayoutConstants.buttonImageInsets.left)
             make.centerY.equalTo(titleLabel.snp.centerY)
+            make.size.equalTo(LayoutConstants.buttonSize)
         }
         
         draftsCollectionView.snp.makeConstraints { make in
