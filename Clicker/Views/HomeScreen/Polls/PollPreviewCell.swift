@@ -16,6 +16,13 @@ protocol PollPreviewCellDelegate {
 
 class PollPreviewCell: UICollectionViewCell {
     
+    // MARK: - Override vars
+    override var isSelected: Bool {
+        didSet {
+            self.contentView.backgroundColor = isSelected ? UIColor.lightGray : UIColor.white
+        }
+    }
+    
     // MARK: - View vars
     var nameLabel: UILabel!
     var codeLabel: UILabel!
@@ -34,7 +41,7 @@ class PollPreviewCell: UICollectionViewCell {
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
     let dotsButtonRightPadding: CGFloat = 12
-    let dotsButtonLength: CGFloat = 30
+    let dotsButtonLength: CGFloat = 40
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,7 +55,7 @@ class PollPreviewCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
     
         codeLabel = UILabel()
-        codeLabel.font = ._18MediumFont
+        codeLabel.font = ._16MediumFont
         codeLabel.textColor = .clickerGrey2
         contentView.addSubview(codeLabel)
         
@@ -58,6 +65,7 @@ class PollPreviewCell: UICollectionViewCell {
         
         dotsButton = UIButton()
         dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
+        dotsButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
         dotsButton.clipsToBounds = true
         contentView.addSubview(dotsButton)

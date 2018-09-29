@@ -5,6 +5,7 @@
 //  Created by Kevin Chan on 2/13/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
+
 import Alamofire
 import Neutron
 import SwiftyJSON
@@ -75,7 +76,7 @@ struct GetSortedPolls: ClickerQuark {
     let id: Int
     
     var route: String {
-        return "/sessions/\(id)/polls/date"
+        return "/sessions/\(id)/polls"
     }
     var headers: HTTPHeaders {
         return [

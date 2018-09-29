@@ -82,7 +82,16 @@ extension PollsViewController: PollsCellDelegate {
 
 extension PollsViewController: EditPollViewControllerDelegate {
     
+    func editPollViewControllerDidUpdateName(for userRole: UserRole) {
+        editPollViewControllerDidPerformChange(for: userRole)
+    }
+    
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) {
+        editPollViewControllerDidPerformChange(for: userRole)
+    }
+    
+    // MARK: - Helpers
+    private func editPollViewControllerDidPerformChange(for userRole: UserRole) {
         switch userRole {
         case .admin:
             pollTypeModels[0] = PollTypeModel(pollType: .created)

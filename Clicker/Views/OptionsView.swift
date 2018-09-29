@@ -131,7 +131,7 @@ class QuestionOptionCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = .clickerGrey2
-        label.font = UIFont._16MediumFont
+        label.font = UIFont._18MediumFont
         return label
     }()
     

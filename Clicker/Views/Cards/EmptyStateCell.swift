@@ -49,6 +49,11 @@ class EmptyStateCell: UICollectionViewCell {
     let userWaitingText = "Waiting for the host to post a poll."
     let noDraftsText = "No saved drafts!"
     let createDraftButtonText = "Create a draft"
+    let createdString = "created"
+    let joinedString = "joined"
+    let manShruggingImageName = "man_shrugging"
+    let monkeyEmojiImageName = "monkey_emoji"
+    let womanShruggingImageName = "woman_shrugging"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -166,9 +171,9 @@ class EmptyStateCell: UICollectionViewCell {
         self.emptyStateModel = emptyStateModel
         switch emptyStateModel.type {
         case .pollsViewController(let pollType):
-            iconImageView.image = #imageLiteral(resourceName: "shrug_emoji")
+            iconImageView.image = UIImage(named: manShruggingImageName)
             titleLabel.textColor = .black
-            let pollTypeString = pollType == .created ? "created" : "joined"
+            let pollTypeString = pollType == .created ? createdString : joinedString
             titleLabel.text = "No groups \(pollTypeString)"
             subtitleLabel.text = pollType == .created ? createNewGroupText : enterCodeText
             break
@@ -176,13 +181,13 @@ class EmptyStateCell: UICollectionViewCell {
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
                 setupNameView(with: session, nameViewDelegate: nameViewDelegate)
             }
-            iconImageView.image = #imageLiteral(resourceName: "monkey_emoji")
+            iconImageView.image = UIImage(named: monkeyEmojiImageName)
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
             break
         case .draftsViewController(let delegate):
-            iconImageView.image = #imageLiteral(resourceName: "woman_shrugging")
+            iconImageView.image = UIImage(named: womanShruggingImageName)
             titleLabel.textColor = .white
             titleLabel.text = noDraftsText
             self.delegate = delegate
@@ -192,6 +197,7 @@ class EmptyStateCell: UICollectionViewCell {
     
     // MARK - NAME THE POLL
     func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
+        
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
         
