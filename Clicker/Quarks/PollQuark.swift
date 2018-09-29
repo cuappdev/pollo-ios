@@ -76,7 +76,7 @@ struct GetSortedPolls: ClickerQuark {
     let id: Int
     
     var route: String {
-        return "/sessions/\(id)/polls/date"
+        return "/sessions/\(id)/polls"
     }
     var headers: HTTPHeaders {
         return [
