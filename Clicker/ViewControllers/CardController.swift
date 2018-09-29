@@ -105,7 +105,7 @@ class CardController: UIViewController {
         view.addSubview(countLabel)
         
         countLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(23)
             make.centerX.equalToSuperview()
             make.width.equalTo(countLabelWidth)
             make.height.equalTo(countLabelHeight)
