@@ -48,8 +48,8 @@ class PollsViewController: UIViewController {
     let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
-    let newGroupAlertControllerTitle = "Error"
-    let newGroupAlertControllerMessage = "Failed to create new group. Try again!"
+    let errorText = "Error"
+    let failedToCreateGroupText = "Failed to create new group. Try again!"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
     
@@ -248,13 +248,13 @@ class PollsViewController: UIViewController {
                     }.catch { error in
                         print(error)
                         self.hideNewGroupActivityIndicatorView()
-                        let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                        let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
                         self.present(alertController, animated: true, completion: nil)
                 }
             }.catch { error in
                 print(error)
                 self.hideNewGroupActivityIndicatorView()
-                let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
                 self.present(alertController, animated: true, completion: nil)
         }
     }
@@ -292,7 +292,7 @@ class PollsViewController: UIViewController {
                     }
             }.catch { error in
                 print(error)
-                let alertController = self.createAlert(title: "Error", message: "Failed to join session with code \(code). Try again!")
+                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                 self.present(alertController, animated: true, completion: nil)
             }
     }
