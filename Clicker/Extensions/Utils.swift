@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftyJSON
-import UIKit
 
 // MARK: - General Utils
 // CONVERT INT TO MC OPTIONS
