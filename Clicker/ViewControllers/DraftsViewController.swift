@@ -34,6 +34,8 @@ class DraftsViewController: UIViewController {
     let draftsCollectionViewWidthInset: CGFloat = 36
     let editDraftModalSize: CGFloat = 50
     let titleLabelText = "Drafts"
+    let errorText = "Error"
+    let failedToDeleteDraftText = "Failed to delete draft. Try again!"
     
     init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
         super.init(nibName: nil, bundle: nil)

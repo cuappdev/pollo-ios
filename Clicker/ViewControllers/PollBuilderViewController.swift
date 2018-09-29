@@ -24,7 +24,7 @@ class PollBuilderViewController: UIViewController {
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
-    let edgePadding: CGFloat = UIApplication.shared.statusBarFrame.height + 10
+    let edgePadding: CGFloat = 18
     let topBarHeight: CGFloat = 24
     let dropDownHeight: CGFloat = 100
     let dropDownArrowLength: CGFloat = 6.5
@@ -45,6 +45,7 @@ class PollBuilderViewController: UIViewController {
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
+    var topPaddingView: UIView!
     var bottomPaddingView: UIView!
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
@@ -182,18 +183,26 @@ class PollBuilderViewController: UIViewController {
         dropDown = QuestionTypeDropDownView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: dropDownHeight), delegate: self, selectedQuestionType: questionType)
         view.addSubview(dropDown)
         
+        topPaddingView = UIView()
+        topPaddingView.backgroundColor = .white
+        view.addSubview(topPaddingView)
+        
         dropDown.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalToSuperview()
+            make.centerX.width.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.height.equalTo(dropDownHeight)
-            make.centerX.equalToSuperview()
         }
-    
+        
+        topPaddingView.snp.makeConstraints { make in
+            make.centerX.width.top.equalToSuperview()
+            make.bottom.equalTo(dropDown.snp.top)
+        }
         dropDownHidden = false
     }
     
     @objc func hideDropDown() {
         dropDown.removeFromSuperview()
+        topPaddingView.removeFromSuperview()
         dropDownHidden = true
         dimmingView.removeFromSuperview()
     }
@@ -201,7 +210,7 @@ class PollBuilderViewController: UIViewController {
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
             make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding)
+            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height)
             make.width.equalTo(topBarHeight)
             make.height.equalTo(topBarHeight)
         }

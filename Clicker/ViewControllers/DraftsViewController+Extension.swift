@@ -43,18 +43,11 @@ extension DraftsViewController: EditDraftViewControllerDelegate {
                 guard let pollBuilderViewController = nav.topViewController as? PollBuilderViewController else { return }
                 pollBuilderViewController.getDrafts()
             } .catch { error in
-                self.alertDeleteFailed()
+                let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
+                self.present(alertController, animated: true, completion: nil)
         }
     }
     
-    func alertDeleteFailed() {
-        let alertController = UIAlertController(title: "Error", message: "Failed to delete draft. Try again!", preferredStyle: .alert)
-        alertController.view.tintColor = .clickerGreen0
-        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: { action in
-            alertController.dismiss(animated: true, completion: nil)
-        }))
-        present(alertController, animated: true, completion: nil)
-    }
 }
 
 extension DraftsViewController: EmptyStateCellDelegate {
@@ -67,8 +60,9 @@ extension DraftsViewController: DraftSectionControllerDelegate {
     
     func draftSectionControllerEditDraft(draft: Draft) {
         let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(editDraftModalSize))
-        let originY = UIScreen.main.bounds.height - editDraftModalSize
+        let modalHeight = editDraftModalSize + view.safeAreaInsets.bottom
+        let height = ModalSize.custom(size: Float(modalHeight))
+        let originY = UIScreen.main.bounds.height - modalHeight
         let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
         let customType = PresentationType.custom(width: width, height: height, center: center)
         let presenter = Presentr(presentationType: customType)
