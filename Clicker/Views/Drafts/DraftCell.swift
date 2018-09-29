@@ -53,7 +53,7 @@ class DraftCell: UICollectionViewCell {
         borderView.layer.borderWidth = 1
         borderView.layer.borderColor = UIColor.white.cgColor
         borderView.clipsToBounds = true
-        addSubview(borderView)
+        contentView.addSubview(borderView)
         
         loadButton = UIButton()
         loadButton.addTarget(self, action: #selector(loadButtonPressed), for: .touchUpInside)
@@ -62,7 +62,7 @@ class DraftCell: UICollectionViewCell {
         loadButton.addTarget(self, action: #selector(zoomOut), for: .touchUpOutside)
         loadButton.layer.cornerRadius = layer.cornerRadius
         loadButton.clipsToBounds = true
-        addSubview(loadButton)
+        contentView.addSubview(loadButton)
         
         questionLabel = UILabel()
         questionLabel.font = ._18SemiboldFont
@@ -71,16 +71,16 @@ class DraftCell: UICollectionViewCell {
         questionLabel.textColor = .white
         questionLabel.numberOfLines = 2
         questionLabel.lineBreakMode = .byTruncatingTail
-        addSubview(questionLabel)
+        contentView.addSubview(questionLabel)
         
         editButton = UIButton()
         editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
-        addSubview(editButton)
+        contentView.addSubview(editButton)
         
         editImageView = UIImageView()
         editImageView.image = #imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate)
         editImageView.tintColor = .white
-        addSubview(editImageView)
+        contentView.addSubview(editImageView)
     }
     
     @objc func zoomIn(sender: UIButton) {

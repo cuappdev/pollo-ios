@@ -37,9 +37,9 @@ class QuestionTypeDropDownView: UIView {
     let freeResponseLabelText: String = "Free Response"
     
     init(frame: CGRect, delegate: QuestionTypeDropDownViewDelegate, selectedQuestionType: QuestionType) {
+        super.init(frame: frame)
         self.delegate = delegate
         self.selectedQuestionType = selectedQuestionType
-        super.init(frame: frame)
         setupViews()
     }
     
