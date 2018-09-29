@@ -48,7 +48,15 @@ class SessionSectionController: ListSectionController {
     }
     
     override func didSelectItem(at index: Int) {
+        let cell = collectionContext?.cellForItem(at: index, sectionController: self) as! PollPreviewCell
+        cell.isSelected = true
+        collectionContext?.deselectItem(at: index, sectionController: self, animated: true)
         delegate.sessionSectionControllerShouldOpenSession(sectionController: self, session: session)
+    }
+    
+    override func didDeselectItem(at index: Int) {
+        let cell = collectionContext?.cellForItem(at: index, sectionController: self) as! PollPreviewCell
+        cell.isSelected = false
     }
 
 }

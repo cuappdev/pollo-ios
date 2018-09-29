@@ -36,13 +36,20 @@ extension PollsDateViewController: ListAdapterDataSource {
     }
 }
 
+extension PollsDateViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 1.0)
+    }
+}
+
 extension PollsDateViewController: CardControllerDelegate {
     
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {
         self.numberOfPeople = numberOfPeople
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
-            pollsDateArray[indexOfPollsDateModel] = pollsDateModel
+            pollsDateArray[indexOfPollsDateModel] = PollsDateModel(date: pollsDateModel.date, polls: pollsDateModel.polls)
             adapter.performUpdates(animated: false, completion: nil)
         }
         self.socket.updateDelegate(self)

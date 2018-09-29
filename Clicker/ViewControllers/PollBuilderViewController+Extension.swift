@@ -28,10 +28,12 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
 
 extension PollBuilderViewController: DraftsViewControllerDelegate {
     
-    func draftsViewControllerShouldStartDraft(_ draft: Draft) {
+    func draftsViewControllerLoadDraft(_ draft: Draft) {
         let qType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
         if questionType != qType {
-            updateQuestionType()
+            updateQuestionTypeButton()
+            mcPollBuilder.isHidden = questionType == .freeResponse
+            frPollBuilder.isHidden = questionType == .multipleChoice
         }
         switch qType {
         case .multipleChoice:
@@ -46,24 +48,10 @@ extension PollBuilderViewController: DraftsViewControllerDelegate {
 
 }
 
-extension PollBuilderViewController: PollTypeDropDownDelegate {
+extension PollBuilderViewController: QuestionTypeDropDownViewDelegate {
     
-    func updateQuestionType() {
-        questionType = questionType.other
-        updateQuestionTypeButton()
-        guard let type = questionType else {
-            print("question type must be initalized before updateQuestionTypeCalled.")
-            return
-        }
-        mcPollBuilder.isHidden = type == .freeResponse
-        frPollBuilder.isHidden = type == .multipleChoice
-    }
-
-}
-
-extension PollBuilderViewController: EditQuestionTypeDelegate {
-    
-    func editQuestionTypeViewControllerDidPick(questionType: QuestionType) {
+    func questionTypeDropDownViewDidPick(questionType: QuestionType) {
+        hideDropDown()
         self.questionType = questionType
         updateQuestionTypeButton()
         mcPollBuilder.isHidden = questionType == .freeResponse

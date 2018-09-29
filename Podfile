@@ -19,6 +19,5 @@ target 'Clicker' do
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
   pod 'SwiftyJSON'
-  pod 'Wormholy', :configurations => ['Debug']
   pod 'Neutron', :git => 'https://github.com/dantheli/Neutron.git'
 end
