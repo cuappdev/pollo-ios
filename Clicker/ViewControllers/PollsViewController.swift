@@ -48,8 +48,8 @@ class PollsViewController: UIViewController {
     let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
-    let newGroupAlertControllerTitle = "Error"
-    let newGroupAlertControllerMessage = "Failed to create new group. Try again!"
+    let errorText = "Error"
+    let failedToCreateGroupText = "Failed to create new group. Try again!"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
     
@@ -57,9 +57,9 @@ class PollsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
         
-        let createdPollTypeModel = PollTypeModel(pollType: .created)
         let joinedPollTypeModel = PollTypeModel(pollType: .joined)
-        pollTypeModels = [createdPollTypeModel, joinedPollTypeModel]
+        let createdPollTypeModel = PollTypeModel(pollType: .created)
+        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -80,7 +80,7 @@ class PollsViewController: UIViewController {
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
-        pollsOptionsView = OptionsView(frame: .zero, options: [createdPollsOptionsText, joinedPollsOptionsText], sliderBarDelegate: self)
+        pollsOptionsView = OptionsView(frame: .zero, options: [joinedPollsOptionsText, createdPollsOptionsText], sliderBarDelegate: self)
         pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         
@@ -248,13 +248,13 @@ class PollsViewController: UIViewController {
                     }.catch { error in
                         print(error)
                         self.hideNewGroupActivityIndicatorView()
-                        let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                        let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
                         self.present(alertController, animated: true, completion: nil)
                 }
             }.catch { error in
                 print(error)
                 self.hideNewGroupActivityIndicatorView()
-                let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
                 self.present(alertController, animated: true, completion: nil)
         }
     }
@@ -279,7 +279,7 @@ class PollsViewController: UIViewController {
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        StartSession(code: code, name: nil, isGroup: nil).make()
+        JoinSession(code: code).make()
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
@@ -289,10 +289,12 @@ class PollsViewController: UIViewController {
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
-                }
+                    }
             }.catch { error in
                 print(error)
-        }
+                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                self.present(alertController, animated: true, completion: nil)
+            }
     }
     
     @objc func settingsAction() {
@@ -335,7 +337,8 @@ class PollsViewController: UIViewController {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if !isListeningToKeyboard || self.presentedViewController != nil { return }
+        let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
+        if !isListeningToKeyboard || hasPresentedViewController { return }
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
             dimmingView.isHidden = false
@@ -350,7 +353,8 @@ class PollsViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if !isListeningToKeyboard || self.presentedViewController != nil { return }
+        let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
+        if !isListeningToKeyboard || hasPresentedViewController { return }
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             dimmingView.isHidden = true
             joinSessionContainerView.snp.remakeConstraints { make in
