@@ -9,16 +9,12 @@
 import UIKit
 
 protocol EditDraftViewControllerDelegate {
-    func editDraftViewControllerDidTapEditDraftButton(draft: Draft)
     func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft)
 }
 
 class EditDraftViewController: UIViewController {
 
     // MARK: - View vars
-    var editDraftButton: UIButton!
-    var editDraftImageView: UIImageView!
-    var editDraftLabel: UILabel!
     var deleteDraftButton: UIButton!
     var deleteDraftImageView: UIImageView!
     var deleteDraftLabel: UILabel!
@@ -30,7 +26,6 @@ class EditDraftViewController: UIViewController {
     // MARK: - Constants
     let buttonHeight: CGFloat = 50
     let imageViewPadding: CGFloat = 18
-    let editDraftLabelText: String = "Edit Draft"
     let deleteDraftLabelText: String = "Delete"
     
     init(delegate: EditDraftViewControllerDelegate, draft: Draft) {
@@ -47,20 +42,6 @@ class EditDraftViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-
-        editDraftButton = UIButton()
-        editDraftButton.addTarget(self, action: #selector(editDraftButtonPressed), for: .touchUpInside)
-        view.addSubview(editDraftButton)
-        
-        editDraftImageView = UIImageView()
-        editDraftImageView.image = #imageLiteral(resourceName: "editPoll")
-        view.addSubview(editDraftImageView)
-        
-        editDraftLabel = UILabel()
-        editDraftLabel.text = editDraftLabelText
-        editDraftLabel.textColor = .black
-        editDraftLabel.font = UIFont._16RegularFont
-        view.addSubview(editDraftLabel)
         
         deleteDraftButton = UIButton()
         deleteDraftButton.addTarget(self, action: #selector(deleteDraftButtonPressed), for: .touchUpInside)
@@ -73,7 +54,7 @@ class EditDraftViewController: UIViewController {
         deleteDraftLabel = UILabel()
         deleteDraftLabel.text = deleteDraftLabelText
         deleteDraftLabel.textColor = .clickerRed
-        deleteDraftLabel.font = editDraftLabel.font
+        deleteDraftLabel.font = UIFont._16RegularFont
         view.addSubview(deleteDraftLabel)
         
         setupConstraints()
@@ -82,48 +63,24 @@ class EditDraftViewController: UIViewController {
     
     func setupConstraints() {
         
-        editDraftButton.snp.makeConstraints { make in
+        deleteDraftButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(buttonHeight)
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-        editDraftImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(imageViewPadding)
-            make.centerY.equalTo(editDraftButton.snp.centerY)
-        }
-        
-        editDraftLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-imageViewPadding * 2)
-            make.height.equalTo(editDraftButton.snp.height)
-            make.left.equalTo(editDraftImageView.snp.right).offset(imageViewPadding)
-        }
-        
-        deleteDraftButton.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(editDraftButton.snp.height)
-            make.top.equalTo(editDraftButton.snp.bottom)
-            make.centerX.equalToSuperview()
-        }
-        
         deleteDraftImageView.snp.makeConstraints { make in
-            make.left.equalTo(editDraftImageView.snp.left)
+            make.left.equalToSuperview().offset(imageViewPadding)
             make.centerY.equalTo(deleteDraftButton.snp.centerY)
         }
         
         deleteDraftLabel.snp.makeConstraints { make in
-            make.width.equalTo(editDraftLabel.snp.width)
-            make.height.equalTo(editDraftLabel.snp.height)
-            make.left.equalTo(editDraftLabel.snp.left)
-            make.centerY.equalTo(deleteDraftButton.snp.centerY)
+            make.width.equalToSuperview().offset(-imageViewPadding * 2)
+            make.height.equalTo(deleteDraftButton.snp.height)
+            make.left.equalTo(deleteDraftImageView.snp.right).offset(imageViewPadding)
         }
         
-    }
-    
-    @objc func editDraftButtonPressed() {
-        self.dismiss(animated: true, completion: nil)
-        delegate.editDraftViewControllerDidTapEditDraftButton(draft: draft)
     }
     
     @objc func deleteDraftButtonPressed() {

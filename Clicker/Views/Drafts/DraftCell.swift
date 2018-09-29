@@ -9,15 +9,18 @@
 import UIKit
 
 protocol DraftCellDelegate {
-    func draftCellDidSelectDraft(draft: Draft)
+    func draftCellDidTapLoadButton(draft: Draft)
+    func draftCellDidTapEditButton(draft: Draft)
 }
 
 class DraftCell: UICollectionViewCell {
 
     // MARK: - View vars
-    var selectDraftButton: UIButton!
+    var loadButton: UIButton!
     var questionLabel: UILabel!
     var borderView: UIView!
+    var editButton: UIButton!
+    var editImageView: UIImageView!
     
     // MARK: - Data vars
     var delegate: DraftCellDelegate?
@@ -27,8 +30,9 @@ class DraftCell: UICollectionViewCell {
     let questionLabelHorizontalPadding: CGFloat = 18.5
     let questionLabelVerticalPadding: CGFloat = 20
     let borderViewPadding: CGFloat = 18
-    let zoomInScale: CGFloat = 0.85
-    let zoomDuration: TimeInterval = 0.35
+    let editButtonWidth: CGFloat = 25
+    let zoomInScale: CGFloat = 0.98
+    let zoomDuration: TimeInterval = 0.25
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,16 +53,16 @@ class DraftCell: UICollectionViewCell {
         borderView.layer.borderWidth = 1
         borderView.layer.borderColor = UIColor.white.cgColor
         borderView.clipsToBounds = true
-        addSubview(borderView)
+        contentView.addSubview(borderView)
         
-        selectDraftButton = UIButton()
-        selectDraftButton.addTarget(self, action: #selector(selectDraftButtonPressed), for: .touchUpInside)
-        selectDraftButton.addTarget(self, action: #selector(zoomIn), for: .touchDown)
-        selectDraftButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
-        selectDraftButton.addTarget(self, action: #selector(zoomOut), for: .touchUpOutside)
-        selectDraftButton.layer.cornerRadius = layer.cornerRadius
-        selectDraftButton.clipsToBounds = true
-        addSubview(selectDraftButton)
+        loadButton = UIButton()
+        loadButton.addTarget(self, action: #selector(loadButtonPressed), for: .touchUpInside)
+        loadButton.addTarget(self, action: #selector(zoomIn), for: .touchDown)
+        loadButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
+        loadButton.addTarget(self, action: #selector(zoomOut), for: .touchUpOutside)
+        loadButton.layer.cornerRadius = layer.cornerRadius
+        loadButton.clipsToBounds = true
+        contentView.addSubview(loadButton)
         
         questionLabel = UILabel()
         questionLabel.font = ._18SemiboldFont
@@ -67,14 +71,25 @@ class DraftCell: UICollectionViewCell {
         questionLabel.textColor = .white
         questionLabel.numberOfLines = 2
         questionLabel.lineBreakMode = .byTruncatingTail
-        addSubview(questionLabel)
+        contentView.addSubview(questionLabel)
+        
+        editButton = UIButton()
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        contentView.addSubview(editButton)
+        
+        editImageView = UIImageView()
+        editImageView.image = #imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate)
+        editImageView.tintColor = .white
+        contentView.addSubview(editImageView)
     }
     
     @objc func zoomIn(sender: UIButton) {
         UIView.animate(withDuration: zoomDuration) {
             sender.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
-            self.borderView.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
-            self.questionLabel.transform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
+            let transform: CGAffineTransform = CGAffineTransform(scaleX: self.zoomInScale, y: self.zoomInScale)
+            self.borderView.transform = transform
+            self.questionLabel.transform = transform
+            self.editImageView.transform = transform
         }
     }
     
@@ -83,11 +98,16 @@ class DraftCell: UICollectionViewCell {
             sender.transform = .identity
             self.borderView.transform = .identity
             self.questionLabel.transform = .identity
+            self.editImageView.transform = .identity
         }
     }
     
-    @objc func selectDraftButtonPressed() {
-        delegate?.draftCellDidSelectDraft(draft: draft)
+    @objc func editButtonPressed() {
+        delegate?.draftCellDidTapEditButton(draft: draft)
+    }
+    
+    @objc func loadButtonPressed() {
+        delegate?.draftCellDidTapLoadButton(draft: draft)
     }
     
     func setupConstraints() {
@@ -97,16 +117,29 @@ class DraftCell: UICollectionViewCell {
             make.center.equalToSuperview()
         }
         
-        selectDraftButton.snp.makeConstraints { make in
+        loadButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview()
             make.center.equalToSuperview()
         }
         
         questionLabel.snp.makeConstraints { make in
-            make.width.equalTo(borderView.snp.width).offset(-questionLabelHorizontalPadding * 2)
+            make.width.equalTo(borderView.snp.width).inset(questionLabelHorizontalPadding + editButtonWidth)
             make.height.equalToSuperview()
-            make.center.equalToSuperview()
+            make.left.equalTo(borderView.snp.left).offset(questionLabelHorizontalPadding)
+            make.centerY.equalToSuperview()
+        }
+        
+        editButton.snp.makeConstraints { make in
+            make.width.equalTo(editButtonWidth)
+            make.height.equalTo(editButtonWidth)
+            make.centerY.equalToSuperview()
+            make.right.equalTo(borderView.snp.right).inset(questionLabelHorizontalPadding)
+        }
+        
+        editImageView.snp.makeConstraints { make in
+            make.width.equalTo(editButton.snp.width)
+            make.center.equalTo(editButton.snp.center)
         }
     }
     

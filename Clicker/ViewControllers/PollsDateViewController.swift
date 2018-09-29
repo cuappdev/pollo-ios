@@ -120,20 +120,10 @@ class PollsDateViewController: UIViewController {
         
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
-        let pollBuilderVC = PollBuilderViewController(delegate: self)
-        let width = Float(view.safeAreaLayoutGuide.layoutFrame.size.width)
-        let height = Float(view.safeAreaLayoutGuide.layoutFrame.size.height)
-        let center = CGPoint(x: view.safeAreaLayoutGuide.layoutFrame.midX, y: UIApplication.shared.statusBarFrame.height + view.safeAreaLayoutGuide.layoutFrame.midY)
-        let presenter = Presentr(presentationType: .custom(width: .custom(size: width), height: .custom(size: height), center: .custom(centerPoint: center)))
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = true
-        presenter.cornerRadius = 15
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        
-        let pollBuilderNavigationController = UINavigationController(rootViewController: pollBuilderVC)
-        pollBuilderNavigationController.isNavigationBarHidden = true
-        present(pollBuilderNavigationController, animated: true, completion: nil)
+        let pollBuilderViewController = PollBuilderViewController(delegate: self)
+        pollBuilderViewController.modalPresentationStyle = .custom
+        pollBuilderViewController.transitioningDelegate = self
+        present(pollBuilderViewController, animated: true, completion: nil)
     }
     
     @objc func goBack() {

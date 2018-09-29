@@ -26,6 +26,13 @@ extension CardController: ListAdapterDataSource {
     }
 }
 
+extension CardController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 1.0)
+    }
+}
+
 extension CardController: PollSectionControllerDelegate {
     
     var role: UserRole {
