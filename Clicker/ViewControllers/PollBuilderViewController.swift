@@ -24,9 +24,11 @@ class PollBuilderViewController: UIViewController {
     let questionTypeButtonWidth: CGFloat = 150
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
-    let edgePadding: CGFloat = 18
+    let edgePadding: CGFloat = UIApplication.shared.statusBarFrame.height + 10
     let topBarHeight: CGFloat = 24
-    let dropdownArrowHeight: CGFloat = 5.5
+    let dropDownHeight: CGFloat = 100
+    let dropDownArrowLength: CGFloat = 6.5
+    let dropDownArrowInset: CGFloat = 7.5
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
     let editQuestionTypeModalHeight: Float = 100 + Float(UIApplication.shared.statusBarFrame.height)
@@ -34,7 +36,7 @@ class PollBuilderViewController: UIViewController {
     let startQuestionButtonTitle = "Start Question"
 
     // MARK: View vars
-    var dropDown: PollTypeDropDownView!
+    var dropDown: QuestionTypeDropDownView!
     var dropDownArrow: UIImageView!
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
@@ -47,6 +49,8 @@ class PollBuilderViewController: UIViewController {
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
     var tapGestureRecognizer: UITapGestureRecognizer!
+    var dropDownGestureRecognizer: UITapGestureRecognizer!
+    var dimmingView: UIView!
     
     // MARK: Data vars
     var drafts: [Draft]!
@@ -57,6 +61,7 @@ class PollBuilderViewController: UIViewController {
     var loadedMCDraft: Draft?
     var loadedFRDraft: Draft?
     var isKeyboardShown: Bool = false
+    var dropDownHidden: Bool = true
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
@@ -68,6 +73,9 @@ class PollBuilderViewController: UIViewController {
         
         view.backgroundColor = .clickerWhite
         questionType = .multipleChoice
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         // Add Keyboard Handlers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -79,7 +87,6 @@ class PollBuilderViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        setupDropDown()
         getDrafts()
     }
     
@@ -151,39 +158,50 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
-    }
-    
-    func setupDropDown() {
+        
         dropDownArrow = UIImageView(image: UIImage(named: "DropdownArrowIcon"))
         view.addSubview(dropDownArrow)
+    }
+    
+    func setupDimmingView() {
+        dimmingView = UIView()
+        dimmingView.translatesAutoresizingMaskIntoConstraints = false
+        dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        dimmingView.alpha = 1.0
+        view.addSubview(dimmingView)
         
-        dropDown = PollTypeDropDownView()
-        let topTitle = questionType.description
-        let bottomTitle = questionType.other.description
-        dropDown.topButton.setTitle(topTitle, for: .normal)
-        dropDown.bottomButton.setTitle(bottomTitle, for: .normal)
-        dropDown.delegate = self
+        dimmingView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+    }
+    
+    func showDropDown() {
+        setupDimmingView()
+        
+        dropDown = QuestionTypeDropDownView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: dropDownHeight), delegate: self, selectedQuestionType: questionType)
         view.addSubview(dropDown)
         
         dropDown.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalTo(questionTypeButton.snp.height).multipliedBy(2)
-            make.centerY.equalTo(questionTypeButton.snp.bottom)
+            make.top.equalToSuperview()
+            make.height.equalTo(dropDownHeight)
             make.centerX.equalToSuperview()
         }
-        dropDownArrow.snp.makeConstraints { make in
-            make.height.equalTo(6.5)
-            make.width.equalTo(6.5)
-            make.centerY.equalTo(questionTypeButton.snp.centerY)
-            make.left.equalTo(questionTypeButton.snp.right)
-        }
-        dropDown.isHidden = true
+    
+        dropDownHidden = false
+    }
+    
+    @objc func hideDropDown() {
+        dropDown.removeFromSuperview()
+        dropDownHidden = true
+        dimmingView.removeFromSuperview()
     }
     
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
             make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height)
+            make.top.equalTo(edgePadding)
             make.width.equalTo(topBarHeight)
             make.height.equalTo(topBarHeight)
         }
@@ -240,6 +258,13 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(buttonsView.snp.bottom)
+        }
+        
+        dropDownArrow.snp.makeConstraints { make in
+            make.height.equalTo(dropDownArrowLength)
+            make.width.equalTo(dropDownArrowLength)
+            make.centerY.equalTo(questionTypeButton.snp.centerY)
+            make.left.equalTo(questionTypeButton.snp.right).inset(dropDownArrowInset)
         }
     }
     
@@ -324,21 +349,20 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !dropDownHidden {
+            hideDropDown()
+        }
+    }
+    
     @objc func hideKeyboard() {
         view.endEditing(true)
     }
     
     @objc func toggleQuestionType() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: editQuestionTypeModalHeight)
-        let originY = 0
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        let presenter = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.transitionType = .coverVerticalFromTop
-        let editQuestionTypeVC = EditQuestionTypeViewController(delegate: self, selectedQuestionType: questionType)
-        customPresentViewController(presenter, viewController: editQuestionTypeVC, animated: true, completion: nil)
+        if dropDownHidden {
+            showDropDown()
+        }
     }
     
     @objc func showDrafts() {

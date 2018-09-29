@@ -25,6 +25,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     let welcomeLabelWidth: CGFloat = 249.5
     let welcomeLabelHeight: CGFloat = 31.5
     let welcomeLabelTopScaleFactor: CGFloat = 0.3
+    let appNameLabelOffset: CGFloat = 5
     let appNameLabelHeight: CGFloat = 71.5
     let pronunciationLabelHeight: CGFloat = 19
     let pronunciationLabelTopOffset: CGFloat = 14.5
@@ -88,7 +89,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         appNameLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabel.snp.width)
             make.height.equalTo(appNameLabelHeight)
-            make.top.equalTo(welcomeLabel.snp.bottom)
+            make.top.equalTo(welcomeLabel.snp.bottom).inset(appNameLabelOffset)
             make.centerX.equalToSuperview()
         }
         pronunciationLabel.snp.makeConstraints { make in
