@@ -224,15 +224,15 @@ class PollBuilderViewController: UIViewController {
         }
         
         mcPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(questionTypeButton.snp.bottom).offset(28)
             make.bottom.equalTo(buttonsView.snp.top)
         }
         
         frPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(mcPollBuilder.snp.top)
             make.bottom.equalTo(mcPollBuilder.snp.bottom)
         }

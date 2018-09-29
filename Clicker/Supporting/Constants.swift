@@ -80,6 +80,7 @@ struct LayoutConstants {
     static let pollOptionsVerticalPadding: CGFloat = 10
     static let cardHorizontalPadding: CGFloat = 14
     static let questionCellHeight: CGFloat = 46
+    static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCellHeight: CGFloat = 1
     static let buttonImageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
 }
