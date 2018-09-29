@@ -16,6 +16,13 @@ protocol PollPreviewCellDelegate {
 
 class PollPreviewCell: UICollectionViewCell {
     
+    // MARK: - Override vars
+    override var isSelected: Bool {
+        didSet {
+            self.contentView.backgroundColor = isSelected ? UIColor.lightGray : UIColor.white
+        }
+    }
+    
     // MARK: - View vars
     var nameLabel: UILabel!
     var codeLabel: UILabel!
@@ -48,7 +55,7 @@ class PollPreviewCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
     
         codeLabel = UILabel()
-        codeLabel.font = ._18MediumFont
+        codeLabel.font = ._16MediumFont
         codeLabel.textColor = .clickerGrey2
         contentView.addSubview(codeLabel)
         

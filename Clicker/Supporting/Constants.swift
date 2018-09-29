@@ -82,7 +82,8 @@ struct LayoutConstants {
     static let questionCellHeight: CGFloat = 46
     static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCellHeight: CGFloat = 1
-    static let buttonImageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    static let buttonImageInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+    static let buttonSize: CGSize = CGSize(width: 40, height: 40)
 }
 
 struct ParserKeys {

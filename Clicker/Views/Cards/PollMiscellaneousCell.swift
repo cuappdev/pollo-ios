@@ -19,7 +19,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let descriptionLabelXPadding: CGFloat = 10
     let totalVotesLabelTrailingPadding: CGFloat = 14
     let labelFontSize: CGFloat = 12
-    let endedDescriptionText = "Only you can see results"
+    let liveEndedDescriptionText = "Only you can see results"
     let sharedDescriptionText = "Shared with group"
     
     
@@ -69,12 +69,9 @@ class PollMiscellaneousCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for miscellaneousModel: PollMiscellaneousModel) {
         switch miscellaneousModel.pollState {
-        case .live:
-            iconImageView.image = #imageLiteral(resourceName: "liveIcon")
-            descriptionLabel.text = ""
-        case .ended:
+        case .live, .ended:
             iconImageView.image = #imageLiteral(resourceName: "solo_eye")
-            descriptionLabel.text = endedDescriptionText
+            descriptionLabel.text = liveEndedDescriptionText
         case .shared:
             iconImageView.image = #imageLiteral(resourceName: "results_shared")
             descriptionLabel.text = sharedDescriptionText

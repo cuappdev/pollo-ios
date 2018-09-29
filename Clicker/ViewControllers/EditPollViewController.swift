@@ -6,11 +6,12 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 protocol EditPollViewControllerDelegate {
     
+    func editPollViewControllerDidUpdateName(for userRole: UserRole)
     func editPollViewControllerDidDeleteSession(for userRole: UserRole)
     
 }
@@ -126,7 +127,7 @@ class EditPollViewController: UIViewController {
     }
     
     @objc func editNameBtnPressed() {
-        let editNameVC = EditNameViewController(session: session)
+        let editNameVC = EditNameViewController(delegate: self, session: session)
         self.navigationController?.pushViewController(editNameVC, animated: true)
     }
     
@@ -149,6 +150,14 @@ class EditPollViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+extension EditPollViewController: EditNameViewControllerDelegate {
+    
+    func editNameViewControllerDidUpdateName() {
+        self.delegate.editPollViewControllerDidUpdateName(for: userRole)
     }
     
 }
