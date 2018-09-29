@@ -101,29 +101,6 @@ struct GetSession: ClickerQuark {
 
 }
 
-
-
-struct GetJoinedSessions: ClickerQuark {
-
-    typealias ResponseType = [[Session]]
-
-    var route: String {
-        return "/sessions/"
-    }
-    var headers: HTTPHeaders {
-        return [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
-        ]
-    }
-    let method: HTTPMethod = .get
-
-    func process(element: Element) throws -> [[Session]] {
-        return []
-    }
-
-}
-
-
 struct GetPollSessions: ClickerQuark {
 
     typealias ResponseType = [Session]
