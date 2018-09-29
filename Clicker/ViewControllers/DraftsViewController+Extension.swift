@@ -43,7 +43,7 @@ extension DraftsViewController: EditDraftViewControllerDelegate {
                 guard let pollBuilderViewController = nav.topViewController as? PollBuilderViewController else { return }
                 pollBuilderViewController.getDrafts()
             } .catch { error in
-                let alertController = self.createAlert(title: "Error", message: "Failed to delete draft. Try again!")
+                let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
                 self.present(alertController, animated: true, completion: nil)
         }
     }
