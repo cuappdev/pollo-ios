@@ -57,9 +57,9 @@ class PollsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
         
-        let createdPollTypeModel = PollTypeModel(pollType: .created)
         let joinedPollTypeModel = PollTypeModel(pollType: .joined)
-        pollTypeModels = [createdPollTypeModel, joinedPollTypeModel]
+        let createdPollTypeModel = PollTypeModel(pollType: .created)
+        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -80,7 +80,7 @@ class PollsViewController: UIViewController {
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
-        pollsOptionsView = OptionsView(frame: .zero, options: [createdPollsOptionsText, joinedPollsOptionsText], sliderBarDelegate: self)
+        pollsOptionsView = OptionsView(frame: .zero, options: [joinedPollsOptionsText, createdPollsOptionsText], sliderBarDelegate: self)
         pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         
