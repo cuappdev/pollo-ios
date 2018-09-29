@@ -18,7 +18,8 @@ class PollsViewController: UIViewController {
     var pollsCollectionView: UICollectionView!
     var adapter: ListAdapter!
     var titleLabel: UILabel!
-    var newPollButton: UIButton!
+    var newGroupButton: UIButton!
+    var newGroupActivityIndicatorView: UIActivityIndicatorView!
     var bottomPaddingView: UIView!
     var joinSessionContainerView: UIView!
     var codeTextField: UITextField!
@@ -30,22 +31,27 @@ class PollsViewController: UIViewController {
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
     var isKeyboardShown: Bool = false
+    var isListeningToKeyboard: Bool = true
     
     // MARK: - Constants
-    let newPollButtonLength: CGFloat = 29
-    let newPollButtonTopPadding: CGFloat = 15
-    let newPollButtonRightPadding: CGFloat = 15
+    let newGroupButtonLength: CGFloat = 29
+    let newGroupButtonTopPadding: CGFloat = 15
+    let newGroupButtonRightPadding: CGFloat = 15
     let popupViewHeight: CGFloat = 140
     let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
-    let titleLabelText = "Groups"
+    let titleLabelText = "Poll Groups"
     let createdPollsOptionsText = "Created"
     let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
     let joinSessionButtonTitle = "Join"
+    let newGroupAlertControllerTitle = "Error"
+    let newGroupAlertControllerMessage = "Failed to create new group. Try again!"
+    let submitFeedbackTitle = "Submit Feedback"
+    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +76,7 @@ class PollsViewController: UIViewController {
 
         titleLabel = UILabel()
         titleLabel.text = titleLabelText
-        titleLabel.font = ._30SemiboldFont
+        titleLabel.font = ._30HeavyFont
         titleLabel.textColor = .clickerBlack1
         view.addSubview(titleLabel)
         
@@ -96,11 +102,16 @@ class PollsViewController: UIViewController {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        newPollButton = UIButton()
-        newPollButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
-        newPollButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
-        newPollButton.addTarget(self, action: #selector(newPollAction), for: .touchUpInside)
-        view.addSubview(newPollButton)
+        newGroupButton = UIButton()
+        newGroupButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
+        newGroupButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
+        newGroupButton.addTarget(self, action: #selector(newGroupAction), for: .touchUpInside)
+        view.addSubview(newGroupButton)
+        
+        newGroupActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        newGroupActivityIndicatorView.isHidden = true
+        newGroupActivityIndicatorView.isUserInteractionEnabled = false
+        view.addSubview(newGroupActivityIndicatorView)
         
         dimmingView = UIView()
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
@@ -137,7 +148,7 @@ class PollsViewController: UIViewController {
         codeTextField.rightView = joinSessionButton
         codeTextField.rightViewMode = .always
         codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey13, NSAttributedStringKey.font: UIFont._16MediumFont])
-        codeTextField.textColor = .clickerGrey13
+        codeTextField.textColor = .white
         codeTextField.autocapitalizationType = .allCharacters
         joinSessionContainerView.addSubview(codeTextField)
         
@@ -158,7 +169,6 @@ class PollsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.height.equalTo(35.5)
         }
-        
         
         pollsOptionsView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
@@ -196,43 +206,75 @@ class PollsViewController: UIViewController {
         }
         
         pollsCollectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(joinSessionContainerView.snp.top)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(joinSessionContainerViewHeight)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.top.equalTo(pollsOptionsView.snp.bottom)
         }
         
-        newPollButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(newPollButtonTopPadding)
-            make.width.height.equalTo(newPollButtonLength)
-            make.trailing.equalToSuperview().inset(newPollButtonRightPadding)
+        newGroupButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(newGroupButtonTopPadding)
+            make.width.height.equalTo(newGroupButtonLength)
+            make.trailing.equalToSuperview().inset(newGroupButtonRightPadding)
+        }
+        
+        newGroupActivityIndicatorView.snp.makeConstraints { make in
+            make.top.equalTo(newGroupButton.snp.top)
+            make.width.equalTo(newGroupButton.snp.width)
+            make.height.equalTo(newGroupButton.snp.height)
+            make.trailing.equalTo(newGroupButton.snp.trailing)
         }
         
         settingsButton.snp.makeConstraints { make in
             make.height.equalTo(30)
             make.width.equalTo(30)
-            make.centerY.equalTo(newPollButton.snp.centerY)
+            make.centerY.equalTo(newGroupButton.snp.centerY)
             make.left.equalToSuperview().offset(15)
         }
     }
     
     // MARK - Actions
-    @objc func newPollAction() {
-        newPollButton.isEnabled = false
+    @objc func newGroupAction() {
+        displayNewGroupActivityIndicatorView()
         GenerateCode().make()
             .done { code in
                 StartSession(code: code, name: code, isGroup: false).make()
                     .done { session in
+                        self.isListeningToKeyboard = false
+                        self.hideNewGroupActivityIndicatorView()
                         let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
-                        print("error: ", error)
+                        print(error)
+                        self.hideNewGroupActivityIndicatorView()
+                        let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                        self.present(alertController, animated: true, completion: nil)
                 }
             }.catch { error in
                 print(error)
+                self.hideNewGroupActivityIndicatorView()
+                let alertController = self.createAlert(title: self.newGroupAlertControllerTitle, message: self.newGroupAlertControllerMessage)
+                self.present(alertController, animated: true, completion: nil)
         }
-        newPollButton.isEnabled = true
+    }
+    
+    func displayNewGroupActivityIndicatorView() {
+        newGroupButton.isHidden = true
+        newGroupButton.isUserInteractionEnabled = false
+        
+        newGroupActivityIndicatorView.isHidden = false
+        newGroupActivityIndicatorView.isUserInteractionEnabled = true
+        newGroupActivityIndicatorView.startAnimating()
+    }
+    
+    func hideNewGroupActivityIndicatorView() {
+        newGroupActivityIndicatorView.stopAnimating()
+        newGroupActivityIndicatorView.isHidden = true
+        newGroupActivityIndicatorView.isUserInteractionEnabled = false
+        
+        newGroupButton.isHidden = false
+        newGroupButton.isUserInteractionEnabled = true
     }
     
     @objc func joinSession() {
@@ -251,25 +293,6 @@ class PollsViewController: UIViewController {
             }.catch { error in
                 print(error)
         }
-    }
-    
-    @objc func showJoinSessionPopup() {
-        let width = ModalSize.full
-        let height = ModalSize.custom(size: Float(popupViewHeight))
-        let originY = view.frame.height - popupViewHeight
-        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
-        let customType = PresentationType.custom(width: width, height: height, center: center)
-        
-        let presenter: Presentr = Presentr(presentationType: customType)
-        presenter.backgroundOpacity = 0.6
-        presenter.roundCorners = false
-        presenter.dismissOnSwipe = true
-        presenter.dismissOnSwipeDirection = .bottom
-        
-        let joinSessionVC = JoinViewController()
-        joinSessionVC.dismissController = self
-        joinSessionVC.popupHeight = popupViewHeight
-        customPresentViewController(presenter, viewController: joinSessionVC, animated: true, completion: nil)
     }
     
     @objc func settingsAction() {
@@ -303,6 +326,7 @@ class PollsViewController: UIViewController {
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         pollsCollectionView.reloadData()
+        isListeningToKeyboard = true
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -311,6 +335,7 @@ class PollsViewController: UIViewController {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
+        if !isListeningToKeyboard || self.presentedViewController != nil { return }
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
             dimmingView.isHidden = false
@@ -325,6 +350,7 @@ class PollsViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        if !isListeningToKeyboard || self.presentedViewController != nil { return }
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             dimmingView.isHidden = true
             joinSessionContainerView.snp.remakeConstraints { make in
@@ -337,4 +363,16 @@ class PollsViewController: UIViewController {
         }
     }
 
+    // MARK: - Shake to send feedback
+    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
+                self.isListeningToKeyboard = false
+                let feedbackVC = FeedbackViewController()
+                self.navigationController?.pushViewController(feedbackVC, animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 }

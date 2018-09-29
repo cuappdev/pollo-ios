@@ -62,8 +62,8 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {
-            case .newOption(option: let option, index: _):
-                return option != "" ? option : nil
+            case .newOption(option: let option, index: let index):
+                return option != "" ? option : intToMCOption(index)
             case .addOption:
                 return nil
             }
