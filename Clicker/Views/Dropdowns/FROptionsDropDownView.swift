@@ -25,8 +25,6 @@ class FROptionsDropDownView: UIView {
     
     var line: UIView!
     
-    var delegate: PollTypeDropDownDelegate!
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

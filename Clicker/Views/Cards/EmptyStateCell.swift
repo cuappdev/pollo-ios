@@ -197,6 +197,7 @@ class EmptyStateCell: UICollectionViewCell {
     
     // MARK - NAME THE POLL
     func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
+        
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
         
