@@ -145,7 +145,11 @@ class CardController: UIViewController {
         if userRole == .admin {
             createPollButton = UIButton()
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+            createPollButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            createPollButton.snp.makeConstraints { make in
+                make.size.equalTo(LayoutConstants.buttonSize)
+            }
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)
             self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
         } else {

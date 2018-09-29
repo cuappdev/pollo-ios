@@ -220,14 +220,14 @@ class PollsViewController: UIViewController {
         }
         
         newGroupButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonPadding)
-            make.right.equalToSuperview().inset(buttonPadding)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonPadding - LayoutConstants.buttonImageInsets.top)
+            make.right.equalToSuperview().inset(buttonPadding - LayoutConstants.buttonImageInsets.right)
             make.size.equalTo(LayoutConstants.buttonSize)
         }
         
         settingsButton.snp.makeConstraints { make in
             make.top.equalTo(newGroupButton.snp.top)
-            make.left.equalToSuperview().offset(buttonPadding)
+            make.left.equalToSuperview().offset(buttonPadding - LayoutConstants.buttonImageInsets.left)
             make.size.equalTo(LayoutConstants.buttonSize)
         }
     }
