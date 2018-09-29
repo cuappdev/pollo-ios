@@ -30,8 +30,9 @@ class QuestionTypeDropDownView: UIView {
     // MARK: - Constants
     let labelWidth: CGFloat = 150
     let buttonHeight: CGFloat = 50
-    let selectedImageViewLength: CGFloat = 6.5
-    let selectedImageViewInset: CGFloat = 5
+    let selectedImageViewWidth: CGFloat = 13
+    let selectedImageViewHeight: CGFloat = 13
+    let selectedImageViewInset: CGFloat = 7.5
     let separatorHeight: CGFloat = 2
     let multipleChoiceText: String = "Multiple Choice"
     let freeResponseText: String = "Free Response"
@@ -70,6 +71,7 @@ class QuestionTypeDropDownView: UIView {
         
         selectedImageView = UIImageView()
         selectedImageView.image = #imageLiteral(resourceName: "DropUpArrowIcon")
+        selectedImageView.contentMode = .scaleAspectFit
         addSubview(selectedImageView)
         
         selectedGradient = CAGradientLayer()
@@ -129,7 +131,8 @@ class QuestionTypeDropDownView: UIView {
         }
         
         selectedImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(selectedImageViewLength)
+            make.width.equalTo(selectedImageViewWidth)
+            make.height.equalTo(selectedImageViewHeight)
             make.left.equalTo(topLabel.snp.right).inset(selectedImageViewInset)
             make.centerY.equalTo(topLabel.snp.centerY)
         }
