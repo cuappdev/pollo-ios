@@ -288,6 +288,8 @@ class PollsViewController: UIViewController {
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
+                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                        self.present(alertController, animated: true, completion: nil)
                     }
             }.catch { error in
                 print(error)

@@ -92,7 +92,8 @@ class PollsDateCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
         dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
-        numQuestionsLabel.text = "\(pollsDateModel.polls.count) Questions"
+        let numPolls = pollsDateModel.polls.count
+        numQuestionsLabel.text = "\(numPolls) \(numPolls > 1 ? "Questions" : "Question")"
     }
     
     // MARK: - Helpers

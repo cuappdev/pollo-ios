@@ -50,7 +50,7 @@ class NavigationTitleView: UIView {
         nameLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.bottom.equalTo(self.snp.centerY)
             make.height.equalTo(19)
         }
         
