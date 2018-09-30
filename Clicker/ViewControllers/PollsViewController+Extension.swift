@@ -98,11 +98,11 @@ extension PollsViewController: EditPollViewControllerDelegate {
     private func editPollViewControllerDidPerformChange(for userRole: UserRole) {
         switch userRole {
         case .admin:
-            pollTypeModels[0] = PollTypeModel(pollType: .created)
+            pollTypeModels[0] = PollTypeModel(pollType: .joined)
         case .member:
-            pollTypeModels[1] = PollTypeModel(pollType: .joined)
+            pollTypeModels[1] = PollTypeModel(pollType: .created)
         }
-        adapter.performUpdates(animated: false, completion: nil)
+        pollsCollectionView.reloadData()
     }
     
 }
