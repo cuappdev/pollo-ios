@@ -31,12 +31,12 @@ class PollsViewController: UIViewController {
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
     var isKeyboardShown: Bool = false
+    var isOpeningGroup: Bool = false
     var isListeningToKeyboard: Bool = true
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29
-    let newGroupButtonTopPadding: CGFloat = 15
-    let newGroupButtonRightPadding: CGFloat = 15
+    let buttonPadding: CGFloat = 15
     let popupViewHeight: CGFloat = 140
     let editModalHeight: CGFloat = 205
     let joinSessionContainerViewHeight: CGFloat = 64
@@ -108,6 +108,12 @@ class PollsViewController: UIViewController {
         newGroupButton.addTarget(self, action: #selector(newGroupAction), for: .touchUpInside)
         view.addSubview(newGroupButton)
         
+        settingsButton = UIButton()
+        settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
+        settingsButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
+        settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
+        view.addSubview(settingsButton)
+        
         newGroupActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         newGroupActivityIndicatorView.isHidden = true
         newGroupActivityIndicatorView.isUserInteractionEnabled = false
@@ -155,12 +161,6 @@ class PollsViewController: UIViewController {
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .clickerBlack1
         view.addSubview(bottomPaddingView)
-        
-        settingsButton = UIButton()
-        settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
-        settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
-        view.addSubview(settingsButton)
-        
     }
     
     func setupConstraints() {
@@ -212,12 +212,6 @@ class PollsViewController: UIViewController {
             make.top.equalTo(pollsOptionsView.snp.bottom)
         }
         
-        newGroupButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(newGroupButtonTopPadding)
-            make.width.height.equalTo(newGroupButtonLength)
-            make.trailing.equalToSuperview().inset(newGroupButtonRightPadding)
-        }
-        
         newGroupActivityIndicatorView.snp.makeConstraints { make in
             make.top.equalTo(newGroupButton.snp.top)
             make.width.equalTo(newGroupButton.snp.width)
@@ -225,11 +219,16 @@ class PollsViewController: UIViewController {
             make.trailing.equalTo(newGroupButton.snp.trailing)
         }
         
+        newGroupButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonPadding - LayoutConstants.buttonImageInsets.top)
+            make.right.equalToSuperview().inset(buttonPadding - LayoutConstants.buttonImageInsets.right)
+            make.size.equalTo(LayoutConstants.buttonSize)
+        }
+        
         settingsButton.snp.makeConstraints { make in
-            make.height.equalTo(30)
-            make.width.equalTo(30)
-            make.centerY.equalTo(newGroupButton.snp.centerY)
-            make.left.equalToSuperview().offset(15)
+            make.top.equalTo(newGroupButton.snp.top)
+            make.left.equalToSuperview().offset(buttonPadding - LayoutConstants.buttonImageInsets.left)
+            make.size.equalTo(LayoutConstants.buttonSize)
         }
     }
     
@@ -333,6 +332,8 @@ class PollsViewController: UIViewController {
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+        newGroupButton?.isEnabled = true
+        isOpeningGroup = false
     }
     
     // MARK: - KEYBOARD

@@ -99,6 +99,7 @@ class PollBuilderViewController: UIViewController {
         
         exitButton = UIButton()
         exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
+        exitButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
         
@@ -212,10 +213,9 @@ class PollBuilderViewController: UIViewController {
     
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
-            make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height)
-            make.width.equalTo(topBarHeight)
-            make.height.equalTo(topBarHeight)
+            make.left.equalTo(edgePadding - LayoutConstants.buttonImageInsets.left)
+            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height - LayoutConstants.buttonImageInsets.top)
+            make.size.equalTo(LayoutConstants.buttonSize)
         }
 
         centerView.snp.makeConstraints { make in
@@ -265,15 +265,15 @@ class PollBuilderViewController: UIViewController {
         }
         
         mcPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(questionTypeButton.snp.bottom).offset(28)
             make.bottom.equalTo(buttonsView.snp.top)
         }
         
         frPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(mcPollBuilder.snp.top)
             make.bottom.equalTo(mcPollBuilder.snp.bottom)
         }
