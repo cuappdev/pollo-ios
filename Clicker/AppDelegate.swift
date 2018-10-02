@@ -33,6 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        
+        UITextField.appearance().tintColor = .clickerGreen0
+        UITextView.appearance().tintColor = .clickerGreen0
     }
 
     func setupNavigationController() {
