@@ -15,11 +15,11 @@ func intToMCOption(_ intOption: Int) -> String {
     return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
 }
 
-// GET DD/MM/YYYY OF TODAY
-// Ex) 25/09/18, 27/10/18
+// GET M/d/YYYY OF TODAY
+// Ex) 9/25/18, 10/O27/18
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "dd/MM/yyyy"
+    formatter.dateFormat = "M/d/yyyy"
     return formatter.string(from: Date())
 }
 
