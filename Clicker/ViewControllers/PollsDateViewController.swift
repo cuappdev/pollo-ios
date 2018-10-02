@@ -128,20 +128,13 @@ class PollsDateViewController: UIViewController {
     
     @objc func goBack() {
         socket.socket.disconnect()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
-                .done {
-                    self.navigationController?.setNavigationBarHidden(true, animated: false)
-                    self.navigationController?.popViewController(animated: true)
-                    return
-                }.catch { (error) in
+                .catch { (error) in
                     print(error)
-                    self.navigationController?.setNavigationBarHidden(true, animated: false)
-                    self.navigationController?.popViewController(animated: true)
             }
-        } else {
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
-            self.navigationController?.popViewController(animated: true)
         }
     }
     
