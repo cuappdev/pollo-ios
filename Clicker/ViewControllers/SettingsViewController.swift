@@ -70,6 +70,7 @@ class SettingsViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
+        collectionView.alwaysBounceVertical = true
         view.addSubview(collectionView)
         
         adapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self)

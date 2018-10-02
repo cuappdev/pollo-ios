@@ -78,9 +78,12 @@ struct LayoutConstants {
     static let mcOptionCellHeight: CGFloat = 50
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsVerticalPadding: CGFloat = 10
+    static let cardHorizontalPadding: CGFloat = 14
     static let questionCellHeight: CGFloat = 46
+    static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCellHeight: CGFloat = 1
-    static let buttonImageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
+    static let buttonSize: CGSize = CGSize(width: 44, height: 44)
 }
 
 struct ParserKeys {

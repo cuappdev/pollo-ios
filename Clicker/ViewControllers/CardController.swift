@@ -38,9 +38,10 @@ class CardController: UIViewController {
     var numberOfPeople: Int!
     
     // MARK: - Constants
-    let countLabelCornerRadius: CGFloat = 8.0
     let countLabelWidth: CGFloat = 42.0
+    let countLabelHeight: CGFloat = 23.0
     let collectionViewTopPadding: CGFloat = 15
+    let navigationTitleHeight: CGFloat = 51.5
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -96,16 +97,18 @@ class CardController: UIViewController {
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
+        countLabel.font = ._12MediumFont
         countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.layer.cornerRadius = countLabelCornerRadius
         countLabel.clipsToBounds = true
+        countLabel.layer.cornerRadius = 0.5 * min(countLabelHeight, countLabelWidth)
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
         
         countLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(23)
             make.centerX.equalToSuperview()
             make.width.equalTo(countLabelWidth)
+            make.height.equalTo(countLabelHeight)
         }
         
         collectionView.snp.makeConstraints { make in
@@ -124,9 +127,6 @@ class CardController: UIViewController {
         
         navigationTitleView = NavigationTitleView()
         navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
-        navigationTitleView.snp.makeConstraints { make in
-            make.height.equalTo(36)
-        }
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
@@ -142,7 +142,11 @@ class CardController: UIViewController {
         if userRole == .admin {
             createPollButton = UIButton()
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+            createPollButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+            createPollButton.snp.makeConstraints { make in
+                make.size.equalTo(LayoutConstants.buttonSize)
+            }
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)
             self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
         } else {

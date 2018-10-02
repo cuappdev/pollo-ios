@@ -28,7 +28,6 @@ class FROptionCell: UICollectionViewCell {
     
     // MARK: - Constants
     let optionLabelFontSize: CGFloat = 14
-    let optionLabelLeftPadding: CGFloat = 17
     let optionLabelWidthScaleFactor: CGFloat = 0.8
     let numUpvotedButtonFontSize: CGFloat = 12
     let numUpvotedButtonRightPadding: CGFloat = 12
@@ -69,7 +68,7 @@ class FROptionCell: UICollectionViewCell {
     
     override func updateConstraints() {
         optionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(optionLabelLeftPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
             make.width.equalToSuperview().multipliedBy(optionLabelWidthScaleFactor)
             make.centerY.equalToSuperview()
         }

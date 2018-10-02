@@ -15,11 +15,11 @@ protocol QuestionTypeDropDownViewDelegate {
 class QuestionTypeDropDownView: UIView {
     
     // MARK: - View vars
-    var multipleChoiceButton: UIButton!
-    var multipleChoiceLabel: UILabel!
+    var topButton: UIButton!
+    var topLabel: UILabel!
     var separatorView: UIView!
-    var freeResponseButton: UIButton!
-    var freeResponseLabel: UILabel!
+    var bottomButton: UIButton!
+    var bottomLabel: UILabel!
     var selectedImageView: UIImageView!
     var selectedGradient: CAGradientLayer!
     
@@ -30,11 +30,12 @@ class QuestionTypeDropDownView: UIView {
     // MARK: - Constants
     let labelWidth: CGFloat = 150
     let buttonHeight: CGFloat = 50
-    let selectedImageViewLength: CGFloat = 6.5
-    let selectedImageViewInset: CGFloat = 5
+    let selectedImageViewWidth: CGFloat = 13
+    let selectedImageViewHeight: CGFloat = 13
+    let selectedImageViewInset: CGFloat = 7.5
     let separatorHeight: CGFloat = 2
-    let multipleChoiceLabelText: String = "Multiple Choice"
-    let freeResponseLabelText: String = "Free Response"
+    let multipleChoiceText: String = "Multiple Choice"
+    let freeResponseText: String = "Free Response"
     
     init(frame: CGRect, delegate: QuestionTypeDropDownViewDelegate, selectedQuestionType: QuestionType) {
         super.init(frame: frame)
@@ -46,30 +47,31 @@ class QuestionTypeDropDownView: UIView {
     func setupViews() {
         backgroundColor = .white
         
-        multipleChoiceButton = UIButton()
-        multipleChoiceButton.addTarget(self, action: #selector(didPickMultipleChoice), for: .touchUpInside)
-        addSubview(multipleChoiceButton)
+        topButton = UIButton()
+        topButton.addTarget(self, action: #selector(didTapTopButton), for: .touchUpInside)
+        addSubview(topButton)
         
-        multipleChoiceLabel = UILabel()
-        multipleChoiceLabel.text = multipleChoiceLabelText
-        multipleChoiceLabel.textAlignment = .center
-        multipleChoiceLabel.textColor = selectedQuestionType == .multipleChoice ? .aquaMarine : .clickerBlack0
-        multipleChoiceLabel.font = selectedQuestionType == .multipleChoice ? ._16SemiboldFont : ._16RegularFont
-        addSubview(multipleChoiceLabel)
+        topLabel = UILabel()
+        topLabel.text = selectedQuestionType == .multipleChoice ? multipleChoiceText : freeResponseText
+        topLabel.textAlignment = .center
+        topLabel.textColor = .aquaMarine
+        topLabel.font = ._16SemiboldFont
+        addSubview(topLabel)
         
-        freeResponseButton = UIButton()
-        freeResponseButton.addTarget(self, action: #selector(didPickFreeResponse), for: .touchUpInside)
-        addSubview(freeResponseButton)
+        bottomButton = UIButton()
+        bottomButton.addTarget(self, action: #selector(didTapBottomButton), for: .touchUpInside)
+        addSubview(bottomButton)
         
-        freeResponseLabel = UILabel()
-        freeResponseLabel.text = freeResponseLabelText
-        freeResponseLabel.textAlignment = .center
-        freeResponseLabel.textColor = selectedQuestionType == .freeResponse ? .aquaMarine : .clickerBlack0
-        freeResponseLabel.font = selectedQuestionType == .freeResponse ? ._16SemiboldFont : ._16RegularFont
-        addSubview(freeResponseLabel)
+        bottomLabel = UILabel()
+        bottomLabel.text = selectedQuestionType == .multipleChoice ? freeResponseText : multipleChoiceText
+        bottomLabel.textAlignment = .center
+        bottomLabel.textColor = .clickerBlack0
+        bottomLabel.font = ._16RegularFont
+        addSubview(bottomLabel)
         
         selectedImageView = UIImageView()
         selectedImageView.image = #imageLiteral(resourceName: "DropUpArrowIcon")
+        selectedImageView.contentMode = .scaleAspectFit
         addSubview(selectedImageView)
         
         selectedGradient = CAGradientLayer()
@@ -99,39 +101,40 @@ class QuestionTypeDropDownView: UIView {
     
     func setupConstraints() {
         let backgroundImage: UIImage = image(fromLayer: selectedGradient)
-        multipleChoiceButton.setBackgroundImage(backgroundImage, for: selectedQuestionType == .multipleChoice ? .normal : .highlighted)
-        multipleChoiceButton.setBackgroundImage(UIImage(), for: selectedQuestionType == .multipleChoice ? .highlighted : .normal)
-        freeResponseButton.setBackgroundImage(backgroundImage, for: selectedQuestionType == .freeResponse ? .normal : .highlighted)
-        freeResponseButton.setBackgroundImage(UIImage(), for: selectedQuestionType == .freeResponse ? .highlighted : .normal)
+        topButton.setBackgroundImage(backgroundImage, for: .normal)
+        topButton.setBackgroundImage(UIImage(), for: .highlighted)
+        bottomButton.setBackgroundImage(backgroundImage, for: .highlighted)
+        bottomButton.setBackgroundImage(UIImage(), for: .normal)
         
-        multipleChoiceButton.snp.makeConstraints { make in
+        topButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(buttonHeight)
             make.top.equalToSuperview()
         }
         
-        multipleChoiceLabel.snp.makeConstraints { make in
+        topLabel.snp.makeConstraints { make in
             make.width.equalTo(labelWidth)
-            make.height.equalTo(multipleChoiceButton.snp.height)
-            make.center.equalTo(multipleChoiceButton.snp.center)
+            make.height.equalTo(topButton.snp.height)
+            make.center.equalTo(topButton.snp.center)
         }
         
-        freeResponseButton.snp.makeConstraints { make in
-            make.width.equalTo(multipleChoiceButton.snp.width)
-            make.height.equalTo(multipleChoiceButton.snp.height)
-            make.top.equalTo(multipleChoiceButton.snp.bottom)
+        bottomButton.snp.makeConstraints { make in
+            make.width.equalTo(topButton.snp.width)
+            make.height.equalTo(topButton.snp.height)
+            make.top.equalTo(topButton.snp.bottom)
         }
         
-        freeResponseLabel.snp.makeConstraints { make in
-            make.width.equalTo(multipleChoiceLabel.snp.width)
-            make.height.equalTo(multipleChoiceLabel.snp.height)
-            make.center.equalTo(freeResponseButton.snp.center)
+        bottomLabel.snp.makeConstraints { make in
+            make.width.equalTo(topLabel.snp.width)
+            make.height.equalTo(topLabel.snp.height)
+            make.center.equalTo(bottomButton.snp.center)
         }
         
         selectedImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(selectedImageViewLength)
-            make.left.equalTo(selectedQuestionType == .multipleChoice ? multipleChoiceLabel.snp.right : freeResponseLabel.snp.right).inset(selectedImageViewInset)
-            make.centerY.equalTo(selectedQuestionType == .multipleChoice ? multipleChoiceLabel.snp.centerY : freeResponseLabel.snp.centerY)
+            make.width.equalTo(selectedImageViewWidth)
+            make.height.equalTo(selectedImageViewHeight)
+            make.left.equalTo(topLabel.snp.right).inset(selectedImageViewInset)
+            make.centerY.equalTo(topLabel.snp.centerY)
         }
         
         separatorView.snp.makeConstraints { make in
@@ -142,12 +145,12 @@ class QuestionTypeDropDownView: UIView {
         
     }
     
-    @objc func didPickMultipleChoice() {
-        delegate.questionTypeDropDownViewDidPick(questionType: .multipleChoice)
+    @objc func didTapTopButton() {
+        delegate.questionTypeDropDownViewDidPick(questionType: selectedQuestionType)
     }
     
-    @objc func didPickFreeResponse() {
-        delegate.questionTypeDropDownViewDidPick(questionType: .freeResponse)
+    @objc func didTapBottomButton() {
+        delegate.questionTypeDropDownViewDidPick(questionType: selectedQuestionType.other)
     }
 
 }

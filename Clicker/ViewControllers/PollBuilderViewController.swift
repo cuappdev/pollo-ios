@@ -20,24 +20,9 @@ protocol PollBuilderViewControllerDelegate {
 
 class PollBuilderViewController: UIViewController {
 
-    // MARK: Constants
-    let questionTypeButtonWidth: CGFloat = 150
-    let draftsButtonWidth: CGFloat = 100
-    let popupViewHeight: CGFloat = 95
-    let edgePadding: CGFloat = UIApplication.shared.statusBarFrame.height + 10
-    let topBarHeight: CGFloat = 24
-    let dropDownHeight: CGFloat = 100
-    let dropDownArrowLength: CGFloat = 6.5
-    let dropDownArrowInset: CGFloat = 7.5
-    let buttonsViewHeight: CGFloat = 67.5
-    let buttonHeight: CGFloat = 47.5
-    let editQuestionTypeModalHeight: Float = 100 + Float(UIApplication.shared.statusBarFrame.height)
-    let saveDraftButtonTitle = "Save as draft"
-    let startQuestionButtonTitle = "Start Question"
-
     // MARK: View vars
     var dropDown: QuestionTypeDropDownView!
-    var dropDownArrow: UIImageView!
+    var dropDownArrow: UIButton!
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
     var draftsButton: UIButton!
@@ -45,6 +30,7 @@ class PollBuilderViewController: UIViewController {
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
     var startQuestionButton: UIButton!
+    var topPaddingView: UIView!
     var bottomPaddingView: UIView!
     var mcPollBuilder: MCPollBuilderView!
     var frPollBuilder: FRPollBuilderView!
@@ -62,6 +48,24 @@ class PollBuilderViewController: UIViewController {
     var loadedFRDraft: Draft?
     var isKeyboardShown: Bool = false
     var dropDownHidden: Bool = true
+    
+    // MARK: Constants
+    let centerViewWidth: CGFloat = 135
+    let centerViewHeight: CGFloat = 24
+    let dropDownArrowLeftPadding: CGFloat = 7.5
+    let draftsButtonWidth: CGFloat = 100
+    let popupViewHeight: CGFloat = 95
+    let edgePadding: CGFloat = 18
+    let topBarHeight: CGFloat = 24
+    let dropDownHeight: CGFloat = 100
+    let dropDownArrowWidth: CGFloat = 13
+    let dropDownArrowHeight: CGFloat = 13
+    let dropDownArrowInset: CGFloat = 10
+    let buttonsViewHeight: CGFloat = 67.5
+    let buttonHeight: CGFloat = 47.5
+    let saveDraftButtonTitle = "Save as draft"
+    let startQuestionButtonTitle = "Start Question"
+    let dropDownArrowImageName = "DropdownArrowIcon"
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
@@ -96,8 +100,12 @@ class PollBuilderViewController: UIViewController {
         
         exitButton = UIButton()
         exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
+        exitButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
+        
+        centerView = UIView()
+        view.addSubview(centerView)
         
         questionTypeButton = UIButton()
         questionTypeButton.setTitle(StringConstants.multipleChoice, for: .normal)
@@ -106,7 +114,14 @@ class PollBuilderViewController: UIViewController {
         questionTypeButton.contentHorizontalAlignment = .center
         questionTypeButton.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
         questionTypeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: questionTypeButton.titleLabel!.frame.size.width)
-        view.addSubview(questionTypeButton)
+        centerView.addSubview(questionTypeButton)
+        
+        dropDownArrow = UIButton()
+        let dropDownArrowImage = UIImage(named: dropDownArrowImageName)
+        dropDownArrow.setImage(dropDownArrowImage, for: .normal)
+        dropDownArrow.contentMode = .scaleAspectFit
+        dropDownArrow.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
+        centerView.addSubview(dropDownArrow)
         
         draftsButton = UIButton()
         updateDraftsCount()
@@ -115,9 +130,6 @@ class PollBuilderViewController: UIViewController {
         draftsButton.contentHorizontalAlignment = .right
         draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
         view.addSubview(draftsButton)
-        
-        centerView = UIView()
-        view.addSubview(centerView)
         
         mcPollBuilder = MCPollBuilderView()
         mcPollBuilder.pollBuilderDelegate = self
@@ -158,9 +170,6 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
-        
-        dropDownArrow = UIImageView(image: UIImage(named: "DropdownArrowIcon"))
-        view.addSubview(dropDownArrow)
     }
     
     func setupDimmingView() {
@@ -182,40 +191,58 @@ class PollBuilderViewController: UIViewController {
         dropDown = QuestionTypeDropDownView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: dropDownHeight), delegate: self, selectedQuestionType: questionType)
         view.addSubview(dropDown)
         
+        topPaddingView = UIView()
+        topPaddingView.backgroundColor = .white
+        view.addSubview(topPaddingView)
+        
         dropDown.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalToSuperview()
+            make.centerX.width.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.height.equalTo(dropDownHeight)
-            make.centerX.equalToSuperview()
         }
-    
+        
+        topPaddingView.snp.makeConstraints { make in
+            make.centerX.width.top.equalToSuperview()
+            make.bottom.equalTo(dropDown.snp.top)
+        }
         dropDownHidden = false
     }
     
     @objc func hideDropDown() {
         dropDown.removeFromSuperview()
+        topPaddingView.removeFromSuperview()
         dropDownHidden = true
         dimmingView.removeFromSuperview()
     }
     
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
-            make.left.equalTo(edgePadding)
-            make.top.equalTo(edgePadding)
-            make.width.equalTo(topBarHeight)
-            make.height.equalTo(topBarHeight)
+            make.left.equalTo(edgePadding - LayoutConstants.buttonImageInsets.left)
+            make.top.equalTo(edgePadding + UIApplication.shared.statusBarFrame.height - LayoutConstants.buttonImageInsets.top)
+            make.size.equalTo(LayoutConstants.buttonSize)
+        }
+
+        centerView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(exitButton.snp.centerY)
+            make.width.equalTo(centerViewWidth)
+            make.height.equalTo(centerViewHeight)
         }
         
         questionTypeButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(exitButton.snp.top)
-            make.width.equalTo(questionTypeButtonWidth)
-            make.height.equalTo(topBarHeight)
+            make.centerY.leading.height.equalToSuperview()
+        }
+        
+        dropDownArrow.snp.makeConstraints { make in
+            make.width.equalTo(dropDownArrowWidth)
+            make.height.equalTo(dropDownArrowHeight)
+            make.centerY.equalTo(questionTypeButton.snp.centerY)
+            make.leading.equalTo(questionTypeButton.snp.trailing).offset(dropDownArrowLeftPadding)
         }
         
         draftsButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(edgePadding)
-            make.top.equalTo(exitButton.snp.top)
+            make.centerY.equalTo(centerView.snp.centerY)
             make.width.equalTo(draftsButtonWidth)
             make.height.equalTo(topBarHeight)
         }
@@ -242,15 +269,15 @@ class PollBuilderViewController: UIViewController {
         }
         
         mcPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(questionTypeButton.snp.bottom).offset(28)
             make.bottom.equalTo(buttonsView.snp.top)
         }
         
         frPollBuilder.snp.makeConstraints { make in
-            make.width.equalToSuperview().inset(36)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(edgePadding)
+            make.right.equalToSuperview().inset(edgePadding)
             make.top.equalTo(mcPollBuilder.snp.top)
             make.bottom.equalTo(mcPollBuilder.snp.bottom)
         }
@@ -258,13 +285,6 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(buttonsView.snp.bottom)
-        }
-        
-        dropDownArrow.snp.makeConstraints { make in
-            make.height.equalTo(dropDownArrowLength)
-            make.width.equalTo(dropDownArrowLength)
-            make.centerY.equalTo(questionTypeButton.snp.centerY)
-            make.left.equalTo(questionTypeButton.snp.right).inset(dropDownArrowInset)
         }
     }
     
