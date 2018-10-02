@@ -164,7 +164,7 @@ extension EditPollViewController: EditNameViewControllerDelegate {
 
 extension EditPollViewController: DeletePollViewControllerDelegate {
     
-    func deletePollViewControllerDidDeleteSession(for userRole: UserRole) {
+    func deletePollViewControllerDidRemoveSession(for userRole: UserRole) {
         self.delegate.editPollViewControllerDidDeleteSession(for: userRole)
     }
     
