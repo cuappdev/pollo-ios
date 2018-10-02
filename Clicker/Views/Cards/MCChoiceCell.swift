@@ -28,7 +28,6 @@ class MCChoiceCell: UICollectionViewCell {
     let optionButtonCornerRadius: CGFloat = 8.0
     let optionButtonBorderWidth: CGFloat = 1.0
     let optionButtonTopPadding: CGFloat = 5
-    let optionButtonHorizontalPadding: CGFloat = 14
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,8 +51,8 @@ class MCChoiceCell: UICollectionViewCell {
     
     override func updateConstraints() {
         optionButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(optionButtonHorizontalPadding)
-            make.trailing.equalToSuperview().inset(optionButtonHorizontalPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
+            make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
             make.top.equalToSuperview().offset(optionButtonTopPadding)
             make.bottom.equalToSuperview()
         }

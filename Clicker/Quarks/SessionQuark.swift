@@ -101,29 +101,6 @@ struct GetSession: ClickerQuark {
 
 }
 
-
-
-struct GetJoinedSessions: ClickerQuark {
-
-    typealias ResponseType = [[Session]]
-
-    var route: String {
-        return "/sessions/"
-    }
-    var headers: HTTPHeaders {
-        return [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
-        ]
-    }
-    let method: HTTPMethod = .get
-
-    func process(element: Element) throws -> [[Session]] {
-        return []
-    }
-
-}
-
-
 struct GetPollSessions: ClickerQuark {
 
     typealias ResponseType = [Session]
@@ -453,6 +430,38 @@ struct StartSession: ClickerQuark {
             params["isGroup"] = g
         }
         return params
+    }
+    let method: HTTPMethod = .post
+    
+    func process(element: Element) throws -> Session {
+        switch element {
+        case .node(let node):
+            print(node)
+            if let id = node["id"].int, let name = node["name"].string, let code = node["code"].string {
+                return Session(id: id, name: name, code: code)
+            } else {
+                throw NeutronError.badResponseData
+            }
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
+
+struct JoinSession: ClickerQuark {
+    
+    typealias ResponseType = Session
+    let code: String
+    
+    var route: String {
+        return "/join/session"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+    }
+    var parameters: Parameters {
+        return ["code": code]
     }
     let method: HTTPMethod = .post
     

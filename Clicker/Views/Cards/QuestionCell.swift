@@ -14,7 +14,6 @@ class QuestionCell: UICollectionViewCell {
     var questionLabel: UILabel!
     
     // MARK: - Constants
-    let horizontalPadding: CGFloat = 18
     let questionLabelFontSize: CGFloat = 20
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
@@ -37,8 +36,8 @@ class QuestionCell: UICollectionViewCell {
     
     override func updateConstraints() {
         questionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(horizontalPadding)
-            make.trailing.equalToSuperview().inset(horizontalPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
+            make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
             make.top.equalToSuperview()
         }
         super.updateConstraints()
