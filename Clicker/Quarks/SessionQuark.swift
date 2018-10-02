@@ -253,6 +253,23 @@ struct DeleteSession: ClickerQuark {
     func process(element: Element) { }
 }
 
+struct LeaveSession: ClickerQuark {
+    typealias ResponseType = Void
+    let id: Int
+    
+    var route: String {
+        return "/sessions/\(id)/members"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+    }
+    let method: HTTPMethod = .delete
+    
+    func process(element: Element) throws -> Void { }
+}
+
 
 struct GetMembers: ClickerQuark {
     typealias ResponseType = [User]
