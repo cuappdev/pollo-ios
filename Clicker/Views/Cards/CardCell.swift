@@ -41,6 +41,7 @@ class CardCell: UICollectionViewCell {
     var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
+    var timer: Timer?
     
     // MARK: - Constants
     let collectionViewHorizontalPadding: CGFloat = 5.0
@@ -129,7 +130,7 @@ class CardCell: UICollectionViewCell {
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endQuestionText, for: .normal)
-            setTimerText(for: poll.timeLive)
+            setTimerText()
             runTimer()
         } else if poll.state == .ended {
             questionButton.setTitle(shareResultsText, for: .normal)
@@ -159,18 +160,12 @@ class CardCell: UICollectionViewCell {
         }
     }
     
-    @objc func updateTimerLabel() {
-        if let _ = poll.timeLive  {
-            poll.timeLive! += 1
-        }
-        setTimerText(for: poll.timeLive)
-    }
-    
-    func setTimerText(for s: Int?) {
-        guard let elapsedSeconds = s else {
-            timerLabel.text = initialTimerLabelText
+    @objc func setTimerText() {
+        guard let start = poll.startTime else {
+            self.timerLabel.text = self.initialTimerLabelText
             return
         }
+        let elapsedSeconds = Int(NSDate().timeIntervalSince1970 - start)
         if (elapsedSeconds < 10) {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if (elapsedSeconds < 60) {
@@ -196,7 +191,10 @@ class CardCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func runTimer() {
-        poll.runTimerWith(target: self, selector: #selector(updateTimerLabel))
+        if let t = timer {
+            t.invalidate()
+        }
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(setTimerText), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
