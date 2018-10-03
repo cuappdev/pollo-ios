@@ -107,5 +107,15 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
             mcResultModels.append(resultModel)
         }
     }
+    // We should always have at least 2 choices.
+    // Thus, if mcResultModels is empty, that means poll.results is empty.
+    // This should only happen for the admin/poll/start socket route in which
+    // the poll is still live which makes sense that we do not have any results yet.
+    if mcResultModels.isEmpty {
+        poll.options.forEach { option in
+            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isAnswer: false)
+            mcResultModels.append(resultModel)
+        }
+    }
     return .mcResult(resultModels: mcResultModels)
 }
