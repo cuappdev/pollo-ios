@@ -171,8 +171,7 @@ extension CardController: SocketDelegate {
         peopleButton.setTitle("\(count)", for: .normal)
     }
     
-    func pollStarted(_ poll: Poll) {
-        if userRole == .admin { return }
+    func pollStarted(_ poll: Poll, userRole: UserRole) {
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
             if completed {
