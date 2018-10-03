@@ -16,10 +16,12 @@ enum PollBuilderMCOptionModelType {
 class PollBuilderMCOptionModel {
     
     var type: PollBuilderMCOptionModelType
+    var totalOptions: Int
     let identifier = UUID().uuidString
     
     init(type: PollBuilderMCOptionModelType) {
         self.type = type
+        self.totalOptions = -1
     }
     
 }
@@ -33,7 +35,7 @@ extension PollBuilderMCOptionModel: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
         guard let object = object as? PollBuilderMCOptionModel else { return false }
-        return identifier == object.identifier
+        return identifier == object.identifier && totalOptions == object.totalOptions
     }
     
 }

@@ -10,9 +10,9 @@ import IGListKit
 
 protocol PollBuilderMCOptionSectionControllerDelegate {
     
-    func pollBuilderSectionControllerShouldAddOption(sectionController: PollBuilderMCOptionSectionController)
-    func pollBuilderSectionControllerDidUpdateOption(sectionController: PollBuilderMCOptionSectionController, option:String, index: Int)
-    func pollBuilderSectionControllerDidDeleteOption(sectionController: PollBuilderMCOptionSectionController, index: Int)
+    func pollBuilderSectionControllerShouldAddOption()
+    func pollBuilderSectionControllerDidUpdateOption(option:String, index: Int)
+    func pollBuilderSectionControllerDidDeleteOption(index: Int)
     
 }
 
@@ -45,7 +45,9 @@ class PollBuilderMCOptionSectionController: ListSectionController {
             createMCOptionCell.configure(for: mcOptionModel, delegate: self)
             cell = createMCOptionCell
         case .addOption:
-            cell = collectionContext?.dequeueReusableCell(of: AddMoreOptionCell.self, for: self, at: index) as! AddMoreOptionCell
+            let addMoreOptionCell = collectionContext?.dequeueReusableCell(of: AddMoreOptionCell.self, for: self, at: index) as! AddMoreOptionCell
+            addMoreOptionCell.configure(with: delegate)
+            cell = addMoreOptionCell
         }
         cell.setNeedsUpdateConstraints()
         return cell
@@ -55,25 +57,16 @@ class PollBuilderMCOptionSectionController: ListSectionController {
         mcOptionModel = object as? PollBuilderMCOptionModel
     }
     
-    override func didSelectItem(at index: Int) {
-        switch mcOptionModel.type {
-        case .addOption:
-            delegate.pollBuilderSectionControllerShouldAddOption(sectionController: self)
-        case .newOption(option: _, index: _):
-            return
-        }
-    }
-    
 }
 
 extension PollBuilderMCOptionSectionController: CreateMCOptionCellDelegate {
     
     func createMCOptionCellDidUpdateTextField(index: Int, text: String) {
-        delegate.pollBuilderSectionControllerDidUpdateOption(sectionController: self, option: text, index: index)
+        delegate.pollBuilderSectionControllerDidUpdateOption(option: text, index: index)
     }
     
     func createMCOptionCellDidDeleteOption(index: Int) {
-        delegate.pollBuilderSectionControllerDidDeleteOption(sectionController: self, index: index)
+        delegate.pollBuilderSectionControllerDidDeleteOption(index: index)
     }
     
 }

@@ -132,7 +132,7 @@ class PollsDateViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
-                .catch { (error) in
+                .catch { error in
                     print(error)
             }
         }
