@@ -85,7 +85,6 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     func configure(for mcOptionModel: PollBuilderMCOptionModel, delegate: CreateMCOptionCellDelegate) {
         self.delegate = delegate
         trashButton.isHidden = mcOptionModel.totalOptions <= 2
-        
         switch mcOptionModel.type {
         case .newOption(option: let option, index: let index):
             self.index = index
