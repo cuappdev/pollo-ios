@@ -136,7 +136,7 @@ extension PollsDateViewController: SocketDelegate {
         peopleButton.setTitle("\(count)", for: .normal)
     }
     
-    func pollStarted(_ poll: Poll) {
+    func pollStarted(_ poll: Poll, userRole: UserRole) {
         appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
