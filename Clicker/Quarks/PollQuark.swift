@@ -99,7 +99,7 @@ struct GetSortedPolls: ClickerQuark {
                 }
             }
             let formatter = DateFormatter()
-            formatter.dateFormat = "MMM dd yyyy"
+            formatter.dateFormat = StringConstants.dateFormat
             pollsDateArray.sort { (pollsDateModelA, pollsDateModelB) -> Bool in
                 let dateA = formatter.date(from: pollsDateModelA.date) ?? Date()
                 let dateB = formatter.date(from: pollsDateModelB.date) ?? Date()
