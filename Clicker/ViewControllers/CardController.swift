@@ -36,7 +36,7 @@ class CardController: UIViewController {
     var pollsDateModel: PollsDateModel!
     var currentIndex: Int!
     var numberOfPeople: Int!
-    var didScrollToEndOnLoad: Bool = false
+    var isInitialLoad: Bool = true
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -73,10 +73,10 @@ class CardController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        if !didScrollToEndOnLoad {
+        if isInitialLoad && pollsDateModel.polls.last?.state == .live {
             scrollToLatestPoll()
-            didScrollToEndOnLoad = true
         }
+        isInitialLoad = false
     }
     
     // MARK: - Layout
