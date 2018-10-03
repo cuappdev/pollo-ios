@@ -11,11 +11,17 @@ import SnapKit
 
 class AddMoreOptionCell: UICollectionViewCell {
     
+    // MARK: Layout constants
     let edgePadding: CGFloat = 18
     let bottomPadding: CGFloat = 6
     
+    // MARK: Views
+    var wholeButton: UIButton!
     var plusLabel: UILabel!
     var addMoreLabel: UILabel!
+    
+    // MARK: Data
+    var delegate: PollBuilderMCOptionSectionControllerDelegate!
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -27,8 +33,17 @@ class AddMoreOptionCell: UICollectionViewCell {
         setupViews()
     }
     
+    func configure(with: PollBuilderMCOptionSectionControllerDelegate) {
+        delegate = with
+    }
+    
     // MARK: - LAYOUT
     func setupViews() {
+        wholeButton = UIButton()
+        wholeButton.frame = contentView.frame
+        wholeButton.addTarget(self, action: #selector(didPressCell), for: .touchUpInside)
+        contentView.addSubview(wholeButton)
+        
         plusLabel = UILabel()
         plusLabel.text = "+"
         plusLabel.textColor = .clickerGrey2
@@ -56,6 +71,10 @@ class AddMoreOptionCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
         }
         super.updateConstraints()
+    }
+    
+    @objc func didPressCell() {
+        delegate.pollBuilderSectionControllerShouldAddOption()
     }
     
     required init?(coder aDecoder: NSCoder) {
