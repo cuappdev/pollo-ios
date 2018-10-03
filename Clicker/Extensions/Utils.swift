@@ -16,7 +16,7 @@ func intToMCOption(_ intOption: Int) -> String {
 }
 
 // GET MMM dd yyyy OF TODAY
-// Ex) 9/25/18, 10/O27/18
+// Ex) Sep 29 2018, Oct 02 2018
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "MMM dd yyyy"
