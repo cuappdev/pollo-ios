@@ -32,6 +32,18 @@ class EditPollViewController: UIViewController {
     var session: Session!
     var userRole: UserRole!
     
+    // MARK: - Constants
+    let buttonStackViewHeight: CGFloat = 75
+    let editViewHeight: CGFloat = 24
+    let editNameImageViewLeftPadding: CGFloat = 18
+    let editNameButtonLeftPadding: CGFloat = 18
+    let editNameButtonWidthScaleFactor: CGFloat = 0.7
+    let deleteImageViewLeftPadding: CGFloat = 18
+    let deleteButtonLeftPadding: CGFloat = 18
+    let deleteButtonWidthScaleFactor: CGFloat = 0.7
+    let adminDeleteButtonTitle = "Delete"
+    let memberDeleteButtonTitle = "Leave"
+    
     init(delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
@@ -64,7 +76,7 @@ class EditPollViewController: UIViewController {
         deleteImageView = UIImageView(image: #imageLiteral(resourceName: "delete"))
         
         deleteButton = UIButton()
-        deleteButton.setTitle("Delete", for: .normal)
+        deleteButton.setTitle(userRole == .admin ? adminDeleteButtonTitle : memberDeleteButtonTitle, for: .normal)
         deleteButton.setTitleColor(.clickerRed, for: .normal)
         deleteButton.contentHorizontalAlignment = .left
         deleteButton.titleLabel?.font = UIFont._16RegularFont
@@ -74,7 +86,8 @@ class EditPollViewController: UIViewController {
         deleteView.addSubview(deleteImageView)
         deleteView.addSubview(deleteButton)
         
-        buttonStackView = UIStackView(arrangedSubviews: [editView, deleteView])
+        let stackViewSubviews: [UIView] = userRole == .admin ? [editView, deleteView] : [deleteView]
+        buttonStackView = UIStackView(arrangedSubviews: stackViewSubviews)
         buttonStackView.axis = .vertical
         buttonStackView.distribution =  .fillEqually
         buttonStackView.spacing = 20
@@ -85,37 +98,39 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(75)
+            make.height.equalTo(buttonStackViewHeight)
         }
         
-        editView.snp.makeConstraints { make in
-            make.height.equalTo(24)
-        }
-        
-        editNameImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
-            make.centerY.equalToSuperview()
-        }
-        
-        editNameButton.snp.makeConstraints { make in
-            make.left.equalTo(editNameImageView.snp.right).offset(18)
-            make.centerY.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.7)
+        if userRole == .admin {
+            editView.snp.makeConstraints { make in
+                make.height.equalTo(editViewHeight)
+            }
+            
+            editNameImageView.snp.makeConstraints { make in
+                make.left.equalToSuperview().offset(editNameImageViewLeftPadding)
+                make.centerY.equalToSuperview()
+            }
+            
+            editNameButton.snp.makeConstraints { make in
+                make.left.equalTo(editNameImageView.snp.right).offset(editNameButtonLeftPadding)
+                make.centerY.equalToSuperview()
+                make.width.equalToSuperview().multipliedBy(editNameButtonWidthScaleFactor)
+            }
         }
         
         deleteView.snp.makeConstraints { make in
-            make.height.equalTo(editView.snp.height)
+            make.height.equalTo(editViewHeight)
         }
         
         deleteImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(18)
+            make.left.equalToSuperview().offset(deleteImageViewLeftPadding)
             make.centerY.equalToSuperview()
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.left.equalTo(editNameImageView.snp.right).offset(18)
+            make.left.equalTo(deleteImageView.snp.right).offset(deleteButtonLeftPadding)
             make.centerY.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.7)
+            make.width.equalToSuperview().multipliedBy(deleteButtonWidthScaleFactor)
         }
     }
     

@@ -59,6 +59,7 @@ class Socket {
             self.delegate.receivedResults(currentState)
         }
         
+        // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
         socket.on(Routes.adminStart) { data, ack in
             guard let json = data[0] as? [String:Any], let pollDict = json[ParserKeys.pollKey] as? [String:Any] else {
                 return
