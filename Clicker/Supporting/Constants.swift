@@ -115,6 +115,7 @@ struct RequestKeys {
 struct StringConstants {
     static let freeResponse = "Free Response"
     static let multipleChoice = "Multiple Choice"
+    static let dateFormat = "MMM dd yyyy"
 }
 
 enum Keys: String {

@@ -100,7 +100,7 @@ class PollsDateCell: UICollectionViewCell {
     // Converts MMM dd yyyy to MMMM d format
     func reformatDateString(dateString: String) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd yyyy"
+        dateFormatter.dateFormat = StringConstants.dateFormat
         let date = dateFormatter.date(from: dateString) ?? Date()
         dateFormatter.dateFormat = "MMMM d"
         return dateFormatter.string(from: date)

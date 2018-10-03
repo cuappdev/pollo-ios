@@ -19,7 +19,7 @@ func intToMCOption(_ intOption: Int) -> String {
 // Ex) Sep 29 2018, Oct 02 2018
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "MMM dd yyyy"
+    formatter.dateFormat = StringConstants.dateFormat
     return formatter.string(from: Date())
 }
 
