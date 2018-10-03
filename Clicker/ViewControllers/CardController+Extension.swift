@@ -238,7 +238,6 @@ extension CardController: SocketDelegate {
     
     func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
         guard let latestPoll = pollsDateModel.polls.last else { return }
-        //let updatedPollState = pollState ?? latestPoll.state
         // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
         if latestPoll.questionType == .freeResponse {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
