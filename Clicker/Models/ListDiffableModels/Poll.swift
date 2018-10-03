@@ -9,10 +9,6 @@
 import IGListKit
 import SwiftyJSON
 
-protocol PollTimeKeeper {
-    func runTimerWith(target aTarget: Any, selector aSelector: Selector)
-}
-
 enum PollState {
     case live
     case ended
@@ -32,14 +28,13 @@ class Poll {
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
     
-    /// `timeLive` is how long a poll has been live for, so we can make the timer for each poll start correctly if a poll is already live when its cell is configured.
-    var timeLive: Int?
-    var timer: Timer?
+    /// `startTime` is the time (in seconds since 1970) that the poll was started.
+    var startTime: Double?
     
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, answer: String?, timeLive: Int? = nil) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, answer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -48,12 +43,25 @@ class Poll {
         self.state = state
         self.answer = answer
         
-        if state == .live {
-            self.timeLive = timeLive ?? 0
-        } else {
-            self.timeLive = nil
+        switch state {
+        case .live:
+            self.startTime = NSDate().timeIntervalSince1970
+        default:
+            self.startTime = nil
         }
     }
+    
+    init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
+        self.id = poll.id
+        self.text = poll.text
+        self.questionType = poll.questionType
+        self.options = poll.options
+        self.results = currentState.results
+        self.state = updatedPollState ?? poll.state
+        self.answer = poll.answer
+        self.startTime = poll.startTime
+    }
+
     
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
@@ -83,19 +91,7 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if (self === object) { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id && text == object.text && questionType == object.questionType
+        return id == object.id && text == object.text && questionType == object.questionType && results == object.results
     }
-    
-}
-
-extension Poll: PollTimeKeeper {
-    
-    func runTimerWith(target aTarget: Any, selector aSelector: Selector) {
-        if let t = timer {
-            t.invalidate()
-        }
-        timer = Timer.scheduledTimer(timeInterval: 1, target: aTarget, selector: aSelector, userInfo: nil, repeats: true)
-    }
-    
     
 }
