@@ -76,7 +76,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
             iconImageView.image = #imageLiteral(resourceName: "results_shared")
             descriptionLabel.text = sharedDescriptionText
         }
-        totalVotesLabel.text = "\(miscellaneousModel.totalVotes) votes"
+        totalVotesLabel.text = miscellaneousModel.totalVotes == 1 ? "1 vote" : "\(miscellaneousModel.totalVotes) votes"
     }
     
     required init?(coder aDecoder: NSCoder) {
