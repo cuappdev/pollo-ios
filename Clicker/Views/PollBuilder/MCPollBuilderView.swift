@@ -182,7 +182,6 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
         updateTotalOptions()
         adapter.reloadData(completion: nil)
-        //adapter.performUpdates(animated: true, completion: nil)
     }
     
     func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int) {
