@@ -40,7 +40,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
-            self.delegate.pollStarted(poll)
+            self.delegate.pollStarted(poll, userRole: .member)
         }
         
         socket.on(Routes.userEnd) { data, ack in
@@ -57,6 +57,15 @@ class Socket {
             }
             let currentState = CurrentStateParser.parseItem(json: JSON(dict))
             self.delegate.receivedResults(currentState)
+        }
+        
+        // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
+        socket.on(Routes.adminStart) { data, ack in
+            guard let json = data[0] as? [String:Any], let pollDict = json[ParserKeys.pollKey] as? [String:Any] else {
+                return
+            }
+            let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
+            self.delegate.pollStarted(poll, userRole: .admin)
         }
         
         socket.on(Routes.adminUpdateTally) { data, ack in

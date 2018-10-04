@@ -36,6 +36,7 @@ class CardController: UIViewController {
     var pollsDateModel: PollsDateModel!
     var currentIndex: Int!
     var numberOfPeople: Int!
+    var isInitialLoad: Bool = true
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -69,6 +70,13 @@ class CardController: UIViewController {
             createPollButton.isUserInteractionEnabled = !livePollExists
             createPollButton.isHidden = livePollExists
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if isInitialLoad && pollsDateModel.polls.last?.state == .live {
+            scrollToLatestPoll()
+        }
+        isInitialLoad = false
     }
     
     // MARK: - Layout
