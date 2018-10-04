@@ -133,9 +133,9 @@ extension PollsViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollsViewController: Reloadable {
+extension PollsViewController: PollsDateViewControllerDelegate {
     
-    func shouldReloadData() {
+    func pollsDateViewControllerDidDeleteSession() {
         pollsCollectionView.reloadData()
     }
 }

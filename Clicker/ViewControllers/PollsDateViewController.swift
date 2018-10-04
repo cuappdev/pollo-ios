@@ -10,8 +10,8 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol Reloadable {
-    func shouldReloadData()
+protocol PollsDateViewControllerDelegate {
+    func pollsDateViewControllerDidDeleteSession()
 }
 
 class PollsDateViewController: UIViewController {
@@ -30,7 +30,7 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
-    var delegate: Reloadable!
+    var delegate: PollsDateViewControllerDelegate!
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -53,7 +53,7 @@ class PollsDateViewController: UIViewController {
         self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
     }
     
-    func configure(with delegate: Reloadable) {
+    func configure(with delegate: PollsDateViewControllerDelegate) {
         self.delegate = delegate
     }
     
@@ -142,7 +142,7 @@ class PollsDateViewController: UIViewController {
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
-                    self.delegate.shouldReloadData()
+                    self.delegate.pollsDateViewControllerDidDeleteSession()
                 }
                 .catch { error in
                     print(error)
