@@ -10,6 +10,10 @@ import IGListKit
 import Presentr
 import UIKit
 
+protocol PollsDateViewControllerDelegate {
+    func pollsDateViewControllerDidDeleteSession()
+}
+
 class PollsDateViewController: UIViewController {
     
     // MARK: - View vars
@@ -26,6 +30,7 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
+    var delegate: PollsDateViewControllerDelegate!
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -46,6 +51,10 @@ class PollsDateViewController: UIViewController {
         setupViews()
         setupNavBar()
         self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
+    }
+    
+    func configure(with delegate: PollsDateViewControllerDelegate) {
+        self.delegate = delegate
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,20 +137,16 @@ class PollsDateViewController: UIViewController {
     
     @objc func goBack() {
         socket.socket.disconnect()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
-                    self.navigationController?.setNavigationBarHidden(true, animated: false)
-                    self.navigationController?.popViewController(animated: true)
-                    return
-                }.catch { (error) in
+                    self.delegate.pollsDateViewControllerDidDeleteSession()
+                }
+                .catch { error in
                     print(error)
-                    self.navigationController?.setNavigationBarHidden(true, animated: false)
-                    self.navigationController?.popViewController(animated: true)
             }
-        } else {
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
-            self.navigationController?.popViewController(animated: true)
         }
     }
     
