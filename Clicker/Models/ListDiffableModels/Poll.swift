@@ -43,12 +43,8 @@ class Poll {
         self.state = state
         self.answer = answer
         
-        switch state {
-        case .live:
-            self.startTime = NSDate().timeIntervalSince1970
-        default:
-            self.startTime = nil
-        }
+        self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
+     
     }
     
     init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
