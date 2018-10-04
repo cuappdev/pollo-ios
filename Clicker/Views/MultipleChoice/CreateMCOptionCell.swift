@@ -16,14 +16,18 @@ protocol CreateMCOptionCellDelegate {
 
 class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     
+    // MARK: Layout constants
     let trashIconHeight: CGFloat = 21.5
     let edgePadding: CGFloat = 18
     let bottomPadding: CGFloat = 6
     
-    var delegate: CreateMCOptionCellDelegate!
-    var index: Int!
+    // MARK: Views
     var addOptionTextField: UITextField!
     var trashButton: UIButton!
+    
+    // MARK: Data
+    var delegate: CreateMCOptionCellDelegate!
+    var index: Int!
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -80,6 +84,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     // MARK: - Configure
     func configure(for mcOptionModel: PollBuilderMCOptionModel, delegate: CreateMCOptionCellDelegate) {
         self.delegate = delegate
+        trashButton.isHidden = mcOptionModel.totalOptions <= 2
         switch mcOptionModel.type {
         case .newOption(option: let option, index: let index):
             self.index = index

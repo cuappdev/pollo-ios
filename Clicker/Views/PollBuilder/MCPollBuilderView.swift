@@ -57,6 +57,7 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
         let secondOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 1))
         let addOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.addOption)
         mcOptionModels = [firstOptionModel, secondOptionModel, addOptionModel]
+        updateTotalOptions()
     }
     
     func getOptions() -> [String] {
@@ -123,7 +124,14 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
             mcOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index)))
         }
         mcOptionModels.append(PollBuilderMCOptionModel(type: .addOption))
+        updateTotalOptions()
         adapter.performUpdates(animated: false, completion: nil)
+    }
+    
+    func updateTotalOptions() {
+        for opt in mcOptionModels {
+            opt.totalOptions = mcOptionModels.count - 1
+        }
     }
     
     // MARK: - KEYBOARD
@@ -168,18 +176,19 @@ extension MCPollBuilderView: ListAdapterDataSource {
 
 extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     
-    func pollBuilderSectionControllerShouldAddOption(sectionController: PollBuilderMCOptionSectionController) {
+    func pollBuilderSectionControllerShouldAddOption() {
         if mcOptionModels.count >= 27 { return }
         let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1))
         mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
-        adapter.performUpdates(animated: false, completion: nil)
+        updateTotalOptions()
+        adapter.reloadData(completion: nil)
     }
     
-    func pollBuilderSectionControllerDidUpdateOption(sectionController: PollBuilderMCOptionSectionController, option: String, index: Int) {
+    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int) {
         mcOptionModels[index].type = .newOption(option: option, index: index)
     }
     
-    func pollBuilderSectionControllerDidDeleteOption(sectionController: PollBuilderMCOptionSectionController, index: Int) {
+    func pollBuilderSectionControllerDidDeleteOption(index: Int) {
         if isKeyboardShown {
             hideKeyboard()
             return
@@ -196,6 +205,7 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
             }
         }
         mcOptionModels = updatedMCOptionModels
+        updateTotalOptions()
         adapter.performUpdates(animated: false, completion: nil)
     }
     
