@@ -33,8 +33,8 @@ class AddMoreOptionCell: UICollectionViewCell {
         setupViews()
     }
     
-    func configure(with: PollBuilderMCOptionSectionControllerDelegate) {
-        delegate = with
+    func configure(with delegate: PollBuilderMCOptionSectionControllerDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - LAYOUT
