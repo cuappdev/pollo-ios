@@ -242,6 +242,7 @@ class PollsViewController: UIViewController {
                         self.isListeningToKeyboard = false
                         self.hideNewGroupActivityIndicatorView()
                         let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
+                        cardVC.configure(with: self)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
@@ -284,6 +285,7 @@ class PollsViewController: UIViewController {
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
                         let cardVC = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        cardVC.configure(with: self)
                         self.navigationController?.pushViewController(cardVC, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
