@@ -15,11 +15,11 @@ func intToMCOption(_ intOption: Int) -> String {
     return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
 }
 
-// GET DD/MM/YYYY OF TODAY
-// Ex) 25/09/18, 27/10/18
+// GET MMM dd yyyy OF TODAY
+// Ex) Sep 29 2018, Oct 02 2018
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "dd/MM/yyyy"
+    formatter.dateFormat = StringConstants.dateFormat
     return formatter.string(from: Date())
 }
 
@@ -104,6 +104,16 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             let isAnswer = option == poll.answer
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+            mcResultModels.append(resultModel)
+        }
+    }
+    // We should always have at least 2 choices.
+    // Thus, if mcResultModels is empty, that means poll.results is empty.
+    // This should only happen for the admin/poll/start socket route in which
+    // the poll is still live which makes sense that we do not have any results yet.
+    if mcResultModels.isEmpty {
+        poll.options.forEach { option in
+            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isAnswer: false)
             mcResultModels.append(resultModel)
         }
     }

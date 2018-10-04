@@ -59,6 +59,7 @@ struct Identifiers {
 
 struct Routes {
     static let adminEnded = "admin/poll/ended"
+    static let adminStart = "admin/poll/start"
     static let adminUpdateTally = "admin/poll/updateTally"
     static let count = "user/count"
     static let serverEnd = "server/poll/end"
@@ -114,6 +115,7 @@ struct RequestKeys {
 struct StringConstants {
     static let freeResponse = "Free Response"
     static let multipleChoice = "Multiple Choice"
+    static let dateFormat = "MMM dd yyyy"
 }
 
 enum Keys: String {

@@ -10,7 +10,7 @@ import UIKit
 
 protocol DeletePollViewControllerDelegate {
     
-    func deletePollViewControllerDidDeleteSession(for userRole: UserRole)
+    func deletePollViewControllerDidRemoveSession(for userRole: UserRole)
     
 }
 
@@ -38,6 +38,8 @@ class DeletePollViewController: UIViewController {
     let navBarTitle = "Are you sure?"
     let adminDeleteLabelText = "Deleting will permanently close the group for all participants and all poll data will be lost."
     let memberDeleteLabelText = "Leaving will remove you from the group and you will no longer have access to its polls."
+    let adminDeleteButtonTitle = "Yes, Delete"
+    let memberDeleteButtonTitle = "Yes, Leave"
     
     init(delegate: DeletePollViewControllerDelegate, session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -75,7 +77,7 @@ class DeletePollViewController: UIViewController {
         view.addSubview(cancelButton)
         
         deleteButton = UIButton()
-        deleteButton.setTitle("Yes, Delete", for: .normal)
+        deleteButton.setTitle(userRole == .admin ? adminDeleteButtonTitle : memberDeleteButtonTitle, for: .normal)
         deleteButton.setTitleColor(.white, for: .normal)
         deleteButton.backgroundColor = .clickerRed
         deleteButton.layer.cornerRadius = 25
@@ -111,13 +113,24 @@ class DeletePollViewController: UIViewController {
     }
     
     @objc func deleteBtnPressed() {
-        DeleteSession(id: session.id).make()
-            .done {
-                self.delegate.deletePollViewControllerDidDeleteSession(for: self.userRole)
-                self.dismiss(animated: true, completion: nil)
-            }.catch { error in
-                print(error)
+        switch userRole! {
+        case .admin:
+            DeleteSession(id: session.id).make()
+                .done {
+                    self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                    self.dismiss(animated: true, completion: nil)
+                }.catch { error in
+                    print(error)
             }
+        case .member:
+            LeaveSession(id: session.id).make()
+                .done {
+                    self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                    self.dismiss(animated: true, completion: nil)
+                }.catch { error in
+                    print(error)
+            }
+        }
     }
     
     @objc func exitBtnPressed() {

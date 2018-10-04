@@ -27,6 +27,7 @@ class MCResultCell: UICollectionViewCell {
     let containerViewTopPadding: CGFloat = 5
     let optionLabelHorizontalPadding: CGFloat = 14
     let numSelectedLabelTrailingPadding: CGFloat = 14
+    let numSelectedLabelWidth: CGFloat = 40
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,6 +53,7 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
+        numSelectedLabel.textAlignment = .right
         containerView.addSubview(numSelectedLabel)
         
         highlightView = UIView()
@@ -67,15 +69,16 @@ class MCResultCell: UICollectionViewCell {
             make.bottom.equalToSuperview()
         }
         
+        numSelectedLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
+            make.width.equalTo(numSelectedLabelWidth)
+        }
+        
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
             make.trailing.equalTo(numSelectedLabel.snp.leading).inset(optionLabelHorizontalPadding)
-        }
-        
-        numSelectedLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
         }
         
         highlightView.snp.remakeConstraints { make in
