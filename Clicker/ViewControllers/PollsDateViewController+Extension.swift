@@ -39,7 +39,7 @@ extension PollsDateViewController: ListAdapterDataSource {
 extension PollsDateViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 1.0)
+        return CustomModalPresentationController(presented: presented, presenting: presenting, style: .upToStatusBar)
     }
 }
 
