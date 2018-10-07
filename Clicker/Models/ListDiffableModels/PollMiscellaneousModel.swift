@@ -10,11 +10,13 @@ import IGListKit
 
 class PollMiscellaneousModel {
     
+    var questionType: QuestionType!
     var pollState: PollState
     var totalVotes: Int
     let identifier = UUID().uuidString
     
-    init(pollState: PollState, totalVotes: Int) {
+    init(questionType: QuestionType, pollState: PollState, totalVotes: Int) {
+        self.questionType = questionType
         self.pollState = pollState
         self.totalVotes = totalVotes
     }

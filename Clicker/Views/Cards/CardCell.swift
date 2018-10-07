@@ -52,7 +52,7 @@ class CardCell: UICollectionViewCell {
     let questionButtonHeight: CGFloat = 47.0
     let questionButtonBottomPadding: CGFloat = 10.0
     let timerLabelFontSize: CGFloat = 14.0
-    let timerLabelBottomPadding: CGFloat =  50.0
+    let timerLabelBottomPadding: CGFloat =  30.0
     let endQuestionText = "End Question"
     let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
@@ -74,7 +74,7 @@ class CardCell: UICollectionViewCell {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        collectionView.bounces = true
         collectionView.backgroundColor = .clear
         contentView.addSubview(collectionView)
         
@@ -138,7 +138,7 @@ class CardCell: UICollectionViewCell {
         
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
-        miscellaneousModel = PollMiscellaneousModel(pollState: poll.state, totalVotes: poll.getTotalResults())
+        miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
         adapter.performUpdates(animated: false, completion: nil)
     }
     
@@ -148,13 +148,13 @@ class CardCell: UICollectionViewCell {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
             timerLabel.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: miscellaneousModel.totalVotes)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .ended, totalVotes: miscellaneousModel.totalVotes)
             adapter.performUpdates(animated: false, completion: nil)
             delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(pollState: .shared, totalVotes: miscellaneousModel.totalVotes)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .shared, totalVotes: miscellaneousModel.totalVotes)
             adapter.performUpdates(animated: false, completion: nil)
             delegate.cardCellDidShareResults(cardCell: self, poll: poll)
         }
