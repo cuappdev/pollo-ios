@@ -122,8 +122,7 @@ class PollsViewController: UIViewController {
         dimmingView = UIView()
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
         dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        dimmingView.alpha = 1.0
-        dimmingView.isHidden = true
+        dimmingView.alpha = 0
         view.addSubview(dimmingView)
         
         joinSessionContainerView = UIView()
@@ -346,7 +345,9 @@ class PollsViewController: UIViewController {
         if !isListeningToKeyboard || hasPresentedViewController { return }
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
-            dimmingView.isHidden = false
+            UIView.animate(withDuration: 0.5) {
+                self.dimmingView.alpha = 1
+            }
             joinSessionContainerView.snp.remakeConstraints { make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
                 make.leading.trailing.equalToSuperview()
@@ -361,7 +362,9 @@ class PollsViewController: UIViewController {
         let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
         if !isListeningToKeyboard || hasPresentedViewController { return }
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            dimmingView.isHidden = true
+            UIView.animate(withDuration: 0.5) {
+                self.dimmingView.alpha = 0
+            }
             joinSessionContainerView.snp.remakeConstraints { make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
                 make.leading.trailing.equalToSuperview()
