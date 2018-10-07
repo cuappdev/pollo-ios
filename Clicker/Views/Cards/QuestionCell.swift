@@ -30,7 +30,8 @@ class QuestionCell: UICollectionViewCell {
         questionLabel = UILabel()
         questionLabel.font = UIFont.systemFont(ofSize: questionLabelFontSize, weight: .heavy)
         questionLabel.numberOfLines = 0
-        questionLabel.lineBreakMode = .byWordWrapping
+        questionLabel.lineBreakMode = .byTruncatingTail
+        questionLabel.numberOfLines = 2
         contentView.addSubview(questionLabel)
     }
     

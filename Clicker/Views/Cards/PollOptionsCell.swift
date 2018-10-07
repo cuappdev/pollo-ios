@@ -40,9 +40,9 @@ class PollOptionsCell: UICollectionViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .clear
         contentView.addSubview(collectionView)
         

@@ -21,7 +21,8 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let labelFontSize: CGFloat = 12
     let liveEndedDescriptionText = "Only you can see results"
     let sharedDescriptionText = "Shared with group"
-    
+    let voteString = "vote"
+    let responseString = "response"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,7 +77,14 @@ class PollMiscellaneousCell: UICollectionViewCell {
             iconImageView.image = #imageLiteral(resourceName: "results_shared")
             descriptionLabel.text = sharedDescriptionText
         }
-        totalVotesLabel.text = miscellaneousModel.totalVotes == 1 ? "1 vote" : "\(miscellaneousModel.totalVotes) votes"
+        var unit: String
+        switch miscellaneousModel.questionType! {
+        case .multipleChoice:
+            unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
+        case .freeResponse:
+            unit = miscellaneousModel.totalVotes == 1 ? responseString : "\(responseString)s"
+        }
+        totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
     }
     
     required init?(coder aDecoder: NSCoder) {
