@@ -43,6 +43,7 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
         setupViews()
         setupConstraints()
         editable = false
+        questionTextField.becomeFirstResponder()
     }
     
     // MARK: - POLLING
