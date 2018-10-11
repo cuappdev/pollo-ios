@@ -72,7 +72,7 @@ class PollsCell: UICollectionViewCell {
         GetPollSessions(role: String(describing: role)).make()
             .done { sessions in
                 self.sessions = sessions
-                self.adapter.performUpdates(animated: false, completion: nil)
+                self.adapter.performUpdates(animated: true, completion: nil)
             } .catch { error in
                 print(error)
         }
