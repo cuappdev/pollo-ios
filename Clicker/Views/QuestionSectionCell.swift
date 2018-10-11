@@ -9,10 +9,6 @@
 import SnapKit
 import UIKit
 
-protocol QuestionDelegate {
-    func inFollowUpQuestion()
-}
-
 class QuestionSectionCell: UICollectionViewCell, UITextFieldDelegate {
  
     //MARK: - INITIALIZATION

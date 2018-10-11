@@ -17,7 +17,6 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     
     var session: Session!
     var grayViewBottomConstraint: Constraint!
-    var questionDelegate: QuestionDelegate!
     
     var questionTextField: UITextField!
     var line: UIView!
@@ -35,6 +34,10 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         layoutSubviews()
         editable = false
         questionTextField.becomeFirstResponder()
+    }
+    
+    func configure(with delegate: PollBuilderViewDelegate) {
+        self.pollBuilderDelegate = delegate
     }
     
     // MARK: - LAYOUT
