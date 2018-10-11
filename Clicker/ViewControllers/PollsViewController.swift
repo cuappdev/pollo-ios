@@ -34,6 +34,7 @@ class PollsViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var isOpeningGroup: Bool = false
     var isListeningToKeyboard: Bool = true
+    var gradientNeedsSetup: Bool = true
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29
@@ -68,7 +69,7 @@ class PollsViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        setupGradient()
+        //setupGradient()
     }
     
     // MARK: - LAYOUT
@@ -242,14 +243,20 @@ class PollsViewController: UIViewController {
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        if gradientNeedsSetup {
+            setupGradient() // needs headerGradientView to have been layed out, so it has a nonzero frame
+            gradientNeedsSetup = false
+        }
+    }
+    
     func setupGradient() {
-        headerGradientView.backgroundColor = .red
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = headerGradientView.bounds
-//        gradientLayer.colors = [UIColor.white.cgColor, UIColor.red.cgColor/*UIColor.clickerGrey7.cgColor*/, UIColor.white.cgColor]
-//        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-//        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-//        headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = headerGradientView.bounds
+        gradientLayer.colors = [UIColor.white.cgColor, UIColor.clickerGrey7.cgColor, UIColor.white.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+        headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     // MARK - Actions
