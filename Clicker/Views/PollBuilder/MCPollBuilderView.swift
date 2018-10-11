@@ -20,7 +20,6 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     
     // MARK: - Data vars
     var pollBuilderDelegate: PollBuilderViewDelegate!
-    var questionDelegate: QuestionDelegate!
     var session: Session!
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
@@ -44,6 +43,10 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
         setupConstraints()
         editable = false
         questionTextField.becomeFirstResponder()
+    }
+    
+    func configure(with delegate: PollBuilderViewDelegate) {
+        self.pollBuilderDelegate = delegate
     }
     
     // MARK: - POLLING
@@ -182,6 +185,7 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1))
         mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
         updateTotalOptions()
+        pollBuilderDelegate.ignoreNextKeyboardHiding()
         adapter.reloadData { _ in
             let index = IndexPath(item: 0, section: self.mcOptionModels.count - 2)
             self.collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)

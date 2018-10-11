@@ -16,7 +16,6 @@ class FRSectionCell: QuestionSectionCell {
     
     var session: Session!
     var grayViewBottomConstraint: Constraint!
-    var questionDelegate: QuestionDelegate!
     
     var questionTextField: UITextField!
     var line: UIView!
