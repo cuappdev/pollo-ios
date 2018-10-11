@@ -182,7 +182,15 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1))
         mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
         updateTotalOptions()
-        adapter.reloadData(completion: nil)
+        adapter.reloadData { _ in
+            let index = IndexPath(item: 0, section: self.mcOptionModels.count - 2)
+            self.collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)
+            guard let cell = self.collectionView.cellForItem(at: index) as? CreateMCOptionCell else {
+                print("thats not the right type of cell, something went wrong")
+                return
+            }
+            cell.shouldFocusTextField()
+        }
     }
     
     func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int) {
