@@ -33,8 +33,8 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         super.init(frame: frame)
         setupViews()
         layoutSubviews()
-        
         editable = false
+        questionTextField.becomeFirstResponder()
     }
     
     // MARK: - LAYOUT
