@@ -48,7 +48,7 @@ class SettingsViewController: UIViewController {
     
     func setupNavBar() {
         let gradientLayer = CAGradientLayer()
-
+        
         var bounds = navigationController?.navigationBar.bounds ?? CGRect()
         bounds.size.height += UIApplication.shared.statusBarFrame.size.height
         gradientLayer.frame = bounds

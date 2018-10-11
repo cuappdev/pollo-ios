@@ -18,7 +18,6 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     var collectionView: UICollectionView!
     var options: [String]!
     var sliderBar: UIView!
-    var grayBar: UIView!
     var sliderBarLeftConstraint: NSLayoutConstraint!
     var sliderBarDelegate: SliderBarDelegate!
     
@@ -27,6 +26,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         super.init(frame: frame)
         self.options = options
         self.sliderBarDelegate = sliderBarDelegate
+        backgroundColor = .clear
         
         setupViews()
         layoutSubviews()
@@ -36,7 +36,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor(red: 247/255, green: 249/255, blue: 250/255, alpha: 1.0)
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(QuestionOptionCell.self, forCellWithReuseIdentifier: Identifiers.questionOptionCellIdentifier)
@@ -51,10 +51,6 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         bringSubview(toFront: sliderBar)
         sliderBarLeftConstraint = sliderBar.leftAnchor.constraint(equalTo: leftAnchor)
         sliderBarLeftConstraint.isActive = true
-        
-        grayBar = UIView()
-        grayBar.backgroundColor = .clickerGrey2
-        addSubview(grayBar)
     }
     
     override func layoutSubviews() {
@@ -64,11 +60,6 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         }
         sliderBar.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.5, height: 2.0))
-            make.bottom.equalToSuperview()
-        }
-        grayBar.snp.updateConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(0.5)
             make.bottom.equalToSuperview()
         }
     }
@@ -81,7 +72,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.questionOptionCellIdentifier, for: indexPath) as! QuestionOptionCell
         cell.optionLabel.text = options[indexPath.item]
-        cell.backgroundColor = .clickerGrey8
+        cell.backgroundColor = .clear
         return cell
     }
     
@@ -105,11 +96,6 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         }
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
         unselectedCell.optionLabel.textColor = .clickerGrey2
-    }
-    
-    // BACKGROUND COLOR
-    func setBackgroundColor(color: UIColor) {
-        collectionView.backgroundColor = color
     }
     
     required init?(coder _: NSCoder) {

@@ -27,6 +27,7 @@ class PollsViewController: UIViewController {
     var settingsButton: UIButton!
     var tapGestureRecognizer: UITapGestureRecognizer!
     var dimmingView: UIView!
+    var headerGradientView: UIView!
     
     // MARK: - Data vars
     var pollTypeModels: [PollTypeModel]!
@@ -43,6 +44,7 @@ class PollsViewController: UIViewController {
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
+    let headerGradientHeight: CGFloat = 186
     let titleLabelText = "Poll Groups"
     let createdPollsOptionsText = "Created"
     let joinedPollsOptionsText = "Joined"
@@ -66,10 +68,14 @@ class PollsViewController: UIViewController {
         
         setupViews()
         setupConstraints()
+        setupGradient()
     }
     
     // MARK: - LAYOUT
     func setupViews() {
+        headerGradientView = UIView()
+        view.addSubview(headerGradientView)
+        
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGestureRecognizer.delegate = self
         view.addGestureRecognizer(tapGestureRecognizer)
@@ -81,7 +87,6 @@ class PollsViewController: UIViewController {
         view.addSubview(titleLabel)
         
         pollsOptionsView = OptionsView(frame: .zero, options: [joinedPollsOptionsText, createdPollsOptionsText], sliderBarDelegate: self)
-        pollsOptionsView.setBackgroundColor(color: .clickerGrey8)
         view.addSubview(pollsOptionsView)
         
         let layout = UICollectionViewFlowLayout()
@@ -163,14 +168,20 @@ class PollsViewController: UIViewController {
     }
     
     func setupConstraints() {
+        headerGradientView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-1 * UIApplication.shared.statusBarFrame.size.height)
+            make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
+            make.height.equalTo(headerGradientHeight)
+        }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
+            //make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
+            make.centerY.equalTo(headerGradientView.snp.centerY).multipliedBy(1.2)
             make.centerX.equalToSuperview()
             make.height.equalTo(35.5)
         }
         
         pollsOptionsView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.bottom.equalTo(headerGradientView.snp.bottom)
             make.width.equalToSuperview()
             make.height.equalTo(40)
         }
@@ -229,6 +240,16 @@ class PollsViewController: UIViewController {
             make.left.equalToSuperview().offset(buttonPadding - LayoutConstants.buttonImageInsets.left)
             make.size.equalTo(LayoutConstants.buttonSize)
         }
+    }
+    
+    func setupGradient() {
+        headerGradientView.backgroundColor = .red
+//        let gradientLayer = CAGradientLayer()
+//        gradientLayer.frame = headerGradientView.bounds
+//        gradientLayer.colors = [UIColor.white.cgColor, UIColor.red.cgColor/*UIColor.clickerGrey7.cgColor*/, UIColor.white.cgColor]
+//        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+//        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+//        headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     // MARK - Actions
