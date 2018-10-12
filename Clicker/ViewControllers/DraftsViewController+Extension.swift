@@ -37,6 +37,7 @@ extension DraftsViewController: EditDraftViewControllerDelegate {
                     return otherDraft.id == draft.id
                 }) else { return }
                 self.drafts.remove(at: index)
+                
                 self.adapter.performUpdates(animated: false, completion: nil)
                 
                 guard let nav = self.presentingViewController as? UINavigationController else { return }
