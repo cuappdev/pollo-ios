@@ -202,12 +202,16 @@ extension CardController: SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: .shared)
-        adapter.performUpdates(animated: true, completion: nil)
+        UIView.animate(withDuration: 0.1) {
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
         
     func updatedTally(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: nil)
-        adapter.performUpdates(animated: false, completion: nil)
+        UIView.animate(withDuration: 0.1) {
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
 
     // MARK: Helpers
