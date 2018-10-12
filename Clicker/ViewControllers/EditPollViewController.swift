@@ -91,7 +91,6 @@ class EditPollViewController: UIViewController {
         buttonStackView.axis = .vertical
         buttonStackView.distribution =  .fillEqually
         buttonStackView.spacing = 20
-        buttonStackView.alignment = .top
         view.addSubview(buttonStackView)
     }
     
