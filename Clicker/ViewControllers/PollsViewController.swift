@@ -43,6 +43,7 @@ class PollsViewController: UIViewController {
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
+    let joinSessionButtonAnimationDuration: TimeInterval = 0.2
     let titleLabelText = "Poll Groups"
     let createdPollsOptionsText = "Created"
     let joinedPollsOptionsText = "Joined"
@@ -308,6 +309,9 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
+            UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
+                self.joinSessionButton.backgroundColor = text.count == 6 ? .clickerGreen0 : .clickerGrey2
+            }
         }
     }
     
