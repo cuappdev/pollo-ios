@@ -91,12 +91,17 @@ class EditPollViewController: UIViewController {
         buttonStackView.axis = .vertical
         buttonStackView.distribution =  .fillEqually
         buttonStackView.spacing = 20
+        buttonStackView.alignment = .top
         view.addSubview(buttonStackView)
     }
     
     func setupConstraints() {
         buttonStackView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            if userRole == .admin {
+                make.center.equalToSuperview()
+            } else {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            }
             make.width.equalToSuperview()
             make.height.equalTo(buttonStackViewHeight)
         }

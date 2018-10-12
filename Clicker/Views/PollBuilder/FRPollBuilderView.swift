@@ -20,8 +20,6 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     var questionDelegate: QuestionDelegate!
     
     var questionTextField: UITextField!
-    var line: UIView!
-    var responseOptionsLabel: UILabel!
     var changeButton: UIButton!
     
     var editable: Bool!
@@ -46,16 +44,6 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         questionTextField.delegate = self
         questionTextField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
         addSubview(questionTextField)
-        
-        line = UIView()
-        line.backgroundColor = .clickerGrey2
-        addSubview(line)
-        
-        responseOptionsLabel = UILabel()
-        responseOptionsLabel.text = "Only you will see responses and votes"
-        responseOptionsLabel.textAlignment = .left
-        responseOptionsLabel.font = ._14MediumFont
-        addSubview(responseOptionsLabel)
     }
     
     override func layoutSubviews() {
@@ -66,19 +54,7 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
             make.top.equalToSuperview()
             make.left.equalToSuperview()
         }
-        
-        line.snp.updateConstraints { make in
-            make.height.equalTo(1.5)
-            make.width.equalTo(339)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(questionTextField.snp.bottom).offset(73.5)
-        }
-        
-        responseOptionsLabel.snp.updateConstraints { make in
-            responseOptionsLabel.sizeToFit()
-            make.left.equalTo(line.snp.left)
-            make.top.equalTo(line.snp.bottom).offset(14)
-        }
+
     }
     
     @objc func updateEditable() {

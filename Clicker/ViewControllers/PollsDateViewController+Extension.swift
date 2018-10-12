@@ -17,7 +17,7 @@ extension PollsDateViewController: ListAdapterDataSource {
             let type: EmptyStateType = .cardController(userRole: userRole)
             return [EmptyStateModel(type: type)]
         }
-        return pollsDateArray
+        return pollsDateArray.reversed()
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
