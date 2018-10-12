@@ -17,7 +17,8 @@ extension PollsDateViewController: ListAdapterDataSource {
             let type: EmptyStateType = .cardController(userRole: userRole)
             return [EmptyStateModel(type: type)]
         }
-        return pollsDateArray
+        // Want to display latest PollsDateModels on top
+        return pollsDateArray.reversed()
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -39,7 +40,7 @@ extension PollsDateViewController: ListAdapterDataSource {
 extension PollsDateViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 1.0)
+        return CustomModalPresentationController(presented: presented, presenting: presenting, style: .upToStatusBar)
     }
 }
 
@@ -137,6 +138,11 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
+        if let lastPollDateModel = pollsDateArray.last {
+            if lastPollDateModel.polls.contains(where: { otherPoll -> Bool in
+                return otherPoll.id == poll.id
+            }) { return }
+        }
         appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -159,7 +165,10 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: .shared)
+        guard let latestPoll = getLatestPoll() else { return }
+        // Free Response receives results in live state
+        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+        updateWithCurrentState(currentState: currentState, pollState: pollState)
         adapter.performUpdates(animated: false, completion: nil)
     }
     

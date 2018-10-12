@@ -46,7 +46,8 @@ class PollsViewController: UIViewController {
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
     let headerGradientHeight: CGFloat = 186
-    let titleLabelText = "Poll Groups"
+    let titleLabelText = "Pollo"
+    let joinSessionButtonAnimationDuration: TimeInterval = 0.2
     let createdPollsOptionsText = "Created"
     let joinedPollsOptionsText = "Joined"
     let codeTextFieldPlaceHolder = "Enter a code..."
@@ -267,9 +268,8 @@ class PollsViewController: UIViewController {
                     .done { session in
                         self.isListeningToKeyboard = false
                         self.hideNewGroupActivityIndicatorView()
-                        let cardVC = PollsDateViewController(pollsDateArray: [], session: session, userRole: .admin)
-                        cardVC.configure(with: self)
-                        self.navigationController?.pushViewController(cardVC, animated: true)
+                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
@@ -310,9 +310,8 @@ class PollsViewController: UIViewController {
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
-                        let cardVC = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        cardVC.configure(with: self)
-                        self.navigationController?.pushViewController(cardVC, animated: true)
+                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
@@ -334,6 +333,9 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
+            UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
+                self.joinSessionButton.backgroundColor = text.count == 6 ? .clickerGreen0 : .clickerGrey2
+            }
         }
     }
     

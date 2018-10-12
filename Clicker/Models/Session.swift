@@ -13,6 +13,7 @@ class Session {
     var id: Int
     var name: String
     var code: String
+    var latestActivity: String = ""
     var isLive: Bool?
     let identifier = UUID().uuidString
     
@@ -29,10 +30,11 @@ class Session {
         self.isLive = isLive
     }
     
-    init(json: [String:Any]){
-        self.id = json["id"] as! Int
-        self.name = json["name"] as! String
-        self.code = json["code"] as! String
+    init(id: Int, name: String, code: String, latestActivity: String) {
+        self.id = id
+        self.name = name
+        self.code = code
+        self.latestActivity = latestActivity
     }
     
 }

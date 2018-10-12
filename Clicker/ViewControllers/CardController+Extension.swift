@@ -29,7 +29,7 @@ extension CardController: ListAdapterDataSource {
 extension CardController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return CustomModalPresentationController(presented: presented, presenting: presenting, customHeightScaleFactor: 1.0)
+        return CustomModalPresentationController(presented: presented, presenting: presenting, style: .upToStatusBar)
     }
 }
 
@@ -175,6 +175,9 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
+        if !pollsDateModel.polls.contains(where: { otherPoll -> Bool in
+            return otherPoll.id == poll.id
+        }) { return }
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
             if completed {
@@ -201,13 +204,20 @@ extension CardController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: .shared)
-        adapter.performUpdates(animated: false, completion: nil)
+        guard let latestPoll = pollsDateModel.polls.last else { return }
+        // Free Response receives results in live state
+        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+        updateWithCurrentState(currentState: currentState, pollState: pollState)
+        UIView.animate(withDuration: 0.1) {
+        self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
         
     func updatedTally(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: nil)
-        adapter.performUpdates(animated: false, completion: nil)
+        UIView.animate(withDuration: 0.1) {
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
 
     // MARK: Helpers
@@ -244,8 +254,8 @@ extension CardController: SocketDelegate {
         if latestPoll.questionType == .freeResponse {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
-        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: pollState)
         
+        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: pollState)
         updateLatestPoll(with: updatedPoll)
     }
     
