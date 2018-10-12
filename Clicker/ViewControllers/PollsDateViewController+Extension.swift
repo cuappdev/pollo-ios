@@ -17,6 +17,7 @@ extension PollsDateViewController: ListAdapterDataSource {
             let type: EmptyStateType = .cardController(userRole: userRole)
             return [EmptyStateModel(type: type)]
         }
+        // Want to display latest PollsDateModels on top
         return pollsDateArray.reversed()
     }
     

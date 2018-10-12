@@ -240,8 +240,8 @@ class PollsViewController: UIViewController {
                     .done { session in
                         self.isListeningToKeyboard = false
                         self.hideNewGroupActivityIndicatorView()
-                        let cardVC = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
-                        self.navigationController?.pushViewController(cardVC, animated: true)
+                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
@@ -282,8 +282,8 @@ class PollsViewController: UIViewController {
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
-                        let cardVC = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        self.navigationController?.pushViewController(cardVC, animated: true)
+                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
                         print(error)
