@@ -145,12 +145,15 @@ extension CardController: UIScrollViewDelegate {
         // calculate where scrollView should snap to:
         let indexOfHorizontalCard = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
         let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        UIView.animate(withDuration: 0.1) {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }
         updateCountLabelText(with: indexOfHorizontalCard)
-    
+
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
     }
+
     
     func scrollToLatestPoll() {
         let indexOfLatestSection = pollsDateModel.polls.count - 1
