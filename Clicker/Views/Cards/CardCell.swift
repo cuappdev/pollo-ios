@@ -109,7 +109,7 @@ class CardCell: UICollectionViewCell {
         
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(timerLabelBottomPadding)
+            make.bottom.equalToSuperview()
         }
         
         questionButton.snp.makeConstraints { make in
