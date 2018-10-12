@@ -11,20 +11,17 @@ import UIKit
 
 class FRPollBuilderView: UIView, UITextFieldDelegate {
     
-    let popupViewHeight: CGFloat = 95
+    // MARK: - View vars
+    var questionTextField: UITextField!
     
+    // MARK: - Data vars
+    var editable: Bool!
+    var session: Session!
+    var questionDelegate: QuestionDelegate!
     var pollBuilderDelegate: PollBuilderViewDelegate!
     
-    var session: Session!
-    var grayViewBottomConstraint: Constraint!
-    var questionDelegate: QuestionDelegate!
-    
-    var questionTextField: UITextField!
-    var changeButton: UIButton!
-    
-    var editable: Bool!
-    
-    var dropDown: FROptionsDropDownView!
+    // MARK: - Constants
+    let popupViewHeight: CGFloat = 95
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -54,7 +51,6 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
             make.top.equalToSuperview()
             make.left.equalToSuperview()
         }
-
     }
     
     @objc func updateEditable() {
