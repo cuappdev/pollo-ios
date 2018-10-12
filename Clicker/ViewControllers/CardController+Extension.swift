@@ -198,7 +198,10 @@ extension CardController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: .shared)
+        guard let latestPoll = pollsDateModel.polls.last else { return }
+        // Free Response receives results in live state
+        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+        updateWithCurrentState(currentState: currentState, pollState: pollState)
         adapter.performUpdates(animated: false, completion: nil)
     }
         
@@ -242,7 +245,6 @@ extension CardController: SocketDelegate {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
         let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: pollState)
-        
         updateLatestPoll(with: updatedPoll)
     }
     
