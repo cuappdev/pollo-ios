@@ -404,8 +404,8 @@
 		C2434CB72134710E00929C98 /* SectionControllers */ = {
 			isa = PBXGroup;
 			children = (
-				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
 				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
+				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
 				C20B570C213893180091034F /* PollSectionController.swift */,
 				C20B57182139DDA10091034F /* QuestionSectionController.swift */,
 				C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */,
