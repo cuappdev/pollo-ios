@@ -115,6 +115,9 @@ class DraftsViewController: UIViewController {
 
     // MARK: ACTIONS
     @objc func backBtnPressed() {
+        guard let pollBuilderViewController = presentingViewController as? PollBuilderViewController else { return }
+        pollBuilderViewController.drafts = self.drafts
+        pollBuilderViewController.updateDraftsCount()
         self.dismiss(animated: true, completion: nil)
     }
     
