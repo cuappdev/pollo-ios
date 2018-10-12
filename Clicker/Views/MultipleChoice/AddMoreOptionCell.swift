@@ -41,6 +41,13 @@ class AddMoreOptionCell: UICollectionViewCell {
     func setupViews() {
         wholeButton = UIButton()
         wholeButton.frame = contentView.frame
+        wholeButton.backgroundColor = .white
+        wholeButton.layer.cornerRadius = contentView.layer.cornerRadius
+        wholeButton.layer.shadowColor = UIColor.clickerWhite2.cgColor
+        wholeButton.layer.shadowOffset = CGSize(width: 0, height: 1)
+        wholeButton.layer.shadowOpacity = 1.0
+        wholeButton.layer.shadowRadius = 2.5
+        wholeButton.layer.masksToBounds = false
         wholeButton.addTarget(self, action: #selector(didPressCell), for: .touchUpInside)
         contentView.addSubview(wholeButton)
         

@@ -25,7 +25,7 @@ class PollPreviewCell: UICollectionViewCell {
     
     // MARK: - View vars
     var nameLabel: UILabel!
-    var codeLabel: UILabel!
+    var activityLabel: UILabel!
     var lineView: UIView!
     var dotsButton: UIButton!
     
@@ -37,7 +37,7 @@ class PollPreviewCell: UICollectionViewCell {
     let nameLabelTopPadding: CGFloat = 19.5
     let nameLabelWidth: CGFloat = 300
     let nameLabelLeftPadding: CGFloat = 17
-    let codeLabelTopPadding: CGFloat = 4
+    let activityLabelTopPadding: CGFloat = 4
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
     let dotsButtonRightPadding: CGFloat = 12
@@ -54,10 +54,10 @@ class PollPreviewCell: UICollectionViewCell {
         nameLabel.font = ._18SemiboldFont
         contentView.addSubview(nameLabel)
     
-        codeLabel = UILabel()
-        codeLabel.font = ._16MediumFont
-        codeLabel.textColor = .clickerGrey2
-        contentView.addSubview(codeLabel)
+        activityLabel = UILabel()
+        activityLabel.font = ._16MediumFont
+        activityLabel.textColor = .clickerGrey2
+        contentView.addSubview(activityLabel)
         
         lineView = UIView()
         lineView.backgroundColor = .clickerGrey5
@@ -78,7 +78,7 @@ class PollPreviewCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(nameLabelLeftPadding)
         }
         
-        codeLabel.snp.makeConstraints { make in
+        activityLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(4)
             make.left.equalTo(nameLabel.snp.left)
             make.width.equalTo(nameLabel.snp.width)
@@ -103,7 +103,7 @@ class PollPreviewCell: UICollectionViewCell {
     func configure(for session: Session, delegate: PollPreviewCellDelegate) {
         self.delegate = delegate
         nameLabel.text = session.name
-        codeLabel.text = "CODE: \(session.code)"
+        activityLabel.text = "Latest Activity: \(session.latestActivity)"
     }
     
     // MARK: - Action
