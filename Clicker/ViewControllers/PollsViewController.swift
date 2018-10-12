@@ -172,10 +172,9 @@ class PollsViewController: UIViewController {
         headerGradientView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-1 * UIApplication.shared.statusBarFrame.size.height)
             make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
-            make.height.equalTo(headerGradientHeight)
+            make.height.equalTo(headerGradientHeight + UIApplication.shared.statusBarFrame.size.height)
         }
         titleLabel.snp.makeConstraints { make in
-            //make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
             make.centerY.equalTo(headerGradientView.snp.centerY).multipliedBy(1.2)
             make.centerX.equalToSuperview()
             make.height.equalTo(35.5)
