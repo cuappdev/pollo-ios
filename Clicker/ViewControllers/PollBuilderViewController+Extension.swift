@@ -35,13 +35,14 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
 extension PollBuilderViewController: DraftsViewControllerDelegate {
     
     func draftsViewControllerLoadDraft(_ draft: Draft) {
-        let qType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
-        if questionType != qType {
+        let draftQuestionType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
+        if questionType != draftQuestionType {
+            mcPollBuilder.isHidden = draftQuestionType == .freeResponse
+            frPollBuilder.isHidden = draftQuestionType == .multipleChoice
+            questionType = draftQuestionType
             updateQuestionTypeButton()
-            mcPollBuilder.isHidden = questionType == .freeResponse
-            frPollBuilder.isHidden = questionType == .multipleChoice
         }
-        switch qType {
+        switch draftQuestionType {
         case .multipleChoice:
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             loadedMCDraft = draft

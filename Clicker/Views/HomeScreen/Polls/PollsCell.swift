@@ -52,6 +52,7 @@ class PollsCell: UICollectionViewCell {
         collectionView.backgroundColor = .white
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.alwaysBounceVertical = true
         contentView.addSubview(collectionView)
         
         let updater = ListAdapterUpdater()

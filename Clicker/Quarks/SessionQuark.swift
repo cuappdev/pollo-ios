@@ -126,51 +126,42 @@ struct GetPollSessions: ClickerQuark {
         case .nodes(let nodes):
             var sessions: [Session] = [Session]()
             for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let updatedAt = node["updatedAt"].string else {
                     throw NeutronError.badResponseData
                 }
-                sessions.append(Session(id: id, name: name, code: code))
+                guard let latestActivityTimestamp = Double(updatedAt) else { break }
+                sessions.append(Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp)))
             }
             return sessions
         default:
             throw NeutronError.badResponseData
         }
     }
-}
-
-struct GetGroupSessions: ClickerQuark {
     
-    typealias ResponseType = [Session]
-    
-    let role: String
-    
-    var route: String {
-        return "/groups/all/\(role)"
-    }
-    var headers: HTTPHeaders {
-        return [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
-        ]
-    }
-    let method: HTTPMethod = .get
-    
-    func process(element: Element) throws -> [Session] {
-        switch element {
-        case .nodes(let nodes):
-            var sessions: [Session] = [Session]()
-            for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let isLive = node["isLive"].bool else {
-                    throw NeutronError.badResponseData
-                }
-                sessions.append(Session(id: id, name: name, code: code, isLive: isLive))
+    func getLatestActivity(latestActivityTimestamp: Double) -> String {
+        var latestActivity: String!
+        let today: Date = Date()
+        let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
+        if today.hours(from: latestActivityDate) < 24 {
+            if today.hours(from: latestActivityDate) == 0 {
+                latestActivity = "Less than an hour ago"
+            } else {
+                let suffix: String = today.hours(from: latestActivityDate) == 1 ? "hour" : "hours"
+                latestActivity = "\(today.hours(from: latestActivityDate)) \(suffix) ago"
             }
-            sessions.sort { (s1, s2) in
-                return s1.isLive! && !(s2.isLive!)
-            }
-            return sessions
-        default:
-            throw NeutronError.badResponseData
+        } else if today.days(from: latestActivityDate) < 7 {
+            let suffix: String = today.days(from: latestActivityDate) == 1 ? "day" : "days"
+            latestActivity = "\(today.days(from: latestActivityDate)) \(suffix) ago"
+        } else if today.weeks(from: latestActivityDate) < 4 {
+            let suffix: String = today.weeks(from: latestActivityDate) == 1 ? "week" : "weeks"
+            latestActivity = "\(today.weeks(from: latestActivityDate)) \(suffix) ago"
+        } else {
+            let formatter: DateFormatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            latestActivity = formatter.string(from: latestActivityDate)
         }
+        return latestActivity
     }
 }
 
