@@ -60,21 +60,18 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
     let verticalPadding: CGFloat = LayoutConstants.pollOptionsVerticalPadding * 2
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
-    var maximumNumberVisibleOptions: Int
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels
         optionHeight = LayoutConstants.mcOptionCellHeight
-        maximumNumberVisibleOptions = 6
     case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
         optionHeight = LayoutConstants.mcOptionCellHeight
-        maximumNumberVisibleOptions = 6
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
         optionHeight = LayoutConstants.frOptionCellHeight
-        maximumNumberVisibleOptions = 5
     }
+    let maximumNumberVisibleOptions = 5
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
     let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
     return verticalPadding + optionsHeight
@@ -83,9 +80,7 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
 // MARK: - Helpers
 private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
     let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-        // numUpvoted is the count - 1 because submitting a response does not count as an upvote
-        let numUpvoted = count - 1
-        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: numUpvoted, didUpvote: false)
+        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
     }
     return .frOption(optionModels: frOptionModels)
 }

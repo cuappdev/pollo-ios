@@ -109,7 +109,7 @@ class CardCell: UICollectionViewCell {
         
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(timerLabelBottomPadding)
+            make.bottom.equalToSuperview()
         }
         
         questionButton.snp.makeConstraints { make in
@@ -250,18 +250,6 @@ extension CardCell: FRInputSectionControllerDelegate {
         guard let pollOptionsModel = pollOptionsModel else { return }
         switch pollOptionsModel.type {
         case .frOption(optionModels: var frOptionModels):
-            let isNewResponse = checkIfResponseIsNew(for: response, frOptionModels: frOptionModels)
-            if isNewResponse {
-                if let previousAnswer = poll.answer, let previousIndex = indexOfFROptionModel(for: previousAnswer, frOptionModels: frOptionModels) {
-                    frOptionModels.remove(at: previousIndex)
-                }
-                let frOptionModel = FROptionModel(option: response, isAnswer: true, numUpvoted: 0, didUpvote: false)
-                frOptionModels.insert(frOptionModel, at: 0)
-                let type: PollOptionsModelType = .frOption(optionModels: frOptionModels)
-                self.pollOptionsModel = PollOptionsModel(type: type, pollState: pollOptionsModel.pollState)
-                adapter.performUpdates(animated: false, completion: nil)
-                addFRResponseToPoll(response: response, poll: poll)
-            }
             delegate.cardCellDidSubmitChoice(cardCell: self, choice: response)
         default:
             return

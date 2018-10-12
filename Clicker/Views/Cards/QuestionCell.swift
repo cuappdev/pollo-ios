@@ -17,6 +17,7 @@ class QuestionCell: UICollectionViewCell {
     let questionLabelFontSize: CGFloat = 20
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
+    let untitledPollString = "Untitled Poll"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,7 +47,9 @@ class QuestionCell: UICollectionViewCell {
     
     // MARK: - Configure
     func configure(for questionModel: QuestionModel) {
-        questionLabel.text = questionModel.question
+        let isUntitledPoll = questionModel.question == ""
+        questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
+        questionLabel.textColor = isUntitledPoll ? .clickerGrey2 : .black
     }
     
     required init?(coder aDecoder: NSCoder) {

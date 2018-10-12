@@ -58,8 +58,8 @@ extension PollsViewController: PollsCellDelegate {
         isOpeningGroup = true
         GetSortedPolls(id: session.id).make()
             .done { pollsDateArray in
-                let cardController = PollsDateViewController(pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                self.navigationController?.pushViewController(cardController, animated: true)
+                let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
             } .catch { error in
                 print(error)
