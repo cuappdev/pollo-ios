@@ -17,7 +17,8 @@ extension PollsDateViewController: ListAdapterDataSource {
             let type: EmptyStateType = .cardController(userRole: userRole)
             return [EmptyStateModel(type: type)]
         }
-        return pollsDateArray
+        // Want to display latest PollsDateModels on top
+        return pollsDateArray.reversed()
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -164,7 +165,10 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: .shared)
+        guard let latestPoll = getLatestPoll() else { return }
+        // Free Response receives results in live state
+        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+        updateWithCurrentState(currentState: currentState, pollState: pollState)
         adapter.performUpdates(animated: false, completion: nil)
     }
     

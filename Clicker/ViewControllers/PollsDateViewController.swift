@@ -36,8 +36,9 @@ class PollsDateViewController: UIViewController {
     let countLabelWidth: CGFloat = 42.0
     let collectionViewTopPadding: CGFloat = 20
     
-    init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
+    init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
         self.session = session
         self.userRole = userRole
         self.pollsDateArray = pollsDateArray
@@ -51,10 +52,6 @@ class PollsDateViewController: UIViewController {
         setupViews()
         setupNavBar()
         self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
-    }
-    
-    func configure(with delegate: PollsDateViewControllerDelegate) {
-        self.delegate = delegate
     }
     
     override func viewWillAppear(_ animated: Bool) {
