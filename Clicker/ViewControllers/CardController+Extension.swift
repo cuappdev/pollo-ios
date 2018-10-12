@@ -199,7 +199,7 @@ extension CardController: SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: .shared)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
         
     func updatedTally(_ currentState: CurrentState) {
@@ -241,6 +241,7 @@ extension CardController: SocketDelegate {
         if latestPoll.questionType == .freeResponse {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
+        
         let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: pollState)
         
         updateLatestPoll(with: updatedPoll)

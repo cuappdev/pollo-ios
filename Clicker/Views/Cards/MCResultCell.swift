@@ -62,6 +62,8 @@ class MCResultCell: UICollectionViewCell {
     }
     
     override func updateConstraints() {
+        print("update constraints")
+        
         containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(containerViewHorizontalPadding)
             make.trailing.equalToSuperview().inset(containerViewHorizontalPadding)
