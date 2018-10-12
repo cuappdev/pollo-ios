@@ -19,8 +19,6 @@ protocol CardControllerDelegate {
 
 class CardController: UIViewController {
     
-    var scrollToIndex: IndexPath!
-    
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
