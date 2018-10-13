@@ -33,7 +33,7 @@ class EmptyStateCell: UICollectionViewCell {
     let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
     let titleLabelWidth: CGFloat = 200.0
     let titleLabelTopPadding: CGFloat = 18.5
-    let subtitleLabelWidth: CGFloat = 220.0
+    let subtitleLabelWidth: CGFloat = 250.0
     let createDraftButtonTopPadding: CGFloat = 15.0
     let subtitleLabelTopPadding: CGFloat = 7.5
     let countLabelWidth: CGFloat = 42.0
@@ -41,8 +41,8 @@ class EmptyStateCell: UICollectionViewCell {
     let createDraftButtonHeight: CGFloat = 47
     let zoomTimeInterval: TimeInterval = 0.35
     let zoomInScale: CGFloat = 0.85
-    let createNewGroupText = "Create a new group above!"
-    let enterCodeText = "Enter a code below to join!"
+    let createNewGroupText = "Tap \"+\" above to create a new group!"
+    let enterCodeText = "Enter a code below to join a group!"
     let adminNothingToSeeText = "Nothing to see here."
     let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven't asked any polls yet!\nTry it out below."
@@ -171,11 +171,18 @@ class EmptyStateCell: UICollectionViewCell {
         self.emptyStateModel = emptyStateModel
         switch emptyStateModel.type {
         case .pollsViewController(let pollType):
-            iconImageView.image = UIImage(named: manShruggingImageName)
+            switch pollType {
+            case .created:
+                iconImageView.image = UIImage(named: manShruggingImageName)
+                titleLabel.text = "No groups \(createdString)"
+                subtitleLabel.text = createNewGroupText
+            case .joined:
+                iconImageView.image = UIImage(named: womanShruggingImageName)
+                titleLabel.text = "No groups \(joinedString)"
+                subtitleLabel.text = enterCodeText
+            }
+            
             titleLabel.textColor = .black
-            let pollTypeString = pollType == .created ? createdString : joinedString
-            titleLabel.text = "No groups \(pollTypeString)"
-            subtitleLabel.text = pollType == .created ? createNewGroupText : enterCodeText
             break
         case .cardController(let userRole):
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
