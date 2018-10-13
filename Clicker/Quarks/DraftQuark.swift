@@ -33,7 +33,8 @@ struct GetDrafts: ClickerQuark {
             for edge in edges {
                 let node = edge.node
                 if let id = node["id"].int, let text = node["text"].string, let options = node["options"].array {
-                    drafts.append(Draft(id: id, text: text, options: options.map({ $0.stringValue })))
+                    let draft = Draft(id: id, text: text, options: options.map({ $0.stringValue }))
+                    drafts.insert(draft, at: 0)
                 } else {
                     throw NeutronError.badResponseData
                 }
