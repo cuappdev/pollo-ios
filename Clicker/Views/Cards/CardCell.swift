@@ -61,7 +61,7 @@ class CardCell: UICollectionViewCell {
         super.init(frame: frame)
         
         topHamburgerCardModel = HamburgerCardModel(state: .top)
-        separatorLineModel = SeparatorLineModel()
+        separatorLineModel = SeparatorLineModel(state: .card)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         setupViews()
     }
