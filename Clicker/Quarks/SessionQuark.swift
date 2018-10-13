@@ -105,7 +105,7 @@ struct GetPollSessions: ClickerQuark {
 
     typealias ResponseType = [Session]
     
-    let role: String
+    let role: UserRole
 
     var route: String {
         return "/sessions/all/\(role)"
@@ -130,7 +130,7 @@ struct GetPollSessions: ClickerQuark {
                     throw NeutronError.badResponseData
                 }
                 guard let latestActivityTimestamp = Double(updatedAt) else { break }
-                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp))
+                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: code))
             }
             var sessions: [Session] = [Session]()
             for time in preSessions.keys.sorted() {
@@ -143,28 +143,28 @@ struct GetPollSessions: ClickerQuark {
         }
     }
     
-    func getLatestActivity(latestActivityTimestamp: Double) -> String {
-        var latestActivity: String!
+    func getLatestActivity(latestActivityTimestamp: Double, code: String) -> String {
+        var latestActivity = "Last live "
         let today: Date = Date()
         let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
         if today.hours(from: latestActivityDate) < 24 {
             if today.hours(from: latestActivityDate) == 0 {
-                latestActivity = "Less than an hour ago"
+                latestActivity += "less than an hour ago"
             } else {
                 let suffix: String = today.hours(from: latestActivityDate) == 1 ? "hour" : "hours"
-                latestActivity = "\(today.hours(from: latestActivityDate)) \(suffix) ago"
+                latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
             }
         } else if today.days(from: latestActivityDate) < 7 {
             let suffix: String = today.days(from: latestActivityDate) == 1 ? "day" : "days"
-            latestActivity = "\(today.days(from: latestActivityDate)) \(suffix) ago"
-        } else if today.weeks(from: latestActivityDate) < 4 {
-            let suffix: String = today.weeks(from: latestActivityDate) == 1 ? "week" : "weeks"
-            latestActivity = "\(today.weeks(from: latestActivityDate)) \(suffix) ago"
+            latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
         } else {
             let formatter: DateFormatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
-            latestActivity = formatter.string(from: latestActivityDate)
+            latestActivity += String(formatter.string(from: latestActivityDate).split(separator: ",")[0])
+        }
+        if role == .admin {
+            latestActivity = code + "  ·  " + latestActivity
         }
         return latestActivity
     }
