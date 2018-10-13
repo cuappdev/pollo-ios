@@ -175,7 +175,7 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        if !pollsDateModel.polls.contains(where: { otherPoll -> Bool in
+        if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
             return otherPoll.id == poll.id
         }) { return }
         pollsDateModel.polls.append(poll)
