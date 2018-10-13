@@ -55,7 +55,7 @@ class PollBuilderViewController: UIViewController {
     // MARK: Constants
     let centerViewWidth: CGFloat = 135
     let centerViewHeight: CGFloat = 24
-    let dropDownArrowLeftPadding: CGFloat = 7.5
+    let dropDownArrowLeftPadding: CGFloat = 5.0
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
     let edgePadding: CGFloat = 18
