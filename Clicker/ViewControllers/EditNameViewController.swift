@@ -59,6 +59,7 @@ class EditNameViewController: UIViewController {
         nameTextField.layer.borderColor = UIColor.clickerGrey5.cgColor
         nameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: edgePadding, height: nameTextFieldHeight))
         nameTextField.leftViewMode = .always
+        nameTextField.becomeFirstResponder()
         view.addSubview(nameTextField)
         
         saveButton = UIButton()
