@@ -50,6 +50,7 @@ class QuestionCell: UICollectionViewCell {
         let isUntitledPoll = questionModel.question == ""
         questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
         questionLabel.textColor = isUntitledPoll ? .clickerGrey2 : .black
+        questionLabel.alpha = isUntitledPoll ? 0.5 : 1.0
     }
     
     required init?(coder aDecoder: NSCoder) {
