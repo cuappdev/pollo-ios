@@ -11,6 +11,7 @@ import Presentr
 
 protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
+    func ignoreNextKeyboardHiding()
 }
 
 protocol PollBuilderViewControllerDelegate {
@@ -48,6 +49,7 @@ class PollBuilderViewController: UIViewController {
     var loadedFRDraft: Draft?
     var isKeyboardShown: Bool = false
     var dropDownHidden: Bool = true
+    var shouldIgnoreNextKeyboardHiding: Bool = false
     
     // MARK: Constants
     let centerViewWidth: CGFloat = 135
@@ -132,11 +134,12 @@ class PollBuilderViewController: UIViewController {
         view.addSubview(draftsButton)
         
         mcPollBuilder = MCPollBuilderView()
-        mcPollBuilder.pollBuilderDelegate = self
+        mcPollBuilder.configure(with: self)
+        
         view.addSubview(mcPollBuilder)
         
         frPollBuilder = FRPollBuilderView()
-        frPollBuilder.pollBuilderDelegate = self
+        frPollBuilder.configure(with: self)
         view.addSubview(frPollBuilder)
         frPollBuilder.isHidden = true
         
@@ -432,6 +435,10 @@ class PollBuilderViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        if shouldIgnoreNextKeyboardHiding {
+            shouldIgnoreNextKeyboardHiding = false
+            return
+        }
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()

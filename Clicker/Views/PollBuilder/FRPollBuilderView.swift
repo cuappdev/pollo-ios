@@ -17,7 +17,6 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     // MARK: - Data vars
     var editable: Bool!
     var session: Session!
-    var questionDelegate: QuestionDelegate!
     var pollBuilderDelegate: PollBuilderViewDelegate!
     
     // MARK: - Constants
@@ -28,8 +27,12 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
         super.init(frame: frame)
         setupViews()
         layoutSubviews()
-        
         editable = false
+        questionTextField.becomeFirstResponder()
+    }
+    
+    func configure(with delegate: PollBuilderViewDelegate) {
+        self.pollBuilderDelegate = delegate
     }
     
     // MARK: - LAYOUT
