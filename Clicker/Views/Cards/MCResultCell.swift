@@ -12,6 +12,7 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - View vars
     var containerView: UIView!
+    var innerShadow: CALayer!
     var optionLabel: UILabel!
     var numSelectedLabel: UILabel!
     var highlightView: UIView!
@@ -32,17 +33,31 @@ class MCResultCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .clear
         setupViews()
     }
     
     // MARK: - Layout
     func setupViews() {
-        containerView = UIView()
+        containerView = InnerShadowView(frame: CGRect(x: 0, y: 0, width: contentView.frame.width - containerViewHorizontalPadding * 2, height: contentView.frame.height))
         containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
+        
+        innerShadow = CALayer()
+        innerShadow.frame = CGRect(x: 0, y: 0, width: contentView.frame.width - containerViewHorizontalPadding * 2, height: contentView.frame.height)
+        let path = UIBezierPath(rect: innerShadow.bounds.insetBy(dx: -20, dy: -20))
+        let innerPart = UIBezierPath(rect: innerShadow.bounds).reversing()
+        path.append(innerPart)
+        innerShadow.shadowPath = path.cgPath
+        innerShadow.masksToBounds = true
+        innerShadow.shadowColor = UIColor.clickerWhite2.cgColor
+        innerShadow.shadowOffset = CGSize.zero
+        innerShadow.shadowOpacity = 1
+        innerShadow.shadowRadius = 2.5
+        containerView.layer.addSublayer(innerShadow)
+        
         contentView.addSubview(containerView)
         
         optionLabel = UILabel()

@@ -24,6 +24,7 @@ class CardController: UIViewController {
     var peopleButton: UIButton!
     var createPollButton: UIButton!
     var countLabel: UILabel!
+    var countLabelBackgroundView: UIView!
     var collectionViewLayout: UICollectionViewFlowLayout!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
@@ -41,6 +42,7 @@ class CardController: UIViewController {
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
     let countLabelHeight: CGFloat = 23.0
+    let countLabelPadding: CGFloat = 5
     let collectionViewTopPadding: CGFloat = 15
     let navigationTitleHeight: CGFloat = 51.5
     
@@ -102,19 +104,29 @@ class CardController: UIViewController {
         adapter.collectionView = collectionView
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
+        
+        countLabelBackgroundView = UIView()
+        countLabelBackgroundView.backgroundColor = .clickerGrey10
+        countLabelBackgroundView.clipsToBounds = true
+        countLabelBackgroundView.layer.cornerRadius = countLabelHeight / 2
+        view.addSubview(countLabelBackgroundView)
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
         countLabel.font = ._12MediumFont
-        countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.clipsToBounds = true
-        countLabel.layer.cornerRadius = 0.5 * min(countLabelHeight, countLabelWidth)
+        countLabel.adjustsFontSizeToFitWidth = true
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
         
-        countLabel.snp.makeConstraints { make in
+        countLabelBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(23)
             make.centerX.equalToSuperview()
+            make.width.equalTo(countLabelWidth + countLabelPadding * 2)
+            make.height.equalTo(countLabelHeight)
+        }
+        
+        countLabel.snp.makeConstraints { make in
+            make.center.equalTo(countLabelBackgroundView.snp.center)
             make.width.equalTo(countLabelWidth)
             make.height.equalTo(countLabelHeight)
         }
@@ -176,7 +188,7 @@ class CardController: UIViewController {
     
     func updateCountLabelText(with index: Int) {
         let total = pollsDateModel.polls.count
-        countLabel.attributedText = getCountLabelAttributedString("\(index + 1)/\(total)")
+        countLabel.attributedText = getCountLabelAttributedString("\(index + 1) / \(total)")
     }
     
     // MARK: - Actions
