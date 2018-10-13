@@ -56,14 +56,21 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        GetSortedPolls(id: session.id).make()
-            .done { pollsDateArray in
-                let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
+        JoinSessionWithId(id: session.id).make()
+            .done { session in
+                GetSortedPolls(id: session.id).make()
+                    .done { pollsDateArray in
+                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    } .catch { error in
+                        print(error)
+                    }
             } .catch { error in
                 print(error)
-        }
+                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
+                self.present(alertController, animated: true, completion: nil)
+            }
     }
     
     func pollsCellShouldEditSession(session: Session, userRole: UserRole) {
