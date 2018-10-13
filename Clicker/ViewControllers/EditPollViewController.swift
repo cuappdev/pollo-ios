@@ -21,10 +21,10 @@ class EditPollViewController: UIViewController {
     // MARK: - View vars
     var buttonStackView: UIStackView!
     var editView: UIView!
-    var editNameImageView: UIImageView!
+    var editNameImageButton: UIButton!
     var editNameButton: UIButton!
     var deleteView: UIView!
-    var deleteImageView: UIImageView!
+    var deleteImageButton: UIButton!
     var deleteButton: UIButton!
     
     // MARK: - Data vars
@@ -34,15 +34,19 @@ class EditPollViewController: UIViewController {
     
     // MARK: - Constants
     let buttonStackViewHeight: CGFloat = 75
+    let buttonStackViewAdminTopOffset: CGFloat = 20
     let editViewHeight: CGFloat = 24
-    let editNameImageViewLeftPadding: CGFloat = 18
+    let editNameImageButtonLeftPadding: CGFloat = 18
     let editNameButtonLeftPadding: CGFloat = 18
     let editNameButtonWidthScaleFactor: CGFloat = 0.7
-    let deleteImageViewLeftPadding: CGFloat = 18
+    let deleteImageButtonLeftPadding: CGFloat = 18
     let deleteButtonLeftPadding: CGFloat = 18
     let deleteButtonWidthScaleFactor: CGFloat = 0.7
     let adminDeleteButtonTitle = "Delete"
     let memberDeleteButtonTitle = "Leave"
+    let editNameButtonTitle = "Edit Name"
+    let deleteImageName = "delete"
+    let editImageName = "editPoll"
     
     init(delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -60,20 +64,24 @@ class EditPollViewController: UIViewController {
     }
     
     func setupViews() {
-        editNameImageView = UIImageView(image: #imageLiteral(resourceName: "editPoll"))
+        editNameImageButton = UIButton()
+        editNameImageButton.setImage(UIImage(named: editImageName), for: .normal)
+        editNameImageButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
         editNameButton = UIButton()
-        editNameButton.setTitle("Edit Name", for: .normal)
+        editNameButton.setTitle(editNameButtonTitle, for: .normal)
         editNameButton.setTitleColor(.black, for: .normal)
         editNameButton.contentHorizontalAlignment = .left
         editNameButton.titleLabel?.font = UIFont._16RegularFont
         editNameButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
         editView = UIView()
-        editView.addSubview(editNameImageView)
+        editView.addSubview(editNameImageButton)
         editView.addSubview(editNameButton)
         
-        deleteImageView = UIImageView(image: #imageLiteral(resourceName: "delete"))
+        deleteImageButton = UIButton()
+        deleteImageButton.setImage(UIImage(named: deleteImageName), for: .normal)
+        deleteImageButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
         deleteButton = UIButton()
         deleteButton.setTitle(userRole == .admin ? adminDeleteButtonTitle : memberDeleteButtonTitle, for: .normal)
@@ -83,7 +91,7 @@ class EditPollViewController: UIViewController {
         deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
         deleteView = UIView()
-        deleteView.addSubview(deleteImageView)
+        deleteView.addSubview(deleteImageButton)
         deleteView.addSubview(deleteButton)
         
         let stackViewSubviews: [UIView] = userRole == .admin ? [editView, deleteView] : [deleteView]
@@ -95,12 +103,9 @@ class EditPollViewController: UIViewController {
     }
     
     func setupConstraints() {
+        let buttonStackViewTopOffset = userRole == .admin ? buttonStackViewAdminTopOffset : 0
         buttonStackView.snp.makeConstraints { make in
-            if userRole == .admin {
-                make.center.equalToSuperview()
-            } else {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            }
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonStackViewTopOffset)
             make.width.equalToSuperview()
             make.height.equalTo(buttonStackViewHeight)
         }
@@ -110,13 +115,13 @@ class EditPollViewController: UIViewController {
                 make.height.equalTo(editViewHeight)
             }
             
-            editNameImageView.snp.makeConstraints { make in
-                make.left.equalToSuperview().offset(editNameImageViewLeftPadding)
+            editNameImageButton.snp.makeConstraints { make in
+                make.left.equalToSuperview().offset(editNameImageButtonLeftPadding)
                 make.centerY.equalToSuperview()
             }
             
             editNameButton.snp.makeConstraints { make in
-                make.left.equalTo(editNameImageView.snp.right).offset(editNameButtonLeftPadding)
+                make.left.equalTo(editNameImageButton.snp.right).offset(editNameButtonLeftPadding)
                 make.centerY.equalToSuperview()
                 make.width.equalToSuperview().multipliedBy(editNameButtonWidthScaleFactor)
             }
@@ -126,13 +131,13 @@ class EditPollViewController: UIViewController {
             make.height.equalTo(editViewHeight)
         }
         
-        deleteImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(deleteImageViewLeftPadding)
+        deleteImageButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(deleteImageButtonLeftPadding)
             make.centerY.equalToSuperview()
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.left.equalTo(deleteImageView.snp.right).offset(deleteButtonLeftPadding)
+            make.left.equalTo(deleteImageButton.snp.right).offset(deleteButtonLeftPadding)
             make.centerY.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(deleteButtonWidthScaleFactor)
         }
