@@ -24,7 +24,6 @@ class MCResultCell: UICollectionViewCell {
     let labelFontSize: CGFloat = 13
     let containerViewCornerRadius: CGFloat = 6
     let containerViewBorderWidth: CGFloat = 0.5
-    let containerViewHorizontalPadding: CGFloat = 14
     let containerViewTopPadding: CGFloat = 5
     let optionLabelHorizontalPadding: CGFloat = 14
     let numSelectedLabelTrailingPadding: CGFloat = 14
@@ -39,14 +38,14 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        containerView = InnerShadowView()
+        containerView = UIView()
         containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
         
         innerShadow = CALayer()
-        innerShadow.frame = CGRect(x: 0, y: 0, width: contentView.frame.width - containerViewHorizontalPadding * 2, height: contentView.frame.height)
+        innerShadow.frame = CGRect(x: 0, y: 0, width: contentView.frame.width - LayoutConstants.pollOptionsPadding * 2, height: contentView.frame.height)
         let path = UIBezierPath(rect: innerShadow.bounds.insetBy(dx: -20, dy: -20))
         let innerPart = UIBezierPath(rect: innerShadow.bounds).reversing()
         path.append(innerPart)
@@ -78,8 +77,8 @@ class MCResultCell: UICollectionViewCell {
     
     override func updateConstraints() {
         containerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(containerViewHorizontalPadding)
-            make.trailing.equalToSuperview().inset(containerViewHorizontalPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.pollOptionsPadding)
+            make.trailing.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
             make.top.equalToSuperview().offset(containerViewTopPadding)
             make.bottom.equalToSuperview()
         }

@@ -18,7 +18,7 @@ protocol PollOptionsCellDelegate {
     
 }
 
-class PollOptionsCell: UICollectionViewCell {
+class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
     var collectionView: UICollectionView!
@@ -28,10 +28,17 @@ class PollOptionsCell: UICollectionViewCell {
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
+    
+    // MARK: - Constants
+    let contentViewCornerRadius: CGFloat = 12
+    let interItemPadding: CGFloat = 5
         
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .white
+        contentView.clipsToBounds = true
+        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        contentView.layer.cornerRadius = contentViewCornerRadius
         setupViews()
     }
     
@@ -50,14 +57,23 @@ class PollOptionsCell: UICollectionViewCell {
         adapter = ListAdapter(updater: updater, viewController: nil)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+        if diff < 10 {
+            
+        }
     }
     
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(LayoutConstants.pollOptionsVerticalPadding)
-            make.bottom.equalToSuperview().inset(LayoutConstants.pollOptionsVerticalPadding)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
+        
         super.updateConstraints()
     }
     
@@ -76,15 +92,31 @@ class PollOptionsCell: UICollectionViewCell {
 extension PollOptionsCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        var models = [ListDiffable]()
+        let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + interItemPadding)
+        models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            return mcResultModels
+            for model in mcResultModels {
+                models.append(model)
+            }
+            models.append(bottomSpaceModel)
+            break
         case .mcChoice(let mcChoiceModels):
-            return mcChoiceModels
+            for model in mcChoiceModels {
+                models.append(model)
+            }
+            models.append(bottomSpaceModel)
+            break
         case .frOption(let frOptionModels):
-            return frOptionModels
+            for model in frOptionModels {
+                models.append(model)
+            }
+            models.append(bottomSpaceModel)
         }
+        return models
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -92,8 +124,10 @@ extension PollOptionsCell: ListAdapterDataSource {
             return MCResultSectionController(delegate: self)
         } else if object is MCChoiceModel {
             return MCChoiceSectionController(delegate: self)
-        } else {
+        } else if object is FROptionModel {
             return FROptionSectionController(delegate: self)
+        } else {
+            return SpaceSectionController()
         }
     }
     

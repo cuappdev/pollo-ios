@@ -119,7 +119,7 @@ class CardController: UIViewController {
         view.addSubview(countLabel)
         
         countLabelBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(23)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.centerX.equalToSuperview()
             make.width.equalTo(countLabelWidth + countLabelPadding * 2)
             make.height.equalTo(countLabelHeight)
@@ -132,7 +132,7 @@ class CardController: UIViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(collectionViewTopPadding)
+            make.top.equalTo(countLabelBackgroundView.snp.bottom)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
