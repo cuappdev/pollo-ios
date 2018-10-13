@@ -13,8 +13,9 @@ class SettingsSectionController: ListSectionController {
     var settingsDataModel: SettingsDataModel!
     
     // MARK: Layout constants
-    let tallInfoCellHeight: CGFloat = 110.0
-    let shortInfoCellHeight: CGFloat = 87.0
+    let accountInfoCellHeight: CGFloat = 80.0
+    let aboutInfoCellHeight: CGFloat = 110.0
+    let feedbackInfoCellHeight: CGFloat = 130
     let linkCellHeight: CGFloat = 39.5
     
     // MARK: - ListSectionController overrides
@@ -24,8 +25,16 @@ class SettingsSectionController: ListSectionController {
         }
         switch settingsDataModel.state {
         case .info:
-            return CGSize(width: containerSize.width, height: settingsDataModel.title == "About" ?
-                tallInfoCellHeight : shortInfoCellHeight)
+            var cellHeight: CGFloat
+            switch settingsDataModel.title {
+            case "Account":
+                cellHeight = accountInfoCellHeight
+            case "About":
+                cellHeight = aboutInfoCellHeight
+            default:
+                cellHeight = feedbackInfoCellHeight
+            }
+            return CGSize(width: containerSize.width, height: cellHeight)
         case .link:
             return CGSize(width: containerSize.width, height: linkCellHeight)
         }
