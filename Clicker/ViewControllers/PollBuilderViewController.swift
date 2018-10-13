@@ -12,6 +12,7 @@ import Presentr
 protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
+    var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate {
