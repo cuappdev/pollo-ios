@@ -53,7 +53,7 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     func reset() {
         questionTextField.text = ""
         clearMCOptionModels()
-        collectionView.reloadData()
+        adapter.reloadData(completion: nil)
     }
     
     func clearMCOptionModels() {
