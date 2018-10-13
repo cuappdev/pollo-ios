@@ -35,7 +35,7 @@ class PollSectionController: ListSectionController {
         guard let containerSize = collectionContext?.insetContainerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width - 36, height: containerSize.height * heightScaleFactor)
+        return CGSize(width: containerSize.width, height: containerSize.height * heightScaleFactor)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
