@@ -11,9 +11,7 @@ import Foundation
 extension PollBuilderViewController: PollBuilderViewDelegate {
     
     func ignoreNextKeyboardHiding() {
-        if isKeyboardShown {
-            shouldIgnoreNextKeyboardHiding = true
-        }
+        shouldIgnoreNextKeyboardHiding = isKeyboardShown
     }
     
     func updateCanDraft(_ canDraft: Bool) {

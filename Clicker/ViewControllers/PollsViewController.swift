@@ -70,7 +70,6 @@ class PollsViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        //setupGradient()
     }
     
     // MARK: - LAYOUT
