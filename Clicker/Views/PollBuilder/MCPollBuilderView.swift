@@ -10,7 +10,7 @@ import IGListKit
 import SnapKit
 import UIKit
 
-class MCPollBuilderView: UIView, UITextFieldDelegate {
+class MCPollBuilderView: UIView {
     
     // MARK: - View vars
     var questionTextField: UITextField!
@@ -220,6 +220,18 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         mcOptionModels = updatedMCOptionModels
         updateTotalOptions()
         adapter.performUpdates(animated: false, completion: nil)
+    }
+    
+}
+
+extension MCPollBuilderView: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = IntegerConstants.maxQuestionCharacterCount
+        let currentString: NSString = (textField.text ?? "") as NSString
+        let newString: NSString =
+            currentString.replacingCharacters(in: range, with: string) as NSString
+        return newString.length <= maxLength
     }
     
 }

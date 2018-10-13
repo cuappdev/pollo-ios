@@ -17,7 +17,9 @@ class QuestionSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: LayoutConstants.questionCellHeight)
+        let questionLabelWidth = containerSize.width - LayoutConstants.cardHorizontalPadding * 2
+        let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20HeavyFont) + 10
+        return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

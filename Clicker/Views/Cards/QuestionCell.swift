@@ -14,7 +14,6 @@ class QuestionCell: UICollectionViewCell {
     var questionLabel: UILabel!
     
     // MARK: - Constants
-    let questionLabelFontSize: CGFloat = 20
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
     let untitledPollString = "Untitled Poll"
@@ -29,10 +28,9 @@ class QuestionCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         questionLabel = UILabel()
-        questionLabel.font = UIFont.systemFont(ofSize: questionLabelFontSize, weight: .heavy)
+        questionLabel.font = ._20HeavyFont
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byTruncatingTail
-        questionLabel.numberOfLines = 2
         contentView.addSubview(questionLabel)
     }
     
