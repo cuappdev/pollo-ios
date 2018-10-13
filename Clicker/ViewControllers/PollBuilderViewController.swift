@@ -321,7 +321,7 @@ class PollBuilderViewController: UIViewController {
                 } else {
                     CreateDraft(text: question, options: options).make()
                         .done { draft in
-                            self.drafts.append(draft)
+                            self.drafts.insert(draft, at: 0)
                             self.updateDraftsCount()
                         }.catch { error in
                             print("error: ", error)
@@ -342,7 +342,7 @@ class PollBuilderViewController: UIViewController {
                 } else {
                     CreateDraft(text: question, options: []).make()
                         .done { draft in
-                            self.drafts.append(draft)
+                            self.drafts.insert(draft, at: 0)
                             self.updateDraftsCount()
                         }.catch { error in
                             print("error: ", error)
