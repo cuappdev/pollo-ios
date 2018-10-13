@@ -39,7 +39,7 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        containerView = InnerShadowView(frame: CGRect(x: 0, y: 0, width: contentView.frame.width - containerViewHorizontalPadding * 2, height: contentView.frame.height))
+        containerView = InnerShadowView()
         containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
