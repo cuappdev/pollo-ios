@@ -120,6 +120,10 @@ struct StringConstants {
     static let dateFormat = "MMM dd yyyy"
 }
 
+struct IntegerConstants {
+    static let maxQuestionCharacterCount = 58
+}
+
 enum Keys: String {
     case apiURL = "api-url"
     case apiDevURL = "api-dev-url"
