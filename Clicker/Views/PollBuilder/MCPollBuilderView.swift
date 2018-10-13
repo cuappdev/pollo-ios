@@ -140,7 +140,7 @@ class MCPollBuilderView: UIView, UITextFieldDelegate {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
