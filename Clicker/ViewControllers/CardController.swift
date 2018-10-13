@@ -39,9 +39,10 @@ class CardController: UIViewController {
     var isInitialLoad: Bool = true
     
     // MARK: - Constants
+    let navigationTitleHeight: CGFloat = 51.5
     let countLabelWidth: CGFloat = 42.0
     let countLabelHeight: CGFloat = 23.0
-    let navigationTitleHeight: CGFloat = 51.5
+    let collectionViewTopPadding: CGFloat = 7
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -120,7 +121,7 @@ class CardController: UIViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom)
+            make.top.equalTo(countLabel.snp.bottom).offset(collectionViewTopPadding)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()

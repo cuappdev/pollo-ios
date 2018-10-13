@@ -50,9 +50,9 @@ class CardCell: UICollectionViewCell {
     let questionButtonBorderWidth: CGFloat = 1.0
     let questionButtonWidth: CGFloat = 170.0
     let questionButtonHeight: CGFloat = 47.0
-    let questionButtonBottomPadding: CGFloat = 10.0
+    let questionButtonBottomPadding: CGFloat = 5.0
     let timerLabelFontSize: CGFloat = 14.0
-    let timerLabelBottomPadding: CGFloat =  30.0
+    let timerLabelBottomPadding: CGFloat =  16.0
     let endQuestionText = "End Question"
     let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
@@ -109,7 +109,7 @@ class CardCell: UICollectionViewCell {
         
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().inset(timerLabelBottomPadding)
         }
         
         questionButton.snp.makeConstraints { make in
