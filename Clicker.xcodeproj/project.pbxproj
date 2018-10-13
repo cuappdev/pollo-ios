@@ -30,7 +30,6 @@
 		63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */; };
 		63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */; };
 		63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4DAF72097DE94000808EB /* NavigationTitleView.swift */; };
-		6529150A1F78124700882CBB /* ClickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652915091F78124700882CBB /* ClickerTests.swift */; };
 		C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203E56121332FA30016A147 /* PollsViewController+Extension.swift */; };
 		C203E564213330AC0016A147 /* DraftsViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203E563213330AC0016A147 /* DraftsViewController+Extension.swift */; };
 		C20B570721388F500091034F /* EmptyStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B570621388F500091034F /* EmptyStateModel.swift */; };
@@ -156,8 +155,6 @@
 		63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkCell.swift; sourceTree = "<group>"; };
 		63E4DAF72097DE94000808EB /* NavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* ClickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		652915091F78124700882CBB /* ClickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerTests.swift; sourceTree = "<group>"; };
-		6529150B1F78124700882CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DFC69E3243ED7F8257FA975 /* Pods-Clicker.debug dev server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug dev server.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug dev server.xcconfig"; sourceTree = "<group>"; };
 		79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF3AAE5CB03F39BF24F467B /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
@@ -353,15 +350,6 @@
 			path = Dropdowns;
 			sourceTree = "<group>";
 		};
-		652915081F78124700882CBB /* ClickerTests */ = {
-			isa = PBXGroup;
-			children = (
-				652915091F78124700882CBB /* ClickerTests.swift */,
-				6529150B1F78124700882CBB /* Info.plist */,
-			);
-			path = ClickerTests;
-			sourceTree = "<group>";
-		};
 		A2D67F102058E16CFF6D7701 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,7 +521,6 @@
 				0C41C955214DB62B00F559C9 /* Secrets */,
 				C2434C8D2133346C00929C98 /* Clicker-Bridging-Header.h */,
 				C7F923C41F73540600B1E975 /* Clicker */,
-				652915081F78124700882CBB /* ClickerTests */,
 				C7F923C31F73540600B1E975 /* Products */,
 				A2D67F102058E16CFF6D7701 /* Pods */,
 				2B4C2EA7BDB8502F608CE492 /* Frameworks */,
@@ -797,7 +784,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6529150A1F78124700882CBB /* ClickerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
