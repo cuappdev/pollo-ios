@@ -42,9 +42,10 @@ class CardController: UIViewController {
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
     let countLabelHeight: CGFloat = 23.0
-    let countLabelPadding: CGFloat = 5
+    let countLabelHorizontalPadding: CGFloat = 5
     let collectionViewTopPadding: CGFloat = 15
     let navigationTitleHeight: CGFloat = 51.5
+    let countLabelBackgroundViewTopPadding: CGFloat = 24
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -119,9 +120,9 @@ class CardController: UIViewController {
         view.addSubview(countLabel)
         
         countLabelBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(countLabelBackgroundViewTopPadding)
             make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth + countLabelPadding * 2)
+            make.width.equalTo(countLabelWidth + countLabelHorizontalPadding * 2)
             make.height.equalTo(countLabelHeight)
         }
         
