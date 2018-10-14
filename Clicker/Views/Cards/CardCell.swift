@@ -218,7 +218,6 @@ extension CardCell: ListAdapterDataSource {
         }
         objects.append(separatorLineModel)
         objects.append(pollOptionsModel)
-     //   objects.append(bottomHamburgerCardModel)
         return objects
     }
     
