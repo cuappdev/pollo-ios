@@ -1,19 +1,19 @@
 {
   "images" : [
     {
+      "scale" : "1x",
       "idiom" : "universal",
-      "filename" : "DropUpArrowIcon.png",
-      "scale" : "1x"
+      "filename" : "groupCopy.png"
     },
     {
+      "scale" : "2x",
       "idiom" : "universal",
-      "filename" : "DropUpArrowIcon@2x.png",
-      "scale" : "2x"
+      "filename" : "groupCopy@2x.png"
     },
     {
+      "scale" : "3x",
       "idiom" : "universal",
-      "filename" : "DropUpArrowIcon@3x.png",
-      "scale" : "3x"
+      "filename" : "groupCopy@3x.png"
     }
   ],
   "info" : {

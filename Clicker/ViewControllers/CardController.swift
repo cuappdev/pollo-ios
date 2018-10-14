@@ -24,6 +24,7 @@ class CardController: UIViewController {
     var peopleButton: UIButton!
     var createPollButton: UIButton!
     var countLabel: UILabel!
+    var countLabelBackgroundView: UIView!
     var collectionViewLayout: UICollectionViewFlowLayout!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
@@ -43,6 +44,11 @@ class CardController: UIViewController {
     let countLabelWidth: CGFloat = 42.0
     let countLabelHeight: CGFloat = 23.0
     let collectionViewTopPadding: CGFloat = 7
+    let countLabelHorizontalPadding: CGFloat = 5
+    let collectionViewTopPadding: CGFloat = 15
+    let navigationTitleHeight: CGFloat = 51.5
+    let countLabelBackgroundViewTopPadding: CGFloat = 24
+    let collectionViewHorizontalInset: CGFloat = 9.0
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -82,11 +88,10 @@ class CardController: UIViewController {
     // MARK: - Layout
     func setupViews() {
         collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.minimumInteritemSpacing = collectionViewHorizontalInset
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        let collectionViewHorizontalInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -102,26 +107,35 @@ class CardController: UIViewController {
         adapter.collectionView = collectionView
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
+        
+        countLabelBackgroundView = UIView()
+        countLabelBackgroundView.backgroundColor = .clickerGrey10
+        countLabelBackgroundView.clipsToBounds = true
+        countLabelBackgroundView.layer.cornerRadius = countLabelHeight / 2
+        view.addSubview(countLabelBackgroundView)
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
         countLabel.font = ._12MediumFont
-        countLabel.textColor = .white
-        countLabel.backgroundColor = UIColor.clickerGrey10
-        countLabel.clipsToBounds = true
-        countLabel.layer.cornerRadius = 0.5 * min(countLabelHeight, countLabelWidth)
+        countLabel.adjustsFontSizeToFitWidth = true
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
         
-        countLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(23)
+        countLabelBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(countLabelBackgroundViewTopPadding)
             make.centerX.equalToSuperview()
+            make.width.equalTo(countLabelWidth + countLabelHorizontalPadding * 2)
+            make.height.equalTo(countLabelHeight)
+        }
+        
+        countLabel.snp.makeConstraints { make in
+            make.center.equalTo(countLabelBackgroundView.snp.center)
             make.width.equalTo(countLabelWidth)
             make.height.equalTo(countLabelHeight)
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabel.snp.bottom).offset(collectionViewTopPadding)
+            make.top.equalTo(countLabelBackgroundView.snp.bottom)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -166,7 +180,7 @@ class CardController: UIViewController {
     // MARK: Helpers
     func updateCountLabelText(with index: Int) {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(index + 1)/\(total)"
+        countLabel.text = "\(index + 1) / \(total)"
     }
     
     // MARK: - Actions
