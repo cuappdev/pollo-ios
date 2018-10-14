@@ -45,8 +45,6 @@ class CardController: UIViewController {
     let countLabelHeight: CGFloat = 23.0
     let collectionViewTopPadding: CGFloat = 7
     let countLabelHorizontalPadding: CGFloat = 5
-    let collectionViewTopPadding: CGFloat = 15
-    let navigationTitleHeight: CGFloat = 51.5
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
     
@@ -118,6 +116,7 @@ class CardController: UIViewController {
         countLabel.textAlignment = .center
         countLabel.font = ._12MediumFont
         countLabel.adjustsFontSizeToFitWidth = true
+        countLabel.textColor = .white
         updateCountLabelText(with: 0)
         view.addSubview(countLabel)
         
@@ -135,7 +134,7 @@ class CardController: UIViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(countLabelBackgroundView.snp.bottom)
+            make.top.equalTo(countLabelBackgroundView.snp.bottom).offset(collectionViewTopPadding)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
