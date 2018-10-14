@@ -40,8 +40,10 @@ class CardController: UIViewController {
     var isInitialLoad: Bool = true
     
     // MARK: - Constants
+    let navigationTitleHeight: CGFloat = 51.5
     let countLabelWidth: CGFloat = 42.0
     let countLabelHeight: CGFloat = 23.0
+    let collectionViewTopPadding: CGFloat = 7
     let countLabelHorizontalPadding: CGFloat = 5
     let collectionViewTopPadding: CGFloat = 15
     let navigationTitleHeight: CGFloat = 51.5
@@ -176,20 +178,9 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    func getCountLabelAttributedString(_ countString: String) -> NSMutableAttributedString {
-        let slashIndex = countString.index(of: "/")?.encodedOffset
-        let attributedString = NSMutableAttributedString(string: countString, attributes: [
-            .font: UIFont.systemFont(ofSize: 14.0, weight: .bold),
-            .foregroundColor: UIColor.clickerGrey2,
-            .kern: 0.0
-            ])
-        attributedString.addAttribute(.foregroundColor, value: UIColor(white: 1.0, alpha: 0.9), range: NSRange(location: 0, length: slashIndex!))
-        return attributedString
-    }
-    
     func updateCountLabelText(with index: Int) {
         let total = pollsDateModel.polls.count
-        countLabel.attributedText = getCountLabelAttributedString("\(index + 1) / \(total)")
+        countLabel.text = "\(index + 1) / \(total)"
     }
     
     // MARK: - Actions

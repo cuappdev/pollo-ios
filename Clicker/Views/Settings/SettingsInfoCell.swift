@@ -13,7 +13,6 @@ class SettingsInfoCell: UICollectionViewCell {
     // MARK: Views and VC's
     var titleView: UILabel!
     var descriptionView: UILabel!
-    var lineView: UIView!
     
     // MARK: Layout constants
     let standardInset = 18
@@ -38,10 +37,6 @@ class SettingsInfoCell: UICollectionViewCell {
         descriptionView.textAlignment = .left
         descriptionView.numberOfLines = 0
         contentView.addSubview(descriptionView)
-        
-        lineView = UIView()
-        lineView.backgroundColor = UIColor.clickerGrey5
-        contentView.addSubview(lineView)
     }
     
     func setupConstraints() {
@@ -57,23 +52,12 @@ class SettingsInfoCell: UICollectionViewCell {
             make.left.equalTo(titleView.snp.left)
             make.right.equalTo(titleView.snp.right)
         }
-        
-        lineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.left.equalToSuperview().offset(standardInset)
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
     }
     
     func configureWith(settingsDataModel: SettingsDataModel) {
         titleView.text = settingsDataModel.title
         descriptionView.text = settingsDataModel.description
         descriptionView.sizeToFit()
-        
-        if settingsDataModel.title != "Account" {
-            lineView.removeFromSuperview()
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {

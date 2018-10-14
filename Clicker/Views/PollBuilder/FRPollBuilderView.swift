@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-class FRPollBuilderView: UIView, UITextFieldDelegate {
+class FRPollBuilderView: UIView {
     
     // MARK: - View vars
     var questionTextField: UITextField!
@@ -73,4 +73,16 @@ class FRPollBuilderView: UIView, UITextFieldDelegate {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension FRPollBuilderView: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = IntegerConstants.maxQuestionCharacterCount
+        let currentString: NSString = (textField.text ?? "") as NSString
+        let newString: NSString =
+            currentString.replacingCharacters(in: range, with: string) as NSString
+        return newString.length <= maxLength
+    }
+    
 }

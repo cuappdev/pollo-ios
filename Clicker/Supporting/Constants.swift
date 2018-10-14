@@ -38,6 +38,7 @@ enum QuestionType: CustomStringConvertible {
 struct Links {
     static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
     static let appDevSite = "https://www.cornellappdev.com/"
+    static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
 }
 
 struct Identifiers {
@@ -82,7 +83,8 @@ struct LayoutConstants {
     static let cardHorizontalPadding: CGFloat = 14
     static let questionCellHeight: CGFloat = 60
     static let pollBuilderCVHorizontalInset: CGFloat = 18
-    static let separatorLineCellHeight: CGFloat = 1
+    static let separatorLineCardCellHeight: CGFloat = 1
+    static let separatorLineSettingsCellHeight: CGFloat = 5
     static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
     static let buttonSize: CGSize = CGSize(width: 44, height: 44)
 }
@@ -116,6 +118,10 @@ struct StringConstants {
     static let freeResponse = "Free Response"
     static let multipleChoice = "Multiple Choice"
     static let dateFormat = "MMM dd yyyy"
+}
+
+struct IntegerConstants {
+    static let maxQuestionCharacterCount = 58
 }
 
 enum Keys: String {

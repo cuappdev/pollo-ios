@@ -304,7 +304,7 @@ class PollsViewController: UIViewController {
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        JoinSession(code: code).make()
+        JoinSessionWithCode(code: code).make()
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in

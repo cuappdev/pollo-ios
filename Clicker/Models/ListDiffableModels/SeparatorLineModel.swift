@@ -8,10 +8,20 @@
 
 import IGListKit
 
+enum SeparatorLineState {
+    case card
+    case settings
+}
+
 class SeparatorLineModel: ListDiffable  {
     
+    var state: SeparatorLineState
     let identifier = UUID().uuidString
  
+    init(state: SeparatorLineState) {
+        self.state = state
+    }
+    
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
