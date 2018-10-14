@@ -310,6 +310,7 @@ class PollsViewController: UIViewController {
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
                         let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        self.updateJoinSessionButton(backgroundColor: .clickerGrey2)
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
@@ -324,6 +325,12 @@ class PollsViewController: UIViewController {
             }
     }
     
+    func updateJoinSessionButton(backgroundColor: UIColor) {
+        UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
+            self.joinSessionButton.backgroundColor = backgroundColor
+        }
+    }
+    
     @objc func settingsAction() {
         let settingsNavigationController = UINavigationController(rootViewController: SettingsViewController())
         self.present(settingsNavigationController, animated: true, completion: nil)
@@ -332,9 +339,7 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
-                self.joinSessionButton.backgroundColor = text.count == 6 ? .clickerGreen0 : .clickerGrey2
-            }
+            updateJoinSessionButton(backgroundColor: text.count == 6 ? .clickerGreen0 : .clickerGrey2)
         }
     }
     
