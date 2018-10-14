@@ -161,16 +161,14 @@ extension PollOptionsCell: ListAdapterDataSource {
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
             models.append(contentsOf: mcResultModels)
-            models.append(bottomSpaceModel)
             break
         case .mcChoice(let mcChoiceModels):
             models.append(contentsOf: mcChoiceModels)
-            models.append(bottomSpaceModel)
             break
         case .frOption(let frOptionModels):
             models.append(contentsOf: frOptionModels)
-            models.append(bottomSpaceModel)
         }
+        models.append(bottomSpaceModel)
         return models
     }
     
