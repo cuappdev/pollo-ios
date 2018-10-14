@@ -51,8 +51,8 @@ class MCChoiceCell: UICollectionViewCell {
     
     override func updateConstraints() {
         optionButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
-            make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
+            make.leading.equalToSuperview().offset(LayoutConstants.pollOptionsPadding)
+            make.trailing.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
             make.top.equalToSuperview().offset(optionButtonTopPadding)
             make.bottom.equalToSuperview()
         }

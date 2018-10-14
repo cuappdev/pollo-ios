@@ -24,7 +24,6 @@ class MCPollBuilderView: UIView {
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
     var mcOptionModels: [PollBuilderMCOptionModel]!
-    var isKeyboardShown: Bool = false
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -140,11 +139,10 @@ class MCPollBuilderView: UIView {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
-            isKeyboardShown = true
         }
     }
     
@@ -152,7 +150,6 @@ class MCPollBuilderView: UIView {
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
-            isKeyboardShown = false
         }
     }
     
@@ -202,10 +199,6 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     }
     
     func pollBuilderSectionControllerDidDeleteOption(index: Int) {
-        if isKeyboardShown {
-            hideKeyboard()
-            return
-        }
         if mcOptionModels.count <= 3 { return }
         mcOptionModels.remove(at: index)
         var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
@@ -219,7 +212,21 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         }
         mcOptionModels = updatedMCOptionModels
         updateTotalOptions()
-        adapter.performUpdates(animated: false, completion: nil)
+        pollBuilderDelegate.ignoreNextKeyboardHiding()
+        
+        adapter.performUpdates(animated: true) { _ in
+            if self.pollBuilderDelegate.isKeyboardShown {
+                // if deleted last option, select new last option. else, select new option at index of deleted option
+                let newIndex = index == self.mcOptionModels.count - 1 ? self.mcOptionModels.count - 2 : index
+                let selectIndex = IndexPath(item: 0, section: newIndex)
+                self.collectionView.scrollToItem(at: selectIndex, at: .centeredVertically, animated: true)
+                guard let cell = self.collectionView.cellForItem(at: selectIndex) as? CreateMCOptionCell else {
+                    print("thats not the right type of cell, something went wrong")
+                    return
+                }
+                cell.shouldFocusTextField()
+            }
+        }
     }
     
 }
@@ -239,7 +246,7 @@ extension MCPollBuilderView: UITextFieldDelegate {
 extension MCPollBuilderView: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return isKeyboardShown
+        return pollBuilderDelegate.isKeyboardShown
     }
     
 }
