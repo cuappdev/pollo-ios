@@ -17,11 +17,14 @@ class SeparatorLineSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: LayoutConstants.separatorLineCellHeight)
+        let cellHeight = separatorLineModel.state == .card ? LayoutConstants.separatorLineCardCellHeight : LayoutConstants.separatorLineSettingsCellHeight
+        return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: SeparatorLineCell.self, for: self, at: index) as! SeparatorLineCell
+        cell.configure(with: separatorLineModel)
+        cell.setNeedsUpdateConstraints()
         return cell
     }
     

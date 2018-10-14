@@ -23,7 +23,6 @@ class PollSectionController: ListSectionController {
     
     var poll: Poll!
     var delegate: PollSectionControllerDelegate!
-    let heightScaleFactor: CGFloat = 0.95
     
     init(delegate: PollSectionControllerDelegate) {
         super.init()
@@ -35,7 +34,7 @@ class PollSectionController: ListSectionController {
         guard let containerSize = collectionContext?.insetContainerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: containerSize.height * heightScaleFactor)
+        return containerSize
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

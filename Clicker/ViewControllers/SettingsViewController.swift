@@ -19,10 +19,18 @@ class SettingsViewController: UIViewController {
     var adapter: ListAdapter!
 
     // MARK: Data
-    var data: [SettingsDataModel]!
+    var data: [ListDiffable]!
     
     // MARK: - Constants
     let navBarTitle = "Settings"
+    let account = "Account"
+    let about = "About"
+    let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
+    let moreApps = "More Apps"
+    let visitOurWebsite = "Visit Our Website"
+    let feedback = "Feedback"
+    let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
+    let sendUsFeedback = "Send Us Feedback"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,16 +42,16 @@ class SettingsViewController: UIViewController {
     }
     
     func loadData() {
-        let settingsModel1 = SettingsDataModel(state: .info, title: "Account", description:
-            User.currentUser?.email)
-        let settingsModel2 = SettingsDataModel(state: .info, title: "About", description:
-            "Pollo is made by Cornell AppDev, an engineering project team at Cornell University.")
-        let settingsModel3 = SettingsDataModel(state: .link, title: "More Apps", description:
-            Links.allApps)
-        let settingsModel4 = SettingsDataModel(state: .link, title: "Visit Our Website",description:
-            Links.appDevSite)
+        let settingsModel1 = SettingsDataModel(state: .info, title: account, description: User.currentUser?.email)
+        let separatorLineModel1 = SeparatorLineModel(state: .settings)
+        let settingsModel2 = SettingsDataModel(state: .info, title: about, description: aboutDescription)
+        let settingsModel3 = SettingsDataModel(state: .link, title: moreApps, description: Links.allApps)
+        let settingsModel4 = SettingsDataModel(state: .link, title: visitOurWebsite, description: Links.appDevSite)
+        let separatorLineModel2 = SeparatorLineModel(state: .settings)
+        let settingsDataModel5 = SettingsDataModel(state: .info, title: feedback, description: feedbackDescription)
+        let settingsDataModel6 = SettingsDataModel(state: .link, title: sendUsFeedback, description: Links.feedbackForm)
         
-        data = [settingsModel1,settingsModel2,settingsModel3,settingsModel4]
+        data = [settingsModel1, separatorLineModel1, settingsModel2, settingsModel3, settingsModel4, separatorLineModel2, settingsDataModel5, settingsDataModel6]
     }
     
     func setupNavBar() {
@@ -150,7 +158,11 @@ extension SettingsViewController: ListAdapterDataSource {
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return SettingsSectionController()
+        if object is SettingsDataModel {
+            return SettingsSectionController()
+        } else {
+            return SeparatorLineSectionController()
+        }
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {

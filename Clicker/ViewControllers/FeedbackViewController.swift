@@ -16,7 +16,6 @@ class FeedbackViewController: UIViewController, WKUIDelegate {
     
     // MARK: - Constants
     let navBarTitle = "Submit Feedback"
-    let feedbackFormUrl = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +28,7 @@ class FeedbackViewController: UIViewController, WKUIDelegate {
     
     // WEBVIEW
     func setupWebView() {
-        let url = URL(string: feedbackFormUrl)
+        let url = URL(string: Links.feedbackForm)
         let request = URLRequest(url: url!)
         
         let webConfiguration = WKWebViewConfiguration()

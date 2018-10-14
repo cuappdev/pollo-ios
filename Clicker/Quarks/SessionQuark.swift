@@ -443,7 +443,7 @@ struct StartSession: ClickerQuark {
     }
 }
 
-struct JoinSession: ClickerQuark {
+struct JoinSessionWithCode: ClickerQuark {
     
     typealias ResponseType = Session
     let code: String
@@ -474,3 +474,37 @@ struct JoinSession: ClickerQuark {
         }
     }
 }
+
+struct JoinSessionWithId: ClickerQuark {
+    
+    typealias ResponseType = Session
+    let id: Int
+    
+    var route: String {
+        return "/join/session"
+    }
+    var headers: HTTPHeaders {
+        return [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+    }
+    var parameters: Parameters {
+        return ["id": id]
+    }
+    let method: HTTPMethod = .post
+    
+    func process(element: Element) throws -> Session {
+        switch element {
+        case .node(let node):
+            print(node)
+            if let id = node["id"].int, let name = node["name"].string, let code = node["code"].string {
+                return Session(id: id, name: name, code: code)
+            } else {
+                throw NeutronError.badResponseData
+            }
+        default: throw NeutronError.badResponseData
+        }
+    }
+}
+
+
