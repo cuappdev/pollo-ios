@@ -25,7 +25,7 @@ class PollPreviewCell: UICollectionViewCell {
     
     // MARK: - View vars
     var nameLabel: UILabel!
-    var activityLabel: UILabel!
+    var descriptionLabel: UILabel!
     var lineView: UIView!
     var dotsButton: UIButton!
     
@@ -54,10 +54,10 @@ class PollPreviewCell: UICollectionViewCell {
         nameLabel.font = ._18SemiboldFont
         contentView.addSubview(nameLabel)
     
-        activityLabel = UILabel()
-        activityLabel.font = ._16MediumFont
-        activityLabel.textColor = .clickerGrey2
-        contentView.addSubview(activityLabel)
+        descriptionLabel = UILabel()
+        descriptionLabel.font = ._16MediumFont
+        descriptionLabel.textColor = .clickerGrey2
+        contentView.addSubview(descriptionLabel)
         
         lineView = UIView()
         lineView.backgroundColor = .clickerGrey5
@@ -78,7 +78,7 @@ class PollPreviewCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(nameLabelLeftPadding)
         }
         
-        activityLabel.snp.makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(4)
             make.left.equalTo(nameLabel.snp.left)
             make.width.equalTo(nameLabel.snp.width)
@@ -103,7 +103,7 @@ class PollPreviewCell: UICollectionViewCell {
     func configure(for session: Session, delegate: PollPreviewCellDelegate) {
         self.delegate = delegate
         nameLabel.text = session.name
-        activityLabel.text = "Latest Activity: \(session.latestActivity)"
+        descriptionLabel.text = session.description
     }
     
     // MARK: - Action
