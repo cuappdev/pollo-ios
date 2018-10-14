@@ -29,4 +29,5 @@ class SpaceSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         spaceModel = object as? SpaceModel
     }
+
 }

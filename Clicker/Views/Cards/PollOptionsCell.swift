@@ -99,21 +99,15 @@ extension PollOptionsCell: ListAdapterDataSource {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            for model in mcResultModels {
-                models.append(model)
-            }
+            models.append(contentsOf: mcResultModels)
             models.append(bottomSpaceModel)
             break
         case .mcChoice(let mcChoiceModels):
-            for model in mcChoiceModels {
-                models.append(model)
-            }
+            models.append(contentsOf: mcChoiceModels)
             models.append(bottomSpaceModel)
             break
         case .frOption(let frOptionModels):
-            for model in frOptionModels {
-                models.append(model)
-            }
+            models.append(contentsOf: frOptionModels)
             models.append(bottomSpaceModel)
         }
         return models
