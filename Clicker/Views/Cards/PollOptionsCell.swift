@@ -22,6 +22,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
     var collectionView: UICollectionView!
+    var arrowImageView: UIImageView!
     
     // MARK: - Data vars
     var delegate: PollOptionsCellDelegate!
@@ -32,6 +33,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
     let interItemPadding: CGFloat = 5
+    let maximumNumberVisibleOptions: Int = 6
+    let arrowBottomInset: CGFloat = 9.8
+    let arrowImageName: String = "DropdownArrowIcon"
+    
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,12 +63,38 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.collectionView = collectionView
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
+        
+        arrowImageView = UIImageView()
+        arrowImageView.image = UIImage(named: arrowImageName)
+        arrowImageView.isHidden = true
+        contentView.addSubview(arrowImageView)
+    }
+    
+    func updateArrowImageView(show: Bool) {
+        UIView.animate(withDuration: 0.25) {
+            if show {
+                self.arrowImageView.snp.remakeConstraints { remake in
+                    remake.bottom.equalToSuperview().inset(self.arrowBottomInset)
+                    remake.centerX.equalToSuperview()
+                }
+            } else {
+                self.arrowImageView.snp.remakeConstraints { remake in
+                    remake.top.equalTo(self.contentView.snp.bottom).offset(5)
+                    remake.centerX.equalToSuperview()
+                }
+            }
+            self.arrowImageView.superview?.layoutIfNeeded()
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-        if diff < 10 {
-            
+        if !arrowImageView.isHidden {
+            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+            if diff < 10 {
+                updateArrowImageView(show: false)
+            } else {
+                updateArrowImageView(show: true)
+            }
         }
     }
     
@@ -72,6 +103,36 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.leading.trailing.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+        
+        guard let pollOptionsModel = pollOptionsModel else { return }
+        switch pollOptionsModel.type {
+        case .mcResult(let mcResultModels):
+            if mcResultModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
+            break
+        case .mcChoice(let mcChoiceModels):
+            if mcChoiceModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
+            break
+        case .frOption(let frOptionModels):
+            if frOptionModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
         }
         
         super.updateConstraints()
