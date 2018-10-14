@@ -70,7 +70,7 @@ class PollsCell: UICollectionViewCell {
     
     func getPollSessions() {
         let role: UserRole = pollType == .created ? .admin : .member
-        GetPollSessions(role: String(describing: role)).make()
+        GetPollSessions(role: role).make()
             .done { sessions in
                 self.sessions = sessions
                 self.adapter.performUpdates(animated: true, completion: nil)

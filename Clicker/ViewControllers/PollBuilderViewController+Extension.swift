@@ -27,7 +27,6 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
             draftsButton.titleLabel?.font = ._16MediumFont
         }
     }
-
 }
 
 extension PollBuilderViewController: DraftsViewControllerDelegate {
