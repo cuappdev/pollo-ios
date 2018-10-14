@@ -46,6 +46,7 @@ class CardController: UIViewController {
     let collectionViewTopPadding: CGFloat = 15
     let navigationTitleHeight: CGFloat = 51.5
     let countLabelBackgroundViewTopPadding: CGFloat = 24
+    let collectionViewHorizontalInset: CGFloat = 9.0
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -85,11 +86,10 @@ class CardController: UIViewController {
     // MARK: - Layout
     func setupViews() {
         collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.minimumInteritemSpacing = collectionViewHorizontalInset
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        let collectionViewHorizontalInset = view.frame.width * 0.05
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false

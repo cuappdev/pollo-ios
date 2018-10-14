@@ -12,6 +12,7 @@ import Presentr
 protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
+    var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate {
@@ -54,7 +55,7 @@ class PollBuilderViewController: UIViewController {
     // MARK: Constants
     let centerViewWidth: CGFloat = 135
     let centerViewHeight: CGFloat = 24
-    let dropDownArrowLeftPadding: CGFloat = 7.5
+    let dropDownArrowLeftPadding: CGFloat = 5.0
     let draftsButtonWidth: CGFloat = 100
     let popupViewHeight: CGFloat = 95
     let edgePadding: CGFloat = 18
@@ -127,8 +128,6 @@ class PollBuilderViewController: UIViewController {
         
         draftsButton = UIButton()
         updateDraftsCount()
-        draftsButton.setTitleColor(.clickerBlack0, for: .normal)
-        draftsButton.titleLabel?.font = ._16MediumFont
         draftsButton.contentHorizontalAlignment = .right
         draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
         view.addSubview(draftsButton)
@@ -412,11 +411,19 @@ class PollBuilderViewController: UIViewController {
     }
     
     func updateDraftsCount() {
+        var text = "Drafts (0)"
         if let _ = drafts {
-            draftsButton.setTitle("Drafts (\(drafts.count))", for: .normal)
-        } else {
-            draftsButton.setTitle("Drafts (0)", for: .normal)
+            text = "Drafts (\(drafts.count))"
         }
+        let attributes = [NSAttributedStringKey.font: UIFont._16MediumFont]
+        let attributedTitle = NSMutableAttributedString(string: text, attributes: attributes)
+        let range0 = NSRange(location: 0, length: 6)
+        let range1 = NSRange(location: 6, length: text.count - 6)
+
+        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerBlack0, range: range0)
+        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerGrey2, range: range1)
+        draftsButton.setAttributedTitle(attributedTitle, for: .normal)
+
     }
     
     // MARK: - KEYBOARD

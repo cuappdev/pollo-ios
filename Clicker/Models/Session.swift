@@ -13,7 +13,7 @@ class Session {
     var id: Int
     var name: String
     var code: String
-    var latestActivity: String = ""
+    var description: String = ""
     var isLive: Bool?
     let identifier = UUID().uuidString
     
@@ -34,7 +34,7 @@ class Session {
         self.id = id
         self.name = name
         self.code = code
-        self.latestActivity = latestActivity
+        self.description = latestActivity
     }
     
 }
