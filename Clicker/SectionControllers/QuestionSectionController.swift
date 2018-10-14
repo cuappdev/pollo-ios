@@ -10,7 +10,11 @@ import IGListKit
 
 class QuestionSectionController: ListSectionController {
     
+    // MARK: - Data vars
     var questionModel: QuestionModel!
+    
+    // MARK: - Constants
+    let questionLabelVerticalPadding: CGFloat = 10
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -18,7 +22,7 @@ class QuestionSectionController: ListSectionController {
             return .zero
         }
         let questionLabelWidth = containerSize.width - LayoutConstants.cardHorizontalPadding * 2
-        let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20HeavyFont) + 10
+        let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20HeavyFont) + questionLabelVerticalPadding
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
