@@ -203,7 +203,8 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
         switch pollOptionsModel.type {
         case .frOption(optionModels: var frOptionModels):
-            let upvoteIndex = adapter.section(for: sectionController)
+            // Need to subtract 1 from index because topSpaceModel is the first section
+            let upvoteIndex = adapter.section(for: sectionController) - 1
             let upvotedFROptionModel = frOptionModels[upvoteIndex]
             frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
             pollOptionsModel.type = .frOption(optionModels: frOptionModels)
@@ -230,7 +231,8 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
                 mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }
             // Select new choice
-            let selectedIndex = adapter.section(for: sectionController)
+            // Need to subtract 1 from index because topSpaceModel is the first section
+            let selectedIndex = adapter.section(for: sectionController) - 1
             let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
             mcChoiceModels[selectedIndex] = updatedMCChoiceModel
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
