@@ -22,6 +22,7 @@ class QuestionTypeDropDownView: UIView {
     var bottomLabel: UILabel!
     var selectedImageView: UIImageView!
     var selectedGradient: CAGradientLayer!
+    var centerView: UIView!
     
     // MARK: - Data vars
     var delegate: QuestionTypeDropDownViewDelegate!
@@ -29,10 +30,12 @@ class QuestionTypeDropDownView: UIView {
     
     // MARK: - Constants
     let labelWidth: CGFloat = 150
-    let buttonHeight: CGFloat = 50
+    let buttonHeight: CGFloat = 53
+    let centerViewWidth: CGFloat = 135
+    let centerViewHeight: CGFloat = 24
     let selectedImageViewWidth: CGFloat = 13
     let selectedImageViewHeight: CGFloat = 13
-    let selectedImageViewInset: CGFloat = 7.5
+    let selectedImageViewInset: CGFloat = 5.0
     let separatorHeight: CGFloat = 2
     let multipleChoiceText: String = "Multiple Choice"
     let freeResponseText: String = "Free Response"
@@ -51,12 +54,21 @@ class QuestionTypeDropDownView: UIView {
         topButton.addTarget(self, action: #selector(didTapTopButton), for: .touchUpInside)
         addSubview(topButton)
         
+        centerView = UIView()
+        addSubview(centerView)
+        
         topLabel = UILabel()
         topLabel.text = selectedQuestionType == .multipleChoice ? multipleChoiceText : freeResponseText
         topLabel.textAlignment = .center
-        topLabel.textColor = .aquaMarine
+        topLabel.textColor = .clickerGreen0
         topLabel.font = ._16SemiboldFont
-        addSubview(topLabel)
+        centerView.addSubview(topLabel)
+        
+        selectedImageView = UIImageView()
+        selectedImageView.image = UIImage(named: "DropUpArrowIcon")
+        selectedImageView.tintColor = UIColor.clickerGreen1
+        selectedImageView.contentMode = .scaleAspectFit
+        centerView.addSubview(selectedImageView)
         
         bottomButton = UIButton()
         bottomButton.addTarget(self, action: #selector(didTapBottomButton), for: .touchUpInside)
@@ -68,11 +80,6 @@ class QuestionTypeDropDownView: UIView {
         bottomLabel.textColor = .clickerBlack0
         bottomLabel.font = ._16RegularFont
         addSubview(bottomLabel)
-        
-        selectedImageView = UIImageView()
-        selectedImageView.image = #imageLiteral(resourceName: "DropUpArrowIcon")
-        selectedImageView.contentMode = .scaleAspectFit
-        addSubview(selectedImageView)
         
         selectedGradient = CAGradientLayer()
         selectedGradient.frame = CGRect(x: 0, y: 0, width: bounds.width, height: buttonHeight)
@@ -112,10 +119,21 @@ class QuestionTypeDropDownView: UIView {
             make.top.equalToSuperview()
         }
         
-        topLabel.snp.makeConstraints { make in
-            make.width.equalTo(labelWidth)
-            make.height.equalTo(topButton.snp.height)
+        centerView.snp.makeConstraints { make in
             make.center.equalTo(topButton.snp.center)
+            make.width.equalTo(centerViewWidth)
+            make.height.equalTo(centerViewHeight)
+        }
+        
+        topLabel.snp.makeConstraints { make in
+            make.centerY.leading.height.equalToSuperview()
+        }
+        
+        selectedImageView.snp.makeConstraints { make in
+            make.width.equalTo(selectedImageViewWidth)
+            make.height.equalTo(selectedImageViewHeight)
+            make.centerY.equalTo(topLabel.snp.centerY)
+            make.leading.equalTo(topLabel.snp.trailing).offset(selectedImageViewInset)
         }
         
         bottomButton.snp.makeConstraints { make in
@@ -128,13 +146,6 @@ class QuestionTypeDropDownView: UIView {
             make.width.equalTo(topLabel.snp.width)
             make.height.equalTo(topLabel.snp.height)
             make.center.equalTo(bottomButton.snp.center)
-        }
-        
-        selectedImageView.snp.makeConstraints { make in
-            make.width.equalTo(selectedImageViewWidth)
-            make.height.equalTo(selectedImageViewHeight)
-            make.left.equalTo(topLabel.snp.right).inset(selectedImageViewInset)
-            make.centerY.equalTo(topLabel.snp.centerY)
         }
         
         separatorView.snp.makeConstraints { make in
