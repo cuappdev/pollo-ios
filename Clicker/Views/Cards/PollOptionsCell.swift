@@ -104,7 +104,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
+
         guard let pollOptionsModel = pollOptionsModel else { return }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
