@@ -18,20 +18,32 @@ protocol PollOptionsCellDelegate {
     
 }
 
-class PollOptionsCell: UICollectionViewCell {
+class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
     var collectionView: UICollectionView!
+    var arrowImageView: UIImageView!
     
     // MARK: - Data vars
     var delegate: PollOptionsCellDelegate!
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
+    
+    // MARK: - Constants
+    let contentViewCornerRadius: CGFloat = 12
+    let interItemPadding: CGFloat = 5
+    let maximumNumberVisibleOptions: Int = 6
+    let arrowBottomInset: CGFloat = 9.8
+    let arrowImageName: String = "DropdownArrowIcon"
+    
         
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .white
+        contentView.clipsToBounds = true
+        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        contentView.layer.cornerRadius = contentViewCornerRadius
         setupViews()
     }
     
@@ -50,14 +62,79 @@ class PollOptionsCell: UICollectionViewCell {
         adapter = ListAdapter(updater: updater, viewController: nil)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
+        
+        arrowImageView = UIImageView()
+        arrowImageView.image = UIImage(named: arrowImageName)
+        arrowImageView.isHidden = true
+        contentView.addSubview(arrowImageView)
+    }
+    
+    func updateArrowImageView(show: Bool) {
+        UIView.animate(withDuration: 0.25) {
+            if show {
+                self.arrowImageView.snp.remakeConstraints { remake in
+                    remake.bottom.equalToSuperview().inset(self.arrowBottomInset)
+                    remake.centerX.equalToSuperview()
+                }
+            } else {
+                self.arrowImageView.snp.remakeConstraints { remake in
+                    remake.top.equalTo(self.contentView.snp.bottom).offset(5)
+                    remake.centerX.equalToSuperview()
+                }
+            }
+            self.arrowImageView.superview?.layoutIfNeeded()
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !arrowImageView.isHidden {
+            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+            if diff < 10 {
+                updateArrowImageView(show: false)
+            } else {
+                updateArrowImageView(show: true)
+            }
+        }
     }
     
     override func updateConstraints() {
         collectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(LayoutConstants.pollOptionsVerticalPadding)
-            make.bottom.equalToSuperview().inset(LayoutConstants.pollOptionsVerticalPadding)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
+        
+        guard let pollOptionsModel = pollOptionsModel else { return }
+        switch pollOptionsModel.type {
+        case .mcResult(let mcResultModels):
+            if mcResultModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
+            break
+        case .mcChoice(let mcChoiceModels):
+            if mcChoiceModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
+            break
+        case .frOption(let frOptionModels):
+            if frOptionModels.count > maximumNumberVisibleOptions {
+                arrowImageView.isHidden = false
+                arrowImageView.snp.makeConstraints { make in
+                    make.bottom.equalToSuperview().inset(arrowBottomInset)
+                    make.centerX.equalToSuperview()
+                }
+            }
+        }
+        
         super.updateConstraints()
     }
     
@@ -76,15 +153,25 @@ class PollOptionsCell: UICollectionViewCell {
 extension PollOptionsCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        var models = [ListDiffable]()
+        let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + interItemPadding)
+        models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            return mcResultModels
+            models.append(contentsOf: mcResultModels)
+            models.append(bottomSpaceModel)
+            break
         case .mcChoice(let mcChoiceModels):
-            return mcChoiceModels
+            models.append(contentsOf: mcChoiceModels)
+            models.append(bottomSpaceModel)
+            break
         case .frOption(let frOptionModels):
-            return frOptionModels
+            models.append(contentsOf: frOptionModels)
+            models.append(bottomSpaceModel)
         }
+        return models
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -92,8 +179,10 @@ extension PollOptionsCell: ListAdapterDataSource {
             return MCResultSectionController(delegate: self)
         } else if object is MCChoiceModel {
             return MCChoiceSectionController(delegate: self)
-        } else {
+        } else if object is FROptionModel {
             return FROptionSectionController(delegate: self)
+        } else {
+            return SpaceSectionController()
         }
     }
     
