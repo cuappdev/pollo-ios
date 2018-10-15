@@ -69,7 +69,7 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
     
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
         let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
-        self.navigationController?.pushViewController(cardController, animated: true)
+    self.navigationController?.pushViewController(cardController, animated: true)
     }
     
 }
