@@ -19,11 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     var window: UIWindow?
     var pollsNavigationController: UINavigationController!
+    var didSignInSilently: Bool = false
+    let launchScreen = "LaunchScreen"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         setupWindow()
         setupNavigationController()
-        setupGoogleSignin()
+        setupGoogleSignIn()
         setupNavBar()
         setupFabric()
 
@@ -37,21 +39,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         UITextField.appearance().tintColor = .clickerGreen0
         UITextView.appearance().tintColor = .clickerGreen0
     }
-
+    
     func setupNavigationController() {
-        pollsNavigationController = UINavigationController(rootViewController: LoginViewController())
+        let launchScreenVC = UIStoryboard(name: launchScreen, bundle: nil).instantiateInitialViewController() ?? UIViewController()
+        pollsNavigationController = UINavigationController(rootViewController: launchScreenVC)
         window?.rootViewController = pollsNavigationController
     }
     
-    func setupGoogleSignin() {
+    func setupGoogleSignIn() {
         GIDSignIn.sharedInstance().clientID = Google.googleClientID
         GIDSignIn.sharedInstance().serverClientID = Google.googleClientID
         GIDSignIn.sharedInstance().delegate = self
         if GIDSignIn.sharedInstance().hasAuthInKeychain(){
+            didSignInSilently = true
             DispatchQueue.main.async {
                 GIDSignIn.sharedInstance().signInSilently()
             }
-            pollsNavigationController.pushViewController(PollsViewController(), animated: false)
+        } else {
+            let loginVC = LoginViewController()
+            pollsNavigationController.pushViewController(loginVC, animated: false)
         }
     }
     
@@ -95,7 +101,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 .done { userSession in
                     print(userSession)
                     User.userSession = userSession
-                    self.pollsNavigationController.pushViewController(PollsViewController(), animated: true)
+                    let pollsVC = PollsViewController()
+                    self.pollsNavigationController.pushViewController(pollsVC, animated: !self.didSignInSilently)
+                    getAllSessions(completion: { (joinedSessions, createdSessions) in
+                        pollsVC.configure(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                    })
                 } .catch { error in
                     print(error)
             }
@@ -107,9 +117,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func logout() {
         GIDSignIn.sharedInstance().signOut()
+        didSignInSilently = false
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.popToRootViewController(animated: true)
-        setupGoogleSignin()
+        pollsNavigationController.popToRootViewController(animated: false)
+        pollsNavigationController.pushViewController(LoginViewController(), animated: false)
     }
     
     func requestReview() {
