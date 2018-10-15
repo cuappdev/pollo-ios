@@ -67,14 +67,17 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         arrowImageView = UIImageView()
         arrowImageView.image = UIImage(named: arrowImageName)
         arrowImageView.isHidden = true
+        self.arrowImageView.alpha = 0
         contentView.addSubview(arrowImageView)
     }
     
     func updateArrowImageView(show: Bool) {
         UIView.animate(withDuration: 0.2) {
             if show {
+                self.arrowImageView.isHidden = false
                 self.arrowImageView.alpha = 1
             } else {
+                self.arrowImageView.isHidden = true
                 self.arrowImageView.alpha = 0
             }
         }
