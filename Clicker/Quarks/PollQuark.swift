@@ -89,21 +89,17 @@ struct GetSortedPolls: ClickerQuark {
         switch element {
         case .node(let node):
             var pollsDateArray: [PollsDateModel] = []
-            let formatter = DateFormatter()
-            formatter.dateFormat = StringConstants.dateFormat
             for (date, pollsJSON) in node {
                 if let pollsArray = pollsJSON.array {
                     let pollsArr: [Poll] = pollsArray.reversed().map {
                         return PollParser.parseItem(json: $0)
                     }
-                    formatter.timeZone = TimeZone(abbreviation: "UTC")
-                    let utcDate = formatter.date(from: date.trimmingCharacters(in: .whitespaces)) ?? Date()
-                    formatter.timeZone = TimeZone.current
-                    let localDate = formatter.string(from: utcDate)
-                    let pollsDateModel = PollsDateModel(date: localDate, polls: pollsArr)
+                    let pollsDateModel = PollsDateModel(date: date.trimmingCharacters(in: .whitespaces), polls: pollsArr)
                     pollsDateArray.append(pollsDateModel)
                 }
             }
+            let formatter = DateFormatter()
+            formatter.dateFormat = StringConstants.dateFormat
             pollsDateArray.sort { (pollsDateModelA, pollsDateModelB) -> Bool in
                 let dateA = formatter.date(from: pollsDateModelA.date) ?? Date()
                 let dateB = formatter.date(from: pollsDateModelB.date) ?? Date()
