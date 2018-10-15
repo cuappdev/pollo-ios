@@ -208,16 +208,12 @@ extension CardController: SocketDelegate {
         // Free Response receives results in live state
         let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
         updateWithCurrentState(currentState: currentState, pollState: pollState)
-        UIView.animate(withDuration: 0.1) {
         self.adapter.performUpdates(animated: false, completion: nil)
-        }
     }
         
     func updatedTally(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: nil)
-        UIView.animate(withDuration: 0.1) {
-            self.adapter.performUpdates(animated: false, completion: nil)
-        }
+        self.adapter.performUpdates(animated: false, completion: nil)
     }
 
     // MARK: Helpers
