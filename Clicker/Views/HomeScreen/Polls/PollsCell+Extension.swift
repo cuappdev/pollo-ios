@@ -13,11 +13,11 @@ import UIKit
 extension PollsCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        guard let pollTypeModel = pollTypeModel, let sessions = pollTypeModel.sessions else { return [] }
         if !sessions.isEmpty {
             return sessions.reversed()
         }
-        guard let pollType = pollType else { return [] }
-        let emptyStateType: EmptyStateType = .pollsViewController(pollType: pollType)
+        let emptyStateType: EmptyStateType = .pollsViewController(pollType: pollTypeModel.pollType)
         return [EmptyStateModel(type: emptyStateType)]
     }
     
@@ -38,42 +38,13 @@ extension PollsCell: ListAdapterDataSource {
 extension PollsCell: SessionSectionControllerDelegate {
     
     func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session) {
-        let userRole: UserRole = pollType == .created ? .admin : .member
+        let userRole: UserRole = pollTypeModel.pollType == .created ? .admin : .member
         delegate.pollsCellShouldOpenSession(session: session, userRole: userRole)
     }
     
     func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session) {
-        let userRole: UserRole = pollType == .created ? .admin : .member
+        let userRole: UserRole = pollTypeModel.pollType == .created ? .admin : .member
         delegate.pollsCellShouldEditSession(session: session, userRole: userRole)
-    }
-    
-}
-
-extension PollsCell: GIDSignInDelegate {
-    
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if (error == nil) {
-            let userId = user.userID // For client-side use only!
-            let fullName = user.profile.name
-            let givenName = user.profile.givenName
-            let familyName = user.profile.familyName
-            let email = user.profile.email
-            let netId = email?.split(separator: "@")[0]
-            User.currentUser = User(id: userId!, name: fullName!, netId: String(netId!), givenName: givenName!, familyName: familyName!, email: email!)
-            
-            UserAuthenticate(userId: userId!, givenName: givenName!, familyName: familyName!, email: email!).make()
-                .done { userSession in
-                    User.userSession = userSession
-                    self.getPollSessions()
-                } .catch { error in
-                    print(error)
-            }
-            
-            UserDefaults.standard.set( UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier) + 2, forKey:Identifiers.significantEventsIdentifier)
-            window?.rootViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
-        } else {
-            print("\(error.localizedDescription)")
-        }
     }
     
 }

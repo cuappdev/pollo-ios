@@ -11,7 +11,7 @@ import Presentr
 import UIKit
 
 protocol PollsDateViewControllerDelegate {
-    func pollsDateViewControllerDidDeleteSession()
+    func pollsDateViewControllerWasPopped()
 }
 
 class PollsDateViewController: UIViewController {
@@ -139,11 +139,14 @@ class PollsDateViewController: UIViewController {
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
-                    self.delegate.pollsDateViewControllerDidDeleteSession()
+                    self.delegate.pollsDateViewControllerWasPopped()
                 }
                 .catch { error in
                     print(error)
-            }
+                    self.delegate.pollsDateViewControllerWasPopped()
+                }
+        } else {
+            self.delegate.pollsDateViewControllerWasPopped()
         }
     }
     
