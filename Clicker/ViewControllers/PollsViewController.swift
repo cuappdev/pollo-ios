@@ -363,6 +363,21 @@ class PollsViewController: UIViewController {
         }
     }
     
+    // MARK: - Helpers
+    func reloadSessions(for userRole: UserRole) {
+        let pollType: PollType = userRole == .admin ? .created : .joined
+        let index = userRole == .admin ? 1 : 0
+        GetPollSessions(role: userRole).make()
+            .done { sessions in
+                self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
+                DispatchQueue.main.async {
+                    self.adapter.performUpdates(animated: true, completion: nil)
+                }
+            }.catch { error in
+                print(error)
+        }
+    }
+    
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

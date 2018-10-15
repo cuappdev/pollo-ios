@@ -94,26 +94,11 @@ extension PollsViewController: PollsCellDelegate {
 extension PollsViewController: EditPollViewControllerDelegate {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole) {
-        editPollViewControllerDidPerformChange(for: userRole)
+        reloadSessions(for: userRole)
     }
     
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) {
-        editPollViewControllerDidPerformChange(for: userRole)
-    }
-    
-    // MARK: - Helpers
-    private func editPollViewControllerDidPerformChange(for userRole: UserRole) {
-        let pollType: PollType = userRole == .admin ? .created : .joined
-        let index = userRole == .admin ? 1 : 0
-        GetPollSessions(role: userRole).make()
-            .done { sessions in
-                self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
-                DispatchQueue.main.async {
-                    self.adapter.performUpdates(animated: true, completion: nil)
-                }
-            }.catch { error in
-                print(error)
-            }
+        reloadSessions(for: userRole)
     }
     
 }
@@ -153,16 +138,9 @@ extension PollsViewController: UIGestureRecognizerDelegate {
 }
 
 extension PollsViewController: PollsDateViewControllerDelegate {
-    
-    func pollsDateViewControllerWasPopped() {
-        getAllSessions { (joinedSessions, createdSessions) in
-            let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: joinedSessions)
-            let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: createdSessions)
-            self.pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
-            DispatchQueue.main.async {
-                self.adapter.performUpdates(animated: true, completion: nil)
-            }
-        }
+
+    func pollsDateViewControllerWasPopped(for userRole: UserRole) {
+        reloadSessions(for: userRole)
     }
 
 }
