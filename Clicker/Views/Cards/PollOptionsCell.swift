@@ -29,6 +29,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
+    var arrowImageViewIsPresent: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
@@ -64,34 +65,31 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        arrowImageView = UIImageView()
-        arrowImageView.image = UIImage(named: arrowImageName)
-        arrowImageView.isHidden = true
-        self.arrowImageView.alpha = 0
-        contentView.addSubview(arrowImageView)
+//        arrowImageView = UIImageView()
+//        arrowImageView.image = UIImage(named: arrowImageName)
+//        arrowImageView.alpha = 0
+//        contentView.addSubview(arrowImageView)
     }
     
-    func updateArrowImageView(show: Bool) {
-        UIView.animate(withDuration: 0.2) {
-            if show {
-                self.arrowImageView.isHidden = false
-                self.arrowImageView.alpha = 1
-            } else {
-                self.arrowImageView.isHidden = true
-                self.arrowImageView.alpha = 0
-            }
-        }
-    }
+//    func updateArrowImageView(show: Bool) {
+//        UIView.animate(withDuration: 0.2) {
+//            if show {
+//                self.arrowImageView.alpha = 1
+//            } else {
+//                self.arrowImageView.alpha = 0
+//            }
+//        }
+//    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !arrowImageView.isHidden {
-            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-            if diff < 10 {
-                updateArrowImageView(show: false)
-            } else {
-                updateArrowImageView(show: true)
-            }
-        }
+//        if arrowImageViewIsPresent {
+//            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+//            if diff < 10 {
+//                updateArrowImageView(show: false)
+//            } else {
+//                updateArrowImageView(show: true)
+//            }
+//        }
     }
     
     override func updateConstraints() {
@@ -101,42 +99,29 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.bottom.equalToSuperview()
         }
 
-        guard let pollOptionsModel = pollOptionsModel else { return }
-        switch pollOptionsModel.type {
-        case .mcResult(let mcResultModels):
-            if mcResultModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-            break
-        case .mcChoice(let mcChoiceModels):
-            if mcChoiceModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-            break
-        case .frOption(let frOptionModels):
-            if frOptionModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-        }
-        
+//        if arrowImageViewIsPresent {
+//            arrowImageView.alpha = 1
+//            arrowImageView.snp.makeConstraints { make in
+//                make.bottom.equalToSuperview().inset(arrowBottomInset)
+//                make.centerX.equalToSuperview()
+//            }
+//        }
         super.updateConstraints()
     }
     
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
+//        switch pollOptionsModel.type {
+//        case .mcResult(let mcResultModels):
+//            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
+//            break
+//        case .mcChoice(let mcChoiceModels):
+//            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
+//            break
+//        case .frOption(let frOptionModels):
+//            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
+//        }
         adapter.performUpdates(animated: false, completion: nil)
     }
     
