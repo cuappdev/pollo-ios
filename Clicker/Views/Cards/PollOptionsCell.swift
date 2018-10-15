@@ -71,19 +71,12 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     func updateArrowImageView(show: Bool) {
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.2) {
             if show {
-                self.arrowImageView.snp.remakeConstraints { remake in
-                    remake.bottom.equalToSuperview().inset(self.arrowBottomInset)
-                    remake.centerX.equalToSuperview()
-                }
+                self.arrowImageView.alpha = 1
             } else {
-                self.arrowImageView.snp.remakeConstraints { remake in
-                    remake.top.equalTo(self.contentView.snp.bottom).offset(5)
-                    remake.centerX.equalToSuperview()
-                }
+                self.arrowImageView.alpha = 0
             }
-            self.arrowImageView.superview?.layoutIfNeeded()
         }
     }
     
