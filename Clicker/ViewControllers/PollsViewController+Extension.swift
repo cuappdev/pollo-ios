@@ -56,7 +56,7 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        JoinSessionWithId(id: session.id).make()
+        JoinSessionWithIdAndCode(id: session.id, code: session.code).make()
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
