@@ -61,15 +61,25 @@ class PollsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
         
-        let joinedPollTypeModel = PollTypeModel(pollType: .joined)
-        let createdPollTypeModel = PollTypeModel(pollType: .created)
+        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: nil)
+        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: nil)
         pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         setupViews()
         setupConstraints()
+    }
+    
+    // MARK: - Configure
+    func configure(joinedSessions: [Session], createdSessions: [Session]) {
+        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: joinedSessions)
+        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: createdSessions)
+        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
+        DispatchQueue.main.async {
+            self.adapter.performUpdates(animated: true, completion: nil)
+        }
     }
     
     // MARK: - LAYOUT
@@ -242,13 +252,6 @@ class PollsViewController: UIViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        if gradientNeedsSetup {
-            setupGradient() // needs headerGradientView to have been layed out, so it has a nonzero frame
-            gradientNeedsSetup = false
-        }
-    }
-    
     func setupGradient() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = headerGradientView.bounds
@@ -362,14 +365,20 @@ class PollsViewController: UIViewController {
     
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
-        pollsCollectionView.reloadData()
-        isListeningToKeyboard = true
         super.viewWillAppear(animated)
         if self.parent is UINavigationController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
+        isListeningToKeyboard = true
         newGroupButton?.isEnabled = true
         isOpeningGroup = false
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if gradientNeedsSetup {
+            setupGradient() // needs headerGradientView to have been layed out, so it has a nonzero frame
+            gradientNeedsSetup = false
+        }
     }
     
     // MARK: - KEYBOARD
@@ -420,4 +429,5 @@ class PollsViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
+    
 }

@@ -26,22 +26,19 @@ class PollsCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var delegate: PollsCellDelegate!
-    var sessions: [Session] = []
-    var pollType: PollType!
+    var pollTypeModel: PollTypeModel!
     
     let pollPreviewCellHeight: CGFloat = 82.5
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        GIDSignIn.sharedInstance().delegate = self
         setupViews()
     }
     
-    func configureWith(pollType: PollType, delegate: PollsCellDelegate) {
-        self.pollType = pollType
+    func configureWith(pollTypeModel: PollTypeModel, delegate: PollsCellDelegate) {
+        self.pollTypeModel = pollTypeModel
         self.delegate = delegate
-        getPollSessions()
+        self.adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: - LAYOUT
@@ -66,17 +63,6 @@ class PollsCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
         super.updateConstraints()
-    }
-    
-    func getPollSessions() {
-        let role: UserRole = pollType == .created ? .admin : .member
-        GetPollSessions(role: role).make()
-            .done { sessions in
-                self.sessions = sessions
-                self.adapter.performUpdates(animated: true, completion: nil)
-            } .catch { error in
-                print(error)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
