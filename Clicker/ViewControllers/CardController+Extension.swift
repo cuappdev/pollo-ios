@@ -141,7 +141,7 @@ extension CardController: UIScrollViewDelegate {
         return safeIndex
     }
     
-   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // calculate where scrollView should snap to:
         let indexOfHorizontalCard = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
         let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
@@ -172,6 +172,7 @@ extension CardController: SocketDelegate {
     func receivedUserCount(_ count: Int) {
         numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
+        peopleButton.sizeToFit()
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
@@ -210,7 +211,7 @@ extension CardController: SocketDelegate {
         updateWithCurrentState(currentState: currentState, pollState: pollState)
         self.adapter.performUpdates(animated: false, completion: nil)
     }
-        
+
     func updatedTally(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: nil)
         self.adapter.performUpdates(animated: false, completion: nil)
