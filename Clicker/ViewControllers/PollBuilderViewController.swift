@@ -31,7 +31,7 @@ class PollBuilderViewController: UIViewController {
     var centerView: UIView!
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
-    var startQuestionButton: UIButton!
+    var startPollButton: UIButton!
     var topPaddingView: UIView!
     var bottomPaddingView: UIView!
     var mcPollBuilder: MCPollBuilderView!
@@ -67,7 +67,7 @@ class PollBuilderViewController: UIViewController {
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
     let saveDraftButtonTitle = "Save as draft"
-    let startQuestionButtonTitle = "Start Question"
+    let startPollButtonTitle = "Start Poll"
     let dropDownArrowImageName = "DropdownArrowIcon"
     
     init(delegate: PollBuilderViewControllerDelegate) {
@@ -160,14 +160,14 @@ class PollBuilderViewController: UIViewController {
         saveDraftButton.addTarget(self, action: #selector(saveAsDraft), for: .touchUpInside)
         buttonsView.addSubview(saveDraftButton)
         
-        startQuestionButton = UIButton()
-        startQuestionButton.setTitle(startQuestionButtonTitle, for: .normal)
-        startQuestionButton.setTitleColor(.white, for: .normal)
-        startQuestionButton.titleLabel?.font = ._16SemiboldFont
-        startQuestionButton.backgroundColor = .clickerGreen0
-        startQuestionButton.layer.cornerRadius = buttonHeight / 2
-        startQuestionButton.addTarget(self, action: #selector(startQuestion), for: .touchUpInside)
-        buttonsView.addSubview(startQuestionButton)
+        startPollButton = UIButton()
+        startPollButton.setTitle(startPollButtonTitle, for: .normal)
+        startPollButton.setTitleColor(.white, for: .normal)
+        startPollButton.titleLabel?.font = ._16SemiboldFont
+        startPollButton.backgroundColor = .clickerGreen0
+        startPollButton.layer.cornerRadius = buttonHeight / 2
+        startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
+        buttonsView.addSubview(startPollButton)
         
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .white
@@ -263,7 +263,7 @@ class PollBuilderViewController: UIViewController {
             make.height.equalTo(buttonHeight)
         }
         
-        startQuestionButton.snp.makeConstraints { make in
+        startPollButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(edgePadding)
             make.centerY.equalToSuperview()
             make.width.equalTo(saveDraftButton.snp.width)
@@ -354,7 +354,7 @@ class PollBuilderViewController: UIViewController {
         }
     }
     
-    @objc func startQuestion() {
+    @objc func startPoll() {
         // MULTIPLE CHOICE
         guard let questionType = questionType else {
             print("cannot start question before viewdidload")
