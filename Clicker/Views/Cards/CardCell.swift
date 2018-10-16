@@ -53,7 +53,7 @@ class CardCell: UICollectionViewCell {
     let questionButtonBottomPadding: CGFloat = 5.0
     let timerLabelFontSize: CGFloat = 14.0
     let timerLabelBottomPadding: CGFloat =  16.0
-    let endQuestionText = "End Question"
+    let endPollText = "End Poll"
     let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
     
@@ -129,7 +129,7 @@ class CardCell: UICollectionViewCell {
         questionButton.isHidden = poll.state == .shared || isMember
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
-            questionButton.setTitle(endQuestionText, for: .normal)
+            questionButton.setTitle(endPollText, for: .normal)
             setTimerText()
             runTimer()
         } else if poll.state == .ended {
