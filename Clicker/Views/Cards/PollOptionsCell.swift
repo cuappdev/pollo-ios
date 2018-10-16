@@ -30,10 +30,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
     var arrowImageViewIsPresent: Bool = false
+    var hasOverflowOptions: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
-    let interItemPadding: CGFloat = 5
     let maximumNumberVisibleOptions: Int = 6
     let arrowBottomInset: CGFloat = 9.8
     let arrowImageName: String = "DropdownArrowIcon"
@@ -112,16 +112,19 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
-//        switch pollOptionsModel.type {
-//        case .mcResult(let mcResultModels):
-//            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
-//            break
-//        case .mcChoice(let mcChoiceModels):
-//            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
-//            break
-//        case .frOption(let frOptionModels):
-//            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
-//        }
+        switch pollOptionsModel.type {
+        case .mcResult(let mcResultModels):
+            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
+            break
+        case .mcChoice(let mcChoiceModels):
+            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
+            break
+        case .frOption(let frOptionModels):
+            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
+        }
+        hasOverflowOptions = arrowImageViewIsPresent
+        collectionView.isScrollEnabled = hasOverflowOptions
+
         adapter.performUpdates(animated: false, completion: nil)
     }
     
@@ -136,7 +139,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         var models = [ListDiffable]()
         let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
-        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + interItemPadding)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding)
         models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
