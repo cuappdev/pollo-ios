@@ -102,7 +102,7 @@ class PollBuilderViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         exitButton = UIButton()
-        exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
+        exitButton.setImage(UIImage(named: "darkexit"), for: .normal)
         exitButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
