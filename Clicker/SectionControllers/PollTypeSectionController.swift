@@ -32,7 +32,7 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollsCell.self, for: self, at: index) as! PollsCell
-        cell.configureWith(pollType: pollTypeModel.pollType, delegate: delegate.pollsCellDelegate)
+        cell.configureWith(pollTypeModel: pollTypeModel, delegate: delegate.pollsCellDelegate)
         cell.setNeedsUpdateConstraints()
         return cell
     }

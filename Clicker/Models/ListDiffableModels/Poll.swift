@@ -15,6 +15,32 @@ enum PollState {
     case shared
 }
 
+enum QuestionType: CustomStringConvertible {
+    case multipleChoice
+    case freeResponse
+    
+    var description : String {
+        switch self {
+        case .multipleChoice: return StringConstants.multipleChoice
+        case .freeResponse: return StringConstants.freeResponse
+        }
+    }
+    
+    var descriptionForServer : String {
+        switch self {
+        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
+        case .freeResponse: return Identifiers.freeResponseIdentifier
+        }
+    }
+    
+    var other: QuestionType {
+        switch self {
+        case .multipleChoice: return .freeResponse
+        case .freeResponse: return .multipleChoice
+        }
+    }
+}
+
 class Poll {
     
     var id: Int

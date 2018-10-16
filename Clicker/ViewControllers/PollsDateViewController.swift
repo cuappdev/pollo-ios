@@ -11,7 +11,7 @@ import Presentr
 import UIKit
 
 protocol PollsDateViewControllerDelegate {
-    func pollsDateViewControllerDidDeleteSession()
+    func pollsDateViewControllerWasPopped(for userRole: UserRole)
 }
 
 class PollsDateViewController: UIViewController {
@@ -98,9 +98,6 @@ class PollsDateViewController: UIViewController {
         
         navigationTitleView = NavigationTitleView()
         navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
-        navigationTitleView.snp.makeConstraints { make in
-            make.height.equalTo(36)
-        }
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
@@ -108,7 +105,7 @@ class PollsDateViewController: UIViewController {
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("\(numberOfPeople)", for: .normal)
+        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
@@ -139,11 +136,14 @@ class PollsDateViewController: UIViewController {
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
-                    self.delegate.pollsDateViewControllerDidDeleteSession()
+                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
                 }
                 .catch { error in
                     print(error)
-            }
+                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                }
+        } else {
+            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
         }
     }
     
@@ -151,4 +151,7 @@ class PollsDateViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
+    }
 }

@@ -360,6 +360,11 @@ class PollBuilderViewController: UIViewController {
             print("cannot start question before viewdidload")
             return
         }
+        
+        delegate.showNavigationBar()
+        dismiss(animated: true, completion: nil)
+        hideKeyboard()
+        
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text ?? ""
@@ -368,8 +373,7 @@ class PollBuilderViewController: UIViewController {
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        delegate.showNavigationBar()
-        dismiss(animated: true, completion: nil)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
