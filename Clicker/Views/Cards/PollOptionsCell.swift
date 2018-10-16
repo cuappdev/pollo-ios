@@ -22,7 +22,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
     var collectionView: UICollectionView!
-    var arrowImageView: UIImageView!
+    var arrowView: ArrowView!
     
     // MARK: - Data vars
     var delegate: PollOptionsCellDelegate!
@@ -66,59 +66,32 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        arrowImageView = UIImageView()
-        arrowImageView.image = UIImage(named: arrowImageName)
-        contentView.addSubview(arrowImageView)
-    }
-    
-    func updateArrowImageView(show: Bool) {
-        UIView.animate(withDuration: 0.2) {
-            if show {
-                self.arrowImageView.snp.remakeConstraints({ remake in
-                    remake.bottom.equalToSuperview().inset(self.arrowBottomInset)
-                    remake.centerX.equalToSuperview()
-                })
-            } else {
-                self.arrowImageView.snp.remakeConstraints({ remake in
-                    remake.top.equalTo(self.contentView.snp.bottom).offset(self.arrowBottomInset)
-                    remake.centerX.equalToSuperview()
-                })
-            }
-            self.didAnimate = true
-            self.arrowImageView.superview?.layoutIfNeeded()
-        }
+        arrowView = ArrowView()
+        contentView.addSubview(arrowView)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if arrowImageViewIsPresent {
+        if !arrowView.isHidden {
             let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
             if diff < 10 {
-                updateArrowImageView(show: false)
+                arrowView.toggle(show: false, animated: true)
             } else {
-                updateArrowImageView(show: true)
+                arrowView.toggle(show: true, animated: true)
             }
         }
     }
     
     override func updateConstraints() {
-        if !didAnimate {
-            collectionView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.top.equalToSuperview()
-                make.bottom.equalToSuperview()
-            }
-            
-            if arrowImageViewIsPresent {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            } else {
-                arrowImageView.isHidden = true
-            }
-        } else {
-            didAnimate = false
+        collectionView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        arrowView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
         }
         
         super.updateConstraints()
@@ -129,14 +102,15 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.delegate = delegate
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
+            arrowView.isHidden = mcResultModels.count <= maximumNumberVisibleOptions
             break
         case .mcChoice(let mcChoiceModels):
-            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
+            arrowView.isHidden = mcChoiceModels.count <= maximumNumberVisibleOptions
             break
         case .frOption(let frOptionModels):
-            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
+            arrowView.isHidden = frOptionModels.count <= maximumNumberVisibleOptions
         }
+        arrowView.toggle(show: !arrowView.isHidden, animated: false)
         adapter.performUpdates(animated: false, completion: nil)
     }
     
