@@ -19,8 +19,42 @@ func intToMCOption(_ intOption: Int) -> String {
 // Ex) Sep 29 2018, Oct 02 2018
 func getTodaysDate() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = StringConstants.dateFormat
     return formatter.string(from: Date())
+}
+
+// Get a User's Joined and Created Sessions using DispatchGroup
+func getAllSessions(completion: @escaping ([Session], [Session]) -> Void) {
+    let dispatchGroup = DispatchGroup()
+    var joinedSessions: [Session] = []
+    var createdSessions: [Session] = []
+    
+    // Get joined sessions
+    dispatchGroup.enter()
+    GetPollSessions(role: .member).make()
+        .done { sessions in
+            joinedSessions = sessions
+            dispatchGroup.leave()
+        }.catch { error in
+            print(error)
+            dispatchGroup.leave()
+    }
+    
+    // Get created sessions
+    dispatchGroup.enter()
+    GetPollSessions(role: .admin).make()
+        .done { sessions in
+            createdSessions = sessions
+            dispatchGroup.leave()
+        }.catch { error in
+            print(error)
+            dispatchGroup.leave()
+    }
+    
+    dispatchGroup.notify(queue: .main) {
+        completion(joinedSessions, createdSessions)
+    }
 }
 
 // USER DEFAULTS

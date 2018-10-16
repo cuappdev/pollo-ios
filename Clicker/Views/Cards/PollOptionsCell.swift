@@ -29,6 +29,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
+    var arrowImageViewIsPresent: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
@@ -52,7 +53,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsVerticalScrollIndicator = true
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .clear
@@ -64,38 +65,31 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        arrowImageView = UIImageView()
-        arrowImageView.image = UIImage(named: arrowImageName)
-        arrowImageView.isHidden = true
-        contentView.addSubview(arrowImageView)
+//        arrowImageView = UIImageView()
+//        arrowImageView.image = UIImage(named: arrowImageName)
+//        arrowImageView.alpha = 0
+//        contentView.addSubview(arrowImageView)
     }
     
-    func updateArrowImageView(show: Bool) {
-        UIView.animate(withDuration: 0.25) {
-            if show {
-                self.arrowImageView.snp.remakeConstraints { remake in
-                    remake.bottom.equalToSuperview().inset(self.arrowBottomInset)
-                    remake.centerX.equalToSuperview()
-                }
-            } else {
-                self.arrowImageView.snp.remakeConstraints { remake in
-                    remake.top.equalTo(self.contentView.snp.bottom).offset(5)
-                    remake.centerX.equalToSuperview()
-                }
-            }
-            self.arrowImageView.superview?.layoutIfNeeded()
-        }
-    }
+//    func updateArrowImageView(show: Bool) {
+//        UIView.animate(withDuration: 0.2) {
+//            if show {
+//                self.arrowImageView.alpha = 1
+//            } else {
+//                self.arrowImageView.alpha = 0
+//            }
+//        }
+//    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !arrowImageView.isHidden {
-            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-            if diff < 10 {
-                updateArrowImageView(show: false)
-            } else {
-                updateArrowImageView(show: true)
-            }
-        }
+//        if arrowImageViewIsPresent {
+//            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+//            if diff < 10 {
+//                updateArrowImageView(show: false)
+//            } else {
+//                updateArrowImageView(show: true)
+//            }
+//        }
     }
     
     override func updateConstraints() {
@@ -104,43 +98,30 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
-        guard let pollOptionsModel = pollOptionsModel else { return }
-        switch pollOptionsModel.type {
-        case .mcResult(let mcResultModels):
-            if mcResultModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-            break
-        case .mcChoice(let mcChoiceModels):
-            if mcChoiceModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-            break
-        case .frOption(let frOptionModels):
-            if frOptionModels.count > maximumNumberVisibleOptions {
-                arrowImageView.isHidden = false
-                arrowImageView.snp.makeConstraints { make in
-                    make.bottom.equalToSuperview().inset(arrowBottomInset)
-                    make.centerX.equalToSuperview()
-                }
-            }
-        }
-        
+
+//        if arrowImageViewIsPresent {
+//            arrowImageView.alpha = 1
+//            arrowImageView.snp.makeConstraints { make in
+//                make.bottom.equalToSuperview().inset(arrowBottomInset)
+//                make.centerX.equalToSuperview()
+//            }
+//        }
         super.updateConstraints()
     }
     
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
+//        switch pollOptionsModel.type {
+//        case .mcResult(let mcResultModels):
+//            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
+//            break
+//        case .mcChoice(let mcChoiceModels):
+//            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
+//            break
+//        case .frOption(let frOptionModels):
+//            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
+//        }
         adapter.performUpdates(animated: false, completion: nil)
     }
     
@@ -161,16 +142,14 @@ extension PollOptionsCell: ListAdapterDataSource {
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
             models.append(contentsOf: mcResultModels)
-            models.append(bottomSpaceModel)
             break
         case .mcChoice(let mcChoiceModels):
             models.append(contentsOf: mcChoiceModels)
-            models.append(bottomSpaceModel)
             break
         case .frOption(let frOptionModels):
             models.append(contentsOf: frOptionModels)
-            models.append(bottomSpaceModel)
         }
+        models.append(bottomSpaceModel)
         return models
     }
     
@@ -203,7 +182,8 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
         switch pollOptionsModel.type {
         case .frOption(optionModels: var frOptionModels):
-            let upvoteIndex = adapter.section(for: sectionController)
+            // Need to subtract 1 from index because topSpaceModel is the first section
+            let upvoteIndex = adapter.section(for: sectionController) - 1
             let upvotedFROptionModel = frOptionModels[upvoteIndex]
             frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
             pollOptionsModel.type = .frOption(optionModels: frOptionModels)
@@ -230,7 +210,8 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
                 mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }
             // Select new choice
-            let selectedIndex = adapter.section(for: sectionController)
+            // Need to subtract 1 from index because topSpaceModel is the first section
+            let selectedIndex = adapter.section(for: sectionController) - 1
             let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
             mcChoiceModels[selectedIndex] = updatedMCChoiceModel
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)

@@ -56,7 +56,7 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        JoinSessionWithId(id: session.id).make()
+        JoinSessionWithIdAndCode(id: session.id, code: session.code).make()
             .done { session in
                 GetSortedPolls(id: session.id).make()
                     .done { pollsDateArray in
@@ -94,22 +94,11 @@ extension PollsViewController: PollsCellDelegate {
 extension PollsViewController: EditPollViewControllerDelegate {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole) {
-        editPollViewControllerDidPerformChange(for: userRole)
+        reloadSessions(for: userRole)
     }
     
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) {
-        editPollViewControllerDidPerformChange(for: userRole)
-    }
-    
-    // MARK: - Helpers
-    private func editPollViewControllerDidPerformChange(for userRole: UserRole) {
-        switch userRole {
-        case .admin:
-            pollTypeModels[0] = PollTypeModel(pollType: .joined)
-        case .member:
-            pollTypeModels[1] = PollTypeModel(pollType: .created)
-        }
-        pollsCollectionView.reloadData()
+        reloadSessions(for: userRole)
     }
     
 }
@@ -149,8 +138,9 @@ extension PollsViewController: UIGestureRecognizerDelegate {
 }
 
 extension PollsViewController: PollsDateViewControllerDelegate {
-    
-    func pollsDateViewControllerDidDeleteSession() {
-        pollsCollectionView.reloadData()
+
+    func pollsDateViewControllerWasPopped(for userRole: UserRole) {
+        reloadSessions(for: userRole)
     }
+
 }
