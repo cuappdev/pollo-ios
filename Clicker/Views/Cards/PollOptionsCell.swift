@@ -29,15 +29,11 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
-    var arrowImageViewIsPresent: Bool = false
-    var didAnimate: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
     let interItemPadding: CGFloat = 5
     let maximumNumberVisibleOptions: Int = 6
-    let arrowBottomInset: CGFloat = 9.8
-    let arrowImageName: String = "DropdownArrowIcon"
     
         
     override init(frame: CGRect) {

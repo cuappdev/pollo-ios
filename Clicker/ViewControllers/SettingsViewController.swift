@@ -66,7 +66,7 @@ class SettingsViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(image(fromLayer: gradientLayer), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let backImage = UIImage(named: "exit")?.withRenderingMode(.alwaysOriginal)
+        let backImage = UIImage(named: "darkexit")?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         navigationItem.title = "Settings"
     
