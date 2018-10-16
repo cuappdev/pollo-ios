@@ -120,7 +120,7 @@ class PollsDateViewController: UIViewController {
             self.navigationItem.rightBarButtonItems = [peopleBarButton]
         }
     }
-        
+
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
         let pollBuilderViewController = PollBuilderViewController(delegate: self)
@@ -141,7 +141,7 @@ class PollsDateViewController: UIViewController {
                 .catch { error in
                     print(error)
                     self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
-                }
+            }
         } else {
             self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
         }
