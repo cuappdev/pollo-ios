@@ -48,9 +48,12 @@ struct Routes {
 }
 
 struct LayoutConstants {
+    static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
+    static let buttonSize: CGSize = CGSize(width: 44, height: 44)
     static let frInputCellHeight: CGFloat = 64
     static let frOptionCellHeight: CGFloat = 58
     static let hamburgerCardCellHeight: CGFloat = 25
+    static let interItemPadding: CGFloat = 5
     static let mcOptionCellHeight: CGFloat = 50
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsPadding: CGFloat = 18
@@ -59,8 +62,6 @@ struct LayoutConstants {
     static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCardCellHeight: CGFloat = 1
     static let separatorLineSettingsCellHeight: CGFloat = 5
-    static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
-    static let buttonSize: CGSize = CGSize(width: 44, height: 44)
 }
 
 struct ParserKeys {
