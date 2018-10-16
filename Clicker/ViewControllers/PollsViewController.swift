@@ -438,7 +438,7 @@ class PollsViewController: UIViewController {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
             alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
                 self.isListeningToKeyboard = false
-                let feedbackVC = FeedbackViewController()
+                let feedbackVC = FeedbackViewController(type: .pollsViewController)
                 self.navigationController?.pushViewController(feedbackVC, animated: true)
             }))
             self.present(alert, animated: true, completion: nil)
