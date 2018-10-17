@@ -36,6 +36,7 @@ class DraftsViewController: UIViewController {
     let titleLabelText = "Drafts"
     let errorText = "Error"
     let failedToDeleteDraftText = "Failed to delete draft. Try again!"
+    let backButtonImageName = "darkexit"
     
     init(delegate: DraftsViewControllerDelegate, drafts: [Draft]) {
         super.init(nibName: nil, bundle: nil)
@@ -57,7 +58,8 @@ class DraftsViewController: UIViewController {
         view.addSubview(visualEffectView)
         
         backButton = UIButton()
-        backButton.setImage(#imageLiteral(resourceName: "whiteExit"), for: .normal)
+        backButton.setImage(UIImage(named: backButtonImageName)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        backButton.imageView?.tintColor = .white
         backButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         backButton.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
         backButton.contentMode = .scaleAspectFit
@@ -79,6 +81,7 @@ class DraftsViewController: UIViewController {
         draftsCollectionView.allowsSelection = true
         draftsCollectionView.showsVerticalScrollIndicator = false
         draftsCollectionView.showsHorizontalScrollIndicator = false
+        draftsCollectionView.bounces = true
         draftsCollectionView.register(DraftCell.self, forCellWithReuseIdentifier: Identifiers.draftCellIdentifier)
         view.addSubview(draftsCollectionView)
         
