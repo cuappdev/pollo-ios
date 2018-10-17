@@ -136,7 +136,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         var models = [ListDiffable]()
         let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
-        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + interItemPadding)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding /*+ interItemPadding*/ )
         models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
