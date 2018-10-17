@@ -214,6 +214,8 @@ extension CardController: SocketDelegate {
 
     func updatedTally(_ currentState: CurrentState) {
         guard let latestPoll = pollsDateModel.polls.last else { return }
+        // Live MC polls for Admins should have the highlightView animate which is why we don't want to
+        // do adapter.performUpdates
         if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
             updateAdminLiveCardCell(with: currentState)
         } else {
