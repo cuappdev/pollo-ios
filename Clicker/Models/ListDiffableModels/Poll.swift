@@ -84,6 +84,11 @@ class Poll {
         self.startTime = poll.startTime
     }
 
+    // MARK: - Updates
+    func update(with currentState: CurrentState) {
+        self.results = currentState.results
+    }
+
     
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class MCResultCell: UICollectionViewCell {
     
@@ -19,6 +20,8 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var percentSelected: Float!
+    var highlightViewWidthConstraint: Constraint!
+    var didLayoutConstraints: Bool = false
     
     // MARK: - Constants
     let labelFontSize: CGFloat = 13
@@ -68,14 +71,25 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
+        numSelectedLabel.textColor = .black
         containerView.addSubview(numSelectedLabel)
-        
+
         highlightView = UIView()
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
     }
     
     override func updateConstraints() {
+        // If we already layed out constraints before, we should only update the
+        // highlightView width constraint
+        if didLayoutConstraints {
+            let highlightViewMaxWidth = Float(self.contentView.bounds.width - LayoutConstants.pollOptionsPadding * 2)
+            self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
+            super.updateConstraints()
+            return
+        }
+
+        didLayoutConstraints = true
         containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(LayoutConstants.pollOptionsPadding)
             make.trailing.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
@@ -94,10 +108,11 @@ class MCResultCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalTo(numSelectedLabel.snp.leading).inset(optionLabelHorizontalPadding)
         }
-        
-        highlightView.snp.remakeConstraints { make in
+
+        highlightView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(percentSelected)
+            let highlightViewMaxWidth = Float(contentView.bounds.width - LayoutConstants.pollOptionsPadding * 2)
+            highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
         }
         super.updateConstraints()
     }
@@ -106,7 +121,6 @@ class MCResultCell: UICollectionViewCell {
     func configure(for resultModel: MCResultModel, userRole: UserRole) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
-        numSelectedLabel.textColor = .black
         percentSelected = resultModel.percentSelected
         switch userRole {
         case .admin:
@@ -114,6 +128,19 @@ class MCResultCell: UICollectionViewCell {
         case .member:
             let isAnswer = resultModel.isAnswer
             highlightView.backgroundColor = isAnswer ? .clickerGreen0 : .clickerGreen1
+        }
+    }
+
+    // MARK: - Updates
+    func update(with resultModel: MCResultModel) {
+        optionLabel.text = resultModel.option
+        numSelectedLabel.text = "\(resultModel.numSelected)"
+        percentSelected = resultModel.percentSelected
+        // Update highlightView's width constraint offset
+        let highlightViewMaxWidth = Float(self.contentView.bounds.width - LayoutConstants.pollOptionsPadding * 2)
+        self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
+        UIView.animate(withDuration: 0.3) {
+            self.highlightView.superview?.layoutIfNeeded()
         }
     }
     

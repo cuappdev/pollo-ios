@@ -108,7 +108,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
 //        }
         super.updateConstraints()
     }
-    
+
+    // MARK: - Configure
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
@@ -126,6 +127,31 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         collectionView.isScrollEnabled = hasOverflowOptions
 
         adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    // MARK: - Update
+    func update(with updatedPollOptionsModelType: PollOptionsModelType) {
+        switch updatedPollOptionsModelType {
+        case .mcResult(resultModels: let updatedMCResultModels):
+            switch pollOptionsModel.type {
+            case .mcResult(resultModels: let mcResultModels):
+                if updatedMCResultModels.count != mcResultModels.count { return }
+                for index in 0..<updatedMCResultModels.count {
+                    let updatedMCResultModel = updatedMCResultModels[index]
+                    let mcResultModel = mcResultModels[index]
+                    if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
+                        // Have to do index + 1 because first model is SpaceModel
+                        guard let cell = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                        cell.update(with: updatedMCResultModel)
+                    }
+                }
+                self.pollOptionsModel.type = updatedPollOptionsModelType
+            default:
+                return
+            }
+        default:
+            return
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

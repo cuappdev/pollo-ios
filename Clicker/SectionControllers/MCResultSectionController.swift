@@ -42,4 +42,14 @@ class MCResultSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         resultModel = object as? MCResultModel
     }
+
+    // MARK: - Updates
+    func update(with resultModel: MCResultModel) {
+        // Make sure to update resultModel for cells that are currently not on the screen
+        // so that when they get dequeued again, they will have the correct resultModel
+        self.resultModel = resultModel
+        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? MCResultCell else { return }
+        cell.update(with: resultModel)
+    }
+
 }

@@ -213,8 +213,22 @@ extension CardController: SocketDelegate {
     }
 
     func updatedTally(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: nil)
-        self.adapter.performUpdates(animated: false, completion: nil)
+        guard let latestPoll = pollsDateModel.polls.last else { return }
+        if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
+            updateAdminLiveCardCell(with: currentState)
+        } else {
+            updateWithCurrentState(currentState: currentState, pollState: nil)
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
+    }
+
+    func updateAdminLiveCardCell(with currentState: CurrentState) {
+        guard let latestPoll = pollsDateModel.polls.last,
+            latestPoll.state == .live,
+            let latestPollSectionController = adapter.sectionController(forSection: pollsDateModel.polls.count - 1) as? PollSectionController
+            else { return }
+        latestPoll.update(with: currentState)
+        latestPollSectionController.update(with: latestPoll)
     }
 
     // MARK: Helpers

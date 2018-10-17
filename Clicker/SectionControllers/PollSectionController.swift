@@ -47,6 +47,12 @@ class PollSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         poll = object as? Poll
     }
+
+    // MARK: - Updates
+    func update(with poll: Poll) {
+        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? CardCell else { return }
+        cell.update(with: poll)
+    }
         
 }
 
