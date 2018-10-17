@@ -69,7 +69,7 @@ func decodeObjForKey(key: String) -> Any {
 }
 
 // MARK: - Utils for Polls
-func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
+func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
     switch poll.questionType {
     case .freeResponse:
@@ -87,11 +87,16 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
             type = buildMCResultModelType(from: poll)
         }
     }
+    return type
+}
+
+func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
+    let type = buildPollOptionsModelType(from: poll, userRole: userRole)
     return PollOptionsModel(type: type, pollState: poll.state)
 }
 
 func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
-    let verticalPadding: CGFloat = LayoutConstants.pollOptionsPadding * 2
+    let verticalPadding: CGFloat = LayoutConstants.pollOptionsPadding * 2 + LayoutConstants.interItemPadding
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
     switch pollOptionsModel.type {

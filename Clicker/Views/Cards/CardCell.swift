@@ -53,7 +53,7 @@ class CardCell: UICollectionViewCell {
     let questionButtonBottomPadding: CGFloat = 5.0
     let timerLabelFontSize: CGFloat = 14.0
     let timerLabelBottomPadding: CGFloat =  16.0
-    let endQuestionText = "End Question"
+    let endPollText = "End Poll"
     let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
     
@@ -129,7 +129,7 @@ class CardCell: UICollectionViewCell {
         questionButton.isHidden = poll.state == .shared || isMember
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
-            questionButton.setTitle(endQuestionText, for: .normal)
+            questionButton.setTitle(endPollText, for: .normal)
             setTimerText()
             runTimer()
         } else if poll.state == .ended {
@@ -140,6 +140,23 @@ class CardCell: UICollectionViewCell {
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
         adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    // MARK: - Updates
+    func update(with poll: Poll) {
+        switch pollOptionsModel.type {
+        case .mcResult(resultModels: let mcResultModels):
+            guard let pollOptionsSectionController = adapter.sectionController(for: pollOptionsModel) as? PollOptionsSectionController else { return }
+            let updatedPollOptionsModelType = buildPollOptionsModelType(from: poll, userRole: userRole)
+            // Make sure to call update before updating pollOptionsMOdel.type so that the
+            // we don't change the previous pollOptionsModel in pollOptionsSectionController.
+            pollOptionsSectionController.update(with: updatedPollOptionsModelType)
+            pollOptionsModel.type = updatedPollOptionsModelType
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
+            adapter.performUpdates(animated: false, completion: nil)
+        default:
+            return
+        }
     }
     
     // MARK: - Actions

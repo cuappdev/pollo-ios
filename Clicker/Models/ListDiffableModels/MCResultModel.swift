@@ -19,6 +19,12 @@ class MCResultModel: OptionModel {
         self.percentSelected = percentSelected
         super.init(option: option, isAnswer: false)
     }
+
+    // MARK: - Custom isEqual method to use when comparing an updated MCResultModel
+    func isEqual(toUpdatedModel mcResultModel: MCResultModel) -> Bool {
+        return option == mcResultModel.option && numSelected == mcResultModel.numSelected && percentSelected == mcResultModel.percentSelected
+    }
+
 }
 
 extension MCResultModel: ListDiffable {
