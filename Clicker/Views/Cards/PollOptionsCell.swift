@@ -29,10 +29,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
+    var hasOverflowOptions: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
-    let interItemPadding: CGFloat = 5
     let maximumNumberVisibleOptions: Int = 6
     
         
@@ -92,22 +92,50 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         
         super.updateConstraints()
     }
-    
+
+    // MARK: - Configure
     func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            arrowView.isHidden = mcResultModels.count <= maximumNumberVisibleOptions
+            hasOverflowOptions = mcResultModels.count > maximumNumberVisibleOptions
             break
         case .mcChoice(let mcChoiceModels):
-            arrowView.isHidden = mcChoiceModels.count <= maximumNumberVisibleOptions
+            hasOverflowOptions = mcChoiceModels.count > maximumNumberVisibleOptions
             break
         case .frOption(let frOptionModels):
-            arrowView.isHidden = frOptionModels.count <= maximumNumberVisibleOptions
+            hasOverflowOptions = frOptionModels.count > maximumNumberVisibleOptions
         }
+        arrowView.isHidden = !hasOverflowOptions
         arrowView.toggle(show: !arrowView.isHidden, animated: false)
+        collectionView.isScrollEnabled = hasOverflowOptions
         adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    // MARK: - Update
+    func update(with updatedPollOptionsModelType: PollOptionsModelType) {
+        switch updatedPollOptionsModelType {
+        case .mcResult(resultModels: let updatedMCResultModels):
+            switch pollOptionsModel.type {
+            case .mcResult(resultModels: let mcResultModels):
+                if updatedMCResultModels.count != mcResultModels.count { return }
+                for index in 0..<updatedMCResultModels.count {
+                    let updatedMCResultModel = updatedMCResultModels[index]
+                    let mcResultModel = mcResultModels[index]
+                    if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
+                        // Have to do index + 1 because first model is SpaceModel
+                        guard let cell = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                        cell.update(with: updatedMCResultModel)
+                    }
+                }
+                self.pollOptionsModel.type = updatedPollOptionsModelType
+            default:
+                return
+            }
+        default:
+            return
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -121,7 +149,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         var models = [ListDiffable]()
         let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
-        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding /*+ interItemPadding*/ )
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding)
         models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {

@@ -139,7 +139,7 @@ extension CardController: UIScrollViewDelegate {
         let safeIndex = max(0, min(numberOfItems - 1, index))
         return safeIndex
     }
-    
+
     /// what contentOffset would be if the nearest card were centered
     private func closestDiscreteOffset(to offset: CGPoint) -> CGFloat {
         let rem = remainder(offset.x + collectionViewHorizontalInset, cvItemWidth)
@@ -198,6 +198,7 @@ extension CardController: SocketDelegate {
     func receivedUserCount(_ count: Int) {
         numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
+        peopleButton.sizeToFit()
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
@@ -236,10 +237,26 @@ extension CardController: SocketDelegate {
         updateWithCurrentState(currentState: currentState, pollState: pollState)
         self.adapter.performUpdates(animated: false, completion: nil)
     }
-        
+
     func updatedTally(_ currentState: CurrentState) {
-        updateWithCurrentState(currentState: currentState, pollState: nil)
-        self.adapter.performUpdates(animated: false, completion: nil)
+        guard let latestPoll = pollsDateModel.polls.last else { return }
+        // Live MC polls for Admins should have the highlightView animate which is why we don't want to
+        // do adapter.performUpdates
+        if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
+            updateAdminLiveCardCell(with: currentState)
+        } else {
+            updateWithCurrentState(currentState: currentState, pollState: nil)
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
+    }
+
+    func updateAdminLiveCardCell(with currentState: CurrentState) {
+        guard let latestPoll = pollsDateModel.polls.last,
+            latestPoll.state == .live,
+            let latestPollSectionController = adapter.sectionController(forSection: pollsDateModel.polls.count - 1) as? PollSectionController
+            else { return }
+        latestPoll.update(with: currentState)
+        latestPollSectionController.update(with: latestPoll)
     }
 
     // MARK: Helpers

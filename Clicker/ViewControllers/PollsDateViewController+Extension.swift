@@ -49,6 +49,7 @@ extension PollsDateViewController: CardControllerDelegate {
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {
         self.numberOfPeople = numberOfPeople
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
+        peopleButton.sizeToFit()
         if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
             pollsDateArray[indexOfPollsDateModel] = PollsDateModel(date: pollsDateModel.date, polls: pollsDateModel.polls)
             adapter.performUpdates(animated: false, completion: nil)
@@ -135,6 +136,7 @@ extension PollsDateViewController: SocketDelegate {
     func receivedUserCount(_ count: Int) {
         numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
+        peopleButton.sizeToFit()
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
