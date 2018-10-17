@@ -22,7 +22,7 @@ class MCResultModel: OptionModel {
 
     // MARK: - Custom isEqual method to use when comparing an updated MCResultModel
     func isEqual(toUpdatedModel mcResultModel: MCResultModel) -> Bool {
-        return numSelected == mcResultModel.numSelected && percentSelected == mcResultModel.percentSelected
+        return option == mcResultModel.option && numSelected == mcResultModel.numSelected && percentSelected == mcResultModel.percentSelected
     }
 
 }
