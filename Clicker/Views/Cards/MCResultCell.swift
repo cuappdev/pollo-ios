@@ -139,7 +139,7 @@ class MCResultCell: UICollectionViewCell {
         // Update highlightView's width constraint offset
         let highlightViewMaxWidth = Float(self.contentView.bounds.width - LayoutConstants.pollOptionsPadding * 2)
         self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.15) {
             self.highlightView.superview?.layoutIfNeeded()
         }
     }
