@@ -165,12 +165,10 @@ extension PollsViewController: PollsDateViewControllerDelegate {
 
     func pollsDateViewControllerWasPopped(for userRole: UserRole) {
         reloadSessions(for: userRole) { sessions in
-            let pollType: PollType = userRole == .admin ? .created : .joined
             let index = userRole == .admin ? 1 : 0
-            self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
-            DispatchQueue.main.async {
-                self.adapter.performUpdates(animated: true, completion: nil)
-            }
+            self.pollTypeModels[index].sessions = sessions
+            guard let pollTypeSectionController = self.adapter.sectionController(forSection: index) as? PollTypeSectionController else { return }
+            pollTypeSectionController.update(with: sessions)
         }
     }
 
