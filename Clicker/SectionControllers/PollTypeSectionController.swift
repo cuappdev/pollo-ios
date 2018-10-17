@@ -40,6 +40,13 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     override func didUpdate(to object: Any) {
         pollTypeModel = object as? PollTypeModel
     }
+
+    // MARK: - Updates
+    func update(with sessions: [Session]) {
+        pollTypeModel.sessions = sessions
+        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? PollsCell else { return }
+        cell.update(with: sessions)
+    }
     
     // MARK: - ListDisplayDelegate
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController) {
