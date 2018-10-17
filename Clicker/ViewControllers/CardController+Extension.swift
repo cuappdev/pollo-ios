@@ -133,27 +133,53 @@ extension CardController: UIScrollViewDelegate {
     
     // MARK: - Handle paging animation of horizontal collection view
     private func indexOfHorizontalCard(offset: CGPoint) -> Int {
-        let itemWidth = view.frame.width * 0.9
-        let proportionalOffset = offset.x / itemWidth
+        let proportionalOffset = (offset.x + collectionViewHorizontalInset) / cvItemWidth
         let index = Int(round(proportionalOffset))
         let numberOfItems = objects(for: adapter).count
         let safeIndex = max(0, min(numberOfItems - 1, index))
         return safeIndex
     }
+
+    /// what contentOffset would be if the nearest card were centered
+    private func closestDiscreteOffset(to offset: CGPoint) -> CGFloat {
+        let rem = remainder(offset.x + collectionViewHorizontalInset, cvItemWidth)
+        return offset.x - rem
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        wasScrolledToIndex = indexOfHorizontalCard(offset: scrollView.contentOffset)
+        startingScrollingOffset = scrollView.contentOffset
+    }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        // calculate where scrollView should snap to:
-        let indexOfHorizontalCard = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
-        let indexPath = IndexPath(row: 0, section: indexOfHorizontalCard)
-        UIView.animate(withDuration: 0.1) {
-            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        let willScrollToIndex = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
+        let canSwipeNext = wasScrolledToIndex + 1 < pollsDateModel.polls.count && velocity.x > swipeVelocityThreshold
+        let canSwipePrev = wasScrolledToIndex - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        var newCount: Int
+        var direction: Int
+        
+        if willScrollToIndex == wasScrolledToIndex {
+            if (canSwipeNext || canSwipePrev)  {
+                // scrolled short and fast, should snap to next/prev cell
+                direction = canSwipeNext ? 1 : -1
+                newCount =  wasScrolledToIndex + direction
+            } else {
+                // scrolled short and slow, should snap back to same cell
+                direction = 0
+                newCount = wasScrolledToIndex
+            }
+        } else {
+            // scrolled far, should move to next/prev cell
+            direction =  willScrollToIndex > wasScrolledToIndex ? 1 : -1
+            newCount = wasScrolledToIndex + direction
         }
-        updateCountLabelText(with: indexOfHorizontalCard)
-
-        // Stop scrollView sliding:
-        targetContentOffset.pointee = scrollView.contentOffset
+        
+        let deltaOffset = cvItemWidth * CGFloat(direction)
+        let toValue = closestDiscreteOffset(to: startingScrollingOffset) + deltaOffset
+        
+        targetContentOffset.pointee = CGPoint(x: toValue, y: 0)
+        updateCountLabelText(with: newCount)
     }
-
     
     func scrollToLatestPoll() {
         let indexOfLatestSection = pollsDateModel.polls.count - 1
@@ -279,4 +305,3 @@ extension CardController: SocketDelegate {
         pollsDateModel.polls[numPolls - 1] = poll
     }
 }
-

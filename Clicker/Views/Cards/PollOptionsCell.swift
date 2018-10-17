@@ -22,21 +22,18 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
     var collectionView: UICollectionView!
-    var arrowImageView: UIImageView!
+    var arrowView: ArrowView!
     
     // MARK: - Data vars
     var delegate: PollOptionsCellDelegate!
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
-    var arrowImageViewIsPresent: Bool = false
     var hasOverflowOptions: Bool = false
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
     let maximumNumberVisibleOptions: Int = 6
-    let arrowBottomInset: CGFloat = 9.8
-    let arrowImageName: String = "DropdownArrowIcon"
     
         
     override init(frame: CGRect) {
@@ -65,31 +62,19 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-//        arrowImageView = UIImageView()
-//        arrowImageView.image = UIImage(named: arrowImageName)
-//        arrowImageView.alpha = 0
-//        contentView.addSubview(arrowImageView)
+        arrowView = ArrowView()
+        contentView.addSubview(arrowView)
     }
     
-//    func updateArrowImageView(show: Bool) {
-//        UIView.animate(withDuration: 0.2) {
-//            if show {
-//                self.arrowImageView.alpha = 1
-//            } else {
-//                self.arrowImageView.alpha = 0
-//            }
-//        }
-//    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if arrowImageViewIsPresent {
-//            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-//            if diff < 10 {
-//                updateArrowImageView(show: false)
-//            } else {
-//                updateArrowImageView(show: true)
-//            }
-//        }
+        if !arrowView.isHidden {
+            let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
+            if diff < 10 {
+                arrowView.toggle(show: false, animated: true)
+            } else {
+                arrowView.toggle(show: true, animated: true)
+            }
+        }
     }
     
     override func updateConstraints() {
@@ -98,14 +83,13 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-
-//        if arrowImageViewIsPresent {
-//            arrowImageView.alpha = 1
-//            arrowImageView.snp.makeConstraints { make in
-//                make.bottom.equalToSuperview().inset(arrowBottomInset)
-//                make.centerX.equalToSuperview()
-//            }
-//        }
+        
+        arrowView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
         super.updateConstraints()
     }
 
@@ -115,17 +99,17 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.delegate = delegate
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            arrowImageViewIsPresent = mcResultModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = mcResultModels.count > maximumNumberVisibleOptions
             break
         case .mcChoice(let mcChoiceModels):
-            arrowImageViewIsPresent = mcChoiceModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = mcChoiceModels.count > maximumNumberVisibleOptions
             break
         case .frOption(let frOptionModels):
-            arrowImageViewIsPresent = frOptionModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = frOptionModels.count > maximumNumberVisibleOptions
         }
-        hasOverflowOptions = arrowImageViewIsPresent
+        arrowView.isHidden = !hasOverflowOptions
+        arrowView.toggle(show: !arrowView.isHidden, animated: false)
         collectionView.isScrollEnabled = hasOverflowOptions
-
         adapter.performUpdates(animated: false, completion: nil)
     }
 

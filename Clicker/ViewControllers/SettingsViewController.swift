@@ -23,6 +23,7 @@ class SettingsViewController: UIViewController {
     
     // MARK: - Constants
     let navBarTitle = "Settings"
+    let backButtonImageName = "darkexit"
     let account = "Account"
     let about = "About"
     let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
@@ -33,7 +34,7 @@ class SettingsViewController: UIViewController {
     let sendUsFeedback = "Send Us Feedback"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = navBarTitle
@@ -68,7 +69,7 @@ class SettingsViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(image(fromLayer: gradientLayer), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let backImage = UIImage(named: "exit")?.withRenderingMode(.alwaysOriginal)
+        let backImage = UIImage(named: backButtonImageName)?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         navigationItem.title = "Settings"
     
