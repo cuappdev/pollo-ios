@@ -69,6 +69,7 @@ class PollBuilderViewController: UIViewController {
     let saveDraftButtonTitle = "Save as draft"
     let startQuestionButtonTitle = "Start Question"
     let dropDownArrowImageName = "DropdownArrowIcon"
+    let exitButtonImageName = "darkexit"
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
@@ -102,7 +103,7 @@ class PollBuilderViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         exitButton = UIButton()
-        exitButton.setImage(#imageLiteral(resourceName: "SmallExitIcon"), for: .normal)
+        exitButton.setImage(UIImage(named: exitButtonImageName), for: .normal)
         exitButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         exitButton.addTarget(self, action: #selector(exit), for: .touchUpInside)
         view.addSubview(exitButton)
