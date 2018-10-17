@@ -46,6 +46,12 @@ class PollOptionsSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         pollOptionsModel = object as? PollOptionsModel
     }
+
+    // MARK: - Updates
+    func update(with pollOptionsModelType: PollOptionsModelType) {
+        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? PollOptionsCell else { return }
+        cell.update(with: pollOptionsModelType)
+    }
     
 }
 

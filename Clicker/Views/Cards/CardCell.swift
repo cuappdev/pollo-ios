@@ -141,6 +141,23 @@ class CardCell: UICollectionViewCell {
         miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
         adapter.performUpdates(animated: false, completion: nil)
     }
+
+    // MARK: - Updates
+    func update(with poll: Poll) {
+        switch pollOptionsModel.type {
+        case .mcResult(resultModels: let mcResultModels):
+            guard let pollOptionsSectionController = adapter.sectionController(for: pollOptionsModel) as? PollOptionsSectionController else { return }
+            let updatedPollOptionsModelType = buildPollOptionsModelType(from: poll, userRole: userRole)
+            // Make sure to call update before updating pollOptionsMOdel.type so that the
+            // we don't change the previous pollOptionsModel in pollOptionsSectionController.
+            pollOptionsSectionController.update(with: updatedPollOptionsModelType)
+            pollOptionsModel.type = updatedPollOptionsModelType
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
+            adapter.performUpdates(animated: false, completion: nil)
+        default:
+            return
+        }
+    }
     
     // MARK: - Actions
     @objc func questionButtonTapped() {
