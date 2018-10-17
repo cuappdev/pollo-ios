@@ -38,6 +38,9 @@ class CardController: UIViewController {
     var currentIndex: Int!
     var numberOfPeople: Int!
     var isInitialLoad: Bool = true
+    var wasScrolledToIndex: Int!
+    var startingScrollingOffset: CGPoint!
+    lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -47,6 +50,7 @@ class CardController: UIViewController {
     let countLabelHorizontalPadding: CGFloat = 5
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
+    let swipeVelocityThreshold: CGFloat = 0.5
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -93,7 +97,6 @@ class CardController: UIViewController {
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.scrollIndicatorInsets = .zero
         collectionView.bounces = true
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         collectionView.backgroundColor = .clear
