@@ -38,6 +38,9 @@ class CardController: UIViewController {
     var currentIndex: Int!
     var numberOfPeople: Int!
     var isInitialLoad: Bool = true
+    var wasScrolledToIndex: Int!
+    var startingScrollingOffset: CGPoint!
+    lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -93,7 +96,6 @@ class CardController: UIViewController {
         collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.scrollIndicatorInsets = .zero
         collectionView.bounces = true
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         collectionView.backgroundColor = .clear
