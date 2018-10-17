@@ -31,6 +31,7 @@ class SettingsViewController: UIViewController {
     let feedback = "Feedback"
     let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
     let sendUsFeedback = "Send Us Feedback"
+    let backButtonImageName = "darkexit"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +67,7 @@ class SettingsViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(image(fromLayer: gradientLayer), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        let backImage = UIImage(named: "darkexit")?.withRenderingMode(.alwaysOriginal)
+        let backImage = UIImage(named: backButtonImageName)?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         navigationItem.title = "Settings"
     
