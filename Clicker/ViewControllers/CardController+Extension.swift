@@ -140,46 +140,44 @@ extension CardController: UIScrollViewDelegate {
         return safeIndex
     }
     
+    /// what contentOffset would be if the nearest card were centered
+    private func closestDiscreteOffset(to offset: CGPoint) -> CGFloat {
+        let rem = remainder(offset.x + collectionViewHorizontalInset, cvItemWidth)
+        return offset.x - rem
+    }
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         wasScrolledToIndex = indexOfHorizontalCard(offset: scrollView.contentOffset)
         startingScrollingOffset = scrollView.contentOffset
     }
     
-   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let willScrollToIndex = self.indexOfHorizontalCard(offset: targetContentOffset.pointee)
-        let swipeVelocityThreshold: CGFloat = 0.5
         let canSwipeNext = wasScrolledToIndex + 1 < pollsDateModel.polls.count && velocity.x > swipeVelocityThreshold
         let canSwipePrev = wasScrolledToIndex - 1 >= 0 && velocity.x < -swipeVelocityThreshold
-
         var newCount: Int
         var direction: Int
-        var x_vel: CGFloat
+        
         if willScrollToIndex == wasScrolledToIndex {
             if (canSwipeNext || canSwipePrev)  {
                 // scrolled short and fast, should snap to next/prev cell
                 direction = canSwipeNext ? 1 : -1
-                x_vel = velocity.x
                 newCount =  wasScrolledToIndex + direction
             } else {
                 // scrolled short and slow, should snap back to same cell
                 direction = 0
-                x_vel = scrollView.contentOffset.x > startingScrollingOffset!.x ? -0.5 : 0.5
                 newCount = wasScrolledToIndex
             }
         } else {
             // scrolled far, should move to next/prev cell
             direction =  willScrollToIndex > wasScrolledToIndex ? 1 : -1
-            x_vel = abs(velocity.x) < swipeVelocityThreshold ? CGFloat(direction)/2.0 : velocity.x
             newCount = wasScrolledToIndex + direction
         }
-    
+        
         let deltaOffset = cvItemWidth * CGFloat(direction)
-        let toValue = startingScrollingOffset.x + deltaOffset
-
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: x_vel, animations: {
-            scrollView.contentOffset = CGPoint(x: toValue, y: 0)
-        }, completion: nil)
-        targetContentOffset.pointee = scrollView.contentOffset
+        let toValue = closestDiscreteOffset(to: startingScrollingOffset) + deltaOffset
+        
+        targetContentOffset.pointee = CGPoint(x: toValue, y: 0)
         updateCountLabelText(with: newCount)
     }
     
