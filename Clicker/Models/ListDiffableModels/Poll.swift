@@ -70,7 +70,7 @@ class Poll {
         self.answer = answer
         
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
-     
+
     }
     
     init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
@@ -93,11 +93,11 @@ class Poll {
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
     func getFRResultsArray() -> [(String, Int)] {
-        return options.map { (option) -> (String, Int) in
-            if let choiceJSON = results[option], let numSelected = choiceJSON[ParserKeys.countKey].int {
+        return options.compactMap { (answerId) -> (String, Int)? in
+            if let choiceJSON = results[answerId], let option = choiceJSON[ParserKeys.textKey].string, let numSelected = choiceJSON[ParserKeys.countKey].int {
                 return (option, numSelected)
             }
-            return (option, 0)
+            return nil
         }
     }
     
