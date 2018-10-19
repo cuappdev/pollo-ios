@@ -75,6 +75,7 @@ struct ParserKeys {
     static let sharedKey = "shared"
     static let textKey = "text"
     static let typeKey = "type"
+    static let upvotesKey = "upvotes"
 }
 
 struct RequestKeys {
