@@ -57,8 +57,9 @@ extension CardController: PollSectionControllerDelegate {
     func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
         // You can only upvote for FR questions
         if poll.questionType == .multipleChoice { return }
-        let answer = Answer(text: choice, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.serverUpvote)
+        if let answerId = poll.answerId(for: choice) {
+            socket.socket.emit(Routes.serverUpvote, answerId)
+        }
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {

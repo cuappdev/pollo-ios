@@ -52,7 +52,7 @@ class Poll {
     var answer: String?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
-    // FREE_RESPONSE: {'Blue': {'text': 'Blue', 'count': 3}, ...}
+    // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
     
     /// `startTime` is the time (in seconds since 1970) that the poll was started.
     var startTime: Double?
@@ -84,11 +84,10 @@ class Poll {
         self.startTime = poll.startTime
     }
 
-    // MARK: - Updates
+    // MARK: - Public
     func update(with currentState: CurrentState) {
         self.results = currentState.results
     }
-
     
     // Returns array representation of results
     // Ex) [('Blah', 3), ('Jupiter', 2)...]
@@ -105,6 +104,17 @@ class Poll {
         return results.values.reduce(0) { (currentTotalResults, json) -> Int in
             return currentTotalResults + json[ParserKeys.countKey].intValue
         }
+    }
+
+    // Get the answerId for a specific FR choice
+    func answerId(for frChoice: String) -> String? {
+        var id: String?
+        results.forEach { (answerId, choiceJSON) in
+            if let option = choiceJSON[ParserKeys.textKey].string, option == frChoice {
+                id = answerId
+            }
+        }
+        return id
     }
 
 }
