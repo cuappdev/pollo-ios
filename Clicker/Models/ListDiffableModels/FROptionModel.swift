@@ -19,7 +19,7 @@ class FROptionModel: OptionModel {
         self.answerId = answerId
         self.numUpvoted = numUpvoted
         self.didUpvote = didUpvote
-        super.init(option: option, isAnswer: false)
+        super.init(option: option)
     }
     
 }

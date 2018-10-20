@@ -15,13 +15,9 @@ class MCChoiceModel: OptionModel {
     
     init(option: String, isSelected: Bool) {
         self.isSelected = isSelected
-        super.init(option: option, isAnswer: false)
+        super.init(option: option)
     }
-    
-    override init(option: String, isAnswer: Bool) {
-        self.isSelected = false
-        super.init(option: option, isAnswer: isAnswer)
-    }
+
 }
 
 extension MCChoiceModel: ListDiffable {

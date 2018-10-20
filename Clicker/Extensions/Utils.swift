@@ -146,8 +146,8 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
         if let infoDict = poll.results[mcOptionKey] {
             guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            let isAnswer = option == poll.selectedMCChoice
-            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+            let isSelected = option == poll.selectedMCChoice
+            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected)
             mcResultModels.append(resultModel)
         }
     }
@@ -157,7 +157,7 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     // the poll is still live which makes sense that we do not have any results yet.
     if mcResultModels.isEmpty {
         poll.options.forEach { option in
-            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isAnswer: false)
+            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isSelected: false)
             mcResultModels.append(resultModel)
         }
     }
