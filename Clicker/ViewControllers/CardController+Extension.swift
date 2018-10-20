@@ -58,7 +58,11 @@ extension CardController: PollSectionControllerDelegate {
         // You can only upvote for FR questions
         if poll.questionType == .multipleChoice { return }
         if let answerId = poll.answerId(for: choice) {
-            socket.socket.emit(Routes.serverUpvote, answerId)
+            let upvoteObject: [String:Any] = [
+                RequestKeys.answerIdKey: answerId,
+                RequestKeys.googleIdKey: User.currentUser?.id
+            ]
+            socket.socket.emit(Routes.serverUpvote, upvoteObject)
         }
     }
     

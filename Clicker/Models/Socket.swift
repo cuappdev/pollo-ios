@@ -90,7 +90,7 @@ class Socket {
             }
             self.delegate.receivedUserCount(count)
         }
-        
+
         socket.connect()
     }
 
