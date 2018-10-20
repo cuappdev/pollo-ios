@@ -207,6 +207,10 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.pollStarted(poll, userRole: userRole)
+            return
+        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
             return otherPoll.id == poll.id
         }) { return }
@@ -219,6 +223,10 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.pollEnded(poll, userRole: userRole)
+            return
+        }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         if userRole == .admin {
             latestPoll.id = poll.id
@@ -236,6 +244,10 @@ extension CardController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.receivedResults(currentState)
+            return
+        }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
         if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != 7 {
@@ -250,6 +262,10 @@ extension CardController: SocketDelegate {
     }
 
     func updatedTally(_ currentState: CurrentState) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.updatedTally(currentState)
+            return
+        }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
         // do adapter.performUpdates
