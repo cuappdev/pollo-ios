@@ -14,7 +14,7 @@ protocol PollSectionControllerDelegate {
     var role: UserRole { get }
 
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
-    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
 }
@@ -66,9 +66,9 @@ extension PollSectionController: CardCellDelegate {
         poll.selectedMCChoice = choice
         delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
-    
-    func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String) {
-        delegate.pollSectionControllerDidUpvoteChoiceForPoll(sectionController: self, choice: choice, poll: poll)
+
+    func cardCellDidUpvote(cardCell: CardCell, answerId: String) {
+        delegate.pollSectionControllerDidUpvote(sectionController: self, answerId: answerId)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {

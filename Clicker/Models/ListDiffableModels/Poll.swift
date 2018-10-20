@@ -127,17 +127,6 @@ class Poll {
         }
     }
 
-    // Get the answerId for a specific FR choice
-    func answerId(for frChoice: String) -> String? {
-        var id: String?
-        results.forEach { (answerId, choiceJSON) in
-            if let option = choiceJSON[ParserKeys.textKey].string, option == frChoice {
-                id = answerId
-            }
-        }
-        return id
-    }
-
     // Returns whether user upvoted answerId
     func userDidUpvote(answerId: String) -> Bool {
         if let userId = User.currentUser?.id, let userUpvotedAnswerIds = upvotes[userId] {

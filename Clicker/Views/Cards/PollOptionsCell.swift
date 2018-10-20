@@ -14,7 +14,7 @@ protocol PollOptionsCellDelegate {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String)
-    func pollOptionsCellDidUpvoteChoice(choice: String)
+    func pollOptionsCellDidUpvote(for answerId: String)
     
 }
 
@@ -218,19 +218,11 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
     var userRole: UserRole {
         return delegate.userRole
     }
-    
-    func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController) {
+
+    func frOptionSectionControllerDidUpvote(for answerId: String) {
         // Only members can upvote free responses
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
-        switch pollOptionsModel.type {
-        case .frOption(optionModels: var frOptionModels):
-            // Need to subtract 1 from index because topSpaceModel is the first section
-            let upvoteIndex = adapter.section(for: sectionController) - 1
-            let upvotedFROptionModel = frOptionModels[upvoteIndex]
-            delegate.pollOptionsCellDidUpvoteChoice(choice: upvotedFROptionModel.option)
-        default:
-            return
-        }
+        delegate.pollOptionsCellDidUpvote(for: answerId)
     }
     
 }
