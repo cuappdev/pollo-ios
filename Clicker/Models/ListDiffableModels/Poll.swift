@@ -87,6 +87,18 @@ class Poll {
         self.startTime = poll.startTime
     }
 
+    init(poll: Poll, state: PollState) {
+        self.id = poll.id
+        self.text = poll.text
+        self.questionType = poll.questionType
+        self.options = poll.options
+        self.results = poll.results
+        self.upvotes = poll.upvotes
+        self.state = state
+        self.answer = poll.answer
+        self.startTime = poll.startTime
+    }
+
     // MARK: - Public
     func update(with currentState: CurrentState) {
         self.results = currentState.results
