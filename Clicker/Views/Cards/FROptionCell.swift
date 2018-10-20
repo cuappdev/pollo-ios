@@ -104,7 +104,18 @@ class FROptionCell: UICollectionViewCell {
         let upvoteButtonImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
         upvoteButton.setImage(upvoteButtonImage, for: .normal)
     }
-    
+
+    // MARK: - Updates
+    func update(with frOptionModel: FROptionModel) {
+        self.didUpvote = frOptionModel.didUpvote
+        optionLabel.text = frOptionModel.option
+        let numUpvotedButtonTitleColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
+        numUpvotedButton.setTitleColor(numUpvotedButtonTitleColor, for: .normal)
+        numUpvotedButton.setTitle("\(frOptionModel.numUpvoted)", for: .normal)
+        let upvoteButtonImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
+        upvoteButton.setImage(upvoteButtonImage, for: .normal)
+    }
+
     // MARK: - Actions
     @objc func upvoteFROption() {
         if !didUpvote { delegate.frOptionCellDidReceiveUpvote() }

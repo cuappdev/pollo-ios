@@ -125,11 +125,35 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                     let mcResultModel = mcResultModels[index]
                     if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
                         // Have to do index + 1 because first model is SpaceModel
-                        guard let cell = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
-                        cell.update(with: updatedMCResultModel)
+                        guard let sectionController = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                        sectionController.update(with: updatedMCResultModel)
                     }
                 }
                 self.pollOptionsModel.type = updatedPollOptionsModelType
+            default:
+                return
+            }
+        case .frOption(optionModels: let updatedFROptionModels):
+            switch pollOptionsModel.type {
+            case .frOption(optionModels: var frOptionModels):
+                updatedFROptionModels.forEach { (updatedFROptionModel) in
+                    if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
+                        return updatedFROptionModel.answerId == frOptionModel.answerId
+                    }) {
+                        // Have to do index + 1 because first model is SpaceModel
+                        guard let sectionController = adapter.sectionController(forSection: index + 1) as? FROptionSectionController else { return }
+                        sectionController.update(with: updatedFROptionModel)
+                        frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
+                        frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
+                    } else {
+                        frOptionModels.insert(updatedFROptionModel, at: 0)
+                    }
+                }
+                frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
+                    return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
+                }
+                pollOptionsModel.type = .frOption(optionModels: frOptionModels)
+                adapter.performUpdates(animated: false, completion: nil)
             default:
                 return
             }

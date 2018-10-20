@@ -50,6 +50,15 @@ class FROptionSectionController: ListSectionController {
     override func didUpdate(to object: Any) {
         frOptionModel = object as? FROptionModel
     }
+
+    // MARK: - Updates
+    func update(with frOptionModel: FROptionModel) {
+        // Make sure to update frOptionModel for cells that are currently not on the screen
+        // so that when they get dequeued again, they will have the correct resultModel
+        self.frOptionModel = frOptionModel
+        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? FROptionCell else { return }
+        cell.update(with: frOptionModel)
+    }
     
     // MARK: - Helpers
     private func calculateFROptionCellHeight(for frOptionModel: FROptionModel) -> CGFloat {
