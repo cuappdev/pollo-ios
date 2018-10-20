@@ -124,16 +124,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         case .mcResult(resultModels: let updatedMCResultModels):
             switch pollOptionsModel.type {
             case .mcResult(resultModels: let mcResultModels):
-                if updatedMCResultModels.count != mcResultModels.count { return }
-                for index in 0..<updatedMCResultModels.count {
-                    let updatedMCResultModel = updatedMCResultModels[index]
-                    let mcResultModel = mcResultModels[index]
-                    if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
-                        // Have to do index + 1 because first model is SpaceModel
-                        guard let sectionController = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
-                        sectionController.update(with: updatedMCResultModel)
-                    }
-                }
+                compare(oldMCResultModels: mcResultModels, updatedMCResultModels: updatedMCResultModels)
                 self.pollOptionsModel.type = updatedPollOptionsModelType
             default:
                 return
@@ -141,23 +132,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         case .frOption(optionModels: let updatedFROptionModels):
             switch pollOptionsModel.type {
             case .frOption(optionModels: var frOptionModels):
-                updatedFROptionModels.forEach { (updatedFROptionModel) in
-                    if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
-                        return updatedFROptionModel.answerId == frOptionModel.answerId
-                    }) {
-                        // Have to do index + 1 because first model is SpaceModel
-                        guard let sectionController = adapter.sectionController(forSection: index + 1) as? FROptionSectionController else { return }
-                        sectionController.update(with: updatedFROptionModel)
-                        frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
-                        frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
-                    } else {
-                        frOptionModels.insert(updatedFROptionModel, at: 0)
-                    }
-                }
-                frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
-                    return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
-                }
-                pollOptionsModel.type = .frOption(optionModels: frOptionModels)
+                let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
+                pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
             default:
                 return
@@ -165,6 +141,41 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         default:
             return
         }
+    }
+
+    // MARK: - Helpers
+    func compare(oldMCResultModels: [MCResultModel], updatedMCResultModels: [MCResultModel]) {
+        if updatedMCResultModels.count != oldMCResultModels.count { return }
+        for index in 0..<updatedMCResultModels.count {
+            let updatedMCResultModel = updatedMCResultModels[index]
+            let mcResultModel = oldMCResultModels[index]
+            if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
+                // Have to do index + 1 because first model is SpaceModel
+                guard let sectionController = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                sectionController.update(with: updatedMCResultModel)
+            }
+        }
+    }
+
+    func combine(oldFROptionModels: [FROptionModel], updatedFROptionModels: [FROptionModel]) -> [FROptionModel] {
+        var frOptionModels: [FROptionModel] = oldFROptionModels
+        updatedFROptionModels.forEach { (updatedFROptionModel) in
+            if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
+                return updatedFROptionModel.answerId == frOptionModel.answerId
+            }) {
+                // Have to do index + 1 because first model is SpaceModel
+                guard let sectionController = adapter.sectionController(forSection: index + 1) as? FROptionSectionController else { return }
+                sectionController.update(with: updatedFROptionModel)
+                frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
+                frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
+            } else {
+                frOptionModels.insert(updatedFROptionModel, at: 0)
+            }
+        }
+        frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
+            return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
+        }
+        return frOptionModels
     }
     
     required init?(coder aDecoder: NSCoder) {
