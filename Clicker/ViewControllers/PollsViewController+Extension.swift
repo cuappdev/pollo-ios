@@ -51,7 +51,7 @@ extension PollsViewController: UIScrollViewDelegate {
 
 extension PollsViewController: PollsCellDelegate {
     
-    func pollsCellShouldOpenSession(session: Session, userRole: UserRole) {
+    func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell) {
         if isOpeningGroup {
             return
         }
@@ -63,6 +63,7 @@ extension PollsViewController: PollsCellDelegate {
                         let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        withCell.hideOpenSessionActivityIndicatorView()
                     } .catch { error in
                         print(error)
                     }
