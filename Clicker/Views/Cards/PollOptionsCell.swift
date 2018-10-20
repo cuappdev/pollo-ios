@@ -33,8 +33,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12
-    let maximumNumberVisibleOptions: Int = 6
-    
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,13 +97,13 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.delegate = delegate
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            hasOverflowOptions = mcResultModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = mcResultModels.count > IntegerConstants.maxOptionsForMC
             break
         case .mcChoice(let mcChoiceModels):
-            hasOverflowOptions = mcChoiceModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = mcChoiceModels.count > IntegerConstants.maxOptionsForMC
             break
         case .frOption(let frOptionModels):
-            hasOverflowOptions = frOptionModels.count > maximumNumberVisibleOptions
+            hasOverflowOptions = frOptionModels.count > IntegerConstants.maxOptionsForFR
         }
         arrowView.isHidden = !hasOverflowOptions
         arrowView.toggle(show: !arrowView.isHidden, animated: false)
