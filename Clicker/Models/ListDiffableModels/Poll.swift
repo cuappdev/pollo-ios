@@ -48,6 +48,7 @@ class Poll {
     var questionType: QuestionType
     var options: [String]
     var results: [String:JSON]
+    var upvotes: [String:[String]]
     var state: PollState
     var answer: String?
     // results format:
@@ -66,6 +67,7 @@ class Poll {
         self.questionType = questionType
         self.options = options
         self.results = results
+        self.upvotes = [:]
         self.state = state
         self.answer = answer
         
@@ -79,6 +81,7 @@ class Poll {
         self.questionType = poll.questionType
         self.options = poll.options
         self.results = currentState.results
+        self.upvotes = currentState.upvotes
         self.state = updatedPollState ?? poll.state
         self.answer = poll.answer
         self.startTime = poll.startTime
@@ -87,14 +90,15 @@ class Poll {
     // MARK: - Public
     func update(with currentState: CurrentState) {
         self.results = currentState.results
+        self.upvotes = currentState.upvotes
     }
     
-    // Returns array representation of results
-    // Ex) [('Blah', 3), ('Jupiter', 2)...]
-    func getFRResultsArray() -> [(String, Int)] {
-        return options.compactMap { (answerId) -> (String, Int)? in
+    // Returns array representation of results where each element is (answerId, text, count)
+    // Ex) [(1, 'Blah', 3), (2, 'Jupiter', 6)...]
+    func getFRResultsArray() -> [(String, String, Int)] {
+        return options.compactMap { (answerId) -> (String, String, Int)? in
             if let choiceJSON = results[answerId], let option = choiceJSON[ParserKeys.textKey].string, let numSelected = choiceJSON[ParserKeys.countKey].int {
-                return (option, numSelected)
+                return (answerId, option, numSelected)
             }
             return nil
         }
@@ -115,6 +119,14 @@ class Poll {
             }
         }
         return id
+    }
+
+    // Check whether client with clientId upvoted answerId
+    func userDidUpvote(answerId: String) -> Bool {
+        if let userId = User.currentUser?.id, let userUpvotedAnswerIds = upvotes[userId] {
+            return userUpvotedAnswerIds.contains(answerId)
+        }
+        return false
     }
 
 }

@@ -229,7 +229,7 @@ extension PollsDateViewController: SocketDelegate {
         if latestPoll.questionType == .freeResponse {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
-        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
+        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: updatedPollState)
         updateLatestPoll(with: updatedPoll)
     }
     

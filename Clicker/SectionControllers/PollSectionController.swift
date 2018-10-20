@@ -12,7 +12,7 @@ import IGListKit
 protocol PollSectionControllerDelegate {
     
     var role: UserRole { get }
-    
+
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
     func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)

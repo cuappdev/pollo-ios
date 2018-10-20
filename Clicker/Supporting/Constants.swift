@@ -79,6 +79,7 @@ struct ParserKeys {
 }
 
 struct RequestKeys {
+    static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
     static let googleIdKey = "googleId"

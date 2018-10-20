@@ -14,7 +14,7 @@ import UIKit
 protocol CardCellDelegate {
     
     var userRole: UserRole { get }
-    
+
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String)
     func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)

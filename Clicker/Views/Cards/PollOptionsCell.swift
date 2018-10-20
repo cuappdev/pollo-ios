@@ -198,9 +198,6 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
             // Need to subtract 1 from index because topSpaceModel is the first section
             let upvoteIndex = adapter.section(for: sectionController) - 1
             let upvotedFROptionModel = frOptionModels[upvoteIndex]
-            frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
-            pollOptionsModel.type = .frOption(optionModels: frOptionModels)
-            adapter.performUpdates(animated: false, completion: nil)
             delegate.pollOptionsCellDidUpvoteChoice(choice: upvotedFROptionModel.option)
         default:
             return
