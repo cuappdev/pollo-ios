@@ -122,7 +122,7 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
         // Need to subtract 1 from count to get numUpvoted because submitting the response doesn't count as upvote
         let numUpvoted = count - 1
         let didUpvote = poll.userDidUpvote(answerId: answerId)
-        return FROptionModel(option: option, isAnswer: option == poll.answer, answerId: answerId, numUpvoted: numUpvoted, didUpvote: didUpvote)
+        return FROptionModel(option: option, answerId: answerId, numUpvoted: numUpvoted, didUpvote: didUpvote)
     }
     frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
         return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
@@ -131,8 +131,9 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
-    let mcChoiceModels = poll.options.map {
-        return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer)
+    let mcChoiceModels = poll.options.enumerated().map { (index, option) -> MCChoiceModel in
+        let isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || poll.selectedMCChoice == option
+        return MCChoiceModel(option: option, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
 }
@@ -145,7 +146,7 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
         if let infoDict = poll.results[mcOptionKey] {
             guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            let isAnswer = option == poll.answer
+            let isAnswer = option == poll.selectedMCChoice
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
             mcResultModels.append(resultModel)
         }

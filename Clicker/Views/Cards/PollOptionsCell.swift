@@ -103,6 +103,11 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             break
         case .mcChoice(let mcChoiceModels):
             hasOverflowOptions = mcChoiceModels.count > maximumNumberVisibleOptions
+            if let selectedIndex = mcChoiceModels.firstIndex(where: { (mcChoiceModel) -> Bool in
+                return mcChoiceModel.isSelected
+            }) {
+                mcSelectedIndex = selectedIndex
+            }
             break
         case .frOption(let frOptionModels):
             hasOverflowOptions = frOptionModels.count > maximumNumberVisibleOptions
