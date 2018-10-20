@@ -15,7 +15,9 @@ protocol SocketDelegate {
     
     // USER RECEIVES
     func receivedResults(_ currentState: CurrentState)
+    func receivedResultsLive(_ currentState: CurrentState)
     
     // ADMIN RECEIVES
     func updatedTally(_ currentState: CurrentState)
+    func updatedTallyLive(_ currentState: CurrentState)
 }

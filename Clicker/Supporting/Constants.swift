@@ -36,6 +36,7 @@ struct Routes {
     static let adminEnded = "admin/poll/ended"
     static let adminStart = "admin/poll/start"
     static let adminUpdateTally = "admin/poll/updateTally"
+    static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
@@ -44,7 +45,8 @@ struct Routes {
     static let serverUpvote = "server/poll/upvote"
     static let userStart = "user/poll/start"
     static let userEnd = "user/poll/end"
-    static let userShare = "user/poll/results"
+    static let userResults = "user/poll/results"
+    static let userResultsLive = "user/poll/results/live"
 }
 
 struct LayoutConstants {
