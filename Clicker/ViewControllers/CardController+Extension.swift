@@ -238,9 +238,15 @@ extension CardController: SocketDelegate {
     func receivedResults(_ currentState: CurrentState) {
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
-        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
-        updateWithCurrentState(currentState: currentState, pollState: pollState)
-        self.adapter.performUpdates(animated: false, completion: nil)
+        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != 7 {
+            // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
+            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
+            updateLiveCardCell(with: currentState)
+        } else {
+            let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+            updateWithCurrentState(currentState: currentState, pollState: pollState)
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
 
     func updatedTally(_ currentState: CurrentState) {
@@ -248,14 +254,14 @@ extension CardController: SocketDelegate {
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
         // do adapter.performUpdates
         if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
-            updateAdminLiveCardCell(with: currentState)
+            updateLiveCardCell(with: currentState)
         } else {
             updateWithCurrentState(currentState: currentState, pollState: nil)
             self.adapter.performUpdates(animated: false, completion: nil)
         }
     }
 
-    func updateAdminLiveCardCell(with currentState: CurrentState) {
+    func updateLiveCardCell(with currentState: CurrentState) {
         guard let latestPoll = pollsDateModel.polls.last,
             latestPoll.state == .live,
             let latestPollSectionController = adapter.sectionController(forSection: pollsDateModel.polls.count - 1) as? PollSectionController

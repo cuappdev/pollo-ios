@@ -9,12 +9,14 @@
 import IGListKit
 
 class FROptionModel: OptionModel {
-    
+
+    var answerId: String
     var numUpvoted: Int
     var didUpvote: Bool
     let identifier = UUID().uuidString
     
-    init(option: String, isAnswer: Bool, numUpvoted: Int, didUpvote: Bool) {
+    init(option: String, isAnswer: Bool, answerId: String, numUpvoted: Int, didUpvote: Bool) {
+        self.answerId = answerId
         self.numUpvoted = numUpvoted
         self.didUpvote = didUpvote
         super.init(option: option, isAnswer: isAnswer)
