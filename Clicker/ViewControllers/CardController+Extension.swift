@@ -227,7 +227,7 @@ extension CardController: SocketDelegate {
         }
         switch poll.questionType {
         case .freeResponse:
-            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
+            let updatedPoll = Poll(poll: latestPoll, state: .ended)
             updateLatestPoll(with: updatedPoll)
         case .multipleChoice:
             updateLatestPoll(with: poll)
