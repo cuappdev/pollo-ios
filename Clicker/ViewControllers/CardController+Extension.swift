@@ -53,17 +53,13 @@ extension CardController: PollSectionControllerDelegate {
         let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
         emitAnswer(answer: answer, message: Routes.serverTally)
     }
-    
-    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        // You can only upvote for FR questions
-        if poll.questionType == .multipleChoice { return }
-        if let answerId = poll.answerId(for: choice) {
-            let upvoteObject: [String:Any] = [
-                RequestKeys.answerIdKey: answerId,
-                RequestKeys.googleIdKey: User.currentUser?.id
-            ]
-            socket.socket.emit(Routes.serverUpvote, upvoteObject)
-        }
+
+    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
+        let upvoteObject: [String:Any] = [
+            RequestKeys.answerIdKey: answerId,
+            RequestKeys.googleIdKey: User.currentUser?.id
+        ]
+        socket.socket.emit(Routes.serverUpvote, upvoteObject)
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
