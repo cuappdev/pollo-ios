@@ -61,6 +61,7 @@ struct LayoutConstants {
     static let separatorLineSettingsCellHeight: CGFloat = 5
     static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
     static let buttonSize: CGSize = CGSize(width: 44, height: 44)
+    static let noResponsesSpace: CGFloat = 44
 }
 
 struct ParserKeys {
