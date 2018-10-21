@@ -126,8 +126,8 @@ class MCResultCell: UICollectionViewCell {
         case .admin:
             highlightView.backgroundColor = .clickerGreen0
         case .member:
-            let isAnswer = resultModel.isAnswer
-            highlightView.backgroundColor = isAnswer ? .clickerGreen0 : .clickerGreen1
+            let isSelected = resultModel.isSelected
+            highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
         }
     }
 

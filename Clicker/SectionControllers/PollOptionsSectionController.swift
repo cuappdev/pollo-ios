@@ -13,7 +13,7 @@ protocol PollOptionsSectionControllerDelegate {
     var userRole: UserRole { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String)
-    func pollOptionsSectionControllerDidUpvoteChoice(sectionController: PollOptionsSectionController, choice: String)
+    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, answerId: String)
     
 }
 
@@ -64,9 +64,9 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     func pollOptionsCellDidSubmitChoice(choice: String) {
         delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, choice: choice)
     }
-    
-    func pollOptionsCellDidUpvoteChoice(choice: String) {
-        delegate.pollOptionsSectionControllerDidUpvoteChoice(sectionController: self, choice: choice)
+
+    func pollOptionsCellDidUpvote(for answerId: String) {
+        delegate.pollOptionsSectionControllerDidUpvote(sectionController: self, answerId: answerId)
     }
     
 }
