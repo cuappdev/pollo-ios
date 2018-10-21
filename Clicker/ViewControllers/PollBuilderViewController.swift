@@ -333,7 +333,7 @@ class PollBuilderViewController: UIViewController {
             case .freeResponse:
                 let question = frPollBuilder.questionTextField.text ?? ""
                 if let loadedDraft = loadedFRDraft {
-                    UpdateDraft(id: "\(loadedDraft.id )", text: question, options: []).make()
+                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
                         .done { draft in
                             self.getDrafts()
                         }.catch { error in

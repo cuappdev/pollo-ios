@@ -195,6 +195,7 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     }
     
     func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int) {
+        print("did update option: \(option)")
         mcOptionModels[index].type = .newOption(option: option, index: index)
     }
     

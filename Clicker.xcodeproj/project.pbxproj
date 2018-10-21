@@ -10,6 +10,7 @@
 		0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E51FD21711B1B001E07BC /* Date+Shared.swift */; };
 		0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C41C958214DB7AA00F559C9 /* Keys.plist */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
+		0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */; };
 		0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */; };
 		0C8E384521557D8000AB8633 /* DraftSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8E384421557D8000AB8633 /* DraftSectionController.swift */; };
 		0CDAF0D121727B4B004DB6EA /* SpaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDAF0D021727B4B004DB6EA /* SpaceModel.swift */; };
@@ -139,6 +140,7 @@
 		0C1E51FD21711B1B001E07BC /* Date+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Shared.swift"; sourceTree = "<group>"; };
 		0C41C958214DB7AA00F559C9 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
+		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
 		0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDraftViewController.swift; sourceTree = "<group>"; };
 		0C8E384421557D8000AB8633 /* DraftSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftSectionController.swift; sourceTree = "<group>"; };
 		0CDAF0D021727B4B004DB6EA /* SpaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceModel.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 				C20B571421390D2A0091034F /* CardCell.swift */,
 				C20B571A2139DEF90091034F /* QuestionCell.swift */,
 				0CDAF0D421727DA3004DB6EA /* SpaceCell.swift */,
+				0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */,
 				C20B571C2139E6080091034F /* MCResultCell.swift */,
 				C2A0F7CA213A0BC200A28D75 /* PollMiscellaneousCell.swift */,
 				C2A0F7D0213A11CE00A28D75 /* HamburgerCardCell.swift */,
@@ -820,6 +823,7 @@
 				63A4A6462094D41600523AE6 /* MCPollBuilderView.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
 				0CDAF0D521727DA3004DB6EA /* SpaceCell.swift in Sources */,
+				0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */,
 				C28679DD2155A5A300554F7B /* PollBuilderMCOptionModel.swift in Sources */,
 				C28679DF2155A83000554F7B /* PollBuilderMCOptionSectionController.swift in Sources */,
 				6389C9522085953F00F78003 /* PollsCell.swift in Sources */,
