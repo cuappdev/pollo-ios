@@ -12,9 +12,9 @@ import IGListKit
 protocol PollSectionControllerDelegate {
     
     var role: UserRole { get }
-    
+
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
-    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
 }
@@ -63,13 +63,12 @@ extension PollSectionController: CardCellDelegate {
     }
     
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String) {
-        poll.answer = choice
+        poll.selectedMCChoice = choice
         delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
-    
-    func cardCellDidUpvoteChoice(cardCell: CardCell, choice: String) {
-        increaseCountForChoice(choice: choice)
-        delegate.pollSectionControllerDidUpvoteChoiceForPoll(sectionController: self, choice: choice, poll: poll)
+
+    func cardCellDidUpvote(cardCell: CardCell, answerId: String) {
+        delegate.pollSectionControllerDidUpvote(sectionController: self, answerId: answerId)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {
@@ -79,14 +78,5 @@ extension PollSectionController: CardCellDelegate {
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {
         delegate.pollSectionControllerDidShareResultsForPoll(sectionController: self, poll: poll)
     }
-    
-    // MARK: - Helpers
-    private func increaseCountForChoice(choice: String) {
-        if let choiceJSON = poll.results[choice], let count = choiceJSON[ParserKeys.countKey].int {
-            poll.results[choice] = [
-                ParserKeys.textKey: choice,
-                ParserKeys.countKey: count + 1
-            ]
-        }
-    }
+
 }

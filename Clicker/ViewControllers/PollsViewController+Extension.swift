@@ -64,14 +64,19 @@ extension PollsViewController: PollsCellDelegate {
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                         withCell.hideOpenSessionActivityIndicatorView()
+                        self.isOpeningGroup = false
                     } .catch { error in
                         print(error)
-                    }
+                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                        self.isOpeningGroup = false
+                }
             } .catch { error in
                 print(error)
                 let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
                 self.present(alertController, animated: true, completion: nil)
-            }
+                self.isOpeningGroup = false
+        }
     }
     
     func pollsCellShouldEditSession(session: Session, userRole: UserRole) {
@@ -89,17 +94,41 @@ extension PollsViewController: PollsCellDelegate {
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
     }
+
+    func pollsCellDidPullToRefresh(for pollType: PollType) {
+        let userRole: UserRole = pollType == .joined ? .member : .admin
+        reloadSessions(for: userRole) { sessions in
+            let index = userRole == .admin ? 1 : 0
+            self.pollTypeModels[index].sessions = sessions
+            guard let pollTypeSectionController = self.adapter.sectionController(forSection: index) as? PollTypeSectionController else { return }
+            pollTypeSectionController.update(with: sessions)
+        }
+    }
     
 }
 
 extension PollsViewController: EditPollViewControllerDelegate {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole) {
-        reloadSessions(for: userRole)
+        reloadSessions(for: userRole) { sessions in
+            let pollType: PollType = userRole == .admin ? .created : .joined
+            let index = userRole == .admin ? 1 : 0
+            self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
+            DispatchQueue.main.async {
+                self.adapter.performUpdates(animated: true, completion: nil)
+            }
+        }
     }
     
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) {
-        reloadSessions(for: userRole)
+        reloadSessions(for: userRole) { sessions in
+            let pollType: PollType = userRole == .admin ? .created : .joined
+            let index = userRole == .admin ? 1 : 0
+            self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
+            DispatchQueue.main.async {
+                self.adapter.performUpdates(animated: true, completion: nil)
+            }
+        }
     }
     
 }
@@ -114,7 +143,7 @@ extension PollsViewController: SliderBarDelegate {
 }
 
 extension PollsViewController: UITextFieldDelegate {
- 
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -141,7 +170,12 @@ extension PollsViewController: UIGestureRecognizerDelegate {
 extension PollsViewController: PollsDateViewControllerDelegate {
 
     func pollsDateViewControllerWasPopped(for userRole: UserRole) {
-        reloadSessions(for: userRole)
+        reloadSessions(for: userRole) { sessions in
+            let index = userRole == .admin ? 1 : 0
+            self.pollTypeModels[index].sessions = sessions
+            guard let pollTypeSectionController = self.adapter.sectionController(forSection: index) as? PollTypeSectionController else { return }
+            pollTypeSectionController.update(with: sessions)
+        }
     }
 
 }

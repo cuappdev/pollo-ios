@@ -90,7 +90,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, selectedMCChoice: nil)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
@@ -140,10 +140,10 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        if let lastPollDateModel = pollsDateArray.last {
-            if lastPollDateModel.polls.contains(where: { otherPoll -> Bool in
+        if let lastPollsDateModel = pollsDateArray.last {
+            if lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
                 return otherPoll.id == poll.id
-            }) { return }
+            }) || lastPollsDateModel.polls.last?.state == .live { return }
         }
         appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
@@ -158,7 +158,7 @@ extension PollsDateViewController: SocketDelegate {
         }
         switch poll.questionType {
         case .freeResponse:
-            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
+            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, selectedMCChoice: latestPoll.selectedMCChoice)
             updateLatestPoll(with: updatedPoll)
         case .multipleChoice:
             updateLatestPoll(with: poll)
@@ -173,9 +173,20 @@ extension PollsDateViewController: SocketDelegate {
         updateWithCurrentState(currentState: currentState, pollState: pollState)
         adapter.performUpdates(animated: false, completion: nil)
     }
+
+    func receivedResultsLive(_ currentState: CurrentState) {
+        guard let _ = getLatestPoll() else { return }
+        updateWithCurrentState(currentState: currentState, pollState: .live)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
     
     func updatedTally(_ currentState: CurrentState) {
         updateWithCurrentState(currentState: currentState, pollState: nil)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    func updatedTallyLive(_ currentState: CurrentState) {
+        updateWithCurrentState(currentState: currentState, pollState: .live)
         adapter.performUpdates(animated: false, completion: nil)
     }
     
@@ -229,7 +240,7 @@ extension PollsDateViewController: SocketDelegate {
         if latestPoll.questionType == .freeResponse {
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
         }
-        let updatedPoll = Poll(id: currentState.pollId, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: currentState.results, state: updatedPollState, answer: latestPoll.answer)
+        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: updatedPollState)
         updateLatestPoll(with: updatedPoll)
     }
     
@@ -243,7 +254,7 @@ extension PollsDateViewController: SocketDelegate {
         } else {
             // User has polls for today, so just update latest poll for today
             let todayPolls = latestPollsDateModel.polls
-            poll.answer = pollsDateArray.last?.polls.last?.answer
+            poll.selectedMCChoice = pollsDateArray.last?.polls.last?.selectedMCChoice
             pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
         }
     }

@@ -17,7 +17,14 @@ class CurrentStateParser: Parser {
         let pollId = json[ParserKeys.pollKey].intValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
         let answers = json[ParserKeys.answersKey].dictionaryValue
-        return CurrentState(pollId, results, answers)
+        let upvotesJSON = json[ParserKeys.upvotesKey].dictionaryObject
+        var upvotes: [String:[String]] = [:]
+        upvotesJSON?.forEach { (key, value) in
+            if let answerIds = value as? [String] {
+                upvotes[key] = answerIds
+            }
+        }
+        return CurrentState(pollId, results, answers, upvotes)
     }
     
 }

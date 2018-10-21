@@ -14,7 +14,7 @@ protocol PollOptionsCellDelegate {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String)
-    func pollOptionsCellDidUpvoteChoice(choice: String)
+    func pollOptionsCellDidUpvote(for answerId: String)
     
 }
 
@@ -101,6 +101,11 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             break
         case .mcChoice(let mcChoiceModels):
             hasOverflowOptions = mcChoiceModels.count > IntegerConstants.maxOptionsForMC
+            if let selectedIndex = mcChoiceModels.firstIndex(where: { (mcChoiceModel) -> Bool in
+                return mcChoiceModel.isSelected
+            }) {
+                mcSelectedIndex = selectedIndex
+            }
             break
         case .frOption(let frOptionModels):
             hasOverflowOptions = frOptionModels.count > IntegerConstants.maxOptionsForFR
@@ -117,23 +122,58 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         case .mcResult(resultModels: let updatedMCResultModels):
             switch pollOptionsModel.type {
             case .mcResult(resultModels: let mcResultModels):
-                if updatedMCResultModels.count != mcResultModels.count { return }
-                for index in 0..<updatedMCResultModels.count {
-                    let updatedMCResultModel = updatedMCResultModels[index]
-                    let mcResultModel = mcResultModels[index]
-                    if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
-                        // Have to do index + 1 because first model is SpaceModel
-                        guard let cell = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
-                        cell.update(with: updatedMCResultModel)
-                    }
-                }
+                compare(oldMCResultModels: mcResultModels, updatedMCResultModels: updatedMCResultModels)
                 self.pollOptionsModel.type = updatedPollOptionsModelType
+            default:
+                return
+            }
+        case .frOption(optionModels: let updatedFROptionModels):
+            switch pollOptionsModel.type {
+            case .frOption(optionModels: var frOptionModels):
+                let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
+                pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
+                adapter.performUpdates(animated: false, completion: nil)
             default:
                 return
             }
         default:
             return
         }
+    }
+
+    // MARK: - Helpers
+    func compare(oldMCResultModels: [MCResultModel], updatedMCResultModels: [MCResultModel]) {
+        if updatedMCResultModels.count != oldMCResultModels.count { return }
+        for index in 0..<updatedMCResultModels.count {
+            let updatedMCResultModel = updatedMCResultModels[index]
+            let mcResultModel = oldMCResultModels[index]
+            if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
+                // Have to do index + 1 because first model is SpaceModel
+                guard let sectionController = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                sectionController.update(with: updatedMCResultModel)
+            }
+        }
+    }
+
+    func combine(oldFROptionModels: [FROptionModel], updatedFROptionModels: [FROptionModel]) -> [FROptionModel] {
+        var frOptionModels: [FROptionModel] = oldFROptionModels
+        updatedFROptionModels.forEach { (updatedFROptionModel) in
+            if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
+                return updatedFROptionModel.answerId == frOptionModel.answerId
+            }) {
+                // Have to do index + 1 because first model is SpaceModel
+                guard let sectionController = adapter.sectionController(forSection: index + 1) as? FROptionSectionController else { return }
+                sectionController.update(with: updatedFROptionModel)
+                frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
+                frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
+            } else {
+                frOptionModels.insert(updatedFROptionModel, at: 0)
+            }
+        }
+        frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
+            return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
+        }
+        return frOptionModels
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -187,22 +227,11 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
     var userRole: UserRole {
         return delegate.userRole
     }
-    
-    func frOptionSectionControllerDidUpvote(sectionController: FROptionSectionController) {
+
+    func frOptionSectionControllerDidUpvote(for answerId: String) {
         // Only members can upvote free responses
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
-        switch pollOptionsModel.type {
-        case .frOption(optionModels: var frOptionModels):
-            // Need to subtract 1 from index because topSpaceModel is the first section
-            let upvoteIndex = adapter.section(for: sectionController) - 1
-            let upvotedFROptionModel = frOptionModels[upvoteIndex]
-            frOptionModels[upvoteIndex] = FROptionModel(option: upvotedFROptionModel.option, isAnswer: upvotedFROptionModel.isAnswer, numUpvoted: upvotedFROptionModel.numUpvoted + 1, didUpvote: true)
-            pollOptionsModel.type = .frOption(optionModels: frOptionModels)
-            adapter.performUpdates(animated: false, completion: nil)
-            delegate.pollOptionsCellDidUpvoteChoice(choice: upvotedFROptionModel.option)
-        default:
-            return
-        }
+        delegate.pollOptionsCellDidUpvote(for: answerId)
     }
     
 }

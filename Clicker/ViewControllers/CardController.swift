@@ -14,6 +14,10 @@ protocol CardControllerDelegate {
     
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
+    func pollStarted(_ poll: Poll, userRole: UserRole)
+    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func receivedResults(_ currentState: CurrentState)
+    func updatedTally(_ currentState: CurrentState)
     
 }
 
