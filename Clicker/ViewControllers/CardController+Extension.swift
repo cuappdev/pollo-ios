@@ -207,6 +207,9 @@ extension CardController: SocketDelegate {
             delegate.pollStarted(poll, userRole: userRole)
             return
         }
+        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
+            return
+        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
             return otherPoll.id == poll.id
         }) { return }
@@ -330,4 +333,5 @@ extension CardController: SocketDelegate {
         poll.selectedMCChoice = pollsDateModel.polls.last?.selectedMCChoice
         pollsDateModel.polls[numPolls - 1] = poll
     }
+
 }
