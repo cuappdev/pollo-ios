@@ -15,7 +15,8 @@ protocol PollsCellDelegate {
     
     func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell)
     func pollsCellShouldEditSession(session: Session, userRole: UserRole)
-    
+    func pollsCellDidPullToRefresh(for pollType: PollType)
+
 }
 
 class PollsCell: UICollectionViewCell {
@@ -23,6 +24,7 @@ class PollsCell: UICollectionViewCell {
     // MARK: - View vars
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
+    var refreshControl: UIRefreshControl!
     
     // MARK: - Data vars
     var delegate: PollsCellDelegate!
@@ -39,10 +41,14 @@ class PollsCell: UICollectionViewCell {
         self.pollTypeModel = pollTypeModel
         self.delegate = delegate
         self.adapter.performUpdates(animated: false, completion: nil)
+        self.refreshControl.endRefreshing()
     }
     
     // MARK: - LAYOUT
     func setupViews() {
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(pulledToRefresh), for: .valueChanged)
+
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -50,6 +56,7 @@ class PollsCell: UICollectionViewCell {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.alwaysBounceVertical = true
+        collectionView.refreshControl = refreshControl
         contentView.addSubview(collectionView)
         
         let updater = ListAdapterUpdater()
@@ -68,5 +75,17 @@ class PollsCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Updates
+    func update(with sessions: [Session]) {
+        pollTypeModel.sessions = sessions
+        adapter.performUpdates(animated: false) { _ in
+            self.refreshControl.endRefreshing()
+        }
+    }
+
+    // MARK: - Actions
+    @objc func pulledToRefresh() {
+        delegate.pollsCellDidPullToRefresh(for: pollTypeModel.pollType)
+    }
 }

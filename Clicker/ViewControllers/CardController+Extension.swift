@@ -40,7 +40,7 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        poll.answer = choice
+        poll.selectedMCChoice = choice
         var choiceForAnswer: String
         // choiceForAnswer should be "A" or "B" for multiple choice and the actual response for free response
         switch poll.questionType {
@@ -53,12 +53,13 @@ extension CardController: PollSectionControllerDelegate {
         let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
         emitAnswer(answer: answer, message: Routes.serverTally)
     }
-    
-    func pollSectionControllerDidUpvoteChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        // You can only upvote for FR questions
-        if poll.questionType == .multipleChoice { return }
-        let answer = Answer(text: choice, choice: choice, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.serverUpvote)
+
+    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
+        let upvoteObject: [String:Any] = [
+            RequestKeys.answerIdKey: answerId,
+            RequestKeys.googleIdKey: User.currentUser?.id
+        ]
+        socket.socket.emit(Routes.serverUpvote, upvoteObject)
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -87,7 +88,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, answer: nil)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, selectedMCChoice: nil)
         pollsDateModel.polls.append(newPoll)
         if pollsDateModel.date == getTodaysDate() {
             adapter.performUpdates(animated: false) { completed in
@@ -202,6 +203,13 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.pollStarted(poll, userRole: userRole)
+            return
+        }
+        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
+            return
+        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
             return otherPoll.id == poll.id
         }) { return }
@@ -214,43 +222,64 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
-        guard let latestPoll = pollsDateModel.polls.last else { return }
-        if userRole == .admin {
-            latestPoll.id = poll.id
-            updateLatestPoll(with: latestPoll)
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.pollEnded(poll, userRole: userRole)
             return
         }
-        switch poll.questionType {
-        case .freeResponse:
-            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, answer: latestPoll.answer)
+        guard let latestPoll = pollsDateModel.polls.last else { return }
+        switch userRole {
+        case .admin:
+            latestPoll.id = poll.id
+            updateLatestPoll(with: latestPoll)
+        case .member:
+            let updatedPoll = Poll(poll: latestPoll, state: .ended)
             updateLatestPoll(with: updatedPoll)
-        case .multipleChoice:
-            updateLatestPoll(with: poll)
+            adapter.performUpdates(animated: false, completion: nil)
         }
-        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func receivedResults(_ currentState: CurrentState) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.receivedResults(currentState)
+            return
+        }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
-        let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
-        updateWithCurrentState(currentState: currentState, pollState: pollState)
-        self.adapter.performUpdates(animated: false, completion: nil)
+        // NOTE: We need to call adapter.performUpdates if we reach 7 results because we need to display the
+        // overflow arrow
+        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != 7 {
+            // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
+            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
+            updateLiveCardCell(with: currentState)
+        } else {
+            let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
+            updateWithCurrentState(currentState: currentState, pollState: pollState)
+            self.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
 
     func updatedTally(_ currentState: CurrentState) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate.updatedTally(currentState)
+            return
+        }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
         // do adapter.performUpdates
         if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
-            updateAdminLiveCardCell(with: currentState)
+            updateLiveCardCell(with: currentState)
         } else {
             updateWithCurrentState(currentState: currentState, pollState: nil)
             self.adapter.performUpdates(animated: false, completion: nil)
         }
     }
 
-    func updateAdminLiveCardCell(with currentState: CurrentState) {
+    /// These two functions should only get called upon joining a socket
+    /// so it should only be handled in PollsDateViewController
+    func receivedResultsLive(_ currentState: CurrentState) {}
+    func updatedTallyLive(_ currentState: CurrentState) {}
+
+    func updateLiveCardCell(with currentState: CurrentState) {
         guard let latestPoll = pollsDateModel.polls.last,
             latestPoll.state == .live,
             let latestPollSectionController = adapter.sectionController(forSection: pollsDateModel.polls.count - 1) as? PollSectionController
@@ -301,7 +330,8 @@ extension CardController: SocketDelegate {
     func updateLatestPoll(with poll: Poll) {
         if pollsDateModel.polls.isEmpty { return }
         let numPolls = pollsDateModel.polls.count
-        poll.answer = pollsDateModel.polls.last?.answer
+        poll.selectedMCChoice = pollsDateModel.polls.last?.selectedMCChoice
         pollsDateModel.polls[numPolls - 1] = poll
     }
+
 }

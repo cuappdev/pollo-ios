@@ -68,7 +68,7 @@ class MCChoiceCell: UICollectionViewCell {
         case .live:
             configureForLivePoll(isSelected: mcChoiceModel.isSelected)
         case .ended:
-            configureForEndedPoll(isAnswer: mcChoiceModel.isAnswer)
+            configureForEndedPoll(isSelected: mcChoiceModel.isSelected)
         case .shared:
             return
         }
@@ -86,9 +86,9 @@ class MCChoiceCell: UICollectionViewCell {
         isSelected ? selectChoice() : deselectChoice()
     }
     
-    func configureForEndedPoll(isAnswer: Bool) {
-        let optionButtonBackgroundColor: UIColor = isAnswer ? .clickerGreen1 : .white
-        let optionButtonTitleColor: UIColor = isAnswer ? .white : .clickerGreen1
+    func configureForEndedPoll(isSelected: Bool) {
+        let optionButtonBackgroundColor: UIColor = isSelected ? .clickerGreen1 : .white
+        let optionButtonTitleColor: UIColor = isSelected ? .white : .clickerGreen1
         optionButton.backgroundColor = optionButtonBackgroundColor
         optionButton.setTitleColor(optionButtonTitleColor, for: .normal)
         optionButton.layer.borderColor = UIColor.clickerGreen1.cgColor
