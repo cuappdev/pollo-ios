@@ -149,7 +149,7 @@ struct GetPollSessions: ClickerQuark {
         let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
         if today.hours(from: latestActivityDate) < 24 {
             if today.hours(from: latestActivityDate) == 0 {
-                latestActivity += "< 1 hour ago"
+                latestActivity += "< 1 hr ago"
             } else {
                 let suffix: String = today.hours(from: latestActivityDate) == 1 ? "hr" : "hrs"
                 latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
