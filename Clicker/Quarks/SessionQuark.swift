@@ -166,11 +166,6 @@ struct GetPollSessions: ClickerQuark {
         if role == .admin {
             latestActivity = code + "  ·  " + latestActivity
         }
-//        let formatter: DateFormatter = DateFormatter()
-//        formatter.dateStyle = .full
-//        formatter.timeStyle = .full
-//        let test = String(formatter.string(from: latestActivityDate))
-//        print("server sent date: \(test), we parsed \(latestActivity)")
         return latestActivity
     }
 }
