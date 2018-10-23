@@ -19,13 +19,16 @@ class SpaceCell: UICollectionViewCell {
         spaceView.backgroundColor = .white
         contentView.addSubview(spaceView)
         
+        spaceView.snp.makeConstraints { make in
+            make.center.width.equalToSuperview()
+            make.height.equalTo(0)
+        }
+        
     }
     
     func configure(with space: CGFloat) {
-        spaceView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(space)
-            make.center.equalToSuperview()
+        spaceView.snp.updateConstraints { update in
+            update.height.equalTo(space)
         }
     }
     
