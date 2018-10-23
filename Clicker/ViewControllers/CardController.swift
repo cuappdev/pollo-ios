@@ -41,10 +41,10 @@ class CardController: UIViewController {
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
-    let countLabelWidth: CGFloat = 42.0
-    let countLabelHeight: CGFloat = 23.0
+    let countLabelWidth: CGFloat = 30.5
+    let countLabelHeight: CGFloat = 21.0
     let collectionViewTopPadding: CGFloat = 7
-    let countLabelHorizontalPadding: CGFloat = 5
+    let countLabelHorizontalPadding: CGFloat = 2.5
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
     
@@ -123,13 +123,13 @@ class CardController: UIViewController {
         countLabelBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(countLabelBackgroundViewTopPadding)
             make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth + countLabelHorizontalPadding * 2)
+            make.width.equalTo(countLabelWidth)
             make.height.equalTo(countLabelHeight)
         }
         
         countLabel.snp.makeConstraints { make in
             make.center.equalTo(countLabelBackgroundView.snp.center)
-            make.width.equalTo(countLabelWidth)
+            make.width.equalTo(countLabelBackgroundView).inset(countLabelHorizontalPadding * 2)
             make.height.equalTo(countLabelHeight)
         }
         
@@ -175,7 +175,7 @@ class CardController: UIViewController {
     // MARK: Helpers
     func updateCountLabelText(with index: Int) {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(index + 1) / \(total)"
+        countLabel.text = "\(index + 1)/\(total)"
     }
     
     // MARK: - Actions
