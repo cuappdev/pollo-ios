@@ -135,7 +135,7 @@ extension PollOptionsCell: ListAdapterDataSource {
             models.append(bottomSpaceModel)
             return models
         case .frOption(let frOptionModels):
-            if frOptionModels.count > 0 {
+            if !frOptionModels.isEmpty {
                 models.append(topSpaceModel)
                 models.append(contentsOf: frOptionModels)
                 models.append(bottomSpaceModel)
@@ -162,7 +162,7 @@ extension PollOptionsCell: ListAdapterDataSource {
             case .mcChoice(_):
                 return SpaceSectionController(noResponses: false)
             case .frOption(let models):
-                return SpaceSectionController(noResponses: models.count == 0)
+                return SpaceSectionController(noResponses: models.isEmpty)
             }
         }
     }

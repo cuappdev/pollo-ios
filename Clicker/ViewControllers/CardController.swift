@@ -128,7 +128,7 @@ class CardController: UIViewController {
         }
         
         countLabel.snp.makeConstraints { make in
-            make.center.equalTo(countLabelBackgroundView.snp.center)
+            make.center.equalTo(countLabelBackgroundView)
             make.width.equalTo(countLabelBackgroundView).inset(countLabelHorizontalPadding * 2)
             make.height.equalTo(countLabelHeight)
         }
