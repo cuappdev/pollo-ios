@@ -151,12 +151,12 @@ struct GetPollSessions: ClickerQuark {
             if today.hours(from: latestActivityDate) == 0 {
                 latestActivity += "less than an hour ago"
             } else {
-                let suffix: String = today.hours(from: latestActivityDate) == 1 ? "hour" : "hours"
+                let suffix = today.hours(from: latestActivityDate) == 1 ? "hour" : "hours"
                 latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
             }
         } else {
             if today.days(from: latestActivityDate) < 7 {
-                let suffix: String = today.days(from: latestActivityDate) == 1 ? "day" : "days"
+                let suffix = today.days(from: latestActivityDate) == 1 ? "day" : "days"
                 latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
             } else {
                 let formatter: DateFormatter = DateFormatter()

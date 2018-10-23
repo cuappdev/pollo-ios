@@ -103,7 +103,7 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
         optionHeight = LayoutConstants.mcOptionCellHeight
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
-        if optionModels.count == 0 {
+        if optionModels.isEmpty {
             return LayoutConstants.noResponsesSpace
         }
         optionHeight = LayoutConstants.frOptionCellHeight

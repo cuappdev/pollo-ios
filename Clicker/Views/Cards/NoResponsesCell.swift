@@ -31,19 +31,12 @@ class NoResponsesCell: UICollectionViewCell {
         
     }
     
-    override func updateConstraints() {
-        
-        noResponsesLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(space)
-            make.center.equalToSuperview()
-        }
-        
-        super.updateConstraints()
-    }
-    
     func configure(with space: CGFloat) {
         self.space = space
+        noResponsesLabel.snp.makeConstraints { make in
+            make.center.width.equalToSuperview()
+            make.height.equalTo(space)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

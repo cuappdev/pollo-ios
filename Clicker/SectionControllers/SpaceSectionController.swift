@@ -29,7 +29,6 @@ class SpaceSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         if noResponses {
             let cell = collectionContext?.dequeueReusableCell(of: NoResponsesCell.self, for: self, at: index) as! NoResponsesCell
-            cell.setNeedsUpdateConstraints()
             cell.configure(with: spaceModel.space)
             return cell
         }
