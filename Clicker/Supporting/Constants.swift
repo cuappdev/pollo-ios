@@ -36,6 +36,7 @@ struct Routes {
     static let adminEnded = "admin/poll/ended"
     static let adminStart = "admin/poll/start"
     static let adminUpdateTally = "admin/poll/updateTally"
+    static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
@@ -44,13 +45,17 @@ struct Routes {
     static let serverUpvote = "server/poll/upvote"
     static let userStart = "user/poll/start"
     static let userEnd = "user/poll/end"
-    static let userShare = "user/poll/results"
+    static let userResults = "user/poll/results"
+    static let userResultsLive = "user/poll/results/live"
 }
 
 struct LayoutConstants {
+    static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
+    static let buttonSize: CGSize = CGSize(width: 44, height: 44)
     static let frInputCellHeight: CGFloat = 64
     static let frOptionCellHeight: CGFloat = 58
     static let hamburgerCardCellHeight: CGFloat = 25
+    static let interItemPadding: CGFloat = 5
     static let mcOptionCellHeight: CGFloat = 50
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsPadding: CGFloat = 18
@@ -59,8 +64,6 @@ struct LayoutConstants {
     static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCardCellHeight: CGFloat = 1
     static let separatorLineSettingsCellHeight: CGFloat = 5
-    static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
-    static let buttonSize: CGSize = CGSize(width: 44, height: 44)
     static let noResponsesSpace: CGFloat = 44
 }
 
@@ -75,9 +78,11 @@ struct ParserKeys {
     static let sharedKey = "shared"
     static let textKey = "text"
     static let typeKey = "type"
+    static let upvotesKey = "upvotes"
 }
 
 struct RequestKeys {
+    static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
     static let googleIdKey = "googleId"
@@ -97,6 +102,8 @@ struct StringConstants {
 
 struct IntegerConstants {
     static let maxQuestionCharacterCount = 58
+    static let maxOptionsForMC = 6
+    static let maxOptionsForFR = 5
 }
 
 enum Keys: String {

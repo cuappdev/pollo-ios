@@ -20,6 +20,9 @@ class PollPreviewCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             self.contentView.backgroundColor = isSelected ? UIColor.lightGray : UIColor.white
+            if isSelected {
+                displayOpenSessionActivityIndicatorView()
+            }
         }
     }
     
@@ -28,6 +31,7 @@ class PollPreviewCell: UICollectionViewCell {
     var descriptionLabel: UILabel!
     var lineView: UIView!
     var dotsButton: UIButton!
+    var openSessionActivityIndicatorView: UIActivityIndicatorView!
     
     // MARK: - Data vars
     var delegate: PollPreviewCellDelegate!
@@ -69,6 +73,11 @@ class PollPreviewCell: UICollectionViewCell {
         dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
         dotsButton.clipsToBounds = true
         contentView.addSubview(dotsButton)
+        
+        openSessionActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        openSessionActivityIndicatorView.isHidden = true
+        openSessionActivityIndicatorView.isUserInteractionEnabled = false
+        contentView.addSubview(openSessionActivityIndicatorView)
     }
     
     override func updateConstraints() {
@@ -96,6 +105,12 @@ class PollPreviewCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(dotsButtonLength)
         }
+        openSessionActivityIndicatorView.snp.makeConstraints { make in
+            make.top.equalTo(dotsButton.snp.top)
+            make.width.equalTo(dotsButton.snp.width)
+            make.height.equalTo(dotsButton.snp.height)
+            make.trailing.equalTo(dotsButton.snp.trailing)
+        }
         super.updateConstraints()
     }
     
@@ -109,6 +124,25 @@ class PollPreviewCell: UICollectionViewCell {
     // MARK: - Action
     @objc func dotsBtnPressed() {
         delegate.pollPreviewCellShouldEditSession()
+    }
+    
+    // MARK: - Activity Indicator
+    func displayOpenSessionActivityIndicatorView() {
+        dotsButton.isHidden = true
+        dotsButton.isUserInteractionEnabled = false
+        
+        openSessionActivityIndicatorView.isHidden = false
+        openSessionActivityIndicatorView.isUserInteractionEnabled = true
+        openSessionActivityIndicatorView.startAnimating()
+    }
+    
+    func hideOpenSessionActivityIndicatorView() {
+        openSessionActivityIndicatorView.stopAnimating()
+        openSessionActivityIndicatorView.isHidden = true
+        openSessionActivityIndicatorView.isUserInteractionEnabled = false
+        
+        dotsButton.isHidden = false
+        dotsButton.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {

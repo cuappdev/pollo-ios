@@ -12,13 +12,21 @@ class MCResultModel: OptionModel {
     
     var numSelected: Int
     var percentSelected: Float
+    var isSelected: Bool
     let identifier = UUID().uuidString
     
-    init(option: String, numSelected: Int, percentSelected: Float, isAnswer: Bool) {
+    init(option: String, numSelected: Int, percentSelected: Float, isSelected: Bool) {
         self.numSelected = numSelected
         self.percentSelected = percentSelected
-        super.init(option: option, isAnswer: false)
+        self.isSelected = isSelected
+        super.init(option: option)
     }
+
+    // MARK: - Custom isEqual method to use when comparing an updated MCResultModel
+    func isEqual(toUpdatedModel mcResultModel: MCResultModel) -> Bool {
+        return option == mcResultModel.option && numSelected == mcResultModel.numSelected && percentSelected == mcResultModel.percentSelected
+    }
+
 }
 
 extension MCResultModel: ListDiffable {

@@ -23,6 +23,7 @@ class SettingsViewController: UIViewController {
     
     // MARK: - Constants
     let navBarTitle = "Settings"
+    let backButtonImageName = "darkexit"
     let account = "Account"
     let about = "About"
     let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
@@ -31,8 +32,9 @@ class SettingsViewController: UIViewController {
     let feedback = "Feedback"
     let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
     let sendUsFeedback = "Send Us Feedback"
-    let backButtonImageName = "darkexit"
-    
+    let submitFeedbackTitle = "Submit Feedback"
+    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = navBarTitle
@@ -150,6 +152,19 @@ class SettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
+
+    // MARK: - Shake to send feedback
+    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
+                let feedbackVC = FeedbackViewController(type: .settingsViewController)
+                self.navigationController?.pushViewController(feedbackVC, animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+
 }
 
 extension SettingsViewController: ListAdapterDataSource {
