@@ -147,21 +147,23 @@ struct GetPollSessions: ClickerQuark {
         var latestActivity = "Last live "
         let today: Date = Date()
         let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
-        if today.hours(from: latestActivityDate) < 24 {
+        if today.compare(latestActivityDate) == .orderedSame {
             if today.hours(from: latestActivityDate) == 0 {
                 latestActivity += "less than an hour ago"
             } else {
                 let suffix: String = today.hours(from: latestActivityDate) == 1 ? "hour" : "hours"
                 latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
             }
-        } else if today.days(from: latestActivityDate) < 7 {
-            let suffix: String = today.days(from: latestActivityDate) == 1 ? "day" : "days"
-            latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
         } else {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .none
-            latestActivity += String(formatter.string(from: latestActivityDate).split(separator: ",")[0])
+            if today.days(from: latestActivityDate) < 7 {
+                let suffix: String = today.days(from: latestActivityDate) == 1 ? "day" : "days"
+                latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
+            } else {
+                let formatter: DateFormatter = DateFormatter()
+                formatter.dateStyle = .medium
+                formatter.timeStyle = .none
+                latestActivity += String(formatter.string(from: latestActivityDate).split(separator: ",")[0])
+            }
         }
         if role == .admin {
             latestActivity = code + "  ·  " + latestActivity
