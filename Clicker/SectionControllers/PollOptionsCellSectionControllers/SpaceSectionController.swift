@@ -11,6 +11,12 @@ import IGListKit
 class SpaceSectionController: ListSectionController {
     
     var spaceModel: SpaceModel!
+    var noResponses: Bool!
+    
+    init(noResponses: Bool) {
+        super.init()
+        self.noResponses = noResponses
+    }
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -21,6 +27,11 @@ class SpaceSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
+        if noResponses {
+            let cell = collectionContext?.dequeueReusableCell(of: NoResponsesCell.self, for: self, at: index) as! NoResponsesCell
+            cell.configure(with: spaceModel.space)
+            return cell
+        }
         let cell = collectionContext?.dequeueReusableCell(of: SpaceCell.self, for: self, at: index) as! SpaceCell
         cell.configure(with: spaceModel.space)
         return cell

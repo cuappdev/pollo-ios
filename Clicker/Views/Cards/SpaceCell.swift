@@ -17,7 +17,7 @@ class SpaceCell: UICollectionViewCell {
         
         spaceView = UIView()
         spaceView.backgroundColor = .white
-        addSubview(spaceView)
+        contentView.addSubview(spaceView)
         
     }
     
