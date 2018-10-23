@@ -261,7 +261,7 @@ class PollsViewController: UIViewController {
         headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    // MARK - Actions
+    // MARK: - Actions
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
         GenerateCode().make()

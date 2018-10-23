@@ -296,6 +296,47 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6332DAB0217BB4C0003E71F9 /* PollsViewControllerSectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
+				C2F86663215174E800D045CD /* SessionSectionController.swift */,
+			);
+			path = PollsViewControllerSectionControllers;
+			sourceTree = "<group>";
+		};
+		6332DAB1217BB5B3003E71F9 /* CardSectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C20B57182139DDA10091034F /* QuestionSectionController.swift */,
+				C2900D462147043E00566F25 /* FRInputSectionController.swift */,
+				C2649F76214232CF00370454 /* PollOptionsSectionController.swift */,
+				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
+				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
+			);
+			path = CardSectionControllers;
+			sourceTree = "<group>";
+		};
+		6332DAB2217BB62D003E71F9 /* SettingsSectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */,
+				63ACEC73214B401600D555F1 /* SettingsSectionController.swift */,
+			);
+			path = SettingsSectionControllers;
+			sourceTree = "<group>";
+		};
+		6332DAB3217BB65F003E71F9 /* PollOptionsCellSectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0CDAF0D221727D4B004DB6EA /* SpaceSectionController.swift */,
+				C22D5B5B21432562005A0E29 /* MCChoiceSectionController.swift */,
+				C21C95BD2145D90900F58874 /* FROptionSectionController.swift */,
+				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
+			);
+			path = PollOptionsCellSectionControllers;
+			sourceTree = "<group>";
+		};
 		638406D12083CBC700483645 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
@@ -409,24 +450,15 @@
 		C2434CB72134710E00929C98 /* SectionControllers */ = {
 			isa = PBXGroup;
 			children = (
-				C2434CB82134715600929C98 /* PollTypeSectionController.swift */,
-				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
-				C20B570C213893180091034F /* PollSectionController.swift */,
-				C20B57182139DDA10091034F /* QuestionSectionController.swift */,
-				C22F66652141B86400D4E349 /* SeparatorLineSectionController.swift */,
-				0CDAF0D221727D4B004DB6EA /* SpaceSectionController.swift */,
-				C2649F76214232CF00370454 /* PollOptionsSectionController.swift */,
-				C22D5B5B21432562005A0E29 /* MCChoiceSectionController.swift */,
-				C21C95BD2145D90900F58874 /* FROptionSectionController.swift */,
-				C2900D462147043E00566F25 /* FRInputSectionController.swift */,
+				6332DAB0217BB4C0003E71F9 /* PollsViewControllerSectionControllers */,
+				6332DAB1217BB5B3003E71F9 /* CardSectionControllers */,
+				6332DAB2217BB62D003E71F9 /* SettingsSectionControllers */,
+				6332DAB3217BB65F003E71F9 /* PollOptionsCellSectionControllers */,
 				C26D5F50214F5F3700548255 /* PollsDateSectionController.swift */,
-				C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */,
-				C2A0F7C82139F5E100A28D75 /* PollMiscellaneousSectionController.swift */,
-				C2A0F7CE213A115900A28D75 /* HamburgerCardSectionController.swift */,
-				63ACEC73214B401600D555F1 /* SettingsSectionController.swift */,
-				C2F86663215174E800D045CD /* SessionSectionController.swift */,
+				C20B570C213893180091034F /* PollSectionController.swift */,
 				C28679DE2155A83000554F7B /* PollBuilderMCOptionSectionController.swift */,
 				0C8E384421557D8000AB8633 /* DraftSectionController.swift */,
+				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
 			);
 			path = SectionControllers;
 			sourceTree = "<group>";
@@ -1042,12 +1074,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				DEVELOPMENT_TEAM = ULVS743Y94;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEV_SERVER\"";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo1234;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
@@ -1189,11 +1221,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				DEVELOPMENT_TEAM = ULVS743Y94;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo1234;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
@@ -1213,11 +1245,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZGMCXU7X3U;
+				DEVELOPMENT_TEAM = ULVS743Y94;
 				INFOPLIST_FILE = Clicker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Pollo1234;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
