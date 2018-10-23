@@ -11,11 +11,9 @@ import Foundation
 class OptionModel {
     
     var option: String
-    var isAnswer: Bool
     
-    init(option: String, isAnswer: Bool) {
+    init(option: String) {
         self.option = option
-        self.isAnswer = isAnswer
     }
     
 }

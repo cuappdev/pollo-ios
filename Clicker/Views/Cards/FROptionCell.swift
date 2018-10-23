@@ -10,7 +10,7 @@ import UIKit
 
 protocol FROptionCellDelegate {
     
-    func frOptionCellDidReceiveUpvote()
+    func frOptionCellDidReceiveUpvote(for answerId: String)
     
 }
 
@@ -25,6 +25,7 @@ class FROptionCell: UICollectionViewCell {
     // MARK: - Data vars
     var delegate: FROptionCellDelegate!
     var didUpvote: Bool!
+    var answerId: String!
     
     // MARK: - Constants
     let optionLabelFontSize: CGFloat = 14
@@ -97,6 +98,7 @@ class FROptionCell: UICollectionViewCell {
     func configure(for frOptionModel: FROptionModel, delegate: FROptionCellDelegate) {
         self.delegate = delegate
         self.didUpvote = frOptionModel.didUpvote
+        self.answerId = frOptionModel.answerId
         optionLabel.text = frOptionModel.option
         let numUpvotedButtonTitleColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
         numUpvotedButton.setTitleColor(numUpvotedButtonTitleColor, for: .normal)
@@ -104,10 +106,21 @@ class FROptionCell: UICollectionViewCell {
         let upvoteButtonImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
         upvoteButton.setImage(upvoteButtonImage, for: .normal)
     }
-    
+
+    // MARK: - Updates
+    func update(with frOptionModel: FROptionModel) {
+        self.didUpvote = frOptionModel.didUpvote
+        optionLabel.text = frOptionModel.option
+        let numUpvotedButtonTitleColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
+        numUpvotedButton.setTitleColor(numUpvotedButtonTitleColor, for: .normal)
+        numUpvotedButton.setTitle("\(frOptionModel.numUpvoted)", for: .normal)
+        let upvoteButtonImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
+        upvoteButton.setImage(upvoteButtonImage, for: .normal)
+    }
+
     // MARK: - Actions
     @objc func upvoteFROption() {
-        if !didUpvote { delegate.frOptionCellDidReceiveUpvote() }
+        if !didUpvote { delegate.frOptionCellDidReceiveUpvote(for: answerId) }
     }
     
     required init?(coder aDecoder: NSCoder) {

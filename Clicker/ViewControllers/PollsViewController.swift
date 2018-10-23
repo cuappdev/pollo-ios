@@ -56,7 +56,7 @@ class PollsViewController: UIViewController {
     let failedToCreateGroupText = "Failed to create new group. Try again!"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
@@ -261,7 +261,7 @@ class PollsViewController: UIViewController {
         headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    // MARK - Actions
+    // MARK: - Actions
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
         GenerateCode().make()
@@ -320,12 +320,12 @@ class PollsViewController: UIViewController {
                         print(error)
                         let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                         self.present(alertController, animated: true, completion: nil)
-                    }
+                }
             }.catch { error in
                 print(error)
                 let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                 self.present(alertController, animated: true, completion: nil)
-            }
+        }
     }
     
     func updateJoinSessionButton(backgroundColor: UIColor) {
@@ -364,15 +364,10 @@ class PollsViewController: UIViewController {
     }
     
     // MARK: - Helpers
-    func reloadSessions(for userRole: UserRole) {
-        let pollType: PollType = userRole == .admin ? .created : .joined
-        let index = userRole == .admin ? 1 : 0
+    func reloadSessions(for userRole: UserRole, completion: (([Session]) -> Void)?) {
         GetPollSessions(role: userRole).make()
             .done { sessions in
-                self.pollTypeModels[index] = PollTypeModel(pollType: pollType, sessions: sessions)
-                DispatchQueue.main.async {
-                    self.adapter.performUpdates(animated: true, completion: nil)
-                }
+                completion?(sessions)
             }.catch { error in
                 print(error)
         }
@@ -438,7 +433,7 @@ class PollsViewController: UIViewController {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
             alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
                 self.isListeningToKeyboard = false
-                let feedbackVC = FeedbackViewController()
+                let feedbackVC = FeedbackViewController(type: .pollsViewController)
                 self.navigationController?.pushViewController(feedbackVC, animated: true)
             }))
             self.present(alert, animated: true, completion: nil)

@@ -69,7 +69,7 @@ func decodeObjForKey(key: String) -> Any {
 }
 
 // MARK: - Utils for Polls
-func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
+func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
     switch poll.questionType {
     case .freeResponse:
@@ -87,28 +87,37 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
             type = buildMCResultModelType(from: poll)
         }
     }
+    return type
+}
+
+func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsModel {
+    let type = buildPollOptionsModelType(from: poll, userRole: userRole)
     return PollOptionsModel(type: type, pollState: poll.state)
 }
 
 func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
-    let verticalPadding: CGFloat = LayoutConstants.pollOptionsPadding * 2
+    
+    let verticalPadding: CGFloat = LayoutConstants.pollOptionsPadding * 2 + LayoutConstants.interItemPadding
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
+    var maximumNumberVisibleOptions: Int
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels
         optionHeight = LayoutConstants.mcOptionCellHeight
+        maximumNumberVisibleOptions = IntegerConstants.maxOptionsForMC
     case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
         optionHeight = LayoutConstants.mcOptionCellHeight
+        maximumNumberVisibleOptions = IntegerConstants.maxOptionsForMC
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
         if optionModels.isEmpty {
             return LayoutConstants.noResponsesSpace
         }
         optionHeight = LayoutConstants.frOptionCellHeight
+        maximumNumberVisibleOptions = IntegerConstants.maxOptionsForFR
     }
-    let maximumNumberVisibleOptions = 6
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
     let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
     return verticalPadding + optionsHeight
@@ -116,15 +125,22 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
 
 // MARK: - Helpers
 private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
-    let frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-        return FROptionModel(option: option, isAnswer: option == poll.answer, numUpvoted: count, didUpvote: false)
+    var frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (answerId, option, count) -> FROptionModel in
+        // Need to subtract 1 from count to get numUpvoted because submitting the response doesn't count as upvote
+        let numUpvoted = count - 1
+        let didUpvote = poll.userDidUpvote(answerId: answerId)
+        return FROptionModel(option: option, answerId: answerId, numUpvoted: numUpvoted, didUpvote: didUpvote)
+    }
+    frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
+        return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
     }
     return .frOption(optionModels: frOptionModels)
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
-    let mcChoiceModels = poll.options.map {
-        return MCChoiceModel(option: $0, isAnswer: $0 == poll.answer)
+    let mcChoiceModels = poll.options.enumerated().map { (index, option) -> MCChoiceModel in
+        let isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || poll.selectedMCChoice == option
+        return MCChoiceModel(option: option, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
 }
@@ -137,8 +153,8 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
         if let infoDict = poll.results[mcOptionKey] {
             guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            let isAnswer = option == poll.answer
-            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isAnswer: isAnswer)
+            let isSelected = option == poll.selectedMCChoice
+            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected)
             mcResultModels.append(resultModel)
         }
     }
@@ -148,7 +164,7 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     // the poll is still live which makes sense that we do not have any results yet.
     if mcResultModels.isEmpty {
         poll.options.forEach { option in
-            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isAnswer: false)
+            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isSelected: false)
             mcResultModels.append(resultModel)
         }
     }
