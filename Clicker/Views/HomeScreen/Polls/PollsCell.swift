@@ -13,7 +13,7 @@ import UIKit
 
 protocol PollsCellDelegate {
     
-    func pollsCellShouldOpenSession(session: Session, userRole: UserRole)
+    func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell)
     func pollsCellShouldEditSession(session: Session, userRole: UserRole)
     func pollsCellDidPullToRefresh(for pollType: PollType)
 

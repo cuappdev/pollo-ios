@@ -101,6 +101,8 @@ struct StringConstants {
 
 struct IntegerConstants {
     static let maxQuestionCharacterCount = 58
+    static let maxOptionsForMC = 6
+    static let maxOptionsForFR = 5
 }
 
 enum Keys: String {
