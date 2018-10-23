@@ -17,7 +17,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     // MARK: - Constants
     let iconImageViewLength: CGFloat = 15
     let descriptionLabelXPadding: CGFloat = 10
-    let totalVotesLabelTrailingPadding: CGFloat = 14
+    let totalVotesLabelTrailingPadding: CGFloat = 18
     let labelFontSize: CGFloat = 12
     let liveEndedDescriptionText = "Only you can see results"
     let sharedDescriptionText = "Shared with group"

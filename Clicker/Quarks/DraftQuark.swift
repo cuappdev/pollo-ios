@@ -106,6 +106,7 @@ struct UpdateDraft: ClickerQuark {
     }
     var parameters: Parameters {
         return [
+            "id": id,
             "text": text,
             "options": options
         ]

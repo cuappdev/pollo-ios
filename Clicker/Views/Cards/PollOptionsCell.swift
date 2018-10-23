@@ -188,20 +188,29 @@ extension PollOptionsCell: ListAdapterDataSource {
         var models = [ListDiffable]()
         let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
         let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding)
-        models.append(topSpaceModel)
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
+            models.append(topSpaceModel)
             models.append(contentsOf: mcResultModels)
-            break
+            models.append(bottomSpaceModel)
+            return models
         case .mcChoice(let mcChoiceModels):
+            models.append(topSpaceModel)
             models.append(contentsOf: mcChoiceModels)
-            break
+            models.append(bottomSpaceModel)
+            return models
         case .frOption(let frOptionModels):
-            models.append(contentsOf: frOptionModels)
+            if !frOptionModels.isEmpty {
+                models.append(topSpaceModel)
+                models.append(contentsOf: frOptionModels)
+                models.append(bottomSpaceModel)
+            } else {
+                let noResponsesModel = SpaceModel(space: LayoutConstants.noResponsesSpace)
+                models.append(noResponsesModel)
+            }
+            return models
         }
-        models.append(bottomSpaceModel)
-        return models
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -212,7 +221,15 @@ extension PollOptionsCell: ListAdapterDataSource {
         } else if object is FROptionModel {
             return FROptionSectionController(delegate: self)
         } else {
-            return SpaceSectionController()
+            guard let pollOptionsModel = pollOptionsModel else { return ListSectionController() }
+            switch pollOptionsModel.type {
+            case .mcResult(_):
+                return SpaceSectionController(noResponses: false)
+            case .mcChoice(_):
+                return SpaceSectionController(noResponses: false)
+            case .frOption(let models):
+                return SpaceSectionController(noResponses: models.isEmpty)
+            }
         }
     }
     

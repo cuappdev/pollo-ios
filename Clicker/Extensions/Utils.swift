@@ -112,6 +112,9 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
         maximumNumberVisibleOptions = IntegerConstants.maxOptionsForMC
     case .frOption(let frOptionModels):
         optionModels = frOptionModels
+        if optionModels.isEmpty {
+            return LayoutConstants.noResponsesSpace
+        }
         optionHeight = LayoutConstants.frOptionCellHeight
         maximumNumberVisibleOptions = IntegerConstants.maxOptionsForFR
     }
