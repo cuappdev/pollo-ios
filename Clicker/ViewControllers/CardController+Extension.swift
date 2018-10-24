@@ -245,9 +245,9 @@ extension CardController: SocketDelegate {
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
-        // NOTE: We need to call adapter.performUpdates if we reach 7 results because we need to display the
+        // NOTE: We need to call adapter.performUpdates if we reach maxOptions for FR because we need to display the
         // overflow arrow
-        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != 7 {
+        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != IntegerConstants.maxOptionsForFR {
             // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
             updateLiveCardCell(with: currentState)
