@@ -34,6 +34,7 @@ class SettingsViewController: UIViewController {
     let sendUsFeedback = "Send Us Feedback"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let privacyPolicy = "Privacy Policy"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,10 +54,11 @@ class SettingsViewController: UIViewController {
         let separatorLineModel2 = SeparatorLineModel(state: .settings)
         let settingsDataModel5 = SettingsDataModel(state: .info, title: feedback, description: feedbackDescription)
         let settingsDataModel6 = SettingsDataModel(state: .link, title: sendUsFeedback, description: Links.feedbackForm)
+        let settingsDataModel7 = SettingsDataModel(state: .link, title: privacyPolicy, description: Links.privacyPolicy)
         
-        data = [settingsModel1, separatorLineModel1, settingsModel2, settingsModel3, settingsModel4, separatorLineModel2, settingsDataModel5, settingsDataModel6]
+        data = [settingsModel1, separatorLineModel1, settingsModel2, settingsModel3, settingsModel4, separatorLineModel2, settingsDataModel5, settingsDataModel6, settingsDataModel7]
     }
-    
+
     func setupNavBar() {
         let gradientLayer = CAGradientLayer()
         
