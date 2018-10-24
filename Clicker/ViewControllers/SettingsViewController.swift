@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController {
     let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
     let moreApps = "More Apps"
     let visitOurWebsite = "Visit Our Website"
-    let feedback = "Feedback"
+    let more = "More"
     let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
     let sendUsFeedback = "Send Us Feedback"
     let submitFeedbackTitle = "Submit Feedback"
@@ -52,7 +52,7 @@ class SettingsViewController: UIViewController {
         let settingsModel3 = SettingsDataModel(state: .link, title: moreApps, description: Links.allApps)
         let settingsModel4 = SettingsDataModel(state: .link, title: visitOurWebsite, description: Links.appDevSite)
         let separatorLineModel2 = SeparatorLineModel(state: .settings)
-        let settingsDataModel5 = SettingsDataModel(state: .info, title: feedback, description: feedbackDescription)
+        let settingsDataModel5 = SettingsDataModel(state: .info, title: more, description: feedbackDescription)
         let settingsDataModel6 = SettingsDataModel(state: .link, title: sendUsFeedback, description: Links.feedbackForm)
         let settingsDataModel7 = SettingsDataModel(state: .link, title: privacyPolicy, description: Links.privacyPolicy)
         
