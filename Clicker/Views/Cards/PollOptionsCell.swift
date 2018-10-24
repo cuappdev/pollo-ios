@@ -97,10 +97,12 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.delegate = delegate
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            hasOverflowOptions = mcResultModels.count > IntegerConstants.maxOptionsForMC
+            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
+            hasOverflowOptions = mcResultModels.count > maxOptions
             break
         case .mcChoice(let mcChoiceModels):
-            hasOverflowOptions = mcChoiceModels.count > IntegerConstants.maxOptionsForMC
+            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
+            hasOverflowOptions = mcChoiceModels.count > maxOptions
             if let selectedIndex = mcChoiceModels.firstIndex(where: { (mcChoiceModel) -> Bool in
                 return mcChoiceModel.isSelected
             }) {
@@ -108,7 +110,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }
             break
         case .frOption(let frOptionModels):
-            hasOverflowOptions = frOptionModels.count > IntegerConstants.maxOptionsForFR
+            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
+            hasOverflowOptions = frOptionModels.count > maxOptions
         }
         arrowView.isHidden = !hasOverflowOptions
         arrowView.toggle(show: !arrowView.isHidden, animated: false)

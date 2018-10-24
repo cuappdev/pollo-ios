@@ -13,6 +13,7 @@ struct Links {
     static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
     static let appDevSite = "https://www.cornellappdev.com/"
     static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
+    static let privacyPolicy = "https://www.cornellappdev.com/privacy/policies/pollo/"
 }
 
 struct Identifiers {
@@ -102,8 +103,10 @@ struct StringConstants {
 
 struct IntegerConstants {
     static let maxQuestionCharacterCount = 58
-    static let maxOptionsForMC = 6
-    static let maxOptionsForFR = 5
+    static let maxOptionsForAdminMC = 6
+    static let maxOptionsForMemberMC = 8
+    static let maxOptionsForAdminFR = 5
+    static let maxOptionsForMemberFR = 7
 }
 
 enum Keys: String {

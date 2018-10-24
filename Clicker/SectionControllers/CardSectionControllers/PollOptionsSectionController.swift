@@ -32,7 +32,7 @@ class PollOptionsSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
+        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, userRole: delegate.userRole)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
