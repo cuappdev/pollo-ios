@@ -104,6 +104,9 @@ struct UpdateDraft: ClickerQuark {
             "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]
     }
+    var encoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
     var parameters: Parameters {
         return [
             "id": id,
