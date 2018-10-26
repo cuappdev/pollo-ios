@@ -205,7 +205,6 @@ extension PollOptionsCell: ListAdapterDataSource {
             return models
         case .frOption(let frOptionModels):
             if !frOptionModels.isEmpty {
-                models.append(topSpaceModel)
                 models.append(contentsOf: frOptionModels)
                 models.append(bottomSpaceModel)
             } else {
