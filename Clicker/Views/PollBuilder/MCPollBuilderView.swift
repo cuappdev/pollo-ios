@@ -56,8 +56,8 @@ class MCPollBuilderView: UIView {
     }
     
     func clearMCOptionModels() {
-        let firstOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 0))
-        let secondOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 1))
+        let firstOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 0, isCorrect: false))
+        let secondOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.newOption(option: "", index: 1, isCorrect: false))
         let addOptionModel = PollBuilderMCOptionModel(type: PollBuilderMCOptionModelType.addOption)
         mcOptionModels = [firstOptionModel, secondOptionModel, addOptionModel]
         updateTotalOptions()
@@ -66,7 +66,7 @@ class MCPollBuilderView: UIView {
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {
-            case .newOption(option: let option, index: let index):
+            case .newOption(option: let option, index: let index, isCorrect: let isCorrect):
                 return option != "" ? option : intToMCOption(index)
             case .addOption:
                 return nil
@@ -123,8 +123,9 @@ class MCPollBuilderView: UIView {
     func fillDraft(title: String, options: [String]) {
         questionTextField.text = title
         mcOptionModels = []
-        options.enumerated().forEach { (index, option) in
-            mcOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index)))
+        options.enumerated().forEach { (arg) in
+            let (index, option) = arg
+            mcOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: false)))
         }
         mcOptionModels.append(PollBuilderMCOptionModel(type: .addOption))
         updateTotalOptions()
@@ -179,7 +180,7 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     
     func pollBuilderSectionControllerShouldAddOption() {
         if mcOptionModels.count >= 27 { return }
-        let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1))
+        let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1, isCorrect: false))
         mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
         updateTotalOptions()
         pollBuilderDelegate.ignoreNextKeyboardHiding()
@@ -194,8 +195,30 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         }
     }
     
-    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int) {
-        mcOptionModels[index].type = .newOption(option: option, index: index)
+    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int, isCorrect: Bool) {
+        mcOptionModels[index].type = .newOption(option: option, index: index, isCorrect: isCorrect)
+    }
+
+    func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool) {
+        if isCorrect {
+            var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
+            mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
+                switch mcOptionModel.type {
+                case .newOption(option: let option, index: _, isCorrect: let isCorrect):
+                    if isCorrect {
+                        updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: false)))
+                    } else {
+                        updatedMCOptionModels.append(mcOptionModel)
+                    }
+                case .addOption:
+                    updatedMCOptionModels.append(mcOptionModel)
+                }
+            }
+            mcOptionModels = updatedMCOptionModels
+        }
+        mcOptionModels[index] = PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: isCorrect))
+        updateTotalOptions()
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func pollBuilderSectionControllerDidDeleteOption(index: Int) {
@@ -204,8 +227,8 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
         mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
             switch mcOptionModel.type {
-            case .newOption(option: let option, index: _):
-                updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index)))
+            case .newOption(option: let option, index: _, isCorrect: let isCorrect):
+                updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: isCorrect)))
             case .addOption:
                 updatedMCOptionModels.append(mcOptionModel)
             }
