@@ -152,8 +152,8 @@ class PollsViewController: UIViewController {
         joinSessionButton.titleLabel?.textAlignment = .center
         joinSessionButton.backgroundColor = .clickerGrey2
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
-        joinSessionButton.alpha = 0.5
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
+        joinSessionButton.alpha = 0.5
         view.addSubview(joinSessionButton)
         
         codeTextField = UITextField()
