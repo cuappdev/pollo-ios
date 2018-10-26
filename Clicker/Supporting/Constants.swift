@@ -133,6 +133,25 @@ enum Keys: String {
     }()
 }
 
+struct UserDefault {
+
+    static func set(value: Any?, for key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+
+    static func getBoolValue(for key: String) -> Bool {
+        if let boolValue = UserDefaults.standard.value(forKey: key) as? Bool {
+            return boolValue
+        }
+        return false
+    }
+
+    struct Keys {
+        static let displayQuizOverlay = "displayQuizOverlay"
+    }
+
+}
+
 struct Device {
     static let id: String = {
         if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
