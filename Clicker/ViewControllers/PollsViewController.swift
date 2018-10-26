@@ -152,10 +152,9 @@ class PollsViewController: UIViewController {
         joinSessionButton.titleLabel?.textAlignment = .center
         joinSessionButton.backgroundColor = .clickerGrey2
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
+        joinSessionButton.alpha = 0.5
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
-        joinSessionButton.addTarget(self, action: #selector(reduceOpacity), for: .touchDown)
-        joinSessionButton.addTarget(self, action: #selector(resetOpacity), for: .touchUpOutside)
-        joinSessionButton.addTarget(self, action: #selector(resetOpacity), for: .touchUpInside)
+        view.addSubview(joinSessionButton)
         
         codeTextField = UITextField()
         codeTextField.delegate = self
@@ -313,7 +312,7 @@ class PollsViewController: UIViewController {
                     .done { pollsDateArray in
                         self.codeTextField.text = ""
                         let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        self.updateJoinSessionButton(backgroundColor: .clickerGrey2)
+                        self.updateJoinSessionButton(canJoin: false)
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                     }.catch { error in
@@ -328,9 +327,10 @@ class PollsViewController: UIViewController {
         }
     }
     
-    func updateJoinSessionButton(backgroundColor: UIColor) {
+    func updateJoinSessionButton(canJoin: Bool) {
         UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
-            self.joinSessionButton.backgroundColor = backgroundColor
+            self.joinSessionButton.backgroundColor = canJoin ? .clickerGreen0 : .clickerGrey2
+            self.joinSessionButton.alpha = canJoin ? 1.0 : 0.5
         }
     }
     
@@ -342,7 +342,7 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            updateJoinSessionButton(backgroundColor: text.count == 6 ? .clickerGreen0 : .clickerGrey2)
+            updateJoinSessionButton(canJoin: text.count == 6)
         }
     }
     
