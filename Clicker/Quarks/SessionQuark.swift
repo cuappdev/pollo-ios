@@ -147,7 +147,7 @@ struct GetPollSessions: ClickerQuark {
         var latestActivity = "Last live "
         let today: Date = Date()
         let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
-        if today.compare(latestActivityDate) == .orderedSame {
+        if today.days(from: latestActivityDate) == 0 {
             if today.hours(from: latestActivityDate) == 0 {
                 latestActivity += "< 1 hr ago"
             } else {
