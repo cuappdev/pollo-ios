@@ -50,7 +50,6 @@ class PollBuilderMCOptionSectionController: ListSectionController {
             addMoreOptionCell.configure(with: delegate)
             cell = addMoreOptionCell
         }
-        cell.setNeedsUpdateConstraints()
         return cell
     }
     

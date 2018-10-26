@@ -33,10 +33,13 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     var isCorrect: Bool = false
 
     // MARK: - Constants
+    let isCorrectButtonLeftPadding: CGFloat = 12
+    let isCorrectButtonLength: CGFloat = 23
+    let addOptionTextFieldLeftPadding: CGFloat = 8
     let trashIconHeight: CGFloat = 21.5
     let edgePadding: CGFloat = 18
     let bottomPadding: CGFloat = 6
-    let unfilledCircleImageName = "emptyCircle"
+    let unfilledCircleImageName = "greyEmptyCircle"
     let filledCircleImageName = "option_filled"
     
     // MARK: - INITIALIZATION
@@ -80,22 +83,24 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         rightTrashView.addSubview(trashButton)
         
         containerView.addSubview(addOptionTextField)
+
+        setupConstraints()
     }
     
-    override func updateConstraints() {
+    func setupConstraints() {
         containerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(bottomPadding)
         }
 
         isCorrectButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
-            make.width.height.equalTo(23)
+            make.leading.equalToSuperview().offset(isCorrectButtonLeftPadding)
+            make.width.height.equalTo(isCorrectButtonLength)
             make.centerY.equalToSuperview()
         }
 
         addOptionTextField.snp.updateConstraints { make in
-            make.leading.equalTo(isCorrectButton.snp.trailing).offset(8)
+            make.leading.equalTo(isCorrectButton.snp.trailing).offset(addOptionTextFieldLeftPadding)
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -107,7 +112,6 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
             make.width.equalTo(trashIconHeight)
             make.height.equalTo(trashIconHeight)
         }
-        super.updateConstraints()
     }
     
     // MARK: - Configure
