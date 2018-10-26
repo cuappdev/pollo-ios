@@ -9,7 +9,7 @@
 import IGListKit
 
 enum PollBuilderMCOptionModelType {
-    case newOption(option: String, index: Int)
+    case newOption(option: String, index: Int, isCorrect: Bool)
     case addOption
 }
 

@@ -11,7 +11,8 @@ import IGListKit
 protocol PollBuilderMCOptionSectionControllerDelegate {
     
     func pollBuilderSectionControllerShouldAddOption()
-    func pollBuilderSectionControllerDidUpdateOption(option:String, index: Int)
+    func pollBuilderSectionControllerDidUpdateOption(option:String, index: Int, isCorrect: Bool)
+    func pollBuilderSectionControllerDidUpdateIsCorrect(option:String, index: Int, isCorrect: Bool)
     func pollBuilderSectionControllerDidDeleteOption(index: Int)
     
 }
@@ -60,9 +61,13 @@ class PollBuilderMCOptionSectionController: ListSectionController {
 }
 
 extension PollBuilderMCOptionSectionController: CreateMCOptionCellDelegate {
-    
-    func createMCOptionCellDidUpdateTextField(index: Int, text: String) {
-        delegate.pollBuilderSectionControllerDidUpdateOption(option: text, index: index)
+
+    func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool) {
+        delegate.pollBuilderSectionControllerDidUpdateOption(option: text, index: index, isCorrect: isCorrect)
+    }
+
+    func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool) {
+        delegate.pollBuilderSectionControllerDidUpdateIsCorrect(option: text, index: index, isCorrect: isCorrect)
     }
     
     func createMCOptionCellDidDeleteOption(index: Int) {

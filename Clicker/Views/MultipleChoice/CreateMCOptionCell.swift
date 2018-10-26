@@ -10,8 +10,11 @@ import UIKit
 import SnapKit
 
 protocol CreateMCOptionCellDelegate {
-    func createMCOptionCellDidUpdateTextField(index: Int, text: String)
+
+    func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool)
+    func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool)
     func createMCOptionCellDidDeleteOption(index: Int)
+
 }
 
 class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
@@ -112,8 +115,10 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         self.delegate = delegate
         trashButton.isHidden = mcOptionModel.totalOptions <= 2
         switch mcOptionModel.type {
-        case .newOption(option: let option, index: let index):
+        case .newOption(option: let option, index: let index, isCorrect: let isCorrect):
             self.index = index
+            self.isCorrect = isCorrect
+            isCorrectButton.setImage(isCorrect ? filledCircleImage : unfilledCircleImage, for: .normal)
             let choiceTag = intToMCOption(index)
             addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Option \(choiceTag)", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._16RegularFont])
             addOptionTextField.text = option
@@ -129,13 +134,13 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     
     @objc func textFieldDidChange() {
         if let text = addOptionTextField.text {
-            delegate.createMCOptionCellDidUpdateTextField(index: index, text: text)
+            delegate.createMCOptionCellDidUpdateTextField(index: index, text: text, isCorrect: isCorrect)
         }
     }
 
     @objc func isCorrectButtonTapped() {
         isCorrect = !isCorrect
-        isCorrectButton.setImage(isCorrect ? filledCircleImage : unfilledCircleImage, for: .normal)
+        delegate.createMCOptionCellDidUpdateIsCorrect(index: index, text: addOptionTextField.text ?? "", isCorrect: isCorrect)
     }
     
     // MARK: - KEYBOARD
