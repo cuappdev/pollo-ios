@@ -133,6 +133,13 @@ enum Keys: String {
     }()
 }
 
+struct App {
+
+    /// The app version within the App Store (e.g. "1.4.2") [String value of `CFBundleShortVersionString`]
+    static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
+
+}
+
 struct Device {
     static let id: String = {
         if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
@@ -141,6 +148,8 @@ struct Device {
             return UUID().uuidString
         }
     }()
+
+    static let modelName = UIDevice.current.model
     
     private init() {}
 }
