@@ -63,7 +63,7 @@ extension PollSectionController: CardCellDelegate {
     }
     
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String) {
-        poll.selectedMCChoice = choice
+        poll.updateSelected(mcChoice: choice)
         delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
 

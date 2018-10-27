@@ -143,6 +143,13 @@ class Poll {
         return false
     }
 
+    func updateSelected(mcChoice: String) {
+        selectedMCChoice = mcChoice
+        if let userId = User.currentUser?.id {
+            answers[userId] = mcChoice
+        }
+    }
+
 }
 
 extension Poll: ListDiffable {
