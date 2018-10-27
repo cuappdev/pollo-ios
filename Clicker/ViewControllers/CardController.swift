@@ -44,8 +44,8 @@ class CardController: UIViewController {
     var isInitialLoad: Bool = true
     var wasScrolledToIndex: Int!
     var startingScrollingOffset: CGPoint!
+    var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
-    var tap: UITapGestureRecognizer!
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
