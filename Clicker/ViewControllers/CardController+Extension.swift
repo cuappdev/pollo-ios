@@ -248,7 +248,7 @@ extension CardController: SocketDelegate {
         // NOTE: We need to call adapter.performUpdates if we reach maxOptions for FR because we need to display the
         // overflow arrow
         let maxFROptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
-        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != maxFROptions {
+        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != maxFROptions + 1 {
             // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
             updateLiveCardCell(with: currentState)
