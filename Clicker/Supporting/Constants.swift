@@ -106,7 +106,7 @@ struct IntegerConstants {
     static let maxOptionsForAdminMC = 6
     static let maxOptionsForMemberMC = 8
     static let maxOptionsForAdminFR = 5
-    static let maxOptionsForMemberFR = 7
+    static let maxOptionsForMemberFR = 6
 }
 
 enum Keys: String {
