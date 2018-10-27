@@ -45,6 +45,7 @@ class CardController: UIViewController {
     var wasScrolledToIndex: Int!
     var startingScrollingOffset: CGPoint!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
+    var tap: UITapGestureRecognizer!
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -71,9 +72,17 @@ class CardController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clickerBlack1
+        
+        tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        view.addGestureRecognizer(tap)
+        
         setupNavBar()
         setupViews()
         socket.updateDelegate(self)
+    }
+    
+    @objc func didTap() {
+        view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
