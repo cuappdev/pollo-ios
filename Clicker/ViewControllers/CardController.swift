@@ -73,8 +73,8 @@ class CardController: UIViewController {
         
         view.backgroundColor = .clickerBlack1
         
-        tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        view.addGestureRecognizer(tap)
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        view.addGestureRecognizer(tapGestureRecognizer)
         
         setupNavBar()
         setupViews()
