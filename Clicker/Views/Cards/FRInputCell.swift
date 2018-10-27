@@ -23,7 +23,6 @@ class FRInputCell: UICollectionViewCell {
     var delegate: FRInputCellDelegate!
     
     // MARK: - Constants
-    let textFieldCornerRadius: CGFloat = 25
     let textFieldBorderWidth: CGFloat = 1
     let textFieldTextInset: CGFloat = 18
     let textFieldHorizontalPadding: CGFloat = 16.5
@@ -40,7 +39,7 @@ class FRInputCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         inputTextField = UITextField()
-        inputTextField.layer.cornerRadius = textFieldCornerRadius
+        inputTextField.layer.cornerRadius = textFieldHeight / 2.0
         inputTextField.layer.borderWidth = textFieldBorderWidth
         inputTextField.layer.borderColor = UIColor.clickerGrey5.cgColor
         inputTextField.font = ._16MediumFont
