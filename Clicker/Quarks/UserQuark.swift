@@ -39,10 +39,7 @@ struct GetMe: ClickerQuark {
 struct UserAuthenticate: ClickerQuark {
     typealias ResponseType = UserSession
     
-    let userId: String
-    let givenName: String
-    let familyName: String
-    let email: String
+    let idToken: String
     
     // CHANGE THE ROUTE TO HAVE API VERSION
     var route: String {
@@ -50,10 +47,7 @@ struct UserAuthenticate: ClickerQuark {
     }
     var parameters: Parameters {
         return [
-            "userId": userId,
-            "givenName": givenName,
-            "familyName": familyName,
-            "email": email
+            "idToken": idToken
         ]
     }
     let method: HTTPMethod = .post
