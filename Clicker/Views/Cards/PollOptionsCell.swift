@@ -164,8 +164,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
                 return updatedFROptionModel.answerId == frOptionModel.answerId
             }) {
-                // Have to do index + 1 because first model is SpaceModel
-                guard let sectionController = adapter.sectionController(forSection: index + 1) as? FROptionSectionController else { return }
+                // Don't have to do index + 1 because FR does not have topSpaceModel
+                guard let sectionController = adapter.sectionController(forSection: index) as? FROptionSectionController else { return }
                 sectionController.update(with: updatedFROptionModel)
                 frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
                 frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
@@ -188,10 +188,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
 extension PollOptionsCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        guard let pollOptionsModel = pollOptionsModel else { return [] }
         var models = [ListDiffable]()
         let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
         let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding)
-        guard let pollOptionsModel = pollOptionsModel else { return [] }
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
             models.append(topSpaceModel)
