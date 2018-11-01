@@ -118,7 +118,11 @@ class PollPreviewCell: UICollectionViewCell {
     func configure(for session: Session, delegate: PollPreviewCellDelegate) {
         self.delegate = delegate
         nameLabel.text = session.name
-        descriptionLabel.text = session.description
+        if let isLive = session.isLive, isLive {
+            descriptionLabel.text = "LIVE"
+        } else {
+            descriptionLabel.text = session.description
+        }
     }
     
     // MARK: - Action
