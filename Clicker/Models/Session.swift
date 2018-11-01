@@ -30,11 +30,12 @@ class Session {
         self.isLive = isLive
     }
     
-    init(id: Int, name: String, code: String, latestActivity: String) {
+    init(id: Int, name: String, code: String, latestActivity: String, isLive: Bool) {
         self.id = id
         self.name = name
         self.code = code
         self.description = latestActivity
+        self.isLive = isLive
     }
     
 }

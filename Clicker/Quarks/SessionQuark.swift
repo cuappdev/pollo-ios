@@ -37,12 +37,12 @@ struct GenerateCode : ClickerQuark {
 }
 
 struct CreateSession: ClickerQuark {
-
+    
     typealias ResponseType = Session
     let name: String
     let code: String
     let isGroup: Bool
-
+    
     var route: String {
         return "/sessions"
     }
@@ -59,7 +59,7 @@ struct CreateSession: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .post
-
+    
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
@@ -70,14 +70,14 @@ struct CreateSession: ClickerQuark {
         default: throw NeutronError.badResponseData
         }
     }
-
+    
 }
 
 struct GetSession: ClickerQuark {
-
+    
     typealias ResponseType = Session
     let id: String
-
+    
     var route: String {
         return "/sessions/\(id)"
     }
@@ -87,7 +87,7 @@ struct GetSession: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .get
-
+    
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
@@ -98,39 +98,39 @@ struct GetSession: ClickerQuark {
         default: throw NeutronError.badResponseData
         }
     }
-
+    
 }
 
 struct GetPollSessions: ClickerQuark {
-
+    
     typealias ResponseType = [Session]
     
     let role: UserRole
-
+    
     var route: String {
         return "/sessions/all/\(role)"
     }
     var headers: HTTPHeaders {
         if let userSession = User.userSession {
             return [
-                 "Authorization": "Bearer \(userSession.accessToken)"
+                "Authorization": "Bearer \(userSession.accessToken)"
             ]
         } else {
             return [:]
         }
     }
     let method: HTTPMethod = .get
-
+    
     func process(element: Element) throws -> [Session] {
         switch element {
         case .nodes(let nodes):
             var preSessions: [Double:Session] = [:]
             for node in nodes {
-                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let updatedAt = node["updatedAt"].string else {
+                guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let updatedAt = node["updatedAt"].string, let isLive = node["isLive"].bool else {
                     throw NeutronError.badResponseData
                 }
                 guard let latestActivityTimestamp = Double(updatedAt) else { break }
-                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: code))
+                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: code), isLive: isLive)
             }
             var sessions: [Session] = [Session]()
             for time in preSessions.keys.sorted() {
@@ -173,12 +173,12 @@ struct GetPollSessions: ClickerQuark {
 }
 
 struct UpdateSession: ClickerQuark {
-
+    
     typealias ResponseType = Session
     let id: Int
     let name: String
     let code: String
-
+    
     var route: String {
         return "/sessions/\(id)"
     }
@@ -194,9 +194,9 @@ struct UpdateSession: ClickerQuark {
             "code": code
         ]
     }
-
+    
     let method: HTTPMethod = .put
-
+    
     func process(element: Element) throws -> Session {
         switch element {
         case .node(let node):
@@ -210,11 +210,11 @@ struct UpdateSession: ClickerQuark {
 }
 
 struct DeleteSession: ClickerQuark {
-
+    
     typealias ResponseType = Void
-
+    
     let id: Int
-
+    
     var route: String {
         return "/sessions/\(id)"
     }
@@ -224,7 +224,7 @@ struct DeleteSession: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .delete
-
+    
     func process(element: Element) { }
 }
 
@@ -249,7 +249,7 @@ struct LeaveSession: ClickerQuark {
 struct GetMembers: ClickerQuark {
     typealias ResponseType = [User]
     let id: String
-
+    
     var route: String {
         return "/sessions/\(id)/members"
     }
@@ -259,7 +259,7 @@ struct GetMembers: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .get
-
+    
     func process(element: Element) throws -> [User] {
         switch element {
         case .nodes(let nodes):
@@ -279,7 +279,7 @@ struct GetMembers: ClickerQuark {
 struct GetAdmins: ClickerQuark {
     typealias ResponseType = [User]
     let id: String
-
+    
     var route: String {
         return "/sessions/\(id)/admins"
     }
@@ -289,7 +289,7 @@ struct GetAdmins: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .get
-
+    
     func process(element: Element) throws -> [User] {
         switch element {
         case .nodes(let nodes):
@@ -307,11 +307,11 @@ struct GetAdmins: ClickerQuark {
 }
 
 struct AddMembers: ClickerQuark {
-
+    
     typealias ResponseType = Void
     let id: String
     let memberIds: [Int]
-
+    
     var route: String {
         return "/sessions/\(id)/members"
     }
@@ -326,16 +326,16 @@ struct AddMembers: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .post
-
+    
     func process(element: Element) throws -> Void { }
 }
 
 struct RemoveMembers: ClickerQuark {
-
+    
     typealias ResponseType = Void
     let id: String
     let memberIds: [Int]
-
+    
     var route: String {
         return "/sessions/\(id)/members"
     }
@@ -349,19 +349,19 @@ struct RemoveMembers: ClickerQuark {
             "memberIds": memberIds
         ]
     }
-
+    
     let method: HTTPMethod = .delete
-
+    
     func process(element: Element) throws -> Void { }
-
+    
 }
 
 struct AddAdmins: ClickerQuark {
-
+    
     typealias ResponseType = Void
     let id: String
     let adminIds: [Int]
-
+    
     var route: String {
         return "/sessions/\(id)/admins"
     }
@@ -376,16 +376,16 @@ struct AddAdmins: ClickerQuark {
         ]
     }
     let method: HTTPMethod = .post
-
+    
     func process(element: Element) throws -> Void { }
 }
 
 struct DeleteAdmins: ClickerQuark {
-
+    
     typealias ResponseType = Void
     let id: String
     let adminIds: [Int]
-
+    
     var route: String {
         return "/groups/\(id)/admins"
     }
@@ -399,11 +399,11 @@ struct DeleteAdmins: ClickerQuark {
             "adminIds": adminIds
         ]
     }
-
+    
     let method: HTTPMethod = .delete
-
+    
     func process(element: Element) throws -> Void { }
-
+    
 }
 
 struct StartSession: ClickerQuark {
