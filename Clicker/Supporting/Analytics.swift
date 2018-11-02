@@ -56,9 +56,39 @@ extension Payload {
 
 }
 
-struct GroupCreatedPayload: Payload {
-    static let eventName: String = "Group Created"
+struct CreatedGroupPayload: Payload {
+    static let eventName: String = "Created Group"
     let deviceInfo = DeviceInfo()
-
-    let code: String
 }
+
+struct CreatedPollPaylod: Payload {
+    static let eventName: String = "Created poll"
+    let deviceInfo = DeviceInfo()
+}
+
+struct CreatedPollFromDraftPayload: Payload {
+    static let eventName: String = "Created poll from draft"
+    let deviceInfo = DeviceInfo()
+}
+
+struct SharedResultsPayload: Payload {
+    static let eventName: String = "Shared results"
+    let deviceInfo = DeviceInfo()
+}
+
+struct CreatedDraftPayload: Payload {
+    static let eventName: String = "Created draft"
+    let deviceInfo = DeviceInfo()
+}
+
+struct JoinedGroupPayload: Payload {
+    static let eventName: String = "Joined group"
+    let deviceInfo = DeviceInfo()
+}
+
+struct SignedOutPayload: Payload {
+    static let eventName: String = "User signed out"
+    let deviceInfo = DeviceInfo()
+}
+
+

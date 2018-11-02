@@ -298,61 +298,61 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: - Actions
     @objc func saveAsDraft() {
-        if canDraft {
-            guard let type = questionType else {
-                print("warning! cannot save as draft before viewDidLoad")
-                return
-            }
-            switch type {
-            case .multipleChoice:
-                let question = mcPollBuilder.questionTextField.text ?? ""
-                var options = mcPollBuilder.getOptions()
-                if options.isEmpty {
-                    options.append("")
-                    options.append("")
-                }
-                if let loadedDraft = loadedMCDraft {
-                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
-                        .done { draft in
-                            self.getDrafts()
-                        }.catch { error in
-                            print("error: ", error)
-                        }
-                } else {
-                    CreateDraft(text: question, options: options).make()
-                        .done { draft in
-                            self.drafts.insert(draft, at: 0)
-                            self.updateDraftsCount()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                }
-                loadedMCDraft = nil
-                self.mcPollBuilder.reset()
-            
-            case .freeResponse:
-                let question = frPollBuilder.questionTextField.text ?? ""
-                if let loadedDraft = loadedFRDraft {
-                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
-                        .done { draft in
-                            self.getDrafts()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                } else {
-                    CreateDraft(text: question, options: []).make()
-                        .done { draft in
-                            self.drafts.insert(draft, at: 0)
-                            self.updateDraftsCount()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                }
-                loadedFRDraft = nil
-                self.frPollBuilder.questionTextField.text = ""
-            }
-            self.updateCanDraft(false)
+        if !canDraft { return }
+        guard let type = questionType else {
+            print("warning! cannot save as draft before viewDidLoad")
+            return
         }
+        switch type {
+        case .multipleChoice:
+            let question = mcPollBuilder.questionTextField.text ?? ""
+            var options = mcPollBuilder.getOptions()
+            if options.isEmpty {
+                options.append("")
+                options.append("")
+            }
+            if let loadedDraft = loadedMCDraft {
+                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
+                    .done { draft in
+                        self.getDrafts()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            } else {
+                CreateDraft(text: question, options: options).make()
+                    .done { draft in
+                        self.drafts.insert(draft, at: 0)
+                        self.updateDraftsCount()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            }
+            loadedMCDraft = nil
+            self.mcPollBuilder.reset()
+            
+        case .freeResponse:
+            let question = frPollBuilder.questionTextField.text ?? ""
+            if let loadedDraft = loadedFRDraft {
+                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
+                    .done { draft in
+                        self.getDrafts()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            } else {
+                CreateDraft(text: question, options: []).make()
+                    .done { draft in
+                        self.drafts.insert(draft, at: 0)
+                        self.updateDraftsCount()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            }
+            loadedFRDraft = nil
+            self.frPollBuilder.questionTextField.text = ""
+        }
+        self.updateCanDraft(false)
+        Analytics.shared.log(with: CreatedDraftPayload())
     }
     
     @objc func startPoll() {
@@ -374,7 +374,11 @@ class PollBuilderViewController: UIViewController {
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
         }
-        
+        if loadedMCDraft != nil || loadedFRDraft != nil {
+            Analytics.shared.log(with: CreatedPollFromDraftPayload())
+        } else {
+            Analytics.shared.log(with: CreatedPollPaylod())
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
