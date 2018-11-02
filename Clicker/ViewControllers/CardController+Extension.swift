@@ -306,6 +306,7 @@ extension CardController: SocketDelegate {
     
     func emitShareResults() {
         socket.socket.emit(Routes.serverShare, [])
+        Analytics.shared.log(with: SharedResultsPayload())
     }
     
     func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
