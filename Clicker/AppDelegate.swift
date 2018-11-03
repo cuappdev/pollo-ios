@@ -12,7 +12,6 @@ import FLEX
 import GoogleSignIn
 import Crashlytics
 import StoreKit
-import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {

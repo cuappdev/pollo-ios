@@ -272,6 +272,7 @@ class PollsViewController: UIViewController {
                         let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        Analytics.shared.log(with: CreatedGroupPayload())
                     }.catch { error in
                         print(error)
                         self.hideNewGroupActivityIndicatorView()
@@ -315,6 +316,7 @@ class PollsViewController: UIViewController {
                         self.updateJoinSessionButton(canJoin: false)
                         self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        Analytics.shared.log(with: JoinedGroupPayload())
                     }.catch { error in
                         print(error)
                         let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
