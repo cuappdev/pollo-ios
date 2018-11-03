@@ -14,7 +14,6 @@ target 'Clicker' do
   pod 'Google/SignIn'
   pod 'IGListKit'
   pod 'Presentr'
-  pod 'Siren'
   pod 'SnapKit'
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
