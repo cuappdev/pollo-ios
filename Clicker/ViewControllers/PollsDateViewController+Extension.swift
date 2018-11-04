@@ -90,7 +90,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, selectedMCChoice: nil)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
@@ -158,7 +158,7 @@ extension PollsDateViewController: SocketDelegate {
         }
         switch poll.questionType {
         case .freeResponse:
-            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, selectedMCChoice: latestPoll.selectedMCChoice)
+            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended)
             updateLatestPoll(with: updatedPoll)
         case .multipleChoice:
             updateLatestPoll(with: poll)
@@ -254,7 +254,6 @@ extension PollsDateViewController: SocketDelegate {
         } else {
             // User has polls for today, so just update latest poll for today
             let todayPolls = latestPollsDateModel.polls
-            poll.selectedMCChoice = pollsDateArray.last?.polls.last?.selectedMCChoice
             pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
         }
     }
