@@ -22,14 +22,12 @@ class PollMiscellaneousSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollMiscellaneousCell.self, for: self, at: index) as! PollMiscellaneousCell
-        print("configure")
         cell.configure(for: miscellaneousModel)
         cell.setNeedsUpdateConstraints()
         return cell
     }
     
     override func didUpdate(to object: Any) {
-        print("did update")
         miscellaneousModel = object as? PollMiscellaneousModel
     }
 }

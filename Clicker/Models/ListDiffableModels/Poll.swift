@@ -88,7 +88,8 @@ class Poll {
     }
     
     func getSelected() -> Any? {
-        if let userId = User.currentUser?.id, let selected = answers[userId] as? JSON {
+        guard let userId = User.currentUser?.id else { return nil }
+        if let selected = answers[userId] as? JSON {
             switch questionType {
             case .multipleChoice:
                 return selected.stringValue
@@ -97,6 +98,8 @@ class Poll {
                     return json.intValue
                 }
             }
+        } else if let selected = answers[userId] as? String {
+            return selected
         }
         return nil
     }
