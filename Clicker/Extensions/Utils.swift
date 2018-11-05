@@ -139,7 +139,7 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     let mcChoiceModels = poll.options.enumerated().map { (index, option) -> MCChoiceModel in
-        var isSelected = false
+        var isSelected: Bool
         if let selected = poll.getSelected() as? String {
             isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || selected == option
         } else {
