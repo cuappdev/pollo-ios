@@ -132,10 +132,18 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }
         case .frOption(optionModels: let updatedFROptionModels):
             switch pollOptionsModel.type {
-            case .frOption(optionModels: var frOptionModels):
+            case .frOption(optionModels: let frOptionModels):
                 let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
                 pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
+                let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
+                // Have to display arrow view if we've passed maxOptions
+                if updatedFROptionModels.count == maxOptions + 1 {
+                    hasOverflowOptions = true
+                    arrowView.isHidden = !hasOverflowOptions
+                    arrowView.toggle(show: !arrowView.isHidden, animated: false)
+                    collectionView.isScrollEnabled = hasOverflowOptions
+                }
             default:
                 return
             }
@@ -225,9 +233,7 @@ extension PollOptionsCell: ListAdapterDataSource {
         } else {
             guard let pollOptionsModel = pollOptionsModel else { return ListSectionController() }
             switch pollOptionsModel.type {
-            case .mcResult(_):
-                return SpaceSectionController(noResponses: false)
-            case .mcChoice(_):
+            case .mcResult(_), .mcChoice(_):
                 return SpaceSectionController(noResponses: false)
             case .frOption(let models):
                 return SpaceSectionController(noResponses: models.isEmpty)
