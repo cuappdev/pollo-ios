@@ -19,6 +19,8 @@
 		0CE800AC219376AC00F9D0BD /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE800AB219376AC00F9D0BD /* NetworkManager.swift */; };
 		0CE800AE2193780B00F9D0BD /* NetworkManager+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE800AD2193780B00F9D0BD /* NetworkManager+Session.swift */; };
 		0CE800B02193781700F9D0BD /* NetworkManager+Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE800AF2193781700F9D0BD /* NetworkManager+Draft.swift */; };
+		0CE800B22193940600F9D0BD /* NetworkManager+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE800B12193940600F9D0BD /* NetworkManager+User.swift */; };
+		0CE800B42193941600F9D0BD /* NetworkManager+Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE800B32193941600F9D0BD /* NetworkManager+Poll.swift */; };
 		0CF647832176970900535573 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF647822176970900535573 /* ArrowView.swift */; };
 		11FD0981A0ED52D8A3A94A4B /* Pods_Clicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B86F5D454E261FC9E5FA6F /* Pods_Clicker.framework */; };
 		6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */; };
@@ -154,6 +156,8 @@
 		0CE800AB219376AC00F9D0BD /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0CE800AD2193780B00F9D0BD /* NetworkManager+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+Session.swift"; sourceTree = "<group>"; };
 		0CE800AF2193781700F9D0BD /* NetworkManager+Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+Draft.swift"; sourceTree = "<group>"; };
+		0CE800B12193940600F9D0BD /* NetworkManager+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+User.swift"; sourceTree = "<group>"; };
+		0CE800B32193941600F9D0BD /* NetworkManager+Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+Poll.swift"; sourceTree = "<group>"; };
 		0CF647822176970900535573 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		47FB2FE5662510CA62E6D122 /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
 		6321B785209D42A800B3A934 /* FROptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionsDropDownView.swift; sourceTree = "<group>"; };
@@ -486,6 +490,8 @@
 				C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */,
 				0CE800AB219376AC00F9D0BD /* NetworkManager.swift */,
 				0CE800AD2193780B00F9D0BD /* NetworkManager+Session.swift */,
+				0CE800B12193940600F9D0BD /* NetworkManager+User.swift */,
+				0CE800B32193941600F9D0BD /* NetworkManager+Poll.swift */,
 				0CE800AF2193781700F9D0BD /* NetworkManager+Draft.swift */,
 			);
 			path = Quarks;
@@ -873,6 +879,7 @@
 				C28679DF2155A83000554F7B /* PollBuilderMCOptionSectionController.swift in Sources */,
 				6389C9522085953F00F78003 /* PollsCell.swift in Sources */,
 				C2649F77214232CF00370454 /* PollOptionsSectionController.swift in Sources */,
+				0CE800B42193941600F9D0BD /* NetworkManager+Poll.swift in Sources */,
 				C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */,
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
 				C22D5B582142E640005A0E29 /* Parser.swift in Sources */,
@@ -969,6 +976,7 @@
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,
 				C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
+				0CE800B22193940600F9D0BD /* NetworkManager+User.swift in Sources */,
 				C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */,
 				C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */,
 				C21C95C02145DB5400F58874 /* FROptionCell.swift in Sources */,
