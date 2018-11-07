@@ -42,7 +42,7 @@ class User: Codable {
     
 }
 
-struct UserSession {
+struct UserSession: Codable {
     
     let accessToken: String
     let refreshToken: String
