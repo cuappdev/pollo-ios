@@ -28,7 +28,7 @@ extension NetworkManager {
         let method: HTTPMethod = .delete
     }
     
-    class func deleteDraft(id: String, completion: @escaping ((Result<Draft>) -> Void)) {
+    class func deleteDraft(id: String, completion: @escaping ((Result<NoResponse>) -> Void)) {
         let route: String = "/drafts\(id)"
         let apiRequest = DeleteDraftRequest(route: route)
         performRequest(for: apiRequest, completion: completion)

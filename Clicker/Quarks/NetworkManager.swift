@@ -23,6 +23,8 @@ enum PolloAPIVersion {
     case none
 }
 
+struct NoResponse: Codable { }
+
 struct APIResponse<T: Codable>: Codable {
     let data: APIData<T>
     let success: Bool
