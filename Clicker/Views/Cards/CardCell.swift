@@ -150,7 +150,7 @@ class CardCell: UICollectionViewCell {
         case .mcResult(resultModels: _), .frOption(optionModels: _):
             guard let pollOptionsSectionController = adapter.sectionController(for: pollOptionsModel) as? PollOptionsSectionController else { return }
             let updatedPollOptionsModelType = buildPollOptionsModelType(from: poll, userRole: userRole)
-            // Make sure to call update before updating pollOptionsMOdel.type so that the
+            // Make sure to call update before updating pollOptionsModel.type so that
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
