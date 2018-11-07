@@ -41,7 +41,7 @@ class PollBuilderViewController: UIViewController {
     var dimmingView: UIView!
     
     // MARK: Data vars
-    var drafts: [Draft]!
+    var drafts: [Draft] = []
     var questionType: QuestionType!
     var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
@@ -420,10 +420,7 @@ class PollBuilderViewController: UIViewController {
     }
     
     func updateDraftsCount() {
-        var text = "Drafts (0)"
-        if let _ = drafts {
-            text = "Drafts (\(drafts.count))"
-        }
+        let text = "Drafts (\(drafts.count))"
         let attributes = [NSAttributedStringKey.font: UIFont._16MediumFont]
         let attributedTitle = NSMutableAttributedString(string: text, attributes: attributes)
         let range0 = NSRange(location: 0, length: 6)
