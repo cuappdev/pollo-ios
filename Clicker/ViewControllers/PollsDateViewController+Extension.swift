@@ -122,7 +122,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(name: session.name, code: session.code)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
     }
     
 }
@@ -131,7 +131,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewGroupControlsButtonTapped() {
         guard userRole == .admin else { return }
-        let groupControlsVC = GroupControlsViewController()
+        let groupControlsVC = GroupControlsViewController(session: session)
         self.navigationController?.pushViewController(groupControlsVC, animated: true)
     }
 

@@ -10,6 +10,12 @@ import UIKit
 
 class GroupControlsViewController: UIViewController {
 
+    // MARK: - View vars
+    var navigationTitleView: NavigationTitleView!
+
+    // MARK: - Data vars
+    var session: Session!
+
     // MARK: - Constants
     let navigtionTitle = "Group Controls"
     let backImageName = "back"
@@ -18,9 +24,13 @@ class GroupControlsViewController: UIViewController {
         return .lightContent
     }
 
+    init(session: Session) {
+        super.init(nibName: nil, bundle: nil)
+        self.session = session
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = navigtionTitle
         view.backgroundColor = .clickerBlack1
 
         setupNavBar()
@@ -32,7 +42,9 @@ class GroupControlsViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navigationTitleView = NavigationTitleView()
+        navigationTitleView.configure(primaryText: navigtionTitle, secondaryText: session.name)
+        self.navigationItem.titleView = navigationTitleView
 
         let backImage = UIImage(named: backImageName)?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
@@ -41,6 +53,10 @@ class GroupControlsViewController: UIViewController {
     // MARK: - Action
     @objc func goBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }
