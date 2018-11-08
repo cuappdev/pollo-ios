@@ -81,6 +81,8 @@
 		C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D5F52214F5FE900548255 /* PollsDateCell.swift */; };
 		C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524B209D51A600C7980F /* CardController+Extension.swift */; };
 		C271A0762193E78800EF12B4 /* GroupControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */; };
+		C271A0792193EE2B00EF12B4 /* PollsDateAttendanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0782193EE2B00EF12B4 /* PollsDateAttendanceCell.swift */; };
+		C271A07C2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A07B2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF52158747B00586D87 /* PollsDateViewController.swift */; };
@@ -219,6 +221,8 @@
 		C26D5F52214F5FE900548255 /* PollsDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateCell.swift; sourceTree = "<group>"; };
 		C270524B209D51A600C7980F /* CardController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardController+Extension.swift"; sourceTree = "<group>"; };
 		C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsViewController.swift; sourceTree = "<group>"; };
+		C271A0782193EE2B00EF12B4 /* PollsDateAttendanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateAttendanceCell.swift; sourceTree = "<group>"; };
+		C271A07B2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateAttendanceSectionController.swift; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C2833DF52158747B00586D87 /* PollsDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateViewController.swift; sourceTree = "<group>"; };
@@ -459,6 +463,7 @@
 		C2434CB72134710E00929C98 /* SectionControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C271A07A2193EFFB00EF12B4 /* GroupControlsSectionControllers */,
 				6332DAB0217BB4C0003E71F9 /* PollsViewControllerSectionControllers */,
 				6332DAB1217BB5B3003E71F9 /* CardSectionControllers */,
 				6332DAB2217BB62D003E71F9 /* SettingsSectionControllers */,
@@ -470,6 +475,22 @@
 				C20B57082138903B0091034F /* EmptyStateSectionController.swift */,
 			);
 			path = SectionControllers;
+			sourceTree = "<group>";
+		};
+		C271A0772193EE0E00EF12B4 /* GroupControls */ = {
+			isa = PBXGroup;
+			children = (
+				C271A0782193EE2B00EF12B4 /* PollsDateAttendanceCell.swift */,
+			);
+			path = GroupControls;
+			sourceTree = "<group>";
+		};
+		C271A07A2193EFFB00EF12B4 /* GroupControlsSectionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C271A07B2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift */,
+			);
+			path = GroupControlsSectionControllers;
 			sourceTree = "<group>";
 		};
 		C27429E11F8C252D006FAD31 /* Quarks */ = {
@@ -557,6 +578,7 @@
 		C7D6AF5D1F93DED9003ABA10 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C271A0772193EE0E00EF12B4 /* GroupControls */,
 				63ACEC75214D617800D555F1 /* Settings */,
 				6389C94C20858D3300F78003 /* HomeScreen */,
 				638406D12083CBC700483645 /* Cards */,
@@ -851,6 +873,7 @@
 				C2649F792142336D00370454 /* PollOptionsCell.swift in Sources */,
 				C2A0F7CB213A0BC200A28D75 /* PollMiscellaneousCell.swift in Sources */,
 				639B4D562093F975009D3309 /* PickQTypeViewController.swift in Sources */,
+				C271A0792193EE2B00EF12B4 /* PollsDateAttendanceCell.swift in Sources */,
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
 				0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */,
@@ -952,6 +975,7 @@
 				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
 				C2900D432146F72900566F25 /* String+Shared.swift in Sources */,
 				C203E564213330AC0016A147 /* DraftsViewController+Extension.swift in Sources */,
+				C271A07C2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift in Sources */,
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
 				C2113B1F214AD72800BBBB82 /* CurrentStateParser.swift in Sources */,
 				C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */,
