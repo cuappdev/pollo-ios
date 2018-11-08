@@ -21,7 +21,7 @@ class GroupControlsViewController: UIViewController {
     // MARK: - Data vars
     var adapter: ListAdapter!
     var session: Session!
-    var pollsDateModelArray: [PollsDateModel] = []
+    var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
 
     // MARK: - Constants
     let attendanceLabelTopPadding: CGFloat = 38
@@ -41,10 +41,10 @@ class GroupControlsViewController: UIViewController {
         return .lightContent
     }
 
-    init(session: Session, pollsDateModelArray: [PollsDateModel]) {
+    init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
         super.init(nibName: nil, bundle: nil)
         self.session = session
-        self.pollsDateModelArray = pollsDateModelArray
+        self.pollsDateAttendanceArray = pollsDateAttendanceArray
     }
 
     override func viewDidLoad() {
@@ -139,15 +139,15 @@ class GroupControlsViewController: UIViewController {
 extension GroupControlsViewController: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if pollsDateModelArray.count <= 3 {
-            return pollsDateModelArray
+        if pollsDateAttendanceArray.count <= 3 {
+            return pollsDateAttendanceArray
         }
         let viewAllModel = ViewAllModel()
-        return [pollsDateModelArray[0], pollsDateModelArray[1], pollsDateModelArray[2], viewAllModel]
+        return [pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], viewAllModel]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if object is PollsDateModel {
+        if object is PollsDateAttendanceModel {
             return PollsDateAttendanceSectionController(delegate: self)
         } else {
             return ViewAllSectionController(delegate: self)
@@ -162,7 +162,7 @@ extension GroupControlsViewController: ListAdapterDataSource {
 
 extension GroupControlsViewController: PollsDateAttendanceSectionControllerDelegate {
 
-    func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
+    func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
         // TODO
     }
 
@@ -171,7 +171,7 @@ extension GroupControlsViewController: PollsDateAttendanceSectionControllerDeleg
 extension GroupControlsViewController: ViewAllSectionControllerDelegate {
 
     func viewAllSectionControllerWasTapped() {
-        let attendanceVC = AttendanceViewController(pollsDateModelArray: pollsDateModelArray)
+        let attendanceVC = AttendanceViewController(pollsDateAttendanceArray: pollsDateAttendanceArray)
         self.navigationController?.pushViewController(attendanceVC, animated: true)
     }
 

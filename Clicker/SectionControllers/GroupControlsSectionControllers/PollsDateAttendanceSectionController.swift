@@ -9,13 +9,13 @@
 import IGListKit
 
 protocol PollsDateAttendanceSectionControllerDelegate {
-    func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel)
+    func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel)
 }
 
 class PollsDateAttendanceSectionController: ListSectionController {
 
     // MARK: - Data Vars
-    var pollsDateModel: PollsDateModel!
+    var pollsDateAttendanceModel: PollsDateAttendanceModel!
     var delegate: PollsDateAttendanceSectionControllerDelegate!
 
     // MARK: - Constants
@@ -34,24 +34,24 @@ class PollsDateAttendanceSectionController: ListSectionController {
 
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollsDateAttendanceCell.self, for: self, at: index) as! PollsDateAttendanceCell
-        cell.configure(for: pollsDateModel)
+        cell.configure(for: pollsDateAttendanceModel)
         return cell
     }
 
     override func didUpdate(to object: Any) {
-        pollsDateModel = object as? PollsDateModel
+        pollsDateAttendanceModel = object as? PollsDateAttendanceModel
     }
 
     override func didSelectItem(at index: Int) {
         guard let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? PollsDateAttendanceCell else { return }
         cell.toggleCheckBox()
-        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateModel)
+        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateAttendanceModel)
     }
 
     override func didDeselectItem(at index: Int) {
         guard let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? PollsDateAttendanceCell else { return }
         cell.toggleCheckBox()
-        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateModel)
+        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateAttendanceModel)
     }
 
 }

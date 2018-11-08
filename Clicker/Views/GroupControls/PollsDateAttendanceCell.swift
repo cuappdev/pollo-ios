@@ -69,8 +69,8 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     }
 
     // MARK: - Configure
-    func configure(for pollsDateModel: PollsDateModel) {
-        dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
+    func configure(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
+        dateLabel.text = reformatDateString(dateString: pollsDateAttendanceModel.model.date)
     }
 
     func toggleCheckBox() {
