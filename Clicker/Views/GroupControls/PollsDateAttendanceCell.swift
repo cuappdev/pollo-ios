@@ -11,10 +11,12 @@ import UIKit
 class PollsDateAttendanceCell: UICollectionViewCell {
 
     // MARK: - View vars
+    var containerView: UIView!
     var dateLabel: UILabel!
     var checkBoxImageView: UIImageView!
 
     // MARK: - Constants
+    let containerViewHeight: CGFloat = 47
     let contentViewCornerRadius: CGFloat = 6
     let dateLabelLeftPadding: CGFloat = 18
     let checkBoxImageViewRightPadding: CGFloat = 18
@@ -24,27 +26,35 @@ class PollsDateAttendanceCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .clickerGrey10
-        contentView.layer.cornerRadius = contentViewCornerRadius
-        contentView.clipsToBounds = true
         setupViews()
         setupConstraints()
     }
 
     // MARK: - Layout
     func setupViews() {
+        containerView = UIView()
+        containerView.backgroundColor = .clickerGrey10
+        containerView.layer.cornerRadius = contentViewCornerRadius
+        containerView.clipsToBounds = true
+        contentView.addSubview(containerView)
+
         dateLabel = UILabel()
         dateLabel.textColor = .white
         dateLabel.font = UIFont._16MediumFont
-        contentView.addSubview(dateLabel)
+        containerView.addSubview(dateLabel)
 
         checkBoxImageView = UIImageView()
         checkBoxImageView.image = UIImage(named: uncheckedImageName)
         checkBoxImageView.contentMode = .scaleAspectFit
-        contentView.addSubview(checkBoxImageView)
+        containerView.addSubview(checkBoxImageView)
     }
 
     func setupConstraints() {
+        containerView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(containerViewHeight)
+        }
+
         dateLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(dateLabelLeftPadding)
             make.centerY.equalToSuperview()
@@ -60,6 +70,10 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
         dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
+    }
+
+    func toggleCheckBox() {
+        checkBoxImageView.image = isSelected ? UIImage(named: <#T##String#>)
     }
 
     // MARK: - Helpers
