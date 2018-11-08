@@ -8,13 +8,22 @@
 
 import UIKit
 
+protocol NavigationTitleViewDelegate {
+    func navigationTitleViewGroupControlsButtonTapped()
+}
+
 class NavigationTitleView: UIView {
 
-    var name: String!
-    var code: String!
-    
+    // MARK: - View vars
     var nameLabel: UILabel!
     var codeLabel: UILabel!
+    var groupControlsButton: UIButton!
+
+    // MARK: - Data vars
+    var name: String!
+    var code: String!
+    var delegate: NavigationTitleViewDelegate?
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,14 +45,20 @@ class NavigationTitleView: UIView {
         codeLabel.font = ._12MediumFont
         codeLabel.textAlignment = .center
         addSubview(codeLabel)
+
+        groupControlsButton = UIButton()
+        groupControlsButton.backgroundColor = .clear
+        groupControlsButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
+        addSubview(groupControlsButton)
     }
     
-    func updateNameAndCode(name: String?, code: String?) {
+    func configure(name: String?, code: String?, delegate: NavigationTitleViewDelegate? = nil) {
         self.code = "Code: \(code ?? "")"
         if let _ = name { self.name = name } else { self.name = code }
 
         nameLabel.text = self.name
         codeLabel.text = self.code
+        self.delegate = delegate
     }
     
     func setupConstraints() {
@@ -60,7 +75,15 @@ class NavigationTitleView: UIView {
             make.top.equalTo(nameLabel.snp.bottom).offset(2)
             make.height.equalTo(15)
         }
-        
+
+        groupControlsButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
+    // MARK: - Action
+    @objc func groupControlsBtnTapped() {
+        delegate?.navigationTitleViewGroupControlsButtonTapped()
     }
     
     required init?(coder aDecoder: NSCoder) {
