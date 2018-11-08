@@ -9,8 +9,7 @@
 import IGListKit
 
 protocol PollsDateAttendanceSectionControllerDelegate {
-
-
+    func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel)
 }
 
 class PollsDateAttendanceSectionController: ListSectionController {
@@ -20,7 +19,7 @@ class PollsDateAttendanceSectionController: ListSectionController {
     var delegate: PollsDateAttendanceSectionControllerDelegate!
 
     // MARK: - Constants
-    let cellHeight: CGFloat = 47
+    let cellHeight: CGFloat = 61
 
     init(delegate: PollsDateAttendanceSectionControllerDelegate) {
         self.delegate = delegate
@@ -44,7 +43,9 @@ class PollsDateAttendanceSectionController: ListSectionController {
     }
 
     override func didSelectItem(at index: Int) {
+        let cell = collectionContext?.cellForItem(at: index, sectionController: self) as! PollsDateAttendanceCell
         
+        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateModel)
     }
 
 }
