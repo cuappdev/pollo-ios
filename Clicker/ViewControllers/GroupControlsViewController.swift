@@ -16,6 +16,7 @@ class GroupControlsViewController: UIViewController {
     var navigationTitleView: NavigationTitleView!
     var attendanceLabel: UILabel!
     var collectionView: UICollectionView!
+    var exportButton: UIButton!
 
     // MARK: - Data vars
     var adapter: ListAdapter!
@@ -23,13 +24,19 @@ class GroupControlsViewController: UIViewController {
     var pollsDateModelArray: [PollsDateModel] = []
 
     // MARK: - Constants
-    let navigtionTitle = "Group Controls"
-    let backImageName = "back"
-    let attendanceLabelText = "Attendance"
     let attendanceLabelTopPadding: CGFloat = 38
     let attendanceLabelHorizontalPadding: CGFloat = 16.5
     let collectionViewLineSpacing: CGFloat = 14
     let collectionViewTopPadding: CGFloat = 16
+    let collectionViewBottomPadding: CGFloat = 24
+    let exportButtonWidthScaleFactor: CGFloat = 0.43
+    let exportButtonHeight: CGFloat = 47
+    let exportButtonBorderWidth: CGFloat = 1
+    let exportButtonBottomPadding: CGFloat = 192.5
+    let navigtionTitle = "Group Controls"
+    let backImageName = "back"
+    let attendanceLabelText = "Attendance"
+    let exportButtonTitle = "Export"
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -78,7 +85,7 @@ class GroupControlsViewController: UIViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = true
+        collectionView.bounces = false
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
 
@@ -86,6 +93,15 @@ class GroupControlsViewController: UIViewController {
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
+
+        exportButton = UIButton()
+        exportButton.setTitle(exportButtonTitle, for: .normal)
+        exportButton.setTitleColor(.clickerGrey10, for: .normal)
+        exportButton.layer.cornerRadius = exportButtonHeight / 2.0
+        exportButton.layer.borderColor = UIColor.white.withAlphaComponent(0.9).cgColor
+        exportButton.layer.borderWidth = exportButtonBorderWidth
+        view.addSubview(exportButton)
+        view.bringSubview(toFront: exportButton)
     }
 
     func setupConstraints() {
@@ -99,7 +115,14 @@ class GroupControlsViewController: UIViewController {
             make.leading.equalTo(attendanceLabel)
             make.trailing.equalTo(attendanceLabel)
             make.top.equalTo(attendanceLabel.snp.bottom).offset(collectionViewTopPadding)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(exportButton.snp.top).inset(collectionViewBottomPadding)
+        }
+
+        exportButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(exportButtonWidthScaleFactor)
+            make.height.equalTo(exportButtonHeight)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(exportButtonBottomPadding)
         }
     }
 
@@ -117,11 +140,19 @@ class GroupControlsViewController: UIViewController {
 extension GroupControlsViewController: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return pollsDateModelArray
+        if pollsDateModelArray.count <= 3 {
+            return pollsDateModelArray
+        }
+        let viewAllModel = ViewAllModel()
+        return [pollsDateModelArray[0], pollsDateModelArray[1], pollsDateModelArray[2], viewAllModel]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return PollsDateAttendanceSectionController(delegate: self)
+        if object is PollsDateModel {
+            return PollsDateAttendanceSectionController(delegate: self)
+        } else {
+            return ViewAllSectionController()
+        }
     }
 
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
