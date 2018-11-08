@@ -26,7 +26,6 @@ class GroupControlsViewController: UIViewController {
     // MARK: - Constants
     let attendanceLabelTopPadding: CGFloat = 38
     let attendanceLabelHorizontalPadding: CGFloat = 16.5
-    let collectionViewLineSpacing: CGFloat = 14
     let collectionViewTopPadding: CGFloat = 16
     let collectionViewBottomPadding: CGFloat = 24
     let exportButtonWidthScaleFactor: CGFloat = 0.43
@@ -80,7 +79,6 @@ class GroupControlsViewController: UIViewController {
         view.addSubview(attendanceLabel)
 
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = collectionViewLineSpacing
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
@@ -173,7 +171,8 @@ extension GroupControlsViewController: PollsDateAttendanceSectionControllerDeleg
 extension GroupControlsViewController: ViewAllSectionControllerDelegate {
 
     func viewAllSectionControllerWasTapped() {
-        // TODO
+        let attendanceVC = AttendanceViewController(pollsDateModelArray: pollsDateModelArray)
+        self.navigationController?.pushViewController(attendanceVC, animated: true)
     }
 
 }
