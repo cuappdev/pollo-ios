@@ -86,6 +86,7 @@
 		C271A07E2193F58200EF12B4 /* ViewAllModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A07D2193F58200EF12B4 /* ViewAllModel.swift */; };
 		C271A0802193F62800EF12B4 /* ViewAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A07F2193F62800EF12B4 /* ViewAllCell.swift */; };
 		C271A0822193F80400EF12B4 /* ViewAllSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0812193F80400EF12B4 /* ViewAllSectionController.swift */; };
+		C271A0942194026100EF12B4 /* AttendanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0932194026100EF12B4 /* AttendanceViewController.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF52158747B00586D87 /* PollsDateViewController.swift */; };
@@ -229,6 +230,7 @@
 		C271A07D2193F58200EF12B4 /* ViewAllModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllModel.swift; sourceTree = "<group>"; };
 		C271A07F2193F62800EF12B4 /* ViewAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllCell.swift; sourceTree = "<group>"; };
 		C271A0812193F80400EF12B4 /* ViewAllSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSectionController.swift; sourceTree = "<group>"; };
+		C271A0932194026100EF12B4 /* AttendanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceViewController.swift; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C2833DF52158747B00586D87 /* PollsDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateViewController.swift; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 				0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */,
 				63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */,
 				C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */,
+				C271A0932194026100EF12B4 /* AttendanceViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				C271A0762193E78800EF12B4 /* GroupControlsViewController.swift in Sources */,
 				0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */,
 				C2BB14BA209469CD0081C35D /* Utils.swift in Sources */,
+				C271A0942194026100EF12B4 /* AttendanceViewController.swift in Sources */,
 				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
 				63A4A6462094D41600523AE6 /* MCPollBuilderView.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,

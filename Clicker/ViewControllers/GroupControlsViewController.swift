@@ -152,7 +152,7 @@ extension GroupControlsViewController: ListAdapterDataSource {
         if object is PollsDateModel {
             return PollsDateAttendanceSectionController(delegate: self)
         } else {
-            return ViewAllSectionController()
+            return ViewAllSectionController(delegate: self)
         }
     }
 
@@ -165,6 +165,14 @@ extension GroupControlsViewController: ListAdapterDataSource {
 extension GroupControlsViewController: PollsDateAttendanceSectionControllerDelegate {
 
     func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
+        // TODO
+    }
+
+}
+
+extension GroupControlsViewController: ViewAllSectionControllerDelegate {
+
+    func viewAllSectionControllerWasTapped() {
         // TODO
     }
 

@@ -8,13 +8,22 @@
 
 import IGListKit
 
+protocol ViewAllSectionControllerDelegate {
+    func viewAllSectionControllerWasTapped()
+}
+
 class ViewAllSectionController: ListSectionController {
 
     // MARK: - Data vars
     var viewAllModel: ViewAllModel!
+    var delegate: ViewAllSectionControllerDelegate?
 
     // MARK: - Constants
     let cellHeight: CGFloat = 31
+
+    init(delegate: ViewAllSectionControllerDelegate) {
+        self.delegate = delegate
+    }
 
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -31,5 +40,9 @@ class ViewAllSectionController: ListSectionController {
 
     override func didUpdate(to object: Any) {
         self.viewAllModel = object as? ViewAllModel
+    }
+
+    override func didSelectItem(at index: Int) {
+        delegate?.viewAllSectionControllerWasTapped()
     }
 }
