@@ -80,6 +80,7 @@
 		C26D5F51214F5F3700548255 /* PollsDateSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D5F50214F5F3700548255 /* PollsDateSectionController.swift */; };
 		C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D5F52214F5FE900548255 /* PollsDateCell.swift */; };
 		C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C270524B209D51A600C7980F /* CardController+Extension.swift */; };
+		C271A0762193E78800EF12B4 /* GroupControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
 		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF52158747B00586D87 /* PollsDateViewController.swift */; };
@@ -217,6 +218,7 @@
 		C26D5F50214F5F3700548255 /* PollsDateSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateSectionController.swift; sourceTree = "<group>"; };
 		C26D5F52214F5FE900548255 /* PollsDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateCell.swift; sourceTree = "<group>"; };
 		C270524B209D51A600C7980F /* CardController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardController+Extension.swift"; sourceTree = "<group>"; };
+		C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsViewController.swift; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
 		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C2833DF52158747B00586D87 /* PollsDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateViewController.swift; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 				C203E56121332FA30016A147 /* PollsViewController+Extension.swift */,
 				0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */,
 				63ACEC6F214B378E00D555F1 /* SettingsViewController.swift */,
+				C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -853,6 +856,7 @@
 				0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,
+				C271A0762193E78800EF12B4 /* GroupControlsViewController.swift in Sources */,
 				0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */,
 				C2BB14BA209469CD0081C35D /* Utils.swift in Sources */,
 				C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */,
