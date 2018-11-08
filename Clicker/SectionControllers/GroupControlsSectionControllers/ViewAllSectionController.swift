@@ -45,4 +45,8 @@ class ViewAllSectionController: ListSectionController {
     override func didSelectItem(at index: Int) {
         delegate?.viewAllSectionControllerWasTapped()
     }
+
+    override func didDeselectItem(at index: Int) {
+        delegate?.viewAllSectionControllerWasTapped()
+    }
 }

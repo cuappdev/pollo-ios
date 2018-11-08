@@ -19,7 +19,7 @@ class AttendanceViewController: UIViewController {
     // MARK: - Data vars
     var adapter: ListAdapter!
     var session: Session!
-    var pollsDateModelArray: [PollsDateModel] = []
+    var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
 
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 30.5
@@ -38,9 +38,9 @@ class AttendanceViewController: UIViewController {
         return .lightContent
     }
 
-    init(pollsDateModelArray: [PollsDateModel]) {
+    init(pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
         super.init(nibName: nil, bundle: nil)
-        self.pollsDateModelArray = pollsDateModelArray
+        self.pollsDateAttendanceArray = pollsDateAttendanceArray
     }
 
     override func viewDidLoad() {
@@ -129,7 +129,7 @@ class AttendanceViewController: UIViewController {
 extension AttendanceViewController: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return pollsDateModelArray
+        return pollsDateAttendanceArray
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -144,7 +144,7 @@ extension AttendanceViewController: ListAdapterDataSource {
 
 extension AttendanceViewController: PollsDateAttendanceSectionControllerDelegate {
 
-    func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
+    func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
         // TODO
     }
 

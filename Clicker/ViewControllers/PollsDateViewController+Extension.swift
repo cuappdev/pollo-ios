@@ -131,7 +131,8 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewGroupControlsButtonTapped() {
         guard userRole == .admin else { return }
-        let groupControlsVC = GroupControlsViewController(session: session, pollsDateModelArray: pollsDateArray)
+        let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
+        let groupControlsVC = GroupControlsViewController(session: session, pollsDateAttendanceArray: pollsDateAttendanceArray)
         self.navigationController?.pushViewController(groupControlsVC, animated: true)
     }
 
