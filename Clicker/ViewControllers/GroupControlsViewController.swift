@@ -87,6 +87,7 @@ class GroupControlsViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.backgroundColor = .clear
+        collectionView.allowsMultipleSelection = true
         view.addSubview(collectionView)
 
         let updater = ListAdapterUpdater()
@@ -162,5 +163,9 @@ extension GroupControlsViewController: ListAdapterDataSource {
 }
 
 extension GroupControlsViewController: PollsDateAttendanceSectionControllerDelegate {
+
+    func pollsDateAttendanceSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
+        // TODO
+    }
 
 }

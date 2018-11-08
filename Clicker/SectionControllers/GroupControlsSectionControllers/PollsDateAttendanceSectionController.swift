@@ -43,8 +43,14 @@ class PollsDateAttendanceSectionController: ListSectionController {
     }
 
     override func didSelectItem(at index: Int) {
-        let cell = collectionContext?.cellForItem(at: index, sectionController: self) as! PollsDateAttendanceCell
-        
+        guard let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? PollsDateAttendanceCell else { return }
+        cell.toggleCheckBox()
+        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateModel)
+    }
+
+    override func didDeselectItem(at index: Int) {
+        guard let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? PollsDateAttendanceCell else { return }
+        cell.toggleCheckBox()
         delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateModel)
     }
 

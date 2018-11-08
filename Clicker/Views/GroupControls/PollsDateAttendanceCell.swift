@@ -22,6 +22,7 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     let checkBoxImageViewRightPadding: CGFloat = 18
     let checkBoxImageViewLength: CGFloat = 23
     let uncheckedImageName = "greyEmptyCircle"
+    let checkedImageName = "option_filled"
 
 
     override init(frame: CGRect) {
@@ -73,7 +74,7 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     }
 
     func toggleCheckBox() {
-        checkBoxImageView.image = isSelected ? UIImage(named: <#T##String#>)
+        checkBoxImageView.image = isSelected ? UIImage(named: checkedImageName) : UIImage(named: uncheckedImageName)
     }
 
     // MARK: - Helpers
