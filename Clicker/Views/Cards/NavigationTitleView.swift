@@ -15,13 +15,11 @@ protocol NavigationTitleViewDelegate {
 class NavigationTitleView: UIView {
 
     // MARK: - View vars
-    var nameLabel: UILabel!
-    var codeLabel: UILabel!
+    var primaryLabel: UILabel!
+    var secondaryLabel: UILabel!
     var groupControlsButton: UIButton!
 
     // MARK: - Data vars
-    var name: String!
-    var code: String!
     var delegate: NavigationTitleViewDelegate?
 
     
@@ -33,18 +31,18 @@ class NavigationTitleView: UIView {
     }
     
     func setupViews() {
-        nameLabel = UILabel()
-        nameLabel.textColor = .white
-        nameLabel.font = ._16SemiboldFont
-        nameLabel.textAlignment = .center
-        addSubview(nameLabel)
+        primaryLabel = UILabel()
+        primaryLabel.textColor = .white
+        primaryLabel.font = ._16SemiboldFont
+        primaryLabel.textAlignment = .center
+        addSubview(primaryLabel)
     
         
-        codeLabel = UILabel()
-        codeLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        codeLabel.font = ._12MediumFont
-        codeLabel.textAlignment = .center
-        addSubview(codeLabel)
+        secondaryLabel = UILabel()
+        secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)
+        secondaryLabel.font = ._12MediumFont
+        secondaryLabel.textAlignment = .center
+        addSubview(secondaryLabel)
 
         groupControlsButton = UIButton()
         groupControlsButton.backgroundColor = .clear
@@ -52,27 +50,24 @@ class NavigationTitleView: UIView {
         addSubview(groupControlsButton)
     }
     
-    func configure(name: String?, code: String?, delegate: NavigationTitleViewDelegate? = nil) {
-        self.code = "Code: \(code ?? "")"
-        if let _ = name { self.name = name } else { self.name = code }
-
-        nameLabel.text = self.name
-        codeLabel.text = self.code
+    func configure(primaryText: String, secondaryText: String, delegate: NavigationTitleViewDelegate? = nil) {
+        primaryLabel.text = primaryText
+        secondaryLabel.text = secondaryText
         self.delegate = delegate
     }
     
     func setupConstraints() {
-        nameLabel.snp.makeConstraints { make in
+        primaryLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
             make.bottom.equalTo(self.snp.centerY)
             make.height.equalTo(19)
         }
         
-        codeLabel.snp.makeConstraints { make in
+        secondaryLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.top.equalTo(nameLabel.snp.bottom).offset(2)
+            make.top.equalTo(primaryLabel.snp.bottom).offset(2)
             make.height.equalTo(15)
         }
 

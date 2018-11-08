@@ -164,7 +164,7 @@ class CardController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(name: session.name, code: session.code)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
