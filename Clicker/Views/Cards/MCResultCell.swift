@@ -19,6 +19,8 @@ class MCResultCell: UICollectionViewCell {
     var highlightView: UIView!
     
     // MARK: - Data vars
+    var index: Int!
+    var correctAnswer: String?
     var percentSelected: Float!
     var highlightViewWidthConstraint: Constraint!
     var didLayoutConstraints: Bool = false
@@ -118,21 +120,34 @@ class MCResultCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for resultModel: MCResultModel, userRole: UserRole) {
+    func configure(for resultModel: MCResultModel, userRole: UserRole, correctAnswer: String?, index: Int) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
         percentSelected = resultModel.percentSelected
+        self.correctAnswer = correctAnswer
+        self.index = index
         switch userRole {
         case .admin:
             highlightView.backgroundColor = .clickerGreen0
         case .member:
             let isSelected = resultModel.isSelected
-            highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+            let answer = intToMCOption(index)
+            if let correctAnswer = correctAnswer {
+                if isSelected {
+                    highlightView.backgroundColor = answer == correctAnswer ? .clickerGreen0 : .grapefruit
+                    optionLabel.textColor = .black
+                } else {
+                    highlightView.backgroundColor = .clickerGrey5
+                    optionLabel.textColor = answer == correctAnswer ? .black : .clickerGrey2
+                }
+            } else {
+                highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+            }
         }
     }
 
     // MARK: - Updates
-    func update(with resultModel: MCResultModel) {
+    func update(with resultModel: MCResultModel, correctAnswer: String?) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
         percentSelected = resultModel.percentSelected
