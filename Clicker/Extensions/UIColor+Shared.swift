@@ -19,6 +19,7 @@ extension UIColor {
     @nonobjc static let clickerGreen2 = UIColor(red: 6/255, green: 184/255, blue: 158/255, alpha: 0.19)
     @nonobjc static let aquaMarine = UIColor(red: 66/255, green: 219/255, blue: 197/255, alpha: 1.0)
     @nonobjc static let bluishGreen = UIColor(red: 10/255, green: 161/255, blue: 127/255, alpha: 1.0)
+    @nonobjc static let grapefruit = UIColor(red: 249.0 / 255.0, green: 93.0 / 255.0, blue: 93.0 / 255.0, alpha: 1.0)
     @nonobjc static let clickerGrey0 = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1.0)
     @nonobjc static let clickerGrey1 = UIColor(red: 229/255, green: 231/255, blue: 237/255, alpha: 1.0)
     @nonobjc static let clickerGrey2 = UIColor(red: 158/255, green: 167/255, blue: 179/255, alpha: 1.0)
