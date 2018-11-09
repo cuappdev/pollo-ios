@@ -9,6 +9,10 @@
 import UIKit
 import IGListKit
 
+protocol AttendanceViewControllerDelegate {
+    func attendanceViewControllerWillDisappear(with pollsDateAttendanceArray: [PollsDateAttendanceModel])
+}
+
 class AttendanceViewController: UIViewController {
 
     // MARK: - View vars
@@ -17,9 +21,17 @@ class AttendanceViewController: UIViewController {
     var exportButton: UIButton!
 
     // MARK: - Data vars
+    var delegate: AttendanceViewControllerDelegate!
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
+    var isExportable: Bool = false {
+        didSet {
+            if exportButton != nil {
+                updateExportButton(for: isExportable)
+            }
+        }
+    }
 
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 30.5
@@ -38,8 +50,9 @@ class AttendanceViewController: UIViewController {
         return .lightContent
     }
 
-    init(pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
+    init(delegate: AttendanceViewControllerDelegate,pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
         super.init(nibName: nil, bundle: nil)
+        self.delegate = delegate
         self.pollsDateAttendanceArray = pollsDateAttendanceArray
     }
 
@@ -50,6 +63,10 @@ class AttendanceViewController: UIViewController {
         setupNavBar()
         setupViews()
         setupConstraints()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate.attendanceViewControllerWillDisappear(with: pollsDateAttendanceArray)
     }
 
     func setupNavBar() {
@@ -87,12 +104,12 @@ class AttendanceViewController: UIViewController {
 
         exportButton = UIButton()
         exportButton.setTitle(exportButtonTitle, for: .normal)
-        exportButton.setTitleColor(.clickerGrey10, for: .normal)
         exportButton.layer.cornerRadius = exportButtonHeight / 2.0
-        exportButton.layer.borderColor = UIColor.white.withAlphaComponent(0.9).cgColor
         exportButton.layer.borderWidth = exportButtonBorderWidth
         view.addSubview(exportButton)
         view.bringSubview(toFront: exportButton)
+
+        isExportable = pollsDateAttendanceArray.contains(where: { $0.isSelected })
     }
 
     func setupConstraints() {
@@ -111,13 +128,21 @@ class AttendanceViewController: UIViewController {
         }
     }
 
+    func updateExportButton(for isExportable: Bool) {
+        let titleColor: UIColor = isExportable ? .white : .clickerGrey2
+        let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
+        let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)
+        exportButton.setTitleColor(titleColor, for: .normal)
+        exportButton.backgroundColor = backgroundColor
+        exportButton.layer.borderColor = borderColor.cgColor
+    }
+
     // MARK: - Action
     @objc func selectAllBtnPressed() {
-        let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { (model) -> PollsDateAttendanceModel in
-            return PollsDateAttendanceModel(model: model.model, isSelected: true)
-        }
+        let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { PollsDateAttendanceModel(model: $0.model, isSelected: true) }
         pollsDateAttendanceArray = selectedPollsDateAttendanceArray
         adapter.performUpdates(animated: false, completion: nil)
+        isExportable = true
     }
 
     @objc func goBack() {
@@ -149,7 +174,7 @@ extension AttendanceViewController: ListAdapterDataSource {
 extension AttendanceViewController: PollsDateAttendanceSectionControllerDelegate {
 
     func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
-        // TODO
+        isExportable = pollsDateAttendanceArray.contains(where: { $0.isSelected })
     }
 
 }
