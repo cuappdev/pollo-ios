@@ -75,7 +75,7 @@ extension CardController: PollSectionControllerDelegate {
 
 extension CardController: PollBuilderViewControllerDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         

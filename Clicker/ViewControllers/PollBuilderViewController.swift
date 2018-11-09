@@ -12,11 +12,12 @@ import Presentr
 protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
+    func updateCorrectAnswer(correctAnswer: String?)
     var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?)
     func showNavigationBar()
 }
 
@@ -43,6 +44,7 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: Data vars
     var drafts: [Draft]!
+    var correctAnswer: String?
     var questionType: QuestionType!
     var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
@@ -395,10 +397,10 @@ class PollBuilderViewController: UIViewController {
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text ?? ""
-            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live)
+            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
             let question = frPollBuilder.questionTextField.text ?? ""
-            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
+            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
         
     }
