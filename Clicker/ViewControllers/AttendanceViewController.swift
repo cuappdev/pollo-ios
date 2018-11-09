@@ -69,7 +69,7 @@ class AttendanceViewController: UIViewController {
         delegate.attendanceViewControllerWillDisappear(with: pollsDateAttendanceArray)
     }
 
-    func setupNavBar() {
+    private func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -85,7 +85,7 @@ class AttendanceViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = selectAllBarButtonItem
     }
 
-    func setupViews() {
+    private func setupViews() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -112,7 +112,7 @@ class AttendanceViewController: UIViewController {
         isExportable = pollsDateAttendanceArray.contains(where: { $0.isSelected })
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(collectionViewHorizontalPadding)
             make.trailing.equalToSuperview().inset(collectionViewHorizontalPadding)
@@ -128,7 +128,7 @@ class AttendanceViewController: UIViewController {
         }
     }
 
-    func updateExportButton(for isExportable: Bool) {
+    private func updateExportButton(for isExportable: Bool) {
         let titleColor: UIColor = isExportable ? .white : .clickerGrey2
         let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
         let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)

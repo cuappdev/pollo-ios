@@ -14,6 +14,12 @@ class GroupControlsViewController: UIViewController {
 
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
+    var numMembersLabel: UILabel!
+    var numPollsLabel: UILabel!
+    var codeLabel: UILabel!
+    var separatorLineView1: UIView!
+    var separatorLineView2: UIView!
+    var infoStackView: UIStackView!
     var attendanceLabel: UILabel!
     var collectionView: UICollectionView!
     var exportButton: UIButton!
@@ -31,13 +37,18 @@ class GroupControlsViewController: UIViewController {
     }
 
     // MARK: - Constants
+    let separatorLineViewWidth: CGFloat = 0.5
     let attendanceLabelTopPadding: CGFloat = 38
     let attendanceLabelHorizontalPadding: CGFloat = 16.5
+    let infoStackViewTopPadding: CGFloat = 28
+    let infoStackViewHorizontalPadding: CGFloat = 18
     let collectionViewTopPadding: CGFloat = 16
     let collectionViewBottomPadding: CGFloat = 24
+    let collectionViewHeight: CGFloat = 238
     let exportButtonWidthScaleFactor: CGFloat = 0.43
     let exportButtonHeight: CGFloat = 47
     let exportButtonBorderWidth: CGFloat = 1
+    let exportButtonTopPadding: CGFloat = 30
     let exportButtonBottomPadding: CGFloat = 192.5
     let navigtionTitle = "Group Controls"
     let backImageName = "back"
@@ -63,7 +74,7 @@ class GroupControlsViewController: UIViewController {
         setupConstraints()
     }
 
-    func setupNavBar() {
+    private func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -77,7 +88,40 @@ class GroupControlsViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
     }
 
-    func setupViews() {
+    private func setupViews() {
+        numMembersLabel = UILabel()
+        numMembersLabel.text = "2 members"
+        numMembersLabel.textColor = UIColor.white.withAlphaComponent(0.75)
+        numMembersLabel.font = ._16MediumFont
+        numMembersLabel.textAlignment = .center
+
+        numPollsLabel = UILabel()
+        let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
+            return result + pollsDateAttendanceModel.model.polls.count
+        }
+        numPollsLabel.text = "\(numPolls) polls"
+        numPollsLabel.textColor = UIColor.white.withAlphaComponent(0.75)
+        numPollsLabel.font = ._16MediumFont
+        numPollsLabel.textAlignment = .center
+
+        codeLabel = UILabel()
+        codeLabel.text = "Code: \(session.code)"
+        codeLabel.textColor = UIColor.white.withAlphaComponent(0.75)
+        codeLabel.font = ._16MediumFont
+        codeLabel.textAlignment = .center
+
+        separatorLineView1 = UIView()
+        separatorLineView1.backgroundColor = .clickerGrey14
+
+        separatorLineView2 = UIView()
+        separatorLineView2.backgroundColor = .clickerGrey14
+
+        infoStackView = UIStackView(arrangedSubviews: [numMembersLabel, separatorLineView1, numPollsLabel, separatorLineView2, codeLabel])
+        infoStackView.alignment = .center
+        infoStackView.axis = .horizontal
+        infoStackView.distribution = .fillProportionally
+        view.addSubview(infoStackView)
+
         attendanceLabel = UILabel()
         attendanceLabel.text = attendanceLabelText
         attendanceLabel.font = ._21SemiboldFont
@@ -119,9 +163,26 @@ class GroupControlsViewController: UIViewController {
         }
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
+        infoStackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(infoStackViewTopPadding)
+            make.centerX.equalToSuperview()
+            make.leading.equalToSuperview().offset(infoStackViewHorizontalPadding)
+            make.trailing.equalToSuperview().inset(infoStackViewHorizontalPadding)
+        }
+
+        separatorLineView1.snp.makeConstraints { make in
+            make.height.equalTo(infoStackView)
+            make.width.equalTo(separatorLineViewWidth)
+        }
+
+        separatorLineView2.snp.makeConstraints { make in
+            make.height.equalTo(separatorLineView1)
+            make.width.equalTo(separatorLineView1)
+        }
+
         attendanceLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(attendanceLabelTopPadding)
+            make.top.equalTo(infoStackView.snp.bottom).offset(attendanceLabelTopPadding)
             make.leading.equalToSuperview().offset(attendanceLabelHorizontalPadding)
             make.trailing.equalToSuperview().inset(attendanceLabelHorizontalPadding)
         }
@@ -130,18 +191,18 @@ class GroupControlsViewController: UIViewController {
             make.leading.equalTo(attendanceLabel)
             make.trailing.equalTo(attendanceLabel)
             make.top.equalTo(attendanceLabel.snp.bottom).offset(collectionViewTopPadding)
-            make.bottom.equalTo(exportButton.snp.top).inset(collectionViewBottomPadding)
+            make.height.equalTo(collectionViewHeight)
         }
 
         exportButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(exportButtonWidthScaleFactor)
             make.height.equalTo(exportButtonHeight)
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(exportButtonBottomPadding)
+            make.top.equalTo(collectionView.snp.bottom).offset(exportButtonTopPadding)
         }
     }
 
-    func updateExportButton(for isExportable: Bool) {
+    private func updateExportButton(for isExportable: Bool) {
         let titleColor: UIColor = isExportable ? .white : .clickerGrey2
         let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
         let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)
