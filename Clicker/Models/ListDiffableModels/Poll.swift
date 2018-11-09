@@ -52,6 +52,7 @@ class Poll {
     var upvotes: [String:[String]]
     var state: PollState
     var selectedMCChoice: String?
+    var correctAnswer: String?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
@@ -62,7 +63,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, selectedMCChoice: String?) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, selectedMCChoice: String?, correctAnswer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -72,7 +73,7 @@ class Poll {
         self.upvotes = [:]
         self.state = state
         self.selectedMCChoice = selectedMCChoice
-        
+        self.correctAnswer = correctAnswer
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
 
     }
@@ -88,6 +89,7 @@ class Poll {
         self.state = updatedPollState ?? poll.state
         self.selectedMCChoice = poll.selectedMCChoice
         self.startTime = poll.startTime
+        self.correctAnswer = poll.correctAnswer
     }
 
     init(poll: Poll, state: PollState) {
@@ -101,6 +103,7 @@ class Poll {
         self.state = state
         self.selectedMCChoice = poll.selectedMCChoice
         self.startTime = poll.startTime
+        self.correctAnswer = poll.correctAnswer
     }
 
     // MARK: - Public
