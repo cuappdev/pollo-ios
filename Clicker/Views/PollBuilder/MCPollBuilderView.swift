@@ -200,6 +200,7 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
     }
 
     func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool) {
+        pollBuilderDelegate.updateCorrectAnswer(correctAnswer: isCorrect ? intToMCOption(index) : nil)
         if isCorrect {
             var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
             mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
