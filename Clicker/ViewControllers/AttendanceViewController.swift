@@ -113,7 +113,11 @@ class AttendanceViewController: UIViewController {
 
     // MARK: - Action
     @objc func selectAllBtnPressed() {
-
+        let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { (model) -> PollsDateAttendanceModel in
+            return PollsDateAttendanceModel(model: model.model, isSelected: true)
+        }
+        pollsDateAttendanceArray = selectedPollsDateAttendanceArray
+        adapter.performUpdates(animated: false, completion: nil)
     }
 
     @objc func goBack() {

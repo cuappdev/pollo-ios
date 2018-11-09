@@ -15,6 +15,10 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     var dateLabel: UILabel!
     var checkBoxImageView: UIImageView!
 
+    // MARK: - Data vars
+    var checkedImage: UIImage!
+    var uncheckedImage: UIImage!
+
     // MARK: - Constants
     let containerViewHeight: CGFloat = 47
     let contentViewCornerRadius: CGFloat = 6
@@ -44,8 +48,11 @@ class PollsDateAttendanceCell: UICollectionViewCell {
         dateLabel.font = UIFont._16MediumFont
         containerView.addSubview(dateLabel)
 
+        checkedImage = UIImage(named: checkedImageName)
+        uncheckedImage = UIImage(named: uncheckedImageName)
+
         checkBoxImageView = UIImageView()
-        checkBoxImageView.image = UIImage(named: uncheckedImageName)
+        checkBoxImageView.image = uncheckedImage
         checkBoxImageView.contentMode = .scaleAspectFit
         containerView.addSubview(checkBoxImageView)
     }
@@ -71,10 +78,7 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
         dateLabel.text = reformatDateString(dateString: pollsDateAttendanceModel.model.date)
-    }
-
-    func toggleCheckBox() {
-        checkBoxImageView.image = isSelected ? UIImage(named: checkedImageName) : UIImage(named: uncheckedImageName)
+        checkBoxImageView.image = pollsDateAttendanceModel.isSelected ? checkedImage : uncheckedImage
     }
 
     // MARK: - Helpers
