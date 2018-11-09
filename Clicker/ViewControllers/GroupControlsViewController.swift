@@ -41,15 +41,14 @@ class GroupControlsViewController: UIViewController {
     let attendanceLabelTopPadding: CGFloat = 38
     let attendanceLabelHorizontalPadding: CGFloat = 16.5
     let infoStackViewTopPadding: CGFloat = 28
-    let infoStackViewHorizontalPadding: CGFloat = 18
+    let infoStackViewHorizontalPadding: CGFloat = 30
     let collectionViewTopPadding: CGFloat = 16
     let collectionViewBottomPadding: CGFloat = 24
-    let collectionViewHeight: CGFloat = 238
+    let collectionViewHeight: CGFloat = 218
     let exportButtonWidthScaleFactor: CGFloat = 0.43
     let exportButtonHeight: CGFloat = 47
     let exportButtonBorderWidth: CGFloat = 1
-    let exportButtonTopPadding: CGFloat = 30
-    let exportButtonBottomPadding: CGFloat = 192.5
+    let exportButtonTopPadding: CGFloat = 12
     let navigtionTitle = "Group Controls"
     let backImageName = "back"
     let attendanceLabelText = "Attendance"
@@ -119,7 +118,7 @@ class GroupControlsViewController: UIViewController {
         infoStackView = UIStackView(arrangedSubviews: [numMembersLabel, separatorLineView1, numPollsLabel, separatorLineView2, codeLabel])
         infoStackView.alignment = .center
         infoStackView.axis = .horizontal
-        infoStackView.distribution = .fillProportionally
+        infoStackView.distribution = .equalSpacing
         view.addSubview(infoStackView)
 
         attendanceLabel = UILabel()
