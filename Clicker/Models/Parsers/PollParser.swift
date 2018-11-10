@@ -17,10 +17,7 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
-        var correctAnswer: String?
-        if let unwrappedCorrectAnswer = json[ParserKeys.correctAnswerKey].string {
-            correctAnswer = unwrappedCorrectAnswer
-        }
+        let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
             options = optionsArray.map { $0.stringValue }
@@ -42,10 +39,7 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
-        var correctAnswer: String?
-        if let unwrappedCorrectAnswer = json[ParserKeys.correctAnswerKey].string {
-            correctAnswer = unwrappedCorrectAnswer
-        }
+        let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
             options = optionsArray.map { $0.stringValue }

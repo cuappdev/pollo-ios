@@ -81,10 +81,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         
-        var correct = ""
-        if let correctAnswer = correctAnswer {
-            correct = correctAnswer
-        }
+        let correct = correctAnswer ?? ""
         
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
