@@ -81,13 +81,18 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         
+        var correct = ""
+        if let correctAnswer = correctAnswer {
+            correct = correctAnswer
+        }
+        
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
             RequestKeys.sharedKey: state == .shared,
-            RequestKeys.correctAnswerKey: correctAnswer
+            RequestKeys.correctAnswerKey: correct
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)

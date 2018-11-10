@@ -79,13 +79,18 @@ extension CardController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         
+        var correct = ""
+        if let correctAnswer = correctAnswer {
+            correct = correctAnswer
+        }
+        
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
             RequestKeys.sharedKey: state == .shared,
-            RequestKeys.correctAnswerKey: correctAnswer
+            RequestKeys.correctAnswerKey: correct
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
@@ -246,10 +251,7 @@ extension CardController: SocketDelegate {
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
-        // NOTE: We need to call adapter.performUpdates if we reach maxOptions for FR because we need to display the
-        // overflow arrow
-        let maxFROptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
-        if latestPoll.state == .live && latestPoll.questionType == .freeResponse && currentState.results.keys.count != maxFROptions {
+        if latestPoll.state == .live && latestPoll.questionType == .freeResponse {
             // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
             latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
             updateLiveCardCell(with: currentState)
@@ -307,6 +309,7 @@ extension CardController: SocketDelegate {
     
     func emitShareResults() {
         socket.socket.emit(Routes.serverShare, [])
+        Analytics.shared.log(with: SharedResultsPayload())
     }
     
     func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {

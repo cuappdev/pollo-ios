@@ -53,7 +53,6 @@ PODS:
     - Alamofire (~> 4.0)
     - PromiseKit/CorePromise
   - PromiseKit/CorePromise (6.2.0)
-  - Siren (3.2.0)
   - SnapKit (4.0.0)
   - Socket.IO-Client-Swift (13.1.1):
     - Starscream (~> 3.0.2)
@@ -70,7 +69,6 @@ DEPENDENCIES:
   - IGListKit
   - Neutron (from `https://github.com/dantheli/Neutron.git`)
   - Presentr
-  - Siren
   - SnapKit
   - Socket.IO-Client-Swift
   - SwiftLint
@@ -93,7 +91,6 @@ SPEC REPOS:
     - IGListKit
     - Presentr
     - PromiseKit
-    - Siren
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
@@ -126,13 +123,12 @@ SPEC CHECKSUMS:
   Neutron: d554b11bd8fe9daccb68a062c2f2fe16e0dfead6
   Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
   PromiseKit: ea9a155e1fd98a926ccfaf633c0fbd69851f0e7b
-  Siren: 964f57553cf6a39d1bada4e403557523a213b397
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Socket.IO-Client-Swift: f22222913f29801e30ae0df712db663ec096edc2
   Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 546ce665c60448b278cb2f9a673c6ec6c4aae082
+PODFILE CHECKSUM: c768979ebdb9e81bd3de96e66c6ad746fe7f6ea2
 
 COCOAPODS: 1.5.3

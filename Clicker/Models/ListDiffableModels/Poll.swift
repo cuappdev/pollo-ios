@@ -52,7 +52,7 @@ class Poll {
     var upvotes: [String:[String]]
     var state: PollState
     var selectedMCChoice: String?
-    var correctAnswer: String?
+    var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
@@ -144,6 +144,13 @@ class Poll {
             return userSelectedChoice.stringValue == mcChoice
         }
         return false
+    }
+
+    func updateSelected(mcChoice: String) {
+        selectedMCChoice = mcChoice
+        if let userId = User.currentUser?.id {
+            answers[userId] = mcChoice
+        }
     }
 
 }

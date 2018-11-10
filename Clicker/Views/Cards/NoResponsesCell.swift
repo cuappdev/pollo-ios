@@ -10,9 +10,6 @@ import UIKit
 
 class NoResponsesCell: UICollectionViewCell {
     
-    // MARK: - Data vars
-    var space: CGFloat!
-    
     // MARK: - View vars
     var noResponsesLabel: UILabel!
     
@@ -29,13 +26,16 @@ class NoResponsesCell: UICollectionViewCell {
         noResponsesLabel.textAlignment = .center
         contentView.addSubview(noResponsesLabel)
         
+        noResponsesLabel.snp.makeConstraints { make in
+            make.center.width.equalToSuperview()
+            make.height.equalTo(0)
+        }
+        
     }
     
     func configure(with space: CGFloat) {
-        self.space = space
-        noResponsesLabel.snp.makeConstraints { make in
-            make.center.width.equalToSuperview()
-            make.height.equalTo(space)
+        noResponsesLabel.snp.updateConstraints { update in
+            update.height.equalTo(space)
         }
     }
     

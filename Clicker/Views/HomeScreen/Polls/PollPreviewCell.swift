@@ -29,6 +29,8 @@ class PollPreviewCell: UICollectionViewCell {
     // MARK: - View vars
     var nameLabel: UILabel!
     var descriptionLabel: UILabel!
+    var liveCircleView: UIView!
+    var liveLabel: UILabel!
     var lineView: UIView!
     var dotsButton: UIButton!
     var openSessionActivityIndicatorView: UIActivityIndicatorView!
@@ -41,11 +43,15 @@ class PollPreviewCell: UICollectionViewCell {
     let nameLabelTopPadding: CGFloat = 19.5
     let nameLabelWidth: CGFloat = 300
     let nameLabelLeftPadding: CGFloat = 17
+    let liveCircleViewLength: CGFloat = 7
+    let liveCircleViewTopPadding: CGFloat = 8.5
+    let liveLabelLeftPadding: CGFloat = 6
     let activityLabelTopPadding: CGFloat = 4
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
     let dotsButtonRightPadding: CGFloat = 12
     let dotsButtonLength: CGFloat = 40
+    let liveLabelText = "Live Now"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,6 +68,19 @@ class PollPreviewCell: UICollectionViewCell {
         descriptionLabel.font = ._16MediumFont
         descriptionLabel.textColor = .clickerGrey2
         contentView.addSubview(descriptionLabel)
+        
+        liveCircleView = UIView()
+        liveCircleView.backgroundColor = .clickerGreen0
+        liveCircleView.layer.cornerRadius = liveCircleViewLength / 2.0
+        liveCircleView.isHidden = true
+        contentView.addSubview(liveCircleView)
+        
+        liveLabel = UILabel()
+        liveLabel.text = liveLabelText
+        liveLabel.font = UIFont._16SemiboldFont
+        liveLabel.textColor = .clickerGreen0
+        liveLabel.isHidden = true
+        contentView.addSubview(liveLabel)
         
         lineView = UIView()
         lineView.backgroundColor = .clickerGrey5
@@ -84,27 +103,39 @@ class PollPreviewCell: UICollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(nameLabelTopPadding)
             make.width.equalTo(nameLabelWidth)
-            make.left.equalToSuperview().offset(nameLabelLeftPadding)
+            make.leading.equalToSuperview().offset(nameLabelLeftPadding)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(4)
-            make.left.equalTo(nameLabel.snp.left)
+            make.leading.equalTo(nameLabel.snp.leading)
             make.width.equalTo(nameLabel.snp.width)
+        }
+        
+        liveCircleView.snp.makeConstraints { make in
+            make.leading.equalTo(nameLabel.snp.leading)
+            make.top.equalTo(nameLabel.snp.bottom).offset(liveCircleViewTopPadding)
+            make.width.height.equalTo(liveCircleViewLength)
+        }
+        
+        liveLabel.snp.makeConstraints { make in
+            make.leading.equalTo(liveCircleView.snp.trailing).offset(liveLabelLeftPadding)
+            make.centerY.equalTo(liveCircleView.snp.centerY)
         }
         
         lineView.snp.makeConstraints { make in
             make.height.equalTo(lineViewHeight)
-            make.left.equalToSuperview().offset(lineViewLeftPadding)
+            make.leading.equalToSuperview().offset(lineViewLeftPadding)
             make.bottom.equalToSuperview()
-            make.right.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
         dotsButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(dotsButtonRightPadding)
+            make.trailing.equalToSuperview().inset(dotsButtonRightPadding)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(dotsButtonLength)
         }
+
         openSessionActivityIndicatorView.snp.makeConstraints { make in
             make.top.equalTo(dotsButton.snp.top)
             make.width.equalTo(dotsButton.snp.width)
@@ -119,6 +150,10 @@ class PollPreviewCell: UICollectionViewCell {
         self.delegate = delegate
         nameLabel.text = session.name
         descriptionLabel.text = session.description
+        let isLive = session.isLive ?? false
+        descriptionLabel.isHidden = isLive
+        liveCircleView.isHidden = !isLive
+        liveLabel.isHidden = !isLive
     }
     
     // MARK: - Action
