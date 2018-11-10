@@ -8,7 +8,7 @@
 
 import IGListKit
 
-class Session {
+class Session: Codable {
     
     var id: Int
     var name: String

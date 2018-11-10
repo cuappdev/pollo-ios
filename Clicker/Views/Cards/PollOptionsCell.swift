@@ -13,7 +13,7 @@ protocol PollOptionsCellDelegate {
     
     var userRole: UserRole { get }
     
-    func pollOptionsCellDidSubmitChoice(choice: String)
+    func pollOptionsCellDidSubmitChoice(choice: String, index: Int)
     func pollOptionsCellDidUpvote(for answerId: String)
     
 }
@@ -285,7 +285,7 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
             adapter.performUpdates(animated: false, completion: nil)
             mcSelectedIndex = selectedIndex
-            delegate.pollOptionsCellDidSubmitChoice(choice: updatedMCChoiceModel.option)
+            delegate.pollOptionsCellDidSubmitChoice(choice: updatedMCChoiceModel.option, index: selectedIndex)
         default:
             return
         }

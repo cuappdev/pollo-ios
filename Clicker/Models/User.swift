@@ -13,7 +13,7 @@ enum UserRole: String {
     case member = "user"
 }
 
-class User {
+class User: Codable {
     
     static var currentUser: User?
     static var userSession: UserSession?
@@ -42,7 +42,7 @@ class User {
     
 }
 
-struct UserSession {
+struct UserSession: Codable {
     
     let accessToken: String
     let refreshToken: String
