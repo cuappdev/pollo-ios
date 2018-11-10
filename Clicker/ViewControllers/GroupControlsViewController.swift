@@ -23,6 +23,7 @@ class GroupControlsViewController: UIViewController {
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
+    var numMembers: Int = 0
     var isExportable: Bool = false {
         didSet {
             if exportButton != nil {
@@ -54,10 +55,11 @@ class GroupControlsViewController: UIViewController {
         return .lightContent
     }
 
-    init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
+    init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel], numMembers: Int) {
         super.init(nibName: nil, bundle: nil)
         self.session = session
         self.pollsDateAttendanceArray = pollsDateAttendanceArray
+        self.numMembers = numMembers
     }
 
     override func viewDidLoad() {
@@ -88,7 +90,7 @@ class GroupControlsViewController: UIViewController {
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
         }
-        infoView.configure(numMembers: 2, numPolls: numPolls, code: session.code)
+        infoView.configure(numMembers: numMembers, numPolls: numPolls, code: session.code)
         view.addSubview(infoView)
 
         attendanceLabel = UILabel()
