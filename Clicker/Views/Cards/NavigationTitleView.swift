@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NavigationTitleViewDelegate {
-    func navigationTitleViewGroupControlsButtonTapped()
+    func navigationTitleViewNavigationButtonTapped()
 }
 
 class NavigationTitleView: UIView {
@@ -17,11 +17,17 @@ class NavigationTitleView: UIView {
     // MARK: - View vars
     var primaryLabel: UILabel!
     var secondaryLabel: UILabel!
-    var groupControlsButton: UIButton!
+    var arrowImageView: UIImageView!
+    var navigationButton: UIButton!
 
     // MARK: - Data vars
     var delegate: NavigationTitleViewDelegate?
 
+    // MARK: - Constants
+    let arrowImageViewWidth: CGFloat = 5.3
+    let arrowImageViewHeight: CGFloat = 9.5
+    let arrowImageViewLeftPadding: CGFloat = 6
+    let arrowImageName = "forward_arrow"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,21 +50,27 @@ class NavigationTitleView: UIView {
         secondaryLabel.textAlignment = .center
         addSubview(secondaryLabel)
 
-        groupControlsButton = UIButton()
-        groupControlsButton.backgroundColor = .clear
-        groupControlsButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
-        addSubview(groupControlsButton)
+        arrowImageView = UIImageView()
+        arrowImageView.image = UIImage(named: arrowImageName)
+        arrowImageView.contentMode = .scaleAspectFit
+        arrowImageView.isHidden = true
+        addSubview(arrowImageView)
+
+        navigationButton = UIButton()
+        navigationButton.backgroundColor = .clear
+        navigationButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
+        addSubview(navigationButton)
     }
     
     func configure(primaryText: String, secondaryText: String, delegate: NavigationTitleViewDelegate? = nil) {
         primaryLabel.text = primaryText
         secondaryLabel.text = secondaryText
         self.delegate = delegate
+        arrowImageView.isHidden = delegate == nil
     }
     
     func setupConstraints() {
         primaryLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview()
             make.centerX.equalToSuperview()
             make.bottom.equalTo(self.snp.centerY)
             make.height.equalTo(19)
@@ -71,14 +83,21 @@ class NavigationTitleView: UIView {
             make.height.equalTo(15)
         }
 
-        groupControlsButton.snp.makeConstraints { make in
+        arrowImageView.snp.makeConstraints { make in
+            make.width.equalTo(arrowImageViewWidth)
+            make.height.equalTo(arrowImageViewHeight)
+            make.centerY.equalTo(primaryLabel)
+            make.leading.equalTo(primaryLabel.snp.trailing).offset(arrowImageViewLeftPadding)
+        }
+
+        navigationButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
 
     // MARK: - Action
     @objc func groupControlsBtnTapped() {
-        delegate?.navigationTitleViewGroupControlsButtonTapped()
+        delegate?.navigationTitleViewNavigationButtonTapped()
     }
     
     required init?(coder aDecoder: NSCoder) {
