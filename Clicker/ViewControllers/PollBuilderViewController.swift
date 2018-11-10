@@ -43,8 +43,8 @@ class PollBuilderViewController: UIViewController {
     var dimmingView: UIView!
     
     // MARK: Data vars
-    var drafts: [Draft]!
     var correctAnswer: String?
+    var drafts: [Draft] = []
     var questionType: QuestionType!
     var delegate: PollBuilderViewControllerDelegate!
     var isFollowUpQuestion: Bool = false
@@ -326,61 +326,61 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: - Actions
     @objc func saveAsDraft() {
-        if canDraft {
-            guard let type = questionType else {
-                print("warning! cannot save as draft before viewDidLoad")
-                return
-            }
-            switch type {
-            case .multipleChoice:
-                let question = mcPollBuilder.questionTextField.text ?? ""
-                var options = mcPollBuilder.getOptions()
-                if options.isEmpty {
-                    options.append("")
-                    options.append("")
-                }
-                if let loadedDraft = loadedMCDraft {
-                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
-                        .done { draft in
-                            self.getDrafts()
-                        }.catch { error in
-                            print("error: ", error)
-                        }
-                } else {
-                    CreateDraft(text: question, options: options).make()
-                        .done { draft in
-                            self.drafts.insert(draft, at: 0)
-                            self.updateDraftsCount()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                }
-                loadedMCDraft = nil
-                self.mcPollBuilder.reset()
-            
-            case .freeResponse:
-                let question = frPollBuilder.questionTextField.text ?? ""
-                if let loadedDraft = loadedFRDraft {
-                    UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
-                        .done { draft in
-                            self.getDrafts()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                } else {
-                    CreateDraft(text: question, options: []).make()
-                        .done { draft in
-                            self.drafts.insert(draft, at: 0)
-                            self.updateDraftsCount()
-                        }.catch { error in
-                            print("error: ", error)
-                    }
-                }
-                loadedFRDraft = nil
-                self.frPollBuilder.questionTextField.text = ""
-            }
-            self.updateCanDraft(false)
+        if !canDraft { return }
+        guard let type = questionType else {
+            print("warning! cannot save as draft before viewDidLoad")
+            return
         }
+        switch type {
+        case .multipleChoice:
+            let question = mcPollBuilder.questionTextField.text ?? ""
+            var options = mcPollBuilder.getOptions()
+            if options.isEmpty {
+                options.append("")
+                options.append("")
+            }
+            if let loadedDraft = loadedMCDraft {
+                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
+                    .done { draft in
+                        self.getDrafts()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            } else {
+                CreateDraft(text: question, options: options).make()
+                    .done { draft in
+                        self.drafts.insert(draft, at: 0)
+                        self.updateDraftsCount()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            }
+            loadedMCDraft = nil
+            self.mcPollBuilder.reset()
+            
+        case .freeResponse:
+            let question = frPollBuilder.questionTextField.text ?? ""
+            if let loadedDraft = loadedFRDraft {
+                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
+                    .done { draft in
+                        self.getDrafts()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            } else {
+                CreateDraft(text: question, options: []).make()
+                    .done { draft in
+                        self.drafts.insert(draft, at: 0)
+                        self.updateDraftsCount()
+                    }.catch { error in
+                        print("error: ", error)
+                }
+            }
+            loadedFRDraft = nil
+            self.frPollBuilder.questionTextField.text = ""
+        }
+        self.updateCanDraft(false)
+        Analytics.shared.log(with: CreatedDraftPayload())
     }
     
     @objc func startPoll() {
@@ -402,7 +402,11 @@ class PollBuilderViewController: UIViewController {
             let question = frPollBuilder.questionTextField.text ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
-        
+        if loadedMCDraft != nil || loadedFRDraft != nil {
+            Analytics.shared.log(with: CreatedPollFromDraftPayload())
+        } else {
+            Analytics.shared.log(with: CreatedPollPaylod())
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -444,10 +448,7 @@ class PollBuilderViewController: UIViewController {
     }
     
     func updateDraftsCount() {
-        var text = "Drafts (0)"
-        if let _ = drafts {
-            text = "Drafts (\(drafts.count))"
-        }
+        let text = "Drafts (\(drafts.count))"
         let attributes = [NSAttributedStringKey.font: UIFont._16MediumFont]
         let attributedTitle = NSMutableAttributedString(string: text, attributes: attributes)
         let range0 = NSRange(location: 0, length: 6)

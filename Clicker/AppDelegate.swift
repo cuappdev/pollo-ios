@@ -12,7 +12,6 @@ import FLEX
 import GoogleSignIn
 import Crashlytics
 import StoreKit
-import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -86,6 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
+            let idToken = user.authentication.idToken ?? ""
             let userId = user.userID ?? "ID" // For client-side use only!
             let fullName = user.profile.name ?? "First Last"
             let givenName = user.profile.givenName ?? "First"
@@ -96,8 +96,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
             UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
-            
-            UserAuthenticate(userId: userId, givenName: givenName, familyName: familyName, email: email).make()
+
+            UserAuthenticate(idToken: idToken).make()
                 .done { userSession in
                     print(userSession)
                     User.userSession = userSession

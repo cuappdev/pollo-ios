@@ -36,6 +36,7 @@ class CardCell: UICollectionViewCell {
     var adapter: ListAdapter!
     var topHamburgerCardModel: HamburgerCardModel!
     var questionModel: QuestionModel!
+    var frInputModel: FRInputModel!
     var separatorLineModel: SeparatorLineModel!
     var pollOptionsModel: PollOptionsModel!
     var miscellaneousModel: PollMiscellaneousModel!
@@ -63,6 +64,7 @@ class CardCell: UICollectionViewCell {
         topHamburgerCardModel = HamburgerCardModel(state: .top)
         separatorLineModel = SeparatorLineModel(state: .card)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
+        frInputModel = FRInputModel()
         setupViews()
     }
     
@@ -148,12 +150,14 @@ class CardCell: UICollectionViewCell {
         case .mcResult(resultModels: _), .frOption(optionModels: _):
             guard let pollOptionsSectionController = adapter.sectionController(for: pollOptionsModel) as? PollOptionsSectionController else { return }
             let updatedPollOptionsModelType = buildPollOptionsModelType(from: poll, userRole: userRole)
-            // Make sure to call update before updating pollOptionsMOdel.type so that the
+            // Make sure to call update before updating pollOptionsModel.type so that
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults())
-            adapter.performUpdates(animated: false, completion: nil)
+            DispatchQueue.main.async {
+                self.adapter.performUpdates(animated: false, completion: nil)
+            }
         default:
             return
         }
@@ -228,7 +232,7 @@ extension CardCell: ListAdapterDataSource {
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
         if userRole == .member && poll.questionType == .freeResponse && poll.state == .live {
-            objects.append(FRInputModel())
+            objects.append(frInputModel)
         }
         if userRole == .admin {
             objects.append(miscellaneousModel)

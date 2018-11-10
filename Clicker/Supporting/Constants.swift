@@ -108,7 +108,7 @@ struct IntegerConstants {
     static let maxOptionsForAdminMC = 6
     static let maxOptionsForMemberMC = 8
     static let maxOptionsForAdminFR = 5
-    static let maxOptionsForMemberFR = 7
+    static let maxOptionsForMemberFR = 6
 }
 
 enum Keys: String {
@@ -135,6 +135,7 @@ enum Keys: String {
     }()
 }
 
+
 struct UserDefault {
 
     static func set(value: Any?, for key: String) {
@@ -151,6 +152,12 @@ struct UserDefault {
     struct Keys {
         static let displayQuizOverlay = "displayQuizOverlay"
     }
+}
+    
+struct App {
+
+    /// The app version within the App Store (e.g. "1.4.2") [String value of `CFBundleShortVersionString`]
+    static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
 
 }
 
@@ -162,6 +169,8 @@ struct Device {
             return UUID().uuidString
         }
     }()
+
+    static let modelName = UIDevice.current.model
     
     private init() {}
 }

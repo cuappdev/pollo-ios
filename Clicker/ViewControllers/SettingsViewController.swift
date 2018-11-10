@@ -141,6 +141,7 @@ class SettingsViewController: UIViewController {
         }
         self.dismiss(animated: true, completion: nil)
         appDelegate.logout()
+        Analytics.shared.log(with: SignedOutPayload())
     }
     
     @objc func goBack() {

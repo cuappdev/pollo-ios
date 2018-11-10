@@ -36,8 +36,7 @@ class FROptionSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = calculateFROptionCellHeight(for: frOptionModel)
-        return CGSize(width: containerSize.width, height: cellHeight)
+        return CGSize(width: containerSize.width, height: LayoutConstants.frOptionCellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -58,14 +57,6 @@ class FROptionSectionController: ListSectionController {
         self.frOptionModel = frOptionModel
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? FROptionCell else { return }
         cell.update(with: frOptionModel)
-    }
-    
-    // MARK: - Helpers
-    private func calculateFROptionCellHeight(for frOptionModel: FROptionModel) -> CGFloat {
-        guard let containerSize = collectionContext?.containerSize else { return 0 }
-        let optionLabelWidth = containerSize.width * frOptionCellOptionLabelWidthScaleFactor
-        let optionLabelHeight = frOptionModel.option.height(withConstrainedWidth: optionLabelWidth, font: .systemFont(ofSize: frOptionCellOptionLabelSize, weight: .medium))
-        return optionLabelHeight + frOptionCellOptionLabelVerticalPadding * 2
     }
 
 }
