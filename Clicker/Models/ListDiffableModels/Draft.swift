@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-class Draft {
+class Draft: Codable {
     
     var id: Int
     var text: String

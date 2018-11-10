@@ -51,7 +51,6 @@ class Poll {
     var answers: [String:Any]
     var upvotes: [String:[String]]
     var state: PollState
-    var selectedMCChoice: String?
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
@@ -62,7 +61,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, selectedMCChoice: String?) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -71,7 +70,6 @@ class Poll {
         self.answers = [:]
         self.upvotes = [:]
         self.state = state
-        self.selectedMCChoice = selectedMCChoice
         
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
 
@@ -86,8 +84,24 @@ class Poll {
         self.answers = currentState.answers
         self.upvotes = currentState.upvotes
         self.state = updatedPollState ?? poll.state
-        self.selectedMCChoice = poll.selectedMCChoice
         self.startTime = poll.startTime
+    }
+    
+    func getSelected() -> Any? {
+        guard let userId = User.currentUser?.id else { return nil }
+        if let selected = answers[userId] as? JSON {
+            switch questionType {
+            case .multipleChoice:
+                return selected.stringValue
+            case .freeResponse:
+                return selected.arrayValue.map { (json) -> Int in
+                    return json.intValue
+                }
+            }
+        } else if let selected = answers[userId] as? String {
+            return selected
+        }
+        return nil
     }
 
     init(poll: Poll, state: PollState) {
@@ -99,7 +113,6 @@ class Poll {
         self.answers = poll.answers
         self.upvotes = poll.upvotes
         self.state = state
-        self.selectedMCChoice = poll.selectedMCChoice
         self.startTime = poll.startTime
     }
 
@@ -137,14 +150,16 @@ class Poll {
 
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
-        if let userId = User.currentUser?.id, let userSelectedChoice = answers[userId] as? JSON {
+        guard let userId = User.currentUser?.id else { return false }
+        if let userSelectedChoice = answers[userId] as? JSON {
             return userSelectedChoice.stringValue == mcChoice
+        } else if let userSelectedChoice = answers[userId] as? String {
+            return userSelectedChoice == mcChoice
         }
         return false
     }
 
     func updateSelected(mcChoice: String) {
-        selectedMCChoice = mcChoice
         if let userId = User.currentUser?.id {
             answers[userId] = mcChoice
         }
