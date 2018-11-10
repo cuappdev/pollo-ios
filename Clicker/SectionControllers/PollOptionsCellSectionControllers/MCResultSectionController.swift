@@ -18,9 +18,11 @@ class MCResultSectionController: ListSectionController {
     
     var delegate: MCResultSectionControllerDelegate!
     var resultModel: MCResultModel!
+    var correctAnswer: String?
     
-    init(delegate: MCResultSectionControllerDelegate) {
+    init(delegate: MCResultSectionControllerDelegate, correctAnswer: String?) {
         self.delegate = delegate
+        self.correctAnswer = correctAnswer
     }
     
     // MARK: - ListSectionController overrides
@@ -34,7 +36,7 @@ class MCResultSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: MCResultCell.self, for: self, at: index) as! MCResultCell
-        cell.configure(for: resultModel, userRole: delegate.userRole)
+        cell.configure(for: resultModel, userRole: delegate.userRole, correctAnswer: correctAnswer)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -49,7 +51,7 @@ class MCResultSectionController: ListSectionController {
         // so that when they get dequeued again, they will have the correct resultModel
         self.resultModel = resultModel
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? MCResultCell else { return }
-        cell.update(with: resultModel)
+        cell.update(with: resultModel, correctAnswer: correctAnswer)
     }
 
 }

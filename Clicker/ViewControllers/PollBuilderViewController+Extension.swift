@@ -27,6 +27,10 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
             draftsButton.titleLabel?.font = ._16MediumFont
         }
     }
+    
+    func updateCorrectAnswer(correctAnswer: String?) {
+        self.correctAnswer = correctAnswer
+    }
 }
 
 extension PollBuilderViewController: DraftsViewControllerDelegate {

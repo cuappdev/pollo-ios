@@ -26,6 +26,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - Data vars
     var delegate: PollOptionsCellDelegate!
+    var correctAnswer: String?
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
     var mcSelectedIndex: Int = NSNotFound
@@ -92,9 +93,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
 
     // MARK: - Configure
-    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate) {
+    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
+        self.correctAnswer = correctAnswer
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
             let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
@@ -120,7 +122,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
 
     // MARK: - Update
-    func update(with updatedPollOptionsModelType: PollOptionsModelType) {
+    func update(with updatedPollOptionsModelType: PollOptionsModelType, correctAnswer: String?) {
+        self.correctAnswer = correctAnswer
         switch updatedPollOptionsModelType {
         case .mcResult(resultModels: let updatedMCResultModels):
             switch pollOptionsModel.type {
@@ -225,7 +228,7 @@ extension PollOptionsCell: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is MCResultModel {
-            return MCResultSectionController(delegate: self)
+            return MCResultSectionController(delegate: self, correctAnswer: correctAnswer)
         } else if object is MCChoiceModel {
             return MCChoiceSectionController(delegate: self)
         } else if object is FROptionModel {

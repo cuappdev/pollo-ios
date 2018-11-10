@@ -17,11 +17,15 @@ class MCResultCell: UICollectionViewCell {
     var optionLabel: UILabel!
     var numSelectedLabel: UILabel!
     var highlightView: UIView!
+    var checkImageView: UIImageView!
     
     // MARK: - Data vars
+    var index: Int!
+    var correctAnswer: String?
     var percentSelected: Float!
     var highlightViewWidthConstraint: Constraint!
     var didLayoutConstraints: Bool = false
+    var missedCorrectAnswer: Bool = false
     
     // MARK: - Constants
     let labelFontSize: CGFloat = 13
@@ -31,6 +35,8 @@ class MCResultCell: UICollectionViewCell {
     let optionLabelHorizontalPadding: CGFloat = 14
     let numSelectedLabelTrailingPadding: CGFloat = 14
     let numSelectedLabelWidth: CGFloat = 40
+    let checkImageViewLength: CGFloat = 14
+    let checkImageName = "correctanswer"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,18 +71,24 @@ class MCResultCell: UICollectionViewCell {
         optionLabel = UILabel()
         optionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         optionLabel.backgroundColor = .clear
+        optionLabel.lineBreakMode = .byTruncatingTail
         containerView.addSubview(optionLabel)
         
         numSelectedLabel = UILabel()
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
-        numSelectedLabel.textColor = .black
+        numSelectedLabel.textColor = .clickerGrey2
         containerView.addSubview(numSelectedLabel)
 
         highlightView = UIView()
         containerView.addSubview(highlightView)
         containerView.sendSubview(toBack: highlightView)
+        
+        checkImageView = UIImageView()
+        checkImageView.image = UIImage(named: checkImageName)?.withRenderingMode(.alwaysTemplate)
+        checkImageView.tintColor = .charcoalGrey
+        containerView.addSubview(checkImageView)
     }
     
     override func updateConstraints() {
@@ -103,10 +115,26 @@ class MCResultCell: UICollectionViewCell {
             make.width.equalTo(numSelectedLabelWidth)
         }
         
+        guard let optionLabelText = optionLabel.text else { return }
+        let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
+        let maxWidth = bounds.width - numSelectedLabelWidth - optionLabelHorizontalPadding * 4 - checkImageViewLength
+        
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(numSelectedLabel.snp.leading).inset(optionLabelHorizontalPadding)
+            if missedCorrectAnswer {
+                make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
+            } else {
+                make.trailing.equalTo(numSelectedLabel).inset(optionLabelHorizontalPadding)
+            }
+        }
+        
+        if missedCorrectAnswer {
+            checkImageView.snp.makeConstraints { make in
+                make.width.height.equalTo(checkImageViewLength)
+                make.leading.equalTo(optionLabel.snp.trailing).offset(optionLabelHorizontalPadding)
+                make.centerY.equalToSuperview()
+            }
         }
 
         highlightView.snp.makeConstraints { make in
@@ -118,21 +146,41 @@ class MCResultCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for resultModel: MCResultModel, userRole: UserRole) {
+    func configure(for resultModel: MCResultModel, userRole: UserRole, correctAnswer: String?) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
         percentSelected = resultModel.percentSelected
+        self.correctAnswer = correctAnswer
         switch userRole {
         case .admin:
             highlightView.backgroundColor = .clickerGreen0
         case .member:
             let isSelected = resultModel.isSelected
-            highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+            let answer = intToMCOption(resultModel.choiceIndex)
+            if let correctAnswer = correctAnswer {
+                if correctAnswer != "" {
+                    if answer == correctAnswer {
+                        missedCorrectAnswer = !isSelected
+                        highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGrey5
+                        optionLabel.textColor = .black
+                    } else {
+                        highlightView.backgroundColor = isSelected ? .grapefruit : .clickerGrey5
+                        optionLabel.textColor = isSelected ? .black : .clickerGrey2
+                        missedCorrectAnswer = false
+                    }
+                } else {
+                    highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                    missedCorrectAnswer = false
+                }
+            } else {
+                highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                missedCorrectAnswer = false
+            }
         }
     }
 
     // MARK: - Updates
-    func update(with resultModel: MCResultModel) {
+    func update(with resultModel: MCResultModel, correctAnswer: String?) {
         optionLabel.text = resultModel.option
         numSelectedLabel.text = "\(resultModel.numSelected)"
         percentSelected = resultModel.percentSelected

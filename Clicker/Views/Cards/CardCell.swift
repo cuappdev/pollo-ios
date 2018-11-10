@@ -254,7 +254,7 @@ extension CardCell: ListAdapterDataSource {
         } else if object is FRInputModel {
             return FRInputSectionController(delegate: self)
         } else if object is PollOptionsModel {
-            return PollOptionsSectionController(delegate: self)
+            return PollOptionsSectionController(delegate: self, correctAnswer: poll.correctAnswer)
         } else if object is PollMiscellaneousModel {
             return PollMiscellaneousSectionController()
         } else if object is HamburgerCardModel {

@@ -11,10 +11,6 @@ import SnapKit
 
 class AddMoreOptionCell: UICollectionViewCell {
     
-    // MARK: Layout constants
-    let edgePadding: CGFloat = 18
-    let bottomPadding: CGFloat = 6
-    
     // MARK: Views
     var wholeButton: UIButton!
     var plusLabel: UILabel!
@@ -22,6 +18,12 @@ class AddMoreOptionCell: UICollectionViewCell {
     
     // MARK: Data
     var delegate: PollBuilderMCOptionSectionControllerDelegate!
+
+    // MARK: - Constants
+    let edgePadding: CGFloat = 18
+    let bottomPadding: CGFloat = 6
+    let plusLabelWidth: CGFloat = 13
+    let addMoreLabelLeftPadding: CGFloat = 6.5
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -31,6 +33,7 @@ class AddMoreOptionCell: UICollectionViewCell {
         contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.clickerGrey5.cgColor
         setupViews()
+        setupConstraints()
     }
     
     func configure(with delegate: PollBuilderMCOptionSectionControllerDelegate) {
@@ -65,19 +68,18 @@ class AddMoreOptionCell: UICollectionViewCell {
         contentView.addSubview(addMoreLabel)
     }
 
-    override func updateConstraints() {
+    func setupConstraints() {
         plusLabel.snp.updateConstraints { make in
             make.leading.equalToSuperview().offset(edgePadding)
-            make.width.equalTo(13)
+            make.width.equalTo(plusLabelWidth)
             make.centerY.equalToSuperview()
         }
         
         addMoreLabel.snp.updateConstraints { make in
-            make.leading.equalTo(plusLabel.snp.trailing).offset(6.5)
+            make.leading.equalTo(plusLabel.snp.trailing).offset(addMoreLabelLeftPadding)
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        super.updateConstraints()
     }
     
     @objc func didPressCell() {
