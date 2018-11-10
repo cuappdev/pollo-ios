@@ -129,7 +129,7 @@ extension PollsDateViewController: NameViewDelegate {
 
 extension PollsDateViewController: NavigationTitleViewDelegate {
 
-    func navigationTitleViewGroupControlsButtonTapped() {
+    func navigationTitleViewNavigationButtonTapped() {
         guard userRole == .admin else { return }
         let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
         let groupControlsVC = GroupControlsViewController(session: session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed())
