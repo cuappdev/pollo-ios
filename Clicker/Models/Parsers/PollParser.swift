@@ -32,7 +32,7 @@ class PollParser: Parser {
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             answer = answerText
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, selectedMCChoice: answer, correctAnswer: correctAnswer)
+        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
     }
 
     static func parseItem(json: JSON, state: PollState) -> Poll {
@@ -53,6 +53,6 @@ class PollParser: Parser {
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             answer = answerText
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, selectedMCChoice: answer, correctAnswer: correctAnswer)
+        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
     }
 }
