@@ -12,17 +12,19 @@ import Presentr
 protocol PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
+    func updateCorrectAnswer(correctAnswer: String?)
     var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState)
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?)
     func showNavigationBar()
 }
 
 class PollBuilderViewController: UIViewController {
 
     // MARK: View vars
+    var quizModeOverlayView: QuizModeOverlayView!
     var dropDown: QuestionTypeDropDownView!
     var dropDownArrow: UIButton!
     var exitButton: UIButton!
@@ -41,6 +43,7 @@ class PollBuilderViewController: UIViewController {
     var dimmingView: UIView!
     
     // MARK: Data vars
+    var correctAnswer: String?
     var drafts: [Draft] = []
     var questionType: QuestionType!
     var delegate: PollBuilderViewControllerDelegate!
@@ -96,6 +99,18 @@ class PollBuilderViewController: UIViewController {
         setupViews()
         setupConstraints()
         getDrafts()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if let _ = quizModeOverlayView {
+            let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
+            let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
+            let circleImageXOffset: CGFloat = 12.0
+            let circleImageYOffset: CGFloat = circleImageXOffset
+            let circleImageFrame = CGRect(x: collectionViewFrame.origin.x + circleImageXOffset, y: collectionViewFrame.origin.y + circleImageYOffset, width: collectionViewFrame.width, height: collectionViewFrame.height)
+            quizModeOverlayView.configure(with: circleImageFrame)
+        }
     }
     
     // MARK: - Layout
@@ -173,6 +188,13 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
+
+        let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayQuizOverlay)
+        if !displayedQuizModeOverlay {
+            quizModeOverlayView = QuizModeOverlayView()
+            view.addSubview(quizModeOverlayView)
+            UserDefault.set(value: true, for: UserDefault.Keys.displayQuizOverlay)
+        }
     }
     
     func setupDimmingView() {
@@ -289,6 +311,12 @@ class PollBuilderViewController: UIViewController {
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(buttonsView.snp.bottom)
         }
+
+        if let _ = quizModeOverlayView {
+            quizModeOverlayView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
     }
     
     func updateQuestionTypeButton() {
@@ -369,10 +397,10 @@ class PollBuilderViewController: UIViewController {
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionTextField.text ?? ""
-            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live)
+            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
             let question = frPollBuilder.questionTextField.text ?? ""
-            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live)
+            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
         if loadedMCDraft != nil || loadedFRDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())

@@ -51,6 +51,7 @@
 		C20B571F2139E9F40091034F /* MCResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B571E2139E9F40091034F /* MCResultModel.swift */; };
 		C2113B1F214AD72800BBBB82 /* CurrentStateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2113B1E214AD72800BBBB82 /* CurrentStateParser.swift */; };
 		C212179F20281E94007395DA /* UIFont+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212179E20281E94007395DA /* UIFont+Shared.swift */; };
+		C212EE2D21838D9600D15785 /* QuizModeOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C212EE2C21838D9600D15785 /* QuizModeOverlayView.swift */; };
 		C21C95BA2145D42F00F58874 /* OptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21C95B92145D42F00F58874 /* OptionModel.swift */; };
 		C21C95BC2145D57000F58874 /* FROptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21C95BB2145D57000F58874 /* FROptionModel.swift */; };
 		C21C95BE2145D90900F58874 /* FROptionSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21C95BD2145D90900F58874 /* FROptionSectionController.swift */; };
@@ -187,6 +188,7 @@
 		C20B571E2139E9F40091034F /* MCResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCResultModel.swift; sourceTree = "<group>"; };
 		C2113B1E214AD72800BBBB82 /* CurrentStateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentStateParser.swift; sourceTree = "<group>"; };
 		C212179E20281E94007395DA /* UIFont+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Shared.swift"; sourceTree = "<group>"; };
+		C212EE2C21838D9600D15785 /* QuizModeOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizModeOverlayView.swift; sourceTree = "<group>"; };
 		C21C95B92145D42F00F58874 /* OptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionModel.swift; sourceTree = "<group>"; };
 		C21C95BB2145D57000F58874 /* FROptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionModel.swift; sourceTree = "<group>"; };
 		C21C95BD2145D90900F58874 /* FROptionSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FROptionSectionController.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			children = (
 				63A4A6452094D41600523AE6 /* MCPollBuilderView.swift */,
 				63A4A6472094D5EF00523AE6 /* FRPollBuilderView.swift */,
+				C212EE2C21838D9600D15785 /* QuizModeOverlayView.swift */,
 			);
 			path = PollBuilder;
 			sourceTree = "<group>";
@@ -870,6 +873,7 @@
 				0CDAF0D121727B4B004DB6EA /* SpaceModel.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
+				C212EE2D21838D9600D15785 /* QuizModeOverlayView.swift in Sources */,
 				63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */,
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
 				C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */,

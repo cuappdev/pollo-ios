@@ -69,6 +69,7 @@ struct LayoutConstants {
 }
 
 struct ParserKeys {
+    static let correctAnswerKey = "correctAnswer"
     static let answerKey = "answer"
     static let answersKey = "answers"
     static let countKey = "count"
@@ -83,6 +84,7 @@ struct ParserKeys {
 }
 
 struct RequestKeys {
+    static let correctAnswerKey = "correctAnswer"
     static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
@@ -133,6 +135,25 @@ enum Keys: String {
     }()
 }
 
+
+struct UserDefault {
+
+    static func set(value: Any?, for key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+
+    static func getBoolValue(for key: String) -> Bool {
+        if let boolValue = UserDefaults.standard.value(forKey: key) as? Bool {
+            return boolValue
+        }
+        return false
+    }
+
+    struct Keys {
+        static let displayQuizOverlay = "displayQuizOverlay"
+    }
+}
+    
 struct App {
 
     /// The app version within the App Store (e.g. "1.4.2") [String value of `CFBundleShortVersionString`]

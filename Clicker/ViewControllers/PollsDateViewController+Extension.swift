@@ -77,20 +77,23 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
+        
+        let correct = correctAnswer ?? ""
         
         // EMIT START QUESTION
         let socketQuestion: [String:Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
-            RequestKeys.sharedKey: state == .shared
+            RequestKeys.sharedKey: state == .shared,
+            RequestKeys.correctAnswerKey: correct
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, correctAnswer: correctAnswer)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
@@ -158,7 +161,7 @@ extension PollsDateViewController: SocketDelegate {
         }
         switch poll.questionType {
         case .freeResponse:
-            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended)
+            let updatedPoll = Poll(id: latestPoll.id, text: latestPoll.text, questionType: latestPoll.questionType, options: latestPoll.options, results: latestPoll.results, state: .ended, correctAnswer: latestPoll.correctAnswer)
             updateLatestPoll(with: updatedPoll)
         case .multipleChoice:
             updateLatestPoll(with: poll)

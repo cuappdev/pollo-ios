@@ -22,9 +22,11 @@ class PollOptionsSectionController: ListSectionController {
     // MARK: - Data vars
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
+    var correctAnswer: String?
     
-    init(delegate: PollOptionsSectionControllerDelegate) {
+    init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: String?) {
         self.delegate = delegate
+        self.correctAnswer = correctAnswer
     }
     
     // MARK: - ListSectionController overrides
@@ -38,7 +40,7 @@ class PollOptionsSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollOptionsCell.self, for: self, at: index) as! PollOptionsCell
-        cell.configure(for: pollOptionsModel, delegate: self)
+        cell.configure(for: pollOptionsModel, delegate: self, correctAnswer: correctAnswer)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -50,7 +52,7 @@ class PollOptionsSectionController: ListSectionController {
     // MARK: - Updates
     func update(with pollOptionsModelType: PollOptionsModelType) {
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? PollOptionsCell else { return }
-        cell.update(with: pollOptionsModelType)
+        cell.update(with: pollOptionsModelType, correctAnswer: correctAnswer)
     }
     
 }

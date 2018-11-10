@@ -51,6 +51,7 @@ class Poll {
     var answers: [String:Any]
     var upvotes: [String:[String]]
     var state: PollState
+    var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
@@ -61,7 +62,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, correctAnswer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -70,7 +71,7 @@ class Poll {
         self.answers = [:]
         self.upvotes = [:]
         self.state = state
-        
+        self.correctAnswer = correctAnswer
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
 
     }
@@ -85,6 +86,7 @@ class Poll {
         self.upvotes = currentState.upvotes
         self.state = updatedPollState ?? poll.state
         self.startTime = poll.startTime
+        self.correctAnswer = poll.correctAnswer
     }
     
     func getSelected() -> Any? {
@@ -114,6 +116,7 @@ class Poll {
         self.upvotes = poll.upvotes
         self.state = state
         self.startTime = poll.startTime
+        self.correctAnswer = poll.correctAnswer
     }
 
     // MARK: - Public
