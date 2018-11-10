@@ -139,7 +139,12 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     let mcChoiceModels = poll.options.enumerated().map { (index, option) -> MCChoiceModel in
-        let isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || poll.selectedMCChoice == option
+        var isSelected: Bool
+        if let selected = poll.getSelected() as? String {
+            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || selected == option
+        } else {
+            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index))
+        }
         return MCChoiceModel(option: option, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
@@ -153,7 +158,10 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
         if let infoDict = poll.results[mcOptionKey] {
             guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            let isSelected = option == poll.selectedMCChoice
+            var isSelected = false
+            if let selected = poll.getSelected() as? String {
+                isSelected = option == selected
+            }
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected)
             mcResultModels.append(resultModel)
         }
