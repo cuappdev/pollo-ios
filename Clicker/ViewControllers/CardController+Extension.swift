@@ -33,6 +33,14 @@ extension CardController: UIViewControllerTransitioningDelegate {
     }
 }
 
+extension CardController: NavigationTitleViewDelegate {
+
+    func navigationTitleViewNavigationButtonTapped() {
+        delegate.navigationTitleViewNavigationButtonTapped()
+    }
+
+}
+
 extension CardController: PollSectionControllerDelegate {
     
     var role: UserRole {

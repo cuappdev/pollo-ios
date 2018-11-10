@@ -18,6 +18,7 @@ protocol CardControllerDelegate {
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func receivedResults(_ currentState: CurrentState)
     func updatedTally(_ currentState: CurrentState)
+    func navigationTitleViewNavigationButtonTapped()
     
 }
 
@@ -164,7 +165,7 @@ class CardController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", delegate: self)
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
