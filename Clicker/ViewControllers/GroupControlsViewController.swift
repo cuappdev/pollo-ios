@@ -23,7 +23,7 @@ class GroupControlsViewController: UIViewController {
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
-    var numMembers: Int = 0
+    var numMembers = 0
     var isExportable: Bool = false {
         didSet {
             if exportButton != nil {
@@ -122,6 +122,7 @@ class GroupControlsViewController: UIViewController {
         view.addSubview(exportButton)
         view.bringSubview(toFront: exportButton)
 
+        // isExportable if any of the first 3 are selected
         switch pollsDateAttendanceArray.count {
         case 0:
             isExportable = false
@@ -143,13 +144,11 @@ class GroupControlsViewController: UIViewController {
 
         attendanceLabel.snp.makeConstraints { make in
             make.top.equalTo(infoView.snp.bottom).offset(attendanceLabelTopPadding)
-            make.leading.equalToSuperview().offset(attendanceLabelHorizontalPadding)
-            make.trailing.equalToSuperview().inset(attendanceLabelHorizontalPadding)
+            make.leading.trailing.equalToSuperview().inset(attendanceLabelHorizontalPadding)
         }
 
         collectionView.snp.makeConstraints { make in
-            make.leading.equalTo(attendanceLabel)
-            make.trailing.equalTo(attendanceLabel)
+            make.leading.trailing.equalTo(attendanceLabel)
             make.top.equalTo(attendanceLabel.snp.bottom).offset(collectionViewTopPadding)
             make.height.equalTo(collectionViewHeight)
         }
@@ -211,7 +210,7 @@ extension GroupControlsViewController: PollsDateAttendanceSectionControllerDeleg
     func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
         isExportable = pollsDateAttendanceArray.contains(where: { $0.isSelected })
     }
-
+    
 }
 
 extension GroupControlsViewController: ViewAllSectionControllerDelegate {

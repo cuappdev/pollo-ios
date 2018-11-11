@@ -91,7 +91,6 @@ class AttendanceViewController: UIViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = true
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .clear
         collectionView.allowsMultipleSelection = true
@@ -114,8 +113,7 @@ class AttendanceViewController: UIViewController {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(collectionViewHorizontalPadding)
-            make.trailing.equalToSuperview().inset(collectionViewHorizontalPadding)
+            make.leading.trailing.equalToSuperview().inset(collectionViewHorizontalPadding)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(collectionViewTopPadding)
             make.bottom.equalToSuperview()
         }
