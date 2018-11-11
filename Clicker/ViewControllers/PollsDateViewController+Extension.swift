@@ -125,9 +125,25 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
     }
     
+}
+
+extension PollsDateViewController: NavigationTitleViewDelegate {
+
+    func navigationTitleViewNavigationButtonTapped() {
+        guard userRole == .admin else { return }
+        let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
+        GetMembers(id: session?.id ?? -1).make()
+            .done { (users) in
+                let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: users.count)
+                self.navigationController?.pushViewController(groupControlsVC, animated: true)
+            }.catch { (error) in
+                print(error)
+        }
+    }
+
 }
 
 extension PollsDateViewController: SocketDelegate {

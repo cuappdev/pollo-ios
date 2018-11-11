@@ -250,7 +250,7 @@ struct LeaveSession: ClickerQuark {
 
 struct GetMembers: ClickerQuark {
     typealias ResponseType = [User]
-    let id: String
+    let id: Int
     
     var route: String {
         return "/sessions/\(id)/members"
@@ -264,7 +264,8 @@ struct GetMembers: ClickerQuark {
     
     func process(element: Element) throws -> [User] {
         switch element {
-        case .nodes(let nodes):
+        case .edges(let edges):
+            let nodes = edges.map { $0.node }
             var users: [User] = []
             for node in nodes {
                 guard let id = node["id"].rawString(), let name = node["name"].string, let netId = node["netId"].string else {
