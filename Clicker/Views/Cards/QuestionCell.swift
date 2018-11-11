@@ -10,13 +10,18 @@ import UIKit
 
 class QuestionCell: UICollectionViewCell {
     
+    // MARK: - Data vars
+    var userRole: UserRole!
+    
     // MARK: - View vars
     var questionLabel: UILabel!
+    var editButton: UIButton!
     
     // MARK: - Constants
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let moreButtonWidth: CGFloat = 25
     let untitledPollString = "Untitled Poll"
+    let editButtonImageName = "dots"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,19 +37,46 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)
+        
+        editButton = UIButton()
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        editButton.setImage(UIImage(named: editButtonImageName), for: .normal)
+        contentView.addSubview(editButton)
+    }
+    
+    @objc func editButtonPressed() {
+        // TODO: Add this later when functionality gets ironed out
     }
     
     override func updateConstraints() {
-        questionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
-            make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
-            make.top.equalToSuperview()
+        
+        switch userRole! {
+        case .admin:
+            editButton.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
+                make.top.equalToSuperview()
+            }
+            
+            questionLabel.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
+                make.trailing.equalTo(editButton.snp.leading).offset(-LayoutConstants.cardHorizontalPadding)
+                make.top.equalToSuperview()
+            }
+        case .member:
+            questionLabel.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(LayoutConstants.cardHorizontalPadding)
+                make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
+                make.top.equalToSuperview()
+            }
         }
+        
         super.updateConstraints()
     }
     
     // MARK: - Configure
-    func configure(for questionModel: QuestionModel) {
+    func configure(for questionModel: QuestionModel, userRole: UserRole) {
+        self.userRole = userRole
+        questionLabel.textAlignment = userRole == .admin ? .left : .center
         let isUntitledPoll = questionModel.question == ""
         questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
         questionLabel.textColor = isUntitledPoll ? .clickerGrey2 : .black
