@@ -8,13 +8,26 @@
 
 import UIKit
 
+protocol NavigationTitleViewDelegate {
+    func navigationTitleViewNavigationButtonTapped()
+}
+
 class NavigationTitleView: UIView {
 
-    var name: String!
-    var code: String!
-    
-    var nameLabel: UILabel!
-    var codeLabel: UILabel!
+    // MARK: - View vars
+    var primaryLabel: UILabel!
+    var secondaryLabel: UILabel!
+    var arrowImageView: UIImageView!
+    var navigationButton: UIButton!
+
+    // MARK: - Data vars
+    var delegate: NavigationTitleViewDelegate?
+
+    // MARK: - Constants
+    let arrowImageViewWidth: CGFloat = 5.3
+    let arrowImageViewHeight: CGFloat = 9.5
+    let arrowImageViewLeftPadding: CGFloat = 6
+    let arrowImageName = "forward_arrow"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,43 +37,67 @@ class NavigationTitleView: UIView {
     }
     
     func setupViews() {
-        nameLabel = UILabel()
-        nameLabel.textColor = .white
-        nameLabel.font = ._16SemiboldFont
-        nameLabel.textAlignment = .center
-        addSubview(nameLabel)
+        primaryLabel = UILabel()
+        primaryLabel.textColor = .white
+        primaryLabel.font = ._16SemiboldFont
+        primaryLabel.textAlignment = .center
+        addSubview(primaryLabel)
     
         
-        codeLabel = UILabel()
-        codeLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        codeLabel.font = ._12MediumFont
-        codeLabel.textAlignment = .center
-        addSubview(codeLabel)
+        secondaryLabel = UILabel()
+        secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)
+        secondaryLabel.font = ._12MediumFont
+        secondaryLabel.textAlignment = .center
+        addSubview(secondaryLabel)
+
+        arrowImageView = UIImageView()
+        arrowImageView.image = UIImage(named: arrowImageName)
+        arrowImageView.contentMode = .scaleAspectFit
+        arrowImageView.isHidden = true
+        addSubview(arrowImageView)
+
+        navigationButton = UIButton()
+        navigationButton.backgroundColor = .clear
+        navigationButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
+        addSubview(navigationButton)
     }
     
-    func updateNameAndCode(name: String?, code: String?) {
-        self.code = "Code: \(code ?? "")"
-        if let _ = name { self.name = name } else { self.name = code }
-
-        nameLabel.text = self.name
-        codeLabel.text = self.code
+    func configure(primaryText: String, secondaryText: String, delegate: NavigationTitleViewDelegate? = nil) {
+        primaryLabel.text = primaryText
+        secondaryLabel.text = secondaryText
+        self.delegate = delegate
+        arrowImageView.isHidden = delegate == nil
     }
     
     func setupConstraints() {
-        nameLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview()
+        primaryLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(self.snp.centerY)
             make.height.equalTo(19)
         }
         
-        codeLabel.snp.makeConstraints { make in
+        secondaryLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.top.equalTo(nameLabel.snp.bottom).offset(2)
+            make.top.equalTo(primaryLabel.snp.bottom).offset(2)
             make.height.equalTo(15)
         }
-        
+
+        arrowImageView.snp.makeConstraints { make in
+            make.width.equalTo(arrowImageViewWidth)
+            make.height.equalTo(arrowImageViewHeight)
+            make.centerY.equalTo(primaryLabel)
+            make.leading.equalTo(primaryLabel.snp.trailing).offset(arrowImageViewLeftPadding)
+        }
+
+        navigationButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
+    // MARK: - Action
+    @objc func groupControlsBtnTapped() {
+        delegate?.navigationTitleViewNavigationButtonTapped()
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -33,6 +33,14 @@ extension CardController: UIViewControllerTransitioningDelegate {
     }
 }
 
+extension CardController: NavigationTitleViewDelegate {
+
+    func navigationTitleViewNavigationButtonTapped() {
+        delegate.navigationTitleViewNavigationButtonTapped()
+    }
+
+}
+
 extension CardController: PollSectionControllerDelegate {
     
     var role: UserRole {
@@ -130,7 +138,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 extension CardController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.updateNameAndCode(name: session.name, code: session.code)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
     }
     
 }
