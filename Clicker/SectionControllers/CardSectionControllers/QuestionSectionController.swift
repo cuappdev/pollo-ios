@@ -12,9 +12,14 @@ class QuestionSectionController: ListSectionController {
     
     // MARK: - Data vars
     var questionModel: QuestionModel!
+    var userRole: UserRole!
     
     // MARK: - Constants
     let questionLabelVerticalPadding: CGFloat = 10
+    
+    init(userRole: UserRole) {
+        self.userRole = userRole
+    }
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -28,7 +33,7 @@ class QuestionSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: QuestionCell.self, for: self, at: index) as! QuestionCell
-        cell.configure(for: questionModel)
+        cell.configure(for: questionModel, userRole: userRole)
         cell.setNeedsUpdateConstraints()
         return cell
     }

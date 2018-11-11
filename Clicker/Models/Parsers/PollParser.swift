@@ -17,6 +17,7 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
             options = optionsArray.map { $0.stringValue }
@@ -31,13 +32,14 @@ class PollParser: Parser {
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             answer = answerText
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, selectedMCChoice: answer)
+        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
     }
 
     static func parseItem(json: JSON, state: PollState) -> Poll {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
             options = optionsArray.map { $0.stringValue }
@@ -51,6 +53,6 @@ class PollParser: Parser {
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             answer = answerText
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, selectedMCChoice: answer)
+        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
     }
 }
