@@ -25,7 +25,7 @@ class MCResultCell: UICollectionViewCell {
     var percentSelected: Float!
     var highlightViewWidthConstraint: Constraint!
     var didLayoutConstraints: Bool = false
-    var missedCorrectAnswer: Bool = false
+    var showCorrectAnswer: Bool = false
     
     // MARK: - Constants
     let labelFontSize: CGFloat = 13
@@ -122,14 +122,14 @@ class MCResultCell: UICollectionViewCell {
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
-            if missedCorrectAnswer {
+            if showCorrectAnswer {
                 make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
             } else {
                 make.trailing.equalTo(numSelectedLabel).inset(optionLabelHorizontalPadding)
             }
         }
         
-        if missedCorrectAnswer {
+        if showCorrectAnswer {
             checkImageView.snp.makeConstraints { make in
                 make.width.height.equalTo(checkImageViewLength)
                 make.leading.equalTo(optionLabel.snp.trailing).offset(optionLabelHorizontalPadding)
@@ -160,21 +160,18 @@ class MCResultCell: UICollectionViewCell {
             if let correctAnswer = correctAnswer {
                 if correctAnswer != "" {
                     if answer == correctAnswer {
-                        missedCorrectAnswer = !isSelected
+                        showCorrectAnswer = true
                         highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGrey5
                         optionLabel.textColor = .black
                     } else {
                         highlightView.backgroundColor = isSelected ? .grapefruit : .clickerGrey5
                         optionLabel.textColor = isSelected ? .black : .clickerGrey2
-                        missedCorrectAnswer = false
                     }
                 } else {
                     highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
-                    missedCorrectAnswer = false
                 }
             } else {
                 highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
-                missedCorrectAnswer = false
             }
         }
     }
