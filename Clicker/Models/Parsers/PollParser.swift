@@ -17,10 +17,6 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
-        results.forEach { (key, value) in
-            print("key: \(key)")
-            print("value: \(value)")
-        }
         let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {

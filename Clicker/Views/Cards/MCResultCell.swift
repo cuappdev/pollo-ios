@@ -24,8 +24,8 @@ class MCResultCell: UICollectionViewCell {
     var correctAnswer: String?
     var percentSelected: Float!
     var highlightViewWidthConstraint: Constraint!
-    var didLayoutConstraints: Bool = false
-    var showCorrectAnswer: Bool = false
+    var didLayoutConstraints = false
+    var showCorrectAnswer = false
     
     // MARK: - Constants
     let labelFontSize: CGFloat = 13
