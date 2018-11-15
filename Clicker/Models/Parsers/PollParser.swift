@@ -28,11 +28,11 @@ class PollParser: Parser {
             ? .multipleChoice
             : .freeResponse
         let state: PollState = json[ParserKeys.sharedKey].boolValue ? .shared : .ended
-        var answer: String? = nil
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
-            answer = answerText
+            poll.updateSelected(mcChoice: answerText)
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        return poll
     }
 
     static func parseItem(json: JSON, state: PollState) -> Poll {
@@ -49,10 +49,10 @@ class PollParser: Parser {
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse
-        var answer: String?
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
-            answer = answerText
+            poll.updateSelected(mcChoice: answerText)
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        return poll
     }
 }
