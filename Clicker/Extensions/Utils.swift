@@ -160,7 +160,7 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             var isSelected = false
             if let selected = poll.getSelected() as? String {
-                isSelected = mcOptionKey == selected
+                isSelected = mcOptionKey == selected || selected == option
             }
             let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected, choiceIndex: index)
             mcResultModels.append(resultModel)
