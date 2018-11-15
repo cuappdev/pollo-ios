@@ -17,6 +17,10 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        results.forEach { (key, value) in
+            print("key: \(key)")
+            print("value: \(value)")
+        }
         let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
@@ -28,11 +32,11 @@ class PollParser: Parser {
             ? .multipleChoice
             : .freeResponse
         let state: PollState = json[ParserKeys.sharedKey].boolValue ? .shared : .ended
-        var answer: String? = nil
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
-            answer = answerText
+            poll.updateSelected(mcChoice: answerText)
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        return poll
     }
 
     static func parseItem(json: JSON, state: PollState) -> Poll {
@@ -49,10 +53,10 @@ class PollParser: Parser {
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse
-        var answer: String?
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
-            answer = answerText
+            poll.updateSelected(mcChoice: answerText)
         }
-        return Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        return poll
     }
 }
