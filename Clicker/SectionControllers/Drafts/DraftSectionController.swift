@@ -21,8 +21,8 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     var delegate: DraftSectionControllerDelegate!
     
     // MARK: - Constants
-    let cellHeight: CGFloat = 82
     let interitemSpacing: CGFloat = 18
+    let constrainedTextWidth: CGFloat = 253
     
     init(delegate: DraftSectionControllerDelegate) {
         super.init()
@@ -35,7 +35,8 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: cellHeight)
+        let textHeight = draft.text.height(withConstrainedWidth: constrainedTextWidth, font: ._18HeavyFont)
+        return CGSize(width: containerSize.width, height: textHeight + 65)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

@@ -149,7 +149,7 @@ class PollBuilderViewController: UIViewController {
         view.addSubview(draftsButton)
         
         mcPollBuilder = MCPollBuilderView()
-        mcPollBuilder.configure(with: self)
+        mcPollBuilder.configure(with: self, pollBuilderDelegate: self)
         
         view.addSubview(mcPollBuilder)
         
@@ -442,6 +442,7 @@ class PollBuilderViewController: UIViewController {
             .done { drafts in
                 self.drafts = drafts
                 self.updateDraftsCount()
+                self.mcPollBuilder.needsPerformUpdates()
             } .catch { error in
                 print("error: ", error)
         }
