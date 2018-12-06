@@ -333,7 +333,7 @@ class PollBuilderViewController: UIViewController {
         }
         switch type {
         case .multipleChoice:
-            let question = mcPollBuilder.questionTextField.text ?? ""
+            let question = mcPollBuilder.questionText ?? ""
             var options = mcPollBuilder.getOptions()
             if options.isEmpty {
                 options.append("")
@@ -396,7 +396,7 @@ class PollBuilderViewController: UIViewController {
         
         switch questionType {
         case .multipleChoice:
-            let question = mcPollBuilder.questionTextField.text ?? ""
+            let question = mcPollBuilder.questionText ?? ""
             delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
             let question = frPollBuilder.questionTextField.text ?? ""

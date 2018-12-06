@@ -17,7 +17,6 @@ protocol MCPollBuilderViewDelegate {
 class MCPollBuilderView: UIView {
     
     // MARK: - View vars
-    var questionTextField: UITextField!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
     var tapGestureRecognizer: UITapGestureRecognizer!
@@ -28,7 +27,17 @@ class MCPollBuilderView: UIView {
     var session: Session!
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
+    var askQuestionModel: AskQuestionModel!
     var mcOptionModels: [PollBuilderMCOptionModel]!
+    var questionText: String? {
+        guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
+            return nil
+        }
+        return sectionController.getTextFieldText()
+    }
+
+    // MARK: - Constants
+    let collectionViewTopPadding: CGFloat = 10
 
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -42,11 +51,13 @@ class MCPollBuilderView: UIView {
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGestureRecognizer.delegate = self
         self.addGestureRecognizer(tapGestureRecognizer)
-        
+
+        askQuestionModel = AskQuestionModel(currentQuestion: nil)
+
         setupViews()
         setupConstraints()
         editable = false
-        questionTextField.becomeFirstResponder()
+//        questionTextField.becomeFirstResponder()
     }
     
     func configure(with delegate: MCPollBuilderViewDelegate, pollBuilderDelegate: PollBuilderViewDelegate) {
@@ -61,7 +72,7 @@ class MCPollBuilderView: UIView {
     
     // MARK: - POLLING
     func reset() {
-        questionTextField.text = ""
+        askQuestionModel = AskQuestionModel(currentQuestion: nil)
         clearMCOptionModels()
         adapter.reloadData(completion: nil)
     }
@@ -87,14 +98,6 @@ class MCPollBuilderView: UIView {
     
     // MARK: - LAYOUT
     func setupViews() {
-        questionTextField = UITextField()
-        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._18RegularFont])
-        questionTextField.font = ._18RegularFont
-        questionTextField.returnKeyType = .done
-        questionTextField.delegate = self
-        questionTextField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
-        addSubview(questionTextField)
-        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -110,21 +113,11 @@ class MCPollBuilderView: UIView {
     }
     
     func setupConstraints() {
-        questionTextField.snp.makeConstraints{ make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(48)
-        }
-        
         collectionView.snp.makeConstraints { make in
             make.width.centerX.equalToSuperview()
-            make.top.equalTo(questionTextField.snp.bottom).offset(5)
+            make.top.equalToSuperview().offset(collectionViewTopPadding)
             make.bottom.equalToSuperview()
         }
-    }
-    
-    @objc func updateEditable() {
-        pollBuilderDelegate?.updateCanDraft(questionTextField.text == "" ? false : true)
-        editable = questionTextField.text == "" ? false : true
     }
     
     @objc func hideKeyboard() {
@@ -132,7 +125,7 @@ class MCPollBuilderView: UIView {
     }
     
     func fillDraft(title: String, options: [String]) {
-        questionTextField.text = title
+        askQuestionModel = AskQuestionModel(currentQuestion: title)
         mcOptionModels = []
         options.enumerated().forEach { (arg) in
             let (index, option) = arg
