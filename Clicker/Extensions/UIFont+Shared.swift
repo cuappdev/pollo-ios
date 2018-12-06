@@ -30,7 +30,8 @@ extension UIFont {
     static let _30SemiboldFont = UIFont.systemFont(ofSize: 30, weight: .semibold)
     
     static let _14BoldFont = UIFont.systemFont(ofSize: 14, weight: .bold)
-    
+
+    static let _18HeavyFont = UIFont.systemFont(ofSize: 18, weight: .heavy)
     static let _20HeavyFont = UIFont.systemFont(ofSize: 20, weight: .heavy)
     static let _30HeavyFont = UIFont.systemFont(ofSize: 30, weight: .heavy)
     static let _60HeavyFont = UIFont.systemFont(ofSize: 60, weight: .heavy)

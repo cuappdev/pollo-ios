@@ -21,18 +21,24 @@ class DraftCell: UICollectionViewCell {
     var borderView: UIView!
     var editButton: UIButton!
     var editImageView: UIImageView!
+    var draftTypeLabel: UILabel!
     
     // MARK: - Data vars
     var delegate: DraftCellDelegate?
     var draft: Draft!
     
     // MARK: - Constants
-    let questionLabelHorizontalPadding: CGFloat = 18.5
+    let horizontalPadding: CGFloat = 18
     let questionLabelVerticalPadding: CGFloat = 20
-    let borderViewPadding: CGFloat = 18
     let editButtonWidth: CGFloat = 25
     let zoomInScale: CGFloat = 0.98
     let zoomDuration: TimeInterval = 0.25
+    let editImageViewTopPadding: CGFloat = 30.5
+    let editImageViewHeight: CGFloat = 3
+    let draftTypeLabelTopPadding: CGFloat = 10.5
+    let editImageName = "dots"
+    let multipleChoice = "Multiple Choice"
+    let freeResponse = "Free Response"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,15 +49,17 @@ class DraftCell: UICollectionViewCell {
     func configure(with draft: Draft) {
         self.draft = draft
         questionLabel.text = draft.text
+        let isMultipleChoice = draft.options.count > 0
+        draftTypeLabel.text = isMultipleChoice ? multipleChoice : freeResponse
     }
     
     func setupViews() {
         backgroundColor = .clear
         
         borderView = UIView()
-        borderView.layer.cornerRadius = 15
+        borderView.layer.cornerRadius = 5
         borderView.layer.borderWidth = 1
-        borderView.layer.borderColor = UIColor.white.cgColor
+        borderView.layer.borderColor = UIColor.clickerGrey5.cgColor
         borderView.clipsToBounds = true
         contentView.addSubview(borderView)
         
@@ -65,10 +73,10 @@ class DraftCell: UICollectionViewCell {
         contentView.addSubview(loadButton)
         
         questionLabel = UILabel()
-        questionLabel.font = ._18SemiboldFont
+        questionLabel.font = ._18HeavyFont
         questionLabel.textAlignment = .left
         questionLabel.backgroundColor = .clear
-        questionLabel.textColor = .white
+        questionLabel.textColor = .clickerGrey2
         questionLabel.numberOfLines = 2
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)
@@ -78,9 +86,15 @@ class DraftCell: UICollectionViewCell {
         contentView.addSubview(editButton)
         
         editImageView = UIImageView()
-        editImageView.image = #imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate)
+        editImageView.image = UIImage(named: editImageName)
         editImageView.tintColor = .white
+        editImageView.contentMode = .scaleAspectFit
         contentView.addSubview(editImageView)
+
+        draftTypeLabel = UILabel()
+        draftTypeLabel.textColor = .clickerGrey2
+        draftTypeLabel.font = ._12SemiboldFont
+        contentView.addSubview(draftTypeLabel)
     }
     
     @objc func zoomIn(sender: UIButton) {
@@ -112,7 +126,7 @@ class DraftCell: UICollectionViewCell {
     
     func setupConstraints() {
         borderView.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-borderViewPadding * 2)
+            make.width.equalToSuperview()
             make.height.equalToSuperview()
             make.center.equalToSuperview()
         }
@@ -124,22 +138,28 @@ class DraftCell: UICollectionViewCell {
         }
         
         questionLabel.snp.makeConstraints { make in
-            make.width.equalTo(borderView.snp.width).inset(questionLabelHorizontalPadding + editButtonWidth)
-            make.height.equalToSuperview()
-            make.left.equalTo(borderView.snp.left).offset(questionLabelHorizontalPadding)
-            make.centerY.equalToSuperview()
+            make.width.equalTo(borderView.snp.width).inset(horizontalPadding + editButtonWidth)
+            make.leading.equalTo(borderView.snp.leading).offset(horizontalPadding)
+            make.top.equalTo(borderView.snp.top).offset(questionLabelVerticalPadding)
         }
         
         editButton.snp.makeConstraints { make in
             make.width.equalTo(editButtonWidth)
             make.height.equalTo(editButtonWidth)
             make.centerY.equalToSuperview()
-            make.right.equalTo(borderView.snp.right).inset(questionLabelHorizontalPadding)
+            make.trailing.equalTo(borderView.snp.trailing).inset(horizontalPadding)
         }
         
         editImageView.snp.makeConstraints { make in
             make.width.equalTo(editButton.snp.width)
-            make.center.equalTo(editButton.snp.center)
+            make.top.equalTo(borderView).offset(editImageViewTopPadding)
+            make.height.equalTo(editImageViewHeight)
+            make.trailing.equalTo(borderView).inset(horizontalPadding)
+        }
+
+        draftTypeLabel.snp.makeConstraints { make in
+            make.leading.equalTo(questionLabel)
+            make.top.equalTo(questionLabel.snp.bottom).offset(draftTypeLabelTopPadding)
         }
     }
     

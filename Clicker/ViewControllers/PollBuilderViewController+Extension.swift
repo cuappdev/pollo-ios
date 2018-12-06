@@ -75,3 +75,5 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
     }
     
 }
+
+extension PollBuilderViewController: MCPollBuilderViewDelegate {}

@@ -10,6 +10,10 @@ import IGListKit
 import SnapKit
 import UIKit
 
+protocol MCPollBuilderViewDelegate {
+    var drafts: [Draft] { get }
+}
+
 class MCPollBuilderView: UIView {
     
     // MARK: - View vars
@@ -19,12 +23,13 @@ class MCPollBuilderView: UIView {
     var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: - Data vars
-    var pollBuilderDelegate: PollBuilderViewDelegate!
+    var delegate: MCPollBuilderViewDelegate?
+    var pollBuilderDelegate: PollBuilderViewDelegate?
     var session: Session!
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
     var mcOptionModels: [PollBuilderMCOptionModel]!
-    
+
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,8 +49,14 @@ class MCPollBuilderView: UIView {
         questionTextField.becomeFirstResponder()
     }
     
-    func configure(with delegate: PollBuilderViewDelegate) {
-        self.pollBuilderDelegate = delegate
+    func configure(with delegate: MCPollBuilderViewDelegate, pollBuilderDelegate: PollBuilderViewDelegate) {
+        self.delegate = delegate
+        self.pollBuilderDelegate = pollBuilderDelegate
+        self.adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    func needsPerformUpdates() {
+        self.adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: - POLLING
@@ -112,7 +123,7 @@ class MCPollBuilderView: UIView {
     }
     
     @objc func updateEditable() {
-        pollBuilderDelegate.updateCanDraft(questionTextField.text == "" ? false : true)
+        pollBuilderDelegate?.updateCanDraft(questionTextField.text == "" ? false : true)
         editable = questionTextField.text == "" ? false : true
     }
     
@@ -158,119 +169,4 @@ class MCPollBuilderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-}
-
-extension MCPollBuilderView: ListAdapterDataSource {
-    
-    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return mcOptionModels
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return PollBuilderMCOptionSectionController(delegate: self)
-    }
-    
-    func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
-    }
-    
-}
-
-extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
-    
-    func pollBuilderSectionControllerShouldAddOption() {
-        if mcOptionModels.count >= 27 { return }
-        let newMCOptionModel = PollBuilderMCOptionModel(type: .newOption(option: "", index: mcOptionModels.count - 1, isCorrect: false))
-        mcOptionModels.insert(newMCOptionModel, at: mcOptionModels.count - 1)
-        updateTotalOptions()
-        pollBuilderDelegate.ignoreNextKeyboardHiding()
-        adapter.reloadData { _ in
-            let index = IndexPath(item: 0, section: self.mcOptionModels.count - 2) // -2 because last CreateMCOptionCell is penultimate cell, with the add options button as the last cell.
-            self.collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)
-            guard let cell = self.collectionView.cellForItem(at: index) as? CreateMCOptionCell else {
-                print("thats not the right type of cell, something went wrong")
-                return
-            }
-            cell.shouldFocusTextField()
-        }
-    }
-    
-    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int, isCorrect: Bool) {
-        mcOptionModels[index].type = .newOption(option: option, index: index, isCorrect: isCorrect)
-    }
-
-    func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool) {
-        pollBuilderDelegate.updateCorrectAnswer(correctAnswer: isCorrect ? intToMCOption(index) : nil)
-        if isCorrect {
-            var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
-            mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
-                switch mcOptionModel.type {
-                case .newOption(option: let option, index: _, isCorrect: let isCorrect):
-                    if isCorrect {
-                        updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: false)))
-                    } else {
-                        updatedMCOptionModels.append(mcOptionModel)
-                    }
-                case .addOption:
-                    updatedMCOptionModels.append(mcOptionModel)
-                }
-            }
-            mcOptionModels = updatedMCOptionModels
-        }
-        mcOptionModels[index] = PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: isCorrect))
-        updateTotalOptions()
-        adapter.performUpdates(animated: false, completion: nil)
-    }
-    
-    func pollBuilderSectionControllerDidDeleteOption(index: Int) {
-        if mcOptionModels.count <= 3 { return }
-        mcOptionModels.remove(at: index)
-        var updatedMCOptionModels: [PollBuilderMCOptionModel] = []
-        mcOptionModels.enumerated().forEach { (index, mcOptionModel) in
-            switch mcOptionModel.type {
-            case .newOption(option: let option, index: _, isCorrect: let isCorrect):
-                updatedMCOptionModels.append(PollBuilderMCOptionModel(type: .newOption(option: option, index: index, isCorrect: isCorrect)))
-            case .addOption:
-                updatedMCOptionModels.append(mcOptionModel)
-            }
-        }
-        mcOptionModels = updatedMCOptionModels
-        updateTotalOptions()
-        pollBuilderDelegate.ignoreNextKeyboardHiding()
-        
-        adapter.performUpdates(animated: true) { _ in
-            if self.pollBuilderDelegate.isKeyboardShown {
-                // if deleted last option, select new last option. else, select new option at index of deleted option
-                let newIndex = index == self.mcOptionModels.count - 1 ? self.mcOptionModels.count - 2 : index
-                let selectIndex = IndexPath(item: 0, section: newIndex)
-                self.collectionView.scrollToItem(at: selectIndex, at: .centeredVertically, animated: true)
-                guard let cell = self.collectionView.cellForItem(at: selectIndex) as? CreateMCOptionCell else {
-                    print("thats not the right type of cell, something went wrong")
-                    return
-                }
-                cell.shouldFocusTextField()
-            }
-        }
-    }
-    
-}
-
-extension MCPollBuilderView: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let maxLength = IntegerConstants.maxQuestionCharacterCount
-        let currentString: NSString = (textField.text ?? "") as NSString
-        let newString: NSString =
-            currentString.replacingCharacters(in: range, with: string) as NSString
-        return newString.length <= maxLength
-    }
-    
-}
-
-extension MCPollBuilderView: UIGestureRecognizerDelegate {
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return pollBuilderDelegate.isKeyboardShown
-    }
-    
 }
