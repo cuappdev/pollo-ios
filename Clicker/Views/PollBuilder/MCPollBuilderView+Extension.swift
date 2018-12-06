@@ -11,7 +11,8 @@ import IGListKit
 extension MCPollBuilderView: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        var models: [ListDiffable] = mcOptionModels
+        var models: [ListDiffable] = [askQuestionModel]
+        models.append(contentsOf: mcOptionModels)
         if let drafts = delegate?.drafts, !drafts.isEmpty {
             models.append(DraftsTitleModel(numDrafts: drafts.count))
             models.append(contentsOf: drafts)
@@ -23,6 +24,8 @@ extension MCPollBuilderView: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is PollBuilderMCOptionModel {
             return PollBuilderMCOptionSectionController(delegate: self)
+        } else if object is AskQuestionModel {
+            return AskQuestionSectionController(delegate: self)
         } else if object is Draft {
             return DraftSectionController(delegate: self)
         } else if object is DraftsTitleModel {
@@ -47,7 +50,8 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
         updateTotalOptions()
         pollBuilderDelegate?.ignoreNextKeyboardHiding()
         adapter.reloadData { _ in
-            let index = IndexPath(item: 0, section: self.mcOptionModels.count - 2) // -2 because last CreateMCOptionCell is penultimate cell, with the add options button as the last cell.
+            // -1 because first cell is AskQuestionCell, then CreateMCOptionCells
+            let index = IndexPath(item: 0, section: self.mcOptionModels.count - 1)
             self.collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)
             guard let cell = self.collectionView.cellForItem(at: index) as? CreateMCOptionCell else {
                 print("thats not the right type of cell, something went wrong")
@@ -128,6 +132,19 @@ extension MCPollBuilderView: DraftSectionControllerDelegate {
     }
 
     
+}
+
+extension MCPollBuilderView: AskQuestionSectionControllerDelegate {
+
+    func askQuestionSectionControllerDidUpdateEditable(_ editable: Bool) {
+        pollBuilderDelegate?.updateCanDraft(editable)
+        self.editable = editable
+    }
+
+    func askQuestionSectionControllerDidUdpateText(_ text: String?) {
+        askQuestionModel.currentQuestion = text
+    }
+
 }
 
 extension MCPollBuilderView: UITextFieldDelegate {
