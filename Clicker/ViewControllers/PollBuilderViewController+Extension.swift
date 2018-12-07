@@ -6,7 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import Foundation
+import Presentr
 
 extension PollBuilderViewController: PollBuilderViewDelegate {
     
@@ -76,4 +76,40 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollBuilderViewController: MCPollBuilderViewDelegate {}
+extension PollBuilderViewController: MCPollBuilderViewDelegate {
+
+    func shouldEditDraft(draft: Draft) {
+        let width = ModalSize.full
+        let modalHeight = editDraftModalSize + view.safeAreaInsets.bottom
+        let height = ModalSize.custom(size: Float(modalHeight))
+        let originY = UIScreen.main.bounds.height - modalHeight
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        let presenter = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let editDraftViewController = EditDraftViewController(delegate: self, draft: draft)
+        customPresentViewController(presenter, viewController: editDraftViewController, animated: true, completion: nil)
+    }
+
+}
+
+extension PollBuilderViewController: EditDraftViewControllerDelegate {
+
+    func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft) {
+        DeleteDraft(id: draft.id).make()
+            .done {
+                guard let index = self.drafts.index(where: { otherDraft -> Bool in
+                    return otherDraft.id == draft.id
+                }) else { return }
+                self.drafts.remove(at: index)
+
+                self.mcPollBuilder.needsPerformUpdates()
+            } .catch { error in
+                let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
+                self.present(alertController, animated: true, completion: nil)
+        }
+    }
+
+}

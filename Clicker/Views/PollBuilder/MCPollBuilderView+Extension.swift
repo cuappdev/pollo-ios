@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import Presentr
 
 extension MCPollBuilderView: ListAdapterDataSource {
 
@@ -14,7 +15,10 @@ extension MCPollBuilderView: ListAdapterDataSource {
         var models: [ListDiffable] = [askQuestionModel]
         models.append(contentsOf: mcOptionModels)
         if let drafts = delegate?.drafts, !drafts.isEmpty {
-            models.append(DraftsTitleModel(numDrafts: drafts.count))
+            draftsTitleModel = DraftsTitleModel(numDrafts: drafts.count)
+            if let draftsTitleModel = draftsTitleModel {
+                models.append(draftsTitleModel)
+            }
             models.append(contentsOf: drafts)
             return models
         }
@@ -129,6 +133,7 @@ extension MCPollBuilderView: DraftSectionControllerDelegate {
 
     func draftSectionControllerEditDraft(draft: Draft) {
         print("edit draft")
+        delegate?.shouldEditDraft(draft: draft)
     }
 
     

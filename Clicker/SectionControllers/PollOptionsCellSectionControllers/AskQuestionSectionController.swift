@@ -45,6 +45,7 @@ class AskQuestionSectionController: ListSectionController {
         askQuestionModel = object as? AskQuestionModel
     }
 
+    // MARK: - Public API
     func getTextFieldText() -> String? {
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? AskQuestionCell else {
             return nil

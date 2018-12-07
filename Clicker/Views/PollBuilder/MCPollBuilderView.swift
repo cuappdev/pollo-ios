@@ -12,6 +12,7 @@ import UIKit
 
 protocol MCPollBuilderViewDelegate {
     var drafts: [Draft] { get }
+    func shouldEditDraft(draft: Draft)
 }
 
 class MCPollBuilderView: UIView {
@@ -29,15 +30,13 @@ class MCPollBuilderView: UIView {
     var editable: Bool!
     var askQuestionModel: AskQuestionModel!
     var mcOptionModels: [PollBuilderMCOptionModel]!
+    var draftsTitleModel: DraftsTitleModel?
     var questionText: String? {
         guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
             return nil
         }
         return sectionController.getTextFieldText()
     }
-
-    // MARK: - Constants
-    let collectionViewTopPadding: CGFloat = 10
 
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {
@@ -57,7 +56,6 @@ class MCPollBuilderView: UIView {
         setupViews()
         setupConstraints()
         editable = false
-//        questionTextField.becomeFirstResponder()
     }
     
     func configure(with delegate: MCPollBuilderViewDelegate, pollBuilderDelegate: PollBuilderViewDelegate) {
@@ -115,7 +113,7 @@ class MCPollBuilderView: UIView {
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.width.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(collectionViewTopPadding)
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
@@ -141,6 +139,14 @@ class MCPollBuilderView: UIView {
             opt.totalOptions = mcOptionModels.count - 1
         }
     }
+
+    func shouldLightenDraftsText(_ shouldLighten: Bool) {
+        guard let draftsTitleModel = draftsTitleModel,
+            let sectionController = adapter.sectionController(for: draftsTitleModel) as? DraftsTitleSectionController else {
+            return
+        }
+        sectionController.shouldLightenText(shouldLighten)
+    }
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -148,6 +154,7 @@ class MCPollBuilderView: UIView {
             let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
+            shouldLightenDraftsText(true)
         }
     }
     
@@ -155,6 +162,7 @@ class MCPollBuilderView: UIView {
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
+            shouldLightenDraftsText(false)
         }
     }
     

@@ -69,10 +69,13 @@ class PollBuilderViewController: UIViewController {
     let dropDownArrowInset: CGFloat = 10
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
+    let editDraftModalSize: CGFloat = 50
     let saveDraftButtonTitle = "Save as draft"
     let startPollButtonTitle = "Start Poll"
     let dropDownArrowImageName = "DropdownArrowIcon"
     let exitButtonImageName = "darkexit"
+    let errorText = "Error"
+    let failedToDeleteDraftText = "Failed to delete draft. Try again!"
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
