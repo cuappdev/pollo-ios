@@ -128,11 +128,10 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
 extension MCPollBuilderView: DraftSectionControllerDelegate {
 
     func draftSectionControllerLoadDraft(draft: Draft) {
-        print("load draft")
+        delegate?.shouldLoadDraft(draft: draft)
     }
 
     func draftSectionControllerEditDraft(draft: Draft) {
-        print("edit draft")
         delegate?.shouldEditDraft(draft: draft)
     }
 
