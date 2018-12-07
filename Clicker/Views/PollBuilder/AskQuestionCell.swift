@@ -40,7 +40,6 @@ class AskQuestionCell: UICollectionViewCell {
         textField.delegate = self
         textField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
         textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        textField.becomeFirstResponder()
         contentView.addSubview(textField)
 
         textField.snp.makeConstraints { make in
