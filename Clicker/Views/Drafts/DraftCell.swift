@@ -142,8 +142,7 @@ class DraftCell: UICollectionViewCell {
         }
         
         editButton.snp.makeConstraints { make in
-            make.width.equalTo(editButtonWidth)
-            make.height.equalTo(editButtonWidth)
+            make.width.height.equalTo(editButtonWidth)
             make.centerY.equalToSuperview()
             make.trailing.equalTo(borderView.snp.trailing).inset(horizontalPadding)
         }
