@@ -49,7 +49,7 @@ class DraftCell: UICollectionViewCell {
     func configure(with draft: Draft) {
         self.draft = draft
         questionLabel.text = draft.text
-        let isMultipleChoice = draft.options.count > 0
+        let isMultipleChoice = !draft.options.isEmpty
         draftTypeLabel.text = isMultipleChoice ? multipleChoice : freeResponse
     }
     
@@ -126,14 +126,12 @@ class DraftCell: UICollectionViewCell {
     
     func setupConstraints() {
         borderView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.width.height.equalToSuperview()
             make.center.equalToSuperview()
         }
         
         loadButton.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.width.height.equalToSuperview()
             make.center.equalToSuperview()
         }
         
