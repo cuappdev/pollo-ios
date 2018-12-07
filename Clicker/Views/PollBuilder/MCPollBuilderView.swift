@@ -13,6 +13,7 @@ import UIKit
 protocol MCPollBuilderViewDelegate {
     var drafts: [Draft] { get }
     func shouldEditDraft(draft: Draft)
+    func shouldLoadDraft(draft: Draft)
 }
 
 class MCPollBuilderView: UIView {

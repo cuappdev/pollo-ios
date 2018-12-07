@@ -93,6 +93,25 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate {
         customPresentViewController(presenter, viewController: editDraftViewController, animated: true, completion: nil)
     }
 
+    func shouldLoadDraft(draft: Draft) {
+        let draftQuestionType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
+        if questionType != draftQuestionType {
+            mcPollBuilder.isHidden = draftQuestionType == .freeResponse
+            frPollBuilder.isHidden = draftQuestionType == .multipleChoice
+            questionType = draftQuestionType
+            updateQuestionTypeButton()
+        }
+        switch draftQuestionType {
+        case .multipleChoice:
+            mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
+            loadedMCDraft = draft
+        case .freeResponse:
+            frPollBuilder.questionTextField.text = draft.text
+            loadedFRDraft = draft
+        }
+        updateCanDraft(true)
+    }
+
 }
 
 extension PollBuilderViewController: EditDraftViewControllerDelegate {
