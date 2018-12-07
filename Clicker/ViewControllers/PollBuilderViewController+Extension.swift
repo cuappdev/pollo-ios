@@ -24,36 +24,12 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
             saveDraftButton.setTitleColor(.clickerGrey2, for: .normal)
             saveDraftButton.backgroundColor = .clickerGrey6
             saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
-            draftsButton.titleLabel?.font = ._16MediumFont
         }
     }
     
     func updateCorrectAnswer(correctAnswer: String?) {
         self.correctAnswer = correctAnswer
     }
-}
-
-extension PollBuilderViewController: DraftsViewControllerDelegate {
-    
-    func draftsViewControllerLoadDraft(_ draft: Draft) {
-        let draftQuestionType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
-        if questionType != draftQuestionType {
-            mcPollBuilder.isHidden = draftQuestionType == .freeResponse
-            frPollBuilder.isHidden = draftQuestionType == .multipleChoice
-            questionType = draftQuestionType
-            updateQuestionTypeButton()
-        }
-        switch draftQuestionType {
-        case .multipleChoice:
-            mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
-            loadedMCDraft = draft
-        case .freeResponse:
-            frPollBuilder.questionTextField.text = draft.text
-            loadedFRDraft = draft
-        }
-        updateCanDraft(true)
-    }
-
 }
 
 extension PollBuilderViewController: QuestionTypeDropDownViewDelegate {

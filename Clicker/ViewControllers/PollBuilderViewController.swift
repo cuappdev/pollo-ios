@@ -29,7 +29,6 @@ class PollBuilderViewController: UIViewController {
     var dropDownArrow: UIButton!
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
-    var draftsButton: UIButton!
     var centerView: UIView!
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
@@ -144,12 +143,6 @@ class PollBuilderViewController: UIViewController {
         dropDownArrow.contentMode = .scaleAspectFit
         dropDownArrow.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
         centerView.addSubview(dropDownArrow)
-        
-        draftsButton = UIButton()
-        updateDraftsCount()
-        draftsButton.contentHorizontalAlignment = .right
-        draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
-        view.addSubview(draftsButton)
         
         mcPollBuilder = MCPollBuilderView()
         mcPollBuilder.configure(with: self, pollBuilderDelegate: self)
@@ -268,13 +261,6 @@ class PollBuilderViewController: UIViewController {
             make.leading.equalTo(questionTypeButton.snp.trailing).offset(dropDownArrowLeftPadding)
         }
         
-        draftsButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(edgePadding)
-            make.centerY.equalTo(centerView.snp.centerY)
-            make.width.equalTo(draftsButtonWidth)
-            make.height.equalTo(topBarHeight)
-        }
-        
         buttonsView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -353,7 +339,6 @@ class PollBuilderViewController: UIViewController {
                 CreateDraft(text: question, options: options).make()
                     .done { draft in
                         self.drafts.insert(draft, at: 0)
-                        self.updateDraftsCount()
                     }.catch { error in
                         print("error: ", error)
                 }
@@ -374,7 +359,6 @@ class PollBuilderViewController: UIViewController {
                 CreateDraft(text: question, options: []).make()
                     .done { draft in
                         self.drafts.insert(draft, at: 0)
-                        self.updateDraftsCount()
                     }.catch { error in
                         print("error: ", error)
                 }
@@ -428,12 +412,6 @@ class PollBuilderViewController: UIViewController {
         }
     }
     
-    @objc func showDrafts() {
-        let draftsVC = DraftsViewController(delegate: self, drafts: drafts)
-        draftsVC.modalPresentationStyle = .overFullScreen
-        present(draftsVC, animated: true, completion: nil)
-    }
-    
     @objc func exit() {
         delegate.showNavigationBar()
         dismiss(animated: true, completion: nil)
@@ -444,24 +422,10 @@ class PollBuilderViewController: UIViewController {
         GetDrafts().make()
             .done { drafts in
                 self.drafts = drafts
-                self.updateDraftsCount()
                 self.mcPollBuilder.needsPerformUpdates()
             } .catch { error in
                 print("error: ", error)
         }
-    }
-    
-    func updateDraftsCount() {
-        let text = "Drafts (\(drafts.count))"
-        let attributes = [NSAttributedStringKey.font: UIFont._16MediumFont]
-        let attributedTitle = NSMutableAttributedString(string: text, attributes: attributes)
-        let range0 = NSRange(location: 0, length: 6)
-        let range1 = NSRange(location: 6, length: text.count - 6)
-
-        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerBlack0, range: range0)
-        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerGrey2, range: range1)
-        draftsButton.setAttributedTitle(attributedTitle, for: .normal)
-
     }
     
     // MARK: - KEYBOARD
