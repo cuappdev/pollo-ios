@@ -52,7 +52,7 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollBuilderViewController: MCPollBuilderViewDelegate {
+extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderViewDelegate {
 
     func shouldEditDraft(draft: Draft) {
         let width = ModalSize.full
@@ -100,7 +100,7 @@ extension PollBuilderViewController: EditDraftViewControllerDelegate {
                 }) else { return }
                 self.drafts.remove(at: index)
 
-                self.mcPollBuilder.needsPerformUpdates()
+                self.updatePollBuilderViews()
             } .catch { error in
                 let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
                 self.present(alertController, animated: true, completion: nil)

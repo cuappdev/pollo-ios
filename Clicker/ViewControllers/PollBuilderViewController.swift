@@ -150,7 +150,7 @@ class PollBuilderViewController: UIViewController {
         view.addSubview(mcPollBuilder)
         
         frPollBuilder = FRPollBuilderView()
-        frPollBuilder.configure(with: self)
+        frPollBuilder.configure(with: self, pollBuilderDelegate: self)
         view.addSubview(frPollBuilder)
         frPollBuilder.isHidden = true
         
@@ -338,7 +338,7 @@ class PollBuilderViewController: UIViewController {
             } else {
                 CreateDraft(text: question, options: options).make()
                     .done { draft in
-                        self.drafts.insert(draft, at: 0)
+                        self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
@@ -347,7 +347,7 @@ class PollBuilderViewController: UIViewController {
             self.mcPollBuilder.reset()
             
         case .freeResponse:
-            let question = frPollBuilder.questionTextField.text ?? ""
+            let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
                 UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
                     .done { draft in
@@ -358,13 +358,13 @@ class PollBuilderViewController: UIViewController {
             } else {
                 CreateDraft(text: question, options: []).make()
                     .done { draft in
-                        self.drafts.insert(draft, at: 0)
+                        self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
             }
             loadedFRDraft = nil
-            self.frPollBuilder.questionTextField.text = ""
+            self.frPollBuilder.reset()
         }
         self.updateCanDraft(false)
         Analytics.shared.log(with: CreatedDraftPayload())
@@ -422,10 +422,15 @@ class PollBuilderViewController: UIViewController {
         GetDrafts().make()
             .done { drafts in
                 self.drafts = drafts
-                self.mcPollBuilder.needsPerformUpdates()
+                self.updatePollBuilderViews()
             } .catch { error in
                 print("error: ", error)
         }
+    }
+
+    func updatePollBuilderViews() {
+        self.mcPollBuilder.needsPerformUpdates()
+        self.frPollBuilder.needsPerformUpdates()
     }
     
     // MARK: - KEYBOARD
