@@ -50,7 +50,6 @@ extension FRPollBuilderView: DraftSectionControllerDelegate {
         delegate?.shouldEditDraft(draft: draft)
     }
 
-
 }
 
 extension FRPollBuilderView: AskQuestionSectionControllerDelegate {
