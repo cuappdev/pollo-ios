@@ -10,6 +10,7 @@ import SocketIO
 import SwiftyJSON
 
 class Socket {
+
     let id: String
     var delegate: SocketDelegate
     var socket: SocketIOClient

@@ -29,7 +29,6 @@ class PollBuilderViewController: UIViewController {
     var dropDownArrow: UIButton!
     var exitButton: UIButton!
     var questionTypeButton: UIButton!
-    var draftsButton: UIButton!
     var centerView: UIView!
     var buttonsView: UIView!
     var saveDraftButton: UIButton!
@@ -69,10 +68,13 @@ class PollBuilderViewController: UIViewController {
     let dropDownArrowInset: CGFloat = 10
     let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
+    let editDraftModalSize: CGFloat = 50
     let saveDraftButtonTitle = "Save as draft"
     let startPollButtonTitle = "Start Poll"
     let dropDownArrowImageName = "DropdownArrowIcon"
     let exitButtonImageName = "darkexit"
+    let errorText = "Error"
+    let failedToDeleteDraftText = "Failed to delete draft. Try again!"
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
@@ -142,19 +144,13 @@ class PollBuilderViewController: UIViewController {
         dropDownArrow.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
         centerView.addSubview(dropDownArrow)
         
-        draftsButton = UIButton()
-        updateDraftsCount()
-        draftsButton.contentHorizontalAlignment = .right
-        draftsButton.addTarget(self, action: #selector(showDrafts), for: .touchUpInside)
-        view.addSubview(draftsButton)
-        
         mcPollBuilder = MCPollBuilderView()
-        mcPollBuilder.configure(with: self)
+        mcPollBuilder.configure(with: self, pollBuilderDelegate: self)
         
         view.addSubview(mcPollBuilder)
         
         frPollBuilder = FRPollBuilderView()
-        frPollBuilder.configure(with: self)
+        frPollBuilder.configure(with: self, pollBuilderDelegate: self)
         view.addSubview(frPollBuilder)
         frPollBuilder.isHidden = true
         
@@ -265,13 +261,6 @@ class PollBuilderViewController: UIViewController {
             make.leading.equalTo(questionTypeButton.snp.trailing).offset(dropDownArrowLeftPadding)
         }
         
-        draftsButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(edgePadding)
-            make.centerY.equalTo(centerView.snp.centerY)
-            make.width.equalTo(draftsButtonWidth)
-            make.height.equalTo(topBarHeight)
-        }
-        
         buttonsView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -333,7 +322,7 @@ class PollBuilderViewController: UIViewController {
         }
         switch type {
         case .multipleChoice:
-            let question = mcPollBuilder.questionTextField.text ?? ""
+            let question = mcPollBuilder.questionText ?? ""
             var options = mcPollBuilder.getOptions()
             if options.isEmpty {
                 options.append("")
@@ -349,8 +338,7 @@ class PollBuilderViewController: UIViewController {
             } else {
                 CreateDraft(text: question, options: options).make()
                     .done { draft in
-                        self.drafts.insert(draft, at: 0)
-                        self.updateDraftsCount()
+                        self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
@@ -359,7 +347,7 @@ class PollBuilderViewController: UIViewController {
             self.mcPollBuilder.reset()
             
         case .freeResponse:
-            let question = frPollBuilder.questionTextField.text ?? ""
+            let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
                 UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
                     .done { draft in
@@ -370,14 +358,13 @@ class PollBuilderViewController: UIViewController {
             } else {
                 CreateDraft(text: question, options: []).make()
                     .done { draft in
-                        self.drafts.insert(draft, at: 0)
-                        self.updateDraftsCount()
+                        self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
             }
             loadedFRDraft = nil
-            self.frPollBuilder.questionTextField.text = ""
+            self.frPollBuilder.reset()
         }
         self.updateCanDraft(false)
         Analytics.shared.log(with: CreatedDraftPayload())
@@ -396,10 +383,10 @@ class PollBuilderViewController: UIViewController {
         
         switch questionType {
         case .multipleChoice:
-            let question = mcPollBuilder.questionTextField.text ?? ""
+            let question = mcPollBuilder.questionText ?? ""
             delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
-            let question = frPollBuilder.questionTextField.text ?? ""
+            let question = frPollBuilder.questionText ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
         if loadedMCDraft != nil || loadedFRDraft != nil {
@@ -425,12 +412,6 @@ class PollBuilderViewController: UIViewController {
         }
     }
     
-    @objc func showDrafts() {
-        let draftsVC = DraftsViewController(delegate: self, drafts: drafts)
-        draftsVC.modalPresentationStyle = .overFullScreen
-        present(draftsVC, animated: true, completion: nil)
-    }
-    
     @objc func exit() {
         delegate.showNavigationBar()
         dismiss(animated: true, completion: nil)
@@ -441,23 +422,15 @@ class PollBuilderViewController: UIViewController {
         GetDrafts().make()
             .done { drafts in
                 self.drafts = drafts
-                self.updateDraftsCount()
+                self.updatePollBuilderViews()
             } .catch { error in
                 print("error: ", error)
         }
     }
-    
-    func updateDraftsCount() {
-        let text = "Drafts (\(drafts.count))"
-        let attributes = [NSAttributedStringKey.font: UIFont._16MediumFont]
-        let attributedTitle = NSMutableAttributedString(string: text, attributes: attributes)
-        let range0 = NSRange(location: 0, length: 6)
-        let range1 = NSRange(location: 6, length: text.count - 6)
 
-        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerBlack0, range: range0)
-        attributedTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.clickerGrey2, range: range1)
-        draftsButton.setAttributedTitle(attributedTitle, for: .normal)
-
+    func updatePollBuilderViews() {
+        self.mcPollBuilder.needsPerformUpdates()
+        self.frPollBuilder.needsPerformUpdates()
     }
     
     // MARK: - KEYBOARD
