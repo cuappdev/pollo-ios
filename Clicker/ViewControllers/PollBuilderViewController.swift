@@ -386,7 +386,7 @@ class PollBuilderViewController: UIViewController {
             let question = mcPollBuilder.questionText ?? ""
             delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
-            let question = frPollBuilder.questionTextField.text ?? ""
+            let question = frPollBuilder.questionText ?? ""
             delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
         if loadedMCDraft != nil || loadedFRDraft != nil {
