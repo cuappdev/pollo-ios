@@ -20,7 +20,6 @@ extension MCPollBuilderView: ListAdapterDataSource {
                 models.append(draftsTitleModel)
             }
             models.append(contentsOf: drafts)
-            return models
         }
         return models
     }
