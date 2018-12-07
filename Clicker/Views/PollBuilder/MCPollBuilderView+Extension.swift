@@ -134,7 +134,6 @@ extension MCPollBuilderView: DraftSectionControllerDelegate {
         delegate?.shouldEditDraft(draft: draft)
     }
 
-    
 }
 
 extension MCPollBuilderView: AskQuestionSectionControllerDelegate {
