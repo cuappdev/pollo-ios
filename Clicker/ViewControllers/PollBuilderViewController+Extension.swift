@@ -82,7 +82,7 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderVie
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             loadedMCDraft = draft
         case .freeResponse:
-            frPollBuilder.questionTextField.text = draft.text
+            frPollBuilder.fillDraft(title: draft.text)
             loadedFRDraft = draft
         }
         updateCanDraft(true)

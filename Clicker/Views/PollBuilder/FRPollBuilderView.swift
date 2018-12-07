@@ -19,7 +19,6 @@ protocol FRPollBuilderViewDelegate {
 class FRPollBuilderView: UIView {
     
     // MARK: - View vars
-    var questionTextField: UITextField!
     var collectionView: UICollectionView!
     var adapter: ListAdapter!
     
@@ -63,19 +62,16 @@ class FRPollBuilderView: UIView {
 
     func reset() {
         askQuestionModel = AskQuestionModel(currentQuestion: nil)
-        adapter.reloadData(completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    func fillDraft(title: String) {
+        askQuestionModel = AskQuestionModel(currentQuestion: title)
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     // MARK: - LAYOUT
     func setupViews() {
-        questionTextField = UITextField()
-        questionTextField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._18RegularFont])
-        questionTextField.font = ._18RegularFont
-        questionTextField.returnKeyType = .done
-        questionTextField.delegate = self
-        questionTextField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
-        addSubview(questionTextField)
-
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -95,20 +91,6 @@ class FRPollBuilderView: UIView {
             make.width.centerX.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-        }
-    }
-    
-    @objc func updateEditable() {
-        if editable {
-            if questionTextField.text == "" {
-                pollBuilderDelegate.updateCanDraft(false)
-                editable = false
-            }
-        } else {
-            if questionTextField.text != "" {
-                pollBuilderDelegate.updateCanDraft(true)
-                editable = true
-            }
         }
     }
     
