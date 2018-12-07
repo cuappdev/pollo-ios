@@ -55,7 +55,7 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
 extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderViewDelegate {
 
     func shouldEditDraft(draft: Draft) {
-        let width = ModalSize.full
+        let width: ModalSize = .full
         let modalHeight = editDraftModalSize + view.safeAreaInsets.bottom
         let height = ModalSize.custom(size: Float(modalHeight))
         let originY = UIScreen.main.bounds.height - modalHeight
@@ -87,7 +87,7 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderVie
         }
         updateCanDraft(true)
     }
-
+    
 }
 
 extension PollBuilderViewController: EditDraftViewControllerDelegate {

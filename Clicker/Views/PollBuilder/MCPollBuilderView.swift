@@ -113,9 +113,7 @@ class MCPollBuilderView: UIView {
     
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.width.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.width.centerX.top.bottom.equalToSuperview()
         }
     }
     
@@ -144,7 +142,7 @@ class MCPollBuilderView: UIView {
     func shouldLightenDraftsText(_ shouldLighten: Bool) {
         guard let draftsTitleModel = draftsTitleModel,
             let sectionController = adapter.sectionController(for: draftsTitleModel) as? DraftsTitleSectionController else {
-            return
+                return
         }
         sectionController.shouldLightenText(shouldLighten)
     }

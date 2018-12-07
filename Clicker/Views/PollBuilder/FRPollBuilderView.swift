@@ -73,11 +73,9 @@ class FRPollBuilderView: UIView {
     // MARK: - LAYOUT
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clickerWhite
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.bounces = true
         addSubview(collectionView)
 
         let updater = ListAdapterUpdater()
@@ -88,9 +86,7 @@ class FRPollBuilderView: UIView {
     
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.width.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.width.centerX.top.bottom.equalToSuperview()
         }
     }
     

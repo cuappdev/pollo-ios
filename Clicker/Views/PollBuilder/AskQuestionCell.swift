@@ -56,14 +56,14 @@ class AskQuestionCell: UICollectionViewCell {
 
     // MARK: - Actions
     @objc func updateEditable() {
-        let isEditable = !(textField.text == "")
+        let isEditable = !(textField.text?.isEmpty ?? true)
         delegate?.askQuestionCellDidUpdateEditable(isEditable)
     }
 
     @objc func textDidChange() {
         delegate?.askQuestionCellDidUdpateText(textField.text)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
