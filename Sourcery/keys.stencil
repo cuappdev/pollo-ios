@@ -13,6 +13,5 @@ enum Keys: String {
         #else
         return Keys.apiURL
         #endif
-    }
-  
+    }  
 }

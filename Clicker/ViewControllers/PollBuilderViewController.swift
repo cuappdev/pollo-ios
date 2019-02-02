@@ -53,6 +53,7 @@ class PollBuilderViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var dropDownHidden: Bool = true
     var shouldIgnoreNextKeyboardHiding: Bool = false
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: Constants
     let centerViewWidth: CGFloat = 135
@@ -105,7 +106,7 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
             let circleImageXOffset: CGFloat = 12.0
@@ -301,7 +302,7 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             quizModeOverlayView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
@@ -311,6 +312,14 @@ class PollBuilderViewController: UIViewController {
     func updateQuestionTypeButton() {
         let questionTypeText: String = questionType == .multipleChoice ? "Multiple Choice" : "Free Response"
         questionTypeButton.setTitle(questionTypeText, for: .normal)
+    }
+    
+    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode()
+    }
+    
+    func createDraft(text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+        return networking(Endpoint.createDraft(text: text, options: options)).decode()
     }
     
     // MARK: - Actions
@@ -329,18 +338,28 @@ class PollBuilderViewController: UIViewController {
                 options.append("")
             }
             if let loadedDraft = loadedMCDraft {
-                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
-                        print("error: ", error)
+                updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value:
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
+                    }
                 }
             } else {
-                CreateDraft(text: question, options: options).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
-                        print("error: ", error)
+                createDraft(text: question, options: options).observe { [weak self] result in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value:
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
+                    }
                 }
             }
             loadedMCDraft = nil
@@ -349,18 +368,28 @@ class PollBuilderViewController: UIViewController {
         case .freeResponse:
             let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
-                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
-                        print("error: ", error)
+                updateDraft(id: "\(loadedDraft.id)", text: question, options: []).observe { [weak self] result in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value:
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
+                    }
                 }
             } else {
-                CreateDraft(text: question, options: []).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
-                        print("error: ", error)
+                createDraft(text: question, options: []).observe { [weak self] result in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value:
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
+                    }
                 }
             }
             loadedFRDraft = nil
@@ -417,14 +446,27 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    func deleteDraft(with id: String) -> Future<DeleteResponse> {
+        return networking(Endpoint.deleteDraft(with: id)).decode()
+    }
+    
+    func allDrafts() -> Future<Response<Edges<Node<Draft>>>> {
+        return networking(Endpoint.getDrafts()).decode()
+    }
+    
     // MARK: - Helpers
     func getDrafts() {
-        GetDrafts().make()
-            .done { drafts in
-                self.drafts = drafts
-                self.updatePollBuilderViews()
-            } .catch { error in
-                print("error: ", error)
+        allDrafts().observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    self.drafts = response.data.edges.map { node in node.node }
+                    self.updatePollBuilderViews()
+                case .error(let error):
+                    print("error: ", error)
+                }
+            }
         }
     }
 
@@ -453,7 +495,7 @@ class PollBuilderViewController: UIViewController {
             shouldIgnoreNextKeyboardHiding = false
             return
         }
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()

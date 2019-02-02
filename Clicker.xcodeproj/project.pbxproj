@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E51FD21711B1B001E07BC /* Date+Shared.swift */; };
+		0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C30875A2206B31500AC9589 /* UserEndpoints.swift */; };
+		0C40B4752201E54C005BED7B /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4742201E54C005BED7B /* Future.swift */; };
+		0C40B4772201E559005BED7B /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4762201E559005BED7B /* Endpoint.swift */; };
+		0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4782201E56B005BED7B /* PollEndpoints.swift */; };
+		0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */; };
+		0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47C22064263005BED7B /* SessionEndpoints.swift */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
 		0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */; };
@@ -95,7 +101,6 @@
 		C271A0942194026100EF12B4 /* AttendanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A0932194026100EF12B4 /* AttendanceViewController.swift */; };
 		C271A096219405DE00EF12B4 /* PollsDateAttendanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C271A095219405DE00EF12B4 /* PollsDateAttendanceModel.swift */; };
 		C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C275A1BD2098BE9100815951 /* EditPollViewController.swift */; };
-		C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */; };
 		C27D98E8219745C100E5A2FA /* GroupControlsInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27D98E7219745C100E5A2FA /* GroupControlsInfoView.swift */; };
 		C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF52158747B00586D87 /* PollsDateViewController.swift */; };
 		C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2833DF72158753800586D87 /* PollsDateViewController+Extension.swift */; };
@@ -118,11 +123,9 @@
 		C2B91809208CE3A80030822F /* FRSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B91808208CE3A80030822F /* FRSectionCell.swift */; };
 		C2B9180D208CE7320030822F /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9180C208CE7320030822F /* FeedbackViewController.swift */; };
 		C2BB14BA209469CD0081C35D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BB14B9209469CD0081C35D /* Utils.swift */; };
-		C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CD2033FA140067505A /* PollQuark.swift */; };
 		C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */; };
 		C2BF982B206BE1240048468E /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF982A206BE1240048468E /* OptionsView.swift */; };
 		C2CA3A28208309F800E0BDC5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CA3A27208309F800E0BDC5 /* User.swift */; };
-		C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */; };
 		C2D0579B1F926BB4008F21CB /* Answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D0579A1F926BB4008F21CB /* Answer.swift */; };
 		C2E1A2642139F0E500087EE4 /* MCResultSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */; };
 		C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */; };
@@ -132,8 +135,6 @@
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
-		C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBA2083045A0022FE6B /* DraftQuark.swift */; };
-		C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EBE208304980022FE6B /* SessionQuark.swift */; };
 		C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EC22083051A0022FE6B /* PollsViewController.swift */; };
 		C2F86664215174E800D045CD /* SessionSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F86663215174E800D045CD /* SessionSectionController.swift */; };
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
@@ -142,6 +143,7 @@
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
 		D946CA7E221346860005AD70 /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D946CA7D221346860005AD70 /* keys.generated.swift */; };
+		D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +158,12 @@
 
 /* Begin PBXFileReference section */
 		0C1E51FD21711B1B001E07BC /* Date+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Shared.swift"; sourceTree = "<group>"; };
+		0C30875A2206B31500AC9589 /* UserEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndpoints.swift; sourceTree = "<group>"; };
+		0C40B4742201E54C005BED7B /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
+		0C40B4762201E559005BED7B /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		0C40B4782201E56B005BED7B /* PollEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollEndpoints.swift; sourceTree = "<group>"; };
+		0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEndpoints.swift; sourceTree = "<group>"; };
+		0C40B47C22064263005BED7B /* SessionEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndpoints.swift; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
 		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
 		0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDraftViewController.swift; sourceTree = "<group>"; };
@@ -247,7 +255,6 @@
 		C271A0932194026100EF12B4 /* AttendanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceViewController.swift; sourceTree = "<group>"; };
 		C271A095219405DE00EF12B4 /* PollsDateAttendanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateAttendanceModel.swift; sourceTree = "<group>"; };
 		C275A1BD2098BE9100815951 /* EditPollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPollViewController.swift; sourceTree = "<group>"; };
-		C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickerQuark.swift; sourceTree = "<group>"; };
 		C27D98E7219745C100E5A2FA /* GroupControlsInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsInfoView.swift; sourceTree = "<group>"; };
 		C2833DF52158747B00586D87 /* PollsDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsDateViewController.swift; sourceTree = "<group>"; };
 		C2833DF72158753800586D87 /* PollsDateViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsDateViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -270,11 +277,9 @@
 		C2B91808208CE3A80030822F /* FRSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSectionCell.swift; sourceTree = "<group>"; };
 		C2B9180C208CE7320030822F /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		C2BB14B9209469CD0081C35D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		C2BF44CD2033FA140067505A /* PollQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollQuark.swift; sourceTree = "<group>"; };
 		C2BF44CF2033FD630067505A /* UIViewController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Shared.swift"; sourceTree = "<group>"; };
 		C2BF982A206BE1240048468E /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		C2CA3A27208309F800E0BDC5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuark.swift; sourceTree = "<group>"; };
 		C2D0579A1F926BB4008F21CB /* Answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Answer.swift; sourceTree = "<group>"; };
 		C2E1A2632139F0E500087EE4 /* MCResultSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCResultSectionController.swift; sourceTree = "<group>"; };
 		C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMiscellaneousModel.swift; sourceTree = "<group>"; };
@@ -284,8 +289,6 @@
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
-		C2F48EBA2083045A0022FE6B /* DraftQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftQuark.swift; sourceTree = "<group>"; };
-		C2F48EBE208304980022FE6B /* SessionQuark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionQuark.swift; sourceTree = "<group>"; };
 		C2F48EC22083051A0022FE6B /* PollsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsViewController.swift; sourceTree = "<group>"; };
 		C2F86663215174E800D045CD /* SessionSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSectionController.swift; sourceTree = "<group>"; };
 		C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Shared.swift"; sourceTree = "<group>"; };
@@ -297,6 +300,7 @@
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
 		D946CA7D221346860005AD70 /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
+		D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = testflight_release_notes.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +322,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C40B4732201E52C005BED7B /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				0C40B4742201E54C005BED7B /* Future.swift */,
+				0C40B4762201E559005BED7B /* Endpoint.swift */,
+				0C40B4782201E56B005BED7B /* PollEndpoints.swift */,
+				0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */,
+				0C40B47C22064263005BED7B /* SessionEndpoints.swift */,
+				0C30875A2206B31500AC9589 /* UserEndpoints.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		0C41C955214DB62B00F559C9 /* Secrets */ = {
 			isa = PBXGroup;
 			children = (
@@ -541,18 +558,6 @@
 			path = GroupControlsSectionControllers;
 			sourceTree = "<group>";
 		};
-		C27429E11F8C252D006FAD31 /* Quarks */ = {
-			isa = PBXGroup;
-			children = (
-				C27BF0FF1F93E7C100C51095 /* ClickerQuark.swift */,
-				C2BF44CD2033FA140067505A /* PollQuark.swift */,
-				C2F48EBA2083045A0022FE6B /* DraftQuark.swift */,
-				C2F48EBE208304980022FE6B /* SessionQuark.swift */,
-				C2CA3A2920830B2300E0BDC5 /* UserQuark.swift */,
-			);
-			path = Quarks;
-			sourceTree = "<group>";
-		};
 		C281886C1F7ADE6F00D7E944 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,6 +651,7 @@
 		C7F923B91F73540600B1E975 = {
 			isa = PBXGroup;
 			children = (
+				D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */,
 				0C41C955214DB62B00F559C9 /* Secrets */,
 				C2434C8D2133346C00929C98 /* Clicker-Bridging-Header.h */,
 				C7F923C41F73540600B1E975 /* Clicker */,
@@ -667,9 +673,9 @@
 		C7F923C41F73540600B1E975 /* Clicker */ = {
 			isa = PBXGroup;
 			children = (
+				0C40B4732201E52C005BED7B /* Networking */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
-				C27429E11F8C252D006FAD31 /* Quarks */,
 				C7D6AF5D1F93DED9003ABA10 /* Views */,
 				C7F923D91F73543700B1E975 /* ViewControllers */,
 				C2434CB72134710E00929C98 /* SectionControllers */,
@@ -803,6 +809,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
+				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -837,13 +844,10 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/IGListKit/IGListKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Neutron/Neutron.framework",
 				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
-				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -853,13 +857,10 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLEX.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IGListKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neutron.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -890,19 +891,19 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
+				"${SRCROOT}/env-vars.sh",
 			);
 			name = Secrets;
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${SRCROOT}/Secrets/keys.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"pollo\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho \"created keys.generated.swift file\"\n";
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho $API_URL\necho \"created keys.generated.swift file\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"yeet\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho \"created keys.generated.swift file\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"pollo\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\n";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -964,8 +965,10 @@
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
 				C22D5B582142E640005A0E29 /* Parser.swift in Sources */,
 				0CDAF0D121727B4B004DB6EA /* SpaceModel.swift in Sources */,
+				0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
+				0C40B4752201E54C005BED7B /* Future.swift in Sources */,
 				C212EE2D21838D9600D15785 /* QuizModeOverlayView.swift in Sources */,
 				63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */,
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
@@ -978,7 +981,6 @@
 				C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */,
 				C22F66662141B86400D4E349 /* SeparatorLineSectionController.swift in Sources */,
 				0C8E384521557D8000AB8633 /* DraftSectionController.swift in Sources */,
-				C27BF1001F93E7C100C51095 /* ClickerQuark.swift in Sources */,
 				C26EBB6B21B9048A00AC2B60 /* AskQuestionModel.swift in Sources */,
 				C28D0B2F21712C3900FCDE0A /* ActivityIndicatorView.swift in Sources */,
 				C2434CBF21388E2B00929C98 /* Poll.swift in Sources */,
@@ -987,7 +989,7 @@
 				63ACEC74214B401600D555F1 /* SettingsSectionController.swift in Sources */,
 				C2E9C70B2182ACCE00E36659 /* EventPayload.swift in Sources */,
 				C275A1BE2098BE9100815951 /* EditPollViewController.swift in Sources */,
-				C2F48EBF208304980022FE6B /* SessionQuark.swift in Sources */,
+				0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */,
 				C20B57192139DDA10091034F /* QuestionSectionController.swift in Sources */,
 				C26D5F51214F5F3700548255 /* PollsDateSectionController.swift in Sources */,
 				C2E9C7092182A40600E36659 /* Analytics.swift in Sources */,
@@ -998,7 +1000,6 @@
 				6353FD3A2086DDC900E16EB2 /* CardController.swift in Sources */,
 				636B0F15209D2DDA00769E14 /* QuestionTypeDropDownView.swift in Sources */,
 				0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */,
-				C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */,
 				C26EBB6F21B9051B00AC2B60 /* AskQuestionCell.swift in Sources */,
 				D946CA7E221346860005AD70 /* keys.generated.swift in Sources */,
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
@@ -1023,10 +1024,10 @@
 				C2F48EB7208302F90022FE6B /* Socket.swift in Sources */,
 				C2900D49214706C300566F25 /* FRInputCell.swift in Sources */,
 				C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */,
-				C2F48EBB2083045A0022FE6B /* DraftQuark.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C2900D45214703E700566F25 /* FRInputModel.swift in Sources */,
 				C22F66642141B7AA00D4E349 /* SeparatorLineCell.swift in Sources */,
+				0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */,
 				C26EBB6721B8F46100AC2B60 /* DraftsTitleCell.swift in Sources */,
 				C271A0802193F62800EF12B4 /* ViewAllCell.swift in Sources */,
 				C21C95BE2145D90900F58874 /* FROptionSectionController.swift in Sources */,
@@ -1039,6 +1040,7 @@
 				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C22D5B5E214325BE005A0E29 /* MCChoiceCell.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
+				0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */,
 				63A4A64E2094FD7800523AE6 /* DraftCell.swift in Sources */,
 				C26EBB6221B8F10F00AC2B60 /* DraftsTitleModel.swift in Sources */,
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,
@@ -1052,7 +1054,6 @@
 				C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */,
 				0CDAF0D321727D4B004DB6EA /* SpaceSectionController.swift in Sources */,
 				0CF647832176970900535573 /* ArrowView.swift in Sources */,
-				C2BF44CE2033FA140067505A /* PollQuark.swift in Sources */,
 				C2900D432146F72900566F25 /* String+Shared.swift in Sources */,
 				C271A07C2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift in Sources */,
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
@@ -1062,6 +1063,7 @@
 				63A4A6482094D5EF00523AE6 /* FRPollBuilderView.swift in Sources */,
 				C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */,
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,
+				0C40B4772201E559005BED7B /* Endpoint.swift in Sources */,
 				C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
 				C26EBB6921B8F54900AC2B60 /* MCPollBuilderView+Extension.swift in Sources */,

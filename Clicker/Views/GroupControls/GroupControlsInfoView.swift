@@ -90,8 +90,10 @@ class GroupControlsInfoView: UIView {
     
     // MARK: - Configure
     func configure(numMembers: Int, numPolls: Int, code: String) {
-        numMembersLabel.text = "\(numMembers) members"
-        numPollsLabel.text = "\(numPolls) polls"
+        let memberDescriptor = numMembers == 1 ? "member" : "members"
+        let pollsDescriptor = numPolls == 1 ? "poll" : "polls"
+        numMembersLabel.text = "\(numMembers) \(memberDescriptor)"
+        numPollsLabel.text = "\(numPolls) \(pollsDescriptor)"
         codeLabel.text = "Code: \(code)"
     }
 

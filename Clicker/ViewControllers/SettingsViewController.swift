@@ -160,7 +160,7 @@ class SettingsViewController: UIViewController {
     open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
-            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { _ in
                 let feedbackVC = FeedbackViewController(type: .settingsViewController)
                 self.navigationController?.pushViewController(feedbackVC, animated: true)
             }))
@@ -187,6 +187,5 @@ extension SettingsViewController: ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
     }
-    
     
 }

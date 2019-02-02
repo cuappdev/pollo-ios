@@ -42,7 +42,6 @@ class NavigationTitleView: UIView {
         primaryLabel.font = ._16SemiboldFont
         primaryLabel.textAlignment = .center
         addSubview(primaryLabel)
-    
         
         secondaryLabel = UILabel()
         secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)
@@ -62,11 +61,11 @@ class NavigationTitleView: UIView {
         addSubview(navigationButton)
     }
     
-    func configure(primaryText: String, secondaryText: String, delegate: NavigationTitleViewDelegate? = nil) {
+    func configure(primaryText: String, secondaryText: String, userRole: UserRole? = nil, delegate: NavigationTitleViewDelegate? = nil) {
         primaryLabel.text = primaryText
         secondaryLabel.text = secondaryText
         self.delegate = delegate
-        arrowImageView.isHidden = delegate == nil
+        arrowImageView.isHidden = delegate == nil || userRole == .member
     }
     
     func setupConstraints() {

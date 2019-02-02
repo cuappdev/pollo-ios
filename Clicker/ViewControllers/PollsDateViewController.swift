@@ -30,7 +30,8 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
-    weak var delegate: PollsDateViewControllerDelegate?
+    var delegate: PollsDateViewControllerDelegate!
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -97,16 +98,19 @@ class PollsDateViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", delegate: self)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
         peopleButton = UIButton()
+        peopleButton.isEnabled = false
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         
@@ -129,29 +133,47 @@ class PollsDateViewController: UIViewController {
         present(pollBuilderViewController, animated: true, completion: nil)
     }
     
+    func deleteSession(with id: Int) -> Future<DeleteResponse> {
+        return networking(Endpoint.deleteSession(with: id)).decode()
+    }
+    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
-            DeleteSession(id: session.id).make()
-                .done {
-                    self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
+            deleteSession(with: session.id).observe { [weak self] result in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value(let response):
+                        if response.success {
+                            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                        } else {
+                            let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    case .error(let error):
+                        print(error)
+                        let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
                 }
-                .catch { error in
-                    print(error)
-                    self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
             }
         } else {
             self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
         }
     }
     
+    func getMembers(with id: Int) -> Future<Response<Edges<Node<GetMemberResponse>>>> {
+        return networking(Endpoint.getMembers(with: id)).decode()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }

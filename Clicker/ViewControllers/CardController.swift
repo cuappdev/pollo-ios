@@ -108,7 +108,7 @@ class CardController: UIViewController {
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: collectionViewHorizontalInset, bottom: 0, right: collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = true
@@ -175,6 +175,8 @@ class CardController: UIViewController {
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         
@@ -212,7 +214,7 @@ class CardController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 

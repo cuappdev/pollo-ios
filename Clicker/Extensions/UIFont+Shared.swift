@@ -36,6 +36,4 @@ extension UIFont {
     static let _30HeavyFont = UIFont.systemFont(ofSize: 30, weight: .heavy)
     static let _60HeavyFont = UIFont.systemFont(ofSize: 60, weight: .heavy)
     
-    
-    
 }
