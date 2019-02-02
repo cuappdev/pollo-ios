@@ -38,6 +38,10 @@ class PollSectionController: ListSectionController {
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
+        poll.results.forEach { (key, value) in
+            print("key: \(key)")
+            print(value.dictionary)
+        }
         let cell = collectionContext?.dequeueReusableCell(of: CardCell.self, for: self, at: index) as! CardCell
         cell.configure(with: self, poll: poll, userRole: delegate.role)
         cell.setNeedsUpdateConstraints()
