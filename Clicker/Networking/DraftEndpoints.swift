@@ -23,21 +23,33 @@ extension Endpoint {
     }
     
     static func getDrafts() -> Endpoint {
-        return Endpoint(path: "/drafts")
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/drafts", headers: headers)
     }
     
     static func createDraft(text: String, options: [String]) -> Endpoint {
         let body = DraftBody(text: text, options: options)
-        return Endpoint(path: "/drafts", body: body)
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/drafts", headers: headers, body: body)
     }
     
     static func updateDraft(id: Int, text: String, options: [String]) -> Endpoint {
         let body = DraftBody(text: text, options: options)
-        return Endpoint(path: "/drafts/\(id)", body: body)
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/drafts/\(id)", headers: headers, body: body)
     }
     
     static func deleteDraft(with id: Int) -> Endpoint {
-        return Endpoint(path: "/drafts/\(id)", method: EndpointMethod.delete)
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/drafts/\(id)", headers: headers, method: EndpointMethod.delete)
     }
     
 }

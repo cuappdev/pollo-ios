@@ -10,13 +10,18 @@ import Foundation
 
 extension Endpoint {
     
-    
     static func getPoll(with id: Int) -> Endpoint {
-        return Endpoint(path: "/polls\(id)")
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/polls\(id)", headers: headers)
     }
     
     static func getSortedPolls(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/polls")
+        let headers = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
+        ]
+        return Endpoint(path: "/sessions/\(id)/polls", headers: headers)
     }
     
 }

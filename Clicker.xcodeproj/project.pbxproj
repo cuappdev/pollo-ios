@@ -12,6 +12,7 @@
 		0C40B4772201E559005BED7B /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4762201E559005BED7B /* Endpoint.swift */; };
 		0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4782201E56B005BED7B /* PollEndpoints.swift */; };
 		0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */; };
+		0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47C22064263005BED7B /* SessionEndpoints.swift */; };
 		0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C41C958214DB7AA00F559C9 /* Keys.plist */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
 		0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */; };
@@ -164,6 +165,7 @@
 		0C40B4762201E559005BED7B /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		0C40B4782201E56B005BED7B /* PollEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEndpoints.swift; sourceTree = "<group>"; };
+		0C40B47C22064263005BED7B /* SessionEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndpoints.swift; sourceTree = "<group>"; };
 		0C41C958214DB7AA00F559C9 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
 		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				0C40B4762201E559005BED7B /* Endpoint.swift */,
 				0C40B4782201E56B005BED7B /* PollEndpoints.swift */,
 				0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */,
+				0C40B47C22064263005BED7B /* SessionEndpoints.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -1042,6 +1045,7 @@
 				C2434CB421346F8000929C98 /* PollTypeModel.swift in Sources */,
 				C22D5B5E214325BE005A0E29 /* MCChoiceCell.swift in Sources */,
 				C21D98812083D32000191103 /* LoginViewController.swift in Sources */,
+				0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */,
 				63A4A64E2094FD7800523AE6 /* DraftCell.swift in Sources */,
 				C26EBB6221B8F10F00AC2B60 /* DraftsTitleModel.swift in Sources */,
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,
