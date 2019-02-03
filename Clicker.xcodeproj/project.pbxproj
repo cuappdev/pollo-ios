@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E51FD21711B1B001E07BC /* Date+Shared.swift */; };
+		0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C30875A2206B31500AC9589 /* UserEndpoints.swift */; };
 		0C40B4752201E54C005BED7B /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4742201E54C005BED7B /* Future.swift */; };
 		0C40B4772201E559005BED7B /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4762201E559005BED7B /* Endpoint.swift */; };
 		0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4782201E56B005BED7B /* PollEndpoints.swift */; };
@@ -161,6 +162,7 @@
 
 /* Begin PBXFileReference section */
 		0C1E51FD21711B1B001E07BC /* Date+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Shared.swift"; sourceTree = "<group>"; };
+		0C30875A2206B31500AC9589 /* UserEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndpoints.swift; sourceTree = "<group>"; };
 		0C40B4742201E54C005BED7B /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
 		0C40B4762201E559005BED7B /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		0C40B4782201E56B005BED7B /* PollEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollEndpoints.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				0C40B4782201E56B005BED7B /* PollEndpoints.swift */,
 				0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */,
 				0C40B47C22064263005BED7B /* SessionEndpoints.swift */,
+				0C30875A2206B31500AC9589 /* UserEndpoints.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -968,6 +971,7 @@
 				63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */,
 				C22D5B582142E640005A0E29 /* Parser.swift in Sources */,
 				0CDAF0D121727B4B004DB6EA /* SpaceModel.swift in Sources */,
+				0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
 				0C40B4752201E54C005BED7B /* Future.swift in Sources */,
