@@ -30,11 +30,13 @@ class PollsViewController: UIViewController {
     var headerGradientView: UIView!
     
     // MARK: - Data vars
+    private let networking: Networking = URLSession.shared.request
     var pollTypeModels: [PollTypeModel]!
     var isKeyboardShown: Bool = false
     var isOpeningGroup: Bool = false
     var isListeningToKeyboard: Bool = true
     var gradientNeedsSetup: Bool = true
+    var session: Session?
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29
@@ -305,27 +307,37 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
+    func joinSessionWithCode(with code: String) -> Future<Session> {
+        return networking(Endpoint.joinSessionWithCode(with: code)).decode(Session.self)
+    }
+    
+    func getSortedPolls(with id: Int) -> Future<[PollsDateModel]> {
+        return networking(Endpoint.getSortedPolls(with: id)).decode([PollsDateModel].self)
+    }
+    
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        JoinSessionWithCode(code: code).make()
-            .done { session in
-                GetSortedPolls(id: session.id).make()
-                    .done { pollsDateArray in
-                        self.codeTextField.text = ""
-                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        self.updateJoinSessionButton(canJoin: false)
-                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        joinSessionWithCode(with: code).chained { session -> Future<[PollsDateModel]> in
+            self.session = session
+            return self.getSortedPolls(with: session.id)
+            }.observe { [weak self] result in
+                switch result {
+                case .value(let pollsDateArray):
+                    if let this = self, let session = this.session {
+                        this.codeTextField.text = ""
+                        let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        this.updateJoinSessionButton(canJoin: false)
+                        this.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                        this.navigationController?.setNavigationBarHidden(false, animated: true)
                         Analytics.shared.log(with: JoinedGroupPayload())
-                    }.catch { error in
-                        print(error)
-                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
-                        self.present(alertController, animated: true, completion: nil)
+                    }
+                case .error(let error):
+                    print(error)
+                    if let this = self {
+                        let alertController = this.createAlert(title: this.errorText, message: "Failed to join session with code \(code). Try again!")
+                        this.present(alertController, animated: true, completion: nil)
+                    }
                 }
-            }.catch { error in
-                print(error)
-                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
-                self.present(alertController, animated: true, completion: nil)
         }
     }
     

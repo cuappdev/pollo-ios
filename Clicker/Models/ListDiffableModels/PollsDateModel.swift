@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-class PollsDateModel {
+class PollsDateModel: Codable {
     
     var date: String
     var polls: [Poll]

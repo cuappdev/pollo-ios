@@ -41,7 +41,7 @@ enum QuestionType: CustomStringConvertible {
     }
 }
 
-class Poll {
+class Poll: Codable {
     
     var id: Int
     var text: String
