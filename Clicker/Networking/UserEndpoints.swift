@@ -15,7 +15,7 @@ extension Endpoint {
     }
     
     static func userAuthenticate(with idToken: String) -> Endpoint {
-        return Endpoint(path: "/auth/mobile", headers: headers, body: ["idToken": idToken])
+        return Endpoint(path: "/auth/mobile", body: ["idToken": idToken])
     }
     
     static func userRefreshSession() -> Endpoint {

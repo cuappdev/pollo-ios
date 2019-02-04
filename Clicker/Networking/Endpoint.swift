@@ -30,7 +30,7 @@ enum SecretKeys: String {
     
     static var hostURL: SecretKeys {
         #if DEV_SERVER
-        return Keys.apiDevURL
+        return SecretKeys.apiDevURL
         #else
         return SecretKeys.apiURL
         #endif
@@ -45,6 +45,7 @@ enum SecretKeys: String {
 
 
 struct Endpoint {
+    static var apiVersion: Int? { return 2 }
     let path: String
     let queryItems: [URLQueryItem]
     let headers: [String: String]
@@ -68,8 +69,9 @@ extension Endpoint {
         self.queryItems = []
         self.headers = headers
         self.method = .post
-        
+        print(body)
         //Encode body
+//        self.body = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         self.body = try? JSONEncoder().encode(body)
     }
     
@@ -89,8 +91,12 @@ extension Endpoint {
     var url: URL? {
         var components = URLComponents()
         components.scheme = "http"
-        components.host = "\(Keys.hostURL.value)/api"
-        components.path = path
+        components.host = SecretKeys.hostURL.value
+        if let apiVersion = Endpoint.apiVersion {
+            components.path = "/api/v\(apiVersion)\(path)"
+        } else {
+            components.path = "/api\(path)"
+        }
         #if DEV_SERVER
         components.port = 3000
         #endif

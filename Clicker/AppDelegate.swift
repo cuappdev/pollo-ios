@@ -84,8 +84,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
-    func userAuthenticate(with idToken: String) -> Future<UserSession> {
-        return networking(Endpoint.userAuthenticate(with: idToken)).decode(UserSession.self)
+    func userAuthenticate(with idToken: String) -> Future<Response<UserSession>> {
+        return networking(Endpoint.userAuthenticate(with: idToken)).decode(Response<UserSession>.self)
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
@@ -104,8 +104,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             userAuthenticate(with: idToken).observe { [weak self] result in
                 switch result {
-                case .value(let userSession):
-                    User.userSession = userSession
+                case .value(let response):
+                    User.userSession = response.data
                     let pollsViewController = PollsViewController()
                     if let this = self {
                         this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
