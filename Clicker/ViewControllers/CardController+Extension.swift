@@ -101,7 +101,8 @@ extension CardController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        let pollResults = formatResults(results: results)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         pollsDateModel.polls.append(newPoll)
         if pollsDateModel.date == getTodaysDate() {
             adapter.performUpdates(animated: false) { completed in

@@ -150,13 +150,40 @@ private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     return .mcChoice(choiceModels: mcChoiceModels)
 }
 
+func formatResults(results: [String : JSON]) -> [String : PollResult] {
+    var pollResults = [String : PollResult]()
+    results.forEach { (key, value) in
+        let text = value[ParserKeys.textKey].stringValue
+        let count = value[ParserKeys.countKey].intValue
+        pollResults[key] = PollResult(text: text, count: count)
+    }
+    return pollResults
+}
+
+func formatAnswers(answers: [String : JSON]) -> [String : PollAnswer] {
+    var pollAnswers = [String : PollAnswer]()
+    answers.forEach { (key, value) in
+        if let answerIdsJson = value.array {
+            var answerIds = [Int]()
+            answerIdsJson.forEach({ json in
+                answerIds.append(json.intValue)
+            })
+            pollAnswers[key] = PollAnswer(answer: nil, answerIds: answerIds)
+        } else if let answer = value.string {
+            pollAnswers[key] = PollAnswer(answer: answer, answerIds: nil)
+        }
+    }
+    return pollAnswers
+}
+
 func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     var mcResultModels: [MCResultModel] = []
     let totalNumResults = Float(poll.getTotalResults())
     poll.options.enumerated().forEach { (index, option) in
         let mcOptionKey = intToMCOption(index)
-        if let infoDict = poll.results[mcOptionKey] {
-            guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
+        if let result = poll.results[mcOptionKey] {
+            let option = result.text
+            let numSelected = result.count
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             var isSelected = false
             if let selected = poll.getSelected() as? String {
