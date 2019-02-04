@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var pollsNavigationController: UINavigationController!
     var didSignInSilently: Bool = false
     let launchScreen = "LaunchScreen"
+    private let networking: Networking = URLSession.shared.request
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         setupWindow()
@@ -83,6 +84,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
+    func userAuthenticate(with idToken: String) -> Future<UserSession> {
+        return networking(Endpoint.userAuthenticate(with: idToken)).decode(UserSession.self)
+    }
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             let idToken = user.authentication.idToken ?? ""
@@ -96,18 +101,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
             UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
-
-            UserAuthenticate(idToken: idToken).make()
-                .done { userSession in
-                    print(userSession)
+            
+            userAuthenticate(with: idToken).observe { [weak self] result in
+                switch result {
+                case .value(let userSession):
                     User.userSession = userSession
-                    let pollsVC = PollsViewController()
-                    self.pollsNavigationController.pushViewController(pollsVC, animated: !self.didSignInSilently)
-                    getAllSessions(completion: { (joinedSessions, createdSessions) in
-                        pollsVC.configure(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                    })
-                } .catch { error in
+                    let pollsViewController = PollsViewController()
+                    if let this = self {
+                        this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
+                        getAllSessions(completion: { (joinedSessions, createdSessions) in
+                            pollsViewController.configure(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                        })
+                    }
+                case .error(let error):
                     print(error)
+                }
             }
             
         } else {
