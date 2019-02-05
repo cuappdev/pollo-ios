@@ -348,7 +348,7 @@ class PollBuilderViewController: UIViewController {
             
         case .freeResponse:
             let question = frPollBuilder.questionText ?? ""
-            if let loadedDraft = loadedFRDraft {
+            if let loadedDraft = loadedFRDraft, loadedDraft.text == question {
                 UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
                     .done { draft in
                         self.getDrafts()
