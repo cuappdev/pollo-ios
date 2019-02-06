@@ -31,6 +31,7 @@ class PollsDateViewController: UIViewController {
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
     var delegate: PollsDateViewControllerDelegate!
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -145,6 +146,10 @@ class PollsDateViewController: UIViewController {
         } else {
             self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
         }
+    }
+    
+    func getMembers(with id: Int) -> Future<Response<[User]>> {
+        return networking(Endpoint.getMembers(with: id)).decode(Response<[User]>.self)
     }
     
     required init?(coder aDecoder: NSCoder) {

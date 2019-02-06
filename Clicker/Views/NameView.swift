@@ -14,12 +14,15 @@ protocol NameViewDelegate {
 
 class NameView: UIView, UITextFieldDelegate {
 
+    // MARK: - View vars
     var titleField: UITextField!
     var blurEffect: UIBlurEffect!
     var blurEffectView: UIVisualEffectView!
     
+    // MARK: - Data vars
     var session: Session!
     var delegate: NameViewDelegate!
+    private let networking: Networking = URLSession.shared.request
     
     init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
@@ -94,6 +97,10 @@ class NameView: UIView, UITextFieldDelegate {
         }
     }
     
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<String>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<String>.self)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         var name: String
         if let text = textField.text {
@@ -101,15 +108,16 @@ class NameView: UIView, UITextFieldDelegate {
         } else {
             name = session.code
         }
-        UpdateSession(id: session.id, name: name, code: session.code).make()
-            .done { code in
-                self.session.name = name
-                self.delegate.nameViewDidUpdateSessionName()
-                self.removeFromSuperview()
-            }.catch { error in
+        updateSession(id: session.id, name: name, code: session.code).observe { [weak self] result in
+            switch result {
+            case .value(_):
+                self?.session.name = name
+                self?.delegate.nameViewDidUpdateSessionName()
+                self?.removeFromSuperview()
+            case .error(let error):
                 print("error: ", error)
             }
-        
+        }
         return true
     }
 

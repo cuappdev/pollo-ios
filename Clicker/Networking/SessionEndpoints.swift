@@ -67,7 +67,7 @@ extension Endpoint {
         return Endpoint(path: "/sessions/all/\(role)", headers: headers)
     }
     
-    static func updateSessions(id: Int, name: String, code: String) -> Endpoint {
+    static func updateSession(id: Int, name: String, code: String) -> Endpoint {
         let body = UpdateSessionBody(id: id, name: name, code: code)
         return Endpoint(path: "/sessions/\(id)", headers: headers, body: body)
     }
