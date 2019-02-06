@@ -53,6 +53,7 @@ class PollBuilderViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var dropDownHidden: Bool = true
     var shouldIgnoreNextKeyboardHiding: Bool = false
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: Constants
     let centerViewWidth: CGFloat = 135
@@ -313,6 +314,14 @@ class PollBuilderViewController: UIViewController {
         questionTypeButton.setTitle(questionTypeText, for: .normal)
     }
     
+    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Draft>> {
+        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode(Response<Draft>.self)
+    }
+    
+    func createDraft(text: String, options: [String]) -> Future<Response<Draft>> {
+        return networking(Endpoint.createDraft(text: text, options: options)).decode(Response<Draft>.self)
+    }
+    
     // MARK: - Actions
     @objc func saveAsDraft() {
         if !canDraft { return }
@@ -329,18 +338,22 @@ class PollBuilderViewController: UIViewController {
                 options.append("")
             }
             if let loadedDraft = loadedMCDraft {
-                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
+                updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
+                    switch result {
+                    case .value(_):
+                        self?.getDrafts()
+                    case .error(let error):
                         print("error: ", error)
+                    }
                 }
             } else {
-                CreateDraft(text: question, options: options).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
+                createDraft(text: question, options: options).observe { [weak self] result in
+                    switch result {
+                    case .value(_):
+                        self?.getDrafts()
+                    case .error(let error):
                         print("error: ", error)
+                    }
                 }
             }
             loadedMCDraft = nil
@@ -349,18 +362,22 @@ class PollBuilderViewController: UIViewController {
         case .freeResponse:
             let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
-                UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
+                updateDraft(id: "\(loadedDraft.id)", text: question, options: []).observe { [weak self] result in
+                    switch result {
+                    case .value(_):
+                        self?.getDrafts()
+                    case .error(let error):
                         print("error: ", error)
+                    }
                 }
             } else {
-                CreateDraft(text: question, options: []).make()
-                    .done { draft in
-                        self.getDrafts()
-                    }.catch { error in
+                createDraft(text: question, options: []).observe { [weak self] result in
+                    switch result {
+                    case .value(_):
+                        self?.getDrafts()
+                    case .error(let error):
                         print("error: ", error)
+                    }
                 }
             }
             loadedFRDraft = nil
@@ -417,14 +434,20 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    func allDrafts() -> Future<Response<[Draft]>> {
+        return networking(Endpoint.getDrafts()).decode(Response<[Draft]>.self)
+    }
+    
     // MARK: - Helpers
     func getDrafts() {
-        GetDrafts().make()
-            .done { drafts in
-                self.drafts = drafts
-                self.updatePollBuilderViews()
-            } .catch { error in
+        allDrafts().observe { [weak self] result in
+            switch result {
+            case .value(let response):
+                self?.drafts = response.data
+                self?.updatePollBuilderViews()
+            case .error(let error):
                 print("error: ", error)
+            }
         }
     }
 
