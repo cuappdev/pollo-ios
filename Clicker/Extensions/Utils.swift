@@ -24,32 +24,40 @@ func getTodaysDate() -> String {
     return formatter.string(from: Date())
 }
 
+private func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
+    return URLSession.shared.request(endpoint: Endpoint.getPollSessions(with: role)).decode(Response<[Session]>.self)
+}
+
 // Get a User's Joined and Created Sessions using DispatchGroup
 func getAllSessions(completion: @escaping ([Session], [Session]) -> Void) {
     let dispatchGroup = DispatchGroup()
     var joinedSessions: [Session] = []
     var createdSessions: [Session] = []
     
+    
     // Get joined sessions
     dispatchGroup.enter()
-    GetPollSessions(role: .member).make()
-        .done { sessions in
-            joinedSessions = sessions
-            dispatchGroup.leave()
-        }.catch { error in
+    getPollSessions(with: .member).observe { result in
+        switch result {
+        case .value(let response):
+            joinedSessions = response.data
+        case .error(let error):
             print(error)
             dispatchGroup.leave()
+        }
     }
     
     // Get created sessions
     dispatchGroup.enter()
-    GetPollSessions(role: .admin).make()
-        .done { sessions in
-            createdSessions = sessions
+    getPollSessions(with: .admin).observe { result in
+        switch result {
+        case .value(let response):
+            createdSessions = response.data
             dispatchGroup.leave()
-        }.catch { error in
+        case .error(let error):
             print(error)
             dispatchGroup.leave()
+        }
     }
     
     dispatchGroup.notify(queue: .main) {

@@ -56,26 +56,28 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        JoinSessionWithIdAndCode(id: session.id, code: session.code).make()
-            .done { session in
-                GetSortedPolls(id: session.id).make()
-                    .done { pollsDateArray in
-                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        withCell.hideOpenSessionActivityIndicatorView()
-                        self.isOpeningGroup = false
-                    } .catch { error in
-                        print(error)
-                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
-                        self.present(alertController, animated: true, completion: nil)
-                        self.isOpeningGroup = false
+        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
+            let session = sessionResponse.data
+            return self.getSortedPolls(with: session.id)
+        }.observe { [weak self] result in
+            switch result {
+            case .value(let pollsResponse):
+                let pollsDateArray = pollsResponse.data
+                if let this = self {
+                    let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                    this.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    this.navigationController?.setNavigationBarHidden(false, animated: true)
+                    withCell.hideOpenSessionActivityIndicatorView()
+                    this.isOpeningGroup = false
                 }
-            } .catch { error in
-                print(error)
-                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
-                self.present(alertController, animated: true, completion: nil)
-                self.isOpeningGroup = false
+            case .error(let error):
+                if let this = self {
+                    print(error)
+                    let alertController = this.createAlert(title: this.errorText, message: "Failed to join session. Try again!")
+                    this.present(alertController, animated: true, completion: nil)
+                    this.isOpeningGroup = false
+                }
+            }
         }
     }
     
