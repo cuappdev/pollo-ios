@@ -100,6 +100,10 @@ extension PollBuilderViewController: EditDraftViewControllerDelegate {
                 }) else { return }
                 self.drafts.remove(at: index)
 
+                if let loadedFRDraft = self.loadedFRDraft, draft.isEqual(toDiffableObject: loadedFRDraft) {
+                    self.loadedFRDraft = nil
+                }
+
                 self.updatePollBuilderViews()
             } .catch { error in
                 let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
