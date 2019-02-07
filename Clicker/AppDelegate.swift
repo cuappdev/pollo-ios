@@ -84,6 +84,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
+    func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
+        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Node<Session>]>.self)
+    }
+    
     func userAuthenticate(with idToken: String) -> Future<Response<UserSession>> {
         return networking(Endpoint.userAuthenticate(with: idToken)).decode(Response<UserSession>.self)
     }
@@ -102,16 +106,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
             UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
             
-            userAuthenticate(with: idToken).observe { [weak self] result in
+            var joinedSessions = [Session]()
+            var createdSessions = [Session]()
+            
+            userAuthenticate(with: idToken).chained { userResponse -> Future<Response<[Node<Session>]>> in
+                User.userSession = userResponse.data
+                return self.getPollSessions(with: .member)
+            }.chained { memberResponse -> Future<Response<[Node<Session>]>> in
+                var preSessions = [Double : Session]()
+                memberResponse.data.forEach { node in
+                    let session = node.node
+                    if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                        preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                    }
+                }
+                for time in preSessions.keys.sorted() {
+                    joinedSessions.append(preSessions[time]!)
+                }
+                return self.getPollSessions(with: .admin)
+            }.observe { [weak self] result in
                 switch result {
-                case .value(let response):
-                    User.userSession = response.data
-                    let pollsViewController = PollsViewController()
+                case .value(let adminResponse):
+                    var preSessions = [Double : Session]()
+                    adminResponse.data.forEach { node in
+                        let session = node.node
+                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                            preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                        }
+                    }
+                    for time in preSessions.keys.sorted() {
+                        createdSessions.append(preSessions[time]!)
+                    }
                     if let this = self {
-                        this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
-                        getAllSessions(completion: { (joinedSessions, createdSessions) in
-                            pollsViewController.configure(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                        })
+                        DispatchQueue.main.async {
+                            let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                            this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
+                        }
                     }
                 case .error(let error):
                     print(error)

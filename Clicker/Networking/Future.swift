@@ -147,6 +147,12 @@ struct Response<T: Codable>: Codable {
     
 }
 
+struct Node<T: Codable>: Codable {
+    
+    var node: T
+    
+}
+
 extension Future where Value == Data {
     
     

@@ -129,8 +129,8 @@ struct GetPollSessions: ClickerQuark {
                 guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let updatedAt = node["updatedAt"].string, let isLive = node["isLive"].bool else {
                     throw NeutronError.badResponseData
                 }
-                guard let latestActivityTimestamp = Double(updatedAt) else { break }
-                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: code), isLive: isLive)
+//                guard let latestActivityTimestamp = Double(updatedAt) else { break }
+//                preSessions[latestActivityTimestamp] = Session(id: id, name: name, code: code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: code, role: role), isLive: isLive)
             }
             var sessions: [Session] = [Session]()
             for time in preSessions.keys.sorted() {
@@ -142,36 +142,7 @@ struct GetPollSessions: ClickerQuark {
             throw NeutronError.badResponseData
         }
     }
-    
-    func getLatestActivity(latestActivityTimestamp: Double, code: String) -> String {
-        var latestActivity = "Last live "
-        let today: Date = Date()
-        let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
-        if today.days(from: latestActivityDate) == 0 {
-            if today.hours(from: latestActivityDate) == 0 {
-                let numMinutesAgo = today.minutes(from: latestActivityDate) == 0 ? 1 : today.minutes(from: latestActivityDate)
-                let suffix = numMinutesAgo == 1 ? "minute" : "minutes"
-                latestActivity += "\(numMinutesAgo) \(suffix) ago"
-            } else {
-                let suffix = today.hours(from: latestActivityDate) == 1 ? "hr" : "hrs"
-                latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
-            }
-        } else {
-            if today.days(from: latestActivityDate) < 7 {
-                let suffix = today.days(from: latestActivityDate) == 1 ? "day" : "days"
-                latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
-            } else {
-                let formatter: DateFormatter = DateFormatter()
-                formatter.dateStyle = .medium
-                formatter.timeStyle = .none
-                latestActivity += String(formatter.string(from: latestActivityDate).split(separator: ",")[0])
-            }
-        }
-        if role == .admin {
-            latestActivity = code + "  ·  " + latestActivity
-        }
-        return latestActivity
-    }
+
 }
 
 struct UpdateSession: ClickerQuark {

@@ -58,14 +58,21 @@ class PollsViewController: UIViewController {
     let failedToCreateGroupText = "Failed to create new group. Try again!"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
-
+    
+    init(joinedSessions: [Session], createdSessions: [Session]) {
+        super.init(nibName: nil, bundle: nil)
+        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: joinedSessions)
+        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: createdSessions)
+        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
-        
-        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: nil)
-        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: nil)
-        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -262,8 +269,8 @@ class PollsViewController: UIViewController {
         headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    func generateCode() -> Future<Response<String>> {
-        return networking(Endpoint.generateCode()).decode(Response<String>.self)
+    func generateCode() -> Future<Response<Code>> {
+        return networking(Endpoint.generateCode()).decode(Response<Code>.self)
     }
     
     func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
@@ -274,26 +281,28 @@ class PollsViewController: UIViewController {
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
         generateCode().chained { codeResponse -> Future<Response<Session>> in
-            let code = codeResponse.data
+            let code = codeResponse.data.code
             return self.startSession(code: code, name: code, isGroup: false)
         }.observe { [weak self] result in
-            switch result {
-            case .value(let sessionResponse):
-                let session = sessionResponse.data
-                if let this = self {
-                    this.isListeningToKeyboard = false
-                    this.hideNewGroupActivityIndicatorView()
-                    let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: [], session: session, userRole: .admin)
-                    this.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                    this.navigationController?.setNavigationBarHidden(false, animated: true)
-                    Analytics.shared.log(with: CreatedGroupPayload())
-                }
-            case .error(let error):
-                print(error)
-                if let this = self {
-                    this.hideNewGroupActivityIndicatorView()
-                    let alertController = this.createAlert(title: this.errorText, message: this.failedToCreateGroupText)
-                    this.present(alertController, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let sessionResponse):
+                    let session = sessionResponse.data
+                    if let this = self {
+                        this.isListeningToKeyboard = false
+                        this.hideNewGroupActivityIndicatorView()
+                        let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: [], session: session, userRole: .admin)
+                        this.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                        this.navigationController?.setNavigationBarHidden(false, animated: true)
+                        Analytics.shared.log(with: CreatedGroupPayload())
+                    }
+                case .error(let error):
+                    print(error)
+                    if let this = self {
+                        this.hideNewGroupActivityIndicatorView()
+                        let alertController = this.createAlert(title: this.errorText, message: this.failedToCreateGroupText)
+                        this.present(alertController, animated: true, completion: nil)
+                    }
                 }
             }
         }

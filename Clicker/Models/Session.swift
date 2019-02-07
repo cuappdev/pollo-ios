@@ -8,12 +8,19 @@
 
 import IGListKit
 
+struct Code: Codable {
+    
+    var code: String
+    
+}
+
 class Session: Codable {
     
     var id: Int
     var name: String
     var code: String
-    var description: String = ""
+    var description: String?
+    var updatedAt: String?
     var isLive: Bool?
     let identifier = UUID().uuidString
     
@@ -23,7 +30,7 @@ class Session: Codable {
         self.code = code
     }
     
-    init(id: Int, name: String, code: String, latestActivity: String, isLive: Bool) {
+    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?) {
         self.id = id
         self.name = name
         self.code = code
