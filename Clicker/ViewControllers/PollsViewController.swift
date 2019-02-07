@@ -273,21 +273,22 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.generateCode()).decode(Response<Code>.self)
     }
     
-    func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
-        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode(Response<Session>.self)
+    func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode(Response<Node<Session>>.self)
     }
     
     // MARK: - Actions
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
-        generateCode().chained { codeResponse -> Future<Response<Session>> in
+        
+        generateCode().chained { codeResponse -> Future<Response<Node<Session>>> in
             let code = codeResponse.data.code
             return self.startSession(code: code, name: code, isGroup: false)
         }.observe { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .value(let sessionResponse):
-                    let session = sessionResponse.data
+                    let session = sessionResponse.data.node
                     if let this = self {
                         this.isListeningToKeyboard = false
                         this.hideNewGroupActivityIndicatorView()
@@ -326,8 +327,8 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
-    func joinSessionWithCode(with code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.joinSessionWithCode(with: code)).decode(Response<Session>.self)
+    func joinSessionWithCode(with code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.joinSessionWithCode(with: code)).decode(Response<Node<Session>>.self)
     }
     
     func getSortedPolls(with id: Int) -> Future<Response<[PollsDateModel]>> {
@@ -337,19 +338,21 @@ class PollsViewController: UIViewController {
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
         joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
-            self.session = sessionResponse.data
-            return self.getSortedPolls(with: sessionResponse.data.id)
+            self.session = sessionResponse.data.node
+            return self.getSortedPolls(with: sessionResponse.data.node.id)
         }.observe { [weak self] result in
             switch result {
             case .value(let pollsResponse):
                 let pollsDateArray = pollsResponse.data
-                if let this = self, let session = this.session {
-                    this.codeTextField.text = ""
-                    let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                    this.updateJoinSessionButton(canJoin: false)
-                    this.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                    this.navigationController?.setNavigationBarHidden(false, animated: true)
-                    Analytics.shared.log(with: JoinedGroupPayload())
+                DispatchQueue.main.async {
+                    if let this = self, let session = this.session {
+                        this.codeTextField.text = ""
+                        let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                        this.updateJoinSessionButton(canJoin: false)
+                        this.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                        this.navigationController?.setNavigationBarHidden(false, animated: true)
+                        Analytics.shared.log(with: JoinedGroupPayload())
+                    }
                 }
             case .error(let error):
                 print(error)
@@ -397,8 +400,8 @@ class PollsViewController: UIViewController {
         }
     }
     
-    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode(Response<Session>.self)
+    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode(Response<Node<Session>>.self)
     }
     
     func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {

@@ -109,42 +109,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             var joinedSessions = [Session]()
             var createdSessions = [Session]()
             
-            userAuthenticate(with: idToken).chained { userResponse -> Future<Response<[Node<Session>]>> in
-                User.userSession = userResponse.data
-                return self.getPollSessions(with: .member)
-            }.chained { memberResponse -> Future<Response<[Node<Session>]>> in
-                var preSessions = [Double : Session]()
-                memberResponse.data.forEach { node in
-                    let session = node.node
-                    if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                        preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
-                    }
-                }
-                for time in preSessions.keys.sorted() {
-                    joinedSessions.append(preSessions[time]!)
-                }
-                return self.getPollSessions(with: .admin)
-            }.observe { [weak self] result in
-                switch result {
-                case .value(let adminResponse):
-                    var preSessions = [Double : Session]()
-                    adminResponse.data.forEach { node in
-                        let session = node.node
-                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                            preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+            userAuthenticate(with: idToken).observe { [weak self] userResult in
+                switch userResult {
+                case .value(let userResponse):
+                    User.userSession = userResponse.data
+                    let dispatchGroup = DispatchGroup()
+                    dispatchGroup.enter()
+                    dispatchGroup.enter()
+                    self?.getPollSessions(with: .member).observe { memberResult in
+                        switch memberResult {
+                        case .value(let memberResponse):
+                            var preSessions = [Double : Session]()
+                            memberResponse.data.forEach { node in
+                                let session = node.node
+                                if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                                    preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                }
+                            }
+                            for time in preSessions.keys.sorted() {
+                                joinedSessions.append(preSessions[time]!)
+                            }
+                        case .error(let memberError):
+                            print(memberError)
                         }
+                        dispatchGroup.leave()
                     }
-                    for time in preSessions.keys.sorted() {
-                        createdSessions.append(preSessions[time]!)
-                    }
-                    if let this = self {
-                        DispatchQueue.main.async {
-                            let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                            this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
+                    self?.getPollSessions(with: .admin).observe { adminResult in
+                        switch adminResult {
+                        case .value(let adminResponse):
+                            var preSessions = [Double : Session]()
+                            adminResponse.data.forEach { node in
+                                let session = node.node
+                                if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                                    preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                }
+                            }
+                            for time in preSessions.keys.sorted() {
+                                createdSessions.append(preSessions[time]!)
+                            }
+                        case .error(let adminError):
+                            print(adminError)
                         }
+                        dispatchGroup.leave()
                     }
-                case .error(let error):
-                    print(error)
+                    dispatchGroup.notify(queue: .main, execute: {
+                        if let this = self {
+                            DispatchQueue.main.async {
+                                let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                                this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
+                            }
+                        }
+                    })
+                case .error(let userError):
+                    print(userError)
                 }
             }
             

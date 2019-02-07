@@ -121,7 +121,11 @@ extension Endpoint {
             let body = CreateSessionBody(name: name, code: code, isGroup: isGroup)
             return Endpoint(path: "/start/session", headers: headers, body: body)
         }
-        return Endpoint(path: "/start/session", headers: headers, body: ["code": code])
+        let modifiedHeaders = [
+            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")",
+            "Content-Type": "application/json"
+        ]
+        return Endpoint(path: "/start/session", headers: modifiedHeaders, body: ["code": code])
     }
     
     static func joinSessionWithCode(with code: String) -> Endpoint {

@@ -57,7 +57,7 @@ extension PollsViewController: PollsCellDelegate {
         }
         isOpeningGroup = true
         joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
-            let session = sessionResponse.data
+            let session = sessionResponse.data.node
             return self.getSortedPolls(with: session.id)
         }.observe { [weak self] result in
             switch result {

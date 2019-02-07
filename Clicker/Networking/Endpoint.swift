@@ -73,6 +73,7 @@ extension Endpoint {
         //Encode body
 //        self.body = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         self.body = try? JSONEncoder().encode(body)
+        print(self.body)
     }
     
     /// GET and DELETE initializer
@@ -110,6 +111,12 @@ extension Endpoint {
         var request = URLRequest(url: unwrappedURL)
         headers.forEach { (key, value) in
             request.addValue(value, forHTTPHeaderField: key)
+        }
+        
+        if method == .post {
+            if request.value(forHTTPHeaderField: "Content-Type") == nil {
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
         }
         request.httpMethod = method.rawValue
         request.httpBody = body
