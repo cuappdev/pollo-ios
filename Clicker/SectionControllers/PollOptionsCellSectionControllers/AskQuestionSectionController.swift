@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol AskQuestionSectionControllerDelegate {
+protocol AskQuestionSectionControllerDelegate: class {
     func askQuestionSectionControllerDidUpdateEditable(_ editable: Bool)
     func askQuestionSectionControllerDidUdpateText(_ text: String?)
 }
@@ -16,7 +16,7 @@ protocol AskQuestionSectionControllerDelegate {
 class AskQuestionSectionController: ListSectionController {
 
     // MARK: - Data vars
-    var delegate: AskQuestionSectionControllerDelegate?
+    weak var delegate: AskQuestionSectionControllerDelegate?
     var askQuestionModel: AskQuestionModel!
 
     // MARK: - Constants

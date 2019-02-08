@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EmptyStateCellDelegate {
+protocol EmptyStateCellDelegate: class {
     func emptyStateCellDidTapCreateDraftButton()
 }
 
@@ -23,7 +23,7 @@ class EmptyStateCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var emptyStateModel: EmptyStateModel!
-    var delegate: EmptyStateCellDelegate!
+    weak var delegate: EmptyStateCellDelegate?
 
     // MARK: - Constants
     let pollsViewControllerIconImageViewLength: CGFloat = 45.0
@@ -113,7 +113,7 @@ class EmptyStateCell: UICollectionViewCell {
     }
     
     @objc func createDraftButtonPressed() {
-        delegate.emptyStateCellDidTapCreateDraftButton()
+        delegate?.emptyStateCellDidTapCreateDraftButton()
     }
     
     override func updateConstraints() {

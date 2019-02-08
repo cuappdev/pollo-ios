@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditNameViewControllerDelegate {
+protocol EditNameViewControllerDelegate: class {
     func editNameViewControllerDidUpdateName()
 }
 
@@ -19,7 +19,7 @@ class EditNameViewController: UIViewController {
     var saveButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: EditNameViewControllerDelegate!
+    weak var delegate: EditNameViewControllerDelegate?
     var session: Session!
 
     // MARK: - Constants
@@ -93,7 +93,7 @@ class EditNameViewController: UIViewController {
             if (newName != "") {
                 UpdateSession(id: session.id, name: newName, code: session.code).make()
                     .done { code in
-                        self.delegate.editNameViewControllerDidUpdateName()
+                        self.delegate?.editNameViewControllerDidUpdateName()
                         self.dismiss(animated: true, completion: nil)
                     }.catch { error in
                         print("error: ", error)

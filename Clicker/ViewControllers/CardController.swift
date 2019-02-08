@@ -10,7 +10,7 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol CardControllerDelegate {
+protocol CardControllerDelegate: class {
     
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
@@ -35,7 +35,7 @@ class CardController: UIViewController {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
-    var delegate: CardControllerDelegate!
+    weak var delegate: CardControllerDelegate?
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
@@ -204,7 +204,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-        delegate.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
+        delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)
     }
     

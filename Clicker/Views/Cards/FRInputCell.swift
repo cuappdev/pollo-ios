@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FRInputCellDelegate {
+protocol FRInputCellDelegate: class {
     
     func frInputCellSubmittedResponse(response: String)
     
@@ -20,7 +20,7 @@ class FRInputCell: UICollectionViewCell {
     var inputTextField: UITextField!
     
     // MARK: - Data vars
-    var delegate: FRInputCellDelegate!
+    weak var delegate: FRInputCellDelegate?
     
     // MARK: - Constants
     let textFieldBorderWidth: CGFloat = 1
@@ -78,7 +78,7 @@ extension FRInputCell: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text, !text.isEmpty {
-            delegate.frInputCellSubmittedResponse(response: text)
+            delegate?.frInputCellSubmittedResponse(response: text)
             textField.text = ""
         }
         endEditing(true)

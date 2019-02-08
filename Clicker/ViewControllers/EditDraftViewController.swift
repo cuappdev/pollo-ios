@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditDraftViewControllerDelegate {
+protocol EditDraftViewControllerDelegate: class {
     func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft)
 }
 
@@ -20,7 +20,7 @@ class EditDraftViewController: UIViewController {
     var deleteDraftLabel: UILabel!
     
     // MARK: - Data vars
-    var delegate: EditDraftViewControllerDelegate!
+    weak var delegate: EditDraftViewControllerDelegate?
     var draft: Draft!
     
     // MARK: - Constants
@@ -85,7 +85,7 @@ class EditDraftViewController: UIViewController {
     
     @objc func deleteDraftButtonPressed() {
         self.dismiss(animated: true, completion: nil)
-        delegate.editDraftViewControllerDidTapDeleteDraftButton(draft: draft)
+        delegate?.editDraftViewControllerDidTapDeleteDraftButton(draft: draft)
     }
 
 }

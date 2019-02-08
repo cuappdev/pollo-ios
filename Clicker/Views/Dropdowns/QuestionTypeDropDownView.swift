@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol QuestionTypeDropDownViewDelegate {
+protocol QuestionTypeDropDownViewDelegate: class {
     func questionTypeDropDownViewDidPick(questionType: QuestionType)
 }
 
@@ -25,7 +25,7 @@ class QuestionTypeDropDownView: UIView {
     var centerView: UIView!
     
     // MARK: - Data vars
-    var delegate: QuestionTypeDropDownViewDelegate!
+    weak var delegate: QuestionTypeDropDownViewDelegate?
     var selectedQuestionType: QuestionType!
     
     // MARK: - Constants

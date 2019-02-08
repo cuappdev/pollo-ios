@@ -11,7 +11,7 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol PollsCellDelegate {
+protocol PollsCellDelegate: class {
     
     func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell)
     func pollsCellShouldEditSession(session: Session, userRole: UserRole)
@@ -27,7 +27,7 @@ class PollsCell: UICollectionViewCell {
     var refreshControl: UIRefreshControl!
     
     // MARK: - Data vars
-    var delegate: PollsCellDelegate!
+    weak var delegate: PollsCellDelegate?
     var pollTypeModel: PollTypeModel!
     
     let pollPreviewCellHeight: CGFloat = 82.5
@@ -37,7 +37,7 @@ class PollsCell: UICollectionViewCell {
         setupViews()
     }
     
-    func configureWith(pollTypeModel: PollTypeModel, delegate: PollsCellDelegate) {
+    func configureWith(pollTypeModel: PollTypeModel, delegate: PollsCellDelegate?) {
         self.pollTypeModel = pollTypeModel
         self.delegate = delegate
         self.adapter.performUpdates(animated: false, completion: nil)
@@ -86,6 +86,6 @@ class PollsCell: UICollectionViewCell {
 
     // MARK: - Actions
     @objc func pulledToRefresh() {
-        delegate.pollsCellDidPullToRefresh(for: pollTypeModel.pollType)
+        delegate?.pollsCellDidPullToRefresh(for: pollTypeModel.pollType)
     }
 }

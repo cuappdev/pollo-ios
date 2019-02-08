@@ -39,12 +39,12 @@ extension PollsCell: SessionSectionControllerDelegate {
     
     func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session, withCell cell: PollPreviewCell) {
         let userRole: UserRole = pollTypeModel.pollType == .created ? .admin : .member
-        delegate.pollsCellShouldOpenSession(session: session, userRole: userRole, withCell: cell)
+        delegate?.pollsCellShouldOpenSession(session: session, userRole: userRole, withCell: cell)
     }
     
     func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session) {
         let userRole: UserRole = pollTypeModel.pollType == .created ? .admin : .member
-        delegate.pollsCellShouldEditSession(session: session, userRole: userRole)
+        delegate?.pollsCellShouldEditSession(session: session, userRole: userRole)
     }
     
 }

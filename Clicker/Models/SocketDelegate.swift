@@ -6,7 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-protocol SocketDelegate {
+protocol SocketDelegate: class {
     func sessionConnected()
     func sessionDisconnected()
     func receivedUserCount(_ count: Int)

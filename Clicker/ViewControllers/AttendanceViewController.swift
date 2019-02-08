@@ -9,7 +9,7 @@
 import UIKit
 import IGListKit
 
-protocol AttendanceViewControllerDelegate {
+protocol AttendanceViewControllerDelegate: class {
     func attendanceViewControllerWillDisappear(with pollsDateAttendanceArray: [PollsDateAttendanceModel])
 }
 
@@ -21,7 +21,7 @@ class AttendanceViewController: UIViewController {
     var exportButton: UIButton!
 
     // MARK: - Data vars
-    var delegate: AttendanceViewControllerDelegate!
+    weak var delegate: AttendanceViewControllerDelegate?
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
@@ -66,7 +66,7 @@ class AttendanceViewController: UIViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        delegate.attendanceViewControllerWillDisappear(with: pollsDateAttendanceArray)
+        delegate?.attendanceViewControllerWillDisappear(with: pollsDateAttendanceArray)
     }
 
     private func setupNavBar() {
