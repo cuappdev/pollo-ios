@@ -157,11 +157,11 @@ class QuestionTypeDropDownView: UIView {
     }
     
     @objc func didTapTopButton() {
-        delegate.questionTypeDropDownViewDidPick(questionType: selectedQuestionType)
+        delegate?.questionTypeDropDownViewDidPick(questionType: selectedQuestionType)
     }
     
     @objc func didTapBottomButton() {
-        delegate.questionTypeDropDownViewDidPick(questionType: selectedQuestionType.other)
+        delegate?.questionTypeDropDownViewDidPick(questionType: selectedQuestionType.other)
     }
 
 }
