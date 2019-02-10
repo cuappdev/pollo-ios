@@ -10,7 +10,7 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol PollsDateViewControllerDelegate {
+protocol PollsDateViewControllerDelegate: class {
     func pollsDateViewControllerWasPopped(for userRole: UserRole)
 }
 
@@ -30,7 +30,7 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
-    var delegate: PollsDateViewControllerDelegate!
+    weak var delegate: PollsDateViewControllerDelegate?
     
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
@@ -105,7 +105,7 @@ class PollsDateViewController: UIViewController {
         
         peopleButton = UIButton()
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
+        peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
@@ -136,14 +136,14 @@ class PollsDateViewController: UIViewController {
         if pollsDateArray.isEmpty && session.name == session.code {
             DeleteSession(id: session.id).make()
                 .done {
-                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                    self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
                 }
                 .catch { error in
                     print(error)
-                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                    self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
             }
         } else {
-            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
         }
     }
     

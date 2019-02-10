@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol PollsDateAttendanceSectionControllerDelegate {
+protocol PollsDateAttendanceSectionControllerDelegate: class {
     func pollsDateAttendanceSectionControllerDidTap(for pollsDateAttendanceModel: PollsDateAttendanceModel)
 }
 
@@ -16,7 +16,7 @@ class PollsDateAttendanceSectionController: ListSectionController {
 
     // MARK: - Data Vars
     var pollsDateAttendanceModel: PollsDateAttendanceModel!
-    var delegate: PollsDateAttendanceSectionControllerDelegate!
+    weak var delegate: PollsDateAttendanceSectionControllerDelegate?
 
     // MARK: - Constants
     let cellHeight: CGFloat = 61
@@ -54,7 +54,7 @@ class PollsDateAttendanceSectionController: ListSectionController {
         guard let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? PollsDateAttendanceCell else { return }
         pollsDateAttendanceModel.isSelected.toggle()
         cell.configure(for: pollsDateAttendanceModel)
-        delegate.pollsDateAttendanceSectionControllerDidTap(for: pollsDateAttendanceModel)
+        delegate?.pollsDateAttendanceSectionControllerDidTap(for: pollsDateAttendanceModel)
     }
 
 }

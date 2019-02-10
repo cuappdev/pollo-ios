@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol SessionSectionControllerDelegate {
+protocol SessionSectionControllerDelegate: class {
     
     func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session, withCell: PollPreviewCell)
     func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session)
@@ -19,7 +19,7 @@ class SessionSectionController: ListSectionController {
     
     // MARK: - Data vars
     var session: Session!
-    var delegate: SessionSectionControllerDelegate!
+    weak var delegate: SessionSectionControllerDelegate?
     
     // MARK: - Constants
     let cellHeight: CGFloat = 82.5
@@ -51,7 +51,7 @@ class SessionSectionController: ListSectionController {
         let cell = collectionContext?.cellForItem(at: index, sectionController: self) as! PollPreviewCell
         cell.isSelected = true
         collectionContext?.deselectItem(at: index, sectionController: self, animated: true)
-        delegate.sessionSectionControllerShouldOpenSession(sectionController: self, session: session, withCell: cell)
+        delegate?.sessionSectionControllerShouldOpenSession(sectionController: self, session: session, withCell: cell)
     }
     
     override func didDeselectItem(at index: Int) {
@@ -64,7 +64,7 @@ class SessionSectionController: ListSectionController {
 extension SessionSectionController: PollPreviewCellDelegate {
     
     func pollPreviewCellShouldEditSession() {
-        delegate.sessionSectionControllerShouldEditSession(sectionController: self, session: session)
+        delegate?.sessionSectionControllerShouldEditSession(sectionController: self, session: session)
     }
     
 }

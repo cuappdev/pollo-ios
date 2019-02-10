@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol PollPreviewCellDelegate {
-    
+protocol PollPreviewCellDelegate: class {
+
     func pollPreviewCellShouldEditSession()
 
 }
@@ -36,7 +36,7 @@ class PollPreviewCell: UICollectionViewCell {
     var openSessionActivityIndicatorView: UIActivityIndicatorView!
     
     // MARK: - Data vars
-    var delegate: PollPreviewCellDelegate!
+    weak var delegate: PollPreviewCellDelegate?
     var index: Int!
     
     // MARK: - Constants
@@ -158,7 +158,7 @@ class PollPreviewCell: UICollectionViewCell {
     
     // MARK: - Action
     @objc func dotsBtnPressed() {
-        delegate.pollPreviewCellShouldEditSession()
+        delegate?.pollPreviewCellShouldEditSession()
     }
     
     // MARK: - Activity Indicator

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FROptionCellDelegate {
+protocol FROptionCellDelegate: class {
     
     func frOptionCellDidReceiveUpvote(for answerId: String)
     
@@ -24,7 +24,7 @@ class FROptionCell: UICollectionViewCell {
     var separatorLineView: UIView!
     
     // MARK: - Data vars
-    var delegate: FROptionCellDelegate!
+    weak var delegate: FROptionCellDelegate?
     var didUpvote: Bool!
     var answerId: String!
     
@@ -131,7 +131,7 @@ class FROptionCell: UICollectionViewCell {
 
     // MARK: - Actions
     @objc func upvoteFROption() {
-        if !didUpvote { delegate.frOptionCellDidReceiveUpvote(for: answerId) }
+        if !didUpvote { delegate?.frOptionCellDidReceiveUpvote(for: answerId) }
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol FRInputSectionControllerDelegate {
+protocol FRInputSectionControllerDelegate: class {
     
     func frInputSectionControllerSubmittedResponse(sectionController: FRInputSectionController, response: String)
     
@@ -17,7 +17,7 @@ protocol FRInputSectionControllerDelegate {
 class FRInputSectionController: ListSectionController {
     
     // MARK: - Data vars
-    var delegate: FRInputSectionControllerDelegate!
+    weak var delegate: FRInputSectionControllerDelegate?
     var frInputModel: FRInputModel!
     
     init(delegate: FRInputSectionControllerDelegate) {
@@ -48,7 +48,7 @@ class FRInputSectionController: ListSectionController {
 extension FRInputSectionController: FRInputCellDelegate {
     
     func frInputCellSubmittedResponse(response: String) {
-        delegate.frInputSectionControllerSubmittedResponse(sectionController: self, response: response)
+        delegate?.frInputSectionControllerSubmittedResponse(sectionController: self, response: response)
     }
     
 }

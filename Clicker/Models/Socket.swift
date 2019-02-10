@@ -12,7 +12,7 @@ import SwiftyJSON
 class Socket {
 
     let id: String
-    var delegate: SocketDelegate
+    weak var delegate: SocketDelegate?
     var socket: SocketIOClient
     var manager: SocketManager
     
@@ -29,11 +29,11 @@ class Socket {
         socket = manager.socket(forNamespace: "/\(id)")
         
         socket.on(clientEvent: .connect) { data, ack in
-            self.delegate.sessionConnected()
+            self.delegate?.sessionConnected()
         }
         
         socket.on(clientEvent: .disconnect) { data, ack in
-            self.delegate.sessionDisconnected()
+            self.delegate?.sessionDisconnected()
         }
         
         socket.on(Routes.userStart) { data, ack in
@@ -41,7 +41,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
-            self.delegate.pollStarted(poll, userRole: .member)
+            self.delegate?.pollStarted(poll, userRole: .member)
         }
         
         socket.on(Routes.userEnd) { data, ack in
@@ -49,7 +49,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
-            self.delegate.pollEnded(poll, userRole: .member)
+            self.delegate?.pollEnded(poll, userRole: .member)
         }
         
         socket.on(Routes.userResults) { data, ack in
@@ -57,7 +57,7 @@ class Socket {
                 return
             }
             let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate.receivedResults(currentState)
+            self.delegate?.receivedResults(currentState)
         }
 
         socket.on(Routes.userResultsLive) { data, ack in
@@ -65,7 +65,7 @@ class Socket {
                 return
             }
             let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate.receivedResultsLive(currentState)
+            self.delegate?.receivedResultsLive(currentState)
         }
         
         // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
@@ -74,7 +74,7 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
-            self.delegate.pollStarted(poll, userRole: .admin)
+            self.delegate?.pollStarted(poll, userRole: .admin)
         }
         
         socket.on(Routes.adminUpdateTally) { data, ack in
@@ -82,7 +82,7 @@ class Socket {
                 return
             }
             let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate.updatedTally(currentState)
+            self.delegate?.updatedTally(currentState)
         }
 
         socket.on(Routes.adminUpdateTallyLive) { data, ack in
@@ -90,7 +90,7 @@ class Socket {
                 return
             }
             let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate.updatedTallyLive(currentState)
+            self.delegate?.updatedTallyLive(currentState)
         }
         
         socket.on(Routes.adminEnded) { data, ack in
@@ -98,14 +98,14 @@ class Socket {
                 return
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
-            self.delegate.pollEnded(poll, userRole: .admin)
+            self.delegate?.pollEnded(poll, userRole: .admin)
         }
         
         socket.on(Routes.count) { data, ack in
             guard let json = data[0] as? [String:Any], let count = json[ParserKeys.countKey] as? Int else {
                 return
             }
-            self.delegate.receivedUserCount(count)
+            self.delegate?.receivedUserCount(count)
         }
 
         socket.connect()

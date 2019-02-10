@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol PollBuilderMCOptionSectionControllerDelegate {
+protocol PollBuilderMCOptionSectionControllerDelegate: class {
     
     func pollBuilderSectionControllerShouldAddOption()
     func pollBuilderSectionControllerDidUpdateOption(option:String, index: Int, isCorrect: Bool)
@@ -21,7 +21,7 @@ class PollBuilderMCOptionSectionController: ListSectionController {
     
     // MARK: - Data vars
     var mcOptionModel: PollBuilderMCOptionModel!
-    var delegate: PollBuilderMCOptionSectionControllerDelegate
+    weak var delegate: PollBuilderMCOptionSectionControllerDelegate?
     
     // MARK: - Constants
     let cellHeight: CGFloat = 53
@@ -62,15 +62,15 @@ class PollBuilderMCOptionSectionController: ListSectionController {
 extension PollBuilderMCOptionSectionController: CreateMCOptionCellDelegate {
 
     func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool) {
-        delegate.pollBuilderSectionControllerDidUpdateOption(option: text, index: index, isCorrect: isCorrect)
+        delegate?.pollBuilderSectionControllerDidUpdateOption(option: text, index: index, isCorrect: isCorrect)
     }
 
     func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool) {
-        delegate.pollBuilderSectionControllerDidUpdateIsCorrect(option: text, index: index, isCorrect: isCorrect)
+        delegate?.pollBuilderSectionControllerDidUpdateIsCorrect(option: text, index: index, isCorrect: isCorrect)
     }
     
     func createMCOptionCellDidDeleteOption(index: Int) {
-        delegate.pollBuilderSectionControllerDidDeleteOption(index: index)
+        delegate?.pollBuilderSectionControllerDidDeleteOption(index: index)
     }
     
 }

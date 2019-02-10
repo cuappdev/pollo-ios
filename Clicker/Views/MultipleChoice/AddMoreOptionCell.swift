@@ -17,7 +17,7 @@ class AddMoreOptionCell: UICollectionViewCell {
     var addMoreLabel: UILabel!
     
     // MARK: Data
-    var delegate: PollBuilderMCOptionSectionControllerDelegate!
+    weak var delegate: PollBuilderMCOptionSectionControllerDelegate?
 
     // MARK: - Constants
     let edgePadding: CGFloat = 18
@@ -36,7 +36,7 @@ class AddMoreOptionCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    func configure(with delegate: PollBuilderMCOptionSectionControllerDelegate) {
+    func configure(with delegate: PollBuilderMCOptionSectionControllerDelegate?) {
         self.delegate = delegate
     }
     
@@ -83,7 +83,7 @@ class AddMoreOptionCell: UICollectionViewCell {
     }
     
     @objc func didPressCell() {
-        delegate.pollBuilderSectionControllerShouldAddOption()
+        delegate?.pollBuilderSectionControllerShouldAddOption()
     }
     
     required init?(coder aDecoder: NSCoder) {

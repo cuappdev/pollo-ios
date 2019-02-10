@@ -139,7 +139,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
                 pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
-                let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
+                let maxOptions = delegate?.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
                 // Have to display arrow view if we've passed maxOptions
                 if updatedFROptionModels.count == maxOptions + 1 {
                     hasOverflowOptions = true

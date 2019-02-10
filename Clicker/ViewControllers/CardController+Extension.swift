@@ -36,7 +36,7 @@ extension CardController: UIViewControllerTransitioningDelegate {
 extension CardController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
-        delegate.navigationTitleViewNavigationButtonTapped()
+        delegate?.navigationTitleViewNavigationButtonTapped()
     }
 
 }
@@ -112,7 +112,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             return
         }
         self.navigationController?.popViewController(animated: false)
-        delegate.cardControllerDidStartNewPoll(poll: newPoll)
+        delegate?.cardControllerDidStartNewPoll(poll: newPoll)
     }
     
     func showNavigationBar() {
@@ -217,7 +217,7 @@ extension CardController: SocketDelegate {
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.pollStarted(poll, userRole: userRole)
+            delegate?.pollStarted(poll, userRole: userRole)
             return
         }
         if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
@@ -236,7 +236,7 @@ extension CardController: SocketDelegate {
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.pollEnded(poll, userRole: userRole)
+            delegate?.pollEnded(poll, userRole: userRole)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
@@ -253,7 +253,7 @@ extension CardController: SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.receivedResults(currentState)
+            delegate?.receivedResults(currentState)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
@@ -271,7 +271,7 @@ extension CardController: SocketDelegate {
 
     func updatedTally(_ currentState: CurrentState) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.updatedTally(currentState)
+            delegate?.updatedTally(currentState)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }

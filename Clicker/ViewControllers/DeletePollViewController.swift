@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DeletePollViewControllerDelegate {
+protocol DeletePollViewControllerDelegate: class {
     
     func deletePollViewControllerDidRemoveSession(for userRole: UserRole)
     
@@ -22,7 +22,7 @@ class DeletePollViewController: UIViewController {
     var deleteButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: DeletePollViewControllerDelegate!
+    weak var delegate: DeletePollViewControllerDelegate?
     var session: Session!
     var userRole: UserRole!
     
@@ -117,7 +117,7 @@ class DeletePollViewController: UIViewController {
         case .admin:
             DeleteSession(id: session.id).make()
                 .done {
-                    self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                    self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                     self.dismiss(animated: true, completion: nil)
                 }.catch { error in
                     print(error)
@@ -125,7 +125,7 @@ class DeletePollViewController: UIViewController {
         case .member:
             LeaveSession(id: session.id).make()
                 .done {
-                    self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                    self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                     self.dismiss(animated: true, completion: nil)
                 }.catch { error in
                     print(error)

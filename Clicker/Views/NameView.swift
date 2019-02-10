@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NameViewDelegate {
+protocol NameViewDelegate: class {
     func nameViewDidUpdateSessionName()
 }
 
@@ -19,7 +19,7 @@ class NameView: UIView, UITextFieldDelegate {
     var blurEffectView: UIVisualEffectView!
     
     var session: Session!
-    var delegate: NameViewDelegate!
+    weak var delegate: NameViewDelegate?
     
     init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
@@ -104,7 +104,7 @@ class NameView: UIView, UITextFieldDelegate {
         UpdateSession(id: session.id, name: name, code: session.code).make()
             .done { code in
                 self.session.name = name
-                self.delegate.nameViewDidUpdateSessionName()
+                self.delegate?.nameViewDidUpdateSessionName()
                 self.removeFromSuperview()
             }.catch { error in
                 print("error: ", error)

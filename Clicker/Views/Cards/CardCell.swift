@@ -12,7 +12,7 @@ import SwiftyJSON
 import UIKit
 
 protocol CardCellDelegate {
-    
+
     var userRole: UserRole { get }
 
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?)
@@ -171,13 +171,13 @@ class CardCell: UICollectionViewCell {
             timerLabel.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
-            delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
+            delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
-            delegate.cardCellDidShareResults(cardCell: self, poll: poll)
+            delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
         }
     }
     
@@ -276,7 +276,7 @@ extension CardCell: FRInputSectionControllerDelegate {
         guard let pollOptionsModel = pollOptionsModel else { return }
         switch pollOptionsModel.type {
         case .frOption(_):
-            delegate.cardCellDidSubmitChoice(cardCell: self, choice: response, index: nil)
+            delegate?.cardCellDidSubmitChoice(cardCell: self, choice: response, index: nil)
         default:
             return
         }

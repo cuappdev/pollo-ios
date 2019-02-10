@@ -10,6 +10,7 @@
 		0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E51FD21711B1B001E07BC /* Date+Shared.swift */; };
 		0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C41C958214DB7AA00F559C9 /* Keys.plist */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
+		0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */; };
 		0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */; };
 		0C8E384521557D8000AB8633 /* DraftSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8E384421557D8000AB8633 /* DraftSectionController.swift */; };
@@ -139,7 +140,6 @@
 		C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CD5271FAF6BF7004E68D9 /* UIColor+Shared.swift */; };
 		C7D6AF591F93DE4E003ABA10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6AF581F93DE4E003ABA10 /* Constants.swift */; };
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
-		C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
 /* End PBXBuildFile section */
@@ -293,7 +293,7 @@
 		C7D6AF581F93DE4E003ABA10 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C7F923C21F73540600B1E975 /* Clicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F923C51F73540600B1E975 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
+		C7F923CC1F73540600B1E975 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
@@ -614,11 +614,11 @@
 		C7D6AF571F93DE43003ABA10 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
-				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */,
 				C7D6AF581F93DE4E003ABA10 /* Constants.swift */,
 				C2E9C7082182A40600E36659 /* Analytics.swift */,
 				C2E9C70A2182ACCE00E36659 /* EventPayload.swift */,
+				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -801,10 +801,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
 				0C41C959214DB7AA00F559C9 /* Keys.plist in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
-				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
-				C7F923CD1F73540600B1E975 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1136,7 +1135,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1234,7 +1233,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

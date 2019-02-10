@@ -10,7 +10,7 @@ import IGListKit
 import SnapKit
 import UIKit
 
-protocol MCPollBuilderViewDelegate {
+protocol MCPollBuilderViewDelegate: class {
     var drafts: [Draft] { get }
     func shouldEditDraft(draft: Draft)
     func shouldLoadDraft(draft: Draft)
@@ -24,7 +24,7 @@ class MCPollBuilderView: UIView {
     var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: - Data vars
-    var delegate: MCPollBuilderViewDelegate?
+    weak var delegate: MCPollBuilderViewDelegate?
     var pollBuilderDelegate: PollBuilderViewDelegate?
     var session: Session!
     var grayViewBottomConstraint: Constraint!
@@ -87,7 +87,7 @@ class MCPollBuilderView: UIView {
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {
-            case .newOption(option: let option, index: let index, isCorrect: let isCorrect):
+            case .newOption(option: let option, index: let index, isCorrect: _):
                 return option != "" ? option : intToMCOption(index)
             case .addOption:
                 return nil
