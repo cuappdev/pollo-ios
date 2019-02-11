@@ -9,6 +9,13 @@
 import Foundation
 import IGListKit
 
+struct GetDraftsBlob<T: Codable>: Codable {
+    
+    var edges: [T]
+    var pageInfo: [String : Int]
+    
+}
+
 class Draft: Codable {
     
     var id: Int

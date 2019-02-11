@@ -33,11 +33,11 @@ extension Endpoint {
     
     static func updateDraft(id: String, text: String, options: [String]) -> Endpoint {
         let body = DraftBody(text: text, options: options)
-        return Endpoint(path: "/drafts/\(id)", headers: headers, body: body)
+        return Endpoint(path: "/drafts/\(id)", headers: headers, body: body, method: .put)
     }
     
     static func deleteDraft(with id: String) -> Endpoint {
-        return Endpoint(path: "/drafts/\(id)", headers: headers, method: EndpointMethod.delete)
+        return Endpoint(path: "/drafts/\(id)", headers: headers, method: .delete)
     }
     
 }

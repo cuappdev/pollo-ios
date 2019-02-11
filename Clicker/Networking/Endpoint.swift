@@ -13,6 +13,7 @@ enum EndpointMethod: String {
     case get = "GET"
     case post = "POST"
     case delete = "DELETE"
+    case put = "PUT"
 }
 
 /// Looks at Secrets/Keys.plist file which should contain as key:
@@ -64,16 +65,17 @@ extension Endpoint {
     }
     
     /// POST initializer
-    init<T: Codable>(path: String, headers: [String: String] = [:], body: T) {
+    init<T: Codable>(path: String, headers: [String: String] = [:], body: T, method: EndpointMethod = .post) {
         self.path = path
         self.queryItems = []
-        self.headers = headers
-        self.method = .post
+        var modifiedHeaders = headers
+        modifiedHeaders["Content-Type"] = "application/json"
+        self.headers = modifiedHeaders
+        self.method = method
         print(body)
         //Encode body
 //        self.body = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         self.body = try? JSONEncoder().encode(body)
-        print(self.body)
     }
     
     /// GET and DELETE initializer

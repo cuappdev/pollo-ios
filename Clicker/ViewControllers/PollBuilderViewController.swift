@@ -314,12 +314,12 @@ class PollBuilderViewController: UIViewController {
         questionTypeButton.setTitle(questionTypeText, for: .normal)
     }
     
-    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Draft>> {
-        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode(Response<Draft>.self)
+    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode(Response<Node<Draft>>.self)
     }
     
-    func createDraft(text: String, options: [String]) -> Future<Response<Draft>> {
-        return networking(Endpoint.createDraft(text: text, options: options)).decode(Response<Draft>.self)
+    func createDraft(text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+        return networking(Endpoint.createDraft(text: text, options: options)).decode(Response<Node<Draft>>.self)
     }
     
     // MARK: - Actions
@@ -434,8 +434,8 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func allDrafts() -> Future<Response<[Draft]>> {
-        return networking(Endpoint.getDrafts()).decode(Response<[Draft]>.self)
+    func allDrafts() -> Future<Response<GetDraftsBlob<Node<Draft>>>> {
+        return networking(Endpoint.getDrafts()).decode(Response<GetDraftsBlob<Node<Draft>>>.self)
     }
     
     // MARK: - Helpers
@@ -443,7 +443,7 @@ class PollBuilderViewController: UIViewController {
         allDrafts().observe { [weak self] result in
             switch result {
             case .value(let response):
-                self?.drafts = response.data
+                self?.drafts = response.data.edges.map { node in node.node }
                 self?.updatePollBuilderViews()
             case .error(let error):
                 print("error: ", error)

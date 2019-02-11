@@ -69,7 +69,7 @@ extension Endpoint {
     
     static func updateSession(id: Int, name: String, code: String) -> Endpoint {
         let body = UpdateSessionBody(id: id, name: name, code: code)
-        return Endpoint(path: "/sessions/\(id)", headers: headers, body: body)
+        return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     
     static func deleteSession(with id: Int) -> Endpoint {
@@ -99,7 +99,7 @@ extension Endpoint {
         let body = [
             "memberIds": memberIds
         ]
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, body: body, method: EndpointMethod.delete)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers, body: body, method: .put)
     }
     
     static func addAdmins(id: String, adminIds: [Int]) -> Endpoint {
@@ -113,7 +113,7 @@ extension Endpoint {
         let body = [
             "adminIds": adminIds
         ]
-        return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body, method: EndpointMethod.delete)
+        return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body, method: .put)
     }
     
     static func startSession(code: String, name: String?, isGroup: Bool?) -> Endpoint {
@@ -121,11 +121,7 @@ extension Endpoint {
             let body = CreateSessionBody(name: name, code: code, isGroup: isGroup)
             return Endpoint(path: "/start/session", headers: headers, body: body)
         }
-        let modifiedHeaders = [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")",
-            "Content-Type": "application/json"
-        ]
-        return Endpoint(path: "/start/session", headers: modifiedHeaders, body: ["code": code])
+        return Endpoint(path: "/start/session", headers: headers, body: ["code": code])
     }
     
     static func joinSessionWithCode(with code: String) -> Endpoint {
