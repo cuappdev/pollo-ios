@@ -8,10 +8,15 @@
 
 import UIKit
 
+protocol QuestionCellDelegate: class {
+    func questionCellEditButtonPressed()
+}
+
 class QuestionCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var userRole: UserRole!
+    weak var delegate: QuestionCellDelegate?
     
     // MARK: - View vars
     var questionLabel: UILabel!
@@ -45,7 +50,7 @@ class QuestionCell: UICollectionViewCell {
     }
     
     @objc func editButtonPressed() {
-        // TODO: Add this later when functionality gets ironed out
+        delegate?.questionCellEditButtonPressed()
     }
     
     override func updateConstraints() {

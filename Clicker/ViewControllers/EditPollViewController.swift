@@ -13,7 +13,21 @@ protocol EditPollViewControllerDelegate: class {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole)
     func editPollViewControllerDidDeleteSession(for userRole: UserRole)
-    
+    func editPollViewControllerDidDeletePoll()
+
+}
+
+enum EditType {
+    case poll, session
+
+    var stackViewHeight: CGFloat {
+        switch self {
+        case .poll:
+            return 24
+        case .session:
+            return 75
+        }
+    }
 }
 
 class EditPollViewController: UIViewController {
@@ -31,9 +45,10 @@ class EditPollViewController: UIViewController {
     weak var delegate: EditPollViewControllerDelegate?
     var session: Session!
     var userRole: UserRole!
+    var editType: EditType!
+    var countLabelText: String?
     
     // MARK: - Constants
-    let buttonStackViewHeight: CGFloat = 75
     let buttonStackViewAdminTopOffset: CGFloat = 20
     let editViewHeight: CGFloat = 24
     let editNameImageButtonLeftPadding: CGFloat = 18
@@ -48,11 +63,13 @@ class EditPollViewController: UIViewController {
     let deleteImageName = "delete"
     let editImageName = "editPoll"
     
-    init(delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole) {
+    init(_ type: EditType, delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole, countLabelText: String? = nil) {
         super.init(nibName: nil, bundle: nil)
+        self.editType = type
         self.delegate = delegate
         self.session = session
         self.userRole = userRole
+        self.countLabelText = countLabelText
     }
     
     override func viewDidLoad() {
@@ -93,8 +110,15 @@ class EditPollViewController: UIViewController {
         deleteView = UIView()
         deleteView.addSubview(deleteImageButton)
         deleteView.addSubview(deleteButton)
+
+        var stackViewSubviews: [UIView] = []
+        switch editType! {
+        case .session:
+            stackViewSubviews = userRole == .admin ? [editView, deleteView] : [deleteView]
+        case .poll:
+            stackViewSubviews = [deleteView]
+        }
         
-        let stackViewSubviews: [UIView] = userRole == .admin ? [editView, deleteView] : [deleteView]
         buttonStackView = UIStackView(arrangedSubviews: stackViewSubviews)
         buttonStackView.axis = .vertical
         buttonStackView.distribution =  .fillEqually
@@ -107,10 +131,10 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonStackViewTopOffset)
             make.width.equalToSuperview()
-            make.height.equalTo(buttonStackViewHeight)
+            make.height.equalTo(editType.stackViewHeight)
         }
         
-        if userRole == .admin {
+        if userRole == .admin, editType == .session {
             editView.snp.makeConstraints { make in
                 make.height.equalTo(editViewHeight)
             }
@@ -146,8 +170,15 @@ class EditPollViewController: UIViewController {
     // MARK: ACTIONS
     
     @objc func deleteBtnPressed() {
-        let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
-        self.navigationController?.pushViewController(deleteVC, animated: true)
+        switch editType! {
+        case .poll:
+            // TODO
+            break
+        case .session:
+            let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
+            self.navigationController?.pushViewController(deleteVC, animated: true)
+
+        }
     }
     
     @objc func editNameBtnPressed() {
@@ -161,7 +192,6 @@ class EditPollViewController: UIViewController {
     
     func setupNavBar() {
         let sessionNameButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        sessionNameButton.setTitle(session.name, for: .normal)
         sessionNameButton.setTitleColor(.black, for: .normal)
         sessionNameButton.titleLabel?.font = UIFont._18SemiboldFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sessionNameButton)
@@ -170,6 +200,14 @@ class EditPollViewController: UIViewController {
         exitButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
         exitButton.addTarget(self, action: #selector(exitBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
+
+        switch editType! {
+        case .poll:
+            guard let count = countLabelText else { return }
+            sessionNameButton.setTitle("Question: \(count)", for: .normal)
+        case .session:
+            sessionNameButton.setTitle(session.name, for: .normal)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

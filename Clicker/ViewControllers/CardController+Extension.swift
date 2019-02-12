@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import Presentr
 import SwiftyJSON
 import UIKit
 
@@ -78,6 +79,23 @@ extension CardController: PollSectionControllerDelegate {
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll) {
         emitShareResults()
     }
+
+    func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll) {
+        let width = ModalSize.full
+        let modalHeight = editModalHeight + view.safeAreaInsets.bottom
+        let height = ModalSize.custom(size: Float(modalHeight))
+        let originY = view.frame.height - modalHeight + 75
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        let presenter = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let editPollVC = EditPollViewController(.poll, delegate: self, session: session, userRole: userRole, countLabelText: countLabel.text)
+        let navigationVC = UINavigationController(rootViewController: editPollVC)
+        customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
+    }
+
 }
 
 extension CardController: PollBuilderViewControllerDelegate {
@@ -343,6 +361,19 @@ extension CardController: SocketDelegate {
         if pollsDateModel.polls.isEmpty { return }
         let numPolls = pollsDateModel.polls.count
         pollsDateModel.polls[numPolls - 1] = poll
+    }
+
+}
+
+// MARK: - EditPollViewControllerDelegate
+extension CardController: EditPollViewControllerDelegate {
+
+    func editPollViewControllerDidUpdateName(for userRole: UserRole) { }
+
+    func editPollViewControllerDidDeleteSession(for userRole: UserRole) { }
+
+    func editPollViewControllerDidDeletePoll() {
+
     }
 
 }

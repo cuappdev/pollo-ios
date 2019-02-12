@@ -57,6 +57,7 @@ class CardController: UIViewController {
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
     let swipeVelocityThreshold: CGFloat = 0.5
+    let editModalHeight: CGFloat = 205
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
