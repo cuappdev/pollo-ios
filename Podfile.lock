@@ -56,6 +56,7 @@ PODS:
   - SnapKit (4.0.0)
   - Socket.IO-Client-Swift (13.1.1):
     - Starscream (~> 3.0.2)
+  - Sourcery (0.15.0)
   - Starscream (3.0.4)
   - SwiftLint (0.25.0)
   - SwiftyJSON (4.0.0)
@@ -71,6 +72,7 @@ DEPENDENCIES:
   - Presentr
   - SnapKit
   - Socket.IO-Client-Swift
+  - Sourcery
   - SwiftLint
   - SwiftyJSON
 
@@ -93,6 +95,7 @@ SPEC REPOS:
     - PromiseKit
     - SnapKit
     - Socket.IO-Client-Swift
+    - Sourcery
     - Starscream
     - SwiftLint
     - SwiftyJSON
@@ -125,10 +128,11 @@ SPEC CHECKSUMS:
   PromiseKit: ea9a155e1fd98a926ccfaf633c0fbd69851f0e7b
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Socket.IO-Client-Swift: f22222913f29801e30ae0df712db663ec096edc2
+  Sourcery: 5895672cae353cdbfa95f3f4aaeb75a664d76f6a
   Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: c768979ebdb9e81bd3de96e66c6ad746fe7f6ea2
+PODFILE CHECKSUM: 82ecbaca36df8dc1b520b2ef65d5630a4ac5665c
 
 COCOAPODS: 1.5.3
