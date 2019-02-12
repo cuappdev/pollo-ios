@@ -117,7 +117,7 @@ SPEC CHECKSUMS:
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
+  GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
   GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
   IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
   Neutron: d554b11bd8fe9daccb68a062c2f2fe16e0dfead6
