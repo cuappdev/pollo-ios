@@ -54,11 +54,6 @@ extension Endpoint {
         return Endpoint(path: "/generate/code", headers: headers)
     }
     
-    static func createSession(name: String, code: String, isGroup: Bool) -> Endpoint {
-        let body = CreateSessionBody(name: name, code: code, isGroup: isGroup)
-        return Endpoint(path: "/sessions", headers: headers, body: body)
-    }
-    
     static func getSession(with id: Int) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)", headers: headers)
     }
@@ -73,11 +68,11 @@ extension Endpoint {
     }
     
     static func deleteSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)", headers: headers, method: EndpointMethod.delete)
+        return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
     }
     
     static func leaveSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: EndpointMethod.delete)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: .delete)
     }
     
     static func getMembers(with id: Int) -> Endpoint {

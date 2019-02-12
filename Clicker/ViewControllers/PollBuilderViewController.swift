@@ -434,6 +434,10 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    func deleteDraft(with id: String) -> Future<DeleteResponse> {
+        return networking(Endpoint.deleteDraft(with: id)).decode(DeleteResponse.self)
+    }
+    
     func allDrafts() -> Future<Response<GetDraftsBlob<Node<Draft>>>> {
         return networking(Endpoint.getDrafts()).decode(Response<GetDraftsBlob<Node<Draft>>>.self)
     }

@@ -147,6 +147,10 @@ struct Response<T: Codable>: Codable {
     
 }
 
+struct DeleteResponse: Codable {
+    var success: Bool
+}
+
 struct Node<T: Codable>: Codable {
     
     var node: T

@@ -36,7 +36,6 @@ class PollsViewController: UIViewController {
     var isListeningToKeyboard: Bool = true
     var gradientNeedsSetup: Bool = true
     var session: Session?
-    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29

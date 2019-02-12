@@ -130,18 +130,30 @@ class PollsDateViewController: UIViewController {
         present(pollBuilderViewController, animated: true, completion: nil)
     }
     
+    func deleteSession(with id: Int) -> Future<DeleteResponse> {
+        return networking(Endpoint.deleteSession(with: id)).decode(DeleteResponse.self)
+    }
+    
     @objc func goBack() {
         socket.socket.disconnect()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
-            DeleteSession(id: session.id).make()
-                .done {
-                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
-                }
-                .catch { error in
+            deleteSession(with: session.id).observe { [weak self] result in
+                guard let `self` = self else { return }
+                switch result {
+                case .value(let response):
+                    if response.success {
+                        self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                    } else {
+                        let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                case .error(let error):
                     print(error)
-                    self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                    let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                    self.present(alertController, animated: true, completion: nil)
+                }
             }
         } else {
             self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
