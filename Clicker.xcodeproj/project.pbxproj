@@ -731,14 +731,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7F923D41F73540600B1E975 /* Build configuration list for PBXNativeTarget "Clicker" */;
 			buildPhases = (
-				D946CA7922127E3F0005AD70 /* Secrets */,
 				8111505A715B85B069440F9D /* [CP] Check Pods Manifest.lock */,
+				D946CA7922127E3F0005AD70 /* Secrets */,
+				C71173CA1F780BF600B4F9A1 /* Fabric */,
 				C7F923BE1F73540600B1E975 /* Sources */,
 				C7F923BF1F73540600B1E975 /* Frameworks */,
 				C7F923C01F73540600B1E975 /* Resources */,
 				A03B3DEF1A4C524FA4F52E2B /* [CP] Embed Pods Frameworks */,
 				DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */,
-				C71173CA1F780BF600B4F9A1 /* Fabric */,
 			);
 			buildRules = (
 			);
