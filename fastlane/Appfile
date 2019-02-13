@@ -1,5 +1,5 @@
 app_identifier("com.cornellappdev.Pollo") # The bundle identifier of your app
-apple_id(ENV["WALKER_EMAIL"]) # Your Apple email address
+apple_id(ENV['WALKER_EMAIL']) # Your Apple email address
 
 itc_team_id("118129608") # App Store Connect Team ID
 team_id("ZGMCXU7X3U") # Developer Portal Team ID

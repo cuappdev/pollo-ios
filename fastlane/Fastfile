@@ -19,7 +19,8 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     upload_to_testflight(
-      changelog: ENV['RELEASE_NOTES']
+      changelog: ENV['RELEASE_NOTES'],
+      ipa: ENV['BITRISE_IPA_PATH']
     )
   end
   after_all do |lane|
