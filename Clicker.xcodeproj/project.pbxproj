@@ -141,7 +141,7 @@
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
-		D946CA7E221346860005AD70 /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D946CA7D221346860005AD70 /* keys.generated.swift */; };
+		D465F60B2214DDAA0018E25D /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D465F60A2214DDAA0018E25D /* keys.generated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,7 +296,7 @@
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
-		D946CA7D221346860005AD70 /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
+		D465F60A2214DDAA0018E25D /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,7 +321,7 @@
 		0C41C955214DB62B00F559C9 /* Secrets */ = {
 			isa = PBXGroup;
 			children = (
-				D946CA7D221346860005AD70 /* keys.generated.swift */,
+				D465F60A2214DDAA0018E25D /* keys.generated.swift */,
 			);
 			path = Secrets;
 			sourceTree = "<group>";
@@ -902,7 +902,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho $API_URL\necho \"created keys.generated.swift file\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\n#if [ -f ./env-vars.sh ]\n#then\nsource ./env-vars.sh\n#fi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho $API_URL\necho \"created keys.generated.swift file\"\n";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1000,7 +1000,7 @@
 				0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */,
 				C2CA3A2A20830B2300E0BDC5 /* UserQuark.swift in Sources */,
 				C26EBB6F21B9051B00AC2B60 /* AskQuestionCell.swift in Sources */,
-				D946CA7E221346860005AD70 /* keys.generated.swift in Sources */,
+				D465F60B2214DDAA0018E25D /* keys.generated.swift in Sources */,
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
 				C2F86664215174E800D045CD /* SessionSectionController.swift in Sources */,
 				6321B786209D42A800B3A934 /* FROptionsDropDownView.swift in Sources */,
