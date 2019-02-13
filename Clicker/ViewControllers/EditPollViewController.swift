@@ -130,7 +130,7 @@ class EditPollViewController: UIViewController {
         let buttonStackViewTopOffset = userRole == .admin ? buttonStackViewAdminTopOffset : 0
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonStackViewTopOffset)
-            make.width.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(editType.stackViewHeight)
         }
         
@@ -150,9 +150,16 @@ class EditPollViewController: UIViewController {
                 make.width.equalToSuperview().multipliedBy(editNameButtonWidthScaleFactor)
             }
         }
-        
-        deleteView.snp.makeConstraints { make in
-            make.height.equalTo(editViewHeight)
+
+        if editType == .poll {
+            deleteView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(editViewHeight)
+            }
+        } else {
+            deleteView.snp.makeConstraints { make in
+                make.height.equalTo(editViewHeight)
+            }
         }
         
         deleteImageButton.snp.makeConstraints { make in

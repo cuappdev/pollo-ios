@@ -84,7 +84,7 @@ extension CardController: PollSectionControllerDelegate {
         let width = ModalSize.full
         let modalHeight = editModalHeight + view.safeAreaInsets.bottom
         let height = ModalSize.custom(size: Float(modalHeight))
-        let originY = view.frame.height - modalHeight + 75
+        let originY = view.frame.height - modalHeight + UIApplication.shared.statusBarFrame.height + navigationController!.navigationBar.frame.height
         let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
         let customType = PresentationType.custom(width: width, height: height, center: center)
         let presenter = Presentr(presentationType: customType)
