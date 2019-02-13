@@ -137,14 +137,17 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
         guard userRole == .admin else { return }
         let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
         getMembers(with: session?.id ?? -1).observe { [weak self] result in
-            switch result {
-            case .value(let response):
-                if let this = self {
-                    let groupControlsVC = GroupControlsViewController(session: this.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.count)
-                    this.navigationController?.pushViewController(groupControlsVC, animated: true)
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.edges.count)
+                    self.navigationController?.pushViewController(groupControlsVC, animated: true)
+                case .error(let error):
+                    print(error)
+                    let alertController = self.createAlert(title: "Error", message: "Failed to load data. Try again!")
+                    self.present(alertController, animated: true, completion: nil)
                 }
-            case .error(let error):
-                print(error)
             }
         }
     }

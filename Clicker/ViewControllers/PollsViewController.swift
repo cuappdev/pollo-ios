@@ -36,6 +36,7 @@ class PollsViewController: UIViewController {
     var isListeningToKeyboard: Bool = true
     var gradientNeedsSetup: Bool = true
     var session: Session?
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29
@@ -284,25 +285,22 @@ class PollsViewController: UIViewController {
             let code = codeResponse.data.code
             return self.startSession(code: code, name: code, isGroup: false)
         }.observe { [weak self] result in
+            guard let `self` = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .value(let sessionResponse):
                     let session = sessionResponse.data.node
-                    if let this = self {
-                        this.isListeningToKeyboard = false
-                        this.hideNewGroupActivityIndicatorView()
-                        let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: [], session: session, userRole: .admin)
-                        this.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        this.navigationController?.setNavigationBarHidden(false, animated: true)
-                        Analytics.shared.log(with: CreatedGroupPayload())
-                    }
+                    self.isListeningToKeyboard = false
+                    self.hideNewGroupActivityIndicatorView()
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    Analytics.shared.log(with: CreatedGroupPayload())
                 case .error(let error):
                     print(error)
-                    if let this = self {
-                        this.hideNewGroupActivityIndicatorView()
-                        let alertController = this.createAlert(title: this.errorText, message: this.failedToCreateGroupText)
-                        this.present(alertController, animated: true, completion: nil)
-                    }
+                    self.hideNewGroupActivityIndicatorView()
+                    let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
+                    self.present(alertController, animated: true, completion: nil)
                 }
             }
         }
@@ -340,24 +338,21 @@ class PollsViewController: UIViewController {
             self.session = sessionResponse.data.node
             return self.getSortedPolls(with: sessionResponse.data.node.id)
         }.observe { [weak self] result in
-            switch result {
-            case .value(let pollsResponse):
-                let pollsDateArray = pollsResponse.data
-                DispatchQueue.main.async {
-                    if let this = self, let session = this.session {
-                        this.codeTextField.text = ""
-                        let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        this.updateJoinSessionButton(canJoin: false)
-                        this.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        this.navigationController?.setNavigationBarHidden(false, animated: true)
-                        Analytics.shared.log(with: JoinedGroupPayload())
-                    }
-                }
-            case .error(let error):
-                print(error)
-                if let this = self {
-                    let alertController = this.createAlert(title: this.errorText, message: "Failed to join session with code \(code). Try again!")
-                    this.present(alertController, animated: true, completion: nil)
+            guard let `self` = self, let session = self.session else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let pollsResponse):
+                    let pollsDateArray = pollsResponse.data
+                    self.codeTextField.text = ""
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                    self.updateJoinSessionButton(canJoin: false)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    Analytics.shared.log(with: JoinedGroupPayload())
+                case .error(let error):
+                    print(error)
+                    let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                    self.present(alertController, animated: true, completion: nil)
                 }
             }
         }
@@ -410,12 +405,14 @@ class PollsViewController: UIViewController {
     // MARK: - Helpers
     func reloadSessions(for userRole: UserRole, completion: (([Session]) -> Void)?) {
         getPollSessions(with: userRole).observe { result in
-            switch result {
-            case .value(let response):
-                let sessions = response.data
-                completion?(sessions)
-            case .error(let error):
-                print(error)
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    let sessions = response.data
+                    completion?(sessions)
+                case .error(let error):
+                    print(error)
+                }
             }
         }
     }

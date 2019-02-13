@@ -89,20 +89,23 @@ class EditNameViewController: UIViewController {
         }
     }
     
-    func updateSession(id: Int, name: String, code: String) -> Future<Response<String>> {
-        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<String>.self)
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<Node<Session>>.self)
     }
     
     @objc func saveBtnPressed() {
         if let newName = nameTextField.text {
             if (newName != "") {
                 updateSession(id: session.id, name: newName, code: session.code).observe { [weak self] result in
-                    switch result {
-                    case .value(_):
-                        self?.delegate.editNameViewControllerDidUpdateName()
-                        self?.dismiss(animated: true, completion: nil)
-                    case .error(let error):
-                        print("error: ", error)
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value(_):
+                            self.delegate.editNameViewControllerDidUpdateName()
+                            self.dismiss(animated: true, completion: nil)
+                        case .error(let error):
+                            print("error: ", error)
+                        }
                     }
                 }
             }

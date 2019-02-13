@@ -339,20 +339,26 @@ class PollBuilderViewController: UIViewController {
             }
             if let loadedDraft = loadedMCDraft {
                 updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
-                    switch result {
-                    case .value(_):
-                        self?.getDrafts()
-                    case .error(let error):
-                        print("error: ", error)
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value(_):
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
                     }
                 }
             } else {
                 createDraft(text: question, options: options).observe { [weak self] result in
-                    switch result {
-                    case .value(_):
-                        self?.getDrafts()
-                    case .error(let error):
-                        print("error: ", error)
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value(_):
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
                     }
                 }
             }
@@ -363,20 +369,26 @@ class PollBuilderViewController: UIViewController {
             let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
                 updateDraft(id: "\(loadedDraft.id)", text: question, options: []).observe { [weak self] result in
-                    switch result {
-                    case .value(_):
-                        self?.getDrafts()
-                    case .error(let error):
-                        print("error: ", error)
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value(_):
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
                     }
                 }
             } else {
                 createDraft(text: question, options: []).observe { [weak self] result in
-                    switch result {
-                    case .value(_):
-                        self?.getDrafts()
-                    case .error(let error):
-                        print("error: ", error)
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value(_):
+                            self.getDrafts()
+                        case .error(let error):
+                            print("error: ", error)
+                        }
                     }
                 }
             }
@@ -438,19 +450,22 @@ class PollBuilderViewController: UIViewController {
         return networking(Endpoint.deleteDraft(with: id)).decode(DeleteResponse.self)
     }
     
-    func allDrafts() -> Future<Response<GetDraftsBlob<Node<Draft>>>> {
-        return networking(Endpoint.getDrafts()).decode(Response<GetDraftsBlob<Node<Draft>>>.self)
+    func allDrafts() -> Future<Response<Edges<Node<Draft>>>> {
+        return networking(Endpoint.getDrafts()).decode(Response<Edges<Node<Draft>>>.self)
     }
     
     // MARK: - Helpers
     func getDrafts() {
         allDrafts().observe { [weak self] result in
-            switch result {
-            case .value(let response):
-                self?.drafts = response.data.edges.map { node in node.node }
-                self?.updatePollBuilderViews()
-            case .error(let error):
-                print("error: ", error)
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    self.drafts = response.data.edges.map { node in node.node }
+                    self.updatePollBuilderViews()
+                case .error(let error):
+                    print("error: ", error)
+                }
             }
         }
     }

@@ -60,22 +60,21 @@ extension PollsViewController: PollsCellDelegate {
             let session = sessionResponse.data.node
             return self.getSortedPolls(with: session.id)
         }.observe { [weak self] result in
-            switch result {
-            case .value(let pollsResponse):
-                let pollsDateArray = pollsResponse.data
-                if let this = self {
-                    let pollsDateViewController = PollsDateViewController(delegate: this, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                    this.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                    this.navigationController?.setNavigationBarHidden(false, animated: true)
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let pollsResponse):
+                    let pollsDateArray = pollsResponse.data
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
                     withCell.hideOpenSessionActivityIndicatorView()
-                    this.isOpeningGroup = false
-                }
-            case .error(let error):
-                if let this = self {
+                    self.isOpeningGroup = false
+                case .error(let error):
                     print(error)
-                    let alertController = this.createAlert(title: this.errorText, message: "Failed to join session. Try again!")
-                    this.present(alertController, animated: true, completion: nil)
-                    this.isOpeningGroup = false
+                    let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
+                    self.present(alertController, animated: true, completion: nil)
+                    self.isOpeningGroup = false
                 }
             }
         }

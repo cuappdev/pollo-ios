@@ -141,18 +141,20 @@ class PollsDateViewController: UIViewController {
         if pollsDateArray.isEmpty && session.name == session.code {
             deleteSession(with: session.id).observe { [weak self] result in
                 guard let `self` = self else { return }
-                switch result {
-                case .value(let response):
-                    if response.success {
-                        self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
-                    } else {
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value(let response):
+                        if response.success {
+                            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                        } else {
+                            let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    case .error(let error):
+                        print(error)
                         let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
                         self.present(alertController, animated: true, completion: nil)
                     }
-                case .error(let error):
-                    print(error)
-                    let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
-                    self.present(alertController, animated: true, completion: nil)
                 }
             }
         } else {
@@ -160,8 +162,8 @@ class PollsDateViewController: UIViewController {
         }
     }
     
-    func getMembers(with id: Int) -> Future<Response<[User]>> {
-        return networking(Endpoint.getMembers(with: id)).decode(Response<[User]>.self)
+    func getMembers(with id: Int) -> Future<Response<Edges<User>>> {
+        return networking(Endpoint.getMembers(with: id)).decode(Response<Edges<User>>.self)
     }
     
     required init?(coder aDecoder: NSCoder) {

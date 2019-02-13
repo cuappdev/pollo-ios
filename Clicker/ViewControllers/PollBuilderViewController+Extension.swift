@@ -94,22 +94,24 @@ extension PollBuilderViewController: EditDraftViewControllerDelegate {
 
     func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft) {
         deleteDraft(with: "\(draft.id)").observe { [weak self] result in
-            switch result {
-            case .value(let response):
-                if response.success {
-                    guard let index = self?.drafts.index(where: { otherDraft -> Bool in
-                        return otherDraft.id == draft.id
-                    }) else { return }
-                    self?.drafts.remove(at: index)
-                    
-                    self?.updatePollBuilderViews()
-                } else {
-                    let alertController = self?.createAlert(title: self?.errorText ?? "", message: self?.failedToDeleteDraftText ?? "")
-                    guard let alert = alertController else { return }
-                    self?.present(alert, animated: true, completion: nil)
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    if response.success {
+                        guard let index = self.drafts.index(where: { otherDraft -> Bool in
+                            return otherDraft.id == draft.id
+                        }) else { return }
+                        self.drafts.remove(at: index)
+                        
+                        self.updatePollBuilderViews()
+                    } else {
+                        let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                case .error(let error):
+                    print("error: ", error)
                 }
-            case .error(let error):
-                print("error: ", error)
             }
         }
     }

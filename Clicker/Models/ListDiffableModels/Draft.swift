@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-struct GetDraftsBlob<T: Codable>: Codable {
+struct Edges<T: Codable>: Codable {
     
     var edges: [T]
     var pageInfo: [String : Int]

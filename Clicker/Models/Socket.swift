@@ -19,7 +19,12 @@ class Socket {
     init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
-        let url = URL(string: Keys.hostURL.value)!
+        #if DEV_SERVER
+        let urlString = "http://\(Keys.hostURL.value):3000"
+        #else
+        let urlString = "http://\(Keys.hostURL.value)"
+        #endif
+        let url = URL(string: urlString)!
         if let googleId = User.currentUser?.id {
             manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIdKey: googleId])])
         } else {

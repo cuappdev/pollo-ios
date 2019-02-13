@@ -153,11 +153,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                         dispatchGroup.leave()
                     }
                     dispatchGroup.notify(queue: .main, execute: {
-                        if let this = self {
-                            DispatchQueue.main.async {
-                                let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                                this.pollsNavigationController.pushViewController(pollsViewController, animated: !this.didSignInSilently)
-                            }
+                        guard let `self` = self else { return }
+                        DispatchQueue.main.async {
+                            let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                            self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
                         }
                     })
                 case .error(let userError):

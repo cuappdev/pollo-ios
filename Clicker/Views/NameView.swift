@@ -97,8 +97,8 @@ class NameView: UIView, UITextFieldDelegate {
         }
     }
     
-    func updateSession(id: Int, name: String, code: String) -> Future<Response<String>> {
-        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<String>.self)
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<Node<Session>>.self)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -109,13 +109,16 @@ class NameView: UIView, UITextFieldDelegate {
             name = session.code
         }
         updateSession(id: session.id, name: name, code: session.code).observe { [weak self] result in
-            switch result {
-            case .value(_):
-                self?.session.name = name
-                self?.delegate.nameViewDidUpdateSessionName()
-                self?.removeFromSuperview()
-            case .error(let error):
-                print("error: ", error)
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(_):
+                    self.session.name = name
+                    self.delegate.nameViewDidUpdateSessionName()
+                    self.removeFromSuperview()
+                case .error(let error):
+                    print("error: ", error)
+                }
             }
         }
         return true
