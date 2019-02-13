@@ -104,6 +104,7 @@ class PollsDateViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
         peopleButton = UIButton()
+        peopleButton.isEnabled = false
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
