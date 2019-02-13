@@ -22,7 +22,8 @@ platform :ios do
       changelog: ENV['RELEASE_NOTES'],
       ipa: ENV['BITRISE_IPA_PATH'],
       wait_for_uploaded_build: true,
-      distribute_external: true
+      distribute_external: true,
+      groups: ["AppDev Core Team", "External Test Group"]
     )
   end
   after_all do |lane|
