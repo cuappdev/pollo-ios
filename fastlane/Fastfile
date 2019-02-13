@@ -21,7 +21,8 @@ platform :ios do
     upload_to_testflight(
       changelog: ENV['RELEASE_NOTES'],
       ipa: ENV['BITRISE_IPA_PATH'],
-      wait_for_uploaded_build: true
+      wait_for_uploaded_build: true,
+      distribute_external: true
     )
   end
   after_all do |lane|
