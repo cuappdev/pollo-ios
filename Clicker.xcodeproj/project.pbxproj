@@ -731,8 +731,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7F923D41F73540600B1E975 /* Build configuration list for PBXNativeTarget "Clicker" */;
 			buildPhases = (
-				D946CA7922127E3F0005AD70 /* Secrets */,
 				8111505A715B85B069440F9D /* [CP] Check Pods Manifest.lock */,
+				D946CA7922127E3F0005AD70 /* Secrets */,
 				C7F923BE1F73540600B1E975 /* Sources */,
 				C7F923BF1F73540600B1E975 /* Frameworks */,
 				C7F923C01F73540600B1E975 /* Resources */,
@@ -898,6 +898,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${SRCROOT}/Secrets/keys.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
