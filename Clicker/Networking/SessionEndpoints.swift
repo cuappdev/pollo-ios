@@ -59,7 +59,8 @@ extension Endpoint {
     }
     
     static func getPollSessions(with role: UserRole) -> Endpoint {
-        return Endpoint(path: "/sessions/all/\(role == .member ? "member" : "admin")", headers: headers)
+        let userRole = role == .member ? "member" : "admin"
+        return Endpoint(path: "/sessions/all/\(userRole)", headers: headers)
     }
     
     static func updateSession(id: Int, name: String, code: String) -> Endpoint {

@@ -56,7 +56,7 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
+        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
             let session = sessionResponse.data.node
             return self.getSortedPolls(with: session.id)
         }.observe { [weak self] result in
@@ -64,7 +64,14 @@ extension PollsViewController: PollsCellDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let pollsResponse):
-                    let pollsDateArray = pollsResponse.data
+                    var pollsDateArray = [PollsDateModel]()
+                    pollsResponse.data.forEach { response in
+                        var polls = [Poll]()
+                        response.polls.forEach { poll in
+                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: [], results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                        }
+                        pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                    }
                     let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)

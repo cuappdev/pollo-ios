@@ -328,13 +328,13 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.joinSessionWithCode(with: code)).decode(Response<Node<Session>>.self)
     }
     
-    func getSortedPolls(with id: Int) -> Future<Response<[PollsDateModel]>> {
-        return networking(Endpoint.getSortedPolls(with: id)).decode(Response<[PollsDateModel]>.self)
+    func getSortedPolls(with id: Int) -> Future<Response<[GetSortedPollsResponse]>> {
+        return networking(Endpoint.getSortedPolls(with: id)).decode(Response<[GetSortedPollsResponse]>.self)
     }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
+        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
             self.session = sessionResponse.data.node
             return self.getSortedPolls(with: sessionResponse.data.node.id)
         }.observe { [weak self] result in
@@ -342,7 +342,14 @@ class PollsViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let pollsResponse):
-                    let pollsDateArray = pollsResponse.data
+                    var pollsDateArray = [PollsDateModel]()
+                    pollsResponse.data.forEach { response in
+                        var polls = [Poll]()
+                        response.polls.forEach { poll in
+                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: [], results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                        }
+                        pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                    }
                     self.codeTextField.text = ""
                     let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
                     self.updateJoinSessionButton(canJoin: false)

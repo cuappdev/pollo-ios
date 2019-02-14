@@ -119,15 +119,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     self?.getPollSessions(with: .member).observe { memberResult in
                         switch memberResult {
                         case .value(let memberResponse):
-                            var preSessions = [Double : Session]()
+                            var auxiliaryDict = [Double : Session]()
                             memberResponse.data.forEach { node in
                                 let session = node.node
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
                             }
-                            for time in preSessions.keys.sorted() {
-                                joinedSessions.append(preSessions[time]!)
+                            for time in auxiliaryDict.keys.sorted() {
+                                joinedSessions.append(auxiliaryDict[time]!)
                             }
                         case .error(let memberError):
                             print(memberError)
@@ -137,15 +137,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     self?.getPollSessions(with: .admin).observe { adminResult in
                         switch adminResult {
                         case .value(let adminResponse):
-                            var preSessions = [Double : Session]()
+                            var auxiliaryDict = [Double : Session]()
                             adminResponse.data.forEach { node in
                                 let session = node.node
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    preSessions[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
                             }
-                            for time in preSessions.keys.sorted() {
-                                createdSessions.append(preSessions[time]!)
+                            for time in auxiliaryDict.keys.sorted() {
+                                createdSessions.append(auxiliaryDict[time]!)
                             }
                         case .error(let adminError):
                             print(adminError)

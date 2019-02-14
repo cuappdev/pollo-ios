@@ -9,6 +9,24 @@
 import Foundation
 import IGListKit
 
+struct PollsResponse: Codable {
+    
+    var id: Int
+    var text: String
+    var results: [String : PollResult]
+    var shared: Bool
+    var type: String
+    var correctAnswer: String?
+    
+}
+
+struct GetSortedPollsResponse: Codable {
+    
+    var date: String
+    var polls: [PollsResponse]
+    
+}
+
 class PollsDateModel: Codable {
     
     var date: String
