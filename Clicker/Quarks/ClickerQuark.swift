@@ -77,4 +77,3 @@ enum Element {
     case nodes([JSON])
     case edges([Edge])
 }
-

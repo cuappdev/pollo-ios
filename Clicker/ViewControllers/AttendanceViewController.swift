@@ -50,7 +50,7 @@ class AttendanceViewController: UIViewController {
         return .lightContent
     }
 
-    init(delegate: AttendanceViewControllerDelegate,pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
+    init(delegate: AttendanceViewControllerDelegate, pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.pollsDateAttendanceArray = pollsDateAttendanceArray

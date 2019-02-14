@@ -75,7 +75,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 make.trailing.equalToSuperview().inset(totalVotesLabelTrailingPadding)
                 make.centerY.equalToSuperview()
             }
-            break
         case .member:
             
             descriptionLabel.snp.makeConstraints { make in
@@ -108,7 +107,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 unit = miscellaneousModel.totalVotes == 1 ? responseString : "\(responseString)s"
             }
             totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
-            break
         case .member:
             descriptionLabel.textAlignment = .center
             switch miscellaneousModel.pollState {
@@ -128,7 +126,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
             }
         }
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

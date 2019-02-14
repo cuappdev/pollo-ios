@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = Google.googleClientID
         GIDSignIn.sharedInstance().serverClientID = Google.googleClientID
         GIDSignIn.sharedInstance().delegate = self
-        if GIDSignIn.sharedInstance().hasAuthInKeychain(){
+        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
             didSignInSilently = true
             DispatchQueue.main.async {
                 GIDSignIn.sharedInstance().signInSilently()
@@ -79,12 +79,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         #endif
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if (error == nil) {
+        if error == nil {
             let idToken = user.authentication.idToken ?? ""
             let userId = user.userID ?? "ID" // For client-side use only!
             let fullName = user.profile.name ?? "First Last"

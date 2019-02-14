@@ -42,7 +42,6 @@ class NavigationTitleView: UIView {
         primaryLabel.font = ._16SemiboldFont
         primaryLabel.textAlignment = .center
         addSubview(primaryLabel)
-    
         
         secondaryLabel = UILabel()
         secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)

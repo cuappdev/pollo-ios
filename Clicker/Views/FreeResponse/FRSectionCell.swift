@@ -61,7 +61,7 @@ class FRSectionCell: QuestionSectionCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        questionTextField.snp.updateConstraints{ make in
+        questionTextField.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width, height: 48))
             make.top.equalToSuperview()
             make.left.equalToSuperview()
@@ -114,5 +114,3 @@ class FRSectionCell: QuestionSectionCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-

@@ -11,8 +11,8 @@ import IGListKit
 protocol PollBuilderMCOptionSectionControllerDelegate: class {
     
     func pollBuilderSectionControllerShouldAddOption()
-    func pollBuilderSectionControllerDidUpdateOption(option:String, index: Int, isCorrect: Bool)
-    func pollBuilderSectionControllerDidUpdateIsCorrect(option:String, index: Int, isCorrect: Bool)
+    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int, isCorrect: Bool)
+    func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool)
     func pollBuilderSectionControllerDidDeleteOption(index: Int)
     
 }
@@ -41,7 +41,7 @@ class PollBuilderMCOptionSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         var cell: UICollectionViewCell
         switch mcOptionModel.type {
-        case .newOption(_):
+        case .newOption:
             let createMCOptionCell = collectionContext?.dequeueReusableCell(of: CreateMCOptionCell.self, for: self, at: index) as! CreateMCOptionCell
             createMCOptionCell.configure(for: mcOptionModel, delegate: self)
             cell = createMCOptionCell

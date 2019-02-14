@@ -62,9 +62,9 @@ extension CardController: PollSectionControllerDelegate {
     }
 
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
-        let upvoteObject: [String:Any] = [
+        let upvoteObject: [String: Any] = [
             RequestKeys.answerIdKey: answerId,
-            RequestKeys.googleIdKey: User.currentUser?.id
+            RequestKeys.googleIdKey: User.currentUser?.id ?? ""
         ]
         socket.socket.emit(Routes.serverUpvote, upvoteObject)
     }
@@ -92,7 +92,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         }
         
         // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
+        let socketQuestion: [String: Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
@@ -120,8 +120,8 @@ extension CardController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
-        var results: [String:JSON] = [:]
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
+        var results: [String: JSON] = [:]
         options.enumerated().forEach { (index, option) in
             let infoDict: JSON = [
                 RequestKeys.textKey: option,
@@ -173,7 +173,7 @@ extension CardController: UIScrollViewDelegate {
         var direction: Int
         
         if willScrollToIndex == wasScrolledToIndex {
-            if (canSwipeNext || canSwipePrev)  {
+            if canSwipeNext || canSwipePrev {
                 // scrolled short and fast, should snap to next/prev cell
                 direction = canSwipeNext ? 1 : -1
                 newCount =  wasScrolledToIndex + direction
@@ -301,8 +301,8 @@ extension CardController: SocketDelegate {
 
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
-        let data: [String:Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id,
+        let data: [String: Any] = [
+            RequestKeys.googleIdKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text

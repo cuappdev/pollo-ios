@@ -105,7 +105,7 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
             let circleImageXOffset: CGFloat = 12.0
@@ -301,7 +301,7 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             quizModeOverlayView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
@@ -330,14 +330,14 @@ class PollBuilderViewController: UIViewController {
             }
             if let loadedDraft = loadedMCDraft {
                 UpdateDraft(id: "\(loadedDraft.id)", text: question, options: options).make()
-                    .done { draft in
+                    .done { _ in
                         self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
             } else {
                 CreateDraft(text: question, options: options).make()
-                    .done { draft in
+                    .done { _ in
                         self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
@@ -350,14 +350,14 @@ class PollBuilderViewController: UIViewController {
             let question = frPollBuilder.questionText ?? ""
             if let loadedDraft = loadedFRDraft {
                 UpdateDraft(id: "\(loadedDraft.id)", text: question, options: []).make()
-                    .done { draft in
+                    .done { _ in
                         self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
                 }
             } else {
                 CreateDraft(text: question, options: []).make()
-                    .done { draft in
+                    .done { _ in
                         self.getDrafts()
                     }.catch { error in
                         print("error: ", error)
@@ -453,7 +453,7 @@ class PollBuilderViewController: UIViewController {
             shouldIgnoreNextKeyboardHiding = false
             return
         }
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()

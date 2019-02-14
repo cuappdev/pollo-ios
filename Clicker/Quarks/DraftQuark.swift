@@ -10,7 +10,6 @@ import Alamofire
 import Neutron
 import SwiftyJSON
 
-
 struct GetDrafts: ClickerQuark {
 
     typealias ResponseType = [Draft]
@@ -88,7 +87,6 @@ struct CreateDraft: ClickerQuark {
     }
 }
 
-
 struct UpdateDraft: ClickerQuark {
 
     typealias ResponseType = Draft
@@ -144,6 +142,6 @@ struct DeleteDraft: ClickerQuark {
 
     let method: HTTPMethod = .delete
 
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
 
 }

@@ -34,7 +34,7 @@ class PickQTypeViewController: UIViewController {
     func setupViews() {
         view.clipsToBounds = true
         view.layer.cornerRadius = 15
-        view.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         topBackgroundView = UIButton()
         topBackgroundView.backgroundColor = .clear
@@ -69,8 +69,7 @@ class PickQTypeViewController: UIViewController {
         
     }
     
-    
-    // MARK - ACTIONS
+    // MARK: - ACTIONS
     
     @objc func topPressed() {
         delegate?.updateQuestionType(currentType)
@@ -84,6 +83,5 @@ class PickQTypeViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 
 }

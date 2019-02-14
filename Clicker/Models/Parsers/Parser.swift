@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 protocol Parser {
-    associatedtype itemType
+    associatedtype ItemType
     
-    static func parseItem(json: JSON) -> itemType
+    static func parseItem(json: JSON) -> ItemType
 }

@@ -84,7 +84,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         let correct = correctAnswer ?? ""
         
         // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
+        let socketQuestion: [String: Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
@@ -107,8 +107,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
-        var results: [String:JSON] = [:]
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
+        var results: [String: JSON] = [:]
         options.enumerated().forEach { (index, option) in
             let infoDict: JSON = [
                 RequestKeys.textKey: option,
@@ -194,7 +194,7 @@ extension PollsDateViewController: SocketDelegate {
     }
 
     func receivedResultsLive(_ currentState: CurrentState) {
-        guard let _ = getLatestPoll() else { return }
+        guard getLatestPoll() != nil else { return }
         updateWithCurrentState(currentState: currentState, pollState: .live)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -211,8 +211,8 @@ extension PollsDateViewController: SocketDelegate {
     
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
-        let data: [String:Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id,
+        let data: [String: Any] = [
+            RequestKeys.googleIdKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text
@@ -266,7 +266,7 @@ extension PollsDateViewController: SocketDelegate {
     func updateLatestPoll(with poll: Poll) {
         guard let latestPollsDateModel = pollsDateArray.last else { return }
         let todaysDate = getTodaysDate()
-        if (latestPollsDateModel.date != todaysDate) {
+        if latestPollsDateModel.date != todaysDate {
             // User has no polls for today yet
             let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
             pollsDateArray.append(todayPollsDateModel)

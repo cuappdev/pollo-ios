@@ -90,9 +90,9 @@ class EditNameViewController: UIViewController {
     
     @objc func saveBtnPressed() {
         if let newName = nameTextField.text {
-            if (newName != "") {
+            if newName != "" {
                 UpdateSession(id: session.id, name: newName, code: session.code).make()
-                    .done { code in
+                    .done { _ in
                         self.delegate?.editNameViewControllerDidUpdateName()
                         self.dismiss(animated: true, completion: nil)
                     }.catch { error in
@@ -129,7 +129,7 @@ class EditNameViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             self.view.window?.frame.origin.y = 0
             self.view.layoutIfNeeded()
         }

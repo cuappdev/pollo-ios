@@ -25,7 +25,7 @@ class MCPollBuilderView: UIView {
     
     // MARK: - Data vars
     weak var delegate: MCPollBuilderViewDelegate?
-    var pollBuilderDelegate: PollBuilderViewDelegate?
+    weak var pollBuilderDelegate: PollBuilderViewDelegate?
     var session: Session!
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
@@ -149,8 +149,8 @@ class MCPollBuilderView: UIView {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 70, right: 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
             shouldLightenDraftsText(true)
@@ -158,7 +158,7 @@ class MCPollBuilderView: UIView {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
             shouldLightenDraftsText(false)
