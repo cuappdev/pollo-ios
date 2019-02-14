@@ -7,5 +7,5 @@
 # - Made networking more reliable
 #
 # Add notes below this line
-- Testing continious integration
-- This is test numero 46
+- Fixed the ability to log into Pollo
+- Everything should be back to normal (random=pollo)
