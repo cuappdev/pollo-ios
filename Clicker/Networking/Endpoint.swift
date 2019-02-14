@@ -117,7 +117,7 @@ extension Endpoint {
         
         if method == .post {
             if request.value(forHTTPHeaderField: "Content-Type") == nil {
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             }
         }
         request.httpMethod = method.rawValue

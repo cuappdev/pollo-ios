@@ -398,8 +398,8 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode(Response<Node<Session>>.self)
     }
     
-    func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
-        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Session]>.self)
+    func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
+        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Node<Session>]>.self)
     }
     
     // MARK: - Helpers
@@ -408,7 +408,17 @@ class PollsViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    let sessions = response.data
+                    var sessions = [Session]()
+                    var auxiliaryDict = [Double : Session]()
+                    response.data.forEach { node in
+                        let session = node.node
+                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
+                        }
+                    }
+                    for timestamp in auxiliaryDict.keys.sorted() {
+                        sessions.append(auxiliaryDict[timestamp]!)
+                    }
                     completion?(sessions)
                 case .error(let error):
                     print(error)
