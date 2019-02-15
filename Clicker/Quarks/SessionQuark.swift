@@ -10,7 +10,7 @@ import Alamofire
 import Neutron
 import SwiftyJSON
 
-struct GenerateCode : ClickerQuark {
+struct GenerateCode: ClickerQuark {
     
     typealias ResponseType = String
     
@@ -124,7 +124,7 @@ struct GetPollSessions: ClickerQuark {
     func process(element: Element) throws -> [Session] {
         switch element {
         case .nodes(let nodes):
-            var preSessions: [Double:Session] = [:]
+            var preSessions: [Double: Session] = [:]
             for node in nodes {
                 guard let id = node["id"].int, let name = node["name"].string, let code = node["code"].string, let updatedAt = node["updatedAt"].string, let isLive = node["isLive"].bool else {
                     throw NeutronError.badResponseData
@@ -215,9 +215,8 @@ struct LeaveSession: ClickerQuark {
     }
     let method: HTTPMethod = .delete
     
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
 }
-
 
 struct GetMembers: ClickerQuark {
     typealias ResponseType = [User]
@@ -301,7 +300,7 @@ struct AddMembers: ClickerQuark {
     }
     let method: HTTPMethod = .post
     
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
 }
 
 struct RemoveMembers: ClickerQuark {
@@ -326,7 +325,7 @@ struct RemoveMembers: ClickerQuark {
     
     let method: HTTPMethod = .delete
     
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
     
 }
 
@@ -351,7 +350,7 @@ struct AddAdmins: ClickerQuark {
     }
     let method: HTTPMethod = .post
     
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
 }
 
 struct DeleteAdmins: ClickerQuark {
@@ -376,7 +375,7 @@ struct DeleteAdmins: ClickerQuark {
     
     let method: HTTPMethod = .delete
     
-    func process(element: Element) throws -> Void { }
+    func process(element: Element) throws { }
     
 }
 
@@ -518,5 +517,3 @@ struct JoinSessionWithIdAndCode: ClickerQuark {
         }
     }
 }
-
-

@@ -10,7 +10,7 @@ import IGListKit
 import SnapKit
 import UIKit
 
-protocol MCPollBuilderViewDelegate {
+protocol MCPollBuilderViewDelegate: class {
     var drafts: [Draft] { get }
     func shouldEditDraft(draft: Draft)
     func shouldLoadDraft(draft: Draft)
@@ -24,8 +24,8 @@ class MCPollBuilderView: UIView {
     var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: - Data vars
-    var delegate: MCPollBuilderViewDelegate?
-    var pollBuilderDelegate: PollBuilderViewDelegate?
+    weak var delegate: MCPollBuilderViewDelegate?
+    weak var pollBuilderDelegate: PollBuilderViewDelegate?
     var session: Session!
     var grayViewBottomConstraint: Constraint!
     var editable: Bool!
@@ -87,7 +87,7 @@ class MCPollBuilderView: UIView {
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {
-            case .newOption(option: let option, index: let index, isCorrect: let isCorrect):
+            case .newOption(option: let option, index: let index, isCorrect: _):
                 return option != "" ? option : intToMCOption(index)
             case .addOption:
                 return nil
@@ -149,8 +149,8 @@ class MCPollBuilderView: UIView {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0)
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 70, right: 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
             shouldLightenDraftsText(true)
@@ -158,7 +158,7 @@ class MCPollBuilderView: UIView {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
             shouldLightenDraftsText(false)

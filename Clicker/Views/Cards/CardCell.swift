@@ -11,8 +11,8 @@ import SnapKit
 import SwiftyJSON
 import UIKit
 
-protocol CardCellDelegate {
-    
+protocol CardCellDelegate: class {
+
     var userRole: UserRole { get }
 
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?)
@@ -31,7 +31,7 @@ class CardCell: UICollectionViewCell {
     var timerLabel: UILabel!
     
     // MARK: - Data vars
-    var delegate: CardCellDelegate!
+    weak var delegate: CardCellDelegate!
     var poll: Poll!
     var adapter: ListAdapter!
     var topHamburgerCardModel: HamburgerCardModel!
@@ -67,7 +67,6 @@ class CardCell: UICollectionViewCell {
         frInputModel = FRInputModel()
         setupViews()
     }
-    
     
     // MARK: - Layout
     func setupViews() {
@@ -171,13 +170,13 @@ class CardCell: UICollectionViewCell {
             timerLabel.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
-            delegate.cardCellDidEndPoll(cardCell: self, poll: poll)
+            delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
-            delegate.cardCellDidShareResults(cardCell: self, poll: poll)
+            delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
         }
     }
     
@@ -187,21 +186,21 @@ class CardCell: UICollectionViewCell {
             return
         }
         let elapsedSeconds = Int(NSDate().timeIntervalSince1970 - start)
-        if (elapsedSeconds < 10) {
+        if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
-        } else if (elapsedSeconds < 60) {
+        } else if elapsedSeconds < 60 {
             timerLabel.text = "00:\(elapsedSeconds)"
         } else {
             let minutes = Int(elapsedSeconds / 60)
             let seconds = elapsedSeconds - minutes * 60
-            if (elapsedSeconds < 600) {
-                if (seconds < 10) {
+            if elapsedSeconds < 600 {
+                if seconds < 10 {
                     timerLabel.text = "0\(minutes):0\(seconds)"
                 } else {
                     timerLabel.text = "0\(minutes):\(seconds)"
                 }
             } else {
-                if (seconds < 10) {
+                if seconds < 10 {
                     timerLabel.text = "\(minutes):0\(seconds)"
                 } else {
                     timerLabel.text = "\(minutes):\(seconds)"
@@ -239,7 +238,6 @@ extension CardCell: ListAdapterDataSource {
             if poll.questionType == .multipleChoice {
                 objects.append(miscellaneousModel)
             }
-            break
         case .member:
             objects.append(miscellaneousModel)
         }
@@ -275,8 +273,8 @@ extension CardCell: FRInputSectionControllerDelegate {
     func frInputSectionControllerSubmittedResponse(sectionController: FRInputSectionController, response: String) {
         guard let pollOptionsModel = pollOptionsModel else { return }
         switch pollOptionsModel.type {
-        case .frOption(_):
-            delegate.cardCellDidSubmitChoice(cardCell: self, choice: response, index: nil)
+        case .frOption:
+            delegate?.cardCellDidSubmitChoice(cardCell: self, choice: response, index: nil)
         default:
             return
         }
@@ -290,7 +288,7 @@ extension CardCell: FRInputSectionControllerDelegate {
     }
     
     private func indexOfFROptionModel(for answer: String, frOptionModels: [FROptionModel]) -> Int? {
-        let indexOptionPair = frOptionModels.enumerated().first { (index, frOptionModel) -> Bool in
+        let indexOptionPair = frOptionModels.enumerated().first { (_, frOptionModel) -> Bool in
             return answer == frOptionModel.option
         }
         return indexOptionPair?.offset

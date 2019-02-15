@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-protocol EditPollViewControllerDelegate {
+protocol EditPollViewControllerDelegate: class {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole)
     func editPollViewControllerDidDeleteSession(for userRole: UserRole)
@@ -28,7 +28,7 @@ class EditPollViewController: UIViewController {
     var deleteButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: EditPollViewControllerDelegate!
+    weak var delegate: EditPollViewControllerDelegate?
     var session: Session!
     var userRole: UserRole!
     
@@ -181,7 +181,7 @@ class EditPollViewController: UIViewController {
 extension EditPollViewController: EditNameViewControllerDelegate {
     
     func editNameViewControllerDidUpdateName() {
-        self.delegate.editPollViewControllerDidUpdateName(for: userRole)
+        self.delegate?.editPollViewControllerDidUpdateName(for: userRole)
     }
     
 }
@@ -189,7 +189,7 @@ extension EditPollViewController: EditNameViewControllerDelegate {
 extension EditPollViewController: DeletePollViewControllerDelegate {
     
     func deletePollViewControllerDidRemoveSession(for userRole: UserRole) {
-        self.delegate.editPollViewControllerDidDeleteSession(for: userRole)
+        self.delegate?.editPollViewControllerDidDeleteSession(for: userRole)
     }
     
 }

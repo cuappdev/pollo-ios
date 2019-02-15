@@ -10,7 +10,6 @@ import IGListKit
 import Presentr
 import UIKit
 
-
 extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerDelegate {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {

@@ -9,15 +9,15 @@
 import Foundation
 import IGListKit
 
-protocol PollTypeSectionControllerDelegate {
+protocol PollTypeSectionControllerDelegate: class {
     var pollsCellDelegate: PollsCellDelegate {get}
-    func sectionControllerWillDisplayPollType(sectionController:PollTypeSectionController, pollType: PollType)
+    func sectionControllerWillDisplayPollType(sectionController: PollTypeSectionController, pollType: PollType)
 }
 
 class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     
     var pollTypeModel: PollTypeModel!
-    var delegate: PollTypeSectionControllerDelegate!
+    weak var delegate: PollTypeSectionControllerDelegate?
     
     init(delegate: PollTypeSectionControllerDelegate) {
         self.delegate = delegate
@@ -32,7 +32,7 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollsCell.self, for: self, at: index) as! PollsCell
-        cell.configureWith(pollTypeModel: pollTypeModel, delegate: delegate.pollsCellDelegate)
+        cell.configureWith(pollTypeModel: pollTypeModel, delegate: delegate?.pollsCellDelegate)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -62,7 +62,7 @@ class PollTypeSectionController: ListSectionController, ListDisplayDelegate {
     
     // MARK: - ListDisplayDelegate
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController) {
-        delegate.sectionControllerWillDisplayPollType(sectionController: self, pollType: pollTypeModel.pollType)
+        delegate?.sectionControllerWillDisplayPollType(sectionController: self, pollType: pollTypeModel.pollType)
     }
     
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController) {}

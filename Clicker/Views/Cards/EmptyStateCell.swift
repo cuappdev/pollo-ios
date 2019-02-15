@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol EmptyStateCellDelegate {
+protocol EmptyStateCellDelegate: class {
     func emptyStateCellDidTapCreateDraftButton()
 }
 
 class EmptyStateCell: UICollectionViewCell {
     
-    //MARK: View vars
+    // MARK: View vars
     var iconImageView: UIImageView!
     var titleLabel: UILabel!
     var subtitleLabel: UILabel!
@@ -23,7 +23,7 @@ class EmptyStateCell: UICollectionViewCell {
     
     // MARK: - Data vars
     var emptyStateModel: EmptyStateModel!
-    var delegate: EmptyStateCellDelegate!
+    weak var delegate: EmptyStateCellDelegate?
 
     // MARK: - Constants
     let pollsViewControllerIconImageViewLength: CGFloat = 45.0
@@ -113,21 +113,19 @@ class EmptyStateCell: UICollectionViewCell {
     }
     
     @objc func createDraftButtonPressed() {
-        delegate.emptyStateCellDidTapCreateDraftButton()
+        delegate?.emptyStateCellDidTapCreateDraftButton()
     }
     
     override func updateConstraints() {
         iconImageView.snp.makeConstraints { make in
             switch emptyStateModel.type {
-            case .pollsViewController(_):
+            case .pollsViewController:
                 make.width.height.equalTo(pollsViewControllerIconImageViewLength)
                 make.top.equalToSuperview().offset(iconImageViewTopPadding)
-                break
-            case .cardController(_):
+            case .cardController:
                 make.width.height.equalTo(cardControllerIconImageViewLength)
                 make.top.equalToSuperview().offset(iconImageViewTopPadding)
-                break
-            case .draftsViewController(_):
+            case .draftsViewController:
                 make.width.height.equalTo(draftsViewControllerIconImageViewLength)
                 make.top.equalToSuperview().offset(draftsViewControllerIconImageViewTopPadding)
             }
@@ -141,21 +139,19 @@ class EmptyStateCell: UICollectionViewCell {
         }
         
         switch emptyStateModel.type {
-        case .pollsViewController(_):
+        case .pollsViewController:
             subtitleLabel.snp.makeConstraints { make in
                 make.width.equalTo(subtitleLabelWidth)
                 make.centerX.equalToSuperview()
                 make.top.equalTo(titleLabel.snp.bottom).offset(subtitleLabelTopPadding)
             }
-            break
-        case .cardController(_):
+        case .cardController:
             subtitleLabel.snp.makeConstraints { make in
                 make.width.equalTo(subtitleLabelWidth)
                 make.centerX.equalToSuperview()
                 make.top.equalTo(titleLabel.snp.bottom).offset(subtitleLabelTopPadding)
             }
-            break
-        case .draftsViewController(_):
+        case .draftsViewController:
             createDraftButton.snp.makeConstraints { make in
                 make.width.equalTo(createDraftButtonWidth)
                 make.height.equalTo(createDraftButtonHeight)
@@ -183,7 +179,6 @@ class EmptyStateCell: UICollectionViewCell {
             }
             
             titleLabel.textColor = .black
-            break
         case .cardController(let userRole):
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
                 setupNameView(with: session, nameViewDelegate: nameViewDelegate)
@@ -192,7 +187,6 @@ class EmptyStateCell: UICollectionViewCell {
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-            break
         case .draftsViewController(let delegate):
             iconImageView.image = UIImage(named: womanShruggingImageName)
             titleLabel.textColor = .white
@@ -202,7 +196,7 @@ class EmptyStateCell: UICollectionViewCell {
         subtitleLabel.textColor = .clickerGrey2
     }
     
-    // MARK - NAME THE POLL
+    // MARK: - NAME THE POLL
     func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
         
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)

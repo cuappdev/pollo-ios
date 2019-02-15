@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditNameViewControllerDelegate {
+protocol EditNameViewControllerDelegate: class {
     func editNameViewControllerDidUpdateName()
 }
 
@@ -19,7 +19,7 @@ class EditNameViewController: UIViewController {
     var saveButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: EditNameViewControllerDelegate!
+    weak var delegate: EditNameViewControllerDelegate?
     var session: Session!
     private let networking: Networking = URLSession.shared.request
 
@@ -101,7 +101,7 @@ class EditNameViewController: UIViewController {
                     DispatchQueue.main.async {
                         switch result {
                         case .value(_):
-                            self.delegate.editNameViewControllerDidUpdateName()
+                            self.delegate?.editNameViewControllerDidUpdateName()
                             self.dismiss(animated: true, completion: nil)
                         case .error(let error):
                             print("error: ", error)
@@ -139,7 +139,7 @@ class EditNameViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             self.view.window?.frame.origin.y = 0
             self.view.layoutIfNeeded()
         }

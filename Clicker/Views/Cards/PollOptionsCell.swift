@@ -9,7 +9,7 @@
 import UIKit
 import IGListKit
 
-protocol PollOptionsCellDelegate {
+protocol PollOptionsCellDelegate: class {
     
     var userRole: UserRole { get }
     
@@ -25,7 +25,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     var arrowView: ArrowView!
     
     // MARK: - Data vars
-    var delegate: PollOptionsCellDelegate!
+    weak var delegate: PollOptionsCellDelegate!
     var correctAnswer: String?
     var adapter: ListAdapter!
     var pollOptionsModel: PollOptionsModel!
@@ -101,7 +101,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         case .mcResult(let mcResultModels):
             let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
             hasOverflowOptions = mcResultModels.count > maxOptions
-            break
         case .mcChoice(let mcChoiceModels):
             let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
             hasOverflowOptions = mcChoiceModels.count > maxOptions
@@ -110,7 +109,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }) {
                 mcSelectedIndex = selectedIndex
             }
-            break
         case .frOption(let frOptionModels):
             let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
             hasOverflowOptions = frOptionModels.count > maxOptions
@@ -139,7 +137,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
                 pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
-                let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
+                let maxOptions = delegate?.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
                 // Have to display arrow view if we've passed maxOptions
                 if updatedFROptionModels.count == maxOptions + 1 {
                     hasOverflowOptions = true
@@ -236,7 +234,7 @@ extension PollOptionsCell: ListAdapterDataSource {
         } else {
             guard let pollOptionsModel = pollOptionsModel else { return ListSectionController() }
             switch pollOptionsModel.type {
-            case .mcResult(_), .mcChoice(_):
+            case .mcResult, .mcChoice:
                 return SpaceSectionController(noResponses: false)
             case .frOption(let models):
                 return SpaceSectionController(noResponses: models.isEmpty)
@@ -273,7 +271,7 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
         switch pollOptionsModel.type {
         case .mcChoice(choiceModels: var mcChoiceModels):
-            if (mcSelectedIndex != NSNotFound) {
+            if mcSelectedIndex != NSNotFound {
                 // Deselect former choice
                 mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }

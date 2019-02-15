@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PickQTypeDelegate {
+protocol PickQTypeDelegate: class {
     func updateQuestionType(_ type: QuestionType)
 }
 
@@ -17,7 +17,7 @@ class PickQTypeViewController: UIViewController {
     var popupHeight: CGFloat!
     var topBackgroundView: UIButton!
     var bottomBackgroundView: UIButton!
-    var delegate: PickQTypeDelegate!
+    weak var delegate: PickQTypeDelegate?
 
     var currentType: QuestionType! 
 
@@ -34,7 +34,7 @@ class PickQTypeViewController: UIViewController {
     func setupViews() {
         view.clipsToBounds = true
         view.layer.cornerRadius = 15
-        view.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         topBackgroundView = UIButton()
         topBackgroundView.backgroundColor = .clear
@@ -69,21 +69,19 @@ class PickQTypeViewController: UIViewController {
         
     }
     
-    
-    // MARK - ACTIONS
+    // MARK: - ACTIONS
     
     @objc func topPressed() {
-        delegate.updateQuestionType(currentType)
+        delegate?.updateQuestionType(currentType)
     }
     
     @objc func bottomPressed() {
-        delegate.updateQuestionType((currentType == .multipleChoice) ? .freeResponse : .multipleChoice)
+        delegate?.updateQuestionType((currentType == .multipleChoice) ? .freeResponse : .multipleChoice)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 
 }

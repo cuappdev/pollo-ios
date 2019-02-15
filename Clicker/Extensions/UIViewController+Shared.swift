@@ -1,4 +1,3 @@
-
 //
 //  UIViewController+Shared.swift
 //  Clicker

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol AskQuestionCellDelegate {
+protocol AskQuestionCellDelegate: class {
     func askQuestionCellDidUpdateEditable(_ editable: Bool)
     func askQuestionCellDidUdpateText(_ text: String?)
 }
@@ -20,7 +20,7 @@ class AskQuestionCell: UICollectionViewCell {
     var textField: UITextField!
 
     // MARK: - Data vars
-    var delegate: AskQuestionCellDelegate?
+    weak var delegate: AskQuestionCellDelegate?
 
     // MARK: - Constants
     let questionLabelWidthScaleFactor: CGFloat = 0.75
@@ -52,7 +52,6 @@ class AskQuestionCell: UICollectionViewCell {
         self.delegate = delegate
         self.textField.text = askQuestionModel.currentQuestion
     }
-
 
     // MARK: - Actions
     @objc func updateEditable() {

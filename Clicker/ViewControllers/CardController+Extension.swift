@@ -36,7 +36,7 @@ extension CardController: UIViewControllerTransitioningDelegate {
 extension CardController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
-        delegate.navigationTitleViewNavigationButtonTapped()
+        delegate?.navigationTitleViewNavigationButtonTapped()
     }
 
 }
@@ -62,9 +62,9 @@ extension CardController: PollSectionControllerDelegate {
     }
 
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
-        let upvoteObject: [String:Any] = [
+        let upvoteObject: [String: Any] = [
             RequestKeys.answerIdKey: answerId,
-            RequestKeys.googleIdKey: User.currentUser?.id
+            RequestKeys.googleIdKey: User.currentUser?.id ?? ""
         ]
         socket.socket.emit(Routes.serverUpvote, upvoteObject)
     }
@@ -92,7 +92,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         }
         
         // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
+        let socketQuestion: [String: Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
@@ -113,7 +113,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             return
         }
         self.navigationController?.popViewController(animated: false)
-        delegate.cardControllerDidStartNewPoll(poll: newPoll)
+        delegate?.cardControllerDidStartNewPoll(poll: newPoll)
     }
     
     func showNavigationBar() {
@@ -121,8 +121,8 @@ extension CardController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
-        var results: [String:JSON] = [:]
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
+        var results: [String: JSON] = [:]
         options.enumerated().forEach { (index, option) in
             let infoDict: JSON = [
                 RequestKeys.textKey: option,
@@ -174,7 +174,7 @@ extension CardController: UIScrollViewDelegate {
         var direction: Int
         
         if willScrollToIndex == wasScrolledToIndex {
-            if (canSwipeNext || canSwipePrev)  {
+            if canSwipeNext || canSwipePrev {
                 // scrolled short and fast, should snap to next/prev cell
                 direction = canSwipeNext ? 1 : -1
                 newCount =  wasScrolledToIndex + direction
@@ -218,7 +218,7 @@ extension CardController: SocketDelegate {
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.pollStarted(poll, userRole: userRole)
+            delegate?.pollStarted(poll, userRole: userRole)
             return
         }
         if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
@@ -237,7 +237,7 @@ extension CardController: SocketDelegate {
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.pollEnded(poll, userRole: userRole)
+            delegate?.pollEnded(poll, userRole: userRole)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
@@ -254,7 +254,7 @@ extension CardController: SocketDelegate {
     
     func receivedResults(_ currentState: CurrentState) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.receivedResults(currentState)
+            delegate?.receivedResults(currentState)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
@@ -272,7 +272,7 @@ extension CardController: SocketDelegate {
 
     func updatedTally(_ currentState: CurrentState) {
         if pollsDateModel.date != getTodaysDate() {
-            delegate.updatedTally(currentState)
+            delegate?.updatedTally(currentState)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
@@ -302,8 +302,8 @@ extension CardController: SocketDelegate {
 
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
-        let data: [String:Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id,
+        let data: [String: Any] = [
+            RequestKeys.googleIdKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text

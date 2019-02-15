@@ -9,14 +9,14 @@
 import UIKit
 import Presentr
 
-protocol PollBuilderViewDelegate {
+protocol PollBuilderViewDelegate: class {
     func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
     func updateCorrectAnswer(correctAnswer: String?)
     var isKeyboardShown: Bool { get }
 }
 
-protocol PollBuilderViewControllerDelegate {
+protocol PollBuilderViewControllerDelegate: class {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?)
     func showNavigationBar()
 }
@@ -45,7 +45,7 @@ class PollBuilderViewController: UIViewController {
     var correctAnswer: String?
     var drafts: [Draft] = []
     var questionType: QuestionType!
-    var delegate: PollBuilderViewControllerDelegate!
+    weak var delegate: PollBuilderViewControllerDelegate?
     var isFollowUpQuestion: Bool = false
     var canDraft: Bool!
     var loadedMCDraft: Draft?
@@ -106,7 +106,7 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
             let circleImageXOffset: CGFloat = 12.0
@@ -302,7 +302,7 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if let _ = quizModeOverlayView {
+        if quizModeOverlayView != nil {
             quizModeOverlayView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
@@ -406,17 +406,17 @@ class PollBuilderViewController: UIViewController {
             return
         }
         
-        delegate.showNavigationBar()
+        delegate?.showNavigationBar()
         dismiss(animated: true, completion: nil)
         hideKeyboard()
         
         switch questionType {
         case .multipleChoice:
             let question = mcPollBuilder.questionText ?? ""
-            delegate.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
+            delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer)
         case .freeResponse:
             let question = frPollBuilder.questionText ?? ""
-            delegate.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
+            delegate?.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil)
         }
         if loadedMCDraft != nil || loadedFRDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())
@@ -442,7 +442,7 @@ class PollBuilderViewController: UIViewController {
     }
     
     @objc func exit() {
-        delegate.showNavigationBar()
+        delegate?.showNavigationBar()
         dismiss(animated: true, completion: nil)
     }
     
@@ -495,7 +495,7 @@ class PollBuilderViewController: UIViewController {
             shouldIgnoreNextKeyboardHiding = false
             return
         }
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()

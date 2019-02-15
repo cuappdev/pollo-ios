@@ -19,14 +19,14 @@ enum QuestionType: String, CustomStringConvertible, Codable {
     case multipleChoice = "Multiple Choice"
     case freeResponse = "Free Response"
     
-    var description : String {
+    var description: String {
         switch self {
         case .multipleChoice: return StringConstants.multipleChoice
         case .freeResponse: return StringConstants.freeResponse
         }
     }
     
-    var descriptionForServer : String {
+    var descriptionForServer: String {
         switch self {
         case .multipleChoice: return Identifiers.multipleChoiceIdentifier
         case .freeResponse: return Identifiers.freeResponseIdentifier
@@ -90,7 +90,7 @@ class Poll: Codable {
     
     // MARK: - Constants
     let identifier = UUID().uuidString
-    
+
     init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String: PollResult], state: PollState, correctAnswer: String?) {
         self.id = id
         self.text = text
@@ -102,7 +102,6 @@ class Poll: Codable {
         self.state = state
         self.correctAnswer = correctAnswer
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
-
     }
     
     init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
@@ -197,7 +196,7 @@ extension Poll: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if (self === object) { return true }
+        if self === object { return true }
         guard let object = object as? Poll else { return false }
         return id == object.id && text == object.text && questionType == object.questionType && results == object.results
     }

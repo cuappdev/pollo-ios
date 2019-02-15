@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DeletePollViewControllerDelegate {
+protocol DeletePollViewControllerDelegate: class {
     
     func deletePollViewControllerDidRemoveSession(for userRole: UserRole)
     
@@ -22,7 +22,7 @@ class DeletePollViewController: UIViewController {
     var deleteButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: DeletePollViewControllerDelegate!
+    weak var delegate: DeletePollViewControllerDelegate?
     var session: Session!
     var userRole: UserRole!
     private let networking: Networking = URLSession.shared.request
@@ -130,7 +130,7 @@ class DeletePollViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
@@ -150,7 +150,7 @@ class DeletePollViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to leave session. Try again!")

@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class PollParser: Parser {
     
-    typealias itemType = Poll
+    typealias ItemType = Poll
     
     static func parseItem(json: JSON) -> Poll {
         let id = json[ParserKeys.idKey].intValue

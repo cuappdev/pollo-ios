@@ -15,7 +15,7 @@ struct CreatePoll: ClickerQuark {
     typealias ResponseType = Poll
     let sessionId: Int
     let text: String
-    let results: [String:Any]
+    let results: [String: Any]
     let type: QuestionType
     let isShared: Bool
 
@@ -138,13 +138,12 @@ struct GetPollsForSession: ClickerQuark {
     }
 }
 
-
 struct UpdatePoll: ClickerQuark {
 
     typealias ResponseType = Poll
     let id: Int
     let text: String
-    let results: [String:Any]
+    let results: [String: Any]
 
     var route: String {
         return "/polls/\(id)"

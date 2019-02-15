@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol PollsDateSectionControllerDelegate {
+protocol PollsDateSectionControllerDelegate: class {
     
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel)
     
@@ -18,7 +18,7 @@ class PollsDateSectionController: ListSectionController {
     
     // MARK: - Data Vars
     var pollsDateModel: PollsDateModel!
-    var delegate: PollsDateSectionControllerDelegate!
+    weak var delegate: PollsDateSectionControllerDelegate?
     
     // MARK: - Constants
     let cellHeight: CGFloat = 54
@@ -46,7 +46,7 @@ class PollsDateSectionController: ListSectionController {
     }
     
     override func didSelectItem(at index: Int) {
-        delegate.pollsDateSectionControllerDidTap(for: pollsDateModel)
+        delegate?.pollsDateSectionControllerDidTap(for: pollsDateModel)
     }
     
 }

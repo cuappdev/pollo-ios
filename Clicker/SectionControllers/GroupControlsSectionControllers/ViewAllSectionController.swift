@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol ViewAllSectionControllerDelegate {
+protocol ViewAllSectionControllerDelegate: class {
     func viewAllSectionControllerWasTapped()
 }
 
@@ -16,7 +16,7 @@ class ViewAllSectionController: ListSectionController {
 
     // MARK: - Data vars
     var viewAllModel: ViewAllModel!
-    var delegate: ViewAllSectionControllerDelegate?
+    weak var delegate: ViewAllSectionControllerDelegate?
 
     // MARK: - Constants
     let cellHeight: CGFloat = 31

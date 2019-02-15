@@ -10,7 +10,7 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol PollsDateViewControllerDelegate {
+protocol PollsDateViewControllerDelegate: class {
     func pollsDateViewControllerWasPopped(for userRole: UserRole)
 }
 
@@ -30,7 +30,7 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
-    var delegate: PollsDateViewControllerDelegate!
+    weak var delegate: PollsDateViewControllerDelegate?
     private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
@@ -105,8 +105,9 @@ class PollsDateViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
         peopleButton = UIButton()
+        peopleButton.isEnabled = false
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
+        peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
@@ -145,7 +146,7 @@ class PollsDateViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
                             self.present(alertController, animated: true, completion: nil)
@@ -158,7 +159,7 @@ class PollsDateViewController: UIViewController {
                 }
             }
         } else {
-            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
         }
     }
     
@@ -170,7 +171,7 @@ class PollsDateViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }

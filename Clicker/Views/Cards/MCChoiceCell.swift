@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol MCChoiceCellDelegate {
+protocol MCChoiceCellDelegate: class {
     
     func mcChoiceCellWasSelected()
     
@@ -20,7 +20,7 @@ class MCChoiceCell: UICollectionViewCell {
     var optionButton: UIButton!
     
     // MARK: - Data vars
-    var delegate: MCChoiceCellDelegate!
+    weak var delegate: MCChoiceCellDelegate?
     var pollState: PollState!
     
     // MARK: - Constants
@@ -77,7 +77,7 @@ class MCChoiceCell: UICollectionViewCell {
     // MARK: - Action
     @objc func optionButtonWasPressed() {
         if (pollState == .live) {
-            delegate.mcChoiceCellWasSelected()
+            delegate?.mcChoiceCellWasSelected()
         }
     }
     

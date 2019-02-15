@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DraftCellDelegate {
+protocol DraftCellDelegate: class {
     func draftCellDidTapLoadButton(draft: Draft)
     func draftCellDidTapEditButton(draft: Draft)
 }
@@ -24,7 +24,7 @@ class DraftCell: UICollectionViewCell {
     var draftTypeLabel: UILabel!
     
     // MARK: - Data vars
-    var delegate: DraftCellDelegate?
+    weak var delegate: DraftCellDelegate?
     var draft: Draft!
     
     // MARK: - Constants

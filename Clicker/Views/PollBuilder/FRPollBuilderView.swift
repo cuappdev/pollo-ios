@@ -10,7 +10,7 @@ import IGListKit
 import SnapKit
 import UIKit
 
-protocol FRPollBuilderViewDelegate {
+protocol FRPollBuilderViewDelegate: class {
     var drafts: [Draft] { get }
     func shouldEditDraft(draft: Draft)
     func shouldLoadDraft(draft: Draft)
@@ -23,12 +23,12 @@ class FRPollBuilderView: UIView {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
-    var delegate: FRPollBuilderViewDelegate?
+    weak var delegate: FRPollBuilderViewDelegate?
     var askQuestionModel: AskQuestionModel!
     var draftsTitleModel: DraftsTitleModel!
     var editable: Bool!
     var session: Session!
-    var pollBuilderDelegate: PollBuilderViewDelegate!
+    weak var pollBuilderDelegate: PollBuilderViewDelegate?
     var questionText: String? {
         guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
             return nil

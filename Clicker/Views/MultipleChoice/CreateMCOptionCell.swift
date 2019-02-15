@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol CreateMCOptionCellDelegate {
+protocol CreateMCOptionCellDelegate: class {
 
     func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool)
     func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool)
@@ -28,7 +28,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     var filledCircleImage: UIImage!
     
     // MARK: Data
-    var delegate: CreateMCOptionCellDelegate!
+    weak var delegate: CreateMCOptionCellDelegate?
     var index: Int!
     var isCorrect: Bool = false
 
@@ -132,19 +132,19 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     }
 
     // MARK: - Actions
-    @objc func deleteOption(){
-        delegate.createMCOptionCellDidDeleteOption(index: index)
+    @objc func deleteOption() {
+        delegate?.createMCOptionCellDidDeleteOption(index: index)
     }
     
     @objc func textFieldDidChange() {
         if let text = addOptionTextField.text {
-            delegate.createMCOptionCellDidUpdateTextField(index: index, text: text, isCorrect: isCorrect)
+            delegate?.createMCOptionCellDidUpdateTextField(index: index, text: text, isCorrect: isCorrect)
         }
     }
 
     @objc func isCorrectButtonTapped() {
         isCorrect = !isCorrect
-        delegate.createMCOptionCellDidUpdateIsCorrect(index: index, text: addOptionTextField.text ?? "", isCorrect: isCorrect)
+        delegate?.createMCOptionCellDidUpdateIsCorrect(index: index, text: addOptionTextField.text ?? "", isCorrect: isCorrect)
     }
     
     // MARK: - KEYBOARD

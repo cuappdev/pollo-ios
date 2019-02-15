@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NavigationTitleViewDelegate {
+protocol NavigationTitleViewDelegate: class {
     func navigationTitleViewNavigationButtonTapped()
 }
 
@@ -21,7 +21,7 @@ class NavigationTitleView: UIView {
     var navigationButton: UIButton!
 
     // MARK: - Data vars
-    var delegate: NavigationTitleViewDelegate?
+    weak var delegate: NavigationTitleViewDelegate?
 
     // MARK: - Constants
     let arrowImageViewWidth: CGFloat = 5.3
@@ -42,7 +42,6 @@ class NavigationTitleView: UIView {
         primaryLabel.font = ._16SemiboldFont
         primaryLabel.textAlignment = .center
         addSubview(primaryLabel)
-    
         
         secondaryLabel = UILabel()
         secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)

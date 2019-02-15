@@ -9,7 +9,7 @@
 import UIKit
 import IGListKit
 
-protocol DraftSectionControllerDelegate {
+protocol DraftSectionControllerDelegate: class {
     func draftSectionControllerLoadDraft(draft: Draft)
     func draftSectionControllerEditDraft(draft: Draft)
 }
@@ -18,7 +18,7 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     
     // MARK: - Data vars
     var draft: Draft!
-    var delegate: DraftSectionControllerDelegate!
+    weak var delegate: DraftSectionControllerDelegate?
     
     // MARK: - Constants
     let interitemSpacing: CGFloat = 18
@@ -50,11 +50,11 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     }
     
     func draftCellDidTapEditButton(draft: Draft) {
-        delegate.draftSectionControllerEditDraft(draft: draft)
+        delegate?.draftSectionControllerEditDraft(draft: draft)
     }
     
     func draftCellDidTapLoadButton(draft: Draft) {
-        delegate.draftSectionControllerLoadDraft(draft: draft)
+        delegate?.draftSectionControllerLoadDraft(draft: draft)
     }
     
     override func didUpdate(to object: Any) {

@@ -10,7 +10,7 @@ import IGListKit
 import Presentr
 import UIKit
 
-protocol CardControllerDelegate {
+protocol CardControllerDelegate: class {
     
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
@@ -35,7 +35,7 @@ class CardController: UIViewController {
     var adapter: ListAdapter!
     
     // MARK: - Data vars
-    var delegate: CardControllerDelegate!
+    weak var delegate: CardControllerDelegate?
     var userRole: UserRole!
     var socket: Socket!
     var session: Session!
@@ -108,7 +108,7 @@ class CardController: UIViewController {
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: collectionViewHorizontalInset, bottom: 0, right: collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = true
@@ -204,7 +204,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-        delegate.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
+        delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -212,7 +212,7 @@ class CardController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 

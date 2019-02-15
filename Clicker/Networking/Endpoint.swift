@@ -93,7 +93,7 @@ extension Endpoint {
     // dealing with dynamic components that could be invalid.
     var url: URL? {
         var components = URLComponents()
-        components.scheme = "http"
+        components.scheme = "https"
         components.host = SecretKeys.hostURL.value
         if let apiVersion = Endpoint.apiVersion {
             components.path = "/api/v\(apiVersion)\(path)"
@@ -102,6 +102,7 @@ extension Endpoint {
         }
         #if DEV_SERVER
         components.port = 3000
+        components.scheme = "http"
         #endif
         components.queryItems = queryItems
         return components.url

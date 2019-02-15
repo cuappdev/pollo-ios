@@ -475,7 +475,7 @@ class PollsViewController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
         if !isListeningToKeyboard || hasPresentedViewController { return }
-        if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue != nil {
             UIView.animate(withDuration: 0.5) {
                 self.dimmingView.alpha = 0
             }
@@ -493,7 +493,7 @@ class PollsViewController: UIViewController {
     open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
-            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { _ in
                 self.isListeningToKeyboard = false
                 let feedbackVC = FeedbackViewController(type: .pollsViewController)
                 self.navigationController?.pushViewController(feedbackVC, animated: true)
