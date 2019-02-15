@@ -27,7 +27,7 @@
     import AppKit
 #endif
 
-public struct ConstraintPriority: ExpressibleByFloatLiteral, Equatable, Strideable {
+public struct ConstraintPriority : ExpressibleByFloatLiteral, Equatable, Strideable {
     public typealias FloatLiteralType = Float
     
     public let value: Float

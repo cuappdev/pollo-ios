@@ -99,7 +99,6 @@ class FRSectionCell: QuestionSectionCell {
         presenter.backgroundOpacity = 0.6
         presenter.roundCorners = false
         presenter.dismissOnSwipe = true
-        presenter.dismissOnTap = true
         presenter.dismissOnSwipeDirection = .top
         presenter.backgroundOpacity = 0.4
         

@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public class ConstraintMakerRelatable {
     
     internal let description: ConstraintDescription
@@ -45,7 +46,7 @@ public class ConstraintMakerRelatable {
                   other.attributes.layoutAttributes == self.description.attributes.layoutAttributes ||
                   other.attributes == .edges && self.description.attributes == .margins ||
                   other.attributes == .margins && self.description.attributes == .edges else {
-                fatalError("Cannot constraint to multiple non identical attributes. (\(file), \(line))")
+                fatalError("Cannot constraint to multiple non identical attributes. (\(file), \(line))");
             }
             
             related = other

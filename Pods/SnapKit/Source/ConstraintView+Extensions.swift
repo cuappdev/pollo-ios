@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public extension ConstraintView {
     
     @available(*, deprecated:3.0, message:"Use newer snp.* syntax.")

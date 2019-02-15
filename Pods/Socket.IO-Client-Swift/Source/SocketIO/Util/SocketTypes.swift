@@ -54,27 +54,30 @@ public extension SocketData {
     }
 }
 
-extension Array: SocketData { }
-extension Bool: SocketData { }
-extension Dictionary: SocketData { }
-extension Double: SocketData { }
-extension Int: SocketData { }
-extension NSArray: SocketData { }
-extension Data: SocketData { }
-extension NSData: SocketData { }
-extension NSDictionary: SocketData { }
-extension NSString: SocketData { }
-extension NSNull: SocketData { }
-extension String: SocketData { }
+extension Array : SocketData { }
+extension Bool : SocketData { }
+extension Dictionary : SocketData { }
+extension Double : SocketData { }
+extension Int : SocketData { }
+extension NSArray : SocketData { }
+extension Data : SocketData { }
+extension NSData : SocketData { }
+extension NSDictionary : SocketData { }
+extension NSString : SocketData { }
+extension NSNull : SocketData { }
+extension String : SocketData { }
 
 /// A typealias for an ack callback.
-public typealias AckCallback = ([Any]) -> Void
+public typealias AckCallback = ([Any]) -> ()
 
 /// A typealias for a normal callback.
-public typealias NormalCallback = ([Any], SocketAckEmitter) -> Void
+public typealias NormalCallback = ([Any], SocketAckEmitter) -> ()
+
+/// A typealias for a queued POST
+public typealias Post = (msg: String, completion: (() -> ())?)
 
 typealias JSON = [String: Any]
-typealias Probe = (msg: String, type: SocketEnginePacketType, data: [Data])
+typealias Probe = (msg: String, type: SocketEnginePacketType, data: [Data], completion: (() -> ())?)
 typealias ProbeWaitQueue = [Probe]
 
 enum Either<E, V> {

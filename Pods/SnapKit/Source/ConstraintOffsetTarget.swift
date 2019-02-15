@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public protocol ConstraintOffsetTarget: ConstraintConstantTarget {
 }
 
