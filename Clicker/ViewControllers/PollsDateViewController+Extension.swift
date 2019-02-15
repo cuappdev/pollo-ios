@@ -220,7 +220,7 @@ extension PollsDateViewController: SocketDelegate {
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
         let data: [String: Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id ?? "",
+            RequestKeys.googleIDKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text

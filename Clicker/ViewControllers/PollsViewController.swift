@@ -424,8 +424,9 @@ class PollsViewController: UIViewController {
                             auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
                         }
                     }
-                    for timestamp in auxiliaryDict.keys.sorted() {
-                        sessions.append(auxiliaryDict[timestamp]!)
+                    auxiliaryDict.keys.sorted().forEach { timestamp in
+                        guard let session = auxiliaryDict[timestamp] else { return }
+                        sessions.append(session)
                     }
                     completion?(sessions)
                 case .error(let error):
