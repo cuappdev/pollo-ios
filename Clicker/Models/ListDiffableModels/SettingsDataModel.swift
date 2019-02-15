@@ -9,8 +9,7 @@
 import IGListKit
 
 enum SettingsDataState {
-    case link // just a link to something
-    case info // a title and some information
+    case link, info
 }
 
 class SettingsDataModel {

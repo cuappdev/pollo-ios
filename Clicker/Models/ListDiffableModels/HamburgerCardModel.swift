@@ -9,8 +9,7 @@
 import IGListKit
 
 enum HamburgerCardState {
-    case top
-    case bottom
+    case top, bottom
 }
 
 class HamburgerCardModel {

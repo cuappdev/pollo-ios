@@ -10,8 +10,7 @@ import Foundation
 import IGListKit
 
 enum PollType {
-    case created
-    case joined
+    case created, joined
 }
 
 class PollTypeModel {

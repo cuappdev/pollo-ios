@@ -13,7 +13,7 @@ struct PollsResponse: Codable {
     
     var id: Int
     var text: String
-    var results: [String : PollResult]
+    var results: [String: PollResult]
     var shared: Bool
     var type: String
     var correctAnswer: String?

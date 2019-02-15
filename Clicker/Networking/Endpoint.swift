@@ -70,9 +70,6 @@ extension Endpoint {
         modifiedHeaders["Content-Type"] = "application/json"
         self.headers = modifiedHeaders
         self.method = method
-        print(body)
-        //Encode body
-//        self.body = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         self.body = try? JSONEncoder().encode(body)
     }
     

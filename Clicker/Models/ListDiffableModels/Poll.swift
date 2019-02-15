@@ -10,9 +10,7 @@ import IGListKit
 import SwiftyJSON
 
 enum PollState: String, Codable {
-    case live
-    case ended
-    case shared
+    case live, ended, shared
 }
 
 enum QuestionType: String, CustomStringConvertible, Codable {
@@ -152,10 +150,10 @@ class Poll: Codable {
     // Returns array representation of results where each element is (answerId, text, count)
     // Ex) [(1, 'Blah', 3), (2, 'Jupiter', 6)...]
     func getFRResultsArray() -> [(String, String, Int)] {
-        return options.compactMap({ answerId -> (String, String, Int)? in
+        return options.compactMap { answerId -> (String, String, Int)? in
             guard let choice = results[answerId] else { return nil }
             return (answerId, choice.text, choice.count)
-        })
+        }
     }
     
     func getTotalResults() -> Int {

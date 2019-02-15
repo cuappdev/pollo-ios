@@ -161,10 +161,7 @@ func formatAnswers(answers: [String: JSON]) -> [String: PollAnswer] {
     var pollAnswers = [String: PollAnswer]()
     answers.forEach { (key, value) in
         if let answerIdsJson = value.array {
-            var answerIds = [Int]()
-            answerIdsJson.forEach({ json in
-                answerIds.append(json.intValue)
-            })
+            let answerIds = answerIdsJson.map { json in json.intValue }
             pollAnswers[key] = PollAnswer(answer: nil, answerIds: answerIds)
         } else if let answer = value.string {
             pollAnswers[key] = PollAnswer(answer: answer, answerIds: nil)

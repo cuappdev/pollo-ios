@@ -9,8 +9,7 @@
 import IGListKit
 
 enum SeparatorLineState {
-    case card
-    case settings
+    case card, settings
 }
 
 class SeparatorLineModel: ListDiffable {
