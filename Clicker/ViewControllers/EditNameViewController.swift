@@ -100,7 +100,7 @@ class EditNameViewController: UIViewController {
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .value(_):
+                        case .value:
                             self.delegate?.editNameViewControllerDidUpdateName()
                             self.dismiss(animated: true, completion: nil)
                         case .error(let error):

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum EndpointMethod: String {
     case get = "GET"
     case post = "POST"
@@ -43,7 +42,6 @@ enum SecretKeys: String {
         return dict
     }()
 }
-
 
 struct Endpoint {
     static var apiVersion: Int? { return 2 }
@@ -107,7 +105,6 @@ extension Endpoint {
         components.queryItems = queryItems
         return components.url
     }
-    
     
     var urlRequest: URLRequest? {
         guard let unwrappedURL = url else { return nil }

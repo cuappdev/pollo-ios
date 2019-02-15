@@ -112,7 +112,7 @@ class NameView: UIView, UITextFieldDelegate {
             guard let `self` = self else { return }
             DispatchQueue.main.async {
                 switch result {
-                case .value(_):
+                case .value:
                     self.session.name = name
                     self.delegate?.nameViewDidUpdateSessionName()
                     self.removeFromSuperview()

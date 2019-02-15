@@ -159,7 +159,6 @@ struct Node<T: Codable>: Codable {
 
 extension Future where Value == Data {
     
-    
     func decode<NextValue: Codable>(_ type: NextValue.Type) -> Future<NextValue> {
         return transformed {
             //Uncomment this line to see what is being decoded
@@ -195,4 +194,3 @@ func chain<A, B, C>(
     // now returns another function, we'll also call that one.
     return { outer(inner($0))() }
 }
-

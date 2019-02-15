@@ -342,7 +342,7 @@ class PollBuilderViewController: UIViewController {
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .value(_):
+                        case .value:
                             self.getDrafts()
                         case .error(let error):
                             print("error: ", error)
@@ -354,7 +354,7 @@ class PollBuilderViewController: UIViewController {
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .value(_):
+                        case .value:
                             self.getDrafts()
                         case .error(let error):
                             print("error: ", error)
@@ -372,7 +372,7 @@ class PollBuilderViewController: UIViewController {
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .value(_):
+                        case .value:
                             self.getDrafts()
                         case .error(let error):
                             print("error: ", error)
@@ -384,7 +384,7 @@ class PollBuilderViewController: UIViewController {
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .value(_):
+                        case .value:
                             self.getDrafts()
                         case .error(let error):
                             print("error: ", error)
