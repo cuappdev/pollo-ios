@@ -417,7 +417,7 @@ class PollsViewController: UIViewController {
                 switch result {
                 case .value(let response):
                     var sessions = [Session]()
-                    var auxiliaryDict = [Double : Session]()
+                    var auxiliaryDict = [Double: Session]()
                     response.data.forEach { node in
                         let session = node.node
                         if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {

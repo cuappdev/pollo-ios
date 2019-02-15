@@ -31,7 +31,7 @@ extension HamburgerCardModel: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if (self === object) { return true }
+        if self === object { return true }
         guard let object = object as? HamburgerCardModel else { return false }
         return identifier == object.identifier
     }

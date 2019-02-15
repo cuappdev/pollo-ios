@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     self?.getPollSessions(with: .member).observe { memberResult in
                         switch memberResult {
                         case .value(let memberResponse):
-                            var auxiliaryDict = [Double : Session]()
+                            var auxiliaryDict = [Double: Session]()
                             memberResponse.data.forEach { node in
                                 let session = node.node
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
@@ -137,7 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     self?.getPollSessions(with: .admin).observe { adminResult in
                         switch adminResult {
                         case .value(let adminResponse):
-                            var auxiliaryDict = [Double : Session]()
+                            var auxiliaryDict = [Double: Session]()
                             adminResponse.data.forEach { node in
                                 let session = node.node
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {

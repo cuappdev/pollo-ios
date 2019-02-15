@@ -147,8 +147,8 @@ private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     return .mcChoice(choiceModels: mcChoiceModels)
 }
 
-func formatResults(results: [String : JSON]) -> [String : PollResult] {
-    var pollResults = [String : PollResult]()
+func formatResults(results: [String: JSON]) -> [String: PollResult] {
+    var pollResults = [String: PollResult]()
     results.forEach { (key, value) in
         let text = value[ParserKeys.textKey].stringValue
         let count = value[ParserKeys.countKey].intValue
@@ -157,8 +157,8 @@ func formatResults(results: [String : JSON]) -> [String : PollResult] {
     return pollResults
 }
 
-func formatAnswers(answers: [String : JSON]) -> [String : PollAnswer] {
-    var pollAnswers = [String : PollAnswer]()
+func formatAnswers(answers: [String: JSON]) -> [String: PollAnswer] {
+    var pollAnswers = [String: PollAnswer]()
     answers.forEach { (key, value) in
         if let answerIdsJson = value.array {
             var answerIds = [Int]()

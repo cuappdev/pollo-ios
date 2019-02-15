@@ -95,7 +95,7 @@ class EditNameViewController: UIViewController {
     
     @objc func saveBtnPressed() {
         if let newName = nameTextField.text {
-            if (newName != "") {
+            if newName != "" {
                 updateSession(id: session.id, name: newName, code: session.code).observe { [weak self] result in
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {

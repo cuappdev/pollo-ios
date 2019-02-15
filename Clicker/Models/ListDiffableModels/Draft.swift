@@ -12,7 +12,7 @@ import IGListKit
 struct Edges<T: Codable>: Codable {
     
     var edges: [T]
-    var pageInfo: [String : Int]
+    var pageInfo: [String: Int]
     
 }
 

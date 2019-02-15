@@ -10,9 +10,9 @@ import IGListKit
 import SwiftyJSON
 
 enum PollState: String, Codable {
-    case live = "live"
-    case ended = "ended"
-    case shared = "shared"
+    case live
+    case ended
+    case shared
 }
 
 enum QuestionType: String, CustomStringConvertible, Codable {
@@ -47,7 +47,6 @@ class PollResult: Codable, Equatable {
         return lhs.text == rhs.text && lhs.count == rhs.count
     }
     
-    
     var text: String
     var count: Int
     
@@ -76,9 +75,9 @@ class Poll: Codable {
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String : PollResult]
-    var answers: [String : PollAnswer]
-    var upvotes: [String : [String]]
+    var results: [String: PollResult]
+    var answers: [String: PollAnswer]
+    var upvotes: [String: [String]]
     var state: PollState
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     // results format:
