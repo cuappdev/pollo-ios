@@ -15,33 +15,6 @@ enum EndpointMethod: String {
     case put = "PUT"
 }
 
-/// Looks at Secrets/Keys.plist file which should contain as key:
-/// - "api-url" should be the host of the deployed backend url
-enum SecretKeys: String {
-    case apiURL = "api-url"
-    case apiDevURL = "api-dev-url"
-    
-    var value: String {
-        switch self {
-        case .apiDevURL: return "localhost"
-        case .apiURL: return SecretKeys.keyDict[rawValue] as! String
-        }
-    }
-    
-    static var hostURL: SecretKeys {
-        #if DEV_SERVER
-        return SecretKeys.apiDevURL
-        #else
-        return SecretKeys.apiURL
-        #endif
-    }
-    
-    private static let keyDict: NSDictionary = {
-        guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
-            let dict = NSDictionary(contentsOfFile: path) else { return [:] }
-        return dict
-    }()
-}
 
 struct Endpoint {
     static var apiVersion: Int? { return 2 }
@@ -89,7 +62,7 @@ extension Endpoint {
     var url: URL? {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = SecretKeys.hostURL.value
+        components.host = Keys.hostURL.value
         if let apiVersion = Endpoint.apiVersion {
             components.path = "/api/v\(apiVersion)\(path)"
         } else {
