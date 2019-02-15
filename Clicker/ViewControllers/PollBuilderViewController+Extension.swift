@@ -105,7 +105,7 @@ extension PollBuilderViewController: EditDraftViewControllerDelegate {
                 }
 
                 self.updatePollBuilderViews()
-            } .catch { error in
+            } .catch { _ in
                 let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
                 self.present(alertController, animated: true, completion: nil)
         }

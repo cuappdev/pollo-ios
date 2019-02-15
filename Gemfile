@@ -1,3 +1,8 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "fastlane"
+gem 'danger'
+gem 'danger-swiftlint'
+gem 'xcpretty'
+gem 'xcpretty-json-formatter'
+gem 'danger-xcode_summary'
+gem 'fastlane'

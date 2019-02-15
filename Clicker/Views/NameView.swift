@@ -41,7 +41,7 @@ class NameView: UIView, UITextFieldDelegate {
         
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
-        if (session.code != session.name) {
+        if session.code != session.name {
             titleField.text = session.name
         }
         titleField.font = ._24MediumFont
@@ -69,7 +69,7 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             titleField.snp.remakeConstraints { remake in
                 remake.centerX.equalToSuperview()
                 remake.width.equalToSuperview()
@@ -102,7 +102,7 @@ class NameView: UIView, UITextFieldDelegate {
             name = session.code
         }
         UpdateSession(id: session.id, name: name, code: session.code).make()
-            .done { code in
+            .done { _ in
                 self.session.name = name
                 self.delegate?.nameViewDidUpdateSessionName()
                 self.removeFromSuperview()

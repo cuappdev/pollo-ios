@@ -28,7 +28,6 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     let uncheckedImageName = "greyEmptyCircle"
     let checkedImageName = "option_filled"
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()

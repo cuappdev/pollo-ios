@@ -19,14 +19,14 @@ enum QuestionType: CustomStringConvertible {
     case multipleChoice
     case freeResponse
     
-    var description : String {
+    var description: String {
         switch self {
         case .multipleChoice: return StringConstants.multipleChoice
         case .freeResponse: return StringConstants.freeResponse
         }
     }
     
-    var descriptionForServer : String {
+    var descriptionForServer: String {
         switch self {
         case .multipleChoice: return Identifiers.multipleChoiceIdentifier
         case .freeResponse: return Identifiers.freeResponseIdentifier
@@ -47,9 +47,9 @@ class Poll {
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String:JSON]
-    var answers: [String:Any]
-    var upvotes: [String:[String]]
+    var results: [String: JSON]
+    var answers: [String: Any]
+    var upvotes: [String: [String]]
     var state: PollState
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     // results format:
@@ -62,7 +62,7 @@ class Poll {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String:JSON], state: PollState, correctAnswer: String?) {
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String: JSON], state: PollState, correctAnswer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -177,7 +177,7 @@ extension Poll: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if (self === object) { return true }
+        if self === object { return true }
         guard let object = object as? Poll else { return false }
         return id == object.id && text == object.text && questionType == object.questionType && results == object.results
     }

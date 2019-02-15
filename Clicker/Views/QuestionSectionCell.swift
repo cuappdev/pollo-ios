@@ -11,7 +11,7 @@ import UIKit
 
 class QuestionSectionCell: UICollectionViewCell, UITextFieldDelegate {
  
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clickerGrey4

@@ -30,13 +30,13 @@ struct DeviceInfo: Codable {
 // MARK: - Payloads
 extension Payload {
 
-    func convertToFabric() -> (name: String, attributes: [String : Any]?) {
+    func convertToFabric() -> (name: String, attributes: [String: Any]?) {
         let event = self.toEvent()
         do {
             let data = try event.serializeJson()
             let json = try JSON(data: data)
 
-            var dict: [String : Any] = [:]
+            var dict: [String: Any] = [:]
             for (key, value) in json["payload"] {
                 if key == "deviceInfo" {
                     for (infoKey, infoValue) in value {
@@ -90,5 +90,3 @@ struct SignedOutPayload: Payload {
     static let eventName: String = "User signed out"
     let deviceInfo = DeviceInfo()
 }
-
-
