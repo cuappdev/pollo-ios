@@ -114,11 +114,11 @@ class DeletePollViewController: UIViewController {
     }
     
     func deleteSession(with id: Int) -> Future<DeleteResponse> {
-        return networking(Endpoint.deleteSession(with: id)).decode(DeleteResponse.self)
+        return networking(Endpoint.deleteSession(with: id)).decode()
     }
     
     func leaveSession(with id: Int) -> Future<DeleteResponse> {
-        return networking(Endpoint.leaveSession(with: id)).decode(DeleteResponse.self)
+        return networking(Endpoint.leaveSession(with: id)).decode()
     }
     
     @objc func deleteBtnPressed() {

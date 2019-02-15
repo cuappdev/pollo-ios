@@ -85,11 +85,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
-        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Node<Session>]>.self)
+        return networking(Endpoint.getPollSessions(with: role)).decode()
     }
     
     func userAuthenticate(with idToken: String) -> Future<Response<UserSession>> {
-        return networking(Endpoint.userAuthenticate(with: idToken)).decode(Response<UserSession>.self)
+        return networking(Endpoint.userAuthenticate(with: idToken)).decode()
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {

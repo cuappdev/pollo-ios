@@ -315,11 +315,11 @@ class PollBuilderViewController: UIViewController {
     }
     
     func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Node<Draft>>> {
-        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode(Response<Node<Draft>>.self)
+        return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode()
     }
     
     func createDraft(text: String, options: [String]) -> Future<Response<Node<Draft>>> {
-        return networking(Endpoint.createDraft(text: text, options: options)).decode(Response<Node<Draft>>.self)
+        return networking(Endpoint.createDraft(text: text, options: options)).decode()
     }
     
     // MARK: - Actions
@@ -447,11 +447,11 @@ class PollBuilderViewController: UIViewController {
     }
     
     func deleteDraft(with id: String) -> Future<DeleteResponse> {
-        return networking(Endpoint.deleteDraft(with: id)).decode(DeleteResponse.self)
+        return networking(Endpoint.deleteDraft(with: id)).decode()
     }
     
     func allDrafts() -> Future<Response<Edges<Node<Draft>>>> {
-        return networking(Endpoint.getDrafts()).decode(Response<Edges<Node<Draft>>>.self)
+        return networking(Endpoint.getDrafts()).decode()
     }
     
     // MARK: - Helpers

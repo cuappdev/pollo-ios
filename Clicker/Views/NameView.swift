@@ -98,7 +98,7 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
-        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode(Response<Node<Session>>.self)
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
