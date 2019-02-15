@@ -88,7 +88,7 @@ struct RequestKeys {
     static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
-    static let googleIdKey = "googleId"
+    static let googleIdKey = "googleID"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let sharedKey = "shared"
