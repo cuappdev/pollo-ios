@@ -68,7 +68,9 @@ extension PollsViewController: PollsCellDelegate {
                     pollsResponse.data.forEach { response in
                         var polls = [Poll]()
                         response.polls.forEach { poll in
-                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: [], results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                            let options = poll.results.keys.map { option in option }
+                            poll.results.keys.forEach { option in }
+                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
                         }
                         pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                     }
