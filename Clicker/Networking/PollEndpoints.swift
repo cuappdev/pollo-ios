@@ -11,7 +11,6 @@ import Foundation
 extension Endpoint {
     
     static var headers: [String: String] {
-    
         return [
             "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
         ]

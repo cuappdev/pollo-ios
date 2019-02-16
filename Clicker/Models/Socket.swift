@@ -22,7 +22,7 @@ class Socket {
         #if DEV_SERVER
         let urlString = "http://\(Keys.hostURL.value):3000"
         #else
-        let urlString = "https://\(Keys.hostURL.value)3000"
+        let urlString = "https://\(Keys.hostURL.value)"
         #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
         if let googleID = User.currentUser?.id {
