@@ -908,6 +908,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"pollo\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho \"created keys.generated.swift file\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"yeet\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\necho \"created keys.generated.swift file\"\n";
 		};
 		DB0D70AD05214263A3CDF69E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
