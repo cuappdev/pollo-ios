@@ -22,11 +22,11 @@ class Socket {
         #if DEV_SERVER
         let urlString = "http://\(Keys.hostURL.value):3000"
         #else
-        let urlString = "https://\(Keys.hostURL.value)"
+        let urlString = "https://\(Keys.hostURL.value)3000"
         #endif
-        let url = URL(string: urlString)!
-        if let googleId = User.currentUser?.id {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIdKey: googleId])])
+        guard let url = URL(string: urlString) else { fatalError("Bad url") }
+        if let googleID = User.currentUser?.id {
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIDKey: googleID])])
         } else {
             manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue])])
         }

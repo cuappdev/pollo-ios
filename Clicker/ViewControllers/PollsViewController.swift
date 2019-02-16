@@ -270,11 +270,11 @@ class PollsViewController: UIViewController {
     }
     
     func generateCode() -> Future<Response<Code>> {
-        return networking(Endpoint.generateCode()).decode(Response<Code>.self)
+        return networking(Endpoint.generateCode()).decode()
     }
     
     func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Node<Session>>> {
-        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode(Response<Node<Session>>.self)
+        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
     }
     
     // MARK: - Actions
@@ -325,11 +325,11 @@ class PollsViewController: UIViewController {
     }
     
     func joinSessionWithCode(with code: String) -> Future<Response<Node<Session>>> {
-        return networking(Endpoint.joinSessionWithCode(with: code)).decode(Response<Node<Session>>.self)
+        return networking(Endpoint.joinSessionWithCode(with: code)).decode()
     }
     
     func getSortedPolls(with id: Int) -> Future<Response<[GetSortedPollsResponse]>> {
-        return networking(Endpoint.getSortedPolls(with: id)).decode(Response<[GetSortedPollsResponse]>.self)
+        return networking(Endpoint.getSortedPolls(with: id)).decode()
     }
     
     @objc func joinSession() {
@@ -403,11 +403,11 @@ class PollsViewController: UIViewController {
     }
     
     func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Node<Session>>> {
-        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode(Response<Node<Session>>.self)
+        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode()
     }
     
     func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
-        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Node<Session>]>.self)
+        return networking(Endpoint.getPollSessions(with: role)).decode()
     }
     
     // MARK: - Helpers
@@ -424,8 +424,9 @@ class PollsViewController: UIViewController {
                             auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
                         }
                     }
-                    for timestamp in auxiliaryDict.keys.sorted() {
-                        sessions.append(auxiliaryDict[timestamp]!)
+                    auxiliaryDict.keys.sorted().forEach { timestamp in
+                        guard let session = auxiliaryDict[timestamp] else { return }
+                        sessions.append(session)
                     }
                     completion?(sessions)
                 case .error(let error):

@@ -132,7 +132,7 @@ class PollsDateViewController: UIViewController {
     }
     
     func deleteSession(with id: Int) -> Future<DeleteResponse> {
-        return networking(Endpoint.deleteSession(with: id)).decode(DeleteResponse.self)
+        return networking(Endpoint.deleteSession(with: id)).decode()
     }
     
     @objc func goBack() {
@@ -164,7 +164,7 @@ class PollsDateViewController: UIViewController {
     }
     
     func getMembers(with id: Int) -> Future<Response<Edges<User>>> {
-        return networking(Endpoint.getMembers(with: id)).decode(Response<Edges<User>>.self)
+        return networking(Endpoint.getMembers(with: id)).decode()
     }
     
     required init?(coder aDecoder: NSCoder) {

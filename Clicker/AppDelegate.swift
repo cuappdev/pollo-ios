@@ -85,11 +85,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
-        return networking(Endpoint.getPollSessions(with: role)).decode(Response<[Node<Session>]>.self)
+        return networking(Endpoint.getPollSessions(with: role)).decode()
     }
     
     func userAuthenticate(with idToken: String) -> Future<Response<UserSession>> {
-        return networking(Endpoint.userAuthenticate(with: idToken)).decode(Response<UserSession>.self)
+        return networking(Endpoint.userAuthenticate(with: idToken)).decode()
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
@@ -126,8 +126,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                     auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
                             }
-                            for time in auxiliaryDict.keys.sorted() {
-                                joinedSessions.append(auxiliaryDict[time]!)
+                            auxiliaryDict.keys.sorted().forEach { time in
+                                guard let joinedSession = auxiliaryDict[time] else { return }
+                                joinedSessions.append(joinedSession)
                             }
                         case .error(let memberError):
                             print(memberError)
@@ -144,8 +145,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                     auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
                             }
-                            for time in auxiliaryDict.keys.sorted() {
-                                createdSessions.append(auxiliaryDict[time]!)
+                            auxiliaryDict.keys.sorted().forEach { time in
+                                guard let createdSession = auxiliaryDict[time] else { return }
+                                createdSessions.append(createdSession)
                             }
                         case .error(let adminError):
                             print(adminError)
