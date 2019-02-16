@@ -132,6 +132,8 @@ extension PollsViewController: EditPollViewControllerDelegate {
     }
 
     func editPollViewControllerDidDeletePoll() { }
+
+    func editPollViewControllerDidReopenPoll() { }
     
 }
 

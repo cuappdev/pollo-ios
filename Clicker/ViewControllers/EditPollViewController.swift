@@ -14,6 +14,7 @@ protocol EditPollViewControllerDelegate: class {
     func editPollViewControllerDidUpdateName(for userRole: UserRole)
     func editPollViewControllerDidDeleteSession(for userRole: UserRole)
     func editPollViewControllerDidDeletePoll()
+    func editPollViewControllerDidReopenPoll()
 
 }
 
@@ -40,6 +41,8 @@ class EditPollViewController: UIViewController {
     var deleteView: UIView!
     var deleteImageButton: UIButton!
     var deleteButton: UIButton!
+    var reopenButton: UIButton!
+    var reopenView: UIView!
     
     // MARK: - Data vars
     weak var delegate: EditPollViewControllerDelegate?
@@ -57,12 +60,15 @@ class EditPollViewController: UIViewController {
     let deleteImageButtonLeftPadding: CGFloat = 18
     let deleteButtonLeftPadding: CGFloat = 18
     let deleteButtonWidthScaleFactor: CGFloat = 0.7
+    let reopenButtonLeadingPadding: CGFloat = 18
+    let reopenButtonWidthScaleFactor: CGFloat = 0.7
     let adminDeleteButtonTitle = "Delete"
     let memberDeleteButtonTitle = "Leave"
     let editNameButtonTitle = "Edit Name"
+    let reopenButtonTitle = "Reopen"
     let deleteImageName = "delete"
     let editImageName = "editPoll"
-    
+
     init(_ type: EditType, delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole, countLabelText: String? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.editType = type
@@ -111,12 +117,22 @@ class EditPollViewController: UIViewController {
         deleteView.addSubview(deleteImageButton)
         deleteView.addSubview(deleteButton)
 
+        reopenButton = UIButton()
+        reopenButton.setTitle(reopenButtonTitle, for: .normal)
+        reopenButton.setTitleColor(.black, for: .normal)
+        reopenButton.contentHorizontalAlignment = .leading
+        reopenButton.titleLabel?.font = ._16RegularFont
+        reopenButton.addTarget(self, action: #selector(reopenBtnPressed), for: .touchUpInside)
+
+        reopenView = UIView()
+        reopenView.addSubview(reopenButton)
+
         var stackViewSubviews: [UIView] = []
         switch editType! {
         case .session:
             stackViewSubviews = userRole == .admin ? [editView, deleteView] : [deleteView]
         case .poll:
-            stackViewSubviews = [deleteView]
+            stackViewSubviews = [deleteView, reopenView]
         }
         
         buttonStackView = UIStackView(arrangedSubviews: stackViewSubviews)
@@ -151,17 +167,11 @@ class EditPollViewController: UIViewController {
             }
         }
 
-        if editType == .poll {
-            deleteView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(editViewHeight)
-            }
-        } else {
-            deleteView.snp.makeConstraints { make in
-                make.height.equalTo(editViewHeight)
-            }
+        deleteView.snp.makeConstraints { make in
+            make.height.equalTo(editViewHeight)
+            make.leading.trailing.equalToSuperview()
         }
-        
+
         deleteImageButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(deleteImageButtonLeftPadding)
             make.centerY.equalToSuperview()
@@ -172,6 +182,17 @@ class EditPollViewController: UIViewController {
             make.centerY.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(deleteButtonWidthScaleFactor)
         }
+
+        reopenButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(reopenButtonLeadingPadding)
+            make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(reopenButtonWidthScaleFactor)
+        }
+
+        reopenView.snp.makeConstraints { make in
+            make.height.equalTo(editViewHeight)
+            make.leading.trailing.equalToSuperview()
+        }
     }
     
     // MARK: ACTIONS
@@ -179,8 +200,7 @@ class EditPollViewController: UIViewController {
     @objc func deleteBtnPressed() {
         switch editType! {
         case .poll:
-            // TODO
-            break
+            delegate?.editPollViewControllerDidDeletePoll()
         case .session:
             let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
             self.navigationController?.pushViewController(deleteVC, animated: true)
@@ -195,6 +215,10 @@ class EditPollViewController: UIViewController {
     
     @objc func exitBtnPressed() {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    @objc func reopenBtnPressed() {
+        delegate?.editPollViewControllerDidReopenPoll()
     }
     
     func setupNavBar() {

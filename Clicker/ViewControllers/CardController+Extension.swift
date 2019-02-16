@@ -373,7 +373,11 @@ extension CardController: EditPollViewControllerDelegate {
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) { }
 
     func editPollViewControllerDidDeletePoll() {
+        // TODO Networking call
+    }
 
+    func editPollViewControllerDidReopenPoll() {
+        // TODO Networking call
     }
 
 }
