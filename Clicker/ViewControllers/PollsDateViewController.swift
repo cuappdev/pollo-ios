@@ -163,7 +163,7 @@ class PollsDateViewController: UIViewController {
         }
     }
     
-    func getMembers(with id: Int) -> Future<Response<Edges<User>>> {
+    func getMembers(with id: Int) -> Future<Response<Edges<Node<GetMemberResponse>>>> {
         return networking(Endpoint.getMembers(with: id)).decode()
     }
     

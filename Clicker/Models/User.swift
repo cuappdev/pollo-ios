@@ -13,6 +13,14 @@ enum UserRole: String {
     case member = "user"
 }
 
+struct GetMemberResponse: Codable {
+
+    var id: Int
+    var name: String
+    var netID: String
+    
+}
+
 class User: Codable {
     
     static var currentUser: User?
