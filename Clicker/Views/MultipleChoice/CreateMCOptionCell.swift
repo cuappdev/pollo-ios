@@ -132,7 +132,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     }
 
     // MARK: - Actions
-    @objc func deleteOption(){
+    @objc func deleteOption() {
         delegate?.createMCOptionCellDidDeleteOption(index: index)
     }
     

@@ -11,12 +11,13 @@ import SwiftyJSON
 
 class PollParser: Parser {
     
-    typealias itemType = Poll
+    typealias ItemType = Poll
     
     static func parseItem(json: JSON) -> Poll {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        let pollResults = formatResults(results: results)
         let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
@@ -28,7 +29,7 @@ class PollParser: Parser {
             ? .multipleChoice
             : .freeResponse
         let state: PollState = json[ParserKeys.sharedKey].boolValue ? .shared : .ended
-        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             poll.updateSelected(mcChoice: answerText)
         }
@@ -39,6 +40,7 @@ class PollParser: Parser {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
+        let pollResults = formatResults(results: results)
         let correctAnswer = json[ParserKeys.correctAnswerKey].string
         var options: [String]
         if let optionsArray = json[ParserKeys.optionsKey].array {
@@ -49,7 +51,7 @@ class PollParser: Parser {
         let questionType: QuestionType = json[ParserKeys.typeKey].stringValue == Identifiers.multipleChoiceIdentifier
             ? .multipleChoice
             : .freeResponse
-        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        let poll = Poll(id: id, text: text, questionType: questionType, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         if let unwrappedAnswer = json[ParserKeys.answerKey].string, let answerDict = results[unwrappedAnswer], let answerText = answerDict[ParserKeys.textKey].string {
             poll.updateSelected(mcChoice: answerText)
         }

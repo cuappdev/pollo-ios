@@ -53,7 +53,6 @@ class AskQuestionCell: UICollectionViewCell {
         self.textField.text = askQuestionModel.currentQuestion
     }
 
-
     // MARK: - Actions
     @objc func updateEditable() {
         let isEditable = !(textField.text?.isEmpty ?? true)

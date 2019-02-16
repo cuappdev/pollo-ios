@@ -84,7 +84,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         let correct = correctAnswer ?? ""
         
         // EMIT START QUESTION
-        let socketQuestion: [String:Any] = [
+        let socketQuestion: [String: Any] = [
             RequestKeys.textKey: text,
             RequestKeys.typeKey: type.descriptionForServer,
             RequestKeys.optionsKey: options,
@@ -93,7 +93,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        let pollResults = formatResults(results: results)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let lastPollsDateModel = pollsDateArray.last {
@@ -107,8 +108,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String:JSON] {
-        var results: [String:JSON] = [:]
+    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
+        var results: [String: JSON] = [:]
         options.enumerated().forEach { (index, option) in
             let infoDict: JSON = [
                 RequestKeys.textKey: option,
@@ -135,12 +136,19 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
     func navigationTitleViewNavigationButtonTapped() {
         guard userRole == .admin else { return }
         let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
-        GetMembers(id: session?.id ?? -1).make()
-            .done { (users) in
-                let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: users.count)
-                self.navigationController?.pushViewController(groupControlsVC, animated: true)
-            }.catch { (error) in
-                print(error)
+        getMembers(with: session?.id ?? -1).observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.edges.count)
+                    self.navigationController?.pushViewController(groupControlsVC, animated: true)
+                case .error(let error):
+                    print(error)
+                    let alertController = self.createAlert(title: "Error", message: "Failed to load data. Try again!")
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
         }
     }
 
@@ -194,7 +202,7 @@ extension PollsDateViewController: SocketDelegate {
     }
 
     func receivedResultsLive(_ currentState: CurrentState) {
-        guard let _ = getLatestPoll() else { return }
+        guard getLatestPoll() != nil else { return }
         updateWithCurrentState(currentState: currentState, pollState: .live)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -211,8 +219,8 @@ extension PollsDateViewController: SocketDelegate {
     
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
-        let data: [String:Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id,
+        let data: [String: Any] = [
+            RequestKeys.googleIDKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text
@@ -266,7 +274,7 @@ extension PollsDateViewController: SocketDelegate {
     func updateLatestPoll(with poll: Poll) {
         guard let latestPollsDateModel = pollsDateArray.last else { return }
         let todaysDate = getTodaysDate()
-        if (latestPollsDateModel.date != todaysDate) {
+        if latestPollsDateModel.date != todaysDate {
             // User has no polls for today yet
             let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
             pollsDateArray.append(todayPollsDateModel)

@@ -12,8 +12,8 @@ import UIKit
 struct Links {
     static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
     static let appDevSite = "https://www.cornellappdev.com/"
-    static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
     static let privacyPolicy = "https://www.cornellappdev.com/privacy/policies/pollo/"
+    static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
 }
 
 struct Identifiers {
@@ -88,7 +88,7 @@ struct RequestKeys {
     static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
-    static let googleIdKey = "googleId"
+    static let googleIDKey = "googleID"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let sharedKey = "shared"
@@ -110,31 +110,6 @@ struct IntegerConstants {
     static let maxOptionsForAdminFR = 5
     static let maxOptionsForMemberFR = 6
 }
-
-enum Keys: String {
-    case apiURL = "api-url"
-    case apiDevURL = "api-dev-url"
-    case fabricAPIKey = "fabric-api-key"
-    
-    var value: String {
-        return Keys.keyDict[rawValue] as! String
-    }
-    
-    static var hostURL: Keys {
-        #if DEV_SERVER
-        return Keys.apiDevURL
-        #else
-        return Keys.apiURL
-        #endif
-    }
-    
-    private static let keyDict: NSDictionary = {
-        guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
-            let dict = NSDictionary(contentsOfFile: path) else { return [:] }
-        return dict
-    }()
-}
-
 
 struct UserDefault {
 

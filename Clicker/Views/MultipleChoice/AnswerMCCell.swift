@@ -21,7 +21,7 @@ class AnswerMCCell: UITableViewCell {
     
     var optionLabel = UILabel()
     
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -35,7 +35,7 @@ class AnswerMCCell: UITableViewCell {
         layoutSubviews()
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
         choiceLabel.textColor = .clickerGrey3
         choiceLabel.font = UIFont._16SemiboldFont
@@ -50,7 +50,7 @@ class AnswerMCCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsetsMake(0, 18, 5, 18))
+        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsets(top: 0, left: 18, bottom: 5, right: 18))
         
         choiceLabel.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.13, height: frame.height))

@@ -14,12 +14,15 @@ protocol NameViewDelegate: class {
 
 class NameView: UIView, UITextFieldDelegate {
 
+    // MARK: - View vars
     var titleField: UITextField!
     var blurEffect: UIBlurEffect!
     var blurEffectView: UIVisualEffectView!
     
+    // MARK: - Data vars
     var session: Session!
     weak var delegate: NameViewDelegate?
+    private let networking: Networking = URLSession.shared.request
     
     init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
@@ -41,7 +44,7 @@ class NameView: UIView, UITextFieldDelegate {
         
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
-        if (session.code != session.name) {
+        if session.code != session.name {
             titleField.text = session.name
         }
         titleField.font = ._24MediumFont
@@ -69,7 +72,7 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             titleField.snp.remakeConstraints { remake in
                 remake.centerX.equalToSuperview()
                 remake.width.equalToSuperview()
@@ -94,6 +97,10 @@ class NameView: UIView, UITextFieldDelegate {
         }
     }
     
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         var name: String
         if let text = textField.text {
@@ -101,15 +108,19 @@ class NameView: UIView, UITextFieldDelegate {
         } else {
             name = session.code
         }
-        UpdateSession(id: session.id, name: name, code: session.code).make()
-            .done { code in
-                self.session.name = name
-                self.delegate?.nameViewDidUpdateSessionName()
-                self.removeFromSuperview()
-            }.catch { error in
-                print("error: ", error)
+        updateSession(id: session.id, name: name, code: session.code).observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value:
+                    self.session.name = name
+                    self.delegate?.nameViewDidUpdateSessionName()
+                    self.removeFromSuperview()
+                case .error(let error):
+                    print("error: ", error)
+                }
             }
-        
+        }
         return true
     }
 

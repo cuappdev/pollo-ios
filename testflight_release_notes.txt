@@ -1,0 +1,11 @@
+# This file will be read by Bitrise and added to the Whats New Release Notes on TestFlight.
+# Lines that start with a # will be ignored by Bitrise
+#
+# Example:
+# - Added new login flow
+# - Redesigned home screen
+# - Made networking more reliable
+#
+# Add notes below this line
+- Fixed the ability to log into Pollo
+- Everything should be back to normal (random=pollo)

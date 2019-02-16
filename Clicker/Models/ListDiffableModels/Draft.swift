@@ -9,6 +9,13 @@
 import Foundation
 import IGListKit
 
+struct Edges<T: Codable>: Codable {
+    
+    var edges: [T]
+    var pageInfo: [String: Int]
+    
+}
+
 class Draft: Codable {
     
     var id: Int

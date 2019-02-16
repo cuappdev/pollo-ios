@@ -26,7 +26,6 @@ class PollsDateCell: UICollectionViewCell {
     let numQuestionsLabelRightPadding: CGFloat = 44
     let separatorViewHeight: CGFloat = 0.75
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
