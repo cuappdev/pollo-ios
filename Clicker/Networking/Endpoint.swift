@@ -15,7 +15,6 @@ enum EndpointMethod: String {
     case put = "PUT"
 }
 
-
 struct Endpoint {
     static var apiVersion: Int? { return 2 }
     let path: String
