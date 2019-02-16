@@ -93,21 +93,26 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderVie
 extension PollBuilderViewController: EditDraftViewControllerDelegate {
 
     func editDraftViewControllerDidTapDeleteDraftButton(draft: Draft) {
-        DeleteDraft(id: draft.id).make()
-            .done {
-                guard let index = self.drafts.index(where: { otherDraft -> Bool in
-                    return otherDraft.id == draft.id
-                }) else { return }
-                self.drafts.remove(at: index)
-
-                if let loadedFRDraft = self.loadedFRDraft, draft.isEqual(toDiffableObject: loadedFRDraft) {
-                    self.loadedFRDraft = nil
+        deleteDraft(with: "\(draft.id)").observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    if response.success {
+                        guard let index = self.drafts.index(where: { otherDraft -> Bool in
+                            return otherDraft.id == draft.id
+                        }) else { return }
+                        self.drafts.remove(at: index)
+                        
+                        self.updatePollBuilderViews()
+                    } else {
+                        let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                case .error(let error):
+                    print("error: ", error)
                 }
-
-                self.updatePollBuilderViews()
-            } .catch { _ in
-                let alertController = self.createAlert(title: self.errorText, message: self.failedToDeleteDraftText)
-                self.present(alertController, animated: true, completion: nil)
+            }
         }
     }
 

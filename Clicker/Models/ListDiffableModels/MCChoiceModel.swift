@@ -27,7 +27,7 @@ extension MCChoiceModel: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if (self === object) { return true }
+        if self === object { return true }
         guard let object = object as? MCChoiceModel else { return false }
         return identifier == object.identifier && option == object.option && isSelected == object.isSelected
     }

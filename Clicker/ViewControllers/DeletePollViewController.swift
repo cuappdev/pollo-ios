@@ -25,6 +25,7 @@ class DeletePollViewController: UIViewController {
     weak var delegate: DeletePollViewControllerDelegate?
     var session: Session!
     var userRole: UserRole!
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let deleteLabelWidthScale: CGFloat = 0.9
@@ -112,23 +113,55 @@ class DeletePollViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    func deleteSession(with id: Int) -> Future<DeleteResponse> {
+        return networking(Endpoint.deleteSession(with: id)).decode()
+    }
+    
+    func leaveSession(with id: Int) -> Future<DeleteResponse> {
+        return networking(Endpoint.leaveSession(with: id)).decode()
+    }
+    
     @objc func deleteBtnPressed() {
         switch userRole! {
         case .admin:
-            DeleteSession(id: session.id).make()
-                .done {
-                    self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
-                    self.dismiss(animated: true, completion: nil)
-                }.catch { error in
-                    print(error)
+            deleteSession(with: session.id).observe { [weak self] result in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value(let response):
+                        if response.success {
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.dismiss(animated: true, completion: nil)
+                        } else {
+                            let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    case .error(let error):
+                        print(error)
+                        let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                }
             }
         case .member:
-            LeaveSession(id: session.id).make()
-                .done {
-                    self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
-                    self.dismiss(animated: true, completion: nil)
-                }.catch { error in
-                    print(error)
+            leaveSession(with: session.id).observe { [weak self] result in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value(let response):
+                        if response.success {
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.dismiss(animated: true, completion: nil)
+                        } else {
+                            let alertController = self.createAlert(title: "Error", message: "Failed to leave session. Try again!")
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    case .error(let error):
+                        print(error)
+                        let alertController = self.createAlert(title: "Error", message: "Failed to leave session. Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                }
             }
         }
     }

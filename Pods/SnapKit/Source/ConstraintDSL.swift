@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public protocol ConstraintDSL {
     
     var target: AnyObject? { get }
@@ -47,7 +48,8 @@ extension ConstraintDSL {
 }
 private var labelKey: UInt8 = 0
 
-public protocol ConstraintBasicAttributesDSL: ConstraintDSL {
+
+public protocol ConstraintBasicAttributesDSL : ConstraintDSL {
 }
 extension ConstraintBasicAttributesDSL {
     
@@ -107,7 +109,7 @@ extension ConstraintBasicAttributesDSL {
     
 }
 
-public protocol ConstraintAttributesDSL: ConstraintBasicAttributesDSL {
+public protocol ConstraintAttributesDSL : ConstraintBasicAttributesDSL {
 }
 extension ConstraintAttributesDSL {
     

@@ -21,6 +21,7 @@ class EditNameViewController: UIViewController {
     // MARK: - Data vars
     weak var delegate: EditNameViewControllerDelegate?
     var session: Session!
+    private let networking: Networking = URLSession.shared.request
 
     // MARK: - Constants
     let edgePadding = 18
@@ -88,15 +89,24 @@ class EditNameViewController: UIViewController {
         }
     }
     
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
+    }
+    
     @objc func saveBtnPressed() {
         if let newName = nameTextField.text {
             if newName != "" {
-                UpdateSession(id: session.id, name: newName, code: session.code).make()
-                    .done { _ in
-                        self.delegate?.editNameViewControllerDidUpdateName()
-                        self.dismiss(animated: true, completion: nil)
-                    }.catch { error in
-                        print("error: ", error)
+                updateSession(id: session.id, name: newName, code: session.code).observe { [weak self] result in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .value:
+                            self.delegate?.editNameViewControllerDidUpdateName()
+                            self.dismiss(animated: true, completion: nil)
+                        case .error(let error):
+                            print("error: ", error)
+                        }
+                    }
                 }
             }
         }

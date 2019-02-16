@@ -9,15 +9,13 @@
 import IGListKit
 import SwiftyJSON
 
-enum PollState {
-    case live
-    case ended
-    case shared
+enum PollState: String, Codable {
+    case live, ended, shared
 }
 
-enum QuestionType: CustomStringConvertible {
-    case multipleChoice
-    case freeResponse
+enum QuestionType: String, CustomStringConvertible, Codable {
+    case multipleChoice = "Multiple Choice"
+    case freeResponse = "Free Response"
     
     var description: String {
         switch self {
@@ -41,14 +39,42 @@ enum QuestionType: CustomStringConvertible {
     }
 }
 
-class Poll {
+class PollResult: Codable, Equatable {
+    
+    static func == (lhs: PollResult, rhs: PollResult) -> Bool {
+        return lhs.text == rhs.text && lhs.count == rhs.count
+    }
+    
+    var text: String
+    var count: Int
+    
+    init(text: String, count: Int) {
+        self.text = text
+        self.count = count
+    }
+    
+}
+
+class PollAnswer: Codable {
+    
+    var answer: String?
+    var answerIds: [Int]?
+    
+    init(answer: String?, answerIds: [Int]?) {
+        self.answer = answer
+        self.answerIds = answerIds
+    }
+    
+}
+
+class Poll: Codable {
     
     var id: Int
     var text: String
     var questionType: QuestionType
     var options: [String]
-    var results: [String: JSON]
-    var answers: [String: Any]
+    var results: [String: PollResult]
+    var answers: [String: PollAnswer]
     var upvotes: [String: [String]]
     var state: PollState
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
@@ -61,8 +87,8 @@ class Poll {
     
     // MARK: - Constants
     let identifier = UUID().uuidString
-    
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String: JSON], state: PollState, correctAnswer: String?) {
+
+    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String: PollResult], state: PollState, correctAnswer: String?) {
         self.id = id
         self.text = text
         self.questionType = questionType
@@ -73,7 +99,6 @@ class Poll {
         self.state = state
         self.correctAnswer = correctAnswer
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
-
     }
     
     init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
@@ -91,19 +116,15 @@ class Poll {
     
     func getSelected() -> Any? {
         guard let userId = User.currentUser?.id else { return nil }
-        if let selected = answers[userId] as? JSON {
-            switch questionType {
-            case .multipleChoice:
-                return selected.stringValue
-            case .freeResponse:
-                return selected.arrayValue.map { (json) -> Int in
-                    return json.intValue
-                }
-            }
-        } else if let selected = answers[userId] as? String {
-            return selected
+        guard let selected = answers[userId] else { return nil }
+        switch questionType {
+        case .multipleChoice:
+            guard let answer = selected.answer else { return nil }
+            return answer
+        case .freeResponse:
+            guard let answerIds = selected.answerIds else { return nil }
+            return answerIds
         }
-        return nil
     }
 
     init(poll: Poll, state: PollState) {
@@ -129,17 +150,15 @@ class Poll {
     // Returns array representation of results where each element is (answerId, text, count)
     // Ex) [(1, 'Blah', 3), (2, 'Jupiter', 6)...]
     func getFRResultsArray() -> [(String, String, Int)] {
-        return options.compactMap { (answerId) -> (String, String, Int)? in
-            if let choiceJSON = results[answerId], let option = choiceJSON[ParserKeys.textKey].string, let numSelected = choiceJSON[ParserKeys.countKey].int {
-                return (answerId, option, numSelected)
-            }
-            return nil
+        return options.compactMap { answerId -> (String, String, Int)? in
+            guard let choice = results[answerId] else { return nil }
+            return (answerId, choice.text, choice.count)
         }
     }
     
     func getTotalResults() -> Int {
-        return results.values.reduce(0) { (currentTotalResults, json) -> Int in
-            return currentTotalResults + json[ParserKeys.countKey].intValue
+        return results.values.reduce(0) { (currentTotalResults, result) -> Int in
+            return currentTotalResults + result.count
         }
     }
 
@@ -154,17 +173,14 @@ class Poll {
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
         guard let userId = User.currentUser?.id else { return false }
-        if let userSelectedChoice = answers[userId] as? JSON {
-            return userSelectedChoice.stringValue == mcChoice
-        } else if let userSelectedChoice = answers[userId] as? String {
-            return userSelectedChoice == mcChoice
-        }
-        return false
+        guard let userSelectedAnswer = answers[userId] else { return false }
+        guard let userSelectedChoice = userSelectedAnswer.answer else { return false }
+        return userSelectedChoice == mcChoice
     }
 
     func updateSelected(mcChoice: String) {
         if let userId = User.currentUser?.id {
-            answers[userId] = mcChoice
+            answers[userId] = PollAnswer(answer: mcChoice, answerIds: nil)
         }
     }
 

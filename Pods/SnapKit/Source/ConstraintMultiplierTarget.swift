@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public protocol ConstraintMultiplierTarget {
     
     var constraintMultiplierTargetValue: CGFloat { get }

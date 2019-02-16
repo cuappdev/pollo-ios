@@ -24,37 +24,34 @@ func getTodaysDate() -> String {
     return formatter.string(from: Date())
 }
 
-// Get a User's Joined and Created Sessions using DispatchGroup
-func getAllSessions(completion: @escaping ([Session], [Session]) -> Void) {
-    let dispatchGroup = DispatchGroup()
-    var joinedSessions: [Session] = []
-    var createdSessions: [Session] = []
-    
-    // Get joined sessions
-    dispatchGroup.enter()
-    GetPollSessions(role: .member).make()
-        .done { sessions in
-            joinedSessions = sessions
-            dispatchGroup.leave()
-        }.catch { error in
-            print(error)
-            dispatchGroup.leave()
+func getLatestActivity(latestActivityTimestamp: Double, code: String, role: UserRole) -> String {
+    var latestActivity = "Last live "
+    let today: Date = Date()
+    let latestActivityDate: Date = Date(timeIntervalSince1970: latestActivityTimestamp)
+    if today.days(from: latestActivityDate) == 0 {
+        if today.hours(from: latestActivityDate) == 0 {
+            let numMinutesAgo = today.minutes(from: latestActivityDate) == 0 ? 1 : today.minutes(from: latestActivityDate)
+            let suffix = numMinutesAgo == 1 ? "minute" : "minutes"
+            latestActivity += "\(numMinutesAgo) \(suffix) ago"
+        } else {
+            let suffix = today.hours(from: latestActivityDate) == 1 ? "hr" : "hrs"
+            latestActivity += "\(today.hours(from: latestActivityDate)) \(suffix) ago"
+        }
+    } else {
+        if today.days(from: latestActivityDate) < 7 {
+            let suffix = today.days(from: latestActivityDate) == 1 ? "day" : "days"
+            latestActivity += "\(today.days(from: latestActivityDate)) \(suffix) ago"
+        } else {
+            let formatter: DateFormatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            latestActivity += String(formatter.string(from: latestActivityDate).split(separator: ",")[0])
+        }
     }
-    
-    // Get created sessions
-    dispatchGroup.enter()
-    GetPollSessions(role: .admin).make()
-        .done { sessions in
-            createdSessions = sessions
-            dispatchGroup.leave()
-        }.catch { error in
-            print(error)
-            dispatchGroup.leave()
+    if role == .admin {
+        latestActivity = code + "  ·  " + latestActivity
     }
-    
-    dispatchGroup.notify(queue: .main) {
-        completion(joinedSessions, createdSessions)
-    }
+    return latestActivity
 }
 
 // USER DEFAULTS
@@ -150,13 +147,37 @@ private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     return .mcChoice(choiceModels: mcChoiceModels)
 }
 
+func formatResults(results: [String: JSON]) -> [String: PollResult] {
+    var pollResults = [String: PollResult]()
+    results.forEach { (key, value) in
+        let text = value[ParserKeys.textKey].stringValue
+        let count = value[ParserKeys.countKey].intValue
+        pollResults[key] = PollResult(text: text, count: count)
+    }
+    return pollResults
+}
+
+func formatAnswers(answers: [String: JSON]) -> [String: PollAnswer] {
+    var pollAnswers = [String: PollAnswer]()
+    answers.forEach { (key, value) in
+        if let answerIdsJson = value.array {
+            let answerIds = answerIdsJson.map { json in json.intValue }
+            pollAnswers[key] = PollAnswer(answer: nil, answerIds: answerIds)
+        } else if let answer = value.string {
+            pollAnswers[key] = PollAnswer(answer: answer, answerIds: nil)
+        }
+    }
+    return pollAnswers
+}
+
 func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     var mcResultModels: [MCResultModel] = []
     let totalNumResults = Float(poll.getTotalResults())
     poll.options.enumerated().forEach { (index, option) in
         let mcOptionKey = intToMCOption(index)
-        if let infoDict = poll.results[mcOptionKey] {
-            guard let option = infoDict[ParserKeys.textKey].string, let numSelected = infoDict[ParserKeys.countKey].int else { return }
+        if let result = poll.results[mcOptionKey] {
+            let option = result.text
+            let numSelected = result.count
             let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
             var isSelected = false
             if let selected = poll.getSelected() as? String {

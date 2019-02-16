@@ -25,12 +25,12 @@
 import Foundation
 import Starscream
 
-protocol ClientOption: CustomStringConvertible, Equatable {
+protocol ClientOption : CustomStringConvertible, Equatable {
     func getSocketIOOptionValue() -> Any
 }
 
 /// The options for a client.
-public enum SocketIOClientOption: ClientOption {
+public enum SocketIOClientOption : ClientOption {
     /// If given, the WebSocket transport will attempt to use compression.
     case compress
 
@@ -55,6 +55,8 @@ public enum SocketIOClientOption: ClientOption {
 
     /// The queue that all interaction with the client should occur on. This is the queue that event handlers are
     /// called on.
+    ///
+    /// **This should be a serial queue! Concurrent queues are not supported and might cause crashes and races**.
     case handleQueue(DispatchQueue)
 
     /// If passed `true`, the client will log debug information. This should be turned off in production code.
@@ -73,8 +75,14 @@ public enum SocketIOClientOption: ClientOption {
     /// The number of times to try and reconnect before giving up. Pass `-1` to [never give up](https://www.youtube.com/watch?v=dQw4w9WgXcQ).
     case reconnectAttempts(Int)
 
-    /// The number of seconds to wait before reconnect attempts.
+    /// The minimum number of seconds to wait before reconnect attempts.
     case reconnectWait(Int)
+    
+    /// The maximum number of seconds to wait before reconnect attempts.
+    case reconnectWaitMax(Int)
+    
+    /// The randomization factor for calculating reconnect jitter.
+    case randomizationFactor(Double)
 
     /// Set `true` if your server is using secure transports.
     case secure(Bool)
@@ -123,6 +131,10 @@ public enum SocketIOClientOption: ClientOption {
             description = "reconnectAttempts"
         case .reconnectWait:
             description = "reconnectWait"
+        case .reconnectWaitMax:
+            description = "reconnectWaitMax"
+        case .randomizationFactor:
+            description = "randomizationFactor"
         case .secure:
             description = "secure"
         case .selfSigned:
@@ -168,6 +180,10 @@ public enum SocketIOClientOption: ClientOption {
             value = attempts
         case let .reconnectWait(wait):
             value = wait
+        case let .reconnectWaitMax(wait):
+            value = wait
+        case let .randomizationFactor(factor):
+            value = factor
         case let .secure(secure):
             value = secure
         case let .security(security):

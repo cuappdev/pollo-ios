@@ -9,8 +9,7 @@
 import IGListKit
 
 enum SettingsDataState {
-    case link // just a link to something
-    case info // a title and some information
+    case link, info
 }
 
 class SettingsDataModel {
@@ -36,7 +35,7 @@ extension SettingsDataModel: ListDiffable {
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if (self === object) { return true }
+        if self === object { return true }
         guard let object = object as? SettingsDataModel else { return false }
         return identifier == object.identifier
     }

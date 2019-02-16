@@ -1,8 +1,8 @@
 PODS:
-  - Alamofire (4.6.0)
-  - Crashlytics (3.10.1):
-    - Fabric (~> 1.7.5)
-  - Fabric (1.7.5)
+  - Alamofire (4.8.1)
+  - Crashlytics (3.12.0):
+    - Fabric (~> 1.9.0)
+  - Fabric (1.9.0)
   - FirebaseAnalytics (3.9.0):
     - FirebaseCore (~> 3.6)
     - FirebaseInstanceID (~> 1.0)
@@ -17,49 +17,34 @@ PODS:
   - Google/SignIn (3.1.0):
     - Google/Core
     - GoogleSignIn (~> 4.0)
-  - GoogleSignIn (4.1.2):
+  - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
-    - GTMOAuth2 (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3)":
-    - GoogleToolboxForMac/DebugUtils (= 2.1.3)
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.1.3)"
-  - GTMOAuth2 (1.1.6):
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.14):
-    - GTMSessionFetcher/Full (= 1.1.14)
-  - GTMSessionFetcher/Core (1.1.14)
-  - GTMSessionFetcher/Full (1.1.14):
-    - GTMSessionFetcher/Core (= 1.1.14)
+  - GoogleToolboxForMac/DebugUtils (2.2.0):
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+  - GoogleToolboxForMac/Defines (2.2.0)
+  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
+  - GTMSessionFetcher/Core (1.2.1)
   - IGListKit (3.4.0):
     - IGListKit/Default (= 3.4.0)
   - IGListKit/Default (3.4.0):
     - IGListKit/Diffing
   - IGListKit/Diffing (3.4.0)
-  - Neutron (0.4.0):
-    - Alamofire
-    - PromiseKit/Alamofire
-    - SwiftyJSON
-  - Presentr (1.3)
-  - PromiseKit/Alamofire (6.2.0):
-    - Alamofire (~> 4.0)
-    - PromiseKit/CorePromise
-  - PromiseKit/CorePromise (6.2.0)
-  - SnapKit (4.0.0)
-  - Socket.IO-Client-Swift (13.1.1):
-    - Starscream (~> 3.0.2)
+  - Presentr (1.9)
+  - SnapKit (4.2.0)
+  - Socket.IO-Client-Swift (14.0.0):
+    - Starscream (~> 3.0.6)
   - Sourcery (0.15.0)
-  - Starscream (3.0.4)
-  - SwiftLint (0.25.0)
-  - SwiftyJSON (4.0.0)
+  - Starscream (3.0.6)
+  - SwiftLint (0.30.1)
+  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -68,7 +53,6 @@ DEPENDENCIES:
   - FLEX
   - Google/SignIn
   - IGListKit
-  - Neutron (from `https://github.com/dantheli/Neutron.git`)
   - Presentr
   - SnapKit
   - Socket.IO-Client-Swift
@@ -88,11 +72,9 @@ SPEC REPOS:
     - Google
     - GoogleSignIn
     - GoogleToolboxForMac
-    - GTMOAuth2
     - GTMSessionFetcher
     - IGListKit
     - Presentr
-    - PromiseKit
     - SnapKit
     - Socket.IO-Client-Swift
     - Sourcery
@@ -100,39 +82,27 @@ SPEC REPOS:
     - SwiftLint
     - SwiftyJSON
 
-EXTERNAL SOURCES:
-  Neutron:
-    :git: https://github.com/dantheli/Neutron.git
-
-CHECKOUT OPTIONS:
-  Neutron:
-    :commit: 7131748e5146c61d02effae1446ed643e351a1c5
-    :git: https://github.com/dantheli/Neutron.git
-
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
-  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
+  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
-  GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
-  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
+  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
-  Neutron: d554b11bd8fe9daccb68a062c2f2fe16e0dfead6
-  Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
-  PromiseKit: ea9a155e1fd98a926ccfaf633c0fbd69851f0e7b
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  Socket.IO-Client-Swift: f22222913f29801e30ae0df712db663ec096edc2
+  Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
   Sourcery: 5895672cae353cdbfa95f3f4aaeb75a664d76f6a
-  Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
-  SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
-  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 82ecbaca36df8dc1b520b2ef65d5630a4ac5665c
+PODFILE CHECKSUM: 8f64e37be53eb1f52bdc22b510536ffea282d7fb
 
 COCOAPODS: 1.5.3

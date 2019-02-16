@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public final class ConstraintItem {
     
     internal weak var target: AnyObject?

@@ -64,7 +64,7 @@ extension CardController: PollSectionControllerDelegate {
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
         let upvoteObject: [String: Any] = [
             RequestKeys.answerIdKey: answerId,
-            RequestKeys.googleIdKey: User.currentUser?.id ?? ""
+            RequestKeys.googleIDKey: User.currentUser?.id ?? ""
         ]
         socket.socket.emit(Routes.serverUpvote, upvoteObject)
     }
@@ -101,7 +101,8 @@ extension CardController: PollBuilderViewControllerDelegate {
         ]
         socket.socket.emit(Routes.serverStart, socketQuestion)
         let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: results, state: state, correctAnswer: correctAnswer)
+        let pollResults = formatResults(results: results)
+        let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         pollsDateModel.polls.append(newPoll)
         if pollsDateModel.date == getTodaysDate() {
             adapter.performUpdates(animated: false) { completed in
@@ -302,7 +303,7 @@ extension CardController: SocketDelegate {
     // MARK: Helpers
     func emitAnswer(answer: Answer, message: String) {
         let data: [String: Any] = [
-            RequestKeys.googleIdKey: User.currentUser?.id ?? "",
+            RequestKeys.googleIDKey: User.currentUser?.id ?? "",
             RequestKeys.pollKey: answer.pollId,
             RequestKeys.choiceKey: answer.choice,
             RequestKeys.textKey: answer.text

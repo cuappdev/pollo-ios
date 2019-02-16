@@ -46,7 +46,7 @@ import Foundation
 /// or call one of the `disconnectSocket` methods on this class.
 ///
 @objc
-public protocol SocketManagerSpec: class, SocketEngineClient {
+public protocol SocketManagerSpec : AnyObject, SocketEngineClient {
     // MARK: Properties
 
     /// Returns the socket associated with the default namespace ("/").
@@ -69,8 +69,14 @@ public protocol SocketManagerSpec: class, SocketEngineClient {
     /// If `true`, this manager will try and reconnect on any disconnects.
     var reconnects: Bool { get set }
 
-    /// The number of seconds to wait before attempting to reconnect.
+    /// The minimum number of seconds to wait before attempting to reconnect.
     var reconnectWait: Int { get set }
+    
+    /// The maximum number of seconds to wait before attempting to reconnect.
+    var reconnectWaitMax: Int { get set }
+
+    /// The randomization factor for calculating reconnect jitter.
+    var randomizationFactor: Double { get set }
 
     /// The URL of the socket.io server.
     var socketURL: URL { get }
@@ -103,13 +109,13 @@ public protocol SocketManagerSpec: class, SocketEngineClient {
 
     /// Disconnects the socket associated with `forNamespace`.
     ///
-    /// - parameter forNamespace: The namespace to disconnect from.
+    /// - parameter nsp: The namespace to disconnect from.
     func disconnectSocket(forNamespace nsp: String)
 
     /// Sends an event to the server on all namespaces in this manager.
     ///
     /// - parameter event: The event to send.
-    /// - parameter withItems: The data to send with this event.
+    /// - parameter items: The data to send with this event.
     func emitAll(_ event: String, withItems items: [Any])
 
     /// Tries to reconnect to the server.
@@ -133,7 +139,7 @@ public protocol SocketManagerSpec: class, SocketEngineClient {
     /// Call one of the `disconnectSocket` methods on the implementing class to remove the socket from manager control.
     /// Or call `SocketIOClient.disconnect()` on the client.
     ///
-    /// - parameter forNamespace: The namespace for the socket.
+    /// - parameter nsp: The namespace for the socket.
     /// - returns: A `SocketIOClient` for the given namespace.
     func socket(forNamespace nsp: String) -> SocketIOClient
 }

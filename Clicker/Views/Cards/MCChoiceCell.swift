@@ -76,7 +76,7 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Action
     @objc func optionButtonWasPressed() {
-        if (pollState == .live) {
+        if pollState == .live {
             delegate?.mcChoiceCellWasSelected()
         }
     }
