@@ -45,7 +45,7 @@ public enum ModalCenterPosition {
                            y: containerFrame.origin.y + (containerFrame.height * (3 / 4)))
         case .custom(let point):
             return point
-        case .customOrigin:
+        case .customOrigin(_):
             return nil
         }
     }

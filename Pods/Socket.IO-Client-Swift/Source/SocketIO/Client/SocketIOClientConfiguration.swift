@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 
 /// An array-like type that holds `SocketIOClientOption`s
-public struct SocketIOClientConfiguration: ExpressibleByArrayLiteral, Collection, MutableCollection {
+public struct SocketIOClientConfiguration : ExpressibleByArrayLiteral, Collection, MutableCollection {
     // MARK: Typealiases
 
     /// Type of element stored.

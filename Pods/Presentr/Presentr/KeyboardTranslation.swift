@@ -25,7 +25,8 @@ public enum KeyboardTranslationType {
      */
     public func getTranslationFrame(keyboardFrame: CGRect, presentedFrame: CGRect) -> CGRect {
         let keyboardTop = UIScreen.main.bounds.height - keyboardFrame.size.height
-        let presentedViewBottom = presentedFrame.origin.y + presentedFrame.height + 20.0 // add a 20 pt buffer
+        let buffer: CGFloat = (presentedFrame.origin.y + presentedFrame.size.height == UIScreen.main.bounds.height) ? 0 : 20.0 // add a 20 pt buffer except when the presentedFrame is stick to bottom
+        let presentedViewBottom = presentedFrame.origin.y + presentedFrame.height + buffer
         let offset = presentedViewBottom - keyboardTop
         switch self {
         case .moveUp:
@@ -61,11 +62,23 @@ extension Notification {
 
     /// Gets the optional CGRect value of the UIKeyboardFrameEndUserInfoKey from a UIKeyboard notification
     func keyboardEndFrame () -> CGRect? {
-        return (self.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        #if swift(>=4.2)
+        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
+        #else
+        let frameKey = UIKeyboardFrameEndUserInfoKey
+        #endif
+        
+        return (self.userInfo?[frameKey] as? NSValue)?.cgRectValue
     }
 
     /// Gets the optional AnimationDuration value of the UIKeyboardAnimationDurationUserInfoKey from a UIKeyboard notification
     func keyboardAnimationDuration () -> Double? {
-        return (self.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue
+        #if swift(>=4.2)
+        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
+        #else
+        let durationKey = UIKeyboardAnimationDurationUserInfoKey
+        #endif
+
+        return (self.userInfo?[durationKey] as? NSNumber)?.doubleValue
     }
 }

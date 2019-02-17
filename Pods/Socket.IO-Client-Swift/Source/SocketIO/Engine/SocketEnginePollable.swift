@@ -25,7 +25,7 @@
 import Foundation
 
 /// Protocol that is used to implement socket.io polling support
-public protocol SocketEnginePollable: SocketEngineSpec {
+public protocol SocketEnginePollable : SocketEngineSpec {
     // MARK: Properties
 
     /// `true` If engine's session has been invalidated.
@@ -109,7 +109,7 @@ extension SocketEnginePollable {
         doLongPoll(for: req)
     }
 
-    func doRequest(for req: URLRequest, callbackWith callback: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func doRequest(for req: URLRequest, callbackWith callback: @escaping (Data?, URLResponse?, Error?) -> ()) {
         guard polling && !closed && !invalidated && !fastUpgrade else { return }
 
         DefaultSocketLogger.Logger.log("Doing polling \(req.httpMethod ?? "") \(req)", type: "SocketEnginePolling")
@@ -120,11 +120,14 @@ extension SocketEnginePollable {
     func doLongPoll(for req: URLRequest) {
         waitingForPoll = true
 
-        doRequest(for: req) {[weak self] data, _, err in
+        doRequest(for: req) {[weak self] data, res, err in
             guard let this = self, this.polling else { return }
-
-            if err != nil || data == nil {
-                DefaultSocketLogger.Logger.error(err?.localizedDescription ?? "Error", type: "SocketEnginePolling")
+            guard let data = data, let res = res as? HTTPURLResponse, res.statusCode == 200 else {
+                if let err = err {
+                    DefaultSocketLogger.Logger.error(err.localizedDescription, type: "SocketEnginePolling")
+                } else {
+                    DefaultSocketLogger.Logger.error("Error during long poll request", type: "SocketEnginePolling")
+                }
 
                 if this.polling {
                     this.didError(reason: err?.localizedDescription ?? "Error")
@@ -135,7 +138,7 @@ extension SocketEnginePollable {
 
             DefaultSocketLogger.Logger.log("Got polling response", type: "SocketEnginePolling")
 
-            if let str = String(data: data!, encoding: .utf8) {
+            if let str = String(data: data, encoding: .utf8) {
                 this.parsePollingMessage(str)
             }
 
@@ -163,11 +166,14 @@ extension SocketEnginePollable {
 
         DefaultSocketLogger.Logger.log("POSTing", type: "SocketEnginePolling")
 
-        doRequest(for: req) {[weak self] _, _, err in
+        doRequest(for: req) {[weak self] _, res, err in
             guard let this = self else { return }
-
-            if err != nil {
-                DefaultSocketLogger.Logger.error(err?.localizedDescription ?? "Error", type: "SocketEnginePolling")
+            guard let res = res as? HTTPURLResponse, res.statusCode == 200 else {
+                if let err = err {
+                    DefaultSocketLogger.Logger.error(err.localizedDescription, type: "SocketEnginePolling")
+                } else {
+                    DefaultSocketLogger.Logger.error("Error flushing waiting posts", type: "SocketEnginePolling")
+                }
 
                 if this.polling {
                     this.didError(reason: err?.localizedDescription ?? "Error")

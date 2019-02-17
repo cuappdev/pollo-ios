@@ -27,15 +27,17 @@
     import AppKit
 #endif
 
+
 public protocol LayoutConstraintItem: class {
 }
 
 @available(iOS 9.0, OSX 10.11, *)
-extension ConstraintLayoutGuide: LayoutConstraintItem {
+extension ConstraintLayoutGuide : LayoutConstraintItem {
 }
 
-extension ConstraintView: LayoutConstraintItem {
+extension ConstraintView : LayoutConstraintItem {
 }
+
 
 extension LayoutConstraintItem {
     

@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public class ConstraintMakerExtendable: ConstraintMakerRelatable {
     
     public var left: ConstraintMakerExtendable {

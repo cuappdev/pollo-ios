@@ -25,7 +25,7 @@
 import Foundation
 import Starscream
 
-enum JSONError: Error {
+enum JSONError : Error {
     case notArray
     case notNSDictionary
 }

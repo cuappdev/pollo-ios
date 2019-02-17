@@ -25,12 +25,12 @@
 import Foundation
 import Starscream
 
-protocol ClientOption: CustomStringConvertible, Equatable {
+protocol ClientOption : CustomStringConvertible, Equatable {
     func getSocketIOOptionValue() -> Any
 }
 
 /// The options for a client.
-public enum SocketIOClientOption: ClientOption {
+public enum SocketIOClientOption : ClientOption {
     /// If given, the WebSocket transport will attempt to use compression.
     case compress
 
@@ -55,6 +55,8 @@ public enum SocketIOClientOption: ClientOption {
 
     /// The queue that all interaction with the client should occur on. This is the queue that event handlers are
     /// called on.
+    ///
+    /// **This should be a serial queue! Concurrent queues are not supported and might cause crashes and races**.
     case handleQueue(DispatchQueue)
 
     /// If passed `true`, the client will log debug information. This should be turned off in production code.

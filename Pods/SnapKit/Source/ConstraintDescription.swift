@@ -27,14 +27,15 @@
     import AppKit
 #endif
 
+
 public class ConstraintDescription {
     
     internal let item: LayoutConstraintItem
     internal var attributes: ConstraintAttributes
-    internal var relation: ConstraintRelation?
-    internal var sourceLocation: (String, UInt)?
-    internal var label: String?
-    internal var related: ConstraintItem?
+    internal var relation: ConstraintRelation? = nil
+    internal var sourceLocation: (String, UInt)? = nil
+    internal var label: String? = nil
+    internal var related: ConstraintItem? = nil
     internal var multiplier: ConstraintMultiplierTarget = 1.0
     internal var constant: ConstraintConstantTarget = 0.0
     internal var priority: ConstraintPriorityTarget = 1000.0

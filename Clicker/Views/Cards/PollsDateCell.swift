@@ -16,6 +16,7 @@ class PollsDateCell: UICollectionViewCell {
     var rightArrowButtonImageView: UIImageView!
     var topSeparatorView: UIView!
     var bottomSeparatorView: UIView!
+    var isNotLast: Bool!
     
     // MARK: - Constants
     let dateLabelFontSize: CGFloat = 20
@@ -89,10 +90,13 @@ class PollsDateCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for pollsDateModel: PollsDateModel) {
+    func configure(for pollsDateModel: PollsDateModel, isNotLast: Bool) {
         dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
         let numPolls = pollsDateModel.polls.count
         numQuestionsLabel.text = "\(numPolls) \(numPolls > 1 ? "Questions" : "Question")"
+        self.isNotLast = isNotLast
+        bottomSeparatorView.isHidden = isNotLast
+        print(isNotLast)
     }
     
     // MARK: - Helpers

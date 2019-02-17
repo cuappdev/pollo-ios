@@ -27,6 +27,7 @@
     import AppKit
 #endif
 
+
 public class ConstraintMakerFinalizable {
     
     internal let description: ConstraintDescription

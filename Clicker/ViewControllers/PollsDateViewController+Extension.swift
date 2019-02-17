@@ -23,7 +23,12 @@ extension PollsDateViewController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is PollsDateModel {
-            let pollsDateSectionController = PollsDateSectionController(delegate: self)
+            if let pollDateObject = object as? PollsDateModel {
+                let isLast = pollsDateArray[0] === pollDateObject
+                let pollsDateSectionController = PollsDateSectionController(delegate: self, isLast: isLast)
+                return pollsDateSectionController
+            }
+            let pollsDateSectionController = PollsDateSectionController(delegate: self, isLast: false)
             return pollsDateSectionController
         } else {
             let shouldDisplayNameView = userRole == .admin && session.name == session.code

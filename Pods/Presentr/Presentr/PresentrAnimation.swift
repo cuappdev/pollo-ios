@@ -63,6 +63,7 @@ open class PresentrAnimation: NSObject {
         return initialFrame
     }
 
+
     /// Actions to be performed in preparation, before an animation.
     ///
     /// - Parameter transitionContext: The context with everything needed for the animiation.
@@ -73,6 +74,7 @@ open class PresentrAnimation: NSObject {
         let initialFrame = transitionContext.isPresenting ? initialFrameForVC : finalFrameForVC
         transitionContext.animatingView?.frame = initialFrame
     }
+
 
     /// Actions to be performed for the animation.
     ///
@@ -157,7 +159,7 @@ extension PresentrAnimation: UIViewControllerAnimatedTransitioning {
         beforeAnimation(using: presentrContext)
         UIView.animate(withDuration: duration, animations: {
             self.performAnimation(using: presentrContext)
-        }) { (_) in
+        }) { (completed) in
             self.afterAnimation(using: presentrContext)
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
@@ -172,7 +174,7 @@ extension PresentrAnimation: UIViewControllerAnimatedTransitioning {
                        options: [],
                        animations: {
             self.performAnimation(using: presentrContext)
-        }) { (_) in
+        }) { (completed) in
             self.afterAnimation(using: presentrContext)
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
