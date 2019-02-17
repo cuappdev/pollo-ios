@@ -8,16 +8,20 @@
 
 import UIKit
 
-class PassthroughView: UIView {
+class PassthroughBackgroundView: UIView {
+
+    var passthroughViews: [UIView] = []
 
     var shouldPassthrough = true
-
-	var passthroughViews: [UIView] = []
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         var view = super.hitTest(point, with: event)
 
-        if view == self && shouldPassthrough {
+        if !shouldPassthrough {
+            return view
+        }
+
+        if view == self {
             for passthroughView in passthroughViews {
                 view = passthroughView.hitTest(convert(point, to: passthroughView), with: event)
                 if view != nil {
@@ -25,7 +29,7 @@ class PassthroughView: UIView {
                 }
             }
         }
-
+        
         return view
     }
 

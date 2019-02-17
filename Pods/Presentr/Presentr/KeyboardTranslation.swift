@@ -62,23 +62,11 @@ extension Notification {
 
     /// Gets the optional CGRect value of the UIKeyboardFrameEndUserInfoKey from a UIKeyboard notification
     func keyboardEndFrame () -> CGRect? {
-        #if swift(>=4.2)
-        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-        #else
-        let frameKey = UIKeyboardFrameEndUserInfoKey
-        #endif
-        
-        return (self.userInfo?[frameKey] as? NSValue)?.cgRectValue
+        return (self.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
     }
 
     /// Gets the optional AnimationDuration value of the UIKeyboardAnimationDurationUserInfoKey from a UIKeyboard notification
     func keyboardAnimationDuration () -> Double? {
-        #if swift(>=4.2)
-        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
-        #else
-        let durationKey = UIKeyboardAnimationDurationUserInfoKey
-        #endif
-
-        return (self.userInfo?[durationKey] as? NSNumber)?.doubleValue
+        return (self.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue
     }
 }

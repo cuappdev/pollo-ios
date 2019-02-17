@@ -8,7 +8,7 @@
 
 import UIKit
 
-public typealias AlertActionHandler = (() -> Void)
+public typealias AlertActionHandler = ((AlertAction) -> Void)
 
 /// Describes each action that is going to be shown in the 'AlertViewController'
 public class AlertAction {
@@ -87,28 +87,14 @@ private struct ColorPalette {
 
 }
 
-protocol CornerRadiusSettable {
-
-	func customContainerViewSetCornerRadius(_ radius: CGFloat)
-
-}
-
 /// UIViewController subclass that displays the alert
-public class AlertViewController: UIViewController, CornerRadiusSettable {
+public class AlertViewController: UIViewController {
 
     /// Text that will be used as the title for the alert
-	public var titleText: String = "" {
-		didSet {
-			titleLabel?.text = titleText
-		}
-	}
+    public var titleText: String?
 
     /// Text that will be used as the body for the alert
-	public var bodyText: String = "" {
-		didSet {
-			bodyLabel?.text = bodyText
-		}
-	}
+    public var bodyText: String?
 
     /// If set to false, alert wont auto-dismiss the controller when an action is clicked. Dismissal will be up to the action's handler. Default is true.
     public var autoDismiss: Bool = true
@@ -116,39 +102,22 @@ public class AlertViewController: UIViewController, CornerRadiusSettable {
     /// If autoDismiss is set to true, then set this property if you want the dismissal to be animated. Default is true.
     public var dismissAnimated: Bool = true
 
-	public let titleFont: UIFont?
-
-	public let bodyFont: UIFont?
-
-	public let buttonFont: UIFont?
-
     fileprivate var actions = [AlertAction]()
 
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var bodyLabel: UILabel!
-    @IBOutlet private weak var firstButton: UIButton!
-    @IBOutlet private weak var secondButton: UIButton!
-	@IBOutlet private weak var containerView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var bodyLabel: UILabel!
+    @IBOutlet weak var firstButton: UIButton!
+    @IBOutlet weak var secondButton: UIButton!
+    @IBOutlet weak var firstButtonWidthConstraint: NSLayoutConstraint!
 
-	public init(title: String? = nil, body: String? = nil, titleFont: UIFont? = nil, bodyFont: UIFont? = nil, buttonFont: UIFont? = nil) {
-		if let title = title {
-			titleText = title
-		}
-
-		if let body = body {
-			bodyText = body
-		}
-
-		self.titleFont = titleFont
-		self.bodyFont = bodyFont
-		self.buttonFont = buttonFont
-
-		super.init(nibName: "AlertViewController", bundle: Bundle(for: type(of: self)))
-	}
-
-	required public init?(coder aDecoder: NSCoder) {
-		fatalError("Unsupported initializer, please use init()")
-	}
+    override public func loadView() {
+        let name = "AlertViewController"
+        let bundle = Bundle(for: type(of: self))
+        guard let view = bundle.loadNibNamed(name, owner: self, options: nil)?.first as? UIView else {
+            fatalError("Nib not found.")
+        }
+        self.view = view
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +127,8 @@ public class AlertViewController: UIViewController, CornerRadiusSettable {
             addAction(okAction)
         }
 
-		setupContainerView()
+        loadFonts
+
         setupFonts()
         setupLabels()
         setupButtons()
@@ -166,6 +136,23 @@ public class AlertViewController: UIViewController, CornerRadiusSettable {
 
     override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+
+    override public func updateViewConstraints() {
+        if actions.count == 1 {
+            // If only one action, second button will have been removed from superview
+            // So, need to add constraint for first button trailing to superview
+            if let constraint = firstButtonWidthConstraint {
+                view.removeConstraint(constraint)
+            }
+            let views: [String: UIView] = ["button" : firstButton]
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[button]-0-|",
+                                                                             options: NSLayoutFormatOptions(rawValue: 0),
+                                                                             metrics: nil,
+                                                                             views: views)
+            view.addConstraints(constraints)
+        }
+        super.updateViewConstraints()
     }
 
     // MARK: AlertAction's
@@ -180,33 +167,21 @@ public class AlertViewController: UIViewController, CornerRadiusSettable {
         actions += [action]
     }
 
-    // MARK: Setup, CornerRadiusSettable
+    // MARK: Setup
 
-	func customContainerViewSetCornerRadius(_ radius: CGFloat) {
-		containerView.layer.cornerRadius = radius
-	}
-
-	private func setupContainerView() {
-		containerView.clipsToBounds = true
-	}
-
-    private func setupFonts() {
-		if titleFont == nil || bodyFont == nil || buttonFont == nil {
-			loadFonts
-		}
-
-        titleLabel.font = titleFont ?? Font.Montserrat.font()
-        bodyLabel.font = bodyFont ?? Font.SourceSansPro.font()
-        firstButton.titleLabel?.font = buttonFont ?? Font.Montserrat.font(11.0)
-        secondButton.titleLabel?.font = buttonFont ?? Font.Montserrat.font(11.0)
+    fileprivate func setupFonts() {
+        titleLabel.font = Font.Montserrat.font()
+        bodyLabel.font = Font.SourceSansPro.font()
+        firstButton.titleLabel?.font = Font.Montserrat.font(11.0)
+        secondButton.titleLabel?.font = Font.Montserrat.font(11.0)
     }
 
-    private func setupLabels() {
-        titleLabel.text = titleText
-        bodyLabel.text = bodyText
+    fileprivate func setupLabels() {
+        titleLabel.text = titleText ?? "Alert"
+        bodyLabel.text = bodyText ?? "This is an alert."
     }
 
-    private func setupButtons() {
+    fileprivate func setupButtons() {
         guard let firstAction = actions.first else { return }
         apply(firstAction, toButton: firstButton)
         if actions.count == 2 {
@@ -217,24 +192,28 @@ public class AlertViewController: UIViewController, CornerRadiusSettable {
         }
     }
 
-    private func apply(_ action: AlertAction, toButton: UIButton) {
+    fileprivate func apply(_ action: AlertAction, toButton: UIButton) {
         let title = action.title.uppercased()
         let style = action.style
-        toButton.setTitle(title, for: UIControl.State())
-        toButton.setTitleColor(style.color(), for: UIControl.State())
+        toButton.setTitle(title, for: UIControlState())
+        toButton.setTitleColor(style.color(), for: UIControlState())
     }
 
     // MARK: IBAction's
 
     @IBAction func didSelectFirstAction(_ sender: AnyObject) {
         guard let firstAction = actions.first else { return }
-		firstAction.handler?()
+        if let handler = firstAction.handler {
+            handler(firstAction)
+        }
         dismiss()
     }
 
     @IBAction func didSelectSecondAction(_ sender: AnyObject) {
         guard let secondAction = actions.last, actions.count == 2 else { return }
-		secondAction.handler?()
+        if let handler = secondAction.handler {
+            handler(secondAction)
+        }
         dismiss()
     }
 

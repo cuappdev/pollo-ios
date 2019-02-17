@@ -44,14 +44,14 @@ PODS:
   - IGListKit/Default (3.4.0):
     - IGListKit/Diffing
   - IGListKit/Diffing (3.4.0)
-  - Presentr (1.9)
-  - SnapKit (4.2.0)
+  - Presentr (1.3.2)
+  - SnapKit (4.0.1)
   - Socket.IO-Client-Swift (13.3.1):
     - Starscream (~> 3.0.2)
   - Sourcery (0.15.0)
   - Starscream (3.0.6)
   - SwiftLint (0.27.0)
-  - SwiftyJSON (4.2.0)
+  - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -104,13 +104,13 @@ SPEC CHECKSUMS:
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
   IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
-  Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  Presentr: 797ae6ec8904eaba4ec58a4c2065bd66e31569ea
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
   Sourcery: 5895672cae353cdbfa95f3f4aaeb75a664d76f6a
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
-  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
 PODFILE CHECKSUM: 8f64e37be53eb1f52bdc22b510536ffea282d7fb
 
