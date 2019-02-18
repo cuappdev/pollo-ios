@@ -100,7 +100,7 @@ extension CardController: PollSectionControllerDelegate {
 
 extension CardController: PollBuilderViewControllerDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         
@@ -130,7 +130,10 @@ extension CardController: PollBuilderViewControllerDelegate {
             }
             return
         }
-        self.navigationController?.popViewController(animated: false)
+
+        if shouldPopViewController {
+            self.navigationController?.popViewController(animated: false)
+        }
         delegate?.cardControllerDidStartNewPoll(poll: newPoll)
     }
     
@@ -211,14 +214,16 @@ extension CardController: UIScrollViewDelegate {
         let toValue = closestDiscreteOffset(to: startingScrollingOffset) + deltaOffset
         
         targetContentOffset.pointee = CGPoint(x: toValue, y: 0)
-        updateCountLabelText(with: newCount)
+        currentIndex = newCount
+        updateCountLabelText()
     }
     
     func scrollToLatestPoll() {
         let indexOfLatestSection = pollsDateModel.polls.count - 1
         let lastIndexPath = IndexPath(item: 0, section: indexOfLatestSection)
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        updateCountLabelText(with: indexOfLatestSection)
+        currentIndex = indexOfLatestSection
+        updateCountLabelText()
     }
 }
 
@@ -373,12 +378,16 @@ extension CardController: EditPollViewControllerDelegate {
 
     func editPollViewControllerDidDeleteSession(for userRole: UserRole) { }
 
-    func editPollViewControllerDidDeletePoll() {
-        // TODO Networking call
+    func editPollViewControllerDidDeletePoll(sender: EditPollViewController) {
+        // TODO socket
+        let poll = pollsDateModel.polls[currentIndex]
     }
 
-    func editPollViewControllerDidReopenPoll() {
-        // TODO Networking call
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) {
+        let poll = pollsDateModel.polls[currentIndex]
+        // TODO fix this
+        sender.dismiss(animated: true, completion: nil)
+        startPoll(text: poll.text, type: poll.questionType, options: poll.options, state: .live, correctAnswer: poll.correctAnswer, shouldPopViewController: false)
     }
 
 }

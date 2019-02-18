@@ -77,7 +77,7 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         

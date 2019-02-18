@@ -40,13 +40,14 @@ class CardController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateModel: PollsDateModel!
-    var currentIndex: Int!
+    var currentIndex: Int! = 0
     var numberOfPeople: Int!
     var isInitialLoad: Bool = true
     var wasScrolledToIndex: Int!
     var startingScrollingOffset: CGPoint!
     var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -135,7 +136,7 @@ class CardController: UIViewController {
         countLabel.font = ._12MediumFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
-        updateCountLabelText(with: 0)
+        updateCountLabelText()
         view.addSubview(countLabel)
         
         countLabelBackgroundView.snp.makeConstraints { make in
@@ -191,9 +192,9 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    func updateCountLabelText(with index: Int) {
+    func updateCountLabelText() {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(index + 1)/\(total)"
+        countLabel.text = "\(currentIndex + 1)/\(total)"
     }
     
     // MARK: - Actions

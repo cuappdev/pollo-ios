@@ -13,22 +13,13 @@ protocol EditPollViewControllerDelegate: class {
     
     func editPollViewControllerDidUpdateName(for userRole: UserRole)
     func editPollViewControllerDidDeleteSession(for userRole: UserRole)
-    func editPollViewControllerDidDeletePoll()
-    func editPollViewControllerDidReopenPoll()
+    func editPollViewControllerDidDeletePoll(sender: EditPollViewController)
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController)
 
 }
 
 enum EditType {
     case poll, session
-
-    var stackViewHeight: CGFloat {
-        switch self {
-        case .poll:
-            return 24
-        case .session:
-            return 75
-        }
-    }
 }
 
 class EditPollViewController: UIViewController {
@@ -53,7 +44,7 @@ class EditPollViewController: UIViewController {
     
     // MARK: - Constants
     let buttonStackViewAdminTopOffset: CGFloat = 20
-    let editViewHeight: CGFloat = 24
+    let editViewHeight: CGFloat = 20
     let editNameImageButtonLeftPadding: CGFloat = 18
     let editNameButtonLeftPadding: CGFloat = 18
     let editNameButtonWidthScaleFactor: CGFloat = 0.7
@@ -62,6 +53,7 @@ class EditPollViewController: UIViewController {
     let deleteButtonWidthScaleFactor: CGFloat = 0.7
     let reopenButtonLeadingPadding: CGFloat = 18
     let reopenButtonWidthScaleFactor: CGFloat = 0.7
+    let stackViewHeight: CGFloat = 40
     let adminDeleteButtonTitle = "Delete"
     let memberDeleteButtonTitle = "Leave"
     let editNameButtonTitle = "Edit Name"
@@ -147,7 +139,7 @@ class EditPollViewController: UIViewController {
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonStackViewTopOffset)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(editType.stackViewHeight)
+            make.height.equalTo(stackViewHeight)
         }
         
         if userRole == .admin, editType == .session {
@@ -164,6 +156,17 @@ class EditPollViewController: UIViewController {
                 make.left.equalTo(editNameImageButton.snp.right).offset(editNameButtonLeftPadding)
                 make.centerY.equalToSuperview()
                 make.width.equalToSuperview().multipliedBy(editNameButtonWidthScaleFactor)
+            }
+        } else {
+            reopenButton.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(reopenButtonLeadingPadding)
+                make.centerY.equalToSuperview()
+                make.width.equalToSuperview().multipliedBy(reopenButtonWidthScaleFactor)
+            }
+
+            reopenView.snp.makeConstraints { make in
+                make.height.equalTo(editViewHeight)
+                make.leading.trailing.equalToSuperview()
             }
         }
 
@@ -183,16 +186,6 @@ class EditPollViewController: UIViewController {
             make.width.equalToSuperview().multipliedBy(deleteButtonWidthScaleFactor)
         }
 
-        reopenButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(reopenButtonLeadingPadding)
-            make.centerY.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(reopenButtonWidthScaleFactor)
-        }
-
-        reopenView.snp.makeConstraints { make in
-            make.height.equalTo(editViewHeight)
-            make.leading.trailing.equalToSuperview()
-        }
     }
     
     // MARK: ACTIONS
@@ -200,7 +193,7 @@ class EditPollViewController: UIViewController {
     @objc func deleteBtnPressed() {
         switch editType! {
         case .poll:
-            delegate?.editPollViewControllerDidDeletePoll()
+            delegate?.editPollViewControllerDidDeletePoll(sender: self)
         case .session:
             let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
             self.navigationController?.pushViewController(deleteVC, animated: true)
@@ -218,7 +211,7 @@ class EditPollViewController: UIViewController {
     }
 
     @objc func reopenBtnPressed() {
-        delegate?.editPollViewControllerDidReopenPoll()
+        delegate?.editPollViewControllerDidReopenPoll(sender: self)
     }
     
     func setupNavBar() {
