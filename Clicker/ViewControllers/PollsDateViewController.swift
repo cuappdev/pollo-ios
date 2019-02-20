@@ -98,7 +98,7 @@ class PollsDateViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", delegate: self)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
@@ -109,6 +109,8 @@ class PollsDateViewController: UIViewController {
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         

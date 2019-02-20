@@ -67,10 +67,6 @@ extension Endpoint {
         } else {
             components.path = "/api\(path)"
         }
-        #if DEV_SERVER
-        components.port = 3000
-        components.scheme = "http"
-        #endif
         components.queryItems = queryItems
         return components.url
     }

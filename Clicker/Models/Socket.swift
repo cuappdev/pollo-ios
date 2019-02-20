@@ -20,7 +20,7 @@ class Socket {
         self.id = id
         self.delegate = delegate
         #if DEV_SERVER
-        let urlString = "http://\(Keys.hostURL.value):3000"
+        let urlString = "https://\(Keys.hostURL.value)"
         #else
         let urlString = "https://\(Keys.hostURL.value)"
         #endif
