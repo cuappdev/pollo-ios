@@ -16,6 +16,8 @@ protocol CardControllerDelegate: class {
     func cardControllerDidStartNewPoll(poll: Poll)
     func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeletedLive()
     func receivedResults(_ currentState: CurrentState)
     func updatedTally(_ currentState: CurrentState)
     func navigationTitleViewNavigationButtonTapped()
@@ -177,6 +179,8 @@ class CardController: UIViewController {
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         
@@ -194,7 +198,13 @@ class CardController: UIViewController {
     // MARK: Helpers
     func updateCountLabelText() {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(currentIndex + 1)/\(total)"
+        if total > 0 {
+            countLabel.text = "\(currentIndex + 1)/\(total)"
+            countLabelBackgroundView.isHidden = false
+        } else {
+            countLabel.text = ""
+            countLabelBackgroundView.isHidden = true
+        }
     }
     
     // MARK: - Actions

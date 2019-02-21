@@ -45,7 +45,7 @@ extension PollsDateViewController: UIViewControllerTransitioningDelegate {
 }
 
 extension PollsDateViewController: CardControllerDelegate {
-    
+
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {
         self.numberOfPeople = numberOfPeople
         peopleButton.setTitle("\(numberOfPeople)", for: .normal)
@@ -63,7 +63,7 @@ extension PollsDateViewController: CardControllerDelegate {
         let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
         self.navigationController?.pushViewController(cardController, animated: true)
     }
-    
+
 }
 
 extension PollsDateViewController: PollsDateSectionControllerDelegate {
@@ -155,7 +155,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
 }
 
 extension PollsDateViewController: SocketDelegate {
-    
+
     func sessionConnected() {}
     
     func sessionDisconnected() {}
@@ -192,7 +192,33 @@ extension PollsDateViewController: SocketDelegate {
         }
         adapter.performUpdates(animated: false, completion: nil)
     }
-    
+
+    func pollDeleted(_ pollID: Int, userRole: UserRole) {
+        for i in 0..<pollsDateArray.count {
+            if let index = pollsDateArray[i].polls.firstIndex(where: { $0.id == pollID }) {
+                var newPolls = pollsDateArray[i].polls.map { Poll(poll: $0, state: $0.state) }
+                newPolls.remove(at: index)
+                let newPollsDateModel = PollsDateModel(date: pollsDateArray[i].date, polls: newPolls)
+                pollsDateArray[i] = newPollsDateModel
+            }
+        }
+        removeEmptyModels()
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    func pollDeletedLive() {
+        for i in 0..<pollsDateArray.count {
+            if let index = pollsDateArray[i].polls.firstIndex(where: { $0.state == .live }) {
+                var newPolls = pollsDateArray[i].polls.map { Poll(poll: $0, state: $0.state) }
+                newPolls.remove(at: index)
+                let newPollsDateModel = PollsDateModel(date: pollsDateArray[i].date, polls: newPolls)
+                pollsDateArray[i] = newPollsDateModel
+            }
+        }
+        removeEmptyModels()
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+
     func receivedResults(_ currentState: CurrentState) {
         guard let latestPoll = getLatestPoll() else { return }
         // Free Response receives results in live state
@@ -287,6 +313,12 @@ extension PollsDateViewController: SocketDelegate {
     
     func getLatestPoll() -> Poll? {
         return pollsDateArray.last?.polls.last
+    }
+
+    func removeEmptyModels() {
+        let filteredModels = pollsDateArray.filter { $0.polls.count > 0 }
+        pollsDateArray = filteredModels
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
 }

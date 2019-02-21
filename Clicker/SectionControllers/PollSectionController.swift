@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-protocol PollSectionControllerDelegate {
+protocol PollSectionControllerDelegate: class {
     
     var role: UserRole { get }
 

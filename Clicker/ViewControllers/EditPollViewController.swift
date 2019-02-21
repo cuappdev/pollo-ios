@@ -124,7 +124,7 @@ class EditPollViewController: UIViewController {
         case .session:
             stackViewSubviews = userRole == .admin ? [editView, deleteView] : [deleteView]
         case .poll:
-            stackViewSubviews = [deleteView, reopenView]
+            stackViewSubviews = [deleteView]
         }
         
         buttonStackView = UIStackView(arrangedSubviews: stackViewSubviews)
@@ -163,11 +163,6 @@ class EditPollViewController: UIViewController {
                 make.centerY.equalToSuperview()
                 make.width.equalToSuperview().multipliedBy(reopenButtonWidthScaleFactor)
             }
-
-            reopenView.snp.makeConstraints { make in
-                make.height.equalTo(editViewHeight)
-                make.leading.trailing.equalToSuperview()
-            }
         }
 
         deleteView.snp.makeConstraints { make in
@@ -197,7 +192,6 @@ class EditPollViewController: UIViewController {
         case .session:
             let deleteVC = DeletePollViewController(delegate: self, session: session, userRole: userRole)
             self.navigationController?.pushViewController(deleteVC, animated: true)
-
         }
     }
     
@@ -236,6 +230,15 @@ class EditPollViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        switch editType! {
+        case .poll:
+            return .lightContent
+        case .session:
+            return .default
+        }
     }
     
 }
