@@ -92,9 +92,20 @@ class MCResultCell: UICollectionViewCell {
     }
     
     override func updateConstraints() {
+        guard let optionLabelText = optionLabel.text else { return }
+        let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
+        let maxWidth = bounds.width - numSelectedLabelWidth - optionLabelHorizontalPadding * 4 - checkImageViewLength
+        
         // If we already layed out constraints before, we should only update the
         // highlightView width constraint
         if didLayoutConstraints {
+            let useMaxWidth = optionLabelWidth >= maxWidth || !showCorrectAnswer
+            optionLabel.snp.updateConstraints { make in
+                make.width.equalTo(useMaxWidth ? maxWidth : optionLabelWidth)
+            }
+            if showCorrectAnswer {
+                updateCheckImageView()
+            }
             let highlightViewMaxWidth = Float(self.contentView.bounds.width - LayoutConstants.pollOptionsPadding * 2)
             self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
             super.updateConstraints()
@@ -115,26 +126,18 @@ class MCResultCell: UICollectionViewCell {
             make.width.equalTo(numSelectedLabelWidth)
         }
         
-        guard let optionLabelText = optionLabel.text else { return }
-        let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - numSelectedLabelWidth - optionLabelHorizontalPadding * 4 - checkImageViewLength
-        
         optionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(optionLabelHorizontalPadding)
             make.centerY.equalToSuperview()
             if showCorrectAnswer {
                 make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
             } else {
-                make.trailing.equalTo(numSelectedLabel).inset(optionLabelHorizontalPadding)
+                make.width.equalTo(maxWidth)
             }
         }
         
         if showCorrectAnswer {
-            checkImageView.snp.makeConstraints { make in
-                make.width.height.equalTo(checkImageViewLength)
-                make.leading.equalTo(optionLabel.snp.trailing).offset(optionLabelHorizontalPadding)
-                make.centerY.equalToSuperview()
-            }
+            updateCheckImageView()
         }
 
         highlightView.snp.makeConstraints { make in
@@ -143,6 +146,15 @@ class MCResultCell: UICollectionViewCell {
             highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
         }
         super.updateConstraints()
+    }
+    
+    func updateCheckImageView() {
+        checkImageView.image = UIImage(named: checkImageName)?.withRenderingMode(.alwaysTemplate)
+        checkImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(checkImageViewLength)
+            make.leading.equalTo(optionLabel.snp.trailing).offset(optionLabelHorizontalPadding)
+            make.centerY.equalToSuperview()
+        }
     }
     
     // MARK: - Configure
@@ -169,6 +181,7 @@ class MCResultCell: UICollectionViewCell {
                     }
                 } else {
                     highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                    optionLabel.textColor = .black
                 }
             } else {
                 highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
@@ -187,6 +200,11 @@ class MCResultCell: UICollectionViewCell {
         UIView.animate(withDuration: 0.15) {
             self.highlightView.superview?.layoutIfNeeded()
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        showCorrectAnswer = false
     }
     
     required init?(coder aDecoder: NSCoder) {

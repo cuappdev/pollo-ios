@@ -36,6 +36,10 @@ class MCResultSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: MCResultCell.self, for: self, at: index) as! MCResultCell
+        if intToMCOption(resultModel.choiceIndex) != correctAnswer {
+            cell.checkImageView.image = nil
+        }
+        cell.showCorrectAnswer = false
         cell.configure(for: resultModel, userRole: delegate.userRole, correctAnswer: correctAnswer)
         cell.setNeedsUpdateConstraints()
         return cell
