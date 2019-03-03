@@ -99,7 +99,6 @@ class Poll: Codable {
         self.state = state
         self.correctAnswer = correctAnswer
         self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
-
     }
     
     init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {

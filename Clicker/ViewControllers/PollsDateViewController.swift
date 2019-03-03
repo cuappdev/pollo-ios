@@ -30,7 +30,7 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var pollsDateArray: [PollsDateModel]!
     var numberOfPeople: Int = 0
-    var delegate: PollsDateViewControllerDelegate!
+    weak var delegate: PollsDateViewControllerDelegate?
     private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
@@ -148,7 +148,7 @@ class PollsDateViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.pollsDateViewControllerWasPopped(for: self.userRole)
+                            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
                             self.present(alertController, animated: true, completion: nil)

@@ -21,7 +21,7 @@ class NameView: UIView, UITextFieldDelegate {
     
     // MARK: - Data vars
     var session: Session!
-    var delegate: NameViewDelegate!
+    weak var delegate: NameViewDelegate?
     private let networking: Networking = URLSession.shared.request
     
     init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
@@ -114,7 +114,7 @@ class NameView: UIView, UITextFieldDelegate {
                 switch result {
                 case .value:
                     self.session.name = name
-                    self.delegate.nameViewDidUpdateSessionName()
+                    self.delegate?.nameViewDidUpdateSessionName()
                     self.removeFromSuperview()
                 case .error(let error):
                     print("error: ", error)
