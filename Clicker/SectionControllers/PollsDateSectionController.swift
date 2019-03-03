@@ -25,7 +25,6 @@ class PollsDateSectionController: ListSectionController {
     let verticalPadding: CGFloat = 16
     let cellCornerRadius: CGFloat = 5
     
-    
     init(delegate: PollsDateSectionControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -33,10 +32,7 @@ class PollsDateSectionController: ListSectionController {
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
-        guard let containerSize = collectionContext?.insetContainerSize else {
-            return .zero
-        }
-
+        guard let containerSize = collectionContext?.insetContainerSize else { return .zero }
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
