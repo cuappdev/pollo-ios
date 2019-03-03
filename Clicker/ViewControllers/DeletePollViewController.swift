@@ -130,7 +130,7 @@ class DeletePollViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
@@ -150,7 +150,7 @@ class DeletePollViewController: UIViewController {
                     switch result {
                     case .value(let response):
                         if response.success {
-                            self.delegate.deletePollViewControllerDidRemoveSession(for: self.userRole)
+                            self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
                             let alertController = self.createAlert(title: "Error", message: "Failed to leave session. Try again!")

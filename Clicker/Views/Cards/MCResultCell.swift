@@ -96,10 +96,6 @@ class MCResultCell: UICollectionViewCell {
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
         let maxWidth = bounds.width - numSelectedLabelWidth - optionLabelHorizontalPadding * 4 - checkImageViewLength
         
-        guard let optionLabelText = optionLabel.text else { return }
-        let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - numSelectedLabelWidth - optionLabelHorizontalPadding * 4 - checkImageViewLength
-        
         // If we already layed out constraints before, we should only update the
         // highlightView width constraint
         if didLayoutConstraints {
