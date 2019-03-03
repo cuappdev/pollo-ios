@@ -16,6 +16,8 @@ protocol CardControllerDelegate: class {
     func cardControllerDidStartNewPoll(poll: Poll)
     func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeletedLive()
     func receivedResults(_ currentState: CurrentState)
     func updatedTally(_ currentState: CurrentState)
     func navigationTitleViewNavigationButtonTapped()
@@ -40,13 +42,14 @@ class CardController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateModel: PollsDateModel!
-    var currentIndex: Int!
+    var currentIndex: Int! = 0
     var numberOfPeople: Int!
     var isInitialLoad: Bool = true
     var wasScrolledToIndex: Int!
     var startingScrollingOffset: CGPoint!
     var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -57,6 +60,7 @@ class CardController: UIViewController {
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
     let swipeVelocityThreshold: CGFloat = 0.5
+    let editModalHeight: CGFloat = 205
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -134,7 +138,7 @@ class CardController: UIViewController {
         countLabel.font = ._12MediumFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
-        updateCountLabelText(with: 0)
+        updateCountLabelText()
         view.addSubview(countLabel)
         
         countLabelBackgroundView.snp.makeConstraints { make in
@@ -192,9 +196,15 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    func updateCountLabelText(with index: Int) {
+    func updateCountLabelText() {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(index + 1)/\(total)"
+        if total > 0 {
+            countLabel.text = "\(currentIndex + 1)/\(total)"
+            countLabelBackgroundView.isHidden = false
+        } else {
+            countLabel.text = ""
+            countLabelBackgroundView.isHidden = true
+        }
     }
     
     // MARK: - Actions

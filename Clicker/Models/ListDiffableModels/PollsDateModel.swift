@@ -34,7 +34,7 @@ class PollsDateModel: Codable {
     let identifier = UUID().uuidString
     
     init(date: String, polls: [Poll]) {
-        self.date = date
+        self.date = date.trim()
         self.polls = polls
     }
     

@@ -98,7 +98,7 @@ extension PollsViewController: PollsCellDelegate {
         presenter.backgroundOpacity = 0.6
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
-        let editPollVC = EditPollViewController(delegate: self, session: session, userRole: userRole)
+        let editPollVC = EditPollViewController(.session, delegate: self, session: session, userRole: userRole)
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
     }
@@ -138,6 +138,10 @@ extension PollsViewController: EditPollViewControllerDelegate {
             }
         }
     }
+
+    func editPollViewControllerDidDeletePoll(sender: EditPollViewController) { }
+
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) { }
     
 }
 

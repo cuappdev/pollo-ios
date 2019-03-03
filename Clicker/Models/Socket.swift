@@ -19,11 +19,7 @@ class Socket {
     init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
-        #if DEV_SERVER
         let urlString = "https://\(Keys.hostURL.value)"
-        #else
-        let urlString = "https://\(Keys.hostURL.value)"
-        #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
         if let googleID = User.currentUser?.id {
             manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIDKey: googleID])])
@@ -55,6 +51,15 @@ class Socket {
             }
             let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
             self.delegate?.pollEnded(poll, userRole: .member)
+        }
+
+        socket.on(Routes.userDelete) { data, _ in
+            guard let pollID = data[0] as? Int else { return }
+            self.delegate?.pollDeleted(pollID, userRole: .member)
+        }
+
+        socket.on(Routes.userDeleteLive) { _, _ in
+            self.delegate?.pollDeletedLive()
         }
         
         socket.on(Routes.userResults) { data, _ in

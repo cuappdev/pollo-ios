@@ -19,6 +19,7 @@ protocol CardCellDelegate: class {
     func cardCellDidUpvote(cardCell: CardCell, answerId: String)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
+    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
 
 }
 
@@ -248,7 +249,7 @@ extension CardCell: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is QuestionModel {
-            return QuestionSectionController(userRole: userRole)
+            return QuestionSectionController(delegate: self, userRole: userRole)
         } else if object is FRInputModel {
             return FRInputSectionController(delegate: self)
         } else if object is PollOptionsModel {
@@ -317,4 +318,11 @@ extension CardCell: PollOptionsSectionControllerDelegate {
         delegate.cardCellDidUpvote(cardCell: self, answerId: answerId)
     }
     
+}
+
+// MARK: QuestionSectionController Delegate
+extension CardCell: QuestionSectionControllerDelegate {
+    func questionSectionControllerDidEditPoll(_ controller: QuestionSectionController) {
+        delegate.cardCellDidEditPoll(cardCell: self, poll: poll)
+    }
 }

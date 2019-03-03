@@ -7,18 +7,29 @@
 //
 
 import IGListKit
+import Presentr
 import SwiftyJSON
 import UIKit
 
 extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        if pollsDateModel.polls.isEmpty {
+            let type: EmptyStateType = .cardController(userRole: userRole)
+            return [EmptyStateModel(type: type)]
+        }
         return pollsDateModel.polls
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        let pollSectionController = PollSectionController(delegate: self)
-        return pollSectionController
+        if object is Poll {
+            let pollSectionController = PollSectionController(delegate: self)
+            return pollSectionController
+        } else {
+            let shouldDisplayNameView = userRole == .admin && session.name == session.code
+            let emptyStateController = EmptyStateSectionController(session: session, shouldDisplayNameView: shouldDisplayNameView, nameViewDelegate: self)
+            return emptyStateController
+        }
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
@@ -78,11 +89,29 @@ extension CardController: PollSectionControllerDelegate {
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll) {
         emitShareResults()
     }
+
+    func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll) {
+        let width = ModalSize.full
+        let modalHeight = editModalHeight + view.safeAreaInsets.bottom
+        let height = ModalSize.custom(size: Float(modalHeight))
+        let originY = view.frame.height - modalHeight + UIApplication.shared.statusBarFrame.height + navigationController!.navigationBar.frame.height
+        let center = ModalCenterPosition.customOrigin(origin: CGPoint(x: 0, y: originY))
+        let customType = PresentationType.custom(width: width, height: height, center: center)
+        let presenter = Presentr(presentationType: customType)
+        presenter.backgroundOpacity = 0.6
+        presenter.dismissOnSwipe = true
+        presenter.dismissOnSwipeDirection = .bottom
+        let editPollVC = EditPollViewController(.poll, delegate: self, session: session, userRole: userRole, countLabelText: countLabel.text)
+        editPollVC.modalPresentationCapturesStatusBarAppearance = true
+        let navigationVC = UINavigationController(rootViewController: editPollVC)
+        customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
+    }
+
 }
 
 extension CardController: PollBuilderViewControllerDelegate {
     
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?) {
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
         
@@ -112,7 +141,10 @@ extension CardController: PollBuilderViewControllerDelegate {
             }
             return
         }
-        self.navigationController?.popViewController(animated: false)
+
+        if shouldPopViewController {
+            navigationController?.popViewController(animated: false)
+        }
         delegate?.cardControllerDidStartNewPoll(poll: newPoll)
     }
     
@@ -193,14 +225,16 @@ extension CardController: UIScrollViewDelegate {
         let toValue = closestDiscreteOffset(to: startingScrollingOffset) + deltaOffset
         
         targetContentOffset.pointee = CGPoint(x: toValue, y: 0)
-        updateCountLabelText(with: newCount)
+        currentIndex = newCount
+        updateCountLabelText()
     }
     
     func scrollToLatestPoll() {
         let indexOfLatestSection = pollsDateModel.polls.count - 1
         let lastIndexPath = IndexPath(item: 0, section: indexOfLatestSection)
         self.collectionView.scrollToItem(at: lastIndexPath, at: .centeredHorizontally, animated: true)
-        updateCountLabelText(with: indexOfLatestSection)
+        currentIndex = indexOfLatestSection
+        updateCountLabelText()
     }
 }
 
@@ -247,9 +281,33 @@ extension CardController: SocketDelegate {
             updateLatestPoll(with: latestPoll)
         case .member:
             let updatedPoll = Poll(poll: latestPoll, state: .ended)
+            updatedPoll.id = poll.id
             updateLatestPoll(with: updatedPoll)
             adapter.performUpdates(animated: false, completion: nil)
         }
+    }
+
+    func pollDeleted(_ pollID: Int, userRole: UserRole) {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate?.pollDeleted(pollID, userRole: userRole)
+            return
+        }
+        guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.id == pollID }) else { return }
+        pollsDateModel.polls.remove(at: deleteIndex)
+        currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
+        updateCountLabelText()
+        adapter.performUpdates(animated: false, completion: nil)
+    }
+
+    func pollDeletedLive() {
+        if pollsDateModel.date != getTodaysDate() {
+            delegate?.pollDeletedLive()
+            return
+        }
+        pollsDateModel.polls.remove(at: currentIndex)
+        currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
+        updateCountLabelText()
+        adapter.performUpdates(animated: false, completion: nil)
     }
     
     func receivedResults(_ currentState: CurrentState) {
@@ -314,6 +372,18 @@ extension CardController: SocketDelegate {
     func emitEndPoll() {
         socket.socket.emit(Routes.serverEnd, [])
     }
+
+    func emitDeletePoll(at index: Int) {
+        switch pollsDateModel.polls[index].state {
+        case .live:
+            socket.socket.emit(Routes.serverDeleteLive, pollsDateModel.polls[index].id)
+            pollsDateModel.polls[index].state = .ended
+            createPollButton.isUserInteractionEnabled = true
+            createPollButton.isHidden = false
+        case .ended, .shared:
+            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id)
+        }
+    }
     
     func emitShareResults() {
         socket.socket.emit(Routes.serverShare, [])
@@ -344,6 +414,35 @@ extension CardController: SocketDelegate {
         if pollsDateModel.polls.isEmpty { return }
         let numPolls = pollsDateModel.polls.count
         pollsDateModel.polls[numPolls - 1] = poll
+    }
+
+}
+
+// MARK: - EditPollViewControllerDelegate
+extension CardController: EditPollViewControllerDelegate {
+
+    func editPollViewControllerDidUpdateName(for userRole: UserRole) { }
+
+    func editPollViewControllerDidDeleteSession(for userRole: UserRole) { }
+
+    func editPollViewControllerDidDeletePoll(sender: EditPollViewController) {
+        emitDeletePoll(at: currentIndex)
+        pollsDateModel.polls.remove(at: currentIndex)
+        sender.dismiss(animated: true, completion: nil)
+        adapter.performUpdates(animated: true) { completed in
+            if completed && !self.pollsDateModel.polls.isEmpty {
+                // Move current index based on which poll was deleted
+                self.currentIndex = self.currentIndex == 0 ? self.currentIndex : self.currentIndex - 1
+            }
+            self.updateCountLabelText()
+        }
+    }
+
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) {
+        // Commented out for now because reopening functionality needs to be fleshed out more
+//        let poll = pollsDateModel.polls[currentIndex]
+//        sender.dismiss(animated: true, completion: nil)
+//        startPoll(text: poll.text, type: poll.questionType, options: poll.options, state: .live, correctAnswer: poll.correctAnswer, shouldPopViewController: false)
     }
 
 }

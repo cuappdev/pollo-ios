@@ -18,4 +18,8 @@ extension String {
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
         return ceil(boundingBox.width)
     }
+
+    func trim() -> String {
+        return trimmingCharacters(in: CharacterSet.whitespaces)
+    }
 }

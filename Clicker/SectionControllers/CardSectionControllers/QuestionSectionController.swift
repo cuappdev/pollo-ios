@@ -8,16 +8,22 @@
 
 import IGListKit
 
+protocol QuestionSectionControllerDelegate: class {
+    func questionSectionControllerDidEditPoll(_ controller: QuestionSectionController)
+}
+
 class QuestionSectionController: ListSectionController {
     
     // MARK: - Data vars
     var questionModel: QuestionModel!
     var userRole: UserRole!
+    weak var delegate: QuestionSectionControllerDelegate?
     
     // MARK: - Constants
     let questionLabelVerticalPadding: CGFloat = 10
     
-    init(userRole: UserRole) {
+    init(delegate: QuestionSectionControllerDelegate, userRole: UserRole) {
+        self.delegate = delegate
         self.userRole = userRole
     }
     
@@ -34,6 +40,7 @@ class QuestionSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: QuestionCell.self, for: self, at: index) as! QuestionCell
         cell.configure(for: questionModel, userRole: userRole)
+        cell.delegate = self
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -42,4 +49,13 @@ class QuestionSectionController: ListSectionController {
         questionModel = object as? QuestionModel
     }
     
+}
+
+// MARK: - QuestionCellDelegate
+extension QuestionSectionController: QuestionCellDelegate {
+
+    func questionCellEditButtonPressed() {
+        delegate?.questionSectionControllerDidEditPoll(self)
+    }
+
 }
