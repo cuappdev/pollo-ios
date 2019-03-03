@@ -36,6 +36,7 @@ class PollsDateViewController: UIViewController {
     // MARK: - Constants
     let countLabelWidth: CGFloat = 42.0
     let collectionViewTopPadding: CGFloat = 20
+    let insetPadding: CGFloat = 16
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -74,6 +75,7 @@ class PollsDateViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.scrollIndicatorInsets = .zero
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: insetPadding, bottom: 0, right: insetPadding)
         collectionView.bounces = true
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
