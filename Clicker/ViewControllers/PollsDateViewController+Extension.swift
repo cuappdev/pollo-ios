@@ -17,8 +17,7 @@ extension PollsDateViewController: ListAdapterDataSource {
             let type: EmptyStateType = .cardController(userRole: userRole)
             return [EmptyStateModel(type: type)]
         }
-        // Want to display latest PollsDateModels on top
-        return pollsDateArray.reversed()
+        return pollsDateArray
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -58,8 +57,8 @@ extension PollsDateViewController: CardControllerDelegate {
     }
     
     func cardControllerDidStartNewPoll(poll: Poll) {
-        let newPollsDateModel = PollsDateModel(date: getTodaysDate(), polls: [poll])
-        pollsDateArray.append(newPollsDateModel)
+        let newPollsDateModel = PollsDateModel(date: Date().secondsString, polls: [poll])
+        pollsDateArray.insert(newPollsDateModel, at: 0)
         let cardController = CardController(delegate: self, pollsDateModel: newPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
         self.navigationController?.pushViewController(cardController, animated: true)
     }
@@ -97,8 +96,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
-        if let lastPollsDateModel = pollsDateArray.last {
-            let cardController = CardController(delegate: self, pollsDateModel: lastPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
+        if let firstPollsDateModel = pollsDateArray.first {
+            let cardController = CardController(delegate: self, pollsDateModel: firstPollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
             self.navigationController?.pushViewController(cardController, animated: true)
         }
     }
@@ -141,7 +140,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.edges.count)
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.count)
                     self.navigationController?.pushViewController(groupControlsVC, animated: true)
                 case .error(let error):
                     print(error)
@@ -167,11 +166,8 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        if let lastPollsDateModel = pollsDateArray.last {
-            if lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
-                return otherPoll.id == poll.id
-            }) || lastPollsDateModel.polls.last?.state == .live { return }
-        }
+        if let lastPollsDateModel = pollsDateArray.first, lastPollsDateModel.polls.contains(where: { $0.id == poll.id })
+                || lastPollsDateModel.polls.first?.state == .live { return }
         appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -263,18 +259,16 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func appendPoll(poll: Poll) {
-        let todaysDate = getTodaysDate()
-        if let lastPollDateModel = pollsDateArray.last {
-            if lastPollDateModel.date == todaysDate {
-                var updatedPolls = lastPollDateModel.polls
-                updatedPolls.append(poll)
-                let updatedPollsDateModel = PollsDateModel(date: lastPollDateModel.date, polls: updatedPolls)
-                pollsDateArray[pollsDateArray.count - 1] = updatedPollsDateModel
-                return
-            }
+        let todaysDate = Date()
+        if let firstPollDateModel = pollsDateArray.first, firstPollDateModel.dateValue.isSameDay(as: todaysDate) {
+            var updatedPolls = firstPollDateModel.polls
+            updatedPolls.append(poll)
+            let updatedPollsDateModel = PollsDateModel(date: firstPollDateModel.date, polls: updatedPolls)
+            pollsDateArray[0] = updatedPollsDateModel
+            return
         }
-        let newPollsDate = PollsDateModel(date: todaysDate, polls: [poll])
-        pollsDateArray.append(newPollsDate)
+        let newPollsDate = PollsDateModel(date: todaysDate.secondsString, polls: [poll])
+        pollsDateArray.insert(newPollsDate, at: 0)
     }
     
     func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
@@ -298,21 +292,21 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func updateLatestPoll(with poll: Poll) {
-        guard let latestPollsDateModel = pollsDateArray.last else { return }
-        let todaysDate = getTodaysDate()
-        if latestPollsDateModel.date != todaysDate {
+        guard let latestPollsDateModel = pollsDateArray.first else { return }
+        let todaysDate = Date()
+        if !latestPollsDateModel.dateValue.isSameDay(as: todaysDate) {
             // User has no polls for today yet
-            let todayPollsDateModel = PollsDateModel(date: todaysDate, polls: [poll])
-            pollsDateArray.append(todayPollsDateModel)
+            let todayPollsDateModel = PollsDateModel(date: todaysDate.secondsString, polls: [poll])
+            pollsDateArray.insert(todayPollsDateModel, at: 0)
         } else {
             // User has polls for today, so just update latest poll for today
             let todayPolls = latestPollsDateModel.polls
-            pollsDateArray[pollsDateArray.count - 1].polls[todayPolls.count - 1] = poll
+            pollsDateArray[0].polls[todayPolls.count - 1] = poll
         }
     }
     
     func getLatestPoll() -> Poll? {
-        return pollsDateArray.last?.polls.last
+        return pollsDateArray.first?.polls.last
     }
 
     func removeEmptyModels() {
