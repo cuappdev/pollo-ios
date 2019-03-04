@@ -21,20 +21,33 @@ struct PollsResponse: Codable {
 }
 
 struct GetSortedPollsResponse: Codable {
-    
+
+    // Seconds since 1970
     var date: String
     var polls: [PollsResponse]
-    
+
+    /// Swift Date representation of `date` sent from backend
+    lazy var dateValue: Date = {
+        return convertUnixStringToDate(date)
+    }()
+
 }
 
 class PollsDateModel: Codable {
-    
+
+    // Seconds since 1970
     var date: String
     var polls: [Poll]
     let identifier = UUID().uuidString
+
+    /// Swift Date representation of `date` sent from backend
+    lazy var dateValue: Date = { [weak self] in
+        guard let `self` = self else { return Date() }
+        return convertUnixStringToDate(self.date)
+    }()
     
     init(date: String, polls: [Poll]) {
-        self.date = date.trim()
+        self.date = date
         self.polls = polls
     }
     

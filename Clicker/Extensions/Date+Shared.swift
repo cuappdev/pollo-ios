@@ -9,6 +9,23 @@
 import UIKit
 
 extension Date {
+
+    private var day: Int {
+        return Calendar.current.component(.day, from: self)
+    }
+
+    private var month: Int {
+        return Calendar.current.component(.month, from: self)
+    }
+
+    private var year: Int {
+        return Calendar.current.component(.year, from: self)
+    }
+
+    /// String value of seconds since 1970
+    var secondsString: String {
+        return "\(Int(self.timeIntervalSince1970))"
+    }
     
     func weeks(from date: Date) -> Int {
         return Calendar.current.dateComponents([.weekOfMonth], from: date, to: self).weekOfMonth ?? 0
@@ -25,5 +42,14 @@ extension Date {
     func minutes(from date: Date) -> Int {
         return Calendar.current.dateComponents([.minute], from: date, to: self).minute ?? 0
     }
-    
+
+    func toLocalTime() -> Date {
+        let seconds = TimeInterval(TimeZone.current.secondsFromGMT(for: self))
+        return Date(timeInterval: seconds, since: self)
+    }
+
+    /// Checks whether or not two dates share the same month, day, and year.
+    func isSameDay(as date: Date) -> Bool {
+        return month == date.month && day == date.day && year == date.year
+    }
 }

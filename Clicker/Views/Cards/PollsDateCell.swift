@@ -72,19 +72,17 @@ class PollsDateCell: UICollectionViewCell {
     
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
-        dateLabel.text = reformatDateString(dateString: pollsDateModel.date)
+        dateLabel.text = reformatDate(pollsDateModel.dateValue)
         let numPolls = pollsDateModel.polls.count
         numQuestionsLabel.text = "\(numPolls) \(numPolls > 1 ? "Questions" : "Question")"
     }
     
     // MARK: - Helpers
-    // Converts MMM dd yyyy to MMMM d format
-    func reformatDateString(dateString: String) -> String {
+    // Converts Unix timestamp to MMMM d format
+    func reformatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = StringConstants.dateFormat
-        let date = dateFormatter.date(from: dateString) ?? Date()
         dateFormatter.dateFormat = "MMMM d"
-        return dateFormatter.string(from: date)
+        return dateFormatter.string(from: date.toLocalTime())
     }
     
     required init?(coder aDecoder: NSCoder) {
