@@ -58,7 +58,7 @@ class PollPreviewCell: UICollectionViewCell {
         setupViews()
     }
     
-    // MARK - Layout
+    // MARK: - Layout
     func setupViews() {
         nameLabel = UILabel()
         nameLabel.font = ._18SemiboldFont

@@ -12,6 +12,8 @@ protocol SocketDelegate: class {
     func receivedUserCount(_ count: Int)
     func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeletedLive()
     
     // USER RECEIVES
     func receivedResults(_ currentState: CurrentState)

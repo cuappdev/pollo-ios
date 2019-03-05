@@ -35,6 +35,8 @@ class PollsViewController: UIViewController {
     var isOpeningGroup: Bool = false
     var isListeningToKeyboard: Bool = true
     var gradientNeedsSetup: Bool = true
+    var session: Session?
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let newGroupButtonLength: CGFloat = 29
@@ -56,14 +58,21 @@ class PollsViewController: UIViewController {
     let failedToCreateGroupText = "Failed to create new group. Try again!"
     let submitFeedbackTitle = "Submit Feedback"
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
-
+    
+    init(joinedSessions: [Session], createdSessions: [Session]) {
+        super.init(nibName: nil, bundle: nil)
+        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: joinedSessions)
+        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: createdSessions)
+        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clickerGrey8
-        
-        let joinedPollTypeModel = PollTypeModel(pollType: .joined, sessions: nil)
-        let createdPollTypeModel = PollTypeModel(pollType: .created, sessions: nil)
-        pollTypeModels = [joinedPollTypeModel, createdPollTypeModel]
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -260,30 +269,40 @@ class PollsViewController: UIViewController {
         headerGradientView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
+    func generateCode() -> Future<Response<Code>> {
+        return networking(Endpoint.generateCode()).decode()
+    }
+    
+    func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
+    }
+    
     // MARK: - Actions
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
-        GenerateCode().make()
-            .done { code in
-                StartSession(code: code, name: code, isGroup: false).make()
-                    .done { session in
-                        self.isListeningToKeyboard = false
-                        self.hideNewGroupActivityIndicatorView()
-                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
-                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        Analytics.shared.log(with: CreatedGroupPayload())
-                    }.catch { error in
-                        print(error)
-                        self.hideNewGroupActivityIndicatorView()
-                        let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
-                        self.present(alertController, animated: true, completion: nil)
+        
+        generateCode().chained { codeResponse -> Future<Response<Session>> in
+            let code = codeResponse.data.code
+            return self.startSession(code: code, name: code, isGroup: false)
+        }.observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let sessionResponse):
+                    let session = sessionResponse.data
+                    self.isListeningToKeyboard = false
+                    self.hideNewGroupActivityIndicatorView()
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    Analytics.shared.log(with: CreatedGroupPayload())
+                case .error(let error):
+                    print(error)
+                    self.hideNewGroupActivityIndicatorView()
+                    let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
+                    self.present(alertController, animated: true, completion: nil)
                 }
-            }.catch { error in
-                print(error)
-                self.hideNewGroupActivityIndicatorView()
-                let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
-                self.present(alertController, animated: true, completion: nil)
+            }
         }
     }
     
@@ -305,27 +324,45 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
+    func joinSessionWithCode(with code: String) -> Future<Response<Session>> {
+        return networking(Endpoint.joinSessionWithCode(with: code)).decode()
+    }
+    
+    func getSortedPolls(with id: Int) -> Future<Response<[GetSortedPollsResponse]>> {
+        return networking(Endpoint.getSortedPolls(with: id)).decode()
+    }
+    
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        JoinSessionWithCode(code: code).make()
-            .done { session in
-                GetSortedPolls(id: session.id).make()
-                    .done { pollsDateArray in
-                        self.codeTextField.text = ""
-                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
-                        self.updateJoinSessionButton(canJoin: false)
-                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        Analytics.shared.log(with: JoinedGroupPayload())
-                    }.catch { error in
-                        print(error)
-                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
-                        self.present(alertController, animated: true, completion: nil)
+        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
+            self.session = sessionResponse.data
+            return self.getSortedPolls(with: sessionResponse.data.id)
+        }.observe { [weak self] result in
+            guard let `self` = self, let session = self.session else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let pollsResponse):
+                    var pollsDateArray = [PollsDateModel]()
+                    pollsResponse.data.forEach { response in
+                        var polls = [Poll]()
+                        response.polls.forEach { poll in
+                            let options = poll.results.keys.map { option in option }
+                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                        }
+                        pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                    }
+                    self.codeTextField.text = ""
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                    self.updateJoinSessionButton(canJoin: false)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    Analytics.shared.log(with: JoinedGroupPayload())
+                case .error(let error):
+                    print(error)
+                    let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                    self.present(alertController, animated: true, completion: nil)
                 }
-            }.catch { error in
-                print(error)
-                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
-                self.present(alertController, animated: true, completion: nil)
+            }
         }
     }
     
@@ -365,13 +402,36 @@ class PollsViewController: UIViewController {
         }
     }
     
+    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Session>> {
+        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode()
+    }
+    
+    func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
+        return networking(Endpoint.getPollSessions(with: role)).decode()
+    }
+    
     // MARK: - Helpers
     func reloadSessions(for userRole: UserRole, completion: (([Session]) -> Void)?) {
-        GetPollSessions(role: userRole).make()
-            .done { sessions in
-                completion?(sessions)
-            }.catch { error in
-                print(error)
+        getPollSessions(with: userRole).observe { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let response):
+                    var sessions = [Session]()
+                    var auxiliaryDict = [Double: Session]()
+                    response.data.forEach { session in
+                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
+                        }
+                    }
+                    auxiliaryDict.keys.sorted().forEach { timestamp in
+                        guard let session = auxiliaryDict[timestamp] else { return }
+                        sessions.append(session)
+                    }
+                    completion?(sessions)
+                case .error(let error):
+                    print(error)
+                }
+            }
         }
     }
     
@@ -415,7 +475,7 @@ class PollsViewController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
         if !isListeningToKeyboard || hasPresentedViewController { return }
-        if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue != nil {
             UIView.animate(withDuration: 0.5) {
                 self.dimmingView.alpha = 0
             }
@@ -433,7 +493,7 @@ class PollsViewController: UIViewController {
     open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
-            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { action in
+            alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { _ in
                 self.isListeningToKeyboard = false
                 let feedbackVC = FeedbackViewController(type: .pollsViewController)
                 self.navigationController?.pushViewController(feedbackVC, animated: true)

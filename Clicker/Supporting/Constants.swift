@@ -44,10 +44,14 @@ struct Routes {
     static let serverStart = "server/poll/start"
     static let serverTally = "server/poll/tally"
     static let serverUpvote = "server/poll/upvote"
+    static let serverDelete = "server/poll/delete"
+    static let serverDeleteLive = "server/poll/deleteLive"
     static let userStart = "user/poll/start"
     static let userEnd = "user/poll/end"
     static let userResults = "user/poll/results"
     static let userResultsLive = "user/poll/results/live"
+    static let userDelete = "user/poll/delete"
+    static let userDeleteLive = "user/poll/deleteLive"
 }
 
 struct LayoutConstants {
@@ -88,7 +92,7 @@ struct RequestKeys {
     static let answerIdKey = "answerId"
     static let choiceKey = "choice"
     static let countKey = "count"
-    static let googleIdKey = "googleId"
+    static let googleIDKey = "googleID"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let sharedKey = "shared"

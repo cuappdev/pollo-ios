@@ -11,7 +11,7 @@ import IGListKit
 
 protocol PollTypeSectionControllerDelegate: class {
     var pollsCellDelegate: PollsCellDelegate {get}
-    func sectionControllerWillDisplayPollType(sectionController:PollTypeSectionController, pollType: PollType)
+    func sectionControllerWillDisplayPollType(sectionController: PollTypeSectionController, pollType: PollType)
 }
 
 class PollTypeSectionController: ListSectionController, ListDisplayDelegate {

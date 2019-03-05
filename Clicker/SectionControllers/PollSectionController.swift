@@ -9,7 +9,7 @@
 import Foundation
 import IGListKit
 
-protocol PollSectionControllerDelegate {
+protocol PollSectionControllerDelegate: class {
     
     var role: UserRole { get }
 
@@ -17,6 +17,7 @@ protocol PollSectionControllerDelegate {
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
+    func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll)
 }
 
 class PollSectionController: ListSectionController {
@@ -79,6 +80,10 @@ extension PollSectionController: CardCellDelegate {
     
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll) {
         delegate.pollSectionControllerDidShareResultsForPoll(sectionController: self, poll: poll)
+    }
+
+    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll) {
+        delegate.pollSectionControllerDidEditPoll(sectionController: self, poll: poll)
     }
 
 }

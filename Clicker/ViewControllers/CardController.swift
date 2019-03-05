@@ -16,6 +16,8 @@ protocol CardControllerDelegate: class {
     func cardControllerDidStartNewPoll(poll: Poll)
     func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeletedLive()
     func receivedResults(_ currentState: CurrentState)
     func updatedTally(_ currentState: CurrentState)
     func navigationTitleViewNavigationButtonTapped()
@@ -40,13 +42,14 @@ class CardController: UIViewController {
     var socket: Socket!
     var session: Session!
     var pollsDateModel: PollsDateModel!
-    var currentIndex: Int!
+    var currentIndex: Int! = 0
     var numberOfPeople: Int!
     var isInitialLoad: Bool = true
     var wasScrolledToIndex: Int!
     var startingScrollingOffset: CGPoint!
     var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
+    private let networking: Networking = URLSession.shared.request
     
     // MARK: - Constants
     let navigationTitleHeight: CGFloat = 51.5
@@ -57,6 +60,7 @@ class CardController: UIViewController {
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
     let swipeVelocityThreshold: CGFloat = 0.5
+    let editModalHeight: CGFloat = 205
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -108,7 +112,7 @@ class CardController: UIViewController {
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.contentInset = UIEdgeInsetsMake(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: collectionViewHorizontalInset, bottom: 0, right: collectionViewHorizontalInset)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = true
@@ -134,7 +138,7 @@ class CardController: UIViewController {
         countLabel.font = ._12MediumFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
-        updateCountLabelText(with: 0)
+        updateCountLabelText()
         view.addSubview(countLabel)
         
         countLabelBackgroundView.snp.makeConstraints { make in
@@ -175,6 +179,8 @@ class CardController: UIViewController {
         peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
         peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
         peopleButton.titleLabel?.font = UIFont._16RegularFont
+        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         peopleButton.sizeToFit()
         let peopleBarButton = UIBarButtonItem(customView: peopleButton)
         
@@ -190,9 +196,15 @@ class CardController: UIViewController {
     }
     
     // MARK: Helpers
-    func updateCountLabelText(with index: Int) {
+    func updateCountLabelText() {
         let total = pollsDateModel.polls.count
-        countLabel.text = "\(index + 1)/\(total)"
+        if total > 0 {
+            countLabel.text = "\(currentIndex + 1)/\(total)"
+            countLabelBackgroundView.isHidden = false
+        } else {
+            countLabel.text = ""
+            countLabelBackgroundView.isHidden = true
+        }
     }
     
     // MARK: - Actions
@@ -212,7 +224,7 @@ class CardController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 

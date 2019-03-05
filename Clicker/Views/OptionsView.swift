@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-protocol SliderBarDelegate {
+protocol SliderBarDelegate: class {
     func scrollToIndex(index: Int)
 }
 
@@ -19,9 +19,9 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     var options: [String]!
     var sliderBar: UIView!
     var sliderBarLeftConstraint: NSLayoutConstraint!
-    var sliderBarDelegate: SliderBarDelegate!
+    weak var sliderBarDelegate: SliderBarDelegate?
     
-    //MARK: - INITIALIZATION
+    // MARK: - INITIALIZATION
     init(frame: CGRect, options: [String], sliderBarDelegate: SliderBarDelegate) {
         super.init(frame: frame)
         self.options = options
@@ -32,7 +32,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         layoutSubviews()
     }
     
-    //MARK: - LAYOUT
+    // MARK: - LAYOUT
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -85,11 +85,11 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     }
     
     func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        sliderBarDelegate.scrollToIndex(index: indexPath.item)
+        sliderBarDelegate?.scrollToIndex(index: indexPath.item)
         let selectedCell = collectionView.cellForItem(at: indexPath) as! QuestionOptionCell
         selectedCell.optionLabel.textColor = .black
         let unselectedIndexPath: IndexPath
-        if (indexPath.row == 0) {
+        if indexPath.row == 0 {
             unselectedIndexPath = IndexPath(item: 1, section: 0)
         } else {
             unselectedIndexPath = IndexPath(item: 0, section: 0)
@@ -139,8 +139,3 @@ class QuestionOptionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-
-
-

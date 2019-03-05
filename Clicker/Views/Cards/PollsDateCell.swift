@@ -14,21 +14,18 @@ class PollsDateCell: UICollectionViewCell {
     var dateLabel: UILabel!
     var numQuestionsLabel: UILabel!
     var rightArrowButtonImageView: UIImageView!
-    var topSeparatorView: UIView!
-    var bottomSeparatorView: UIView!
     
     // MARK: - Constants
-    let dateLabelFontSize: CGFloat = 20
-    let numQuestionsLabelFontSize: CGFloat = 14
-    let dateLabelLeftPadding: CGFloat = 26
-    let rightArrowButtonImageViewRightPadding: CGFloat = 18
+    let dateLabelFontSize: CGFloat = 16
+    let numQuestionsLabelFontSize: CGFloat = 11
+    let dateLabelLeftPadding: CGFloat = 16
+    let rightArrowButtonImageViewRightPadding: CGFloat = 13
     let rightArrowButtonImageViewHeight: CGFloat = 15
-    let numQuestionsLabelRightPadding: CGFloat = 44
-    let separatorViewHeight: CGFloat = 0.75
-    
+    let numQuestionsLabelRightPadding: CGFloat = 40.5
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .clickerGrey10
         
         setupViews()
     }
@@ -50,14 +47,7 @@ class PollsDateCell: UICollectionViewCell {
         rightArrowButtonImageView.image = #imageLiteral(resourceName: "forward_arrow")
         rightArrowButtonImageView.contentMode = .scaleAspectFit
         contentView.addSubview(rightArrowButtonImageView)
-        
-        topSeparatorView = UIView()
-        topSeparatorView.backgroundColor = .clickerGrey11
-        contentView.addSubview(topSeparatorView)
-        
-        bottomSeparatorView = UIView()
-        bottomSeparatorView.backgroundColor = .clickerGrey11
-        contentView.addSubview(bottomSeparatorView)
+    
     }
     
     override func setNeedsUpdateConstraints() {
@@ -77,15 +67,6 @@ class PollsDateCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
         }
         
-        topSeparatorView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-            make.height.equalTo(separatorViewHeight)
-        }
-        
-        bottomSeparatorView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(separatorViewHeight)
-        }
         super.updateConstraints()
     }
     

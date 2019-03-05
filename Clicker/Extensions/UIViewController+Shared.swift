@@ -1,4 +1,3 @@
-
 //
 //  UIViewController+Shared.swift
 //  Clicker
@@ -7,7 +6,6 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 import UIKit
-import Neutron
 import Alamofire
 import SwiftyJSON
 

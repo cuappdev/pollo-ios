@@ -10,7 +10,6 @@ import IGListKit
 import Presentr
 import UIKit
 
-
 extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerDelegate {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
@@ -56,26 +55,35 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        JoinSessionWithIdAndCode(id: session.id, code: session.code).make()
-            .done { session in
-                GetSortedPolls(id: session.id).make()
-                    .done { pollsDateArray in
-                        let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
-                        self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        withCell.hideOpenSessionActivityIndicatorView()
-                        self.isOpeningGroup = false
-                    } .catch { error in
-                        print(error)
-                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
-                        self.present(alertController, animated: true, completion: nil)
-                        self.isOpeningGroup = false
+        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
+            let session = sessionResponse.data
+            return self.getSortedPolls(with: session.id)
+        }.observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let pollsResponse):
+                    var pollsDateArray = [PollsDateModel]()
+                    pollsResponse.data.forEach { response in
+                        var polls = [Poll]()
+                        response.polls.forEach { poll in
+                            let options = poll.results.keys.map { option in option }
+                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                        }
+                        pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                    }
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    withCell.hideOpenSessionActivityIndicatorView()
+                    self.isOpeningGroup = false
+                case .error(let error):
+                    print(error)
+                    let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
+                    self.present(alertController, animated: true, completion: nil)
+                    self.isOpeningGroup = false
                 }
-            } .catch { error in
-                print(error)
-                let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
-                self.present(alertController, animated: true, completion: nil)
-                self.isOpeningGroup = false
+            }
         }
     }
     
@@ -90,7 +98,7 @@ extension PollsViewController: PollsCellDelegate {
         presenter.backgroundOpacity = 0.6
         presenter.dismissOnSwipe = true
         presenter.dismissOnSwipeDirection = .bottom
-        let editPollVC = EditPollViewController(delegate: self, session: session, userRole: userRole)
+        let editPollVC = EditPollViewController(.session, delegate: self, session: session, userRole: userRole)
         let navigationVC = UINavigationController(rootViewController: editPollVC)
         customPresentViewController(presenter, viewController: navigationVC, animated: true, completion: nil)
     }
@@ -130,6 +138,10 @@ extension PollsViewController: EditPollViewControllerDelegate {
             }
         }
     }
+
+    func editPollViewControllerDidDeletePoll(sender: EditPollViewController) { }
+
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) { }
     
 }
 
