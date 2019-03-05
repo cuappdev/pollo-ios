@@ -151,12 +151,6 @@ struct DeleteResponse: Codable {
     var success: Bool
 }
 
-struct Node<T: Codable>: Codable {
-    
-    var node: T
-    
-}
-
 extension Future where Value == Data {
     
     func decode<NextValue: Codable>(_ type: NextValue.Type) -> Future<NextValue> {

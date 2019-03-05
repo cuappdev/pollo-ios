@@ -89,7 +89,7 @@ class EditNameViewController: UIViewController {
         }
     }
     
-    func updateSession(id: Int, name: String, code: String) -> Future<Response<Node<Session>>> {
+    func updateSession(id: Int, name: String, code: String) -> Future<Response<Session>> {
         return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
     }
     

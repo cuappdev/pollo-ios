@@ -314,11 +314,11 @@ class PollBuilderViewController: UIViewController {
         questionTypeButton.setTitle(questionTypeText, for: .normal)
     }
     
-    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+    func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Draft>> {
         return networking(Endpoint.updateDraft(id: id, text: text, options: options)).decode()
     }
     
-    func createDraft(text: String, options: [String]) -> Future<Response<Node<Draft>>> {
+    func createDraft(text: String, options: [String]) -> Future<Response<Draft>> {
         return networking(Endpoint.createDraft(text: text, options: options)).decode()
     }
     
@@ -450,7 +450,7 @@ class PollBuilderViewController: UIViewController {
         return networking(Endpoint.deleteDraft(with: id)).decode()
     }
     
-    func allDrafts() -> Future<Response<Edges<Node<Draft>>>> {
+    func allDrafts() -> Future<Response<[Draft]>> {
         return networking(Endpoint.getDrafts()).decode()
     }
     
@@ -461,7 +461,7 @@ class PollBuilderViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    self.drafts = response.data.edges.map { node in node.node }
+                    self.drafts = response.data
                     self.updatePollBuilderViews()
                 case .error(let error):
                     print("error: ", error)

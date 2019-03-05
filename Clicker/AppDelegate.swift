@@ -84,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
-    func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
+    func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
         return networking(Endpoint.getPollSessions(with: role)).decode()
     }
     
@@ -120,8 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                         switch memberResult {
                         case .value(let memberResponse):
                             var auxiliaryDict = [Double: Session]()
-                            memberResponse.data.forEach { node in
-                                let session = node.node
+                            memberResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
                                     auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
@@ -139,8 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                         switch adminResult {
                         case .value(let adminResponse):
                             var auxiliaryDict = [Double: Session]()
-                            adminResponse.data.forEach { node in
-                                let session = node.node
+                            adminResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
                                     auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
                                 }
