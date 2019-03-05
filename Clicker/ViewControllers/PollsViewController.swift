@@ -273,7 +273,7 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.generateCode()).decode()
     }
     
-    func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Node<Session>>> {
+    func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
         return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
     }
     
@@ -281,7 +281,7 @@ class PollsViewController: UIViewController {
     @objc func newGroupAction() {
         displayNewGroupActivityIndicatorView()
         
-        generateCode().chained { codeResponse -> Future<Response<Node<Session>>> in
+        generateCode().chained { codeResponse -> Future<Response<Session>> in
             let code = codeResponse.data.code
             return self.startSession(code: code, name: code, isGroup: false)
         }.observe { [weak self] result in
@@ -289,7 +289,7 @@ class PollsViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let sessionResponse):
-                    let session = sessionResponse.data.node
+                    let session = sessionResponse.data
                     self.isListeningToKeyboard = false
                     self.hideNewGroupActivityIndicatorView()
                     let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
@@ -324,7 +324,7 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
-    func joinSessionWithCode(with code: String) -> Future<Response<Node<Session>>> {
+    func joinSessionWithCode(with code: String) -> Future<Response<Session>> {
         return networking(Endpoint.joinSessionWithCode(with: code)).decode()
     }
     
@@ -335,8 +335,8 @@ class PollsViewController: UIViewController {
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
         joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
-            self.session = sessionResponse.data.node
-            return self.getSortedPolls(with: sessionResponse.data.node.id)
+            self.session = sessionResponse.data
+            return self.getSortedPolls(with: sessionResponse.data.id)
         }.observe { [weak self] result in
             guard let `self` = self, let session = self.session else { return }
             DispatchQueue.main.async {
@@ -402,11 +402,11 @@ class PollsViewController: UIViewController {
         }
     }
     
-    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Node<Session>>> {
+    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Session>> {
         return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode()
     }
     
-    func getPollSessions(with role: UserRole) -> Future<Response<[Node<Session>]>> {
+    func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
         return networking(Endpoint.getPollSessions(with: role)).decode()
     }
     
@@ -418,8 +418,7 @@ class PollsViewController: UIViewController {
                 case .value(let response):
                     var sessions = [Session]()
                     var auxiliaryDict = [Double: Session]()
-                    response.data.forEach { node in
-                        let session = node.node
+                    response.data.forEach { session in
                         if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
                             auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
                         }
