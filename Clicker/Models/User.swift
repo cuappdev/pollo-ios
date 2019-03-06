@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 enum UserRole: String {
     case admin
@@ -24,6 +25,7 @@ struct GetMemberResponse: Codable {
 class User: Codable {
     
     static var currentUser: User?
+    static var currentUserLocation: CLLocationCoordinate2D?
     static var userSession: UserSession?
     
     var id: String

@@ -12,17 +12,21 @@ import FLEX
 import GoogleSignIn
 import Crashlytics
 import StoreKit
+import CoreLocation
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLocationManagerDelegate {
     
     var window: UIWindow?
     var pollsNavigationController: UINavigationController!
     var didSignInSilently: Bool = false
     let launchScreen = "LaunchScreen"
+    var locationManager: CLLocationManager!
     private let networking: Networking = URLSession.shared.request
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        setupLocationManager()
         setupWindow()
         setupNavigationController()
         setupGoogleSignIn()
@@ -30,6 +34,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         setupFabric()
 
         return true
+    }
+    
+    func setupLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let currentLocation = manager.location else { return }
+        User.currentUserLocation = currentLocation.coordinate
     }
     
     func setupWindow() {
