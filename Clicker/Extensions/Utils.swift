@@ -15,13 +15,10 @@ func intToMCOption(_ intOption: Int) -> String {
     return String(Character(UnicodeScalar(intOption + Int(("A" as UnicodeScalar).value))!))
 }
 
-// GET MMM dd yyyy OF TODAY
-// Ex) Sep 29 2018, Oct 02 2018
-func getTodaysDate() -> String {
-    let formatter = DateFormatter()
-    formatter.timeZone = TimeZone(abbreviation: "EDT")
-    formatter.dateFormat = StringConstants.dateFormat
-    return formatter.string(from: Date())
+func convertUnixStringToDate(_ unixString: String) -> Date {
+    guard let dateAsDouble = Double(unixString) else { return Date() }
+    let unixDate = Date(timeIntervalSince1970: dateAsDouble)
+    return unixDate
 }
 
 func getLatestActivity(latestActivityTimestamp: Double, code: String, role: UserRole) -> String {

@@ -76,16 +76,14 @@ class PollsDateAttendanceCell: UICollectionViewCell {
 
     // MARK: - Configure
     func configure(for pollsDateAttendanceModel: PollsDateAttendanceModel) {
-        dateLabel.text = reformatDateString(dateString: pollsDateAttendanceModel.model.date)
+        dateLabel.text = reformatDate(pollsDateAttendanceModel.model.dateValue)
         checkBoxImageView.image = pollsDateAttendanceModel.isSelected ? checkedImage : uncheckedImage
     }
 
     // MARK: - Helpers
-    // Converts MMM dd yyyy to MMMM d format
-    func reformatDateString(dateString: String) -> String {
+    // Converts date to MMMM d format
+    func reformatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = StringConstants.dateFormat
-        let date = dateFormatter.date(from: dateString) ?? Date()
         dateFormatter.dateFormat = "MMMM d"
         return dateFormatter.string(from: date)
     }

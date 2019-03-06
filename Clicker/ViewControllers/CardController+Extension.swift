@@ -133,7 +133,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         let pollResults = formatResults(results: results)
         let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
         pollsDateModel.polls.append(newPoll)
-        if pollsDateModel.date == getTodaysDate() {
+        if pollsDateModel.dateValue.isSameDay(as: Date()) {
             adapter.performUpdates(animated: false) { completed in
                 if completed {
                     self.scrollToLatestPoll()
@@ -251,7 +251,7 @@ extension CardController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
@@ -270,7 +270,7 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollEnded(poll, userRole: userRole)
             return
         }
@@ -288,7 +288,7 @@ extension CardController: SocketDelegate {
     }
 
     func pollDeleted(_ pollID: Int, userRole: UserRole) {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollDeleted(pollID, userRole: userRole)
             return
         }
@@ -300,7 +300,7 @@ extension CardController: SocketDelegate {
     }
 
     func pollDeletedLive() {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollDeletedLive()
             return
         }
@@ -311,7 +311,7 @@ extension CardController: SocketDelegate {
     }
     
     func receivedResults(_ currentState: CurrentState) {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.receivedResults(currentState)
             return
         }
@@ -329,7 +329,7 @@ extension CardController: SocketDelegate {
     }
 
     func updatedTally(_ currentState: CurrentState) {
-        if pollsDateModel.date != getTodaysDate() {
+        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.updatedTally(currentState)
             return
         }
