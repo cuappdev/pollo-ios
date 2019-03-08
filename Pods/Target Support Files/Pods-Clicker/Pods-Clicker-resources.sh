@@ -97,6 +97,9 @@ fi
 if [[ "$CONFIGURATION" == "Debug Dev Server" ]]; then
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
 fi
+if [[ "$CONFIGURATION" == "Debug Local Server" ]]; then
+  install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
+fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
 fi
