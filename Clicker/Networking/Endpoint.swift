@@ -60,8 +60,14 @@ extension Endpoint {
     // dealing with dynamic components that could be invalid.
     var url: URL? {
         var components = URLComponents()
+        #if LOCAL_SERVER
+        components.scheme = "http"
+        components.host = "localhost"
+        components.port = 3000
+        #else
         components.scheme = "https"
         components.host = Keys.hostURL.value
+        #endif
         if let apiVersion = Endpoint.apiVersion {
             components.path = "/api/v\(apiVersion)\(path)"
         } else {
