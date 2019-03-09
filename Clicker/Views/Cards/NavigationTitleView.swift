@@ -28,25 +28,32 @@ class NavigationTitleView: UIView {
     let arrowImageViewHeight: CGFloat = 9.5
     let arrowImageViewLeftPadding: CGFloat = 6
     let arrowImageName = "forward_arrow"
-    
+    let primaryLabelHeight: CGFloat = 19
+    let primaryLabelWidth = UIScreen.main.bounds.width * 0.5
+    let labelInset: CGFloat = 10
+    let secondaryLabelHeight: CGFloat = 15
+    let secondaryLabelTopOffset: CGFloat = 2
+    let secondaryLabelWidth = UIScreen.main.bounds.width * 0.8
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupViews()
         setupConstraints()
     }
-    
+
     func setupViews() {
         primaryLabel = UILabel()
         primaryLabel.textColor = .white
         primaryLabel.font = ._16SemiboldFont
         primaryLabel.textAlignment = .center
+        primaryLabel.lineBreakMode = .byTruncatingTail
         addSubview(primaryLabel)
-        
+
         secondaryLabel = UILabel()
         secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)
         secondaryLabel.font = ._12MediumFont
         secondaryLabel.textAlignment = .center
+        secondaryLabel.lineBreakMode = .byTruncatingTail
         addSubview(secondaryLabel)
 
         arrowImageView = UIImageView()
@@ -71,15 +78,16 @@ class NavigationTitleView: UIView {
     func setupConstraints() {
         primaryLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
+            make.width.lessThanOrEqualTo(primaryLabelWidth)
             make.bottom.equalTo(self.snp.centerY)
-            make.height.equalTo(19)
+            make.height.equalTo(primaryLabelHeight)
         }
         
         secondaryLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview()
+            make.width.lessThanOrEqualTo(secondaryLabelWidth)
             make.centerX.equalToSuperview()
-            make.top.equalTo(primaryLabel.snp.bottom).offset(2)
-            make.height.equalTo(15)
+            make.top.equalTo(primaryLabel.snp.bottom).offset(secondaryLabelTopOffset)
+            make.height.equalTo(secondaryLabelHeight)
         }
 
         arrowImageView.snp.makeConstraints { make in

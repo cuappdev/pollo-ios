@@ -74,7 +74,7 @@ extension CardController: PollSectionControllerDelegate {
 
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
         let upvoteObject: [String: Any] = [
-            RequestKeys.answerIdKey: answerId,
+            RequestKeys.answerIDKey: answerId,
             RequestKeys.googleIDKey: User.currentUser?.id ?? ""
         ]
         socket.socket.emit(Routes.serverUpvote, upvoteObject)
@@ -171,7 +171,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 extension CardController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole)
     }
     
 }

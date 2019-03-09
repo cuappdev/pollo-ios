@@ -90,14 +90,6 @@ class CardController: UIViewController {
         view.endEditing(true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        if createPollButton != nil {
-            let livePollExists = pollsDateModel.polls.last?.state == .live
-            createPollButton.isUserInteractionEnabled = !livePollExists
-            createPollButton.isHidden = livePollExists
-        }
-    }
-    
     override func viewDidLayoutSubviews() {
         if isInitialLoad && pollsDateModel.polls.last?.state == .live {
             scrollToLatestPoll()
@@ -169,7 +161,7 @@ class CardController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", delegate: self)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)

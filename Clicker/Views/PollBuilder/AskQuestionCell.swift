@@ -11,7 +11,7 @@ import SnapKit
 
 protocol AskQuestionCellDelegate: class {
     func askQuestionCellDidUpdateEditable(_ editable: Bool)
-    func askQuestionCellDidUdpateText(_ text: String?)
+    func askQuestionCellDidUpdateText(_ text: String?)
 }
 
 class AskQuestionCell: UICollectionViewCell {
@@ -60,7 +60,7 @@ class AskQuestionCell: UICollectionViewCell {
     }
 
     @objc func textDidChange() {
-        delegate?.askQuestionCellDidUdpateText(textField.text)
+        delegate?.askQuestionCellDidUpdateText(textField.text)
     }
     
     required init?(coder aDecoder: NSCoder) {

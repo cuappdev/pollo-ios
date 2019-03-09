@@ -80,13 +80,14 @@ extension PollsViewController: PollsCellDelegate {
                             }
                         }
                     }
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: userRole)
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: userRole)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     withCell.hideOpenSessionActivityIndicatorView()
                     self.isOpeningGroup = false
                 case .error(let error):
                     print(error)
+                    withCell.hideOpenSessionActivityIndicatorView()
                     let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")
                     self.present(alertController, animated: true, completion: nil)
                     self.isOpeningGroup = false

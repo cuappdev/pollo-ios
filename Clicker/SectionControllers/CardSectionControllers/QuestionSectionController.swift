@@ -32,7 +32,10 @@ class QuestionSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let questionLabelWidth = containerSize.width - LayoutConstants.cardHorizontalPadding * 2
+        var questionLabelWidth = containerSize.width - LayoutConstants.cardHorizontalPadding * 2
+        if userRole == .admin {
+            questionLabelWidth -= LayoutConstants.moreButtonWidth
+        }
         let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20HeavyFont) + questionLabelVerticalPadding
         return CGSize(width: containerSize.width, height: cellHeight)
     }

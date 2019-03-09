@@ -14,43 +14,54 @@ class GroupControlsViewController: UIViewController {
 
     // MARK: - View vars
     var navigationTitleView: NavigationTitleView!
-    var infoView: GroupControlsInfoView!
-    var attendanceLabel: UILabel!
     var collectionView: UICollectionView!
-    var exportButton: UIButton!
 
     // MARK: - Data vars
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
+    var exportAttendanceModel = ExportAttendanceModel(isExportable: false)
     var numMembers = 0
+    var infoModel: GroupControlsInfoModel!
+    var attendanceHeader: HeaderModel!
+    var pollSettingsHeader: HeaderModel!
+    var liveQuestionsSetting: PollsSettingModel!
+    var filterSetting: PollsSettingModel!
+    var locationSetting: PollsSettingModel!
     var isExportable: Bool = false {
         didSet {
-            if exportButton != nil {
-                updateExportButton(for: isExportable)
-            }
+            exportAttendanceModel = ExportAttendanceModel(isExportable: isExportable)
+            adapter.performUpdates(animated: false, completion: nil)
         }
     }
+    var spaceOne: SpaceModel!
+    var spaceTwo: SpaceModel!
+    var spaceThree: SpaceModel!
 
     // MARK: - Constants
-    let separatorLineViewWidth: CGFloat = 0.5
-    let attendanceLabelTopPadding: CGFloat = 38
+    let attendanceHeaderLabel = "Attendance"
     let attendanceLabelHorizontalPadding: CGFloat = 16.5
-    let infoViewHeight: CGFloat = 20
-    let infoViewTopPadding: CGFloat = 28
-    let infoViewHorizontalPadding: CGFloat = 30
-    let collectionViewTopPadding: CGFloat = 16
+    let attendanceLabelTopPadding: CGFloat = 38
+    let backImageName = "back"
     let collectionViewBottomPadding: CGFloat = 24
     let collectionViewHeight: CGFloat = 218
-    let exportButtonWidthScaleFactor: CGFloat = 0.43
-    let exportButtonHeight: CGFloat = 47
-    let exportButtonBorderWidth: CGFloat = 1
-    let exportButtonTopPadding: CGFloat = 12
-    let navigtionTitle = "Group Controls"
-    let backImageName = "back"
-    let attendanceLabelText = "Attendance"
-    let exportButtonTitle = "Export"
-
+    let collectionViewTopPadding: CGFloat = 10
+    let filterDescription = "Filter responses to prohibit inappropriate language"
+    let filterTitle = "Filter Responses"
+    let infoViewHeight: CGFloat = 20
+    let infoViewHorizontalPadding: CGFloat = 30
+    let infoViewTopPadding: CGFloat = 28
+    let liveQuestionsDescription = "Allow audience to ask questions to host during session"
+    let liveQuestionsTitle = "Live Questions"
+    let locationDescription = "Only allow poll members within 300 feet to participate"
+    let locationTitle = "Location Restriction"
+    let navigationTitle = "Group Controls"
+    let pollSettingsHeaderLabel = "Poll Settings"
+    let separatorLineViewWidth: CGFloat = 0.5
+    let spaceOneHeight: CGFloat = 38
+    let spaceTwoHeight: CGFloat = 16
+    let spaceThreeHeight: CGFloat = 57
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -66,6 +77,10 @@ class GroupControlsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .clickerBlack1
 
+        spaceOne = SpaceModel(space: spaceOneHeight, backgroundColor: .clickerBlack1)
+        spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .clickerBlack1)
+        spaceThree = SpaceModel(space: spaceThreeHeight, backgroundColor: .clickerBlack1)
+
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -78,34 +93,20 @@ class GroupControlsViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: navigtionTitle, secondaryText: session.name)
+        navigationTitleView.configure(primaryText: navigationTitle, secondaryText: session.name)
         self.navigationItem.titleView = navigationTitleView
 
         let backImage = UIImage(named: backImageName)?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
     }
 
     private func setupViews() {
-        infoView = GroupControlsInfoView()
-        let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
-            return result + pollsDateAttendanceModel.model.polls.count
-        }
-        infoView.configure(numMembers: numMembers, numPolls: numPolls, code: session.code)
-        view.addSubview(infoView)
-
-        attendanceLabel = UILabel()
-        attendanceLabel.text = attendanceLabelText
-        attendanceLabel.font = ._21SemiboldFont
-        attendanceLabel.textAlignment = .center
-        attendanceLabel.textColor = .white
-        view.addSubview(attendanceLabel)
-
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        collectionView.bounces = true
         collectionView.backgroundColor = .clear
         collectionView.allowsMultipleSelection = true
         view.addSubview(collectionView)
@@ -114,13 +115,6 @@ class GroupControlsViewController: UIViewController {
         adapter = ListAdapter(updater: updater, viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
-
-        exportButton = UIButton()
-        exportButton.setTitle(exportButtonTitle, for: .normal)
-        exportButton.layer.cornerRadius = exportButtonHeight / 2.0
-        exportButton.layer.borderWidth = exportButtonBorderWidth
-        view.addSubview(exportButton)
-        view.bringSubview(toFront: exportButton)
 
         // isExportable if any of the first 3 are selected
         switch pollsDateAttendanceArray.count {
@@ -136,38 +130,11 @@ class GroupControlsViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        infoView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(infoViewTopPadding)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(infoViewHeight)
-        }
-
-        attendanceLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoView.snp.bottom).offset(attendanceLabelTopPadding)
-            make.leading.trailing.equalToSuperview().inset(attendanceLabelHorizontalPadding)
-        }
-
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(attendanceLabel)
-            make.top.equalTo(attendanceLabel.snp.bottom).offset(collectionViewTopPadding)
-            make.height.equalTo(collectionViewHeight)
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalToSuperview().offset(collectionViewTopPadding)
         }
 
-        exportButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(exportButtonWidthScaleFactor)
-            make.height.equalTo(exportButtonHeight)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(collectionView.snp.bottom).offset(exportButtonTopPadding)
-        }
-    }
-
-    private func updateExportButton(for isExportable: Bool) {
-        let titleColor: UIColor = isExportable ? .white : .clickerGrey2
-        let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
-        let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)
-        exportButton.setTitleColor(titleColor, for: .normal)
-        exportButton.backgroundColor = backgroundColor
-        exportButton.layer.borderColor = borderColor.cgColor
     }
 
     // MARK: - Action
@@ -184,16 +151,41 @@ class GroupControlsViewController: UIViewController {
 extension GroupControlsViewController: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+        let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
+            return result + pollsDateAttendanceModel.model.polls.count
+        }
+        
+        infoModel = GroupControlsInfoModel(numMembers: numMembers, numPolls: numPolls, code: session.code)
+        
+        attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
+        pollSettingsHeader = HeaderModel(title: pollSettingsHeaderLabel)
+        
+        liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
+        filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: true)
+        locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .filter, isEnabled: true)
+        
         if pollsDateAttendanceArray.count <= 3 {
-            return pollsDateAttendanceArray
+            let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
+            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceTwo]
+            return [precursorArray, pollsDateAttendanceArray, postArray].flatMap {$0}
         }
         let viewAllModel = ViewAllModel()
-        return [pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], viewAllModel]
+        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceTwo, viewAllModel, exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceTwo]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is PollsDateAttendanceModel {
             return PollsDateAttendanceSectionController(delegate: self)
+        } else if object is ExportAttendanceModel {
+            return ExportAttendanceSectionController(delegate: self)
+        } else if object is GroupControlsInfoModel {
+            return GroupControlsInfoSectionController()
+        } else if object is SpaceModel {
+            return SpaceSectionController(noResponses: false)
+        } else if object is HeaderModel {
+            return HeaderSectionController()
+        } else if object is PollsSettingModel {
+            return PollSettingsSectionController()
         } else {
             return ViewAllSectionController(delegate: self)
         }
@@ -218,6 +210,14 @@ extension GroupControlsViewController: ViewAllSectionControllerDelegate {
     func viewAllSectionControllerWasTapped() {
         let attendanceVC = AttendanceViewController(delegate: self, pollsDateAttendanceArray: pollsDateAttendanceArray)
         self.navigationController?.pushViewController(attendanceVC, animated: true)
+    }
+
+}
+
+extension GroupControlsViewController: ExportAttendanceSectionControllerDelegate {
+
+    func exportAttendanceSectionControllerButtonWasTapped() {
+
     }
 
 }

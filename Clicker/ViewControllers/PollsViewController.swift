@@ -352,7 +352,7 @@ class PollsViewController: UIViewController {
                         pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                     }
                     self.codeTextField.text = ""
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray, session: session, userRole: .member)
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.updateJoinSessionButton(canJoin: false)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
