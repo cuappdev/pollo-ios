@@ -7,7 +7,5 @@
 # - Enable question deletion
 #
 # Add notes below this line
-- Redesigned layout of groups
-- Enable question deletion
-- Made networking more reliable
-
+- Update date grouping of polls based on current time zone
+- Add ability to un-upvote
