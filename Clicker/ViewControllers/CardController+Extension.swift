@@ -74,7 +74,7 @@ extension CardController: PollSectionControllerDelegate {
 
     func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
         let upvoteObject: [String: Any] = [
-            RequestKeys.answerIdKey: answerId,
+            RequestKeys.answerIDKey: answerId,
             RequestKeys.googleIDKey: User.currentUser?.id ?? ""
         ]
         socket.socket.emit(Routes.serverUpvote, upvoteObject)
