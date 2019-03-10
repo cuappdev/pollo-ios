@@ -153,7 +153,7 @@ class DeletePollViewController: UIViewController {
                             self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
-                            let alertController = self.createAlert(title: "Error", message: "Failed to leave session. Try again!")
+                            let alertController = self.createAlert(title: "Error", message: "Group may have been deleted. Try pulling to refresh.")
                             self.present(alertController, animated: true, completion: nil)
                         }
                     case .error(let error):

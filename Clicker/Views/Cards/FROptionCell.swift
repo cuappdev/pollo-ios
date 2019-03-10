@@ -122,16 +122,16 @@ class FROptionCell: UICollectionViewCell {
     func update(with frOptionModel: FROptionModel) {
         self.didUpvote = frOptionModel.didUpvote
         optionLabel.text = frOptionModel.option
-        let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
+        let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerGreen0 : .clickerGrey2
         numUpvotedLabel.textColor = numUpvotedLabelTextColor
         numUpvotedLabel.text = "\(frOptionModel.numUpvoted)"
-        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
+        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "upvote_green") : #imageLiteral(resourceName: "greyTriangle")
         upvoteImageView.image = upvoteImageViewImage
     }
 
     // MARK: - Actions
     @objc func upvoteFROption() {
-        if !didUpvote { delegate?.frOptionCellDidReceiveUpvote(for: answerId) }
+        delegate?.frOptionCellDidReceiveUpvote(for: answerId)
     }
     
     required init?(coder aDecoder: NSCoder) {
