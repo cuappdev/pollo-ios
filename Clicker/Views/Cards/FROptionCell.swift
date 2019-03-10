@@ -59,7 +59,7 @@ class FROptionCell: UICollectionViewCell {
         contentView.addSubview(numUpvotedLabel)
         
         upvoteImageView = UIImageView()
-        upvoteImageView.image = #imageLiteral(resourceName: "greyTriangle")
+        upvoteImageView.image = #imageLiteral(resourceName: "upvote-grey")
         upvoteImageView.contentMode = .scaleAspectFit
         contentView.addSubview(upvoteImageView)
 
@@ -111,10 +111,10 @@ class FROptionCell: UICollectionViewCell {
         self.didUpvote = frOptionModel.didUpvote
         self.answerId = frOptionModel.answerId
         optionLabel.text = frOptionModel.option
-        let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerBlue : .clickerGrey2
+        let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerGreen0 : .clickerGrey2
         numUpvotedLabel.textColor = numUpvotedLabelTextColor
         numUpvotedLabel.text = "\(frOptionModel.numUpvoted)"
-        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "blueTriangle") : #imageLiteral(resourceName: "greyTriangle")
+        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "upvote-green") : #imageLiteral(resourceName: "upvote-grey")
         upvoteImageView.image = upvoteImageViewImage
     }
 
@@ -125,7 +125,7 @@ class FROptionCell: UICollectionViewCell {
         let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerGreen0 : .clickerGrey2
         numUpvotedLabel.textColor = numUpvotedLabelTextColor
         numUpvotedLabel.text = "\(frOptionModel.numUpvoted)"
-        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "upvote_green") : #imageLiteral(resourceName: "greyTriangle")
+        let upvoteImageViewImage = frOptionModel.didUpvote ? #imageLiteral(resourceName: "upvote-green") : #imageLiteral(resourceName: "upvote-grey")
         upvoteImageView.image = upvoteImageViewImage
     }
 
