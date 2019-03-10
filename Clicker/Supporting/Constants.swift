@@ -89,7 +89,7 @@ struct ParserKeys {
 
 struct RequestKeys {
     static let correctAnswerKey = "correctAnswer"
-    static let answerIdKey = "answerId"
+    static let answerIDKey = "answerID"
     static let choiceKey = "choice"
     static let countKey = "count"
     static let googleIDKey = "googleID"
