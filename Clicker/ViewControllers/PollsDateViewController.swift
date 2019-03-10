@@ -75,7 +75,6 @@ class PollsDateViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.scrollIndicatorInsets = .zero
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: insetPadding, bottom: 0, right: insetPadding)
         collectionView.bounces = true
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)

@@ -26,7 +26,7 @@ class EmptyStateSectionController: ListSectionController {
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
-        guard let containerSize = collectionContext?.insetContainerSize else {
+        guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
         return containerSize
