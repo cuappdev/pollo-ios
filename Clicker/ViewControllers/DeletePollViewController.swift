@@ -39,6 +39,7 @@ class DeletePollViewController: UIViewController {
     let navBarTitle = "Are you sure?"
     let adminDeleteLabelText = "Deleting will permanently close the group for all participants and all poll data will be lost."
     let memberDeleteLabelText = "Leaving will remove you from the group and you will no longer have access to its polls."
+    let leaveDeletedPollErrorMessage = "Group may have been deleted. Try pulling to refresh."
     let adminDeleteButtonTitle = "Yes, Delete"
     let memberDeleteButtonTitle = "Yes, Leave"
     
@@ -153,7 +154,7 @@ class DeletePollViewController: UIViewController {
                             self.delegate?.deletePollViewControllerDidRemoveSession(for: self.userRole)
                             self.dismiss(animated: true, completion: nil)
                         } else {
-                            let alertController = self.createAlert(title: "Error", message: "Group may have been deleted. Try pulling to refresh.")
+                            let alertController = self.createAlert(title: "Error", message: self.leaveDeletedPollErrorMessage)
                             self.present(alertController, animated: true, completion: nil)
                         }
                     case .error(let error):
