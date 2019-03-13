@@ -78,13 +78,13 @@ class NavigationTitleView: UIView {
     func setupConstraints() {
         primaryLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalTo(primaryLabelWidth)
+            make.width.lessThanOrEqualTo(primaryLabelWidth)
             make.bottom.equalTo(self.snp.centerY)
             make.height.equalTo(primaryLabelHeight)
         }
         
         secondaryLabel.snp.makeConstraints { make in
-            make.width.equalTo(secondaryLabelWidth)
+            make.width.lessThanOrEqualTo(secondaryLabelWidth)
             make.centerX.equalToSuperview()
             make.top.equalTo(primaryLabel.snp.bottom).offset(secondaryLabelTopOffset)
             make.height.equalTo(secondaryLabelHeight)
