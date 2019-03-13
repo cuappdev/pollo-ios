@@ -24,25 +24,23 @@ class NameView: UIView, UITextFieldDelegate {
     weak var delegate: NameViewDelegate?
     private let networking: Networking = URLSession.shared.request
     
-    init(frame: CGRect, session: Session, delegate: NameViewDelegate, completion: (() -> Void)) {
+    init(frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
         self.session = session
         self.delegate = delegate
         backgroundColor = .clear
-        setupViews(completion: completion)
+        setupViews()
         setupConstraints()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: Notification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: Notification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func setupViews(completion: (() -> Void)) {
-        
+    func setupViews() {
         blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(blurEffectView)
-        completion()
-        
+
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
         if session.code != session.name {
@@ -55,7 +53,6 @@ class NameView: UIView, UITextFieldDelegate {
         titleField.becomeFirstResponder()
         titleField.keyboardType = .asciiCapable
         addSubview(titleField)
-        
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {

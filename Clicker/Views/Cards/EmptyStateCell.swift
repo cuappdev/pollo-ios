@@ -184,11 +184,8 @@ class EmptyStateCell: UICollectionViewCell {
             iconImageView.image = UIImage(named: monkeyEmojiImageName)
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-            toggleBackground()
             if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
-                setupNameView(with: session, nameViewDelegate: nameViewDelegate) {
-                    toggleBackground()
-                }
+                setupNameView(with: session, nameViewDelegate: nameViewDelegate)
             }
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
         case .draftsViewController(let delegate):
@@ -199,16 +196,9 @@ class EmptyStateCell: UICollectionViewCell {
         }
     }
 
-    func toggleBackground() {
-        titleLabel.isHidden.toggle()
-        iconImageView.isHidden.toggle()
-        subtitleLabel.isHidden.toggle()
-    }
-    
     // MARK: - NAME THE POLL
-    func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate, completion: (() -> Void)) {
-//        nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
-        nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate, completion: completion)
+    func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
+        nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
         nameView.snp.makeConstraints { make in
             make.width.equalTo(self.snp.width)
