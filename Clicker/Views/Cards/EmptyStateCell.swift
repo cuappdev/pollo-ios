@@ -201,10 +201,7 @@ class EmptyStateCell: UICollectionViewCell {
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
         nameView.snp.makeConstraints { make in
-            make.width.equalTo(self.snp.width)
-            make.centerX.equalTo(self.snp.centerX)
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+            make.edges.equalToSuperview()
         }
     }
     

@@ -62,7 +62,9 @@ class PollsDateViewController: UIViewController {
             createPollButton.isUserInteractionEnabled = !livePollExists
             createPollButton.isHidden = livePollExists
         }
-        removeEmptyModels()
+        if !pollsDateArray.isEmpty {
+            removeEmptyModels()
+        }
     }
     
     // MARK: - Layout
