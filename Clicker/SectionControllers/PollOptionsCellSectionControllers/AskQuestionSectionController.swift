@@ -10,7 +10,7 @@ import IGListKit
 
 protocol AskQuestionSectionControllerDelegate: class {
     func askQuestionSectionControllerDidUpdateEditable(_ editable: Bool)
-    func askQuestionSectionControllerDidUdpateText(_ text: String?)
+    func askQuestionSectionControllerDidUpdateText(_ text: String?)
 }
 
 class AskQuestionSectionController: ListSectionController {
@@ -61,8 +61,8 @@ extension AskQuestionSectionController: AskQuestionCellDelegate {
         delegate?.askQuestionSectionControllerDidUpdateEditable(editable)
     }
 
-    func askQuestionCellDidUdpateText(_ text: String?) {
-        delegate?.askQuestionSectionControllerDidUdpateText(text)
+    func askQuestionCellDidUpdateText(_ text: String?) {
+        delegate?.askQuestionSectionControllerDidUpdateText(text)
     }
 
 }
