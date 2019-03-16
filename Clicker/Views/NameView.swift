@@ -24,7 +24,7 @@ class NameView: UIView, UITextFieldDelegate {
     weak var delegate: NameViewDelegate?
     private let networking: Networking = URLSession.shared.request
     
-    init (frame: CGRect, session: Session, delegate: NameViewDelegate) {
+    init(frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)
         self.session = session
         self.delegate = delegate
@@ -36,12 +36,11 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     func setupViews() {
-        
         blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(blurEffectView)
-        
+
         titleField = UITextField()
         titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
         if session.code != session.name {
@@ -54,7 +53,6 @@ class NameView: UIView, UITextFieldDelegate {
         titleField.becomeFirstResponder()
         titleField.keyboardType = .asciiCapable
         addSubview(titleField)
-        
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -85,8 +83,7 @@ class NameView: UIView, UITextFieldDelegate {
     
     func setupConstraints() {
         blurEffectView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         titleField.snp.makeConstraints { make in

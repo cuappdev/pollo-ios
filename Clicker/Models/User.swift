@@ -54,10 +54,10 @@ struct UserSession: Codable {
     
     let accessToken: String
     let refreshToken: String
-    let sessionExpiration: Int
+    let sessionExpiration: String
     let isActive: Bool
     
-    init(accessToken: String, refreshToken: String, sessionExpiration: Int, isActive: Bool) {
+    init(accessToken: String, refreshToken: String, sessionExpiration: String, isActive: Bool) {
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.sessionExpiration = sessionExpiration

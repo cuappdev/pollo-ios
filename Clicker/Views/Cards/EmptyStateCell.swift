@@ -165,6 +165,7 @@ class EmptyStateCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for emptyStateModel: EmptyStateModel, session: Session?, shouldDisplayNameView: Bool?, nameViewDelegate: NameViewDelegate?) {
         self.emptyStateModel = emptyStateModel
+        subtitleLabel.textColor = .clickerGrey2
         switch emptyStateModel.type {
         case .pollsViewController(let pollType):
             switch pollType {
@@ -180,12 +181,12 @@ class EmptyStateCell: UICollectionViewCell {
             
             titleLabel.textColor = .black
         case .cardController(let userRole):
-            if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
-                setupNameView(with: session, nameViewDelegate: nameViewDelegate)
-            }
             iconImageView.image = UIImage(named: monkeyEmojiImageName)
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
+            if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
+                setupNameView(with: session, nameViewDelegate: nameViewDelegate)
+            }
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
         case .draftsViewController(let delegate):
             iconImageView.image = UIImage(named: womanShruggingImageName)
@@ -193,20 +194,14 @@ class EmptyStateCell: UICollectionViewCell {
             titleLabel.text = noDraftsText
             self.delegate = delegate
         }
-        subtitleLabel.textColor = .clickerGrey2
     }
-    
+
     // MARK: - NAME THE POLL
     func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
-        
         nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
         contentView.addSubview(nameView)
-        
         nameView.snp.makeConstraints { make in
-            make.width.equalTo(self.snp.width)
-            make.centerX.equalTo(self.snp.centerX)
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+            make.edges.equalToSuperview()
         }
     }
     

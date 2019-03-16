@@ -140,7 +140,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray.reversed(), numMembers: response.data.count)
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count)
                     self.navigationController?.pushViewController(groupControlsVC, animated: true)
                 case .error(let error):
                     print(error)
