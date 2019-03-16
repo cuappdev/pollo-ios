@@ -11,11 +11,14 @@ import UIKit
 class PollsDateCell: UICollectionViewCell {
     
     // MARK: - View vars
+    var greyView: UIView!
     var dateLabel: UILabel!
     var numQuestionsLabel: UILabel!
     var rightArrowButtonImageView: UIImageView!
     
     // MARK: - Constants
+    let cellCornerRadius: CGFloat = 5
+    let greyViewInset: CGFloat = 16
     let dateLabelFontSize: CGFloat = 16
     let numQuestionsLabelFontSize: CGFloat = 11
     let dateLabelLeftPadding: CGFloat = 16
@@ -25,13 +28,18 @@ class PollsDateCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerGrey10
+        backgroundColor = .clickerBlack1
         
         setupViews()
     }
     
     // MARK: - Layout
     func setupViews() {
+        greyView = UIView()
+        greyView.backgroundColor = .clickerGrey10
+        greyView.layer.cornerRadius = cellCornerRadius
+        contentView.addSubview(greyView)
+
         dateLabel = UILabel()
         dateLabel.textColor = .white
         dateLabel.font = UIFont.boldSystemFont(ofSize: dateLabelFontSize)
@@ -51,19 +59,24 @@ class PollsDateCell: UICollectionViewCell {
     }
     
     override func setNeedsUpdateConstraints() {
+        greyView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(greyViewInset)
+            make.top.bottom.equalToSuperview()
+        }
+
         dateLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(dateLabelLeftPadding)
+            make.leading.equalTo(greyView.snp.leading).offset(dateLabelLeftPadding)
             make.centerY.equalToSuperview()
         }
         
         rightArrowButtonImageView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(rightArrowButtonImageViewRightPadding)
+            make.trailing.equalTo(greyView.snp.trailing).inset(rightArrowButtonImageViewRightPadding)
             make.centerY.equalToSuperview()
             make.height.equalTo(rightArrowButtonImageViewHeight)
         }
         
         numQuestionsLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(numQuestionsLabelRightPadding)
+            make.trailing.equalTo(greyView.snp.trailing).inset(numQuestionsLabelRightPadding)
             make.centerY.equalToSuperview()
         }
         
