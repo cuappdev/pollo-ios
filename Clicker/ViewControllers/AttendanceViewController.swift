@@ -19,12 +19,14 @@ class AttendanceViewController: UIViewController {
     var navigationTitleView: NavigationTitleView!
     var collectionView: UICollectionView!
     var exportButton: UIButton!
+    var selectAllBarButtonItem: UIBarButtonItem!
 
     // MARK: - Data vars
     weak var delegate: AttendanceViewControllerDelegate?
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
+    var isSelectAll: Bool = false
     var isExportable: Bool = false {
         didSet {
             if exportButton != nil {
@@ -35,7 +37,6 @@ class AttendanceViewController: UIViewController {
 
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 30.5
-    let collectionViewHorizontalPadding: CGFloat = 18
     let exportButtonWidthScaleFactor: CGFloat = 0.43
     let exportButtonHeight: CGFloat = 47
     let exportButtonBorderWidth: CGFloat = 1
@@ -45,6 +46,7 @@ class AttendanceViewController: UIViewController {
     let attendanceLabelText = "Attendance"
     let exportButtonTitle = "Export"
     let selectAllBarButtonTitle = "Select All"
+    let cancelBarButtonTitle = "Cancel"
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -80,7 +82,7 @@ class AttendanceViewController: UIViewController {
         let backImage = UIImage(named: backImageName)?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
 
-        let selectAllBarButtonItem = UIBarButtonItem(title: selectAllBarButtonTitle, style: .plain, target: self, action: #selector(selectAllBtnPressed))
+        selectAllBarButtonItem = UIBarButtonItem(title: selectAllBarButtonTitle, style: .plain, target: self, action: #selector(selectAllBtnPressed))
         selectAllBarButtonItem.tintColor = .clickerGreen0
         self.navigationItem.rightBarButtonItem = selectAllBarButtonItem
     }
@@ -113,7 +115,7 @@ class AttendanceViewController: UIViewController {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(collectionViewHorizontalPadding)
+            make.leading.trailing.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(collectionViewTopPadding)
             make.bottom.equalToSuperview()
         }
@@ -137,10 +139,19 @@ class AttendanceViewController: UIViewController {
 
     // MARK: - Action
     @objc func selectAllBtnPressed() {
-        let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { PollsDateAttendanceModel(model: $0.model, isSelected: true) }
-        pollsDateAttendanceArray = selectedPollsDateAttendanceArray
-        adapter.performUpdates(animated: false, completion: nil)
-        isExportable = true
+        if !isSelectAll {
+            let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { PollsDateAttendanceModel(model: $0.model, isSelected: true) }
+            pollsDateAttendanceArray = selectedPollsDateAttendanceArray
+            adapter.performUpdates(animated: false, completion: nil)
+            selectAllBarButtonItem.title = cancelBarButtonTitle
+        } else {
+            let selectedPollsDateAttendanceArray = pollsDateAttendanceArray.map { PollsDateAttendanceModel(model: $0.model, isSelected: false) }
+            pollsDateAttendanceArray = selectedPollsDateAttendanceArray
+            adapter.performUpdates(animated: false, completion: nil)
+            selectAllBarButtonItem.title = selectAllBarButtonTitle
+        }
+        isSelectAll.toggle()
+        isExportable = isSelectAll
     }
 
     @objc func goBack() {

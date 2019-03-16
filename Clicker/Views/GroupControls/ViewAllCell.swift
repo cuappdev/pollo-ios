@@ -23,11 +23,11 @@ class ViewAllCell: UICollectionViewCell {
         viewAllLabel = UILabel()
         viewAllLabel.text = viewAllText
         viewAllLabel.textColor = .clickerGreen0
-        viewAllLabel.font = ._19MediumFont
+        viewAllLabel.font = ._16MediumFont
         contentView.addSubview(viewAllLabel)
 
         viewAllLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.bottom.equalToSuperview()
         }
     }
 

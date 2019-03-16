@@ -199,8 +199,8 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         var models = [ListDiffable]()
-        let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding)
-        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding)
+        let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding, backgroundColor: .white)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding, backgroundColor: .white)
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
             models.append(topSpaceModel)
@@ -217,7 +217,7 @@ extension PollOptionsCell: ListAdapterDataSource {
                 models.append(contentsOf: frOptionModels)
                 models.append(bottomSpaceModel)
             } else {
-                let noResponsesModel = SpaceModel(space: LayoutConstants.noResponsesSpace)
+                let noResponsesModel = SpaceModel(space: LayoutConstants.noResponsesSpace, backgroundColor: .white)
                 models.append(noResponsesModel)
             }
             return models

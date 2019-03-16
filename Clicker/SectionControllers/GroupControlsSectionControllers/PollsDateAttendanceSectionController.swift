@@ -19,7 +19,8 @@ class PollsDateAttendanceSectionController: ListSectionController {
     weak var delegate: PollsDateAttendanceSectionControllerDelegate?
 
     // MARK: - Constants
-    let cellHeight: CGFloat = 61
+    let cellHeight: CGFloat = 63
+    let horizontalPadding: CGFloat = 16
 
     init(delegate: PollsDateAttendanceSectionControllerDelegate) {
         self.delegate = delegate
@@ -29,7 +30,7 @@ class PollsDateAttendanceSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        return CGSize(width: containerSize.width, height: cellHeight)
+        return CGSize(width: containerSize.width - (2 * horizontalPadding), height: cellHeight)
     }
 
     override func cellForItem(at index: Int) -> UICollectionViewCell {

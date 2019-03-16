@@ -171,7 +171,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 extension CardController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole)
     }
     
 }
