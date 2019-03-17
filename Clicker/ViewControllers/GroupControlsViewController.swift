@@ -185,7 +185,8 @@ extension GroupControlsViewController: ListAdapterDataSource {
         } else if object is HeaderModel {
             return HeaderSectionController()
         } else if object is PollsSettingModel {
-            return PollSettingsSectionController()
+            let settingsModel = object as! PollsSettingModel
+            return PollSettingsSectionController(settingsModel: settingsModel, delegate: self)
         } else {
             return ViewAllSectionController(delegate: self)
         }
@@ -195,6 +196,22 @@ extension GroupControlsViewController: ListAdapterDataSource {
         return nil
     }
 
+}
+
+extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
+    
+    func pollSettingsSectionControllerDidToggleSetting(settingsModel: PollsSettingModel) {
+        switch settingsModel.type {
+        case .filter:
+            break
+        case .liveQuestions:
+            break
+        case .location:
+            // Make request to toggle location services for the admin here
+            adapter.performUpdates(animated: false, completion: nil)
+        }
+    }
+    
 }
 
 extension GroupControlsViewController: PollsDateAttendanceSectionControllerDelegate {

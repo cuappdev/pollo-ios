@@ -9,7 +9,17 @@
 import UIKit
 import SnapKit
 
+protocol SettingCellDelegate: class {
+    
+    func settingCellDidToggle(settingsModel: PollsSettingModel)
+    
+}
+
 class SettingCell: UICollectionViewCell {
+    
+    // MARK: - Data vars
+    weak var delegate: SettingCellDelegate?
+    var settingsModel: PollsSettingModel!
     
     // MARK: - View vars
     var title: UILabel!
@@ -58,7 +68,12 @@ class SettingCell: UICollectionViewCell {
         toggle.tintColor = .white
         toggle.onTintColor = .clickerGreen0
         toggle.isEnabled = true
+        toggle.addTarget(self, action: #selector(switchToggled), for: .valueChanged)
         contentView.addSubview(toggle)
+    }
+    
+    @objc func switchToggled() {
+        delegate?.settingCellDidToggle(settingsModel: settingsModel)
     }
     
     private func setupConstraints() {
@@ -80,9 +95,11 @@ class SettingCell: UICollectionViewCell {
         }
     }
     
-    func configure(for settings: PollsSettingModel) {
-        title.text = settings.title
-        body.text = settings.description
-        toggle.isOn = settings.isEnabled
+    func configure(settingsModel: PollsSettingModel, delegate: SettingCellDelegate) {
+        self.settingsModel = settingsModel
+        self.delegate = delegate
+        title.text = settingsModel.title
+        body.text = settingsModel.description
+        toggle.isOn = settingsModel.isEnabled
     }
 }

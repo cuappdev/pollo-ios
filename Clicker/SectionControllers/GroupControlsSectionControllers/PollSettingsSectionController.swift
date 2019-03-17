@@ -8,17 +8,26 @@
 
 import IGListKit
 
+protocol PollSettingsSectionControllerDelegate: class {
+    
+    func pollSettingsSectionControllerDidToggleSetting(settingsModel: PollsSettingModel)
+    
+}
+
 class PollSettingsSectionController: ListSectionController {
     
     // MARK: - Data vars
     var settingsModel: PollsSettingModel!
+    weak var delegate: PollSettingsSectionControllerDelegate?
     
     // MARK: - Constants
     let cellHeight: CGFloat = 96
     let padding: CGFloat = 16
     
-    override init() {
+    init(settingsModel: PollsSettingModel, delegate: PollSettingsSectionControllerDelegate) {
         super.init()
+        self.settingsModel = settingsModel
+        self.delegate = delegate
         self.inset = UIEdgeInsets(top: padding, left: 0, bottom: 0, right: 0)
     }
     
@@ -32,7 +41,7 @@ class PollSettingsSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: SettingCell.self, for: self, at: index) as! SettingCell
-        cell.configure(for: settingsModel)
+        cell.configure(settingsModel: settingsModel, delegate: self)
         return cell
     }
     
@@ -40,4 +49,12 @@ class PollSettingsSectionController: ListSectionController {
         settingsModel = object as? PollsSettingModel
     }
 
+}
+
+extension PollSettingsSectionController: SettingCellDelegate {
+    
+    func settingCellDidToggle(settingsModel: PollsSettingModel) {
+        delegate?.pollSettingsSectionControllerDidToggleSetting(settingsModel: settingsModel)
+    }
+    
 }
