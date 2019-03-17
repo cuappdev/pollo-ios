@@ -59,7 +59,7 @@ extension FRPollBuilderView: AskQuestionSectionControllerDelegate {
         self.editable = editable
     }
 
-    func askQuestionSectionControllerDidUdpateText(_ text: String?) {
+    func askQuestionSectionControllerDidUpdateText(_ text: String?) {
         askQuestionModel.currentQuestion = text
     }
 

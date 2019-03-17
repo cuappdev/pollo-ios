@@ -19,7 +19,7 @@ class ViewAllSectionController: ListSectionController {
     weak var delegate: ViewAllSectionControllerDelegate?
 
     // MARK: - Constants
-    let cellHeight: CGFloat = 31
+    let cellHeight: CGFloat = 19
 
     init(delegate: ViewAllSectionControllerDelegate) {
         self.delegate = delegate
@@ -39,7 +39,7 @@ class ViewAllSectionController: ListSectionController {
     }
 
     override func didUpdate(to object: Any) {
-        self.viewAllModel = object as? ViewAllModel
+        viewAllModel = object as? ViewAllModel
     }
 
     override func didSelectItem(at index: Int) {

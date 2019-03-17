@@ -23,8 +23,7 @@ class PollsDateSectionController: ListSectionController {
     // MARK: - Constants
     let cellHeight: CGFloat = 48
     let verticalPadding: CGFloat = 16
-    let cellCornerRadius: CGFloat = 5
-    
+
     init(delegate: PollsDateSectionControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -40,7 +39,6 @@ class PollsDateSectionController: ListSectionController {
         let cell = collectionContext?.dequeueReusableCell(of: PollsDateCell.self, for: self, at: index) as! PollsDateCell
         cell.configure(for: pollsDateModel)
         cell.setNeedsUpdateConstraints()
-        cell.layer.cornerRadius = cellCornerRadius
         return cell
     }
     

@@ -59,6 +59,7 @@ class EditPollViewController: UIViewController {
     let editNameButtonTitle = "Edit Name"
     let reopenButtonTitle = "Reopen"
     let deleteImageName = "delete"
+    let leaveImageName = "door"
     let editImageName = "editPoll"
 
     init(_ type: EditType, delegate: EditPollViewControllerDelegate, session: Session, userRole: UserRole, countLabelText: String? = nil) {
@@ -95,7 +96,7 @@ class EditPollViewController: UIViewController {
         editView.addSubview(editNameButton)
         
         deleteImageButton = UIButton()
-        deleteImageButton.setImage(UIImage(named: deleteImageName), for: .normal)
+        deleteImageButton.setImage(userRole == .admin ? UIImage(named: deleteImageName) : UIImage(named: leaveImageName), for: .normal)
         deleteImageButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
         deleteButton = UIButton()

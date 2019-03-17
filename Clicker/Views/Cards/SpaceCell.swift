@@ -16,7 +16,6 @@ class SpaceCell: UICollectionViewCell {
         super.init(frame: frame)
         
         spaceView = UIView()
-        spaceView.backgroundColor = .white
         contentView.addSubview(spaceView)
         
         spaceView.snp.makeConstraints { make in
@@ -26,7 +25,8 @@ class SpaceCell: UICollectionViewCell {
         
     }
     
-    func configure(with space: CGFloat) {
+    func configure(with space: CGFloat, backgroundColor: UIColor) {
+        spaceView.backgroundColor = backgroundColor
         spaceView.snp.updateConstraints { update in
             update.height.equalTo(space)
         }

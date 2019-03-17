@@ -12,10 +12,12 @@ import IGListKit
 class SpaceModel {
     
     var space: CGFloat
+    var backgroundColor: UIColor
     let identifier = UUID().uuidString
     
-    init(space: CGFloat) {
+    init(space: CGFloat, backgroundColor: UIColor) {
         self.space = space
+        self.backgroundColor = backgroundColor
     }
     
 }

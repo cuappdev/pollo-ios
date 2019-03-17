@@ -33,7 +33,7 @@ class SpaceSectionController: ListSectionController {
             return cell
         }
         let cell = collectionContext?.dequeueReusableCell(of: SpaceCell.self, for: self, at: index) as! SpaceCell
-        cell.configure(with: spaceModel.space)
+        cell.configure(with: spaceModel.space, backgroundColor: spaceModel.backgroundColor)
         return cell
     }
     

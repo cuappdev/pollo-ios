@@ -15,7 +15,7 @@ class EmptyStateSectionController: ListSectionController {
     var emptyStateModel: EmptyStateModel!
     var session: Session?
     var shouldDisplayNameView: Bool?
-    var nameViewDelegate: NameViewDelegate?
+    weak var nameViewDelegate: NameViewDelegate?
 
     convenience init(session: Session?, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate?) {
         self.init()
@@ -26,7 +26,7 @@ class EmptyStateSectionController: ListSectionController {
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
-        guard let containerSize = collectionContext?.insetContainerSize else {
+        guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
         return containerSize
