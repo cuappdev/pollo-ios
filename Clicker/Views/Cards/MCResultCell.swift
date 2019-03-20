@@ -179,6 +179,7 @@ class MCResultCell: UICollectionViewCell {
                         highlightView.backgroundColor = isSelected ? .grapefruit : .clickerGrey5
                         optionLabel.textColor = isSelected ? .black : .clickerGrey2
                     }
+                    numSelectedLabel.textColor = isSelected ? .black : .clickerGrey2
                 } else {
                     highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
                     optionLabel.textColor = .black
