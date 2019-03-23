@@ -14,23 +14,23 @@ class PollMiscellaneousCell: UICollectionViewCell {
     var userRole: UserRole!
     
     // MARK: - View vars
-    var iconImageView: UIImageView!
     var descriptionLabel: UILabel!
+    var iconImageView: UIImageView!
     var totalVotesLabel: UILabel!
     
     // MARK: - Constants
-    let iconImageViewLength: CGFloat = 15
     let descriptionLabelXPadding: CGFloat = 10
-    let totalVotesLabelTrailingPadding: CGFloat = 18
-    let labelFontSize: CGFloat = 12
-    let liveSubmittedTextMember = "Submitted! Tap other answers to change"
-    let liveOpenTextMember = "Open for responses"
     let endedTextMember = "Poll closed"
-    let sharedTextMember = "Final results  • "
+    let iconImageViewLength: CGFloat = 15
+    let labelFontSize: CGFloat = 12
     let liveEndedDescriptionTextAdmin = "Only you can see results"
-    let sharedDescriptionText = "Shared with group"
-    let voteString = "vote"
+    let liveOpenTextMember = "Open for responses"
+    let liveSubmittedTextMember = "Submitted! Tap other answers to change"
     let responseString = "response"
+    let sharedDescriptionText = "Shared with group"
+    let sharedTextMember = "Final results  • "
+    let totalVotesLabelTrailingPadding: CGFloat = 18
+    let voteString = "vote"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

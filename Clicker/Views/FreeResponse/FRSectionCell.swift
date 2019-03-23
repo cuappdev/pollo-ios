@@ -6,21 +6,21 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
  
+import Presentr
 import SnapKit
 import UIKit
-import Presentr
 
 class FRSectionCell: QuestionSectionCell {
     
     let popupViewHeight: CGFloat = 95
     
-    var session: Session!
     var grayViewBottomConstraint: Constraint!
+    var session: Session!
     
-    var questionTextField: UITextField!
-    var line: UIView!
-    var responseOptionsLabel: UILabel!
     var changeButton: UIButton!
+    var line: UIView!
+    var questionTextField: UITextField!
+    var responseOptionsLabel: UILabel!
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {

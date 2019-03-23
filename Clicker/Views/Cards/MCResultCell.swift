@@ -12,31 +12,31 @@ import SnapKit
 class MCResultCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var containerView: UIView!
-    var innerShadow: CALayer!
-    var optionLabel: UILabel!
-    var numSelectedLabel: UILabel!
-    var highlightView: UIView!
     var checkImageView: UIImageView!
+    var containerView: UIView!
+    var highlightView: UIView!
+    var innerShadow: CALayer!
+    var numSelectedLabel: UILabel!
+    var optionLabel: UILabel!
     
     // MARK: - Data vars
-    var index: Int!
     var correctAnswer: String?
-    var percentSelected: Float!
-    var highlightViewWidthConstraint: Constraint!
     var didLayoutConstraints = false
+    var highlightViewWidthConstraint: Constraint!
+    var index: Int!
+    var percentSelected: Float!
     var showCorrectAnswer = false
     
     // MARK: - Constants
-    let labelFontSize: CGFloat = 13
-    let containerViewCornerRadius: CGFloat = 6
+    let checkImageName = "correctanswer"
+    let checkImageViewLength: CGFloat = 14
     let containerViewBorderWidth: CGFloat = 0.5
+    let containerViewCornerRadius: CGFloat = 6
     let containerViewTopPadding: CGFloat = 5
-    let optionLabelHorizontalPadding: CGFloat = 14
+    let labelFontSize: CGFloat = 13
     let numSelectedLabelTrailingPadding: CGFloat = 14
     let numSelectedLabelWidth: CGFloat = 40
-    let checkImageViewLength: CGFloat = 14
-    let checkImageName = "correctanswer"
+    let optionLabelHorizontalPadding: CGFloat = 14
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -15,30 +15,30 @@ protocol QuestionTypeDropDownViewDelegate: class {
 class QuestionTypeDropDownView: UIView {
     
     // MARK: - View vars
-    var topButton: UIButton!
-    var topLabel: UILabel!
-    var separatorView: UIView!
     var bottomButton: UIButton!
     var bottomLabel: UILabel!
-    var selectedImageView: UIImageView!
-    var selectedGradient: CAGradientLayer!
     var centerView: UIView!
+    var selectedGradient: CAGradientLayer!
+    var selectedImageView: UIImageView!
+    var separatorView: UIView!
+    var topButton: UIButton!
+    var topLabel: UILabel!
     
     // MARK: - Data vars
-    weak var delegate: QuestionTypeDropDownViewDelegate?
     var selectedQuestionType: QuestionType!
+    weak var delegate: QuestionTypeDropDownViewDelegate?
     
     // MARK: - Constants
-    let labelWidth: CGFloat = 150
     let buttonHeight: CGFloat = 53
-    let centerViewWidth: CGFloat = 135
     let centerViewHeight: CGFloat = 24
-    let selectedImageViewWidth: CGFloat = 13
+    let centerViewWidth: CGFloat = 135
+    let freeResponseText: String = "Free Response"
+    let labelWidth: CGFloat = 150
+    let multipleChoiceText: String = "Multiple Choice"
     let selectedImageViewHeight: CGFloat = 13
     let selectedImageViewInset: CGFloat = 5.0
+    let selectedImageViewWidth: CGFloat = 13
     let separatorHeight: CGFloat = 2
-    let multipleChoiceText: String = "Multiple Choice"
-    let freeResponseText: String = "Free Response"
     
     init(frame: CGRect, delegate: QuestionTypeDropDownViewDelegate, selectedQuestionType: QuestionType) {
         super.init(frame: frame)

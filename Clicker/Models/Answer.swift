@@ -7,16 +7,16 @@
 //
 
 class Answer {
-    
-    var id: Int?
-    var text: String
+
     var choice: String
+    var id: Int?
     var pollId: Int
+    var text: String
 
     init(text: String, choice: String, pollId: Int) {
-        self.text = text
         self.choice = choice
         self.pollId = pollId
+        self.text = text
     }
-    
+
 }

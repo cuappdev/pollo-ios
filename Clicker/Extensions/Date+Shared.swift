@@ -26,15 +26,15 @@ extension Date {
     var secondsString: String {
         return "\(Int(self.timeIntervalSince1970))"
     }
-    
+
     func weeks(from date: Date) -> Int {
         return Calendar.current.dateComponents([.weekOfMonth], from: date, to: self).weekOfMonth ?? 0
     }
-    
+
     func days(from date: Date) -> Int {
         return Calendar.current.dateComponents([.day], from: date, to: self).day ?? 0
     }
-    
+
     func hours(from date: Date) -> Int {
         return Calendar.current.dateComponents([.hour], from: date, to: self).hour ?? 0
     }

@@ -23,9 +23,9 @@ class FROptionSectionController: ListSectionController {
     var frOptionModel: FROptionModel!
     
     // MARK: - Constants
+    let frOptionCellOptionLabelSize: CGFloat = 14
     let frOptionCellOptionLabelVerticalPadding: CGFloat = 19.5
     let frOptionCellOptionLabelWidthScaleFactor: CGFloat = 0.8
-    let frOptionCellOptionLabelSize: CGFloat = 14
     
     init(delegate: FROptionSectionControllerDelegate) {
         self.delegate = delegate

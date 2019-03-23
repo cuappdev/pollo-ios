@@ -6,35 +6,35 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-import IGListKit
 import GoogleSignIn
+import IGListKit
+import UIKit
 
 class SettingsViewController: UIViewController {
 
     // MARK: Views and VC's
-    var logOutButton: UIButton!
+    var adapter: ListAdapter!
     var collectionView: UICollectionView!
     var lineView: UIView!
-    var adapter: ListAdapter!
+    var logOutButton: UIButton!
 
     // MARK: Data
     var data: [ListDiffable]!
     
     // MARK: - Constants
-    let navBarTitle = "Settings"
-    let backButtonImageName = "darkexit"
-    let account = "Account"
     let about = "About"
     let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
-    let moreApps = "More Apps"
-    let visitOurWebsite = "Visit Our Website"
-    let more = "More"
+    let account = "Account"
+    let backButtonImageName = "darkexit"
     let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
-    let sendUsFeedback = "Send Us Feedback"
-    let submitFeedbackTitle = "Submit Feedback"
-    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let more = "More"
+    let moreApps = "More Apps"
+    let navBarTitle = "Settings"
     let privacyPolicy = "Privacy Policy"
+    let sendUsFeedback = "Send Us Feedback"
+    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let submitFeedbackTitle = "Submit Feedback"
+    let visitOurWebsite = "Visit Our Website"
 
     override func viewDidLoad() {
         super.viewDidLoad()

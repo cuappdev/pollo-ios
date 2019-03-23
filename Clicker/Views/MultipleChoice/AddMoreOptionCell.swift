@@ -6,24 +6,24 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 class AddMoreOptionCell: UICollectionViewCell {
     
     // MARK: Views
-    var wholeButton: UIButton!
-    var plusLabel: UILabel!
     var addMoreLabel: UILabel!
+    var plusLabel: UILabel!
+    var wholeButton: UIButton!
     
     // MARK: Data
     weak var delegate: PollBuilderMCOptionSectionControllerDelegate?
 
     // MARK: - Constants
-    let edgePadding: CGFloat = 18
-    let bottomPadding: CGFloat = 6
-    let plusLabelWidth: CGFloat = 13
     let addMoreLabelLeftPadding: CGFloat = 6.5
+    let bottomPadding: CGFloat = 6
+    let edgePadding: CGFloat = 18
+    let plusLabelWidth: CGFloat = 13
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {

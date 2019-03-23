@@ -11,13 +11,13 @@ import IGListKit
 
 class PollsDateAttendanceModel {
 
-    var model: PollsDateModel
-    var isSelected: Bool
     let identifier = UUID().uuidString
+    var isSelected: Bool
+    var model: PollsDateModel
 
     init(model: PollsDateModel, isSelected: Bool) {
-        self.model = model
         self.isSelected = isSelected
+        self.model = model
     }
 
 }

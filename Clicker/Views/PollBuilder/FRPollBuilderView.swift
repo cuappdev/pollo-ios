@@ -19,23 +19,24 @@ protocol FRPollBuilderViewDelegate: class {
 class FRPollBuilderView: UIView {
     
     // MARK: - View vars
-    var collectionView: UICollectionView!
     var adapter: ListAdapter!
+    var collectionView: UICollectionView!
     
     // MARK: - Data vars
-    weak var delegate: FRPollBuilderViewDelegate?
     var askQuestionModel: AskQuestionModel!
     var draftsTitleModel: DraftsTitleModel!
     var editable: Bool!
     var session: Session!
+    weak var delegate: FRPollBuilderViewDelegate?
     weak var pollBuilderDelegate: PollBuilderViewDelegate?
+    
     var questionText: String? {
         guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
             return nil
         }
         return sectionController.getTextFieldText()
     }
-    
+
     // MARK: - Constants
     let popupViewHeight: CGFloat = 95
     

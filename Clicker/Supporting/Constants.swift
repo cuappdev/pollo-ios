@@ -12,8 +12,8 @@ import UIKit
 struct Links {
     static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
     static let appDevSite = "https://www.cornellappdev.com/"
-    static let privacyPolicy = "https://www.cornellappdev.com/privacy/policies/pollo/"
     static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
+    static let privacyPolicy = "https://www.cornellappdev.com/privacy/policies/pollo/"
 }
 
 struct Identifiers {
@@ -39,44 +39,44 @@ struct Routes {
     static let adminUpdateTally = "admin/poll/updateTally"
     static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
+    static let serverDelete = "server/poll/delete"
+    static let serverDeleteLive = "server/poll/deleteLive"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
     static let serverStart = "server/poll/start"
     static let serverTally = "server/poll/tally"
     static let serverUpvote = "server/poll/upvote"
-    static let serverDelete = "server/poll/delete"
-    static let serverDeleteLive = "server/poll/deleteLive"
-    static let userStart = "user/poll/start"
+    static let userDelete = "user/poll/delete"
+    static let userDeleteLive = "user/poll/deleteLive"
     static let userEnd = "user/poll/end"
     static let userResults = "user/poll/results"
     static let userResultsLive = "user/poll/results/live"
-    static let userDelete = "user/poll/delete"
-    static let userDeleteLive = "user/poll/deleteLive"
+    static let userStart = "user/poll/start"
 }
 
 struct LayoutConstants {
     static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
     static let buttonSize: CGSize = CGSize(width: 44, height: 44)
+    static let cardHorizontalPadding: CGFloat = 18
     static let frInputCellHeight: CGFloat = 64
     static let frOptionCellHeight: CGFloat = 58
     static let hamburgerCardCellHeight: CGFloat = 25
     static let interItemPadding: CGFloat = 5
     static let mcOptionCellHeight: CGFloat = 50
     static let moreButtonWidth: CGFloat = 25
+    static let noResponsesSpace: CGFloat = 44
+    static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsPadding: CGFloat = 18
-    static let cardHorizontalPadding: CGFloat = 18
     static let questionCellHeight: CGFloat = 60
-    static let pollBuilderCVHorizontalInset: CGFloat = 18
     static let separatorLineCardCellHeight: CGFloat = 1
     static let separatorLineSettingsCellHeight: CGFloat = 5
-    static let noResponsesSpace: CGFloat = 44
 }
 
 struct ParserKeys {
-    static let correctAnswerKey = "correctAnswer"
     static let answerKey = "answer"
     static let answersKey = "answers"
+    static let correctAnswerKey = "correctAnswer"
     static let countKey = "count"
     static let idKey = "id"
     static let optionsKey = "options"
@@ -89,9 +89,9 @@ struct ParserKeys {
 }
 
 struct RequestKeys {
-    static let correctAnswerKey = "correctAnswer"
     static let answerIDKey = "answerID"
     static let choiceKey = "choice"
+    static let correctAnswerKey = "correctAnswer"
     static let countKey = "count"
     static let googleIDKey = "googleID"
     static let optionsKey = "options"
@@ -103,17 +103,17 @@ struct RequestKeys {
 }
 
 struct StringConstants {
+    static let dateFormat = "MMM dd yyyy"
     static let freeResponse = "Free Response"
     static let multipleChoice = "Multiple Choice"
-    static let dateFormat = "MMM dd yyyy"
 }
 
 struct IntegerConstants {
-    static let maxQuestionCharacterCount = 58
-    static let maxOptionsForAdminMC = 6
-    static let maxOptionsForMemberMC = 8
     static let maxOptionsForAdminFR = 5
+    static let maxOptionsForAdminMC = 6
     static let maxOptionsForMemberFR = 6
+    static let maxOptionsForMemberMC = 8
+    static let maxQuestionCharacterCount = 58
 }
 
 struct UserDefault {

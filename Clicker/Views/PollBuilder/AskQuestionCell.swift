@@ -6,8 +6,8 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 protocol AskQuestionCellDelegate: class {
     func askQuestionCellDidUpdateEditable(_ editable: Bool)
@@ -23,10 +23,10 @@ class AskQuestionCell: UICollectionViewCell {
     weak var delegate: AskQuestionCellDelegate?
 
     // MARK: - Constants
-    let questionLabelWidthScaleFactor: CGFloat = 0.75
-    let moreButtonWidth: CGFloat = 25
-    let untitledPollString = "Untitled Poll"
     let editButtonImageName = "dots"
+    let moreButtonWidth: CGFloat = 25
+    let questionLabelWidthScaleFactor: CGFloat = 0.75
+    let untitledPollString = "Untitled Poll"
 
     override init(frame: CGRect) {
         super.init(frame: frame)

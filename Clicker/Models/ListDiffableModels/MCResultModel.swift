@@ -9,13 +9,13 @@
 import IGListKit
 
 class MCResultModel: OptionModel {
-    
+
+    let identifier = UUID().uuidString
+    var choiceIndex: Int
+    var isSelected: Bool
     var numSelected: Int
     var percentSelected: Float
-    var isSelected: Bool
-    var choiceIndex: Int
-    let identifier = UUID().uuidString
-    
+
     init(option: String, numSelected: Int, percentSelected: Float, isSelected: Bool, choiceIndex: Int) {
         self.numSelected = numSelected
         self.percentSelected = percentSelected
@@ -32,15 +32,15 @@ class MCResultModel: OptionModel {
 }
 
 extension MCResultModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? MCResultModel else { return false }
         return identifier == object.identifier
     }
-    
+
 }

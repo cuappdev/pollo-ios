@@ -9,35 +9,33 @@
 import IGListKit
 
 struct Code: Codable {
-    
     var code: String
-    
 }
 
 class Session: Codable {
-    
-    var id: Int
-    var name: String
+
+    let identifier = UUID().uuidString
     var code: String
     var description: String?
-    var updatedAt: String?
+    var id: Int
     var isLive: Bool?
-    let identifier = UUID().uuidString
-    
+    var name: String
+    var updatedAt: String?
+
     init(id: Int, name: String, code: String) {
-        self.id = id
-        self.name = name
         self.code = code
-    }
-    
-    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?) {
         self.id = id
         self.name = name
+    }
+
+    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?) {
         self.code = code
         self.description = latestActivity
+        self.id = id
         self.isLive = isLive
+        self.name = name
     }
-    
+
 }
 
 extension Session: ListDiffable {

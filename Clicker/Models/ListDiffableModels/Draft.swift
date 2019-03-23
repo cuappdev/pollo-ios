@@ -10,30 +10,30 @@ import Foundation
 import IGListKit
 
 class Draft: Codable {
-    
-    var id: Int
-    var text: String
-    var options: [String]
+
     let identifier: String = UUID().uuidString
-    
+    var id: Int
+    var options: [String]
+    var text: String
+
     init(id: Int, text: String, options: [String]) {
         self.id = id
-        self.text = text
         self.options = options
+        self.text = text
     }
-    
+
 }
 
 extension Draft: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? Draft else { return false }
         return object.identifier == identifier
     }
-    
+
 }

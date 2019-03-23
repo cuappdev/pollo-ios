@@ -11,8 +11,8 @@ import IGListKit
 
 class DraftsTitleModel {
 
-    var numDrafts: Int
     let identifier = UUID().uuidString
+    var numDrafts: Int
 
     init(numDrafts: Int) {
         self.numDrafts = numDrafts

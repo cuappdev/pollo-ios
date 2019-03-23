@@ -27,17 +27,17 @@ class PollPreviewCell: UICollectionViewCell {
     }
     
     // MARK: - View vars
-    var nameLabel: UILabel!
     var descriptionLabel: UILabel!
+    var dotsButton: UIButton!
+    var lineView: UIView!
     var liveCircleView: UIView!
     var liveLabel: UILabel!
-    var lineView: UIView!
-    var dotsButton: UIButton!
+    var nameLabel: UILabel!
     var openSessionActivityIndicatorView: UIActivityIndicatorView!
     
     // MARK: - Data vars
-    weak var delegate: PollPreviewCellDelegate?
     var index: Int!
+    weak var delegate: PollPreviewCellDelegate?
     
     // MARK: - Constants
     let nameLabelTopPadding: CGFloat = 19.5

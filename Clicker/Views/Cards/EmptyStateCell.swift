@@ -15,45 +15,45 @@ protocol EmptyStateCellDelegate: class {
 class EmptyStateCell: UICollectionViewCell {
     
     // MARK: View vars
-    var iconImageView: UIImageView!
-    var titleLabel: UILabel!
-    var subtitleLabel: UILabel!
-    var nameView: NameView!
     var createDraftButton: UIButton!
+    var iconImageView: UIImageView!
+    var nameView: NameView!
+    var subtitleLabel: UILabel!
+    var titleLabel: UILabel!
     
     // MARK: - Data vars
     var emptyStateModel: EmptyStateModel!
     weak var delegate: EmptyStateCellDelegate?
 
     // MARK: - Constants
-    let pollsViewControllerIconImageViewLength: CGFloat = 45.0
-    let cardControllerIconImageViewLength: CGFloat = 32.0
-    let draftsViewControllerIconImageViewLength: CGFloat = 50.0
-    let iconImageViewTopPadding: CGFloat = 142.0
-    let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
-    let titleLabelWidth: CGFloat = 200.0
-    let titleLabelTopPadding: CGFloat = 18.5
-    let subtitleLabelWidth: CGFloat = 250.0
-    let createDraftButtonTopPadding: CGFloat = 15.0
-    let subtitleLabelTopPadding: CGFloat = 7.5
-    let countLabelWidth: CGFloat = 42.0
-    let createDraftButtonWidth: CGFloat = 169.5
-    let createDraftButtonHeight: CGFloat = 47
-    let zoomTimeInterval: TimeInterval = 0.35
-    let zoomInScale: CGFloat = 0.85
-    let createNewGroupText = "Tap \"+\" above to create a new group!"
-    let enterCodeText = "Enter a code below to join a group!"
     let adminNothingToSeeText = "Nothing to see here."
-    let userNothingToSeeText = "Nothing to see yet."
     let adminWaitingText = "You haven’t made any polls yet!\nTap \"+\" above to try it out."
-    let userWaitingText = "Waiting for the host to post a poll..."
-    let noDraftsText = "No saved drafts!"
+    let cardControllerIconImageViewLength: CGFloat = 32.0
+    let countLabelWidth: CGFloat = 42.0
+    let createDraftButtonHeight: CGFloat = 47
     let createDraftButtonText = "Create a draft"
+    let createDraftButtonTopPadding: CGFloat = 15.0
+    let createDraftButtonWidth: CGFloat = 169.5
+    let createNewGroupText = "Tap \"+\" above to create a new group!"
     let createdString = "created"
+    let draftsViewControllerIconImageViewLength: CGFloat = 50.0
+    let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
+    let enterCodeText = "Enter a code below to join a group!"
+    let iconImageViewTopPadding: CGFloat = 142.0
     let joinedString = "joined"
     let manShruggingImageName = "man_shrugging"
     let monkeyEmojiImageName = "monkey_emoji"
+    let noDraftsText = "No saved drafts!"
+    let pollsViewControllerIconImageViewLength: CGFloat = 45.0
+    let subtitleLabelTopPadding: CGFloat = 7.5
+    let subtitleLabelWidth: CGFloat = 250.0
+    let titleLabelTopPadding: CGFloat = 18.5
+    let titleLabelWidth: CGFloat = 200.0
+    let userNothingToSeeText = "Nothing to see yet."
+    let userWaitingText = "Waiting for the host to post a poll..."
     let womanShruggingImageName = "woman_shrugging"
+    let zoomInScale: CGFloat = 0.85
+    let zoomTimeInterval: TimeInterval = 0.35
 
     override init(frame: CGRect) {
         super.init(frame: frame)

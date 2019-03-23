@@ -6,8 +6,8 @@
 //  Copyright © 2019 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 class HeaderCell: UICollectionViewCell {
     

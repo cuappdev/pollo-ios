@@ -6,8 +6,8 @@
 //  Copyright © 2019 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
+import UIKit
 
 protocol ExportAttendanceSectionControllerDelegate: class {
     func exportAttendanceSectionControllerButtonWasTapped()

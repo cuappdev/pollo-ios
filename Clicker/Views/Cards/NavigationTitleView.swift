@@ -15,22 +15,22 @@ protocol NavigationTitleViewDelegate: class {
 class NavigationTitleView: UIView {
 
     // MARK: - View vars
-    var primaryLabel: UILabel!
-    var secondaryLabel: UILabel!
     var arrowImageView: UIImageView!
     var navigationButton: UIButton!
+    var primaryLabel: UILabel!
+    var secondaryLabel: UILabel!
 
     // MARK: - Data vars
     weak var delegate: NavigationTitleViewDelegate?
 
     // MARK: - Constants
-    let arrowImageViewWidth: CGFloat = 5.3
+    let arrowImageName = "forward_arrow"
     let arrowImageViewHeight: CGFloat = 9.5
     let arrowImageViewLeftPadding: CGFloat = 6
-    let arrowImageName = "forward_arrow"
+    let arrowImageViewWidth: CGFloat = 5.3
+    let labelInset: CGFloat = 10
     let primaryLabelHeight: CGFloat = 19
     let primaryLabelWidth = UIScreen.main.bounds.width * 0.5
-    let labelInset: CGFloat = 10
     let secondaryLabelHeight: CGFloat = 15
     let secondaryLabelTopOffset: CGFloat = 2
     let secondaryLabelWidth = UIScreen.main.bounds.width * 0.8

@@ -12,10 +12,10 @@ import SwiftyJSON
 class Socket {
 
     let id: String
-    weak var delegate: SocketDelegate?
-    var socket: SocketIOClient
     var manager: SocketManager
-    
+    var socket: SocketIOClient
+    weak var delegate: SocketDelegate?
+
     init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
