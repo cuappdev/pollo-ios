@@ -118,13 +118,6 @@ class Socket {
             self.delegate?.pollEnded(poll, userRole: .admin)
         }
         
-        socket.on(Routes.count) { data, _ in
-            guard let json = data[0] as? [String: Any], let count = json[ParserKeys.countKey] as? Int else {
-                return
-            }
-            self.delegate?.receivedUserCount(count)
-        }
-
         socket.connect()
     }
 

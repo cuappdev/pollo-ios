@@ -154,6 +154,7 @@
 		C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F923C51F73540600B1E975 /* AppDelegate.swift */; };
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
+		D412ACD02246EDAA009B6E83 /* SettingsLogOutButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */; };
 		D946CA7E221346860005AD70 /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D946CA7D221346860005AD70 /* keys.generated.swift */; };
 		D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */; };
 /* End PBXBuildFile section */
@@ -323,6 +324,7 @@
 		C7F923CF1F73540600B1E975 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
+		D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogOutButtonCell.swift; sourceTree = "<group>"; };
 		D946CA7D221346860005AD70 /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
 		D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = testflight_release_notes.txt; sourceTree = "<group>"; };
 		F8BCD96EC847A3A4C51959E6 /* Pods-Clicker.debug local server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug local server.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug local server.xcconfig"; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 			children = (
 				63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */,
 				63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */,
+				D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -993,6 +996,7 @@
 				C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */,
 				C271A0822193F80400EF12B4 /* ViewAllSectionController.swift in Sources */,
 				C270524C209D51A600C7980F /* CardController+Extension.swift in Sources */,
+				D412ACD02246EDAA009B6E83 /* SettingsLogOutButtonCell.swift in Sources */,
 				0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */,
 				C2BF44D02033FD630067505A /* UIViewController+Shared.swift in Sources */,
 				C2BF982B206BE1240048468E /* OptionsView.swift in Sources */,

@@ -32,11 +32,11 @@ class MCResultCell: UICollectionViewCell {
     let checkImageViewLength: CGFloat = 14
     let containerViewBorderWidth: CGFloat = 0.5
     let containerViewCornerRadius: CGFloat = 6
-    let containerViewTopPadding: CGFloat = 5
+    let containerViewTopPadding: CGFloat = 8
     let labelFontSize: CGFloat = 13
-    let numSelectedLabelTrailingPadding: CGFloat = 14
+    let numSelectedLabelTrailingPadding: CGFloat = 16
     let numSelectedLabelWidth: CGFloat = 40
-    let optionLabelHorizontalPadding: CGFloat = 14
+    let optionLabelHorizontalPadding: CGFloat = 16
     
     override init(frame: CGRect) {
         super.init(frame: frame)

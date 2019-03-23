@@ -46,7 +46,7 @@ class CardCell: UICollectionViewCell {
     weak var delegate: CardCellDelegate!
     
     // MARK: - Constants
-    let collectionViewHorizontalPadding: CGFloat = 5.0
+    let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
     let initialTimerLabelText = "00:00"
     let questionButtonBorderWidth: CGFloat = 1.0
