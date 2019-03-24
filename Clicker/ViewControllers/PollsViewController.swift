@@ -74,14 +74,12 @@ class PollsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Ratings.updateNumAppLaunches()
-        Ratings.promptReview()
-        
         view.backgroundColor = .clickerGrey8
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        promptUserReview()
         setupViews()
         setupConstraints()
         
@@ -281,6 +279,11 @@ class PollsViewController: UIViewController {
     
     func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
         return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
+    }
+    
+    func promptUserReview() {
+        Ratings.updateNumAppLaunches()
+        Ratings.promptReview()
     }
     
     // MARK: - Actions

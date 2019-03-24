@@ -11,11 +11,11 @@ import StoreKit
 
 class Ratings {
     
-    static let launchThreshold = 5
+    static let launchThreshold = 4
     
     class func updateNumAppLaunches() {
-        let runs = getNumAppLaunches() + 1
-        UserDefaults.standard.set(runs, forKey: "NUMBER_OF_LAUNCHES")
+        let numLaunches = getNumAppLaunches() + 1
+        UserDefaults.standard.set(numLaunches, forKey: "NUMBER_OF_LAUNCHES")
         UserDefaults.standard.synchronize()
     }
     
@@ -35,6 +35,8 @@ class Ratings {
         if #available(iOS 10.3, *)  {
             if shouldPromptReview() {
                 SKStoreReviewController.requestReview()
+                UserDefaults.standard.set(0, forKey: "NUMBER_OF_LAUNCHES")
+                UserDefaults.standard.synchronize()
             }
         }
     }
