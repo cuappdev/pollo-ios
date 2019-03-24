@@ -9,6 +9,7 @@
 import UIKit
 import IGListKit
 import SnapKit
+import CoreLocation
 
 class GroupControlsViewController: UIViewController {
 
@@ -212,6 +213,12 @@ extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
         case .liveQuestions:
             break
         case .location:
+            if !isLocationEnabled() && !session.isLocationRestricted {
+                adapter.performUpdates(animated: false, completion: nil)
+                let alertController = createAlert(title: "Location Not Enabled", message: "Please enable location services in Settings if you want to use this feature.")
+                present(alertController, animated: true, completion: nil)
+                return
+            }
             updateLocationRestricted(id: session.id, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
                 switch result {
                 case .value(let response):

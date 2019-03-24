@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import CoreLocation
 
 // MARK: - General Utils
 // CONVERT INT TO MC OPTIONS
@@ -195,4 +196,9 @@ func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
         }
     }
     return .mcResult(resultModels: mcResultModels)
+}
+
+func isLocationEnabled() -> Bool {
+    let status = CLLocationManager.authorizationStatus()
+    return status == .authorizedWhenInUse || status == .authorizedAlways
 }

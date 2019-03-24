@@ -21,6 +21,7 @@ extension Endpoint {
         var name: String
         var code: String
         var isGroup: Bool
+        var location: Coord
     }
     
     private struct UpdateSessionBody: Codable {
@@ -127,13 +128,9 @@ extension Endpoint {
         return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body, method: .put)
     }
     
-    static func startSession(code: String, name: String?, isGroup: Bool?, location: Coord?) -> Endpoint {
+    static func startSession(code: String, name: String?, isGroup: Bool?, location: Coord) -> Endpoint {
         if let name = name, let isGroup = isGroup {
-            if let location = location {
-                let body = StartRestrictedSessionBody(name: name, code: code, isGroup: isGroup, location: location)
-                return Endpoint(path: "/start/session", headers: headers, body: body)
-            }
-            let body = StartSessionBody(name: name, code: code, isGroup: isGroup)
+            let body = StartSessionBody(name: name, code: code, isGroup: isGroup, location: location)
             return Endpoint(path: "/start/session", headers: headers, body: body)
         }
         return Endpoint(path: "/start/session", headers: headers, body: ["code": code])
