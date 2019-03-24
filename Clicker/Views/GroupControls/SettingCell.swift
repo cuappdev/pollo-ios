@@ -12,18 +12,18 @@ import SnapKit
 class SettingCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var title: UILabel!
     var body: UILabel!
+    var title: UILabel!
     var toggle: UISwitch!
     
     // MARK: Constants
     let bodyHeight: CGFloat = 29
-    let bodyWidth: CGFloat = 190
     let bodyTopPadding: CGFloat = 45.5
+    let bodyWidth: CGFloat = 190
+    let cornerRadius: CGFloat = 5
     let halfCellHeight: CGFloat = 48
     let leftPadding: CGFloat = 16
     let titleTopPadding: CGFloat = 20.5
-    let cornerRadius: CGFloat = 5
     
     override init(frame: CGRect) {
         super.init(frame: frame)

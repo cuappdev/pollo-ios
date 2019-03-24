@@ -15,14 +15,14 @@ protocol DraftSectionControllerDelegate: class {
 }
 
 class DraftSectionController: ListSectionController, DraftCellDelegate {
-    
+
     // MARK: - Data vars
     var draft: Draft!
     weak var delegate: DraftSectionControllerDelegate?
     
     // MARK: - Constants
-    let interitemSpacing: CGFloat = 18
     let constrainedTextWidth: CGFloat = 253
+    let interitemSpacing: CGFloat = 18
     
     init(delegate: DraftSectionControllerDelegate) {
         super.init()

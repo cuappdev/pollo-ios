@@ -6,13 +6,12 @@
 //  Copyright © 2019 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
 
 class ExportAttendanceModel {
-    
-    var isExportable: Bool
+
     let identifier = UUID().uuidString
+    var isExportable: Bool
 
     init(isExportable: Bool) {
         self.isExportable = isExportable

@@ -17,26 +17,26 @@ protocol FROptionCellDelegate: class {
 class FROptionCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var optionLabel: UILabel!
     var numUpvotedLabel: UILabel!
-    var upvoteImageView: UIImageView!
-    var upvoteButton: UIButton!
+    var optionLabel: UILabel!
     var separatorLineView: UIView!
+    var upvoteButton: UIButton!
+    var upvoteImageView: UIImageView!
     
     // MARK: - Data vars
-    weak var delegate: FROptionCellDelegate?
-    var didUpvote: Bool!
     var answerId: String!
+    var didUpvote: Bool!
+    weak var delegate: FROptionCellDelegate?
     
     // MARK: - Constants
-    let optionLabelFontSize: CGFloat = 14
-    let optionLabelWidthScaleFactor: CGFloat = 0.8
+    let defaultNumUpvotedText = "0"
     let numUpvotedLabelRightPadding: CGFloat = 13
     let numUpvotedLabelWidth: CGFloat = 24
-    let upvoteImageViewHeight: CGFloat = 10
-    let upvoteButtonWidth: CGFloat = 50
+    let optionLabelFontSize: CGFloat = 14
+    let optionLabelWidthScaleFactor: CGFloat = 0.8
     let separatorLineViewHeight: CGFloat = 1
-    let defaultNumUpvotedText = "0"
+    let upvoteButtonWidth: CGFloat = 50
+    let upvoteImageViewHeight: CGFloat = 10
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -24,11 +24,11 @@ class FRInputCell: UICollectionViewCell {
     
     // MARK: - Constants
     let textFieldBorderWidth: CGFloat = 1
-    let textFieldTextInset: CGFloat = 18
-    let textFieldHorizontalPadding: CGFloat = 16.5
     let textFieldHeight: CGFloat = 47
-    let textFieldVerticalPadding: CGFloat = 8.5
+    let textFieldHorizontalPadding: CGFloat = 16.5
     let textFieldPlaceholder = "Type a response"
+    let textFieldTextInset: CGFloat = 18
+    let textFieldVerticalPadding: CGFloat = 8.5
     
     override init(frame: CGRect) {
         super.init(frame: frame)

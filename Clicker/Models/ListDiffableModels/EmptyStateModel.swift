@@ -10,16 +10,16 @@ import Foundation
 import IGListKit
 
 enum EmptyStateType {
-    case pollsViewController(pollType: PollType)
     case cardController(userRole: UserRole)
     case draftsViewController(delegate: EmptyStateCellDelegate)
+    case pollsViewController(pollType: PollType)
 }
 
 class EmptyStateModel {
-    
-    var type: EmptyStateType
+
     let identifier = UUID().uuidString
-    
+    var type: EmptyStateType
+
     init(type: EmptyStateType) {
         self.type = type
     }
@@ -27,15 +27,15 @@ class EmptyStateModel {
 }
 
 extension EmptyStateModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? EmptyStateModel else { return false }
         return identifier == object.identifier
     }
-    
+
 }

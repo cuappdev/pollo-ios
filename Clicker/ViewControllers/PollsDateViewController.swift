@@ -17,33 +17,33 @@ protocol PollsDateViewControllerDelegate: class {
 class PollsDateViewController: UIViewController {
     
     // MARK: - View vars
+    var adapter: ListAdapter!
+    var collectionView: UICollectionView!
+    var collectionViewLayout: UICollectionViewFlowLayout!
+    var createPollButton: UIButton!
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
-    var createPollButton: UIButton!
-    var collectionViewLayout: UICollectionViewFlowLayout!
-    var collectionView: UICollectionView!
-    var adapter: ListAdapter!
     
     // MARK: - Data vars
-    var userRole: UserRole!
-    var socket: Socket!
-    var session: Session!
-    var pollsDateArray: [PollsDateModel]!
-    var numberOfPeople: Int = 0
-    weak var delegate: PollsDateViewControllerDelegate?
     private let networking: Networking = URLSession.shared.request
+    var numberOfPeople: Int = 0
+    var pollsDateArray: [PollsDateModel]!
+    var session: Session!
+    var socket: Socket!
+    var userRole: UserRole!
+    weak var delegate: PollsDateViewControllerDelegate?
     
     // MARK: - Constants
-    let countLabelWidth: CGFloat = 42.0
     let collectionViewTopPadding: CGFloat = 20
+    let countLabelWidth: CGFloat = 42.0
     let insetPadding: CGFloat = 16
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
+        self.pollsDateArray = pollsDateArray
         self.session = session
         self.userRole = userRole
-        self.pollsDateArray = pollsDateArray
     }
     
     // MARK: - View lifecycle

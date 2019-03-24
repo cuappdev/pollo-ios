@@ -6,14 +6,13 @@
 //  Copyright © 2019 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
 
 /// Represents a header title (ex. "Attendance", "Live Questions").
 class HeaderModel {
-    
-    var title: String
+
     let identifier = UUID().uuidString
+    var title: String
 
     init(title: String) {
         self.title = title

@@ -13,8 +13,8 @@ class SettingsSectionController: ListSectionController {
     var settingsDataModel: SettingsDataModel!
     
     // MARK: Layout constants
-    let accountInfoCellHeight: CGFloat = 80.0
     let aboutInfoCellHeight: CGFloat = 110.0
+    let accountInfoCellHeight: CGFloat = 80.0
     let feedbackInfoCellHeight: CGFloat = 130
     let linkCellHeight: CGFloat = 39.5
     

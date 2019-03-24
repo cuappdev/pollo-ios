@@ -5,22 +5,23 @@
 //  Created by eoin on 4/14/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
-import UIKit
+
 import Presentr
 import SnapKit
+import UIKit
 
 class TabBarController: UITabBarController {
     
     let popupViewHeight: CGFloat = 140
     
-    var pollsViewController: PollsViewController!
     var dummyViewController: UIViewController!
     var groupViewController: GroupsViewController!
     var joinSessionButton: UIButton!
+    var pollsViewController: PollsViewController!
     
-    var pollsNavigationController: UINavigationController!
     var dummyNavigationController: UINavigationController!
     var groupNavigationController: UINavigationController!
+    var pollsNavigationController: UINavigationController!
     
     var tabBarHeight: CGFloat!
 

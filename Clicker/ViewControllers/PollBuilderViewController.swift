@@ -10,8 +10,8 @@ import UIKit
 import Presentr
 
 protocol PollBuilderViewDelegate: class {
-    func updateCanDraft(_ canDraft: Bool)
     func ignoreNextKeyboardHiding()
+    func updateCanDraft(_ canDraft: Bool)
     func updateCorrectAnswer(correctAnswer: String?)
     var isKeyboardShown: Bool { get }
 }
@@ -24,58 +24,58 @@ protocol PollBuilderViewControllerDelegate: class {
 class PollBuilderViewController: UIViewController {
 
     // MARK: View vars
-    var quizModeOverlayView: QuizModeOverlayView!
+    var bottomPaddingView: UIView!
+    var buttonsView: UIView!
+    var centerView: UIView!
+    var dimmingView: UIView!
     var dropDown: QuestionTypeDropDownView!
     var dropDownArrow: UIButton!
+    var dropDownGestureRecognizer: UITapGestureRecognizer!
     var exitButton: UIButton!
+    var frPollBuilder: FRPollBuilderView!
+    var mcPollBuilder: MCPollBuilderView!
     var questionTypeButton: UIButton!
-    var centerView: UIView!
-    var buttonsView: UIView!
+    var quizModeOverlayView: QuizModeOverlayView!
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
-    var topPaddingView: UIView!
-    var bottomPaddingView: UIView!
-    var mcPollBuilder: MCPollBuilderView!
-    var frPollBuilder: FRPollBuilderView!
     var tapGestureRecognizer: UITapGestureRecognizer!
-    var dropDownGestureRecognizer: UITapGestureRecognizer!
-    var dimmingView: UIView!
+    var topPaddingView: UIView!
     
     // MARK: Data vars
+    private let networking: Networking = URLSession.shared.request
+    var canDraft: Bool!
     var correctAnswer: String?
     var drafts: [Draft] = []
-    var questionType: QuestionType!
-    weak var delegate: PollBuilderViewControllerDelegate?
-    var isFollowUpQuestion: Bool = false
-    var canDraft: Bool!
-    var loadedMCDraft: Draft?
-    var loadedFRDraft: Draft?
-    var isKeyboardShown: Bool = false
     var dropDownHidden: Bool = true
+    var isFollowUpQuestion: Bool = false
+    var isKeyboardShown: Bool = false
+    var loadedFRDraft: Draft?
+    var loadedMCDraft: Draft?
+    var questionType: QuestionType!
     var shouldIgnoreNextKeyboardHiding: Bool = false
-    private let networking: Networking = URLSession.shared.request
+    weak var delegate: PollBuilderViewControllerDelegate?
     
     // MARK: Constants
-    let centerViewWidth: CGFloat = 135
-    let centerViewHeight: CGFloat = 24
-    let dropDownArrowLeftPadding: CGFloat = 5.0
-    let draftsButtonWidth: CGFloat = 100
-    let popupViewHeight: CGFloat = 95
-    let edgePadding: CGFloat = 18
-    let topBarHeight: CGFloat = 24
-    let dropDownHeight: CGFloat = 100
-    let dropDownArrowWidth: CGFloat = 13
-    let dropDownArrowHeight: CGFloat = 13
-    let dropDownArrowInset: CGFloat = 10
-    let buttonsViewHeight: CGFloat = 67.5
     let buttonHeight: CGFloat = 47.5
+    let buttonsViewHeight: CGFloat = 67.5
+    let centerViewHeight: CGFloat = 24
+    let centerViewWidth: CGFloat = 135
+    let draftsButtonWidth: CGFloat = 100
+    let dropDownArrowHeight: CGFloat = 13
+    let dropDownArrowImageName = "DropdownArrowIcon"
+    let dropDownArrowInset: CGFloat = 10
+    let dropDownArrowLeftPadding: CGFloat = 5.0
+    let dropDownArrowWidth: CGFloat = 13
+    let dropDownHeight: CGFloat = 100
+    let edgePadding: CGFloat = 18
     let editDraftModalSize: CGFloat = 50
+    let errorText = "Error"
+    let exitButtonImageName = "darkexit"
+    let failedToDeleteDraftText = "Failed to delete draft. Try again!"
+    let popupViewHeight: CGFloat = 95
     let saveDraftButtonTitle = "Save as draft"
     let startPollButtonTitle = "Start Poll"
-    let dropDownArrowImageName = "DropdownArrowIcon"
-    let exitButtonImageName = "darkexit"
-    let errorText = "Error"
-    let failedToDeleteDraftText = "Failed to delete draft. Try again!"
+    let topBarHeight: CGFloat = 24
     
     init(delegate: PollBuilderViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)

@@ -10,9 +10,9 @@ import Foundation
 import SwiftyJSON
 
 class PollParser: Parser {
-    
+
     typealias ItemType = Poll
-    
+
     static func parseItem(json: JSON) -> Poll {
         let id = json[ParserKeys.idKey].intValue
         let text = json[ParserKeys.textKey].stringValue

@@ -9,36 +9,36 @@
 import UIKit
 
 protocol DraftCellDelegate: class {
-    func draftCellDidTapLoadButton(draft: Draft)
     func draftCellDidTapEditButton(draft: Draft)
+    func draftCellDidTapLoadButton(draft: Draft)
 }
 
 class DraftCell: UICollectionViewCell {
 
     // MARK: - View vars
-    var loadButton: UIButton!
-    var questionLabel: UILabel!
     var borderView: UIView!
+    var draftTypeLabel: UILabel!
     var editButton: UIButton!
     var editImageView: UIImageView!
-    var draftTypeLabel: UILabel!
+    var loadButton: UIButton!
+    var questionLabel: UILabel!
     
     // MARK: - Data vars
-    weak var delegate: DraftCellDelegate?
     var draft: Draft!
+    weak var delegate: DraftCellDelegate?
     
     // MARK: - Constants
-    let horizontalPadding: CGFloat = 18
-    let questionLabelVerticalPadding: CGFloat = 20
-    let editButtonWidth: CGFloat = 25
-    let zoomInScale: CGFloat = 0.98
-    let zoomDuration: TimeInterval = 0.25
-    let editImageViewTopPadding: CGFloat = 30.5
-    let editImageViewHeight: CGFloat = 3
     let draftTypeLabelTopPadding: CGFloat = 10.5
+    let editButtonWidth: CGFloat = 25
     let editImageName = "dots"
-    let multipleChoice = "Multiple Choice"
+    let editImageViewHeight: CGFloat = 3
+    let editImageViewTopPadding: CGFloat = 30.5
     let freeResponse = "Free Response"
+    let horizontalPadding: CGFloat = 18
+    let multipleChoice = "Multiple Choice"
+    let questionLabelVerticalPadding: CGFloat = 20
+    let zoomDuration: TimeInterval = 0.25
+    let zoomInScale: CGFloat = 0.98
     
     override init(frame: CGRect) {
         super.init(frame: frame)

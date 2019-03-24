@@ -14,12 +14,11 @@ protocol PickQTypeDelegate: class {
 
 class PickQTypeViewController: UIViewController {
 
+    var bottomBackgroundView: UIButton!
+    var currentType: QuestionType! 
     var popupHeight: CGFloat!
     var topBackgroundView: UIButton!
-    var bottomBackgroundView: UIButton!
     weak var delegate: PickQTypeDelegate?
-
-    var currentType: QuestionType! 
 
     override func viewDidLoad() {
         super.viewDidLoad()

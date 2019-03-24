@@ -11,8 +11,8 @@ import UIKit
 class SettingsInfoCell: UICollectionViewCell {
     
     // MARK: Views and VC's
-    var titleView: UILabel!
     var descriptionView: UILabel!
+    var titleView: UILabel!
     
     // MARK: Layout constants
     let standardInset = 18

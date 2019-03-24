@@ -12,64 +12,64 @@ import UIKit
 
 protocol CardControllerDelegate: class {
     
-    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
-    func pollStarted(_ poll: Poll, userRole: UserRole)
-    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
+    func navigationTitleViewNavigationButtonTapped()
     func pollDeleted(_ pollID: Int, userRole: UserRole)
     func pollDeletedLive()
+    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollStarted(_ poll: Poll, userRole: UserRole)
     func receivedResults(_ currentState: CurrentState)
     func updatedTally(_ currentState: CurrentState)
-    func navigationTitleViewNavigationButtonTapped()
     
 }
 
 class CardController: UIViewController {
     
     // MARK: - View vars
-    var navigationTitleView: NavigationTitleView!
-    var peopleButton: UIButton!
-    var createPollButton: UIButton!
+    var adapter: ListAdapter!
+    var collectionView: UICollectionView!
+    var collectionViewLayout: UICollectionViewFlowLayout!
     var countLabel: UILabel!
     var countLabelBackgroundView: UIView!
-    var collectionViewLayout: UICollectionViewFlowLayout!
-    var collectionView: UICollectionView!
-    var adapter: ListAdapter!
+    var createPollButton: UIButton!
+    var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     
     // MARK: - Data vars
-    weak var delegate: CardControllerDelegate?
-    var userRole: UserRole!
-    var socket: Socket!
-    var session: Session!
-    var pollsDateModel: PollsDateModel!
-    var currentIndex: Int! = 0
-    var numberOfPeople: Int!
-    var isInitialLoad: Bool = true
-    var wasScrolledToIndex: Int!
-    var startingScrollingOffset: CGPoint!
-    var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
     private let networking: Networking = URLSession.shared.request
+    var currentIndex: Int! = 0
+    var isInitialLoad: Bool = true
+    var numberOfPeople: Int!
+    var pollsDateModel: PollsDateModel!
+    var session: Session!
+    var socket: Socket!
+    var startingScrollingOffset: CGPoint!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    var userRole: UserRole!
+    var wasScrolledToIndex: Int!
+    weak var delegate: CardControllerDelegate?
     
     // MARK: - Constants
-    let navigationTitleHeight: CGFloat = 51.5
-    let countLabelWidth: CGFloat = 30.5
-    let countLabelHeight: CGFloat = 21.0
-    let collectionViewTopPadding: CGFloat = 7
-    let countLabelHorizontalPadding: CGFloat = 2.5
-    let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
-    let swipeVelocityThreshold: CGFloat = 0.5
+    let collectionViewTopPadding: CGFloat = 7
+    let countLabelBackgroundViewTopPadding: CGFloat = 24
+    let countLabelHeight: CGFloat = 21.0
+    let countLabelHorizontalPadding: CGFloat = 2.5
+    let countLabelWidth: CGFloat = 30.5
     let editModalHeight: CGFloat = 205
+    let navigationTitleHeight: CGFloat = 51.5
+    let swipeVelocityThreshold: CGFloat = 0.5
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
+        self.numberOfPeople = numberOfPeople
         self.pollsDateModel = pollsDateModel
         self.session = session
         self.socket = socket
         self.userRole = userRole
-        self.numberOfPeople = numberOfPeople
     }
     
     // MARK: - View lifecycle

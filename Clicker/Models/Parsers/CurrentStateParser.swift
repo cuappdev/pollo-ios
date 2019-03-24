@@ -10,9 +10,9 @@ import Foundation
 import SwiftyJSON
 
 class CurrentStateParser: Parser {
-    
+
     typealias ItemType = CurrentState
-    
+
     static func parseItem(json: JSON) -> CurrentState {
         let pollId = json[ParserKeys.pollKey].intValue
         let results = json[ParserKeys.resultsKey].dictionaryValue
@@ -28,5 +28,5 @@ class CurrentStateParser: Parser {
         }
         return CurrentState(pollId, pollResults, pollAnswers, upvotes)
     }
-    
+
 }

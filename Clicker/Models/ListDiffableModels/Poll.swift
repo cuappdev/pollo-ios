@@ -14,23 +14,23 @@ enum PollState: String, Codable {
 }
 
 enum QuestionType: String, CustomStringConvertible, Codable {
-    case multipleChoice = "Multiple Choice"
     case freeResponse = "Free Response"
-    
+    case multipleChoice = "Multiple Choice"
+
     var description: String {
         switch self {
         case .multipleChoice: return StringConstants.multipleChoice
         case .freeResponse: return StringConstants.freeResponse
         }
     }
-    
+
     var descriptionForServer: String {
         switch self {
         case .multipleChoice: return Identifiers.multipleChoiceIdentifier
         case .freeResponse: return Identifiers.freeResponseIdentifier
         }
     }
-    
+
     var other: QuestionType {
         switch self {
         case .multipleChoice: return .freeResponse
@@ -40,31 +40,31 @@ enum QuestionType: String, CustomStringConvertible, Codable {
 }
 
 class PollResult: Codable, Equatable {
-    
+
     static func == (lhs: PollResult, rhs: PollResult) -> Bool {
         return lhs.text == rhs.text && lhs.count == rhs.count
     }
-    
-    var text: String
+
     var count: Int
-    
+    var text: String
+
     init(text: String, count: Int) {
-        self.text = text
         self.count = count
+        self.text = text
     }
-    
+
 }
 
 class PollAnswer: Codable {
-    
+
     var answer: String?
     var answerIds: [Int]?
-    
+
     init(answer: String?, answerIds: [Int]?) {
         self.answer = answer
         self.answerIds = answerIds
     }
-    
+
 }
 
 class Poll: Codable {

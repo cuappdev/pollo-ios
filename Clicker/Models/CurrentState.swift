@@ -9,16 +9,16 @@
 import SwiftyJSON
 
 class CurrentState {
-    
+
+    var answers: [String: PollAnswer] // mapping of client id to answer choice for MC and array of answer ids for FR
     var pollId: Int
     var results: [String: PollResult] // MC: {'A': {'text': 'blue', 'count': 1}}, FR: {1: {'text': 'blue', 'count': 1}}
-    var answers: [String: PollAnswer] // mapping of client id to answer choice for MC and array of answer ids for FR
     var upvotes: [String: [String]] // mapping of client id to array of answer ids
 
     init(_ pollId: Int, _ results: [String: PollResult], _ answers: [String: PollAnswer], _ upvotes: [String: [String]]) {
+        self.answers = answers
         self.pollId = pollId
         self.results = results
-        self.answers = answers
         self.upvotes = upvotes
     }
 

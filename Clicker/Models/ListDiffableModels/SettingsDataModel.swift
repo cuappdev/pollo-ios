@@ -13,11 +13,11 @@ enum SettingsDataState {
 }
 
 class SettingsDataModel {
-    
+
+    var description: String?
     var state: SettingsDataState
     var title: String
-    var description: String?
-    
+
     let identifier = UUID().uuidString
 
     init(state: SettingsDataState, title: String, description: String? = nil) {
@@ -25,15 +25,15 @@ class SettingsDataModel {
         self.title = title
         self.description = description
     }
-    
+
 }
 
 extension SettingsDataModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? SettingsDataModel else { return false }

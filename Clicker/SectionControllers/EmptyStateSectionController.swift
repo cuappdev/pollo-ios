@@ -19,9 +19,9 @@ class EmptyStateSectionController: ListSectionController {
 
     convenience init(session: Session?, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate?) {
         self.init()
+        self.nameViewDelegate = nameViewDelegate
         self.session = session
         self.shouldDisplayNameView = shouldDisplayNameView
-        self.nameViewDelegate = nameViewDelegate
     }
     
     // MARK: - ListSectionController overrides

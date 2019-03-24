@@ -20,13 +20,13 @@ protocol PollOptionsSectionControllerDelegate {
 class PollOptionsSectionController: ListSectionController {
     
     // MARK: - Data vars
+    var correctAnswer: String?
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
-    var correctAnswer: String?
     
     init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: String?) {
-        self.delegate = delegate
         self.correctAnswer = correctAnswer
+        self.delegate = delegate
     }
     
     // MARK: - ListSectionController overrides

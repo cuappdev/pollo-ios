@@ -9,14 +9,14 @@
 import IGListKit
 
 class PollMiscellaneousModel {
-    
-    var questionType: QuestionType!
+
+    let identifier = UUID().uuidString
+    var didSubmitChoice: Bool
     var pollState: PollState
+    var questionType: QuestionType!
     var totalVotes: Int
     var userRole: UserRole
-    var didSubmitChoice: Bool
-    let identifier = UUID().uuidString
-    
+
     init(questionType: QuestionType, pollState: PollState, totalVotes: Int, userRole: UserRole, didSubmitChoice: Bool) {
         self.questionType = questionType
         self.pollState = pollState
@@ -24,19 +24,19 @@ class PollMiscellaneousModel {
         self.userRole = userRole
         self.didSubmitChoice = didSubmitChoice
     }
-    
+
 }
 
 extension PollMiscellaneousModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? PollMiscellaneousModel else { return false }
         return identifier == object.identifier
     }
-    
+
 }

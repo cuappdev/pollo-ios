@@ -12,28 +12,28 @@ extension Endpoint {
     
     private struct CreateSessionBody: Codable {
         
-        var name: String
         var code: String
         var isGroup: Bool
+        var name: String
         
         init(name: String, code: String, isGroup: Bool) {
-            self.name = name
             self.code = code
             self.isGroup = isGroup
+            self.name = name
         }
         
     }
     
     private struct UpdateSessionBody: Codable {
         
+        var code: String
         var id: Int
         var name: String
-        var code: String
         
         init(id: Int, name: String, code: String) {
+            self.code = code
             self.id = id
             self.name = name
-            self.code = code
         }
         
     }

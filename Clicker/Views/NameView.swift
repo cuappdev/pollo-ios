@@ -15,14 +15,14 @@ protocol NameViewDelegate: class {
 class NameView: UIView, UITextFieldDelegate {
 
     // MARK: - View vars
-    var titleField: UITextField!
     var blurEffect: UIBlurEffect!
     var blurEffectView: UIVisualEffectView!
+    var titleField: UITextField!
     
     // MARK: - Data vars
+    private let networking: Networking = URLSession.shared.request
     var session: Session!
     weak var delegate: NameViewDelegate?
-    private let networking: Networking = URLSession.shared.request
     
     init(frame: CGRect, session: Session, delegate: NameViewDelegate) {
         super.init(frame: frame)

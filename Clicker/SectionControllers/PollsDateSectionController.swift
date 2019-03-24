@@ -25,8 +25,8 @@ class PollsDateSectionController: ListSectionController {
     let verticalPadding: CGFloat = 16
 
     init(delegate: PollsDateSectionControllerDelegate) {
-        self.delegate = delegate
         super.init()
+        self.delegate = delegate
         self.inset = UIEdgeInsets(top: 0, left: 0, bottom: verticalPadding, right: 0)
     }
     
