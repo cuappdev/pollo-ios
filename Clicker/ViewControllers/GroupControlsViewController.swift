@@ -17,6 +17,7 @@ class GroupControlsViewController: UIViewController {
     var collectionView: UICollectionView!
 
     // MARK: - Data vars
+    private let networking: Networking = URLSession.shared.request
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
@@ -136,6 +137,10 @@ class GroupControlsViewController: UIViewController {
         }
 
     }
+    
+    func updateLocationRestricted(id: Int, isLocationRestricted: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.updateLocationRestricted(id: id, isLocationRestricted: isLocationRestricted)).decode()
+    }
 
     // MARK: - Action
     @objc func goBack() {
@@ -162,7 +167,7 @@ extension GroupControlsViewController: ListAdapterDataSource {
         
         liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
         filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: true)
-        locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .filter, isEnabled: true)
+        locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .location, isEnabled: session.isLocationRestricted)
         
         if pollsDateAttendanceArray.count <= 3 {
             let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
@@ -207,8 +212,19 @@ extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
         case .liveQuestions:
             break
         case .location:
-            // Make request to toggle location services for the admin here
-            adapter.performUpdates(animated: false, completion: nil)
+            updateLocationRestricted(id: session.id, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
+                switch result {
+                case .value(let response):
+                    self?.session.isLocationRestricted = response.data.isLocationRestricted
+                case .error(let error):
+                    print(error)
+                    let alertController = self?.createAlert(title: "Error", message: "Failed to update location settings. Try again!")
+                    if let alertController = alertController {
+                        self?.present(alertController, animated: true, completion: nil)
+                    }
+                }
+                self?.adapter.performUpdates(animated: false, completion: nil)
+            }
         }
     }
     

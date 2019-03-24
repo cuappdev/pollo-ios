@@ -86,6 +86,7 @@ extension PollsViewController: PollsCellDelegate {
                     withCell.hideOpenSessionActivityIndicatorView()
                     self.isOpeningGroup = false
                 case .error(let error):
+                    // Distinguish location vs. general error messages here, handle the two differently
                     print(error)
                     withCell.hideOpenSessionActivityIndicatorView()
                     let alertController = self.createAlert(title: self.errorText, message: "Failed to join session. Try again!")

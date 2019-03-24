@@ -358,6 +358,7 @@ class PollsViewController: UIViewController {
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())
                 case .error(let error):
+                    // Distinguish location vs. general error messages here, handle the two differently
                     print(error)
                     let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                     self.present(alertController, animated: true, completion: nil)
