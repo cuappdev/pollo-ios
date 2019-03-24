@@ -9,6 +9,7 @@
 import GoogleSignIn
 import IGListKit
 import Presentr
+import StoreKit
 import UIKit
 
 class PollsViewController: UIViewController {
@@ -72,6 +73,10 @@ class PollsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Ratings.updateNumAppLaunches()
+        Ratings.promptReview()
+        
         view.backgroundColor = .clickerGrey8
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -79,6 +84,7 @@ class PollsViewController: UIViewController {
         
         setupViews()
         setupConstraints()
+        
     }
     
     // MARK: - Configure
