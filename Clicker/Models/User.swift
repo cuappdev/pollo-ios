@@ -22,10 +22,17 @@ struct GetMemberResponse: Codable {
     
 }
 
+struct Coord: Codable {
+    
+    var lat: Double?
+    var long: Double?
+    
+}
+
 class User: Codable {
     
     static var currentUser: User?
-    static var currentUserLocation: CLLocationCoordinate2D?
+    static var currentUserLocation: Coord = Coord(lat: nil, long: nil)
     static var userSession: UserSession?
     
     var id: String

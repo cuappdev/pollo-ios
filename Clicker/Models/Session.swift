@@ -22,20 +22,26 @@ class Session: Codable {
     var description: String?
     var updatedAt: String?
     var isLive: Bool?
+    var location: Coord
+    var isLocationRestricted: Bool
     let identifier = UUID().uuidString
     
-    init(id: Int, name: String, code: String) {
+    init(id: Int, name: String, code: String, isLocationRestricted: Bool, location: Coord) {
         self.id = id
         self.name = name
         self.code = code
+        self.isLocationRestricted = isLocationRestricted
+        self.location = location
     }
     
-    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?) {
+    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?, isLocationRestricted: Bool, location: Coord) {
         self.id = id
         self.name = name
         self.code = code
         self.description = latestActivity
         self.isLive = isLive
+        self.isLocationRestricted = isLocationRestricted
+        self.location = location
     }
     
 }

@@ -10,18 +10,17 @@ import Foundation
 
 extension Endpoint {
     
-    private struct CreateSessionBody: Codable {
-        
+    private struct StartRestrictedSessionBody: Codable {
         var name: String
         var code: String
         var isGroup: Bool
-        
-        init(name: String, code: String, isGroup: Bool) {
-            self.name = name
-            self.code = code
-            self.isGroup = isGroup
-        }
-        
+        var location: Coord
+    }
+    
+    private struct StartSessionBody: Codable {
+        var name: String
+        var code: String
+        var isGroup: Bool
     }
     
     private struct UpdateSessionBody: Codable {
@@ -43,10 +42,26 @@ extension Endpoint {
         var id: Int
         var code: String
         
+        
         init(id: Int, code: String) {
             self.id = id
             self.code = code
         }
+        
+    }
+    
+    private struct JoinSessionWithCodeBody: Codable {
+        
+        var code: String
+        var location: Coord
+        
+    }
+    
+    private struct JoinSessionWithIdAndCodeBody: Codable {
+        
+        var id: Int
+        var code: String
+        var location: Coord
         
     }
     
@@ -112,25 +127,37 @@ extension Endpoint {
         return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body, method: .put)
     }
     
-    static func startSession(code: String, name: String?, isGroup: Bool?) -> Endpoint {
+    static func startSession(code: String, name: String?, isGroup: Bool?, location: Coord?) -> Endpoint {
         if let name = name, let isGroup = isGroup {
-            let body = CreateSessionBody(name: name, code: code, isGroup: isGroup)
+            if let location = location {
+                let body = StartRestrictedSessionBody(name: name, code: code, isGroup: isGroup, location: location)
+                return Endpoint(path: "/start/session", headers: headers, body: body)
+            }
+            let body = StartSessionBody(name: name, code: code, isGroup: isGroup)
             return Endpoint(path: "/start/session", headers: headers, body: body)
         }
         return Endpoint(path: "/start/session", headers: headers, body: ["code": code])
     }
     
-    static func joinSessionWithCode(with code: String) -> Endpoint {
-        return Endpoint(path: "/join/session", headers: headers, body: ["code": code])
+    static func joinSessionWithCode(code: String, location: Coord) -> Endpoint {
+        let body = JoinSessionWithCodeBody(code: code, location: location)
+        return Endpoint(path: "/join/session", headers: headers, body: body)
     }
     
     static func joinSessionWithId(with id: Int) -> Endpoint {
         return Endpoint(path: "/join/session", headers: headers, body: ["id": id])
     }
     
-    static func joinSessionWithIdAndCode(id: Int, code: String) -> Endpoint {
-        let body = JoinSessionBody(id: id, code: code)
+    static func joinSessionWithIdAndCode(id: Int, code: String, location: Coord) -> Endpoint {
+        let body = JoinSessionWithIdAndCodeBody(id: id, code: code, location: location)
         return Endpoint(path: "/join/session", headers: headers, body: body)
+    }
+    
+    static func updateLocationRestricted(id: Int, isLocationRestricted: Bool) -> Endpoint {
+        let body = [
+            "isRestricted": isLocationRestricted
+        ]
+        return Endpoint(path: "/sessions/\(id)/location/restriction", headers: headers, body: body)
     }
     
 }

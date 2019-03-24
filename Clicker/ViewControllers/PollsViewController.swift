@@ -274,7 +274,7 @@ class PollsViewController: UIViewController {
     }
     
     func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
-        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
+        return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup, location: User.currentUserLocation)).decode()
     }
     
     // MARK: - Actions
@@ -324,8 +324,8 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
-    func joinSessionWithCode(with code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.joinSessionWithCode(with: code)).decode()
+    func joinSessionWithCode(code: String, location: Coord) -> Future<Response<Session>> {
+        return networking(Endpoint.joinSessionWithCode(code: code, location: location)).decode()
     }
     
     func getSortedPolls(with id: Int) -> Future<Response<[GetSortedPollsResponse]>> {
@@ -334,7 +334,7 @@ class PollsViewController: UIViewController {
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
+        joinSessionWithCode(code: code, location: User.currentUserLocation).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
             self.session = sessionResponse.data
             return self.getSortedPolls(with: sessionResponse.data.id)
         }.observe { [weak self] result in
@@ -402,8 +402,8 @@ class PollsViewController: UIViewController {
         }
     }
     
-    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode()
+    func joinSessionWithIdAndCode(id: Int, code: String, location: Coord) -> Future<Response<Session>> {
+        return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code, location: location)).decode()
     }
     
     func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
@@ -420,7 +420,7 @@ class PollsViewController: UIViewController {
                     var auxiliaryDict = [Double: Session]()
                     response.data.forEach { session in
                         if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
+                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive, isLocationRestricted: session.isLocationRestricted, location: session.location)
                         }
                     }
                     auxiliaryDict.keys.sorted().forEach { timestamp in

@@ -46,7 +46,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLoca
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let currentLocation = manager.location else { return }
-        User.currentUserLocation = currentLocation.coordinate
+        let lat = currentLocation.coordinate.latitude
+        let long = currentLocation.coordinate.longitude
+        User.currentUserLocation = Coord(lat: lat, long: long)
     }
     
     func setupWindow() {
@@ -139,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLoca
                             var auxiliaryDict = [Double: Session]()
                             memberResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive, isLocationRestricted: session.isLocationRestricted, location: session.location)
                                 }
                             }
                             auxiliaryDict.keys.sorted().forEach { time in
@@ -157,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLoca
                             var auxiliaryDict = [Double: Session]()
                             adminResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive, isLocationRestricted: session.isLocationRestricted, location: session.location)
                                 }
                             }
                             auxiliaryDict.keys.sorted().forEach { time in
