@@ -11,7 +11,7 @@ import StoreKit
 
 class Ratings {
     
-    static let launchThreshold = 4
+    static let launchThreshold = 10
     
     class func updateNumAppLaunches() {
         let numLaunches = getNumAppLaunches() + 1
