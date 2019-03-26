@@ -297,6 +297,9 @@ extension CardController: SocketDelegate {
         currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
+        if pollsDateModel.polls.isEmpty {
+            goBack()
+        }
     }
 
     func pollDeletedLive() {
@@ -308,6 +311,9 @@ extension CardController: SocketDelegate {
         currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
+        if pollsDateModel.polls.isEmpty {
+            goBack()
+        }
     }
     
     func receivedResults(_ currentState: CurrentState) {
