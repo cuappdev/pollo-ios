@@ -461,14 +461,12 @@ extension CardController: EditPollViewControllerDelegate {
                 self.currentIndex = self.currentIndex == 0 ? self.currentIndex : self.currentIndex - 1
             }
             self.updateCountLabelText()
+            if self.pollsDateModel.polls.isEmpty {
+                self.goBack()
+            }
         }
     }
 
-    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) {
-        // Commented out for now because reopening functionality needs to be fleshed out more
-//        let poll = pollsDateModel.polls[currentIndex]
-//        sender.dismiss(animated: true, completion: nil)
-//        startPoll(text: poll.text, type: poll.questionType, options: poll.options, state: .live, correctAnswer: poll.correctAnswer, shouldPopViewController: false)
-    }
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) { }
 
 }
