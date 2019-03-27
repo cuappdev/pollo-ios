@@ -243,7 +243,27 @@ extension CardController: SocketDelegate {
     func sessionConnected() {}
     
     func sessionDisconnected() {}
-    
+
+    func sessionErrored() {
+        socket.socket.connect(timeoutAfter: 5) { [weak self] in
+            guard let `self` = self else { return }
+            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
+                guard let viewControllers = self.navigationController?.viewControllers else { return }
+                if viewControllers.count > 3 {
+                    // Pop back to PollsViewController
+                    guard let viewController = viewControllers[viewControllers.count - 3] as? PollsViewController else { return }
+                    self.navigationController?.popToViewController(viewController, animated: true)
+                    self.socket.socket.disconnect()
+                    self.socket.delegate = nil
+                    viewController.pollsDateViewControllerWasPopped(for: self.userRole)
+                }
+            })
+            if self.presentedViewController == nil {
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+
     func receivedUserCount(_ count: Int) {
         numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
