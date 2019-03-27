@@ -14,6 +14,7 @@ protocol SocketDelegate: class {
     func receivedUserCount(_ count: Int)
     func sessionConnected()
     func sessionDisconnected()
+    func sessionErrored()
     
     // USER RECEIVES
     func receivedResults(_ currentState: CurrentState)
