@@ -39,6 +39,10 @@ class Socket {
         socket.on(clientEvent: .disconnect) { _, _ in
             self.delegate?.sessionDisconnected()
         }
+
+        socket.on(clientEvent: .error) { _, _ in
+            self.delegate?.sessionErrored()
+        }
         
         socket.on(Routes.userStart) { data, _ in
             guard let json = data[0] as? [String: Any], let pollDict = json[ParserKeys.pollKey] as? [String: Any] else {
