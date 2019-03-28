@@ -18,7 +18,6 @@ class SeparatorLineCell: UICollectionViewCell {
     
     // MARK: - Constants
     let lineViewHeight: CGFloat = 1
-    let lineViewSettingsInset: CGFloat = 18
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,10 +28,8 @@ class SeparatorLineCell: UICollectionViewCell {
     }
     
     override func updateConstraints() {
-        let lineViewLeadingOffset = model.state == .settings ? lineViewSettingsInset : 0
         lineView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(lineViewLeadingOffset)
-            make.bottom.trailing.equalToSuperview()
+            make.bottom.leading.trailing.equalToSuperview()  
             make.height.equalTo(lineViewHeight)
         }
         super.updateConstraints()

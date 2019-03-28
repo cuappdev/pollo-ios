@@ -20,7 +20,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     
     // MARK: - Constants
     let descriptionLabelXPadding: CGFloat = 10
-    let endedTextMember = "Poll closed"
+    let endedTextMember = "Poll Closed"
     let iconImageViewLength: CGFloat = 15
     let labelFontSize: CGFloat = 12
     let liveEndedDescriptionTextAdmin = "Only you can see results"
@@ -30,7 +30,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let sharedDescriptionText = "Shared with group"
     let sharedTextMember = "Final results  • "
     let totalVotesLabelTrailingPadding: CGFloat = 18
-    let voteString = "vote"
+    let voteString = "Vote"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -53,7 +53,7 @@ class CardController: UIViewController {
     
     // MARK: - Constants
     let collectionViewHorizontalInset: CGFloat = 9.0
-    let collectionViewTopPadding: CGFloat = 7
+    let collectionViewTopPadding: CGFloat = 16.0
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let countLabelHeight: CGFloat = 21.0
     let countLabelHorizontalPadding: CGFloat = 2.5
@@ -167,24 +167,14 @@ class CardController: UIViewController {
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
-        peopleButton = UIButton()
-        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
-        peopleButton.titleLabel?.font = UIFont._16RegularFont
-        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
-        peopleButton.sizeToFit()
-        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        
         if userRole == .admin {
             createPollButton = UIButton()
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-          let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
-        } else {
-            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton]
         }
+
     }
     
     // MARK: Helpers
