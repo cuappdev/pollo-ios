@@ -82,7 +82,6 @@ class PollsViewController: UIViewController {
         promptUserReview()
         setupViews()
         setupConstraints()
-        
     }
     
     // MARK: - Configure
