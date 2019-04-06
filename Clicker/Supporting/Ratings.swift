@@ -32,7 +32,7 @@ class Ratings {
         return numLaunches >= launchThreshold
     }
     
-    func promptReview(){
+    func promptReview() {
         if #available(iOS 10.3, *)  {
             if shouldPromptReview() {
                 SKStoreReviewController.requestReview()
