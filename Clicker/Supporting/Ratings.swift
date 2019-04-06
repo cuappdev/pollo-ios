@@ -11,26 +11,28 @@ import StoreKit
 
 class Ratings {
     
-    static let launchThreshold = 20
-    static let NUMBER_OF_LAUNCHES = "NUMBER_OF_LAUNCHES"
+    static let shared = Ratings()
+    let launchThreshold = 20
+    let NUMBER_OF_LAUNCHES = "NUMBER_OF_LAUNCHES"
     
+    private init() {}
     
-    class func updateNumAppLaunches() {
+    func updateNumAppLaunches() {
         let numLaunches = getNumAppLaunches() + 1
         UserDefaults.standard.set(numLaunches, forKey: NUMBER_OF_LAUNCHES)
         UserDefaults.standard.synchronize()
     }
     
-    class func getNumAppLaunches() -> Int {
+    func getNumAppLaunches() -> Int {
         return UserDefaults.standard.value(forKey: NUMBER_OF_LAUNCHES) as? Int ?? 0
     }
     
-    class func shouldPromptReview() -> Bool {
+    func shouldPromptReview() -> Bool {
         let numLaunches = getNumAppLaunches()
         return numLaunches >= launchThreshold
     }
     
-    class func promptReview(){
+    func promptReview(){
         if #available(iOS 10.3, *)  {
             if shouldPromptReview() {
                 SKStoreReviewController.requestReview()
@@ -39,4 +41,5 @@ class Ratings {
             }
         }
     }
+    
 }

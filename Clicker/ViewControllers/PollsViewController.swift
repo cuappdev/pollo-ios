@@ -281,8 +281,8 @@ class PollsViewController: UIViewController {
     }
     
     func promptUserReview() {
-        Ratings.updateNumAppLaunches()
-        Ratings.promptReview()
+        Ratings.shared.updateNumAppLaunches()
+        Ratings.shared.promptReview()
     }
     
     // MARK: - Actions
