@@ -56,7 +56,7 @@ struct UserSession: Codable {
     let isActive: Bool
     let refreshToken: String
     let sessionExpiration: String
-
+    
     init(accessToken: String, refreshToken: String, sessionExpiration: String, isActive: Bool) {
         self.accessToken = accessToken
         self.isActive = isActive
