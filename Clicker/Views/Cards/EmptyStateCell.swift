@@ -28,7 +28,7 @@ class EmptyStateCell: UICollectionViewCell {
     // MARK: - Constants
     let adminNothingToSeeText = "Nothing to see here."
     let adminWaitingText = "You haven’t made any polls yet!\nTap \"+\" above to try it out."
-    let cardControllerIconImageViewLength: CGFloat = 32.0
+    let cardControllerIconImageViewLength: CGFloat = 50.0
     let countLabelWidth: CGFloat = 42.0
     let createDraftButtonHeight: CGFloat = 47
     let createDraftButtonText = "Create a draft"
@@ -39,15 +39,16 @@ class EmptyStateCell: UICollectionViewCell {
     let draftsViewControllerIconImageViewLength: CGFloat = 50.0
     let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
     let enterCodeText = "Enter a code below to join a group!"
-    let iconImageViewTopPadding: CGFloat = 142.0
+    let iconImageViewTopPadding: CGFloat = 176.0
     let joinedString = "joined"
     let manShruggingImageName = "man_shrugging"
     let monkeyEmojiImageName = "monkey_emoji"
     let noDraftsText = "No saved drafts!"
-    let pollsViewControllerIconImageViewLength: CGFloat = 45.0
-    let subtitleLabelTopPadding: CGFloat = 7.5
+    let pollsViewControllerIconImageViewTopPadding: CGFloat = 88.0
+    let pollsViewControllerIconImageViewLength: CGFloat = 50.0
+    let subtitleLabelTopPadding: CGFloat = 8.0
     let subtitleLabelWidth: CGFloat = 250.0
-    let titleLabelTopPadding: CGFloat = 18.5
+    let titleLabelTopPadding: CGFloat = 16.0
     let titleLabelWidth: CGFloat = 200.0
     let userNothingToSeeText = "Nothing to see yet."
     let userWaitingText = "Waiting for the host to post a poll..."
@@ -74,7 +75,7 @@ class EmptyStateCell: UICollectionViewCell {
         contentView.addSubview(iconImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = ._16SemiboldFont
+        titleLabel.font = ._18SemiboldFont
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
         
@@ -121,7 +122,7 @@ class EmptyStateCell: UICollectionViewCell {
             switch emptyStateModel.type {
             case .pollsViewController:
                 make.width.height.equalTo(pollsViewControllerIconImageViewLength)
-                make.top.equalToSuperview().offset(iconImageViewTopPadding)
+                make.top.equalToSuperview().offset(pollsViewControllerIconImageViewTopPadding)
             case .cardController:
                 make.width.height.equalTo(cardControllerIconImageViewLength)
                 make.top.equalToSuperview().offset(iconImageViewTopPadding)
