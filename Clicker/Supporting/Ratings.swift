@@ -33,12 +33,10 @@ class Ratings {
     }
     
     func promptReview() {
-        if #available(iOS 10.3, *)  {
-            if shouldPromptReview() {
-                SKStoreReviewController.requestReview()
-                UserDefaults.standard.set(0, forKey: NUMBER_OF_LAUNCHES)
-                UserDefaults.standard.synchronize()
-            }
+        if #available(iOS 10.3, *), shouldPromptReview() {
+            SKStoreReviewController.requestReview()
+            UserDefaults.standard.set(0, forKey: NUMBER_OF_LAUNCHES)
+            UserDefaults.standard.synchronize()
         }
     }
     
