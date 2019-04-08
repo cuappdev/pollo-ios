@@ -155,6 +155,7 @@
 		D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CE1F73540600B1E975 /* LaunchScreen.storyboard */; };
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
 		D412ACD02246EDAA009B6E83 /* SettingsLogOutButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */; };
+		D412ACD22247BF7C009B6E83 /* Ratings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D412ACD12247BF7C009B6E83 /* Ratings.swift */; };
 		D946CA7E221346860005AD70 /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D946CA7D221346860005AD70 /* keys.generated.swift */; };
 		D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */; };
 /* End PBXBuildFile section */
@@ -325,6 +326,7 @@
 		C7F923D11F73540600B1E975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D13E9091208712A300856DD4 /* PollBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilderViewController.swift; sourceTree = "<group>"; };
 		D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogOutButtonCell.swift; sourceTree = "<group>"; };
+		D412ACD12247BF7C009B6E83 /* Ratings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ratings.swift; sourceTree = "<group>"; };
 		D946CA7D221346860005AD70 /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
 		D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = testflight_release_notes.txt; sourceTree = "<group>"; };
 		F8BCD96EC847A3A4C51959E6 /* Pods-Clicker.debug local server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clicker.debug local server.xcconfig"; path = "Pods/Target Support Files/Pods-Clicker/Pods-Clicker.debug local server.xcconfig"; sourceTree = "<group>"; };
@@ -665,6 +667,7 @@
 				C2E9C7082182A40600E36659 /* Analytics.swift */,
 				C2E9C70A2182ACCE00E36659 /* EventPayload.swift */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
+				D412ACD12247BF7C009B6E83 /* Ratings.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -1008,6 +1011,7 @@
 				63A4A6462094D41600523AE6 /* MCPollBuilderView.swift in Sources */,
 				B638A0AD2238B2E000D1C2D2 /* PollSettingsSectionController.swift in Sources */,
 				C72CD5281FAF6BF7004E68D9 /* UIColor+Shared.swift in Sources */,
+				D412ACD22247BF7C009B6E83 /* Ratings.swift in Sources */,
 				0CDAF0D521727DA3004DB6EA /* SpaceCell.swift in Sources */,
 				0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */,
 				C28679DD2155A5A300554F7B /* PollBuilderMCOptionModel.swift in Sources */,
