@@ -94,8 +94,8 @@ class NameView: UIView, UITextFieldDelegate {
         }
     }
     
-    func updateSession(id: Int, name: String, code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
+    func updateSession(id: Int, name: String, code: String, isLocationRestricted: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code, isLocationRestricted: isLocationRestricted)).decode()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -105,7 +105,7 @@ class NameView: UIView, UITextFieldDelegate {
         } else {
             name = session.code
         }
-        updateSession(id: session.id, name: name, code: session.code).observe { [weak self] result in
+        updateSession(id: session.id, name: name, code: session.code, isLocationRestricted: session.isLocationRestricted).observe { [weak self] result in
             guard let `self` = self else { return }
             DispatchQueue.main.async {
                 switch result {

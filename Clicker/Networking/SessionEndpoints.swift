@@ -29,12 +29,7 @@ extension Endpoint {
         var id: Int
         var name: String
         var code: String
-        
-        init(id: Int, name: String, code: String) {
-            self.id = id
-            self.name = name
-            self.code = code
-        }
+        var isLocationRestricted: Bool
         
     }
     
@@ -79,8 +74,8 @@ extension Endpoint {
         return Endpoint(path: "/sessions/all/\(userRole)", headers: headers)
     }
     
-    static func updateSession(id: Int, name: String, code: String) -> Endpoint {
-        let body = UpdateSessionBody(id: id, name: name, code: code)
+    static func updateSession(id: Int, name: String, code: String, isLocationRestricted: Bool) -> Endpoint {
+        let body = UpdateSessionBody(id: id, name: name, code: code, isLocationRestricted: isLocationRestricted)
         return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     
@@ -148,13 +143,6 @@ extension Endpoint {
     static func joinSessionWithIdAndCode(id: Int, code: String, location: Coord) -> Endpoint {
         let body = JoinSessionWithIdAndCodeBody(id: id, code: code, location: location)
         return Endpoint(path: "/join/session", headers: headers, body: body)
-    }
-    
-    static func updateLocationRestricted(id: Int, isLocationRestricted: Bool) -> Endpoint {
-        let body = [
-            "isRestricted": isLocationRestricted
-        ]
-        return Endpoint(path: "/sessions/\(id)/location/restriction", headers: headers, body: body)
     }
     
 }

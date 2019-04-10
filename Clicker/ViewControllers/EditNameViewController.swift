@@ -89,14 +89,14 @@ class EditNameViewController: UIViewController {
         }
     }
     
-    func updateSession(id: Int, name: String, code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.updateSession(id: id, name: name, code: code)).decode()
+    func updateSession(id: Int, name: String, code: String, isLocationRestricted: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code, isLocationRestricted: isLocationRestricted)).decode()
     }
     
     @objc func saveBtnPressed() {
         if let newName = nameTextField.text {
             if newName != "" {
-                updateSession(id: session.id, name: newName, code: session.code).observe { [weak self] result in
+                updateSession(id: session.id, name: newName, code: session.code, isLocationRestricted: session.isLocationRestricted).observe { [weak self] result in
                     guard let `self` = self else { return }
                     DispatchQueue.main.async {
                         switch result {

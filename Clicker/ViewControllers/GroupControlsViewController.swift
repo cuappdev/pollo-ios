@@ -139,8 +139,8 @@ class GroupControlsViewController: UIViewController {
 
     }
     
-    func updateLocationRestricted(id: Int, isLocationRestricted: Bool) -> Future<Response<Session>> {
-        return networking(Endpoint.updateLocationRestricted(id: id, isLocationRestricted: isLocationRestricted)).decode()
+    func updateSession(id: Int, name: String, code: String, isLocationRestricted: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.updateSession(id: id, name: name, code: code, isLocationRestricted: isLocationRestricted)).decode()
     }
 
     // MARK: - Action
@@ -219,11 +219,11 @@ extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
                 present(alertController, animated: true, completion: nil)
                 return
             }
-            updateLocationRestricted(id: session.id, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
+            updateSession(id: session.id, name: session.name, code: session.code, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
                 switch result {
-                case .value(let response):
-                    self?.session.isLocationRestricted = response.data.isLocationRestricted
-                case .error(let error):
+                case .value:
+                    self?.session.isLocationRestricted.toggle()
+                case.error(let error):
                     print(error)
                     let alertController = self?.createAlert(title: "Error", message: "Failed to update location settings. Try again!")
                     if let alertController = alertController {
