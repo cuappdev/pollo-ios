@@ -29,6 +29,8 @@ class NavigationTitleView: UIView {
     let arrowImageViewLeftPadding: CGFloat = 6
     let arrowImageViewWidth: CGFloat = 5.3
     let labelInset: CGFloat = 10
+    let navigationButtonVerticalEdgeInset: CGFloat = 10
+    let navigationButtonHorizontalEdgeInset: CGFloat = 30
     let primaryLabelHeight: CGFloat = 19
     let primaryLabelWidth = UIScreen.main.bounds.width * 0.5
     let secondaryLabelHeight: CGFloat = 15
@@ -64,6 +66,7 @@ class NavigationTitleView: UIView {
 
         navigationButton = UIButton()
         navigationButton.backgroundColor = .clear
+        navigationButton.contentEdgeInsets = UIEdgeInsets(top: navigationButtonVerticalEdgeInset, left: navigationButtonHorizontalEdgeInset, bottom: navigationButtonVerticalEdgeInset, right: navigationButtonHorizontalEdgeInset)
         navigationButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
         addSubview(navigationButton)
     }
