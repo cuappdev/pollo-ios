@@ -12,7 +12,7 @@ protocol FROptionSectionControllerDelegate {
     
     var pollState: PollState { get }
     
-    func frOptionSectionControllerDidUpvote(for answerId: String)
+    func frOptionSectionControllerDidUpvote(for option: String)
     
 }
 
@@ -63,8 +63,8 @@ class FROptionSectionController: ListSectionController {
 
 extension FROptionSectionController: FROptionCellDelegate {
 
-    func frOptionCellDidReceiveUpvote(for answerId: String) {
-        delegate.frOptionSectionControllerDidUpvote(for: answerId)
+    func frOptionCellDidReceiveUpvote(for text: String) {
+        delegate.frOptionSectionControllerDidUpvote(for: text)
     }
     
 }

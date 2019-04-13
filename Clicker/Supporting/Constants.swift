@@ -74,6 +74,8 @@ struct LayoutConstants {
 }
 
 struct ParserKeys {
+    static let createdAtKey = "createdAt"
+    static let updatedAtKey = "updatedAt"
     static let correctAnswerKey = "correctAnswer"
     static let answerKey = "answer"
     static let answersKey = "answers"
@@ -85,16 +87,19 @@ struct ParserKeys {
     static let sharedKey = "shared"
     static let textKey = "text"
     static let typeKey = "type"
+    static let stateKey = "state"
     static let upvotesKey = "upvotes"
 }
 
 struct RequestKeys {
+    static let letterKey = "letter"
     static let correctAnswerKey = "correctAnswer"
     static let answerIDKey = "answerID"
     static let choiceKey = "choice"
     static let countKey = "count"
     static let googleIDKey = "googleID"
     static let optionsKey = "options"
+    static let answerChoicesKey = "answerChoices"
     static let pollKey = "poll"
     static let sharedKey = "shared"
     static let textKey = "text"

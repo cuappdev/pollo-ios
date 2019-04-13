@@ -157,15 +157,19 @@ extension Future where Value == Data {
         return transformed {
             //Uncomment this line to see what is being decoded
             //print(String.init(data: $0, encoding: .utf8))
-            return try JSONDecoder().decode(NextValue.self, from: $0)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            return try decoder.decode(NextValue.self, from: $0)
         }
     }
     
     func decode<NextValue: Codable>() -> Future<NextValue> {
         return transformed {
             //Uncomment this line to see what is being decoded
-            //print(String.init(data: $0, encoding: .utf8))
-            return try JSONDecoder().decode(NextValue.self, from: $0)
+            print(String.init(data: $0, encoding: .utf8))
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            return try decoder.decode(NextValue.self, from: $0)
         }
     }
 }

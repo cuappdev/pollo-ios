@@ -14,7 +14,7 @@ protocol PollOptionsCellDelegate: class {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int)
-    func pollOptionsCellDidUpvote(for answerId: String)
+    func pollOptionsCellDidUpvote(for text: String)
     
 }
 
@@ -171,7 +171,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         var frOptionModels: [FROptionModel] = oldFROptionModels
         updatedFROptionModels.forEach { (updatedFROptionModel) in
             if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
-                return updatedFROptionModel.answerId == frOptionModel.answerId
+                return updatedFROptionModel.identifier == frOptionModel.identifier
             }) {
                 // Don't have to do index + 1 because FR does not have topSpaceModel
                 guard let sectionController = adapter.sectionController(forSection: index) as? FROptionSectionController else { return }
@@ -254,10 +254,10 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
         return delegate.userRole
     }
 
-    func frOptionSectionControllerDidUpvote(for answerId: String) {
+    func frOptionSectionControllerDidUpvote(for text: String) {
         // Only members can upvote free responses
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
-        delegate.pollOptionsCellDidUpvote(for: answerId)
+        delegate.pollOptionsCellDidUpvote(for: text)
     }
     
 }

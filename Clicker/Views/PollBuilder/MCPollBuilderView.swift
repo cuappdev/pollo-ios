@@ -84,6 +84,17 @@ class MCPollBuilderView: UIView {
         updateTotalOptions()
     }
     
+    func getChoices() -> [PollResult] {
+        return mcOptionModels.compactMap { (mcOptionModel) -> PollResult? in
+            switch mcOptionModel.type {
+            case .newOption(option: let option, index: let index, isCorrect: _):
+                return PollResult(text: option != "" ? option : intToMCOption(index), count: 0)
+            case .addOption:
+                return nil
+            }
+        }
+    }
+
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {

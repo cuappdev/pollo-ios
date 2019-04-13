@@ -10,7 +10,7 @@ import UIKit
 
 protocol FROptionCellDelegate: class {
     
-    func frOptionCellDidReceiveUpvote(for answerId: String)
+    func frOptionCellDidReceiveUpvote(for text: String)
     
 }
 
@@ -26,7 +26,6 @@ class FROptionCell: UICollectionViewCell {
     // MARK: - Data vars
     weak var delegate: FROptionCellDelegate?
     var didUpvote: Bool!
-    var answerId: String!
     
     // MARK: - Constants
     let optionLabelFontSize: CGFloat = 14
@@ -109,7 +108,6 @@ class FROptionCell: UICollectionViewCell {
     func configure(for frOptionModel: FROptionModel, delegate: FROptionCellDelegate) {
         self.delegate = delegate
         self.didUpvote = frOptionModel.didUpvote
-        self.answerId = frOptionModel.answerId
         optionLabel.text = frOptionModel.option
         let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerGreen0 : .clickerGrey2
         numUpvotedLabel.textColor = numUpvotedLabelTextColor
@@ -131,7 +129,7 @@ class FROptionCell: UICollectionViewCell {
 
     // MARK: - Actions
     @objc func upvoteFROption() {
-        delegate?.frOptionCellDidReceiveUpvote(for: answerId)
+        delegate?.frOptionCellDidReceiveUpvote(for: optionLabel.text ?? "")
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -9,14 +9,17 @@
 import Foundation
 import IGListKit
 
-struct PollsResponse: Codable {
-    
+struct PollsResponse: Codable { 
+
+    var createdAt: String?
+    var updatedAt: String?
     var id: Int
     var text: String
-    var results: [String: PollResult]
-    var shared: Bool
-    var type: String
+    var answerChoices: [PollResult]
+    var type: QuestionType
     var correctAnswer: String?
+    var userAnswers: [String: PollResult]
+    var state: PollState
     
 }
 
@@ -24,7 +27,7 @@ struct GetSortedPollsResponse: Codable {
 
     // Seconds since 1970
     var date: String
-    var polls: [PollsResponse]
+    var polls: [Poll]
 
     /// Swift Date representation of `date` sent from backend
     lazy var dateValue: Date = {

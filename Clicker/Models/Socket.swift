@@ -15,6 +15,12 @@ class Socket {
     weak var delegate: SocketDelegate?
     var socket: SocketIOClient
     var manager: SocketManager
+
+    var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return decoder
+    }()
     
     init(id: String, userRole: UserRole, delegate: SocketDelegate) {
         self.id = id
@@ -40,19 +46,15 @@ class Socket {
             self.delegate?.sessionDisconnected()
         }
         
-        socket.on(Routes.userStart) { data, _ in
-            guard let json = data[0] as? [String: Any], let pollDict = json[ParserKeys.pollKey] as? [String: Any] else {
-                return
-            }
-            let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
+        socket.on(Routes.userStart) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .member)
         }
         
-        socket.on(Routes.userEnd) { data, _ in
-            guard let json = data[0] as? [String: Any], let pollDict = json[ParserKeys.pollKey] as? [String: Any] else {
-                return
-            }
-            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
+        socket.on(Routes.userEnd) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollEnded(poll, userRole: .member)
         }
 
@@ -65,60 +67,41 @@ class Socket {
             self.delegate?.pollDeletedLive()
         }
         
-        socket.on(Routes.userResults) { data, _ in
-            guard let dict = data[0] as? [String: Any] else {
-                return
-            }
-            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate?.receivedResults(currentState)
+        socket.on(Routes.userResults) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            self.delegate?.receivedResults(poll, userRole: .member)
         }
 
-        socket.on(Routes.userResultsLive) { data, _ in
-            guard let dict = data[0] as? [String: Any] else {
-                return
-            }
-            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate?.receivedResultsLive(currentState)
+        socket.on(Routes.userResultsLive) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            self.delegate?.receivedResultsLive(poll, userRole: .member)
         }
         
         // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
-        socket.on(Routes.adminStart) { data, _ in
-            guard let json = data[0] as? [String: Any], let pollDict = json[ParserKeys.pollKey] as? [String: Any] else {
-                return
-            }
-            let poll = PollParser.parseItem(json: JSON(pollDict), state: .live)
+        socket.on(Routes.adminStart) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .admin)
         }
         
-        socket.on(Routes.adminUpdateTally) { data, _ in
-            guard let dict = data[0] as? [String: Any] else {
-                return
-            }
-            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate?.updatedTally(currentState)
+        socket.on(Routes.adminUpdateTally) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            self.delegate?.updatedTally(poll, userRole: .admin)
         }
 
-        socket.on(Routes.adminUpdateTallyLive) { data, _ in
-            guard let dict = data[0] as? [String: Any] else {
-                return
-            }
-            let currentState = CurrentStateParser.parseItem(json: JSON(dict))
-            self.delegate?.updatedTallyLive(currentState)
+        socket.on(Routes.adminUpdateTallyLive) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            self.delegate?.updatedTallyLive(poll, userRole: .admin)
         }
         
-        socket.on(Routes.adminEnded) { data, _ in
-            guard let json = data[0] as? [String: Any], let pollDict = json[ParserKeys.pollKey] as? [String: Any] else {
-                return
-            }
-            let poll = PollParser.parseItem(json: JSON(pollDict), state: .ended)
+        socket.on(Routes.adminEnded) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollEnded(poll, userRole: .admin)
-        }
-        
-        socket.on(Routes.count) { data, _ in
-            guard let json = data[0] as? [String: Any], let count = json[ParserKeys.countKey] as? Int else {
-                return
-            }
-            self.delegate?.receivedUserCount(count)
         }
 
         socket.connect()

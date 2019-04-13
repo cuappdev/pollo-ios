@@ -18,8 +18,8 @@ protocol CardControllerDelegate: class {
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollDeleted(_ pollID: Int, userRole: UserRole)
     func pollDeletedLive()
-    func receivedResults(_ currentState: CurrentState)
-    func updatedTally(_ currentState: CurrentState)
+    func receivedResults(_ poll: Poll)
+    func updatedTally(_ poll: Poll)
     func navigationTitleViewNavigationButtonTapped()
     
 }

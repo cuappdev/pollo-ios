@@ -17,7 +17,7 @@ protocol PollBuilderViewDelegate: class {
 }
 
 protocol PollBuilderViewControllerDelegate: class {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?, shouldPopViewController: Bool)
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool)
     func showNavigationBar()
 }
 
@@ -43,6 +43,7 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: Data vars
     var correctAnswer: String?
+    var answerChoices: [PollResult]!
     var drafts: [Draft] = []
     var questionType: QuestionType!
     weak var delegate: PollBuilderViewControllerDelegate?
@@ -333,10 +334,10 @@ class PollBuilderViewController: UIViewController {
         case .multipleChoice:
             let question = mcPollBuilder.questionText ?? ""
             var options = mcPollBuilder.getOptions()
-            if options.isEmpty {
+           if options.isEmpty {
                 options.append("")
                 options.append("")
-            }
+           }
             if let loadedDraft = loadedMCDraft {
                 updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
                     guard let `self` = self else { return }
@@ -412,12 +413,14 @@ class PollBuilderViewController: UIViewController {
         
         switch questionType {
         case .multipleChoice:
+            answerChoices = mcPollBuilder.getChoices()
             let question = mcPollBuilder.questionText ?? ""
-            delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, correctAnswer: correctAnswer, shouldPopViewController: true)
+            delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
         case .freeResponse:
             let question = frPollBuilder.questionText ?? ""
-            delegate?.startPoll(text: question, type: .freeResponse, options: [], state: .live, correctAnswer: nil, shouldPopViewController: true)
+            delegate?.startPoll(text: question, type: .freeResponse, options: [], state: .live, answerChoices: [], correctAnswer: nil, shouldPopViewController: true)
         }
+
         if loadedMCDraft != nil || loadedFRDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())
         } else {
