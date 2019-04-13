@@ -130,7 +130,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 //        ]
         //let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         //let pollResults = formatResults(results: results)
-        let newPoll = Poll(createdAt: Date(), text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [], state: state)
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
@@ -139,7 +139,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             "answerChoices": answerChoicesDict,
             "state": "live",
             "correctAnswer": correct,
-            "userAnswers": [String: Any](),
+            "userAnswers": [String: [PollChoice]](),
             "type": type.rawValue
         ]
 
@@ -283,6 +283,7 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
+        print(poll.id)
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollEnded(poll, userRole: userRole)
             return
@@ -397,7 +398,8 @@ extension CardController: SocketDelegate {
     }
     
     func emitShareResults() {
-        socket.socket.emit(Routes.serverShare, [])
+        let poll = pollsDateModel.polls[currentIndex]
+        socket.socket.emit(Routes.serverShare, poll.id ?? -1)
         Analytics.shared.log(with: SharedResultsPayload())
     }
     

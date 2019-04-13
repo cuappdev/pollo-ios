@@ -68,14 +68,14 @@ class PollChoice: Codable {
 }
 
 class Poll: Codable {
-    var createdAt: Date? // string of seconds since 1970
-    var updatedAt: Date?
+    var createdAt: String? // string of seconds since 1970
+    var updatedAt: String?
     var id: Int?
     var text: String
     var answerChoices: [PollResult]
     var type: QuestionType
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
-    var userAnswers: [String: [PollChoice]] // googleID to poll choice
+    var userAnswers: [PollChoice] // googleID to poll choice
     var state: PollState
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
@@ -84,7 +84,7 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: Date? = nil, updatedAt: Date? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [PollChoice], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
@@ -107,14 +107,13 @@ class Poll: Codable {
     }
 
     func getSelected() -> Any? {
-        guard let userId = User.currentUser?.id else { return nil }
-        guard let selected = userAnswers[userId] else { return nil }
+        if userAnswers.isEmpty { return nil }
         switch type {
         case .multipleChoice:
-            guard let answer = selected[0].letter else { return nil }
+            guard let answer = userAnswers[0].letter else { return nil }
             return answer
         case .freeResponse:
-            return selected[0].text
+            return userAnswers[0].text
         }
     }
 
@@ -140,31 +139,27 @@ class Poll: Codable {
     }
     
     func getTotalResults() -> Int {
-        return userAnswers.values.reduce(0) { (currentTotalResults, result) -> Int in
-            return currentTotalResults + (result.count)
+        return answerChoices.reduce(0) { (currentTotalResults, choice) -> Int in
+            return currentTotalResults + (choice.count ?? 0)
         }
     }
 
     // Returns whether user upvoted answerId
     func userDidUpvote(answerText: String) -> Bool {
-        if let userId = User.currentUser?.id, let userUpvotedAnswer = userAnswers[userId] {
-            return userUpvotedAnswer.contains { $0.text == answerText }
-        }
-        return false
+        return userAnswers.contains(where: { choice -> Bool in
+            return choice.text == answerText
+        })
     }
 
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
-        guard let userId = User.currentUser?.id else { return false }
-        guard let userSelectedLetterAnswer = userAnswers[userId]?[0].letter else { return false }
-        return userSelectedLetterAnswer == mcChoice
+        return userAnswers.contains(where: { choice -> Bool in
+            return choice.text == mcChoice
+        })
     }
 
     func updateSelected(mcChoice: String) {
-        if let userId = User.currentUser?.id {
-            // This should never be nil
-            userAnswers[userId]?[0] = PollChoice(text: mcChoice)
-        }
+        userAnswers[0].text = mcChoice
     }
 
 }

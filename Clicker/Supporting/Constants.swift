@@ -92,6 +92,7 @@ struct ParserKeys {
 }
 
 struct RequestKeys {
+    static let accessTokenKey = "accessToken"
     static let letterKey = "letter"
     static let correctAnswerKey = "correctAnswer"
     static let answerIDKey = "answerID"

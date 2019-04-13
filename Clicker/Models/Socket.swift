@@ -30,8 +30,8 @@ class Socket {
         urlString = "http://localhost:3000"
         #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
-        if let googleID = User.currentUser?.id {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.googleIDKey: googleID])])
+        if let accessToken = User.userSession?.accessToken {
+            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.accessTokenKey: accessToken])])
         } else {
             manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue])])
         }
@@ -101,6 +101,7 @@ class Socket {
         socket.on(Routes.adminEnded) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
             guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            print(poll.id)
             self.delegate?.pollEnded(poll, userRole: .admin)
         }
 

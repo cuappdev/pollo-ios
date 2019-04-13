@@ -170,28 +170,43 @@ func formatResults(results: [String: JSON]) -> [String: PollResult] {
 func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
     var mcResultModels: [MCResultModel] = []
     let totalNumResults = Float(poll.getTotalResults())
-    poll.answerChoices.enumerated().forEach { (index, option) in
-        let mcOptionKey = intToMCOption(index)
-        if let result = poll.userAnswers[mcOptionKey] {
-            let numSelected = result.count
-            let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            var isSelected = false
-            if let selected = poll.getSelected() as? String {
-                isSelected = mcOptionKey == selected || selected == option.text
-            }
-            let resultModel = MCResultModel(option: option.text, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected, choiceIndex: index)
-            mcResultModels.append(resultModel)
+    var choiceIndex = 0
+    poll.answerChoices.forEach { choice in
+        let numSelected = choice.count ?? 0
+        let letter = choice.letter ?? ""
+        let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+        var isSelected = false
+        if let selected = poll.getSelected() as? String {
+            isSelected = letter == selected || selected == choice.text
         }
+        let resultModel = MCResultModel(option: choice.text, numSelected: numSelected, percentSelected: percentSelected, isSelected: isSelected, choiceIndex: choiceIndex)
+        mcResultModels.append(resultModel)
+        choiceIndex += 1
     }
+    
+//    poll.answerChoices.enumerated().forEach { (index, option) in
+//        let mcOptionKey = intToMCOption(index)
+//
+//        if let result = poll.userAnswers[mcOptionKey] {
+//            let numSelected = result.count
+//            let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+//            var isSelected = false
+//            if let selected = poll.getSelected() as? String {
+//                isSelected = mcOptionKey == selected || selected == option.text
+//            }
+//            let resultModel = MCResultModel(option: option.text, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected, choiceIndex: index)
+//            mcResultModels.append(resultModel)
+//        }
+//    }
     // We should always have at least 2 choices.
     // Thus, if mcResultModels is empty, that means poll.results is empty.
     // This should only happen for the admin/poll/start socket route in which
     // the poll is still live which makes sense that we do not have any results yet.
-    if mcResultModels.isEmpty {
-        poll.answerChoices.enumerated().forEach { (index, option) in
-            let resultModel = MCResultModel(option: option.text, numSelected: 0, percentSelected: 0.0, isSelected: false, choiceIndex: index)
-            mcResultModels.append(resultModel)
-        }
-    }
+//    if mcResultModels.isEmpty {
+//        poll.answerChoices.enumerated().forEach { (index, option) in
+//            let resultModel = MCResultModel(option: option.text, numSelected: 0, percentSelected: 0.0, isSelected: false, choiceIndex: index)
+//            mcResultModels.append(resultModel)
+//        }
+//    }
     return .mcResult(resultModels: mcResultModels)
 }

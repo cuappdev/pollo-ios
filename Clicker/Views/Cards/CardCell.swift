@@ -182,11 +182,12 @@ class CardCell: UICollectionViewCell {
     }
     
     @objc func setTimerText() {
-        guard let start = poll.createdAt else {
+        guard let start = poll.createdAt, let startTimestamp = Double(start) else {
             self.timerLabel.text = self.initialTimerLabelText
             return
         }
-        let elapsedSeconds = Int(NSDate().timeIntervalSince(start))
+        let date = Date(timeIntervalSince1970: startTimestamp)
+        let elapsedSeconds = Int(NSDate().timeIntervalSince(date))
         if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if elapsedSeconds < 60 {
