@@ -15,6 +15,7 @@ protocol EmptyStateCellDelegate: class {
 class EmptyStateCell: UICollectionViewCell {
     
     // MARK: View vars
+    var containerView: UIView!
     var createDraftButton: UIButton!
     var iconImageView: UIImageView!
     var nameView: NameView!
@@ -50,6 +51,7 @@ class EmptyStateCell: UICollectionViewCell {
     let subtitleLabelWidth: CGFloat = 250.0
     let titleLabelTopPadding: CGFloat = 16.0
     let titleLabelWidth: CGFloat = 200.0
+    let topPadding: CGFloat = 20
     let userNothingToSeeText = "Nothing to see yet."
     let userWaitingText = "Waiting for the host to post a poll..."
     let womanShruggingImageName = "woman_shrugging"
@@ -70,21 +72,24 @@ class EmptyStateCell: UICollectionViewCell {
     }
     
     func setupViews() {
+        containerView = UIView()
+        contentView.addSubview(containerView)
+
         iconImageView = UIImageView()
         iconImageView.contentMode = .scaleAspectFit
-        contentView.addSubview(iconImageView)
+        containerView.addSubview(iconImageView)
         
         titleLabel = UILabel()
         titleLabel.font = ._18SemiboldFont
         titleLabel.textAlignment = .center
-        contentView.addSubview(titleLabel)
+        containerView.addSubview(titleLabel)
         
         subtitleLabel = UILabel()
         subtitleLabel.font = ._14MediumFont
         subtitleLabel.textAlignment = .center
         subtitleLabel.lineBreakMode = .byWordWrapping
         subtitleLabel.numberOfLines = 0
-        contentView.addSubview(subtitleLabel)
+        containerView.addSubview(subtitleLabel)
         
         createDraftButton = UIButton()
         createDraftButton.clipsToBounds = true
@@ -98,7 +103,7 @@ class EmptyStateCell: UICollectionViewCell {
         createDraftButton.layer.borderColor = UIColor.white.cgColor
         createDraftButton.layer.borderWidth = 1
         createDraftButton.backgroundColor = .clear
-        contentView.addSubview(createDraftButton)
+        containerView.addSubview(createDraftButton)
     }
     
     @objc func zoomIn(sender: UIButton) {
@@ -122,13 +127,10 @@ class EmptyStateCell: UICollectionViewCell {
             switch emptyStateModel.type {
             case .pollsViewController:
                 make.width.height.equalTo(pollsViewControllerIconImageViewLength)
-                make.top.equalToSuperview().offset(pollsViewControllerIconImageViewTopPadding)
+                make.top.equalToSuperview()
             case .cardController:
                 make.width.height.equalTo(cardControllerIconImageViewLength)
-                make.top.equalToSuperview().offset(iconImageViewTopPadding)
-            case .draftsViewController:
-                make.width.height.equalTo(draftsViewControllerIconImageViewLength)
-                make.top.equalToSuperview().offset(draftsViewControllerIconImageViewTopPadding)
+                make.top.equalToSuperview()
             }
             make.centerX.equalToSuperview()
         }
@@ -146,18 +148,22 @@ class EmptyStateCell: UICollectionViewCell {
                 make.centerX.equalToSuperview()
                 make.top.equalTo(titleLabel.snp.bottom).offset(subtitleLabelTopPadding)
             }
+            containerView.snp.makeConstraints { make in
+                make.leading.trailing.centerY.equalToSuperview()
+                make.top.equalTo(iconImageView)
+                make.bottom.equalTo(subtitleLabel)
+            }
         case .cardController:
             subtitleLabel.snp.makeConstraints { make in
                 make.width.equalTo(subtitleLabelWidth)
                 make.centerX.equalToSuperview()
                 make.top.equalTo(titleLabel.snp.bottom).offset(subtitleLabelTopPadding)
             }
-        case .draftsViewController:
-            createDraftButton.snp.makeConstraints { make in
-                make.width.equalTo(createDraftButtonWidth)
-                make.height.equalTo(createDraftButtonHeight)
-                make.top.equalTo(titleLabel.snp.bottom).offset(createDraftButtonTopPadding)
-                make.centerX.equalToSuperview()
+            containerView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.centerY.equalToSuperview().offset(-topPadding)
+                make.top.equalTo(iconImageView)
+                make.bottom.equalTo(subtitleLabel)
             }
         }
         super.updateConstraints()
@@ -189,11 +195,6 @@ class EmptyStateCell: UICollectionViewCell {
                 setupNameView(with: session, nameViewDelegate: nameViewDelegate)
             }
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
-        case .draftsViewController(let delegate):
-            iconImageView.image = UIImage(named: womanShruggingImageName)
-            titleLabel.textColor = .white
-            titleLabel.text = noDraftsText
-            self.delegate = delegate
         }
     }
 
