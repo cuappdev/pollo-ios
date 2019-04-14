@@ -29,7 +29,7 @@ class QuestionTypeDropDownView: UIView {
     weak var delegate: QuestionTypeDropDownViewDelegate?
     
     // MARK: - Constants
-    let buttonHeight: CGFloat = 53
+    let buttonHeight: CGFloat = 50
     let centerViewHeight: CGFloat = 24
     let centerViewWidth: CGFloat = 135
     let freeResponseText: String = "Free Response"
