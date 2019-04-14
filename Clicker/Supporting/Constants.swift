@@ -39,6 +39,7 @@ struct Routes {
     static let adminUpdateTally = "admin/poll/updateTally"
     static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
+    static let serverAnswer = "server/poll/answer"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
     static let serverStart = "server/poll/start"

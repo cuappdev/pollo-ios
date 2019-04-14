@@ -66,11 +66,11 @@ extension CardController: PollSectionControllerDelegate {
             guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
             choiceForAnswer = intToMCOption(indexOfChoice)
             let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
-            emitAnswer(pollChoice: pollChoice, message: Routes.serverTally)
+            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         case .freeResponse:
             choiceForAnswer = choice
             let pollChoice = PollChoice(text: choice)
-            emitAnswer(pollChoice: pollChoice, message: Routes.serverTally)
+            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         }
     }
 
