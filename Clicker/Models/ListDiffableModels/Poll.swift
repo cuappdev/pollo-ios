@@ -75,7 +75,7 @@ class Poll: Codable {
     var answerChoices: [PollResult]
     var type: QuestionType
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
-    var userAnswers: [PollChoice] // googleID to poll choice
+    var userAnswers: [String: [PollChoice]] // googleID to poll choice
     var state: PollState
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
@@ -84,7 +84,7 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [PollChoice], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
@@ -108,12 +108,13 @@ class Poll: Codable {
 
     func getSelected() -> Any? {
         if userAnswers.isEmpty { return nil }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID] else { return nil }
         switch type {
         case .multipleChoice:
-            guard let answer = userAnswers[0].letter else { return nil }
+            guard let answer = answers[0].letter else { return nil }
             return answer
         case .freeResponse:
-            return userAnswers[0].text
+            return answers[0].text
         }
     }
 
@@ -146,20 +147,22 @@ class Poll: Codable {
 
     // Returns whether user upvoted answerId
     func userDidUpvote(answerText: String) -> Bool {
-        return userAnswers.contains(where: { choice -> Bool in
-            return choice.text == answerText
-        })
+        if let googleID = User.currentUser?.id, let userUpvotedAnswers = userAnswers[googleID] {
+            return userUpvotedAnswers.contains { $0.text == answerText }
+        }
+        return false
     }
 
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
-        return userAnswers.contains(where: { choice -> Bool in
-            return choice.text == mcChoice
-        })
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID] else { return false }
+        guard let letter = userSelectedAnswers[0].letter else { return false }
+        return letter == mcChoice
     }
 
     func updateSelected(mcChoice: String) {
-        userAnswers[0].text = mcChoice
+        guard let googleID = User.currentUser?.id else { return }
+        userAnswers[googleID]?[0] = PollChoice(text: mcChoice)
     }
 
 }

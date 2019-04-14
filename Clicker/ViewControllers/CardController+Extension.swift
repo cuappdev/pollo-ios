@@ -130,7 +130,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 //        ]
         //let results = buildEmptyResultsFromOptions(options: options, questionType: type)
         //let pollResults = formatResults(results: results)
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [], state: state)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 

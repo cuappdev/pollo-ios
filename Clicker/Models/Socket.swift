@@ -22,7 +22,7 @@ class Socket {
         return decoder
     }()
     
-    init(id: String, userRole: UserRole, delegate: SocketDelegate) {
+    init(id: String, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
         var urlString = "https://\(Keys.hostURL.value)"
@@ -30,11 +30,8 @@ class Socket {
         urlString = "http://localhost:3000"
         #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
-        if let accessToken = User.userSession?.accessToken {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue, RequestKeys.accessTokenKey: accessToken])])
-        } else {
-            manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.userTypeKey: userRole.rawValue])])
-        }
+        guard let accessToken = User.userSession?.accessToken else { fatalError("No access token") }
+        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.accessTokenKey: accessToken])])
         
         socket = manager.socket(forNamespace: "/\(id)")
         

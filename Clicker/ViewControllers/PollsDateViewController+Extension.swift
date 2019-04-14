@@ -89,7 +89,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [], state: .live)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
