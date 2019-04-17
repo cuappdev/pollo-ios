@@ -82,6 +82,12 @@ class Socket {
             guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .admin)
         }
+
+        socket.on(Routes.adminUpdates) { socketData, _ in
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
+            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            self.delegate?.updatedTally(poll, userRole: .admin)
+        }
         
         socket.on(Routes.adminUpdateTally) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }

@@ -140,7 +140,8 @@ class CardCell: UICollectionViewCell {
         
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
-        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+        let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
+        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: didSubmitChoice)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -182,12 +183,12 @@ class CardCell: UICollectionViewCell {
     }
     
     @objc func setTimerText() {
-        guard let start = poll.createdAt, let startTimestamp = Double(start) else {
-            self.timerLabel.text = self.initialTimerLabelText
-            return
-        }
-        let date = Date(timeIntervalSince1970: startTimestamp)
-        let elapsedSeconds = Int(NSDate().timeIntervalSince(date))
+//        guard let start = poll.createdAt else {
+//            self.timerLabel.text = self.initialTimerLabelText
+//            return
+//        }
+        let startTime = convertUnixStringToDate(String(Date().timeIntervalSince1970))
+        let elapsedSeconds = Int(NSDate().timeIntervalSince(startTime))
         if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if elapsedSeconds < 60 {

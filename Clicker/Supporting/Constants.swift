@@ -36,6 +36,7 @@ struct Identifiers {
 struct Routes {
     static let adminEnded = "admin/poll/ended"
     static let adminStart = "admin/poll/start"
+    static let adminUpdates = "admin/poll/updates"
     static let adminUpdateTally = "admin/poll/updateTally"
     static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
