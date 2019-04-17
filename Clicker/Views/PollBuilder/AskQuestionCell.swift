@@ -12,55 +12,86 @@ import UIKit
 protocol AskQuestionCellDelegate: class {
     func askQuestionCellDidUpdateEditable(_ editable: Bool)
     func askQuestionCellDidUpdateText(_ text: String?)
+    func askQuestionCellDidUpdateHeight(_ height: CGFloat)
 }
 
 class AskQuestionCell: UICollectionViewCell {
 
     // MARK: - View vars
-    var textField: UITextField!
+    var questionTextView: UITextView!
+    var charCountLabel: UILabel!
 
     // MARK: - Data vars
     weak var delegate: AskQuestionCellDelegate?
-
+    
     // MARK: - Constants
     let editButtonImageName = "dots"
     let moreButtonWidth: CGFloat = 25
+    let questionLabelPlaceholder = "Ask a question..."
     let questionLabelWidthScaleFactor: CGFloat = 0.75
+    let charCountLabelPadding: CGFloat = 4
     let untitledPollString = "Untitled Poll"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         contentView.backgroundColor = .clickerWhite
+        
+        questionTextView = UITextView()
+        questionTextView.delegate = self
+        questionTextView.font = ._18RegularFont
+        questionTextView.backgroundColor = .clickerWhite
+        questionTextView.returnKeyType = .done
+        questionTextView.isScrollEnabled = false
+        contentView.addSubview(questionTextView)
+        
+        charCountLabel = UILabel()
+        charCountLabel.textColor = .clickerGrey2
+        charCountLabel.font = ._12RegularFont
+        contentView.addSubview(charCountLabel)
 
-        textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Ask a question...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._18RegularFont])
-        textField.font = ._18RegularFont
-        textField.returnKeyType = .done
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(updateEditable), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        contentView.addSubview(textField)
-
-        textField.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        setUpConstraints()
     }
 
     // MARK: - Configure
     func configure(with delegate: AskQuestionCellDelegate, askQuestionModel: AskQuestionModel) {
         self.delegate = delegate
-        self.textField.text = askQuestionModel.currentQuestion
+        if let currentQuestion = askQuestionModel.currentQuestion {
+            questionTextView.text = currentQuestion
+            questionTextView.textColor = .black
+            charCountLabel.text = "\(questionTextView.text.count)/120"
+            updateQuestionTextViewHeight()
+        } else {
+            questionTextView.text = questionLabelPlaceholder
+            questionTextView.textColor = .clickerGrey2
+            charCountLabel.text = nil
+        }
     }
 
     // MARK: - Actions
-    @objc func updateEditable() {
-        let isEditable = !(textField.text?.isEmpty ?? true)
+    func updateEditable() {
+        let isEditable = !(questionTextView.text?.isEmpty ?? true)
         delegate?.askQuestionCellDidUpdateEditable(isEditable)
     }
 
-    @objc func textDidChange() {
-        delegate?.askQuestionCellDidUpdateText(textField.text)
+    func updateQuestionTextViewHeight() {
+        let questionTextViewWidth = self.contentView.frame.size.width
+        let dynamicHeight = questionTextView.sizeForWidth(width: questionTextViewWidth)
+        delegate?.askQuestionCellDidUpdateHeight(dynamicHeight)
+    }
+
+    func textDidChange() {
+        delegate?.askQuestionCellDidUpdateText(questionTextView.text)
+    }
+    
+    func setUpConstraints() {
+        questionTextView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        charCountLabel.snp.makeConstraints { make in
+            make.bottom.right.equalTo(questionTextView).inset(charCountLabelPadding)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -69,14 +100,37 @@ class AskQuestionCell: UICollectionViewCell {
 
 }
 
-extension AskQuestionCell: UITextFieldDelegate {
+extension AskQuestionCell: UITextViewDelegate {
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let maxLength = IntegerConstants.maxQuestionCharacterCount
-        let currentString: NSString = (textField.text ?? "") as NSString
-        let newString: NSString =
-            currentString.replacingCharacters(in: range, with: string) as NSString
+        let currentString: NSString = (textView.text ?? "") as NSString
+        let newString: NSString = currentString.replacingCharacters(in: range, with: text) as NSString
         return newString.length <= maxLength
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .clickerGrey2 {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        charCountLabel.text = "\(questionTextView.text.count)/120"
+        updateQuestionTextViewHeight()
+        updateEditable()
+        textDidChange()
+    }
+    
+}
+
+// MARK: - UITextView
+extension UITextView {
+
+    func sizeForWidth(width: CGFloat) -> CGFloat {
+        let dynamicSize = sizeThatFits(CGSize.init(width: width, height: CGFloat(MAXFLOAT)))
+        return dynamicSize.height
     }
 
 }
