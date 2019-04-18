@@ -268,11 +268,14 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
-        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
-            return
-        }
+//        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
+//            return
+//        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
-            return otherPoll.id == poll.id
+            if let otherID = otherPoll.id, let id = poll.id {
+                return otherID == id
+            }
+            return false
         }) { return }
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
@@ -336,8 +339,9 @@ extension CardController: SocketDelegate {
             latestPoll.answerChoices = updatedPollOptions(for: latestPoll)
             updateLiveCardCell(with: latestPoll)
         } else {
-            let pollState: PollState = latestPoll.type == .multipleChoice ? .shared : latestPoll.state
+            //let pollState: PollState = latestPoll.type == .multipleChoice ? .shared : latestPoll.state
            // updateWithCurrentState(currentState: currentState, pollState: pollState)
+            updateLatestPoll(with: poll)
             self.adapter.performUpdates(animated: false, completion: nil)
         }
     }
@@ -351,6 +355,7 @@ extension CardController: SocketDelegate {
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
         // do adapter.performUpdates
         if latestPoll.state == .live && latestPoll.type == .multipleChoice && userRole == .admin {
+            latestPoll.userAnswers = poll.userAnswers
             updateLiveCardCell(with: latestPoll)
         } else {
             //updateWithCurrentState(currentState: currentState, pollState: nil)

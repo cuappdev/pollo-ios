@@ -141,7 +141,7 @@ class CardCell: UICollectionViewCell {
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
-        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: didSubmitChoice)
+        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -155,7 +155,7 @@ class CardCell: UICollectionViewCell {
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             DispatchQueue.main.async {
                 self.adapter.performUpdates(animated: false, completion: nil)
             }

@@ -108,7 +108,7 @@ class Poll: Codable {
 
     func getSelected() -> Any? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID] else { return nil }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], !answers.isEmpty else { return nil }
         switch type {
         case .multipleChoice:
             guard let answer = answers[0].letter else { return nil }
@@ -139,9 +139,18 @@ class Poll: Codable {
         }
     }
     
-    func getTotalResults() -> Int {
-        return answerChoices.reduce(0) { (currentTotalResults, choice) -> Int in
-            return currentTotalResults + (choice.count ?? 0)
+    func totalResults(from choices: [PollResult]) -> Int {
+        return choices.reduce(0) { (total, choice) -> Int in
+            return total + (choice.count ?? 0)
+        }
+    }
+    
+    func getTotalResults(for userRole: UserRole) -> Int {
+        switch userRole {
+        case .member:
+            return state == .shared ? totalResults(from: answerChoices) : 0
+        case .admin:
+            return totalResults(from: answerChoices)
         }
     }
 
