@@ -286,7 +286,6 @@ extension CardController: SocketDelegate {
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
-        print(poll.id)
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.pollEnded(poll, userRole: userRole)
             return

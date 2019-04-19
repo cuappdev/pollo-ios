@@ -164,8 +164,7 @@ class Poll: Codable {
 
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
-        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID] else { return false }
-        guard let letter = userSelectedAnswers[0].letter else { return false }
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first?.letter else { return false }
         return letter == mcChoice
     }
 

@@ -63,24 +63,19 @@ extension PollsViewController: PollsCellDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let pollsResponse):
-                    let pollsDateArray = pollsResponse.data
+                    var pollsDateArray = [PollsDateModel]()
 
-//                    pollsResponse.data.forEach { response in
-//                        var mutableResponse = response
-//                        if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
-////                            pollsDateArray[index].polls.append(contentsOf: response.polls)
-//                            response.polls.forEach { poll in
-//                                //let options = poll.userAnswers.keys.map { option in option }
-//                                pollsDateArray[index].polls.append(Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state))
-//                            }
-//                        } else {
-//                            response.polls.forEach { poll in
-//                               // let options = poll.userAnswers.keys.map { option in option }
-//                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state)]
-//                                pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
-//                            }
-//                        }
-//                    }
+                    pollsResponse.data.forEach { response in
+                        let mutableResponse = response
+                        if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
+                            pollsDateArray[index].polls.append(contentsOf: response.polls)
+                        } else {
+                            response.polls.forEach { poll in
+                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state)]
+                                pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                            }
+                        }
+                    }
                     let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: userRole)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
