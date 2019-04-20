@@ -357,9 +357,8 @@ class PollsViewController: UIViewController {
                         }
                     }
                     
-                    self.codeTextField.text = ""
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.updateJoinSessionButton(canJoin: false)
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())

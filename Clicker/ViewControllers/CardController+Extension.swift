@@ -335,11 +335,9 @@ extension CardController: SocketDelegate {
         // Free Response receives results in live state
         if latestPoll.state == .live && latestPoll.type == .freeResponse {
             // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
-            latestPoll.answerChoices = updatedPollOptions(for: latestPoll)
+            latestPoll.answerChoices = updatedPollOptions(for: poll)
             updateLiveCardCell(with: latestPoll)
         } else {
-            //let pollState: PollState = latestPoll.type == .multipleChoice ? .shared : latestPoll.state
-           // updateWithCurrentState(currentState: currentState, pollState: pollState)
             updateLatestPoll(with: poll)
             self.adapter.performUpdates(animated: false, completion: nil)
         }
