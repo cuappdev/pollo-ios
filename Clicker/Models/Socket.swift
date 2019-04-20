@@ -70,7 +70,7 @@ class Socket {
             self.delegate?.receivedResults(poll, userRole: .member)
         }
 
-        socket.on(Routes.userResultsLive) { socketData, _ in
+        socket.on(Routes.userFreeResponseLive) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
             guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.receivedResultsLive(poll, userRole: .member)

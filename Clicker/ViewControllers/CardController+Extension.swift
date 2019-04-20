@@ -350,21 +350,17 @@ extension CardController: SocketDelegate {
             delegate?.updatedTally(poll)
             return
         }
-        guard let latestPoll = pollsDateModel.polls.last else { return }
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
-        // do adapter.performUpdates
-        if latestPoll.state == .live && latestPoll.type == .multipleChoice && userRole == .admin {
-            latestPoll.userAnswers = poll.userAnswers
-            updateLiveCardCell(with: latestPoll)
-        } else {
-            //updateWithCurrentState(currentState: currentState, pollState: nil)
-            self.adapter.performUpdates(animated: false, completion: nil)
-        }
+        updateLiveCardCell(with: poll)
+        self.adapter.performUpdates(animated: true, completion: nil)
     }
 
     /// These two functions should only get called upon joining a socket
     /// so it should only be handled in PollsDateViewController
-    func receivedResultsLive(_ poll: Poll, userRole: UserRole) { }
+    func receivedResultsLive(_ poll: Poll, userRole: UserRole) {
+        receivedResults(poll, userRole: userRole)
+    }
+
     func updatedTallyLive(_ poll: Poll, userRole: UserRole) {}
 
     func updateLiveCardCell(with poll: Poll) {

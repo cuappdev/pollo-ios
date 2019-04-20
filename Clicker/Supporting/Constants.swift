@@ -50,8 +50,8 @@ struct Routes {
     static let serverDeleteLive = "server/poll/deleteLive"
     static let userStart = "user/poll/start"
     static let userEnd = "user/poll/end"
+    static let userFreeResponseLive = "user/poll/fr/live"
     static let userResults = "user/poll/results"
-    static let userResultsLive = "user/poll/results/live"
     static let userDelete = "user/poll/delete"
     static let userDeleteLive = "user/poll/deleteLive"
 }
