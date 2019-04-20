@@ -344,11 +344,18 @@ class PollsViewController: UIViewController {
                 case .value(let pollsResponse):
                     var pollsDateArray = [PollsDateModel]()
                     pollsResponse.data.forEach { response in
-                        pollsDateArray.append(PollsDateModel(date: response.date, polls: response.polls))
+                        let mutableResponse = response
+                        if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
+                            pollsDateArray[index].polls.append(contentsOf: response.polls)
+                        } else {
+                            response.polls.forEach { poll in
+                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state)]
+                                pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                            }
+                        }
                     }
-                    self.codeTextField.text = ""
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.updateJoinSessionButton(canJoin: false)
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())
