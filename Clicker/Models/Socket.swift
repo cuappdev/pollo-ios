@@ -104,7 +104,6 @@ class Socket {
         socket.on(Routes.adminEnded) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
             guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
-            print(poll.id)
             self.delegate?.pollEnded(poll, userRole: .admin)
         }
 

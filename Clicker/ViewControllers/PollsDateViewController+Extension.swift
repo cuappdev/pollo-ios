@@ -108,10 +108,6 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)
-
-        //        let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        //        let pollResults = formatResults(results: results)
-
         appendPoll(poll: newPoll)
         adapter.performUpdates(animated: false, completion: nil)
         if let firstPollsDateModel = pollsDateArray.first {
@@ -124,21 +120,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
     func showNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
-    // MARK: - Helpers
-//    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
-//        var results: [String: JSON] = [:]
-//        options.enumerated().forEach { (index, option) in
-//            let infoDict: JSON = [
-//                RequestKeys.textKey: option,
-//                RequestKeys.countKey: 0
-//            ]
-//            let letterChoice = intToMCOption(index) // i.e. A, B, C, ...
-//            let key = questionType == .multipleChoice ? letterChoice : option
-//            results[key] = infoDict
-//        }
-//        return results
-//    }
+
 }
 
 extension PollsDateViewController: NameViewDelegate {
@@ -185,7 +167,6 @@ extension PollsDateViewController: SocketDelegate {
                 return false
             }) { return }
         }
-//                || lastPollsDateModel.polls.first?.state == .live { return }
         appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -228,9 +209,7 @@ extension PollsDateViewController: SocketDelegate {
     }
 
     func receivedResults(_ poll: Poll, userRole: UserRole) {
-        guard let latestPoll = getLatestPoll() else { return }
         // Free Response receives results in live state
-        let pollState: PollState = latestPoll.type == .multipleChoice ? .shared : latestPoll.state
         updateLatestPoll(with: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
@@ -278,23 +257,6 @@ extension PollsDateViewController: SocketDelegate {
         let newPollsDate = PollsDateModel(date: todaysDate.secondsString, polls: [poll])
         pollsDateArray.insert(newPollsDate, at: 0)
     }
-    
-//    func updatedPollOptions(for poll: Poll) -> [PollResult] {
-//        var updatedOptions = poll.answerChoices.filter { (option) -> Bool in
-//            return currentState.results[option] != nil
-//        }
-//        let newOptions = currentState.results.keys.filter { return !poll.answerChoices.contains($0) }
-//        updatedOptions.insert(contentsOf: newOptions, at: 0)
-//        return updatedOptions
-//    }
-
-//    func updateWithCurrentState(poll: Poll) {
-//        guard let latestPoll = getLatestPoll() else { return }
-//        let updatedPollState = pollState ?? latestPoll.state
-//        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
-//        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: updatedPollState)
-//        updateLatestPoll(with: updatedPoll)
-//    }
 
     func updateLatestPoll(with poll: Poll) {
         guard let latestPollsDateModel = pollsDateArray.first else { return }

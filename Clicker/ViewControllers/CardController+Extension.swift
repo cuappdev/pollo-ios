@@ -59,16 +59,12 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        var choiceForAnswer: String
-        // choiceForAnswer should be "A" or "B" for multiple choice and the actual response for free response
         switch poll.type {
         case .multipleChoice:
             guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
-            choiceForAnswer = intToMCOption(indexOfChoice)
             let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
             emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         case .freeResponse:
-            choiceForAnswer = choice
             let pollChoice = PollChoice(text: choice)
             emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         }
@@ -121,19 +117,8 @@ extension CardController: PollBuilderViewControllerDelegate {
         }
 
         // EMIT START QUESTION
-//        let socketQuestion: [String: Any] = [
-//            RequestKeys.textKey: text,
-//            RequestKeys.answerChoicesKey: answerChoices,
-//            RequestKeys.typeKey: type.descriptionForServer,
-//            RequestKeys.correctAnswerKey: correct,
-//            RequestKeys.sharedKey: state == .live
-//        ]
-        //let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        //let pollResults = formatResults(results: results)
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
-
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
-
         let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
@@ -268,9 +253,6 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
-//        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
-//            return
-//        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
             if let otherID = otherPoll.id, let id = poll.id {
                 return otherID == id
@@ -304,7 +286,7 @@ extension CardController: SocketDelegate {
     }
 
     func pollDeleted(_ pollID: Int, userRole: UserRole) {
-        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
+        if !pollsDateModel.dateValue.isSameDay(as: pollsDateModel.dateValue) {
             delegate?.pollDeleted(pollID, userRole: userRole)
             return
         }
@@ -312,7 +294,7 @@ extension CardController: SocketDelegate {
         pollsDateModel.polls.remove(at: deleteIndex)
         currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
         updateCountLabelText()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func pollDeletedLive() {
@@ -373,7 +355,7 @@ extension CardController: SocketDelegate {
     // MARK: Helpers
     func emitAnswer(pollChoice: PollChoice, message: String) {
         let data: [String: Any] = [
-            RequestKeys.letterKey: pollChoice.letter, 
+            RequestKeys.letterKey: pollChoice.letter as Any,
             RequestKeys.textKey: pollChoice.text
         ]
         socket.socket.emit(message, data)
@@ -386,7 +368,7 @@ extension CardController: SocketDelegate {
     func emitDeletePoll(at index: Int) {
         switch pollsDateModel.polls[index].state {
         case .live:
-            socket.socket.emit(Routes.serverDeleteLive, pollsDateModel.polls[index].id ?? -1)
+            socket.socket.emit(Routes.serverDeleteLive)
             pollsDateModel.polls[index].state = .ended
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false

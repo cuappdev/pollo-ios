@@ -43,7 +43,6 @@ class CardCell: UICollectionViewCell {
     var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
-    var startTime: Date!
     var timer: Timer?
     
     // MARK: - Constants
@@ -68,7 +67,6 @@ class CardCell: UICollectionViewCell {
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
         frInputModel = FRInputModel()
         setupViews()
-        startTime = Date()
     }
     
     // MARK: - Layout
@@ -185,11 +183,11 @@ class CardCell: UICollectionViewCell {
     }
     
     @objc func setTimerText() {
-//        guard let start = poll.createdAt else {
-//            self.timerLabel.text = self.initialTimerLabelText
-//            return
-//        }
-        let elapsedSeconds = Int(NSDate().timeIntervalSince(startTime))
+        guard let start = poll.createdAt else {
+            self.timerLabel.text = self.initialTimerLabelText
+            return
+        }
+        let elapsedSeconds = Int(NSDate().timeIntervalSince(convertUnixStringToDate(start)))
         if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if elapsedSeconds < 60 {
