@@ -6,35 +6,35 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-import IGListKit
 import GoogleSignIn
+import IGListKit
+import UIKit
 
 class SettingsViewController: UIViewController {
 
     // MARK: Views and VC's
-    var logOutButton: UIButton!
+    var adapter: ListAdapter!
     var collectionView: UICollectionView!
     var lineView: UIView!
-    var adapter: ListAdapter!
 
     // MARK: Data
     var data: [ListDiffable]!
     
     // MARK: - Constants
-    let navBarTitle = "Settings"
-    let backButtonImageName = "darkexit"
-    let account = "Account"
     let about = "About"
     let aboutDescription = "Pollo is made by Cornell AppDev, an engineering project team at Cornell University."
-    let moreApps = "More Apps"
-    let visitOurWebsite = "Visit Our Website"
-    let more = "More"
+    let account = "Account"
+    let backButtonImageName = "darkexit"
     let feedbackDescription = "Let us know if you have any ideas, suggestions, or issues! Shake your phone to access the feedback form, or follow the link below."
-    let sendUsFeedback = "Send Us Feedback"
-    let submitFeedbackTitle = "Submit Feedback"
-    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let logOut = "Log Out"
+    let more = "More"
+    let moreApps = "More Apps"
+    let navBarTitle = "Settings"
     let privacyPolicy = "Privacy Policy"
+    let sendUsFeedback = "Send Us Feedback"
+    let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let submitFeedbackTitle = "Submit Feedback"
+    let visitOurWebsite = "Visit Our Website"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,8 +55,9 @@ class SettingsViewController: UIViewController {
         let settingsDataModel5 = SettingsDataModel(state: .info, title: more, description: feedbackDescription)
         let settingsDataModel6 = SettingsDataModel(state: .link, title: sendUsFeedback, description: Links.feedbackForm)
         let settingsDataModel7 = SettingsDataModel(state: .link, title: privacyPolicy, description: Links.privacyPolicy)
+        let settingsDataModel8 = SettingsDataModel(state: .button, title: logOut, description: logOut)
         
-        data = [settingsModel1, separatorLineModel1, settingsModel2, settingsModel3, settingsModel4, separatorLineModel2, settingsDataModel5, settingsDataModel6, settingsDataModel7]
+        data = [settingsModel1, separatorLineModel1, settingsModel2, settingsModel3, settingsModel4, separatorLineModel2, settingsDataModel5, settingsDataModel6, settingsDataModel7, settingsDataModel8]
     }
 
     func setupNavBar() {
@@ -89,27 +90,10 @@ class SettingsViewController: UIViewController {
         adapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self)
         adapter.collectionView = collectionView
         adapter.dataSource = self
-        
-        lineView = UIView()
-        lineView.backgroundColor = UIColor.clickerGrey5
-        view.addSubview(lineView)
-        
-        logOutButton = UIButton()
-        logOutButton.setTitle("Log Out", for: .normal)
-        logOutButton.titleLabel?.textAlignment = .center
-        logOutButton.titleLabel?.font = UIFont._18MediumFont
-        logOutButton.setTitleColor(.black, for: .normal)
-        logOutButton.addTarget(self, action: #selector(logOutAction), for: .touchUpInside)
-        view.addSubview(logOutButton)
+    
     }
     
     func setupConstraints() {
-        logOutButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(150)
-            make.height.equalTo(22)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(20)
-        }
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -117,12 +101,6 @@ class SettingsViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(61)
         }
         
-        lineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.top.equalTo(collectionView.snp.bottom)
-        }
     }
     
     func image(fromLayer layer: CALayer) -> UIImage {
@@ -178,7 +156,7 @@ extension SettingsViewController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is SettingsDataModel {
-            return SettingsSectionController()
+            return SettingsSectionController(delegate: self)
         } else {
             return SeparatorLineSectionController()
         }
@@ -186,6 +164,14 @@ extension SettingsViewController: ListAdapterDataSource {
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
+    }
+    
+}
+
+extension SettingsViewController: LogOutSectionControllerDelegate {
+    
+    func logOutSectionControllerButtonWasTapped() {
+        logOutAction()
     }
     
 }

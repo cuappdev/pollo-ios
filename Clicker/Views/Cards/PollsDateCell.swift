@@ -11,20 +11,20 @@ import UIKit
 class PollsDateCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var greyView: UIView!
     var dateLabel: UILabel!
+    var greyView: UIView!
     var numQuestionsLabel: UILabel!
     var rightArrowButtonImageView: UIImageView!
     
     // MARK: - Constants
     let cellCornerRadius: CGFloat = 5
-    let greyViewInset: CGFloat = 16
     let dateLabelFontSize: CGFloat = 16
-    let numQuestionsLabelFontSize: CGFloat = 11
     let dateLabelLeftPadding: CGFloat = 16
-    let rightArrowButtonImageViewRightPadding: CGFloat = 13
-    let rightArrowButtonImageViewHeight: CGFloat = 15
+    let greyViewInset: CGFloat = 16
+    let numQuestionsLabelFontSize: CGFloat = 11
     let numQuestionsLabelRightPadding: CGFloat = 40.5
+    let rightArrowButtonImageViewHeight: CGFloat = 15
+    let rightArrowButtonImageViewRightPadding: CGFloat = 13
     
     override init(frame: CGRect) {
         super.init(frame: frame)

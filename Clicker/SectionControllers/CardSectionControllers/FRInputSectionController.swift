@@ -17,8 +17,8 @@ protocol FRInputSectionControllerDelegate: class {
 class FRInputSectionController: ListSectionController {
     
     // MARK: - Data vars
-    weak var delegate: FRInputSectionControllerDelegate?
     var frInputModel: FRInputModel!
+    weak var delegate: FRInputSectionControllerDelegate?
     
     init(delegate: FRInputSectionControllerDelegate) {
         self.delegate = delegate

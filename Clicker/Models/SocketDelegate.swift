@@ -7,12 +7,14 @@
 //
 
 protocol SocketDelegate: class {
+
     func sessionConnected()
     func sessionDisconnected()
     func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollDeleted(_ pollID: Int, userRole: UserRole)
     func pollDeletedLive()
+    func sessionErrored()
     
     // USER RECEIVES
     func receivedResults(_ poll: Poll, userRole: UserRole)

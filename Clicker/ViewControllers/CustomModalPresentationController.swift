@@ -9,8 +9,8 @@
 import UIKit
 
 enum ModalStyle {
-    case upToStatusBar
     case custom(heightScale: CGFloat)
+    case upToStatusBar
 }
 
 class CustomModalPresentationController: UIPresentationController {

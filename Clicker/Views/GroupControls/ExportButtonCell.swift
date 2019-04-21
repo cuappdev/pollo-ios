@@ -23,8 +23,8 @@ class ExportButtonCell: UICollectionViewCell {
     // MARK: Constants
     let exportButtonBorderWidth: CGFloat = 1
     let exportButtonHeight: CGFloat = 47
-    let exportButtonWidthScaleFactor: CGFloat = 0.43
     let exportButtonTitle = "Export"
+    let exportButtonWidthScaleFactor: CGFloat = 0.43
 
     override init(frame: CGRect) {
         super.init(frame: frame)

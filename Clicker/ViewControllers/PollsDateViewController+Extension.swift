@@ -56,8 +56,6 @@ extension PollsDateViewController: CardControllerDelegate {
 
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {
         self.numberOfPeople = numberOfPeople
-        peopleButton.setTitle("\(numberOfPeople)", for: .normal)
-        peopleButton.sizeToFit()
         if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
             pollsDateArray[indexOfPollsDateModel] = PollsDateModel(date: pollsDateModel.date, polls: pollsDateModel.polls)
             adapter.performUpdates(animated: false, completion: nil)
@@ -160,6 +158,19 @@ extension PollsDateViewController: SocketDelegate {
     
     func sessionDisconnected() {}
 
+    func sessionErrored() {
+        socket.socket.connect(timeoutAfter: 5) { [weak self] in
+            guard let `self` = self else { return }
+            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
+                self.goBack()
+                self.socket.delegate = nil
+            })
+            if self.presentedViewController == nil {
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         if let lastPollsDateModel = pollsDateArray.first, let id = poll.id {
             if lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in

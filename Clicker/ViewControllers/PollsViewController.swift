@@ -9,55 +9,56 @@
 import GoogleSignIn
 import IGListKit
 import Presentr
+import StoreKit
 import UIKit
 
 class PollsViewController: UIViewController {
     
     // MARK: - View vars
-    var pollsOptionsView: OptionsView!
-    var pollsCollectionView: UICollectionView!
     var adapter: ListAdapter!
-    var titleLabel: UILabel!
-    var newGroupButton: UIButton!
-    var newGroupActivityIndicatorView: UIActivityIndicatorView!
     var bottomPaddingView: UIView!
-    var joinSessionContainerView: UIView!
     var codeTextField: UITextField!
-    var joinSessionButton: UIButton!
-    var settingsButton: UIButton!
-    var tapGestureRecognizer: UITapGestureRecognizer!
     var dimmingView: UIView!
     var headerGradientView: UIView!
+    var joinSessionButton: UIButton!
+    var joinSessionContainerView: UIView!
+    var newGroupActivityIndicatorView: UIActivityIndicatorView!
+    var newGroupButton: UIButton!
+    var pollsCollectionView: UICollectionView!
+    var pollsOptionsView: OptionsView!
+    var settingsButton: UIButton!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    var titleLabel: UILabel!
     
     // MARK: - Data vars
-    var pollTypeModels: [PollTypeModel]!
-    var isKeyboardShown: Bool = false
-    var isOpeningGroup: Bool = false
-    var isListeningToKeyboard: Bool = true
-    var gradientNeedsSetup: Bool = true
-    var session: Session?
     private let networking: Networking = URLSession.shared.request
+    var gradientNeedsSetup: Bool = true
+    var isKeyboardShown: Bool = false
+    var isListeningToKeyboard: Bool = true
+    var isOpeningGroup: Bool = false
+    var pollTypeModels: [PollTypeModel]!
+    var session: Session?
     
     // MARK: - Constants
-    let newGroupButtonLength: CGFloat = 29
     let buttonPadding: CGFloat = 15
-    let popupViewHeight: CGFloat = 140
-    let editModalHeight: CGFloat = 205
-    let joinSessionContainerViewHeight: CGFloat = 64
     let codeTextFieldEdgePadding: CGFloat = 18
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
-    let headerGradientHeight: CGFloat = 186
-    let titleLabelText = "Pollo"
-    let joinSessionButtonAnimationDuration: TimeInterval = 0.2
+    let codeTextFieldPlaceHolder = "Enter a group code..."
     let createdPollsOptionsText = "Created"
-    let joinedPollsOptionsText = "Joined"
-    let codeTextFieldPlaceHolder = "Enter a code..."
-    let joinSessionButtonTitle = "Join"
+    let editModalHeight: CGFloat = 205
     let errorText = "Error"
     let failedToCreateGroupText = "Failed to create new group. Try again!"
-    let submitFeedbackTitle = "Submit Feedback"
+    let headerGradientHeight: CGFloat = 186
+    let joinSessionButtonAnimationDuration: TimeInterval = 0.2
+    let joinSessionButtonTitle = "Join"
+    let joinSessionContainerViewHeight: CGFloat = 64
+    let joinedPollsOptionsText = "Joined"
+    let newGroupButtonLength: CGFloat = 29
+    let popupViewHeight: CGFloat = 140
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
+    let submitFeedbackTitle = "Submit Feedback"
+    let titleLabelText = "Pollo"
     
     init(joinedSessions: [Session], createdSessions: [Session]) {
         super.init(nibName: nil, bundle: nil)
@@ -72,11 +73,13 @@ class PollsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .clickerGrey8
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        promptUserReview()
         setupViews()
         setupConstraints()
     }
@@ -275,6 +278,11 @@ class PollsViewController: UIViewController {
     
     func startSession(code: String, name: String, isGroup: Bool) -> Future<Response<Session>> {
         return networking(Endpoint.startSession(code: code, name: name, isGroup: isGroup)).decode()
+    }
+    
+    func promptUserReview() {
+        Ratings.shared.updateNumAppLaunches()
+        Ratings.shared.promptReview()
     }
     
     // MARK: - Actions

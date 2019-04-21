@@ -42,6 +42,10 @@ class Socket {
         socket.on(clientEvent: .disconnect) { _, _ in
             self.delegate?.sessionDisconnected()
         }
+
+        socket.on(clientEvent: .error) { _, _ in
+            self.delegate?.sessionErrored()
+        }
         
         socket.on(Routes.userStart) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }

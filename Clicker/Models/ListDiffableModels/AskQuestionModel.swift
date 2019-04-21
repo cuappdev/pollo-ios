@@ -10,8 +10,8 @@ import IGListKit
 
 class AskQuestionModel: ListDiffable {
 
-    var currentQuestion: String?
     let identifier = UUID().uuidString
+    var currentQuestion: String?
 
     init(currentQuestion: String?) {
         self.currentQuestion = currentQuestion

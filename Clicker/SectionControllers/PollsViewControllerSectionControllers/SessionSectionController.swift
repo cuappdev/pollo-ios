@@ -10,8 +10,8 @@ import IGListKit
 
 protocol SessionSectionControllerDelegate: class {
     
-    func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session, withCell: PollPreviewCell)
     func sessionSectionControllerShouldEditSession(sectionController: SessionSectionController, session: Session)
+    func sessionSectionControllerShouldOpenSession(sectionController: SessionSectionController, session: Session, withCell: PollPreviewCell)
     
 }
 

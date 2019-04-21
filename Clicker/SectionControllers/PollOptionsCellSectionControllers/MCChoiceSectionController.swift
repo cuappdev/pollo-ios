@@ -16,8 +16,8 @@ protocol MCChoiceSectionControllerDelegate {
 
 class MCChoiceSectionController: ListSectionController {
     
-    var delegate: MCChoiceSectionControllerDelegate!
     var choiceModel: MCChoiceModel!
+    var delegate: MCChoiceSectionControllerDelegate!
     
     init(delegate: MCChoiceSectionControllerDelegate) {
         self.delegate = delegate

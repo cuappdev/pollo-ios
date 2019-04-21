@@ -12,64 +12,64 @@ import UIKit
 
 protocol CardControllerDelegate: class {
     
-    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func cardControllerDidStartNewPoll(poll: Poll)
-    func pollStarted(_ poll: Poll, userRole: UserRole)
-    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
+    func navigationTitleViewNavigationButtonTapped()
     func pollDeleted(_ pollID: Int, userRole: UserRole)
     func pollDeletedLive()
     func receivedResults(_ poll: Poll)
     func updatedTally(_ poll: Poll)
-    func navigationTitleViewNavigationButtonTapped()
+    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollStarted(_ poll: Poll, userRole: UserRole)
     
 }
 
 class CardController: UIViewController {
     
     // MARK: - View vars
-    var navigationTitleView: NavigationTitleView!
-    var peopleButton: UIButton!
-    var createPollButton: UIButton!
+    var adapter: ListAdapter!
+    var collectionView: UICollectionView!
+    var collectionViewLayout: UICollectionViewFlowLayout!
     var countLabel: UILabel!
     var countLabelBackgroundView: UIView!
-    var collectionViewLayout: UICollectionViewFlowLayout!
-    var collectionView: UICollectionView!
-    var adapter: ListAdapter!
+    var createPollButton: UIButton!
+    var navigationTitleView: NavigationTitleView!
+    var peopleButton: UIButton!
     
     // MARK: - Data vars
-    weak var delegate: CardControllerDelegate?
-    var userRole: UserRole!
-    var socket: Socket!
-    var session: Session!
-    var pollsDateModel: PollsDateModel!
-    var currentIndex: Int! = 0
-    var numberOfPeople: Int!
-    var isInitialLoad: Bool = true
-    var wasScrolledToIndex: Int!
-    var startingScrollingOffset: CGPoint!
-    var tapGestureRecognizer: UITapGestureRecognizer!
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
     private let networking: Networking = URLSession.shared.request
+    var currentIndex: Int! = 0
+    var isInitialLoad: Bool = true
+    var numberOfPeople: Int!
+    var pollsDateModel: PollsDateModel!
+    var session: Session!
+    var socket: Socket!
+    var startingScrollingOffset: CGPoint!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    var userRole: UserRole!
+    var wasScrolledToIndex: Int!
+    weak var delegate: CardControllerDelegate?
     
     // MARK: - Constants
-    let navigationTitleHeight: CGFloat = 51.5
-    let countLabelWidth: CGFloat = 30.5
-    let countLabelHeight: CGFloat = 21.0
-    let collectionViewTopPadding: CGFloat = 7
-    let countLabelHorizontalPadding: CGFloat = 2.5
-    let countLabelBackgroundViewTopPadding: CGFloat = 24
     let collectionViewHorizontalInset: CGFloat = 9.0
-    let swipeVelocityThreshold: CGFloat = 0.5
+    let collectionViewTopPadding: CGFloat = 16.0
+    let countLabelBackgroundViewTopPadding: CGFloat = 24
+    let countLabelHeight: CGFloat = 21.0
+    let countLabelHorizontalPadding: CGFloat = 2.5
+    let countLabelWidth: CGFloat = 30.5
     let editModalHeight: CGFloat = 205
+    let navigationTitleHeight: CGFloat = 51.5
+    let swipeVelocityThreshold: CGFloat = 0.5
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
+        self.numberOfPeople = numberOfPeople
         self.pollsDateModel = pollsDateModel
         self.session = session
         self.socket = socket
         self.userRole = userRole
-        self.numberOfPeople = numberOfPeople
     }
     
     // MARK: - View lifecycle
@@ -167,24 +167,14 @@ class CardController: UIViewController {
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
         
-        peopleButton = UIButton()
-        peopleButton.setImage(#imageLiteral(resourceName: "person"), for: .normal)
-        peopleButton.setTitle("\(numberOfPeople ?? 0)", for: .normal)
-        peopleButton.titleLabel?.font = UIFont._16RegularFont
-        peopleButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        peopleButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
-        peopleButton.sizeToFit()
-        let peopleBarButton = UIBarButtonItem(customView: peopleButton)
-        
         if userRole == .admin {
             createPollButton = UIButton()
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-          let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton, peopleBarButton]
-        } else {
-            self.navigationItem.rightBarButtonItems = [peopleBarButton]
+            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+            self.navigationItem.rightBarButtonItems = [createPollBarButton]
         }
+
     }
     
     // MARK: Helpers

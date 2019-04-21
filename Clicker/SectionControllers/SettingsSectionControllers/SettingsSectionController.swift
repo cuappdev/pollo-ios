@@ -8,15 +8,27 @@
 
 import IGListKit
 
+protocol LogOutSectionControllerDelegate: class {
+    func logOutSectionControllerButtonWasTapped()
+}
+
 class SettingsSectionController: ListSectionController {
     
     var settingsDataModel: SettingsDataModel!
     
+    // MARK: Data vars
+    weak var delegate: LogOutSectionControllerDelegate?
+    
     // MARK: Layout constants
-    let accountInfoCellHeight: CGFloat = 80.0
     let aboutInfoCellHeight: CGFloat = 110.0
+    let accountInfoCellHeight: CGFloat = 80.0
+    let buttonCellHeight: CGFloat = 39.5
     let feedbackInfoCellHeight: CGFloat = 130
     let linkCellHeight: CGFloat = 39.5
+    
+    init(delegate: LogOutSectionControllerDelegate) {
+        self.delegate = delegate
+    }
     
     // MARK: - ListSectionController overrides
     override func sizeForItem(at index: Int) -> CGSize {
@@ -37,7 +49,10 @@ class SettingsSectionController: ListSectionController {
             return CGSize(width: containerSize.width, height: cellHeight)
         case .link:
             return CGSize(width: containerSize.width, height: linkCellHeight)
+        case .button:
+            return CGSize(width: containerSize.width, height: buttonCellHeight)
         }
+
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -55,6 +70,11 @@ class SettingsSectionController: ListSectionController {
             let cell = collectionContext?.dequeueReusableCell(of: SettingsLinkCell.self, for: self, at: index) as! SettingsLinkCell
             cell.configureWith(settingsDataModel: settingsDataModel)
             return cell
+        case .button:
+            let cell = collectionContext?.dequeueReusableCell(of: SettingsLogOutButtonCell.self, for: self, at: index) as! SettingsLogOutButtonCell
+            cell.configureWith(settingsDataModel: settingsDataModel)
+            cell.delegate = self
+            return cell
         }
     }
     
@@ -62,4 +82,13 @@ class SettingsSectionController: ListSectionController {
         settingsDataModel = object as? SettingsDataModel
     }
 
+}
+
+// MARK: - LogoutButtonCellDelegate
+extension SettingsSectionController: LogoutButtonCellDelegate {
+    
+    func logOutButtonCellWasTapped() {
+        delegate?.logOutSectionControllerButtonWasTapped()
+    }
+    
 }

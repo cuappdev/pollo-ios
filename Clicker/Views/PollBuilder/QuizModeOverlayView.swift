@@ -6,23 +6,23 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 class QuizModeOverlayView: UIView {
 
     // MARK: - View vars
-    var circleImageView: UIImageView!
     var aboutQuizModeLabel: UILabel!
+    var circleImageView: UIImageView!
     var dismissButton: UIButton!
     var dismissTimer: Timer!
 
     // MARK: - Constants
-    let circleImageViewLength: CGFloat = 23.0
-    let aboutQuizModeLabelWidth: CGFloat = 176.5
     let aboutQuizModeLabelLeftPadding: CGFloat = 10
-    let circleImageViewName = "whiteEmptyCircle"
     let aboutQuizModeLabelText = "To use quiz mode, tap to set a correct answer"
+    let aboutQuizModeLabelWidth: CGFloat = 176.5
+    let circleImageViewLength: CGFloat = 23.0
+    let circleImageViewName = "whiteEmptyCircle"
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -10,8 +10,8 @@ import IGListKit
 
 class SpaceSectionController: ListSectionController {
     
-    var spaceModel: SpaceModel!
     var noResponses: Bool!
+    var spaceModel: SpaceModel!
     
     init(noResponses: Bool) {
         super.init()

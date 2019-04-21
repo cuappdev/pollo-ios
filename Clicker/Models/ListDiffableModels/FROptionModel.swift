@@ -17,21 +17,22 @@ class FROptionModel: OptionModel {
     init(option: String, numUpvoted: Int, didUpvote: Bool) {
         self.numUpvoted = numUpvoted
         self.didUpvote = didUpvote
+        self.numUpvoted = numUpvoted
         super.init(option: option)
     }
-    
+
 }
 
 extension FROptionModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
-        return identifier as NSString
+        return identifier as NSString 
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? FROptionModel else { return false }
         return identifier == object.identifier
     }
-    
+
 }

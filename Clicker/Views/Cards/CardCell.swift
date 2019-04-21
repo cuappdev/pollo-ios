@@ -15,49 +15,49 @@ protocol CardCellDelegate: class {
 
     var userRole: UserRole { get }
 
-    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?)
-    func cardCellDidUpvote(cardCell: CardCell, pollChoice: PollChoice)
+    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
-    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) 
+    func cardCellDidUpvote(cardCell: CardCell, pollChoice: PollChoice)
 
 }
 
 class CardCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var shadowView: UIView!
     var collectionView: UICollectionView!
     var questionButton: UIButton!
+    var shadowView: UIView!
     var timerLabel: UILabel!
     
     // MARK: - Data vars
-    weak var delegate: CardCellDelegate!
-    var poll: Poll!
     var adapter: ListAdapter!
-    var topHamburgerCardModel: HamburgerCardModel!
-    var questionModel: QuestionModel!
-    var frInputModel: FRInputModel!
-    var separatorLineModel: SeparatorLineModel!
-    var pollOptionsModel: PollOptionsModel!
-    var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
+    var frInputModel: FRInputModel!
+    var miscellaneousModel: PollMiscellaneousModel!
+    var poll: Poll!
+    var pollOptionsModel: PollOptionsModel!
+    var questionModel: QuestionModel!
+    var separatorLineModel: SeparatorLineModel!
     var timer: Timer?
+    var topHamburgerCardModel: HamburgerCardModel!
+    weak var delegate: CardCellDelegate!
     
     // MARK: - Constants
-    let collectionViewHorizontalPadding: CGFloat = 5.0
-    let questionButtonFontSize: CGFloat = 16.0
-    let questionButtonCornerRadius: CGFloat = 23.0
-    let questionButtonBorderWidth: CGFloat = 1.0
-    let questionButtonWidth: CGFloat = 170.0
-    let questionButtonHeight: CGFloat = 47.0
-    let questionButtonBottomPadding: CGFloat = 5.0
-    let timerLabelFontSize: CGFloat = 14.0
-    let timerLabelBottomPadding: CGFloat =  16.0
+    let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
-    let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
+    let questionButtonBorderWidth: CGFloat = 1.0
+    let questionButtonBottomPadding: CGFloat = 5.0
+    let questionButtonCornerRadius: CGFloat = 23.0
+    let questionButtonFontSize: CGFloat = 16.0
+    let questionButtonHeight: CGFloat = 47.0
+    let questionButtonWidth: CGFloat = 170.0
+    let shareResultsText = "Share Results"
+    let timerLabelBottomPadding: CGFloat =  16.0
+    let timerLabelFontSize: CGFloat = 14.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)

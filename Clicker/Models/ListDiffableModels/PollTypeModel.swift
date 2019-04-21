@@ -14,11 +14,11 @@ enum PollType {
 }
 
 class PollTypeModel {
-    
+
+    let identifier = UUID().uuidString
     var pollType: PollType
     var sessions: [Session]?
-    let identifier = UUID().uuidString
-    
+
     init(pollType: PollType, sessions: [Session]?) {
         self.pollType = pollType
         self.sessions = sessions
@@ -26,11 +26,11 @@ class PollTypeModel {
 }
 
 extension PollTypeModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? PollTypeModel else { return false }

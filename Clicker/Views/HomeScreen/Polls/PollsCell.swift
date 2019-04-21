@@ -13,22 +13,22 @@ import UIKit
 
 protocol PollsCellDelegate: class {
     
-    func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell)
-    func pollsCellShouldEditSession(session: Session, userRole: UserRole)
     func pollsCellDidPullToRefresh(for pollType: PollType)
+    func pollsCellShouldEditSession(session: Session, userRole: UserRole)
+    func pollsCellShouldOpenSession(session: Session, userRole: UserRole, withCell: PollPreviewCell)
 
 }
 
 class PollsCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var collectionView: UICollectionView!
     var adapter: ListAdapter!
+    var collectionView: UICollectionView!
     var refreshControl: UIRefreshControl!
     
     // MARK: - Data vars
-    weak var delegate: PollsCellDelegate?
     var pollTypeModel: PollTypeModel!
+    weak var delegate: PollsCellDelegate?
     
     let pollPreviewCellHeight: CGFloat = 82.5
     

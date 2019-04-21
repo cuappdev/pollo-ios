@@ -11,17 +11,17 @@ import UIKit
 class FROptionsDropDownView: UIView {
     
     var responsesButton: UIButton!
-    var responsesLabel: UILabel!
     var responsesCheck: UIImageView!
+    var responsesLabel: UILabel!
     var shareResponses: Bool = false
     
-    var votesButton: UIButton!
-    var votesLabel: UILabel!
-    var votesCheck: UIImageView!
     var shareVotes: Bool = false
+    var votesButton: UIButton!
+    var votesCheck: UIImageView!
+    var votesLabel: UILabel!
     
-    let circleImage = UIImage(named: "emptyCircle")
     let checkImage = UIImage(named: "blueCheck")
+    let circleImage = UIImage(named: "emptyCircle")
     
     var line: UIView!
     

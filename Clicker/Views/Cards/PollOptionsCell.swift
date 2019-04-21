@@ -21,16 +21,16 @@ protocol PollOptionsCellDelegate: class {
 class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
-    var collectionView: UICollectionView!
     var arrowView: ArrowView!
+    var collectionView: UICollectionView!
     
     // MARK: - Data vars
-    weak var delegate: PollOptionsCellDelegate!
-    var correctAnswer: String?
     var adapter: ListAdapter!
-    var pollOptionsModel: PollOptionsModel!
-    var mcSelectedIndex: Int = NSNotFound
+    var correctAnswer: String?
     var hasOverflowOptions: Bool = false
+    var mcSelectedIndex: Int = NSNotFound
+    var pollOptionsModel: PollOptionsModel!
+    weak var delegate: PollOptionsCellDelegate!
     
     // MARK: - Constants
     let contentViewCornerRadius: CGFloat = 12

@@ -16,8 +16,8 @@ protocol AskQuestionSectionControllerDelegate: class {
 class AskQuestionSectionController: ListSectionController {
 
     // MARK: - Data vars
-    weak var delegate: AskQuestionSectionControllerDelegate?
     var askQuestionModel: AskQuestionModel!
+    weak var delegate: AskQuestionSectionControllerDelegate?
 
     // MARK: - Constants
     let cellHeight: CGFloat = 48

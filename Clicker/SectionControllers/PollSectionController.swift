@@ -13,17 +13,17 @@ protocol PollSectionControllerDelegate: class {
     
     var role: UserRole { get }
 
-    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
     func pollSectionControllerDidUpvote(pollChoice: PollChoice)
+    func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
-    func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll)
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
 }
 
 class PollSectionController: ListSectionController {
     
-    var poll: Poll!
     var delegate: PollSectionControllerDelegate!
+    var poll: Poll!
     
     init(delegate: PollSectionControllerDelegate) {
         super.init()

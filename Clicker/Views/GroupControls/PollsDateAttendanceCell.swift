@@ -11,22 +11,22 @@ import UIKit
 class PollsDateAttendanceCell: UICollectionViewCell {
 
     // MARK: - View vars
+    var checkBoxImageView: UIImageView!
     var containerView: UIView!
     var dateLabel: UILabel!
-    var checkBoxImageView: UIImageView!
 
     // MARK: - Data vars
     var checkedImage: UIImage!
     var uncheckedImage: UIImage!
 
     // MARK: - Constants
+    let checkBoxImageViewLength: CGFloat = 23
+    let checkBoxImageViewRightPadding: CGFloat = 18
+    let checkedImageName = "option_filled"
     let containerViewHeight: CGFloat = 47
     let contentViewCornerRadius: CGFloat = 6
     let dateLabelLeftPadding: CGFloat = 18
-    let checkBoxImageViewRightPadding: CGFloat = 18
-    let checkBoxImageViewLength: CGFloat = 23
     let uncheckedImageName = "greyEmptyCircle"
-    let checkedImageName = "option_filled"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
