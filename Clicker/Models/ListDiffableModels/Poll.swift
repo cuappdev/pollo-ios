@@ -197,4 +197,3 @@ extension Encodable {
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }
-

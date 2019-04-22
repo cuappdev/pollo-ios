@@ -53,7 +53,6 @@ extension PollsDateViewController: CardControllerDelegate {
         adapter.performUpdates(animated: false, completion: nil)
     }
 
-
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int) {
         self.numberOfPeople = numberOfPeople
         if let indexOfPollsDateModel = pollsDateArray.firstIndex(where: { $0.date == pollsDateModel.date }) {
@@ -113,7 +112,6 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
             self.navigationController?.pushViewController(cardController, animated: true)
         }
     }
-
     
     func showNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: true)

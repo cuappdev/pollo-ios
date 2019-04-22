@@ -133,7 +133,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }
         case .frOption(optionModels: let updatedFROptionModels):
             switch pollOptionsModel.type {
-            case .frOption(_):
+            case .frOption:
                 pollOptionsModel.type = .frOption(optionModels: updatedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
                 let maxOptions = delegate?.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
