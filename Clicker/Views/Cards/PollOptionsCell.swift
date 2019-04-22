@@ -165,28 +165,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }
         }
     }
-
-//    func combine(oldFROptionModels: [FROptionModel], updatedFROptionModels: [FROptionModel]) -> [FROptionModel] {
-//        
-//        var frOptionModels: [FROptionModel] = oldFROptionModels
-//        updatedFROptionModels.forEach { (updatedFROptionModel) in
-//            if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
-//                return updatedFROptionModel.identifier == frOptionModel.identifier
-//            }) {
-//                // Don't have to do index + 1 because FR does not have topSpaceModel
-//                guard let sectionController = adapter.sectionController(forSection: index) as? FROptionSectionController else { return }
-//                sectionController.update(with: updatedFROptionModel)
-//                frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
-//                frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
-//            } else {
-//                frOptionModels.insert(updatedFROptionModel, at: 0)
-//            }
-//        }
-//        frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
-//            return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
-//        }
-//        return frOptionModels
-//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
