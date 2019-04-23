@@ -170,13 +170,12 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        if let lastPollsDateModel = pollsDateArray.first, let id = poll.id {
+        guard let lastPollsDateModel = pollsDateArray.first, let id = poll.id else { return }
             if lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
                 if let otherID = otherPoll.id { return otherID == id }
                 return false
             }) { return }
-        }
-        appendPoll(poll: poll)
+        appendPoll(poll: poll) 
         adapter.performUpdates(animated: false, completion: nil)
     }
     

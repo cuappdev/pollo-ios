@@ -43,9 +43,9 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: Data vars
     private let networking: Networking = URLSession.shared.request
+    var answerChoices: [PollResult]!
     var canDraft: Bool!
     var correctAnswer: String?
-    var answerChoices: [PollResult]!
     var drafts: [Draft] = []
     var dropDownHidden: Bool = true
     var isFollowUpQuestion: Bool = false

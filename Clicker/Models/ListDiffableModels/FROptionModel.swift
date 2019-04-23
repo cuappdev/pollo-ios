@@ -10,12 +10,11 @@ import IGListKit
 
 class FROptionModel: OptionModel {
 
-    var numUpvoted: Int
     var didUpvote: Bool
     let identifier = UUID().uuidString
+    var numUpvoted: Int
     
     init(option: String, numUpvoted: Int, didUpvote: Bool) {
-        self.numUpvoted = numUpvoted
         self.didUpvote = didUpvote
         self.numUpvoted = numUpvoted
         super.init(option: option)

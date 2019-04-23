@@ -13,8 +13,8 @@ class Socket {
 
     let id: String
     weak var delegate: SocketDelegate?
-    var socket: SocketIOClient
     var manager: SocketManager
+    var socket: SocketIOClient
 
     var jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -48,14 +48,12 @@ class Socket {
         }
         
         socket.on(Routes.userStart) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .member)
         }
         
         socket.on(Routes.userEnd) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollEnded(poll, userRole: .member)
         }
 
@@ -69,14 +67,12 @@ class Socket {
         }
         
         socket.on(Routes.userResults) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.receivedResults(poll, userRole: .member)
         }
 
         socket.on(Routes.userFreeResponseLive) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.receivedResultsLive(poll, userRole: .member)
         }
         
@@ -88,26 +84,22 @@ class Socket {
         }
 
         socket.on(Routes.adminUpdates) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.updatedTally(poll, userRole: .admin)
         }
         
         socket.on(Routes.adminUpdateTally) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.updatedTally(poll, userRole: .admin)
         }
 
         socket.on(Routes.adminUpdateTallyLive) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.updatedTallyLive(poll, userRole: .admin)
         }
         
         socket.on(Routes.adminEnded) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollEnded(poll, userRole: .admin)
         }
 

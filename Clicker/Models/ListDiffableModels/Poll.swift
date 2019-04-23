@@ -14,9 +14,9 @@ enum PollState: String, Codable {
 }
 
 enum QuestionType: String, CustomStringConvertible, Codable {
-    
-    case multipleChoice
+
     case freeResponse
+    case multipleChoice
 
     var description: String {
         switch self {
@@ -122,7 +122,6 @@ class Poll: Codable {
 
     // MARK: - Public
     func update(with poll: Poll) {
-        // TODO: determine if this function is necessary
         self.id = poll.id
         self.text = poll.text
         self.answerChoices = poll.answerChoices
