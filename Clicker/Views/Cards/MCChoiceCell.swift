@@ -56,6 +56,10 @@ class MCChoiceCell: UICollectionViewCell {
             make.top.equalToSuperview().offset(optionButtonTopPadding)
             make.bottom.equalToSuperview()
         }
+        optionButton.titleLabel?.snp.makeConstraints { make in
+            make.width.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
+            make.center.equalToSuperview()
+        }
         super.updateConstraints()
     }
     

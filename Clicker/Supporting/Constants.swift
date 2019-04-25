@@ -36,21 +36,23 @@ struct Identifiers {
 struct Routes {
     static let adminEnded = "admin/poll/ended"
     static let adminStart = "admin/poll/start"
+    static let adminUpdates = "admin/poll/updates"
     static let adminUpdateTally = "admin/poll/updateTally"
     static let adminUpdateTallyLive = "admin/poll/updateTally/live"
     static let count = "user/count"
+    static let serverAnswer = "server/poll/answer"
     static let serverDelete = "server/poll/delete"
-    static let serverDeleteLive = "server/poll/deleteLive"
+    static let serverDeleteLive = "server/poll/delete/live"
     static let serverEnd = "server/poll/end"
     static let serverShare = "server/poll/results"
     static let serverStart = "server/poll/start"
     static let serverTally = "server/poll/tally"
     static let serverUpvote = "server/poll/upvote"
     static let userDelete = "user/poll/delete"
-    static let userDeleteLive = "user/poll/deleteLive"
+    static let userDeleteLive = "user/poll/delete/live"
     static let userEnd = "user/poll/end"
+    static let userFreeResponseLive = "user/poll/fr/live"
     static let userResults = "user/poll/results"
-    static let userResultsLive = "user/poll/results/live"
     static let userStart = "user/poll/start"
 }
 
@@ -74,26 +76,34 @@ struct LayoutConstants {
 }
 
 struct ParserKeys {
+
     static let answerKey = "answer"
     static let answersKey = "answers"
     static let correctAnswerKey = "correctAnswer"
     static let countKey = "count"
+    static let createdAtKey = "createdAt"
     static let idKey = "id"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let resultsKey = "results"
     static let sharedKey = "shared"
+    static let stateKey = "state"
     static let textKey = "text"
     static let typeKey = "type"
+    static let updatedAtKey = "updatedAt"
     static let upvotesKey = "upvotes"
 }
 
 struct RequestKeys {
+    
+    static let accessTokenKey = "accessToken"
+    static let answerChoicesKey = "answerChoices"
     static let answerIDKey = "answerID"
     static let choiceKey = "choice"
     static let correctAnswerKey = "correctAnswer"
     static let countKey = "count"
     static let googleIDKey = "googleID"
+    static let letterKey = "letter"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let sharedKey = "shared"

@@ -55,7 +55,7 @@ extension PollsViewController: PollsCellDelegate {
             return
         }
         isOpeningGroup = true
-        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
+        joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
             let session = sessionResponse.data
             return self.getSortedPolls(with: session.id)
         }.observe { [weak self] result in
@@ -66,16 +66,12 @@ extension PollsViewController: PollsCellDelegate {
                     var pollsDateArray = [PollsDateModel]()
 
                     pollsResponse.data.forEach { response in
-                        var mutableResponse = response
+                        let mutableResponse = response
                         if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
-                            response.polls.forEach { poll in
-                                let options = poll.results.keys.map { option in option }
-                                pollsDateArray[index].polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
-                            }
+                            pollsDateArray[index].polls.append(contentsOf: response.polls)
                         } else {
                             response.polls.forEach { poll in
-                                let options = poll.results.keys.map { option in option }
-                                let polls = [Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer)]
+                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state)]
                                 pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                             }
                         }

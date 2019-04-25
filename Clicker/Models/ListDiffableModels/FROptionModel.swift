@@ -10,13 +10,11 @@ import IGListKit
 
 class FROptionModel: OptionModel {
 
-    let identifier = UUID().uuidString
-    var answerId: String
     var didUpvote: Bool
+    let identifier = UUID().uuidString
     var numUpvoted: Int
-
-    init(option: String, answerId: String, numUpvoted: Int, didUpvote: Bool) {
-        self.answerId = answerId
+    
+    init(option: String, numUpvoted: Int, didUpvote: Bool) {
         self.didUpvote = didUpvote
         self.numUpvoted = numUpvoted
         super.init(option: option)
@@ -27,7 +25,7 @@ class FROptionModel: OptionModel {
 extension FROptionModel: ListDiffable {
 
     func diffIdentifier() -> NSObjectProtocol {
-        return identifier as NSString
+        return identifier as NSString 
     }
 
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {

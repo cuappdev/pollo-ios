@@ -19,8 +19,8 @@ protocol CardControllerDelegate: class {
     func pollDeletedLive()
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollStarted(_ poll: Poll, userRole: UserRole)
-    func receivedResults(_ currentState: CurrentState)
-    func updatedTally(_ currentState: CurrentState)
+    func receivedResults(_ poll: Poll)
+    func updatedTally(_ poll: Poll)
     
 }
 

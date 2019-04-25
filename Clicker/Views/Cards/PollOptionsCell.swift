@@ -14,7 +14,7 @@ protocol PollOptionsCellDelegate: class {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int)
-    func pollOptionsCellDidUpvote(for answerId: String)
+    func pollOptionsCellDidUpvote(for text: String)
     
 }
 
@@ -133,9 +133,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }
         case .frOption(optionModels: let updatedFROptionModels):
             switch pollOptionsModel.type {
-            case .frOption(optionModels: let frOptionModels):
-                let combinedFROptionModels = combine(oldFROptionModels: frOptionModels, updatedFROptionModels: updatedFROptionModels)
-                pollOptionsModel.type = .frOption(optionModels: combinedFROptionModels)
+            case .frOption:
+                pollOptionsModel.type = .frOption(optionModels: updatedFROptionModels)
                 adapter.performUpdates(animated: false, completion: nil)
                 let maxOptions = delegate?.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
                 // Have to display arrow view if we've passed maxOptions
@@ -165,27 +164,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 sectionController.update(with: updatedMCResultModel)
             }
         }
-    }
-
-    func combine(oldFROptionModels: [FROptionModel], updatedFROptionModels: [FROptionModel]) -> [FROptionModel] {
-        var frOptionModels: [FROptionModel] = oldFROptionModels
-        updatedFROptionModels.forEach { (updatedFROptionModel) in
-            if let index = frOptionModels.firstIndex(where: { (frOptionModel) -> Bool in
-                return updatedFROptionModel.answerId == frOptionModel.answerId
-            }) {
-                // Don't have to do index + 1 because FR does not have topSpaceModel
-                guard let sectionController = adapter.sectionController(forSection: index) as? FROptionSectionController else { return }
-                sectionController.update(with: updatedFROptionModel)
-                frOptionModels[index].numUpvoted = updatedFROptionModel.numUpvoted
-                frOptionModels[index].didUpvote = updatedFROptionModel.didUpvote
-            } else {
-                frOptionModels.insert(updatedFROptionModel, at: 0)
-            }
-        }
-        frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
-            return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
-        }
-        return frOptionModels
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -254,10 +232,10 @@ extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionCon
         return delegate.userRole
     }
 
-    func frOptionSectionControllerDidUpvote(for answerId: String) {
+    func frOptionSectionControllerDidUpvote(for text: String) {
         // Only members can upvote free responses
         if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
-        delegate.pollOptionsCellDidUpvote(for: answerId)
+        delegate.pollOptionsCellDidUpvote(for: text)
     }
     
 }

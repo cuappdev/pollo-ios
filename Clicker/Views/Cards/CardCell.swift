@@ -18,8 +18,8 @@ protocol CardCellDelegate: class {
     func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
-    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?)
-    func cardCellDidUpvote(cardCell: CardCell, answerId: String)
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) 
+    func cardCellDidUpvote(cardCell: CardCell, pollChoice: PollChoice)
 
 }
 
@@ -140,7 +140,8 @@ class CardCell: UICollectionViewCell {
         
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
-        miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+        let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
+        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -154,7 +155,7 @@ class CardCell: UICollectionViewCell {
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             DispatchQueue.main.async {
                 self.adapter.performUpdates(animated: false, completion: nil)
             }
@@ -169,24 +170,24 @@ class CardCell: UICollectionViewCell {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
             timerLabel.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
         }
     }
     
     @objc func setTimerText() {
-        guard let start = poll.startTime else {
+        guard let start = poll.createdAt else {
             self.timerLabel.text = self.initialTimerLabelText
             return
         }
-        let elapsedSeconds = Int(NSDate().timeIntervalSince1970 - start)
+        let elapsedSeconds = Int(NSDate().timeIntervalSince(convertUnixStringToDate(start)))
         if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if elapsedSeconds < 60 {
@@ -231,12 +232,12 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        if userRole == .member && poll.questionType == .freeResponse && poll.state == .live {
+        if userRole == .member && poll.type == .freeResponse && poll.state == .live {
             objects.append(frInputModel)
         }
         switch userRole {
         case .admin:
-            if poll.questionType == .multipleChoice {
+            if poll.type == .multipleChoice {
                 objects.append(miscellaneousModel)
             }
         case .member:
@@ -296,9 +297,8 @@ extension CardCell: FRInputSectionControllerDelegate {
     }
     
     private func addFRResponseToPoll(response: String, poll: Poll) {
-        poll.options = [response]
         let result = PollResult(text: response, count: 1)
-        poll.results[response] = result
+        poll.answerChoices.append(result)
     }
 }
 
@@ -314,8 +314,9 @@ extension CardCell: PollOptionsSectionControllerDelegate {
         delegate.cardCellDidSubmitChoice(cardCell: self, choice: choice, index: index)
     }
 
-    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, answerId: String) {
-        delegate.cardCellDidUpvote(cardCell: self, answerId: answerId)
+    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, text: String) {
+        let pollChoice = PollChoice(text: text)
+        delegate.cardCellDidUpvote(cardCell: self, pollChoice: pollChoice)
     }
     
 }

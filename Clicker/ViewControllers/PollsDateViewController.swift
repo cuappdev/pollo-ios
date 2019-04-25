@@ -53,7 +53,7 @@ class PollsDateViewController: UIViewController {
         view.backgroundColor = .clickerBlack1
         setupViews()
         setupNavBar()
-        self.socket = Socket(id: "\(session.id)", userRole: userRole, delegate: self)
+        self.socket = Socket(id: "\(session.id)", delegate: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {

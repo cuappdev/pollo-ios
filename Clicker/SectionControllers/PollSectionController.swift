@@ -13,11 +13,11 @@ protocol PollSectionControllerDelegate: class {
     
     var role: UserRole { get }
 
+    func pollSectionControllerDidUpvote(pollChoice: PollChoice)
     func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
-    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String)
 }
 
 class PollSectionController: ListSectionController {
@@ -70,8 +70,8 @@ extension PollSectionController: CardCellDelegate {
         delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }
 
-    func cardCellDidUpvote(cardCell: CardCell, answerId: String) {
-        delegate.pollSectionControllerDidUpvote(sectionController: self, answerId: answerId)
+    func cardCellDidUpvote(cardCell: CardCell, pollChoice: PollChoice) {
+        delegate.pollSectionControllerDidUpvote(pollChoice: pollChoice)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {

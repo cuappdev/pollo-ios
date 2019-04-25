@@ -336,32 +336,37 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.joinSessionWithCode(with: code)).decode()
     }
     
-    func getSortedPolls(with id: Int) -> Future<Response<[GetSortedPollsResponse]>> {
+    func getSortedPolls(with id: Int) -> Future<Response<[PollsDateModel]>> {
         return networking(Endpoint.getSortedPolls(with: id)).decode()
     }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[GetSortedPollsResponse]>> in
+        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
             self.session = sessionResponse.data
-            return self.getSortedPolls(with: sessionResponse.data.id)
+            return self.getSortedPolls(with: sessionResponse.data.id) 
         }.observe { [weak self] result in
             guard let `self` = self, let session = self.session else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .value(let pollsResponse):
+                    
                     var pollsDateArray = [PollsDateModel]()
+                    
                     pollsResponse.data.forEach { response in
-                        var polls = [Poll]()
-                        response.polls.forEach { poll in
-                            let options = poll.results.keys.map { option in option }
-                            polls.append(Poll(id: poll.id, text: poll.text, questionType: poll.type == "MULTIPLE_CHOICE" ? .multipleChoice : .freeResponse, options: options, results: poll.results, state: poll.shared ? .shared : .ended, correctAnswer: poll.correctAnswer))
+                        let mutableResponse = response
+                        if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
+                            pollsDateArray[index].polls.append(contentsOf: response.polls)
+                        } else {
+                            response.polls.forEach { poll in
+                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, userAnswers: poll.userAnswers, state: poll.state)]
+                                pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                            }
                         }
-                        pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                     }
-                    self.codeTextField.text = ""
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
+                    
                     self.updateJoinSessionButton(canJoin: false)
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())

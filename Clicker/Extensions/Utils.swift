@@ -65,7 +65,7 @@ func decodeObjForKey(key: String) -> Any {
 // MARK: - Utils for Polls
 func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
-    switch poll.questionType {
+    switch poll.type {
     case .freeResponse:
         type = buildFROptionModelType(from: poll)
     case .multipleChoice:
@@ -75,10 +75,10 @@ func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptio
             case .member:
                 type = buildMCChoiceModelType(from: poll)
             case .admin:
-                type = buildMCResultModelType(from: poll)
+                type = buildMCResultModelType(from: poll, userRole: userRole)
             }
         case .shared:
-            type = buildMCResultModelType(from: poll)
+            type = buildMCResultModelType(from: poll, userRole: userRole)
         }
     }
     return type
@@ -119,11 +119,9 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, user
 
 // MARK: - Helpers
 private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
-    var frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (answerId, option, count) -> FROptionModel in
-        // Need to subtract 1 from count to get numUpvoted because submitting the response doesn't count as upvote
-        let numUpvoted = count - 1
-        let didUpvote = poll.userDidUpvote(answerId: answerId)
-        return FROptionModel(option: option, answerId: answerId, numUpvoted: numUpvoted, didUpvote: didUpvote)
+    var frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
+        let didUpvote = poll.userDidUpvote(answerText: option)
+        return FROptionModel(option: option, numUpvoted: count, didUpvote: didUpvote)
     }
     frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
         return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
@@ -132,14 +130,14 @@ private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
-    let mcChoiceModels = poll.options.enumerated().map { (index, option) -> MCChoiceModel in
+    let mcChoiceModels = poll.answerChoices.enumerated().map { (index, option) -> MCChoiceModel in
         var isSelected: Bool
-        if let selected = poll.getSelected() as? String {
+        if let selected = poll.getSelected() as? PollResult {
             isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || selected == option
         } else {
             isSelected = poll.userDidSelect(mcChoice: intToMCOption(index))
         }
-        return MCChoiceModel(option: option, isSelected: isSelected)
+        return MCChoiceModel(option: option.text, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
 }
@@ -154,45 +152,28 @@ func formatResults(results: [String: JSON]) -> [String: PollResult] {
     return pollResults
 }
 
-func formatAnswers(answers: [String: JSON]) -> [String: PollAnswer] {
-    var pollAnswers = [String: PollAnswer]()
-    answers.forEach { (key, value) in
-        if let answerIdsJson = value.array {
-            let answerIds = answerIdsJson.map { json in json.intValue }
-            pollAnswers[key] = PollAnswer(answer: nil, answerIds: answerIds)
-        } else if let answer = value.string {
-            pollAnswers[key] = PollAnswer(answer: answer, answerIds: nil)
-        }
+func getNumSelected(poll: Poll, choice: PollResult, userRole: UserRole) -> Int {
+    if userRole == .admin || poll.state == .shared || poll.type == .freeResponse {
+        return choice.count ?? 0
     }
-    return pollAnswers
+    return 0
 }
 
-func buildMCResultModelType(from poll: Poll) -> PollOptionsModelType {
+func buildMCResultModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var mcResultModels: [MCResultModel] = []
-    let totalNumResults = Float(poll.getTotalResults())
-    poll.options.enumerated().forEach { (index, option) in
-        let mcOptionKey = intToMCOption(index)
-        if let result = poll.results[mcOptionKey] {
-            let option = result.text
-            let numSelected = result.count
-            let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
-            var isSelected = false
-            if let selected = poll.getSelected() as? String {
-                isSelected = mcOptionKey == selected || selected == option
-            }
-            let resultModel = MCResultModel(option: option, numSelected: Int(numSelected), percentSelected: percentSelected, isSelected: isSelected, choiceIndex: index)
-            mcResultModels.append(resultModel)
+    let totalNumResults = Float(poll.getTotalResults(for: userRole))
+    var choiceIndex = 0
+    poll.answerChoices.forEach { choice in
+        let numSelected = getNumSelected(poll: poll, choice: choice, userRole: userRole)
+        let letter = choice.letter ?? ""
+        let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
+        var isSelected = false
+        if let selected = poll.getSelected() as? String {
+            isSelected = letter == selected || selected == choice.text
         }
-    }
-    // We should always have at least 2 choices.
-    // Thus, if mcResultModels is empty, that means poll.results is empty.
-    // This should only happen for the admin/poll/start socket route in which
-    // the poll is still live which makes sense that we do not have any results yet.
-    if mcResultModels.isEmpty {
-        poll.options.enumerated().forEach { (index, option) in
-            let resultModel = MCResultModel(option: option, numSelected: 0, percentSelected: 0.0, isSelected: false, choiceIndex: index)
-            mcResultModels.append(resultModel)
-        }
+        let resultModel = MCResultModel(option: choice.text, numSelected: numSelected, percentSelected: percentSelected, isSelected: isSelected, choiceIndex: choiceIndex)
+        mcResultModels.append(resultModel)
+        choiceIndex += 1
     }
     return .mcResult(resultModels: mcResultModels)
 }

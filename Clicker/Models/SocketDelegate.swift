@@ -8,19 +8,19 @@
 
 protocol SocketDelegate: class {
 
-    func pollDeleted(_ pollID: Int, userRole: UserRole)
-    func pollDeletedLive()
-    func pollEnded(_ poll: Poll, userRole: UserRole)
-    func pollStarted(_ poll: Poll, userRole: UserRole)
     func sessionConnected()
     func sessionDisconnected()
+    func pollEnded(_ poll: Poll, userRole: UserRole)
+    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeletedLive()
+    func pollStarted(_ poll: Poll, userRole: UserRole)
     func sessionErrored()
     
     // USER RECEIVES
-    func receivedResults(_ currentState: CurrentState)
-    func receivedResultsLive(_ currentState: CurrentState)
+    func receivedResults(_ poll: Poll, userRole: UserRole)
+    func receivedResultsLive(_ poll: Poll, userRole: UserRole)
     
     // ADMIN RECEIVES
-    func updatedTally(_ currentState: CurrentState)
-    func updatedTallyLive(_ currentState: CurrentState)
+    func updatedTally(_ poll: Poll, userRole: UserRole)
+    func updatedTallyLive(_ poll: Poll, userRole: UserRole)
 }
