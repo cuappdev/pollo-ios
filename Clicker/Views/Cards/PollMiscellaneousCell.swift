@@ -91,7 +91,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
         switch miscellaneousModel.userRole {
         case .admin:
             descriptionLabel.textAlignment = .left
-            switch miscellaneousModel.pollState { 
+            switch miscellaneousModel.pollState {
             case .live, .ended:
                 iconImageView.image = #imageLiteral(resourceName: "solo_eye")
                 descriptionLabel.text = "Only you can see results"

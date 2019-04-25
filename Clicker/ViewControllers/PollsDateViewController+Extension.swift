@@ -82,7 +82,6 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
     func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
-        
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
@@ -90,10 +89,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
-        var correct = ""
-        if let correctAnswer = correctAnswer {
-            correct = correctAnswer
-        }
+        let correct = correctAnswer ?? ""
 
         let newPollDict: [String: Any] = [
             "text": text,
@@ -170,11 +166,12 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        guard let lastPollsDateModel = pollsDateArray.first, let id = poll.id else { return }
-            if lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
+        guard let lastPollsDateModel = pollsDateArray.first,
+            let id = poll.id,
+            !lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
                 if let otherID = otherPoll.id { return otherID == id }
                 return false
-            }) { return }
+            }) else { return }
         appendPoll(poll: poll) 
         adapter.performUpdates(animated: false, completion: nil)
     }

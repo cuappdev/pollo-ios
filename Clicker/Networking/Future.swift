@@ -153,16 +153,6 @@ struct DeleteResponse: Codable {
 
 extension Future where Value == Data {
     
-    func decode<NextValue: Codable>(_ type: NextValue.Type) -> Future<NextValue> {
-        return transformed {
-            //Uncomment this line to see what is being decoded
-//            print(String.init(data: $0, encoding: .utf8))
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            return try decoder.decode(NextValue.self, from: $0)
-        }
-    }
-    
     func decode<NextValue: Codable>() -> Future<NextValue> {
         return transformed {
             //Uncomment this line to see what is being decoded

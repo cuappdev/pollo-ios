@@ -68,7 +68,7 @@ class MCChoiceCell: UICollectionViewCell {
         self.delegate = delegate
         self.pollState = pollState
         optionButton.setTitle(mcChoiceModel.option, for: .normal)
-        switch pollState { 
+        switch pollState {
         case .live:
             configureForLivePoll(isSelected: mcChoiceModel.isSelected)
         case .ended:

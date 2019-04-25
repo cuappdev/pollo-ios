@@ -111,10 +111,7 @@ extension CardController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
-        var correct = ""
-        if let correctAnswer = correctAnswer {
-            correct = correctAnswer
-        }
+        let correct = correctAnswer ?? ""
 
         // EMIT START QUESTION
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
@@ -344,7 +341,7 @@ extension CardController: SocketDelegate {
             updateLiveCardCell(with: poll)
         } else {
             updateLatestPoll(with: poll)
-            self.adapter.performUpdates(animated: false, completion: nil)
+            adapter.performUpdates(animated: false, completion: nil)
         }
     }
 
@@ -355,7 +352,7 @@ extension CardController: SocketDelegate {
         }
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
         updateLiveCardCell(with: poll)
-        self.adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     /// These two functions should only get called upon joining a socket

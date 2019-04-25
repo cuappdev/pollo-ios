@@ -46,9 +46,9 @@ class PollResult: Codable, Equatable {
         return lhs.letter == rhs.letter && lhs.text == rhs.text && lhs.count == rhs.count
     }
 
+    var count: Int?
     var letter: String?
     var text: String
-    var count: Int?
     
     init(letter: String? = nil, text: String, count: Int?) {
         self.letter = letter
@@ -70,15 +70,16 @@ class PollChoice: Codable {
 }
 
 class Poll: Codable {
-    var createdAt: String? // string of seconds since 1970
-    var updatedAt: String?
-    var id: Int?
-    var text: String
+
     var answerChoices: [PollResult]
-    var type: QuestionType
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
-    var userAnswers: [String: [PollChoice]] // googleID to poll choice
+    var createdAt: String? // string of seconds since 1970
+    var id: Int?
     var state: PollState
+    var text: String
+    var type: QuestionType
+    var updatedAt: String?
+    var userAnswers: [String: [PollChoice]] // googleID to poll choice
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}

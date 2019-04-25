@@ -78,8 +78,7 @@ class Socket {
         
         // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
         socket.on(Routes.adminStart) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]) else { return }
-            guard let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
+            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .admin)
         }
 

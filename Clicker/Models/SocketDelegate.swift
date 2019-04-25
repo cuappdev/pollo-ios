@@ -10,10 +10,10 @@ protocol SocketDelegate: class {
 
     func sessionConnected()
     func sessionDisconnected()
-    func pollStarted(_ poll: Poll, userRole: UserRole)
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollDeleted(_ pollID: Int, userRole: UserRole)
     func pollDeletedLive()
+    func pollStarted(_ poll: Poll, userRole: UserRole)
     func sessionErrored()
     
     // USER RECEIVES
