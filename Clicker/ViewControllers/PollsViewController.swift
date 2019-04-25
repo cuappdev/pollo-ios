@@ -36,6 +36,11 @@ class PollsViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var isListeningToKeyboard: Bool = true
     var isOpeningGroup: Bool = false
+    var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return decoder
+    }()
     var pollTypeModels: [PollTypeModel]!
     var session: Session?
     
@@ -332,29 +337,40 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
-    func joinSessionWithCode(with code: String) -> Future<Response<Session>> {
-        return networking(Endpoint.joinSessionWithCode(with: code)).decode()
+    func joinSessionWithCode(with code: String) -> Future<Data> {
+        return networking(Endpoint.joinSessionWithCode(with: code))
     }
     
-    func getSortedPolls(with id: Int) -> Future<Response<[PollsDateModel]>> {
-        return networking(Endpoint.getSortedPolls(with: id)).decode()
+    func getSortedPolls(with id: Int) -> Future<Data> {
+        return networking(Endpoint.getSortedPolls(with: id))
     }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        joinSessionWithCode(with: code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
-            self.session = sessionResponse.data
-            return self.getSortedPolls(with: sessionResponse.data.id) 
+        joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
+            if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
+                self.session = sessionResponse.data
+                return self.getSortedPolls(with: sessionResponse.data.id)
+            }
+            // Fail out of get sorted polls call
+            return self.getSortedPolls(with: -1)
         }.observe { [weak self] result in
-            guard let `self` = self, let session = self.session else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let pollsResponse):
-                    
+            guard let `self` = self else { return }
+            switch result {
+            case .value(let data):
+                guard let pollsResponse = try? self.jsonDecoder.decode(Response<[GetSortedPollsResponse]>.self, from: data), pollsResponse.success else {
+                    DispatchQueue.main.async {
+                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    return
+                }
+                DispatchQueue.main.async {
+                    guard let session = self.session else { return }
                     var pollsDateArray = [PollsDateModel]()
                     
                     pollsResponse.data.forEach { response in
-                        let mutableResponse = response
+                        var mutableResponse = response
                         if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
                             pollsDateArray[index].polls.append(contentsOf: response.polls)
                         } else {
@@ -370,8 +386,10 @@ class PollsViewController: UIViewController {
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())
-                case .error(let error):
-                    print(error)
+                }
+            case .error(let error):
+                print(error)
+                DispatchQueue.main.async {
                     let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                     self.present(alertController, animated: true, completion: nil)
                 }
@@ -394,7 +412,7 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            updateJoinSessionButton(canJoin: text.count == 6)
+            updateJoinSessionButton(canJoin: text.count == IntegerConstants.validCodeLength)
         }
     }
     

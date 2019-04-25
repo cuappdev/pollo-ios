@@ -124,6 +124,7 @@ struct IntegerConstants {
     static let maxOptionsForMemberFR = 6
     static let maxOptionsForMemberMC = 8
     static let maxQuestionCharacterCount = 120
+    static let validCodeLength = 6
 }
 
 struct UserDefault {
