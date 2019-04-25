@@ -23,6 +23,7 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     // MARK: - Constants
     let constrainedTextWidth: CGFloat = 253
     let interitemSpacing: CGFloat = 18
+    let maxDraftTextHeight: CGFloat = 130
     
     init(delegate: DraftSectionControllerDelegate) {
         super.init()
@@ -35,8 +36,10 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let textHeight = draft.text.height(withConstrainedWidth: constrainedTextWidth, font: ._18HeavyFont)
-        return CGSize(width: containerSize.width, height: textHeight + 65)
+        let calculatedTextHeight = draft.text.height(withConstrainedWidth: constrainedTextWidth, font: ._18HeavyFont)
+        let adjustedTextHeight = calculatedTextHeight + 65 // 65 being the total padding + questionType height
+        let textHeight = (adjustedTextHeight > maxDraftTextHeight) ? maxDraftTextHeight : adjustedTextHeight
+        return CGSize(width: containerSize.width, height: textHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {

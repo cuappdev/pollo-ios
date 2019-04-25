@@ -36,6 +36,7 @@ class DraftCell: UICollectionViewCell {
     let freeResponse = "Free Response"
     let horizontalPadding: CGFloat = 18
     let multipleChoice = "Multiple Choice"
+    let questionLabelMaxNumLines = 3
     let questionLabelVerticalPadding: CGFloat = 20
     let zoomDuration: TimeInterval = 0.25
     let zoomInScale: CGFloat = 0.98
@@ -77,7 +78,7 @@ class DraftCell: UICollectionViewCell {
         questionLabel.textAlignment = .left
         questionLabel.backgroundColor = .clear
         questionLabel.textColor = .clickerGrey2
-        questionLabel.numberOfLines = 2
+        questionLabel.numberOfLines = questionLabelMaxNumLines
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)
         

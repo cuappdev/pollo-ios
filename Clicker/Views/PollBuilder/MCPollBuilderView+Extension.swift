@@ -146,6 +146,10 @@ extension MCPollBuilderView: AskQuestionSectionControllerDelegate {
     func askQuestionSectionControllerDidUpdateText(_ text: String?) {
         askQuestionModel.currentQuestion = text
     }
+    
+    func askQuestionSectionControllerDidUpdateHeight() {
+        adapter.performUpdates(animated: false, completion: nil)
+    }
 
 }
 
