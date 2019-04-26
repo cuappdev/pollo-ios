@@ -7,6 +7,11 @@
 //
 
 import Foundation
+import FutureNova
+
+extension Endpoint {
+    static var apiVersion: Int? { return 2 }
+}
 
 struct Response<T: Codable>: Codable {
 

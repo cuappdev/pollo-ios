@@ -12,7 +12,7 @@ PODS:
   - FirebaseInstanceID (1.0.10):
     - FirebaseCore (~> 3.6)
   - FLEX (2.4.0)
-  - FutureNova (0.1.2)
+  - FutureNova (0.1.3)
   - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
   - Google/SignIn (3.1.0):
@@ -90,7 +90,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   FutureNova:
-    :commit: 760a733fcb0ac82654796cbf70a77a41c2477150
+    :commit: bc4e21a3e3d5a617042f26260ca228a9a505c090
     :git: https://github.com/cuappdev/ios-networking.git
 
 SPEC CHECKSUMS:
@@ -101,7 +101,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
-  FutureNova: ac182c4b251f385e7b8f9cead95a7b2779805676
+  FutureNova: 232d1adaa4b0a62768db5d1d9c31d5a061e2efab
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
