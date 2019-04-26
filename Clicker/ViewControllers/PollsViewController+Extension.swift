@@ -57,7 +57,7 @@ extension PollsViewController: PollsCellDelegate {
         isOpeningGroup = true
         joinSessionWithIdAndCode(id: session.id, code: session.code).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
             let session = sessionResponse.data
-            return self.getSortedPolls(with: session.id)
+            return self.getSortedPolls(with: session.id).decode()
         }.observe { [weak self] result in
             guard let `self` = self else { return }
             DispatchQueue.main.async {
@@ -162,7 +162,10 @@ extension PollsViewController: SliderBarDelegate {
 extension PollsViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        if let text = textField.text, text.count == IntegerConstants.validCodeLength { // Valid code length
+            joinSession()
+        }
+        view.endEditing(true)
         return false
     }
     
