@@ -9,6 +9,7 @@
 import UIKit
 import Fabric
 import FLEX
+import FutureNova
 import GoogleSignIn
 import Crashlytics
 import StoreKit

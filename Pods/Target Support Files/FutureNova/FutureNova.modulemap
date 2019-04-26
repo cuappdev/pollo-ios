@@ -1,0 +1,6 @@
+framework module FutureNova {
+  umbrella header "FutureNova-umbrella.h"
+
+  export *
+  module * { export * }
+}

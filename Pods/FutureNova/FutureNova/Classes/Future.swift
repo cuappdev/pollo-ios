@@ -1,16 +1,16 @@
-//
-//  Future.swift
-//  Clicker
-//
-//  Created by Matthew Coufal on 1/30/19.
-//  Copyright © 2019 CornellAppDev. All rights reserved.
-//
+/**
+ *  Swift by Sundell sample code (Additions by Austin Astorga)
+ *  Copyright (c) John Sundell 2017
+ *  See LICENSE file for license
+ *
+ *  Read the blog post at https://swiftbysundell.com/posts/under-the-hood-of-futures-and-promises-in-swift
+ */
 
 import Foundation
 
-typealias Networking = (Endpoint) -> Future<Data>
+public typealias Networking = (Endpoint) -> Future<Data>
 
-enum Result<Value> {
+public enum Result<Value> {
     case value(Value)
     case error(Error)
 }
@@ -34,20 +34,20 @@ extension Result where Value == Data {
     }
 }
 
-class Future<Value> {
+public class Future<Value> {
     fileprivate var result: Result<Value>? {
         didSet { result.map(report) }
     }
-    
+
     var currentTask: URLSessionDataTask?
-    
+
     private lazy var callbacks = [(Result<Value>) -> Void]()
-    
-    func observe(with callback: @escaping (Result<Value>) -> Void) {
+
+    public func observe(with callback: @escaping (Result<Value>) -> Void) {
         callbacks.append(callback)
         result.map(callback)
     }
-    
+
     private func report(result: Result<Value>) {
         for callback in callbacks {
             callback(result)
@@ -56,15 +56,15 @@ class Future<Value> {
 }
 
 extension Future {
-    func chained<NextValue>(with closure: @escaping (Value) throws -> Future<NextValue>) -> Future<NextValue> {
+    public func chained<NextValue>(with closure: @escaping (Value) throws -> Future<NextValue>) -> Future<NextValue> {
         let promise = Promise<NextValue>()
-        
+
         observe { result in
             switch result {
             case .value(let value):
                 do {
                     let future = try closure(value)
-                    
+
                     future.observe { result in
                         switch result {
                         case .value(let value):
@@ -80,100 +80,101 @@ extension Future {
                 promise.reject(with: error)
             }
         }
-        
+
         return promise
     }
-    
-    func transformed<NextValue>(with closure: @escaping (Value) throws -> NextValue) -> Future<NextValue> {
+
+    public func transformed<NextValue>(with closure: @escaping (Value) throws -> NextValue) -> Future<NextValue> {
         return chained { value in
             return try Promise(value: closure(value))
         }
     }
 }
 
-class Promise<Value>: Future<Value> {
-    
-    init(value: Value? = nil) {
+public class Promise<Value>: Future<Value> {
+
+    public init(value: Value? = nil) {
         super.init()
         result = value.map(Result.value)
     }
-    
-    func resolve(with value: Value) {
+
+    public init(error: Error) {
+        super.init()
+        result = .error(error)
+    }
+
+    public func resolve(with value: Value) {
         result = .value(value)
     }
-    
-    func reject(with error: Error) {
+
+    public func reject(with error: Error) {
         result = .error(error)
     }
 }
 
 extension URLSession {
-    
-    enum EndpointErrors: Error {
+
+    public enum EndpointErrors: Error {
         case badUrlRequest
     }
-    
-    func request(endpoint: Endpoint) -> Future<Data> {
+
+    public func request(endpoint: Endpoint) -> Future<Data> {
         let promise = Promise<Data>()
-        
+
         guard let urlRequest = endpoint.urlRequest else {
             promise.reject(with: EndpointErrors.badUrlRequest)
             return promise
         }
-        
+
         let task =  dataTask(with: urlRequest) { data, _, error in
             if error?._code == NSURLErrorCancelled {
                 return
             }
-            
+
             if let error = error {
                 promise.reject(with: error)
             } else {
                 promise.resolve(with: data ?? Data())
             }
         }
-        
+
         task.resume()
         promise.currentTask = task
-        
+
         return promise
     }
 }
 
-struct Response<T: Codable>: Codable {
-    
-    var success: Bool
-    var data: T
-    
-}
-
-struct DeleteResponse: Codable {
-    var success: Bool
-}
-
 extension Future where Value == Data {
-    
-    func decode<NextValue: Codable>() -> Future<NextValue> {
+
+
+    public func decode<NextValue: Codable>(_ type: NextValue.Type) -> Future<NextValue> {
         return transformed {
             //Uncomment this line to see what is being decoded
-//            print(String.init(data: $0, encoding: .utf8))
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            return try decoder.decode(NextValue.self, from: $0)
+            //print(String.init(data: $0, encoding: .utf8))
+            return try JSONDecoder().decode(NextValue.self, from: $0)
+        }
+    }
+    
+    public func decode<NextValue: Codable>() -> Future<NextValue> {
+        return transformed {
+            //Uncomment this line to see what is being decoded
+            //print(String.init(data: $0, encoding: .utf8))
+            return try JSONDecoder().decode(NextValue.self, from: $0)
         }
     }
 }
 
 // This turns an (A) -> B function into a () -> B function,
 // by using a constant value for A.
-func combine<A, B>(_ value: A,
+public func combine<A, B>(_ value: A,
                    with closure: @escaping (A) -> B) -> () -> B {
     return { closure(value) }
 }
 
 // This turns an (A) -> B and a (B) -> () -> C function into a
 // (A) -> C function, by chaining them together.
-func chain<A, B, C>(
+public func chain<A, B, C>(
     _ inner: @escaping (A) -> B,
     to outer: @escaping (B) -> () -> C
     ) -> (A) -> C {

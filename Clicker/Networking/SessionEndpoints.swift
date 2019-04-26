@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FutureNova
 
 extension Endpoint {
     
@@ -69,11 +70,11 @@ extension Endpoint {
     }
     
     static func deleteSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
+        return Endpoint(path: "/sessions/\(id)", headers: headers, method: Endpoint.Method.delete)
     }
     
     static func leaveSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: .delete)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: Endpoint.Method.delete)
     }
     
     static func getMembers(with id: Int) -> Endpoint {
