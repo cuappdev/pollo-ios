@@ -14,8 +14,8 @@ extension UITextField {
         guard let text = self.text else { return }
         let nsString = text as NSString
         let attributedString = NSMutableAttributedString(string: text)
-        for word in words {
-            let range = nsString.range(of: word)
+        words.forEach {
+            let range = nsString.range(of: $0)
             attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: range)
         }
         attributedText = attributedString
