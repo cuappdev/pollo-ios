@@ -11,6 +11,7 @@ import UIKit
 
 protocol SliderBarDelegate: class {
     func scrollToIndex(index: Int)
+    func changeNewGroupButton(status: Bool)
 }
 
 class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -18,6 +19,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
     var collectionView: UICollectionView!
     var options: [String]!
     var sliderBar: UIView!
+    var isJoined: Bool!
     var sliderBarLeftConstraint: NSLayoutConstraint!
     weak var sliderBarDelegate: SliderBarDelegate?
     
@@ -27,6 +29,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         self.options = options
         self.sliderBarDelegate = sliderBarDelegate
         backgroundColor = .clear
+        isJoined = true
         
         setupViews()
         layoutSubviews()
@@ -91,9 +94,12 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         let unselectedIndexPath: IndexPath
         if indexPath.row == 0 {
             unselectedIndexPath = IndexPath(item: 1, section: 0)
+            isJoined = true
         } else {
             unselectedIndexPath = IndexPath(item: 0, section: 0)
+            isJoined = false
         }
+        sliderBarDelegate?.changeNewGroupButton(status: isJoined)
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
         unselectedCell.optionLabel.textColor = .clickerGrey2
     }
