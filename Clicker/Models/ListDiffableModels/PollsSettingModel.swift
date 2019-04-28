@@ -15,7 +15,7 @@ enum SettingType {
     case location
 }
 
-class PollsSettingModel {
+class PollsSettingModel: NSCopying {
 
     let identifier = UUID().uuidString
     var description: String
@@ -28,6 +28,11 @@ class PollsSettingModel {
         self.isEnabled = isEnabled
         self.title = title
         self.type = type
+    }
+
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = PollsSettingModel(title: title, description: description, type: type, isEnabled: isEnabled)
+        return copy
     }
 
 }

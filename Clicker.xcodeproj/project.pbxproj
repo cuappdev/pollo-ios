@@ -14,6 +14,7 @@
 		0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4782201E56B005BED7B /* PollEndpoints.swift */; };
 		0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */; };
 		0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47C22064263005BED7B /* SessionEndpoints.swift */; };
+		0C4A24CF227638A700AE0B76 /* UITextField+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
 		0C55CE262233056900E9912C /* HeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C55CE252233056900E9912C /* HeaderModel.swift */; };
 		0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
@@ -174,6 +175,7 @@
 		0C40B4782201E56B005BED7B /* PollEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47C22064263005BED7B /* SessionEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndpoints.swift; sourceTree = "<group>"; };
+		0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Shared.swift"; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
 		0C55CE252233056900E9912C /* HeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderModel.swift; sourceTree = "<group>"; };
 		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 				C2BB14B9209469CD0081C35D /* Utils.swift */,
 				C2900D422146F72900566F25 /* String+Shared.swift */,
 				6397F8C72174294C00F515DE /* UINavigationController+Shared.swift */,
+				0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1094,6 +1097,7 @@
 				C20B570D213893180091034F /* PollSectionController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */,
+				0C4A24CF227638A700AE0B76 /* UITextField+Shared.swift in Sources */,
 				0CDAF0D321727D4B004DB6EA /* SpaceSectionController.swift in Sources */,
 				0CF647832176970900535573 /* ArrowView.swift in Sources */,
 				0CCA95E9223417ED006A3659 /* ExportButtonCell.swift in Sources */,

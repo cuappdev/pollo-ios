@@ -9,12 +9,19 @@
 import UIKit
 import SnapKit
 
+protocol SettingCellDelegate: class {
+    func settingCellDidUpdate(_ cell: SettingCell, to newValue: Bool)
+}
+
 class SettingCell: UICollectionViewCell {
     
-    // MARK: - View vars
+    // MARK: View vars
     var body: UILabel!
     var title: UILabel!
     var toggle: UISwitch!
+
+    // MARK: Data vars
+    weak var delegate: SettingCellDelegate?
     
     // MARK: Constants
     let bodyHeight: CGFloat = 29
@@ -58,6 +65,7 @@ class SettingCell: UICollectionViewCell {
         toggle.tintColor = .white
         toggle.onTintColor = .clickerGreen0
         toggle.isEnabled = true
+        toggle.addTarget(self, action: #selector(toggleSwitched), for: .valueChanged)
         contentView.addSubview(toggle)
     }
     
@@ -85,4 +93,9 @@ class SettingCell: UICollectionViewCell {
         body.text = settings.description
         toggle.isOn = settings.isEnabled
     }
+
+    @objc func toggleSwitched() {
+        delegate?.settingCellDidUpdate(self, to: toggle.isOn)
+    }
+
 }

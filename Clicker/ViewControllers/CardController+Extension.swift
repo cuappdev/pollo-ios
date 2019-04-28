@@ -345,6 +345,8 @@ extension CardController: SocketDelegate {
         }
     }
 
+    func receivedFRFilter(_ pollFilter: PollFilter) { }
+
     func updatedTally(_ poll: Poll, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
             delegate?.updatedTally(poll)

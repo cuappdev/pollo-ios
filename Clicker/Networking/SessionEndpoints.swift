@@ -49,6 +49,10 @@ extension Endpoint {
         }
         
     }
+
+    private struct UpdateGroupControlsBody: Codable {
+        var isActivated: Bool
+    }
     
     static func generateCode() -> Endpoint {
         return Endpoint(path: "/generate/code", headers: headers)
@@ -70,6 +74,11 @@ extension Endpoint {
     
     static func deleteSession(with id: Int) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
+    }
+
+    static func updateGroupControlForSession(with id: Int, isFilteringActivated: Bool) -> Endpoint {
+        let body = UpdateGroupControlsBody(isActivated: isFilteringActivated)
+        return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     
     static func leaveSession(with id: Int) -> Endpoint {

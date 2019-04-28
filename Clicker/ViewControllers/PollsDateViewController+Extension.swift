@@ -133,7 +133,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count)
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count, delegate: self)
                     self.navigationController?.pushViewController(groupControlsVC, animated: true)
                 case .error(let error):
                     print(error)
@@ -142,6 +142,15 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
                 }
             }
         }
+    }
+
+}
+
+// MARK: - GroupControlsViewControllerDelegate
+extension PollsDateViewController: GroupControlsViewControllerDelegate {
+
+    func groupControlsViewControllerDidUpdateSession(_ session: Session) {
+        self.session = session
     }
 
 }
@@ -224,6 +233,8 @@ extension PollsDateViewController: SocketDelegate {
         updateLatestPoll(with: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
+
+    func receivedFRFilter(_ pollFilter: PollFilter) { }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {
         updateLatestPoll(with: poll)
