@@ -70,11 +70,11 @@ extension Endpoint {
     }
     
     static func deleteSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)", headers: headers, method: Endpoint.Method.delete)
+        return Endpoint(path: "/sessions/\(id)", headers: headers, method: delete)
     }
     
     static func leaveSession(with id: Int) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: Endpoint.Method.delete)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: delete)
     }
     
     static func getMembers(with id: Int) -> Endpoint {
