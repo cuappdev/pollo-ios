@@ -80,6 +80,7 @@ extension FRInputCell: UITextFieldDelegate {
         if let text = textField.text, !text.isEmpty {
             delegate?.frInputCellSubmittedResponse(response: text)
             textField.text = ""
+            // TODO: fix this to only clear if response succeeds, else color words
         }
         endEditing(true)
         return false

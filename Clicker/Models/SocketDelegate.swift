@@ -19,6 +19,7 @@ protocol SocketDelegate: class {
     // USER RECEIVES
     func receivedResults(_ poll: Poll, userRole: UserRole)
     func receivedResultsLive(_ poll: Poll, userRole: UserRole)
+    func receivedFRFilter(_ pollFilter: PollFilter)
     
     // ADMIN RECEIVES
     func updatedTally(_ poll: Poll, userRole: UserRole)

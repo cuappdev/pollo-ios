@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                             var auxiliaryDict = [Double: Session]()
                             memberResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive, isFilterActivated: session.isFilterActivated)
                                 }
                             }
                             auxiliaryDict.keys.sorted().forEach { time in
@@ -140,7 +140,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                             var auxiliaryDict = [Double: Session]()
                             adminResponse.data.forEach { session in
                                 if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
+                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive, isFilterActivated: session.isFilterActivated)
                                 }
                             }
                             auxiliaryDict.keys.sorted().forEach { time in

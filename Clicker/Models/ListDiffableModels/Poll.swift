@@ -69,6 +69,12 @@ class PollChoice: Codable {
 
 }
 
+struct PollFilter: Codable {
+    var success: Bool
+    var text: String? // passed in when success = false
+    var filter: [String]? // passed in when success = false
+}
+
 class Poll: Codable {
 
     var answerChoices: [PollResult]
