@@ -17,9 +17,9 @@ protocol SliderBarDelegate: class {
 class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var collectionView: UICollectionView!
+    var isJoined: Bool!
     var options: [String]!
     var sliderBar: UIView!
-    var isJoined: Bool!
     var sliderBarLeftConstraint: NSLayoutConstraint!
     weak var sliderBarDelegate: SliderBarDelegate?
     
