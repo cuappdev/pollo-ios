@@ -92,13 +92,8 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         let selectedCell = collectionView.cellForItem(at: indexPath) as! QuestionOptionCell
         selectedCell.optionLabel.textColor = .black
         let unselectedIndexPath: IndexPath
-        if indexPath.row == 0 {
-            unselectedIndexPath = IndexPath(item: 1, section: 0)
-            isJoined = true
-        } else {
-            unselectedIndexPath = IndexPath(item: 0, section: 0)
-            isJoined = false
-        }
+        unselectedIndexPath = indexPath.row == 0 ? IndexPath(item: 1, section: 0) : IndexPath(item: 0, section: 0)
+        isJoined = indexPath.row == 0 
         sliderBarDelegate?.changeNewGroupButton(status: isJoined)
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
         unselectedCell.optionLabel.textColor = .clickerGrey2
