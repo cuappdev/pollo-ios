@@ -161,6 +161,8 @@ extension PollsDateViewController: SocketDelegate {
     
     func sessionDisconnected() {}
 
+    func receivedFRFilter(_ pollFilter: PollFilter) { }
+
     func sessionErrored() {
         socket.socket.connect(timeoutAfter: 5) { [weak self] in
             guard let `self` = self else { return }
@@ -233,8 +235,6 @@ extension PollsDateViewController: SocketDelegate {
         updateLatestPoll(with: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
-
-    func receivedFRFilter(_ pollFilter: PollFilter) { }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {
         updateLatestPoll(with: poll)

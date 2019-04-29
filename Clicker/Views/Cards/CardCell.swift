@@ -142,6 +142,7 @@ class CardCell: UICollectionViewCell {
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
         miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
+        frInputModel = FRInputModel(pollFilter: poll.pollFilter)
         adapter.performUpdates(animated: false, completion: nil)
     }
 

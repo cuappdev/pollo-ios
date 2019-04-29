@@ -10,13 +10,12 @@ import Foundation
 
 extension UITextField {
 
-    func updateTextToDisplayProfanity(for words: [String]) {
-        guard let text = self.text else { return }
+    func updateTextToDisplayProfanity(for words: [String], in text: String) {
         let nsString = text as NSString
         let attributedString = NSMutableAttributedString(string: text)
         words.forEach {
             let range = nsString.range(of: $0)
-            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: range)
+            attributedString.addAttribute(.foregroundColor, value: UIColor.clickerRed, range: range)
         }
         attributedText = attributedString
     }

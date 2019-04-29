@@ -345,7 +345,15 @@ extension CardController: SocketDelegate {
         }
     }
 
-    func receivedFRFilter(_ pollFilter: PollFilter) { }
+    func receivedFRFilter(_ pollFilter: PollFilter) {
+        guard !pollFilter.success else { return }
+        let newPoll = Poll(poll: pollsDateModel.polls[currentIndex], state: pollsDateModel.polls[currentIndex].state)
+        newPoll.pollFilter = pollFilter
+        updateLatestPoll(with: newPoll)
+        adapter.performUpdates(animated: false, completion: nil)
+        let alertController = self.createAlert(title: "Inappropriate Content", message: "We have detected inappropriate language. Please submit an appropriate response.")
+        present(alertController, animated: true, completion: nil)
+    }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
