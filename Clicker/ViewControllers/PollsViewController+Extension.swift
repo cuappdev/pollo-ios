@@ -39,13 +39,13 @@ extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerD
 extension PollsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pollsOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+
+
         if scrollView.contentOffset.x == 0 {
             newGroupButton.isHidden = true
-            newGroupButton.isEnabled = false
         }
-        if scrollView.contentOffset.x == 375 {
+        if scrollView.contentOffset.x == view.frame.width {
             newGroupButton.isHidden = false
-            newGroupButton.isEnabled = true
         }
     }
     
@@ -167,7 +167,6 @@ extension PollsViewController: SliderBarDelegate {
 
     func changeNewGroupButton(status: Bool) {
         newGroupButton.isHidden = status
-        newGroupButton.isEnabled = !status
     }
 
 }

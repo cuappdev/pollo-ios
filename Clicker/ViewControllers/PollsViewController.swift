@@ -474,7 +474,6 @@ class PollsViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         isListeningToKeyboard = true
-        newGroupButton?.isEnabled = !pollsOptionsView.isJoined
         newGroupButton.isHidden = pollsOptionsView.isJoined
         isOpeningGroup = false
     }
