@@ -59,8 +59,6 @@ class SessionSectionController: ListSectionController {
         cell.isSelected = false
     }
 
-    
-
 }
 
 extension SessionSectionController: PollPreviewCellDelegate {

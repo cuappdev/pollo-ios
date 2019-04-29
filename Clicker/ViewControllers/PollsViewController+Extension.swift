@@ -40,7 +40,6 @@ extension PollsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pollsOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
 
-
         if scrollView.contentOffset.x == 0 {
             newGroupButton.isHidden = true
         }
