@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import FutureNova
 import GoogleSignIn
 import IGListKit
 import Presentr

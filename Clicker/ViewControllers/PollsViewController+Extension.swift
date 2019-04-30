@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import FutureNova
 import Presentr
 import UIKit
 

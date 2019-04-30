@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 # ignore all warnings from all pods
 inhibit_all_warnings!
@@ -11,6 +11,7 @@ target 'Clicker' do
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'FLEX'
+  pod 'FutureNova', :git => 'https://github.com/cuappdev/ios-networking.git'
   pod 'Google/SignIn'
   pod 'IGListKit'
   pod 'Presentr'

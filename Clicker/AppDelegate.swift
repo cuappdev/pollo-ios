@@ -9,6 +9,7 @@
 import UIKit
 import Fabric
 import FLEX
+import FutureNova
 import GoogleSignIn
 import Crashlytics
 import StoreKit
@@ -25,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         setupWindow()
         setupNavigationController()
+        setupNetworking()
         setupGoogleSignIn()
         setupNavBar()
         setupFabric()
@@ -78,6 +80,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         print("[Running Clicker in release configuration]")
         Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
         #endif
+    }
+
+    func setupNetworking() {
+        #if LOCAL_SERVER
+        Endpoint.config.scheme = "http"
+        Endpoint.config.host = "localhost"
+        Endpoint.config.port = 3000
+        #else
+        Endpoint.config.scheme = "https"
+        Endpoint.config.host = Keys.hostURL.value
+        #endif
+
+        if let apiVersion = Endpoint.apiVersion {
+            Endpoint.config.commonPath = "/api/v\(apiVersion)"
+        }
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {

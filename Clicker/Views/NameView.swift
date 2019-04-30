@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FutureNova
 
 protocol NameViewDelegate: class {
     func nameViewDidUpdateSessionName()

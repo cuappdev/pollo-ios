@@ -12,6 +12,7 @@ PODS:
   - FirebaseInstanceID (1.0.10):
     - FirebaseCore (~> 3.6)
   - FLEX (2.4.0)
+  - FutureNova (0.1.4)
   - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
   - Google/SignIn (3.1.0):
@@ -51,6 +52,7 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - FLEX
+  - FutureNova (from `https://github.com/cuappdev/ios-networking.git`)
   - Google/SignIn
   - IGListKit
   - Presentr
@@ -82,6 +84,15 @@ SPEC REPOS:
     - SwiftLint
     - SwiftyJSON
 
+EXTERNAL SOURCES:
+  FutureNova:
+    :git: https://github.com/cuappdev/ios-networking.git
+
+CHECKOUT OPTIONS:
+  FutureNova:
+    :commit: b191dd799244cdf9f48309d46a03c64884a4ef84
+    :git: https://github.com/cuappdev/ios-networking.git
+
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
@@ -90,6 +101,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
+  FutureNova: bec0b346fcab0312cc63cb70c052511f08153436
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
@@ -103,6 +115,6 @@ SPEC CHECKSUMS:
   SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 8f64e37be53eb1f52bdc22b510536ffea282d7fb
+PODFILE CHECKSUM: 22e8518391954613e3ac3df6b92cda8eb408d30b
 
 COCOAPODS: 1.5.3
