@@ -81,6 +81,7 @@ class Poll: Codable {
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     var createdAt: String? // string of seconds since 1970
     var id: Int?
+    var pollFilter: PollFilter? // used for filtering user profanity
     var state: PollState
     var text: String
     var type: QuestionType
