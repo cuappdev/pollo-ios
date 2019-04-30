@@ -139,7 +139,6 @@ class PollsViewController: UIViewController {
         newGroupButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newGroupButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         newGroupButton.addTarget(self, action: #selector(newGroupAction), for: .touchUpInside)
-        newGroupButton.isHidden = pollsOptionsView.isJoined
         view.addSubview(newGroupButton)
         
         settingsButton = UIButton()
@@ -474,7 +473,7 @@ class PollsViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         isListeningToKeyboard = true
-        newGroupButton.isHidden = pollsOptionsView.isJoined
+        newGroupButton?.isEnabled = true
         isOpeningGroup = false
     }
     
