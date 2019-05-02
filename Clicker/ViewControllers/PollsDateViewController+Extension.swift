@@ -86,6 +86,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isHidden = true
 
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
+        newPoll.createdAt = Date().secondsString
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
@@ -177,13 +178,18 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
+        if pollsDateArray.isEmpty { // How do we make this cleaner with less code reuse
+            appendPoll(poll: poll)
+            adapter.performUpdates(animated: false, completion: nil)
+        }
+
         guard let lastPollsDateModel = pollsDateArray.first,
             let id = poll.id,
             !lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
                 if let otherID = otherPoll.id { return otherID == id }
                 return false
             }) else { return }
-        appendPoll(poll: poll) 
+        appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
     

@@ -115,6 +115,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 
         // EMIT START QUESTION
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
+        newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
         let newPollDict: [String: Any] = [
             "text": text,
