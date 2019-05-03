@@ -40,6 +40,15 @@ extension PollBuilderViewController: QuestionTypeDropDownViewDelegate {
         updateQuestionTypeButton()
         mcPollBuilder.isHidden = questionType == .freeResponse
         frPollBuilder.isHidden = questionType == .multipleChoice
+
+        switch questionType {
+        case .freeResponse:
+            frPollBuilder.askQuestionModel = AskQuestionModel(currentQuestion: mcPollBuilder.questionText)
+            frPollBuilder.adapter.performUpdates(animated: false, completion: nil)
+        case .multipleChoice:
+            mcPollBuilder.askQuestionModel = AskQuestionModel(currentQuestion: frPollBuilder.questionText)
+            mcPollBuilder.adapter.performUpdates(animated: false, completion: nil)
+        }
     }
 
 }
