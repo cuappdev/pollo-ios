@@ -271,12 +271,6 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
-        if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
-            if let otherID = otherPoll.id, let id = poll.id {
-                return otherID == id
-            }
-            return false
-        }) { return }
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
             if completed {
