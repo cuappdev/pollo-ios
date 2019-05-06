@@ -52,7 +52,7 @@ class AskQuestionSectionController: ListSectionController {
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? AskQuestionCell else {
             return nil
         }
-        return cell.questionTextView.text
+        return cell.questionTextView.text == cell.questionLabelPlaceholder ? nil : cell.questionTextView.text
     }
 
 }
