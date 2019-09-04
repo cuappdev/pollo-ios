@@ -3,10 +3,10 @@ platform :ios, '11.0'
 # ignore all warnings from all pods
 inhibit_all_warnings!
 
-target 'Clicker' do
+target 'Pollo' do
   use_frameworks!
 
-  # Pods for Clicker
+  # Pods for Pollo
   pod 'Alamofire'
   pod 'AppDevAnalytics', :git => 'https://github.com/cuappdev/ios-analytics.git'
   pod 'Crashlytics'

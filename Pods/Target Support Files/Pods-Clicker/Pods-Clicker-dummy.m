@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-@interface PodsDummy_Pods_Clicker : NSObject
+@interface PodsDummy_Pods_Pollo : NSObject
 @end
-@implementation PodsDummy_Pods_Clicker
+@implementation PodsDummy_Pods_Pollo
 @end

@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ClickerVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ClickerVersionString[];
+FOUNDATION_EXPORT double Pods_PolloVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_PolloVersionString[];
 

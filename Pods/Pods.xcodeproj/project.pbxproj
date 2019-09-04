@@ -312,7 +312,7 @@
 		806C8AD150D4AB258FA792291EB4392A /* IGListMoveIndexInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = B8B0B72E974F04BDA5729DA864EC47FB /* IGListMoveIndexInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		80E53E3DBA657A96C8F3889CBEAF5234 /* IGListDiff.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5CE2F4EF5AAFF7A0A08533A059EFF05 /* IGListDiff.mm */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		8148B65BD0B7684F6996917D3EBE47BA /* FLEXViewControllerExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9006DAAED4F84AD504CCF6FB23553B02 /* FLEXViewControllerExplorerViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		8301A99110830CEE4FB666D35BF959BE /* Pods-Clicker-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Clicker-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8301A99110830CEE4FB666D35BF959BE /* Pods-Pollo-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Pollo-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		833A8D8C40753C99DB0D7BE7F710A5CB /* FLEXMultilineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E49C978DE44F872F059AB04F61049AA /* FLEXMultilineTableViewCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		83619820600BFE3BB02C831F005CFD7E /* FLEXImageExplorerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 44834C3CEA36A227AFA34356EE0BABD3 /* FLEXImageExplorerViewController.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		855F0FB0646774E96F34E5FA5B0162B6 /* ConstraintView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A0F505F1E66C1009ABD4A7FEA45E2B /* ConstraintView+Extensions.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -340,7 +340,7 @@
 		92DE40EE06F3919B14CC309E731460EF /* SocketLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9376ED3915ACE373FD23AABDA6D7457 /* SocketLogger.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		92F24178F9A21411DF7B9A3385994CDD /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F30E1314B6FED8122A54D435E28A1 /* ParameterEncoding.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		93416FAA3E234B619E240CD16068729D /* FLEXExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B76885D133DFADB138A8D9C10904D6E /* FLEXExplorerViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		9375EB020BB2468FA08CC5EF15510D61 /* Pods-Clicker-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD517AB0AA73B909438305AEC3590E75 /* Pods-Clicker-dummy.m */; };
+		9375EB020BB2468FA08CC5EF15510D61 /* Pods-Pollo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD517AB0AA73B909438305AEC3590E75 /* Pods-Pollo-dummy.m */; };
 		93D297BF0DEFCEF9BE3F1EAD0677D610 /* PresentationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D3A9D31A80D34F9DDF7AEF6796A402 /* PresentationType.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		940617BD2B1BA610A87CD8E67C5C4473 /* IGListAdapterUpdateListener.h in Headers */ = {isa = PBXBuildFile; fileRef = C43E18B6FBEB68C28A532F40D0E7B9DD /* IGListAdapterUpdateListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94088A9D91C01931F3F8A59E194E818C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 699D46CBF2CDB9EFF111F51B6219628E /* SourceSansPro-Regular.ttf */; };
@@ -924,7 +924,7 @@
 		397505EBDCCA7C8EF6F6491AAE07592F /* SocketIOStatus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketIOStatus.swift; path = Source/SocketIO/Client/SocketIOStatus.swift; sourceTree = "<group>"; };
 		398ABC6053A6EE415FF8BD9553FC87E1 /* GTMNSDictionary+URLArguments.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GTMNSDictionary+URLArguments.h"; path = "Foundation/GTMNSDictionary+URLArguments.h"; sourceTree = "<group>"; };
 		39E15AE7EB22B0170A67A0DA677641AA /* ModalCenterPosition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ModalCenterPosition.swift; path = Presentr/ModalCenterPosition.swift; sourceTree = "<group>"; };
-		39EDE5C43709AB2ABAFF7B2F2E66EA0E /* Pods-Clicker.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Clicker.modulemap"; sourceTree = "<group>"; };
+		39EDE5C43709AB2ABAFF7B2F2E66EA0E /* Pods-Pollo.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Pollo.modulemap"; sourceTree = "<group>"; };
 		3C0277B1C71DBF19A7923ECF3B6158D6 /* FLEX-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FLEX-dummy.m"; sourceTree = "<group>"; };
 		3C2C88CE70EA69D26058DA129F395D8F /* IGListStackedSectionController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IGListStackedSectionController.m; path = Source/IGListStackedSectionController.m; sourceTree = "<group>"; };
 		3C70E97174D5F3546E47F4493E07177F /* FLEXArgumentInputViewFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArgumentInputViewFactory.m; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputViewFactory.m; sourceTree = "<group>"; };
@@ -993,7 +993,7 @@
 		5D3524E99A458DF62D0AE58CEC9B88E1 /* UICollectionViewLayout+InteractiveReordering.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UICollectionViewLayout+InteractiveReordering.h"; path = "Source/Internal/UICollectionViewLayout+InteractiveReordering.h"; sourceTree = "<group>"; };
 		5DFEE5C39B7A385E06699FCD0971E0C0 /* FLEX.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FLEX.xcconfig; sourceTree = "<group>"; };
 		5E49C978DE44F872F059AB04F61049AA /* FLEXMultilineTableViewCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXMultilineTableViewCell.m; path = Classes/Utility/FLEXMultilineTableViewCell.m; sourceTree = "<group>"; };
-		5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Clicker.framework; path = "Pods-Clicker.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Pollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Pollo.framework; path = "Pods-Pollo.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F024690326486914F605E0FE88563AC /* FLEXFileBrowserSearchOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXFileBrowserSearchOperation.m; path = Classes/GlobalStateExplorers/FLEXFileBrowserSearchOperation.m; sourceTree = "<group>"; };
 		5F52F8CD0BD29A86C6C007496F712F4D /* SignIn-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "SignIn-Module.h"; path = "Headers/ModuleHeaders/SignIn-Module.h"; sourceTree = "<group>"; };
 		5F86B73CA9721BB013237057C70EA963 /* IGListKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IGListKit-umbrella.h"; sourceTree = "<group>"; };
@@ -1067,7 +1067,7 @@
 		81EA76D42DA0997B09583BD1C82B54A5 /* IGListKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = IGListKit.modulemap; sourceTree = "<group>"; };
 		82D9247E9B5ABE9FC57777648B445E30 /* FutureNova.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FutureNova.xcconfig; sourceTree = "<group>"; };
 		82DCC499CE2B39317E1B9A6A608D57C8 /* FLEXWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXWindow.m; path = Classes/ExplorerInterface/FLEXWindow.m; sourceTree = "<group>"; };
-		8333A459E552EB53A98CBE7F03BC4296 /* Pods-Clicker-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Clicker-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8333A459E552EB53A98CBE7F03BC4296 /* Pods-Pollo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Pollo-acknowledgements.markdown"; sourceTree = "<group>"; };
 		8354E02DE28DD87EF938B3DA2F5F3BFE /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
 		83D0A59138CCB9AF96165310B024F795 /* FLEXHierarchyTableViewCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXHierarchyTableViewCell.m; path = Classes/ViewHierarchy/FLEXHierarchyTableViewCell.m; sourceTree = "<group>"; };
 		83FC34B1221CA247730B4A3CBA047044 /* FLEXArgumentInputNotSupportedView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArgumentInputNotSupportedView.m; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputNotSupportedView.m; sourceTree = "<group>"; };
@@ -1099,7 +1099,7 @@
 		92D43953D42C7FC70CB6434AD2705BF5 /* ConstraintLayoutGuide.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutGuide.swift; path = Source/ConstraintLayoutGuide.swift; sourceTree = "<group>"; };
 		92FF660C1D2C4846C920E5196A21474B /* GTMSessionUploadFetcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionUploadFetcher.m; path = Source/GTMSessionUploadFetcher.m; sourceTree = "<group>"; };
 		93081A40784461F9B3F7E10829333880 /* GoogleToolboxForMac-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GoogleToolboxForMac-umbrella.h"; sourceTree = "<group>"; };
-		939439CF9A3F6339A0EC861771C89691 /* Pods-Clicker-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clicker-frameworks.sh"; sourceTree = "<group>"; };
+		939439CF9A3F6339A0EC861771C89691 /* Pods-Pollo-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Pollo-frameworks.sh"; sourceTree = "<group>"; };
 		93B33717FBC3D31460A050C3C66A1F80 /* GTMSessionFetcherLogging.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionFetcherLogging.m; path = Source/GTMSessionFetcherLogging.m; sourceTree = "<group>"; };
 		93D6809DDB109896C383342EDDDE9DCC /* IGListSectionMap.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IGListSectionMap.m; path = Source/Internal/IGListSectionMap.m; sourceTree = "<group>"; };
 		93F9E5533FE93A7993C61058CF4CA121 /* FLEXUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXUtility.m; path = Classes/Utility/FLEXUtility.m; sourceTree = "<group>"; };
@@ -1111,7 +1111,7 @@
 		97D1FD4E73DC32A39431801203FBF54C /* TransitionType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransitionType.swift; path = Presentr/TransitionType.swift; sourceTree = "<group>"; };
 		9887B4DDEFC165BAEEC9F1FC7DED9DB7 /* IGListAdapter+DebugDescription.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "IGListAdapter+DebugDescription.m"; path = "Source/Internal/IGListAdapter+DebugDescription.m"; sourceTree = "<group>"; };
 		98A39CAA9C90B7E0C7D9D6A36F42DEE4 /* Presentr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Presentr.xcconfig; sourceTree = "<group>"; };
-		9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Clicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clicker.release.xcconfig"; sourceTree = "<group>"; };
+		9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Pollo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Pollo.release.xcconfig"; sourceTree = "<group>"; };
 		99627B1056CCF473CDE20DB97AD507E2 /* IGListSectionController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListSectionController.h; path = Source/IGListSectionController.h; sourceTree = "<group>"; };
 		9984870070F8F244D4DFEB9852BEB233 /* SocketStringReader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketStringReader.swift; path = Source/SocketIO/Util/SocketStringReader.swift; sourceTree = "<group>"; };
 		99BF55BBEEA14825750644798BFE4A02 /* IGListGenericSectionController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListGenericSectionController.h; path = Source/IGListGenericSectionController.h; sourceTree = "<group>"; };
@@ -1131,9 +1131,9 @@
 		A3232D430669C3940B818D4678E562AC /* FLEXExplorerToolbar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXExplorerToolbar.h; path = Classes/Toolbar/FLEXExplorerToolbar.h; sourceTree = "<group>"; };
 		A386DF97712734B012407FDDF0B0B267 /* FLEXArrayExplorerViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArrayExplorerViewController.m; path = Classes/ObjectExplorers/FLEXArrayExplorerViewController.m; sourceTree = "<group>"; };
 		A3ADFA4E8F1219C3103744AB657C5406 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintAttributes.swift; path = Source/ConstraintAttributes.swift; sourceTree = "<group>"; };
-		A400CBE6428C10669B9906D1C4807B18 /* Pods-Clicker.debug dev server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clicker.debug dev server.xcconfig"; sourceTree = "<group>"; };
+		A400CBE6428C10669B9906D1C4807B18 /* Pods-Pollo.debug dev server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Pollo.debug dev server.xcconfig"; sourceTree = "<group>"; };
 		A49AF90A9F6E36EC5EB4239E31117104 /* NSNumber+IGListDiffable.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNumber+IGListDiffable.h"; path = "Source/Common/NSNumber+IGListDiffable.h"; sourceTree = "<group>"; };
-		A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Clicker.debug local server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clicker.debug local server.xcconfig"; sourceTree = "<group>"; };
+		A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Pollo.debug local server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Pollo.debug local server.xcconfig"; sourceTree = "<group>"; };
 		A6CE6001F5AA11918BDF70F2CDA1E080 /* FLEXFieldEditorViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXFieldEditorViewController.h; path = Classes/Editing/FLEXFieldEditorViewController.h; sourceTree = "<group>"; };
 		A71F24181D7B435ED15FBD3D1B06E92D /* FLEXArgumentInputStructView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXArgumentInputStructView.h; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputStructView.h; sourceTree = "<group>"; };
 		A7D2665DF458BAACD05140AD3D933A58 /* IGListMoveIndex.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IGListMoveIndex.m; path = Source/Common/IGListMoveIndex.m; sourceTree = "<group>"; };
@@ -1177,7 +1177,7 @@
 		B946583A382313DDACEFD702130858D2 /* FLEXTableColumnHeader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXTableColumnHeader.m; path = Classes/GlobalStateExplorers/DatabaseBrowser/FLEXTableColumnHeader.m; sourceTree = "<group>"; };
 		BA16992800F7F468410BE2AA30E8D36B /* FLEXArgumentInputStructView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArgumentInputStructView.m; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputStructView.m; sourceTree = "<group>"; };
 		BA580964897E0B112B8584A79A2FEF03 /* SwiftyJSON-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyJSON-dummy.m"; sourceTree = "<group>"; };
-		BA7AC95FD3913175A9FEECB7D5546CA9 /* Pods-Clicker-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Clicker-acknowledgements.plist"; sourceTree = "<group>"; };
+		BA7AC95FD3913175A9FEECB7D5546CA9 /* Pods-Pollo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Pollo-acknowledgements.plist"; sourceTree = "<group>"; };
 		BC55695C2DDB30AD462A1523434BF460 /* FLEXToolbarItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXToolbarItem.h; path = Classes/Toolbar/FLEXToolbarItem.h; sourceTree = "<group>"; };
 		BC8DB08F9D4767C1AA596F35C9974EEF /* SocketAckEmitter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketAckEmitter.swift; path = Source/SocketIO/Ack/SocketAckEmitter.swift; sourceTree = "<group>"; };
 		BCD4C3C0BF14B7DD20B4382C55EBC128 /* FLEXTableLeftCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXTableLeftCell.m; path = Classes/GlobalStateExplorers/DatabaseBrowser/FLEXTableLeftCell.m; sourceTree = "<group>"; };
@@ -1197,7 +1197,7 @@
 		C4EAF21813DBA2C4B794917B5BB9BD7E /* KeyboardTranslation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyboardTranslation.swift; path = Presentr/KeyboardTranslation.swift; sourceTree = "<group>"; };
 		C4FE545BAC6DE680D6A8946099DE2E30 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		C56260B0DFDA8AC3D1A78375A26C32C1 /* FLEXFieldEditorView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXFieldEditorView.m; path = Classes/Editing/FLEXFieldEditorView.m; sourceTree = "<group>"; };
-		C5A7FE0D7A73295FC874A882BC28C26D /* Pods-Clicker-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Clicker-Info.plist"; sourceTree = "<group>"; };
+		C5A7FE0D7A73295FC874A882BC28C26D /* Pods-Pollo-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Pollo-Info.plist"; sourceTree = "<group>"; };
 		C5CD91371FF06625E464E2B5A444EDFA /* FLEXClassExplorerViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXClassExplorerViewController.m; path = Classes/ObjectExplorers/FLEXClassExplorerViewController.m; sourceTree = "<group>"; };
 		C5E6E8C44B6EDD54F560A0C34AA76EC1 /* IGListBindingSectionController+DebugDescription.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "IGListBindingSectionController+DebugDescription.m"; path = "Source/Internal/IGListBindingSectionController+DebugDescription.m"; sourceTree = "<group>"; };
 		C6757CAED22DD5B51E67EDE5DCD07A01 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GTMSessionFetcher.framework; path = GTMSessionFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1205,13 +1205,13 @@
 		C79B13C28615FE618CE0023C42200182 /* FLEXSetExplorerViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXSetExplorerViewController.h; path = Classes/ObjectExplorers/FLEXSetExplorerViewController.h; sourceTree = "<group>"; };
 		C8E987014929F2514F964D75D9AC6E60 /* FLEXInstancesTableViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXInstancesTableViewController.m; path = Classes/GlobalStateExplorers/FLEXInstancesTableViewController.m; sourceTree = "<group>"; };
 		C9376ED3915ACE373FD23AABDA6D7457 /* SocketLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketLogger.swift; path = Source/SocketIO/Util/SocketLogger.swift; sourceTree = "<group>"; };
-		CA3E349A6F75FD4552B5B0A413749561 /* Pods-Clicker-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clicker-resources.sh"; sourceTree = "<group>"; };
+		CA3E349A6F75FD4552B5B0A413749561 /* Pods-Pollo-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Pollo-resources.sh"; sourceTree = "<group>"; };
 		CA63F421DC59EC04D9DA4739A3D2404A /* IGListWorkingRangeDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListWorkingRangeDelegate.h; path = Source/IGListWorkingRangeDelegate.h; sourceTree = "<group>"; };
 		CA7904A184B918C7E172F03E574636B0 /* ConstraintViewDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintViewDSL.swift; path = Source/ConstraintViewDSL.swift; sourceTree = "<group>"; };
 		CB8CC9AC3647D09FD9C7633F47B7C292 /* FLEXArgumentInputNumberView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArgumentInputNumberView.m; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputNumberView.m; sourceTree = "<group>"; };
 		CCB18C4D7DEB29DA2FF6EF9B82BAF82F /* FLEXObjectExplorerFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXObjectExplorerFactory.m; path = Classes/ObjectExplorers/FLEXObjectExplorerFactory.m; sourceTree = "<group>"; };
 		CD2C13630404360B033007BF00AEB216 /* FLEXSetExplorerViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXSetExplorerViewController.m; path = Classes/ObjectExplorers/FLEXSetExplorerViewController.m; sourceTree = "<group>"; };
-		CD517AB0AA73B909438305AEC3590E75 /* Pods-Clicker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Clicker-dummy.m"; sourceTree = "<group>"; };
+		CD517AB0AA73B909438305AEC3590E75 /* Pods-Pollo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Pollo-dummy.m"; sourceTree = "<group>"; };
 		CD832DCB13F7B5E82B22C8DBAAF055DF /* FLEXObjectExplorerViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXObjectExplorerViewController.h; path = Classes/ObjectExplorers/FLEXObjectExplorerViewController.h; sourceTree = "<group>"; };
 		CD94A7378906F83C7005193C1D7A29C1 /* FLEXRuntimeUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXRuntimeUtility.m; path = Classes/Utility/FLEXRuntimeUtility.m; sourceTree = "<group>"; };
 		CE4A523F01FC8537631664D3597BEB84 /* FLEXKeyboardShortcutManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXKeyboardShortcutManager.m; path = Classes/Utility/FLEXKeyboardShortcutManager.m; sourceTree = "<group>"; };
@@ -1305,7 +1305,7 @@
 		F37F1FB46EB5D03DC773416F823FF9EA /* FLEXMethodCallingViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXMethodCallingViewController.m; path = Classes/Editing/FLEXMethodCallingViewController.m; sourceTree = "<group>"; };
 		F390803E3BBF9F535FB33EE58219D532 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = Resources/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		F49FBDD555F7DAFF8F37639D90F3E975 /* IGListAdapterUpdater+DebugDescription.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "IGListAdapterUpdater+DebugDescription.m"; path = "Source/Internal/IGListAdapterUpdater+DebugDescription.m"; sourceTree = "<group>"; };
-		F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Clicker-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Clicker-umbrella.h"; sourceTree = "<group>"; };
+		F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Pollo-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Pollo-umbrella.h"; sourceTree = "<group>"; };
 		F60B8727B364AA1E38D94FBA1D4102C6 /* FLEXHierarchyTableViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXHierarchyTableViewController.m; path = Classes/ViewHierarchy/FLEXHierarchyTableViewController.m; sourceTree = "<group>"; };
 		F629B87F255EE37A9F7DD592D476D67B /* FLEXDefaultEditorViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXDefaultEditorViewController.h; path = Classes/Editing/FLEXDefaultEditorViewController.h; sourceTree = "<group>"; };
 		F7333AA504107241F8E99B6DE84205CF /* CoverFromCornerAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoverFromCornerAnimation.swift; path = Presentr/CoverFromCornerAnimation.swift; sourceTree = "<group>"; };
@@ -1317,7 +1317,7 @@
 		FC9DBC83009A8D01DF4FA41DA6816838 /* FLEXMultiColumnTableView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXMultiColumnTableView.m; path = Classes/GlobalStateExplorers/DatabaseBrowser/FLEXMultiColumnTableView.m; sourceTree = "<group>"; };
 		FCA039C91540732F26A3FCBA15484862 /* IGListKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListKit.h; path = Source/IGListKit.h; sourceTree = "<group>"; };
 		FCC382DD408C022CF9252DB0FB3F9BA0 /* Google.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Google.xcconfig; sourceTree = "<group>"; };
-		FCDC0FA9233313D1048C72874E9435ED /* Pods-Clicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clicker.debug.xcconfig"; sourceTree = "<group>"; };
+		FCDC0FA9233313D1048C72874E9435ED /* Pods-Pollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Pollo.debug.xcconfig"; sourceTree = "<group>"; };
 		FDBA3CA79267BF8CB1D8B3EDE0D87267 /* IGListBatchUpdates.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListBatchUpdates.h; path = Source/Internal/IGListBatchUpdates.h; sourceTree = "<group>"; };
 		FE2ABD09D3776799D6B7E01A2816A26F /* FLEXArgumentInputColorView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXArgumentInputColorView.m; path = Classes/Editing/ArgumentInputViews/FLEXArgumentInputColorView.m; sourceTree = "<group>"; };
 		FE5773CABA1504D109503835208CE15A /* Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-umbrella.h"; sourceTree = "<group>"; };
@@ -1703,7 +1703,7 @@
 				33191646045CCA15093467AA0299300B /* GoogleToolboxForMac.framework */,
 				C6757CAED22DD5B51E67EDE5DCD07A01 /* GTMSessionFetcher.framework */,
 				C0394C869C9DA5EEC0B0161208EC49FB /* IGListKit.framework */,
-				5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Clicker.framework */,
+				5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Pollo.framework */,
 				78ECEC6D969C57738917006E998C24C0 /* Presentr.framework */,
 				E97EA8908F7C487628E6D22427F9921B /* SnapKit.framework */,
 				6AE212BD9B98622B1DA0B3737E532765 /* SocketIO.framework */,
@@ -2468,7 +2468,7 @@
 		E095C8EFCC98856E88722A9463C9D130 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				ED3B4BC70355341745960182C32C946C /* Pods-Clicker */,
+				ED3B4BC70355341745960182C32C946C /* Pods-Pollo */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
@@ -2531,24 +2531,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		ED3B4BC70355341745960182C32C946C /* Pods-Clicker */ = {
+		ED3B4BC70355341745960182C32C946C /* Pods-Pollo */ = {
 			isa = PBXGroup;
 			children = (
-				39EDE5C43709AB2ABAFF7B2F2E66EA0E /* Pods-Clicker.modulemap */,
-				8333A459E552EB53A98CBE7F03BC4296 /* Pods-Clicker-acknowledgements.markdown */,
-				BA7AC95FD3913175A9FEECB7D5546CA9 /* Pods-Clicker-acknowledgements.plist */,
-				CD517AB0AA73B909438305AEC3590E75 /* Pods-Clicker-dummy.m */,
-				939439CF9A3F6339A0EC861771C89691 /* Pods-Clicker-frameworks.sh */,
-				C5A7FE0D7A73295FC874A882BC28C26D /* Pods-Clicker-Info.plist */,
-				CA3E349A6F75FD4552B5B0A413749561 /* Pods-Clicker-resources.sh */,
-				F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Clicker-umbrella.h */,
-				FCDC0FA9233313D1048C72874E9435ED /* Pods-Clicker.debug.xcconfig */,
-				A400CBE6428C10669B9906D1C4807B18 /* Pods-Clicker.debug dev server.xcconfig */,
-				A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Clicker.debug local server.xcconfig */,
-				9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Clicker.release.xcconfig */,
+				39EDE5C43709AB2ABAFF7B2F2E66EA0E /* Pods-Pollo.modulemap */,
+				8333A459E552EB53A98CBE7F03BC4296 /* Pods-Pollo-acknowledgements.markdown */,
+				BA7AC95FD3913175A9FEECB7D5546CA9 /* Pods-Pollo-acknowledgements.plist */,
+				CD517AB0AA73B909438305AEC3590E75 /* Pods-Pollo-dummy.m */,
+				939439CF9A3F6339A0EC861771C89691 /* Pods-Pollo-frameworks.sh */,
+				C5A7FE0D7A73295FC874A882BC28C26D /* Pods-Pollo-Info.plist */,
+				CA3E349A6F75FD4552B5B0A413749561 /* Pods-Pollo-resources.sh */,
+				F5951BF4C7BEC0FD5A09473A9F203518 /* Pods-Pollo-umbrella.h */,
+				FCDC0FA9233313D1048C72874E9435ED /* Pods-Pollo.debug.xcconfig */,
+				A400CBE6428C10669B9906D1C4807B18 /* Pods-Pollo.debug dev server.xcconfig */,
+				A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Pollo.debug local server.xcconfig */,
+				9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Pollo.release.xcconfig */,
 			);
-			name = "Pods-Clicker";
-			path = "Target Support Files/Pods-Clicker";
+			name = "Pods-Pollo";
+			path = "Target Support Files/Pods-Pollo";
 			sourceTree = "<group>";
 		};
 		F377F254E3E20E961F11F03FEDE37243 /* Support Files */ = {
@@ -2802,7 +2802,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8301A99110830CEE4FB666D35BF959BE /* Pods-Clicker-umbrella.h in Headers */,
+				8301A99110830CEE4FB666D35BF959BE /* Pods-Pollo-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2942,9 +2942,9 @@
 			productReference = E97EA8908F7C487628E6D22427F9921B /* SnapKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		4A06050186AA0C0EC507079306FDB092 /* Pods-Clicker */ = {
+		4A06050186AA0C0EC507079306FDB092 /* Pods-Pollo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CB5698C4EE6838684BF5C6160EB69E84 /* Build configuration list for PBXNativeTarget "Pods-Clicker" */;
+			buildConfigurationList = CB5698C4EE6838684BF5C6160EB69E84 /* Build configuration list for PBXNativeTarget "Pods-Pollo" */;
 			buildPhases = (
 				6A70B57E469CC6A6F9CE93DE0CED8BCD /* Headers */,
 				D65EDE8302A1E54EFB13A9B45D10B69F /* Sources */,
@@ -2977,9 +2977,9 @@
 				5E3667D89C0ED03A8B82E9CE5E5B3D4F /* PBXTargetDependency */,
 				A7D2F8DB183BF474155F4E1860050B62 /* PBXTargetDependency */,
 			);
-			name = "Pods-Clicker";
-			productName = "Pods-Clicker";
-			productReference = 5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Clicker.framework */;
+			name = "Pods-Pollo";
+			productName = "Pods-Pollo";
+			productReference = 5EDC6A3BDA54EAC14E167ACE8A232061 /* Pods_Pollo.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		829DEA46CC4F04B458E1D5E4F2CF6E4E /* SwiftyJSON */ = {
@@ -3147,7 +3147,7 @@
 				A50601FAFFA38888516646FF7BA22FE3 /* GoogleToolboxForMac */,
 				8599239C9FCF64406189CA5D4DDEE933 /* GTMSessionFetcher */,
 				34049BCBFB104F085CF6FDCCC2B37233 /* IGListKit */,
-				4A06050186AA0C0EC507079306FDB092 /* Pods-Clicker */,
+				4A06050186AA0C0EC507079306FDB092 /* Pods-Pollo */,
 				8AF869F139C50AF80EAE47909E250836 /* Presentr */,
 				357E0911BBC00CF8B87B6F970AECF12B /* SnapKit */,
 				BB6A70BEF5728346877E29EFD54D9E67 /* Socket.IO-Client-Swift */,
@@ -3565,7 +3565,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9375EB020BB2468FA08CC5EF15510D61 /* Pods-Clicker-dummy.m in Sources */,
+				9375EB020BB2468FA08CC5EF15510D61 /* Pods-Pollo-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4723,7 +4723,7 @@
 		};
 		57A9AECEA9953F40B3552EEAE710354E /* Debug Local Server */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Clicker.debug local server.xcconfig */;
+			baseConfigurationReference = A4ECC94AAB6C2544E9A63E8AF9573595 /* Pods-Pollo.debug local server.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
@@ -4737,12 +4737,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -4967,7 +4967,7 @@
 		};
 		6F47EC9C8B91FCED86671470F53BF744 /* Debug Dev Server */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A400CBE6428C10669B9906D1C4807B18 /* Pods-Clicker.debug dev server.xcconfig */;
+			baseConfigurationReference = A400CBE6428C10669B9906D1C4807B18 /* Pods-Pollo.debug dev server.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
@@ -4981,12 +4981,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -5335,7 +5335,7 @@
 		};
 		9A29EF38AEDAE597836BBBFCE349F5D7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Clicker.release.xcconfig */;
+			baseConfigurationReference = 9906A8FBA07F2EAC538CA57A20BD9E6D /* Pods-Pollo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
@@ -5349,12 +5349,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -6186,7 +6186,7 @@
 		};
 		EDF97F954746550C55E517A6E8802199 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCDC0FA9233313D1048C72874E9435ED /* Pods-Clicker.debug.xcconfig */;
+			baseConfigurationReference = FCDC0FA9233313D1048C72874E9435ED /* Pods-Pollo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
@@ -6200,12 +6200,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Clicker/Pods-Clicker.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-Pollo/Pods-Pollo.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -6556,7 +6556,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CB5698C4EE6838684BF5C6160EB69E84 /* Build configuration list for PBXNativeTarget "Pods-Clicker" */ = {
+		CB5698C4EE6838684BF5C6160EB69E84 /* Build configuration list for PBXNativeTarget "Pods-Pollo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EDF97F954746550C55E517A6E8802199 /* Debug */,
