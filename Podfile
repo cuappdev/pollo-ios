@@ -8,8 +8,10 @@ target 'Clicker' do
 
   # Pods for Clicker
   pod 'Alamofire'
+  pod 'AppDevAnalytics', :git => 'https://github.com/cuappdev/ios-analytics.git'
   pod 'Crashlytics'
   pod 'Fabric'
+  pod 'Firebase/Analytics'
   pod 'FLEX'
   pod 'FutureNova', :git => 'https://github.com/cuappdev/ios-networking.git'
   pod 'Google/SignIn'

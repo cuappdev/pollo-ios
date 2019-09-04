@@ -86,6 +86,7 @@
 		C2434CBF21388E2B00929C98 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CBE21388E2B00929C98 /* Poll.swift */; };
 		C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A56209956C600DC5EDC /* DeletePollViewController.swift */; };
 		C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A58209963A200DC5EDC /* EditNameViewController.swift */; };
+		C25EA130231F59FA00E3F4CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */; };
 		C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */; };
 		C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E9203F77FA001F540E /* AnswerMCCell.swift */; };
 		C2649F752142314B00370454 /* PollOptionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2649F742142314B00370454 /* PollOptionsModel.swift */; };
@@ -250,6 +251,7 @@
 		C2434CBE21388E2B00929C98 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C2504A56209956C600DC5EDC /* DeletePollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePollViewController.swift; sourceTree = "<group>"; };
 		C2504A58209963A200DC5EDC /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
+		C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMCOptionCell.swift; sourceTree = "<group>"; };
 		C25F21E9203F77FA001F540E /* AnswerMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMCCell.swift; sourceTree = "<group>"; };
 		C2649F742142314B00370454 /* PollOptionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionsModel.swift; sourceTree = "<group>"; };
@@ -697,6 +699,7 @@
 		C7F923C41F73540600B1E975 /* Clicker */ = {
 			isa = PBXGroup;
 			children = (
+				C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */,
 				0C40B4732201E52C005BED7B /* Networking */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
@@ -833,6 +836,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
+				C25EA130231F59FA00E3F4CA /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -849,7 +853,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
 				"${BUILT_PRODUCTS_DIR}/FutureNova/FutureNova.framework",
@@ -880,7 +884,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		904AB02D71A4A8F02355A7BC /* [CP] Copy Pods Resources */ = {
@@ -891,7 +895,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -902,7 +906,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A7E37B266A6A59B49588A337 /* [CP] Check Pods Manifest.lock */ = {

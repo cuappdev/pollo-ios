@@ -1,0 +1,33 @@
+{
+  "name": "AppDevAnalytics",
+  "version": "0.1.7",
+  "swift_version": "4.2",
+  "summary": "A wrapper for classes used to log analytics to Firebase.",
+  "description": "A wrapper for classes used to log analytics to Firebase.",
+  "homepage": "https://github.com/cuappdev/ios-analytics",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Cornell AppDev": "cornellappdev@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/cuappdev/ios-analytics.git",
+    "tag": "0.1.7"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "AppDevAnalytics/Classes/**/*",
+  "static_framework": true,
+  "frameworks": "UIKit",
+  "dependencies": {
+    "Crashlytics": [
+      "~> 3.12"
+    ],
+    "SwiftyJSON": [
+      "4.2"
+    ]
+  }
+}
