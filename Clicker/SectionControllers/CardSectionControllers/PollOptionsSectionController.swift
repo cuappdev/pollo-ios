@@ -13,20 +13,20 @@ protocol PollOptionsSectionControllerDelegate {
     var userRole: UserRole { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
-    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, answerId: String)
+    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, text: String)
     
 }
 
 class PollOptionsSectionController: ListSectionController {
     
     // MARK: - Data vars
+    var correctAnswer: String?
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
-    var correctAnswer: String?
     
     init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: String?) {
-        self.delegate = delegate
         self.correctAnswer = correctAnswer
+        self.delegate = delegate
     }
     
     // MARK: - ListSectionController overrides
@@ -67,8 +67,8 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
         delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, choice: choice, index: index)
     }
 
-    func pollOptionsCellDidUpvote(for answerId: String) {
-        delegate.pollOptionsSectionControllerDidUpvote(sectionController: self, answerId: answerId)
+    func pollOptionsCellDidUpvote(for text: String) {
+        delegate.pollOptionsSectionControllerDidUpvote(sectionController: self, text: text)
     }
     
 }

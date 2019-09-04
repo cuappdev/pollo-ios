@@ -6,8 +6,8 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import IGListKit
+import UIKit
 
 protocol AttendanceViewControllerDelegate: class {
     func attendanceViewControllerWillDisappear(with pollsDateAttendanceArray: [PollsDateAttendanceModel])
@@ -16,17 +16,18 @@ protocol AttendanceViewControllerDelegate: class {
 class AttendanceViewController: UIViewController {
 
     // MARK: - View vars
-    var navigationTitleView: NavigationTitleView!
     var collectionView: UICollectionView!
     var exportButton: UIButton!
+    var navigationTitleView: NavigationTitleView!
     var selectAllBarButtonItem: UIBarButtonItem!
 
     // MARK: - Data vars
-    weak var delegate: AttendanceViewControllerDelegate?
     var adapter: ListAdapter!
-    var session: Session!
-    var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
     var isSelectAll: Bool = false
+    var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
+    var session: Session!
+    weak var delegate: AttendanceViewControllerDelegate?
+
     var isExportable: Bool = false {
         didSet {
             if exportButton != nil {
@@ -36,17 +37,17 @@ class AttendanceViewController: UIViewController {
     }
 
     // MARK: - Constants
+    let attendanceLabelText = "Attendance"
+    let backImageName = "back"
+    let cancelBarButtonTitle = "Cancel"
     let collectionViewTopPadding: CGFloat = 30.5
-    let exportButtonWidthScaleFactor: CGFloat = 0.43
-    let exportButtonHeight: CGFloat = 47
     let exportButtonBorderWidth: CGFloat = 1
     let exportButtonBottomPadding: CGFloat = 35.5
-    let navigtionTitle = "Attendance"
-    let backImageName = "back"
-    let attendanceLabelText = "Attendance"
+    let exportButtonHeight: CGFloat = 47
     let exportButtonTitle = "Export"
+    let exportButtonWidthScaleFactor: CGFloat = 0.43
+    let navigtionTitle = "Attendance"
     let selectAllBarButtonTitle = "Select All"
-    let cancelBarButtonTitle = "Cancel"
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

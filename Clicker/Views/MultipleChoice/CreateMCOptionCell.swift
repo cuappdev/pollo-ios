@@ -11,36 +11,36 @@ import SnapKit
 
 protocol CreateMCOptionCellDelegate: class {
 
-    func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool)
-    func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool)
     func createMCOptionCellDidDeleteOption(index: Int)
+    func createMCOptionCellDidUpdateIsCorrect(index: Int, text: String, isCorrect: Bool)
+    func createMCOptionCellDidUpdateTextField(index: Int, text: String, isCorrect: Bool)
 
 }
 
 class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
 
     // MARK: Views
-    var containerView: UIView!
-    var isCorrectButton: UIButton!
     var addOptionTextField: UITextField!
+    var containerView: UIView!
+    var filledCircleImage: UIImage!
+    var isCorrectButton: UIButton!
     var trashButton: UIButton!
     var unfilledCircleImage: UIImage!
-    var filledCircleImage: UIImage!
     
     // MARK: Data
-    weak var delegate: CreateMCOptionCellDelegate?
     var index: Int!
     var isCorrect: Bool = false
+    weak var delegate: CreateMCOptionCellDelegate?
 
     // MARK: - Constants
+    let addOptionTextFieldLeftPadding: CGFloat = 8
+    let bottomPadding: CGFloat = 6
+    let edgePadding: CGFloat = 18
+    let filledCircleImageName = "option_filled"
     let isCorrectButtonLeftPadding: CGFloat = 12
     let isCorrectButtonLength: CGFloat = 23
-    let addOptionTextFieldLeftPadding: CGFloat = 8
     let trashIconHeight: CGFloat = 21.5
-    let edgePadding: CGFloat = 18
-    let bottomPadding: CGFloat = 6
     let unfilledCircleImageName = "greyEmptyCircle"
-    let filledCircleImageName = "option_filled"
     
     // MARK: - INITIALIZATION
     override init(frame: CGRect) {

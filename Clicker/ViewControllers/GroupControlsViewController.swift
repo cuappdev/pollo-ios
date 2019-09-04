@@ -19,6 +19,7 @@ class GroupControlsViewController: UIViewController {
 
     // MARK: - Data vars
     private let networking: Networking = URLSession.shared.request
+    var togglingLocation = false
     var adapter: ListAdapter!
     var session: Session!
     var pollsDateAttendanceArray: [PollsDateAttendanceModel] = []
@@ -39,6 +40,8 @@ class GroupControlsViewController: UIViewController {
     var spaceOne: SpaceModel!
     var spaceTwo: SpaceModel!
     var spaceThree: SpaceModel!
+    var spaceFour: SpaceModel!
+    var spaceFive: SpaceModel!
 
     // MARK: - Constants
     let attendanceHeaderLabel = "Attendance"
@@ -60,10 +63,12 @@ class GroupControlsViewController: UIViewController {
     let navigationTitle = "Group Controls"
     let pollSettingsHeaderLabel = "Poll Settings"
     let separatorLineViewWidth: CGFloat = 0.5
+    let spaceFiveHeight: CGFloat = 16
+    let spaceFourHeight: CGFloat = 57
     let spaceOneHeight: CGFloat = 38
+    let spaceThreeHeight: CGFloat = 16
     let spaceTwoHeight: CGFloat = 16
-    let spaceThreeHeight: CGFloat = 57
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -82,6 +87,8 @@ class GroupControlsViewController: UIViewController {
         spaceOne = SpaceModel(space: spaceOneHeight, backgroundColor: .clickerBlack1)
         spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .clickerBlack1)
         spaceThree = SpaceModel(space: spaceThreeHeight, backgroundColor: .clickerBlack1)
+        spaceFour = SpaceModel(space: spaceFourHeight, backgroundColor: .clickerBlack1)
+        spaceFive = SpaceModel(space: spaceFiveHeight, backgroundColor: .clickerBlack1)
 
         setupNavBar()
         setupViews()
@@ -172,11 +179,11 @@ extension GroupControlsViewController: ListAdapterDataSource {
         
         if pollsDateAttendanceArray.count <= 3 {
             let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
-            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceTwo]
+            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceFive]
             return [precursorArray, pollsDateAttendanceArray, postArray].flatMap {$0}
         }
         let viewAllModel = ViewAllModel()
-        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceTwo, viewAllModel, exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceTwo]
+        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceThree, viewAllModel, exportAttendanceModel, spaceFour, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceFive]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -219,18 +226,22 @@ extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
                 present(alertController, animated: true, completion: nil)
                 return
             }
-            updateSession(id: session.id, name: session.name, code: session.code, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
-                switch result {
-                case .value:
-                    self?.session.isLocationRestricted.toggle()
-                case.error(let error):
-                    print(error)
-                    let alertController = self?.createAlert(title: "Error", message: "Failed to update location settings. Try again!")
-                    if let alertController = alertController {
-                        self?.present(alertController, animated: true, completion: nil)
+            if !togglingLocation {
+                togglingLocation.toggle()
+                updateSession(id: session.id, name: session.name, code: session.code, isLocationRestricted: !session.isLocationRestricted).observe { [weak self] result in
+                    switch result {
+                    case .value:
+                        self?.session.isLocationRestricted.toggle()
+                    case.error(let error):
+                        print(error)
+                        let alertController = self?.createAlert(title: "Error", message: "Failed to update location settings. Try again!")
+                        if let alertController = alertController {
+                            self?.present(alertController, animated: true, completion: nil)
+                        }
                     }
+                    self?.togglingLocation.toggle()
+                    self?.adapter.performUpdates(animated: false, completion: nil)
                 }
-                self?.adapter.performUpdates(animated: false, completion: nil)
             }
         }
     }

@@ -59,25 +59,20 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        var choiceForAnswer: String
-        // choiceForAnswer should be "A" or "B" for multiple choice and the actual response for free response
-        switch poll.questionType {
+        switch poll.type {
         case .multipleChoice:
-            guard let indexOfChoice = poll.options.index(of: choice) else { return }
-            choiceForAnswer = intToMCOption(indexOfChoice)
+            guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
+            let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
+            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         case .freeResponse:
-            choiceForAnswer = choice
+            let pollChoice = PollChoice(text: choice)
+            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         }
-        let answer = Answer(text: choice, choice: choiceForAnswer, pollId: poll.id)
-        emitAnswer(answer: answer, message: Routes.serverTally)
     }
 
-    func pollSectionControllerDidUpvote(sectionController: PollSectionController, answerId: String) {
-        let upvoteObject: [String: Any] = [
-            RequestKeys.answerIDKey: answerId,
-            RequestKeys.googleIDKey: User.currentUser?.id ?? ""
-        ]
-        socket.socket.emit(Routes.serverUpvote, upvoteObject)
+    func pollSectionControllerDidUpvote(pollChoice: PollChoice) {
+        guard let pollChoiceDict = pollChoice.dictionary else { return }
+        socket.socket.emit(Routes.serverUpvote, pollChoiceDict)
     }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -110,28 +105,28 @@ extension CardController: PollSectionControllerDelegate {
 }
 
 extension CardController: PollBuilderViewControllerDelegate {
-    
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, correctAnswer: String?, shouldPopViewController: Bool) {
+
+    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
+
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
-        
-        var correct = ""
-        if let correctAnswer = correctAnswer {
-            correct = correctAnswer
-        }
-        
+
+        let correct = correctAnswer ?? ""
+
         // EMIT START QUESTION
-        let socketQuestion: [String: Any] = [
-            RequestKeys.textKey: text,
-            RequestKeys.typeKey: type.descriptionForServer,
-            RequestKeys.optionsKey: options,
-            RequestKeys.sharedKey: state == .shared,
-            RequestKeys.correctAnswerKey: correct
+        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
+        let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
+        let newPollDict: [String: Any] = [
+            "text": text,
+            "answerChoices": answerChoicesDict,
+            "state": "live",
+            "correctAnswer": correct,
+            "userAnswers": [String: [PollChoice]](),
+            "type": type.rawValue
         ]
-        socket.socket.emit(Routes.serverStart, socketQuestion)
-        let results = buildEmptyResultsFromOptions(options: options, questionType: type)
-        let pollResults = formatResults(results: results)
-        let newPoll = Poll(text: text, questionType: type, options: options, results: pollResults, state: state, correctAnswer: correctAnswer)
+
+        socket.socket.emit(Routes.serverStart, newPollDict)
+
         pollsDateModel.polls.append(newPoll)
         if pollsDateModel.dateValue.isSameDay(as: Date()) {
             adapter.performUpdates(animated: false) { completed in
@@ -171,7 +166,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 extension CardController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole)
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
     }
     
 }
@@ -239,11 +234,31 @@ extension CardController: UIScrollViewDelegate {
 }
 
 extension CardController: SocketDelegate {
-    
+
     func sessionConnected() {}
     
     func sessionDisconnected() {}
-    
+
+    func sessionErrored() {
+        socket.socket.connect(timeoutAfter: 5) { [weak self] in
+            guard let `self` = self else { return }
+            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
+                guard let viewControllers = self.navigationController?.viewControllers else { return }
+                if viewControllers.count > 3 {
+                    // Pop back to PollsViewController
+                    guard let viewController = viewControllers[viewControllers.count - 3] as? PollsViewController else { return }
+                    self.navigationController?.popToViewController(viewController, animated: true)
+                    self.socket.socket.disconnect()
+                    self.socket.delegate = nil
+                    viewController.pollsDateViewControllerWasPopped(for: self.userRole)
+                }
+            })
+            if self.presentedViewController == nil {
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+
     func receivedUserCount(_ count: Int) {
         numberOfPeople = count
         peopleButton.setTitle("\(count)", for: .normal)
@@ -255,11 +270,11 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
-        if let latestPoll = pollsDateModel.polls.last, latestPoll.state == .live {
-            return
-        }
         if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
-            return otherPoll.id == poll.id
+            if let otherID = otherPoll.id, let id = poll.id {
+                return otherID == id
+            }
+            return false
         }) { return }
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
@@ -288,7 +303,7 @@ extension CardController: SocketDelegate {
     }
 
     func pollDeleted(_ pollID: Int, userRole: UserRole) {
-        if !pollsDateModel.dateValue.isSameDay(as: Date()) {
+        if !pollsDateModel.dateValue.isSameDay(as: pollsDateModel.dateValue) {
             delegate?.pollDeleted(pollID, userRole: userRole)
             return
         }
@@ -296,7 +311,7 @@ extension CardController: SocketDelegate {
         pollsDateModel.polls.remove(at: deleteIndex)
         currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
         updateCountLabelText()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func pollDeletedLive() {
@@ -308,63 +323,60 @@ extension CardController: SocketDelegate {
         currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
+        if pollsDateModel.polls.isEmpty {
+            goBack()
+        }
     }
     
-    func receivedResults(_ currentState: CurrentState) {
+    func receivedResults(_ poll: Poll, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
-            delegate?.receivedResults(currentState)
+            delegate?.receivedResults(poll)
             return
         }
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // Free Response receives results in live state
-        if latestPoll.state == .live && latestPoll.questionType == .freeResponse {
+        if latestPoll.state == .live && latestPoll.type == .freeResponse {
             // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
-            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
-            updateLiveCardCell(with: currentState)
+            latestPoll.answerChoices = updatedPollOptions(for: poll)
+            updateLiveCardCell(with: poll)
         } else {
-            let pollState: PollState = latestPoll.questionType == .multipleChoice ? .shared : latestPoll.state
-            updateWithCurrentState(currentState: currentState, pollState: pollState)
-            self.adapter.performUpdates(animated: false, completion: nil)
+            updateLatestPoll(with: poll)
+            adapter.performUpdates(animated: false, completion: nil)
         }
     }
 
-    func updatedTally(_ currentState: CurrentState) {
+    func updatedTally(_ poll: Poll, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: Date()) {
-            delegate?.updatedTally(currentState)
+            delegate?.updatedTally(poll)
             return
         }
-        guard let latestPoll = pollsDateModel.polls.last else { return }
         // Live MC polls for Admins should have the highlightView animate which is why we don't want to
-        // do adapter.performUpdates
-        if latestPoll.state == .live && latestPoll.questionType == .multipleChoice && userRole == .admin {
-            updateLiveCardCell(with: currentState)
-        } else {
-            updateWithCurrentState(currentState: currentState, pollState: nil)
-            self.adapter.performUpdates(animated: false, completion: nil)
-        }
+        updateLiveCardCell(with: poll)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     /// These two functions should only get called upon joining a socket
     /// so it should only be handled in PollsDateViewController
-    func receivedResultsLive(_ currentState: CurrentState) {}
-    func updatedTallyLive(_ currentState: CurrentState) {}
+    func receivedResultsLive(_ poll: Poll, userRole: UserRole) {
+        receivedResults(poll, userRole: userRole)
+    }
 
-    func updateLiveCardCell(with currentState: CurrentState) {
+    func updatedTallyLive(_ poll: Poll, userRole: UserRole) {}
+
+    func updateLiveCardCell(with poll: Poll) {
         guard let latestPoll = pollsDateModel.polls.last,
             latestPoll.state == .live,
             let latestPollSectionController = adapter.sectionController(forSection: pollsDateModel.polls.count - 1) as? PollSectionController
             else { return }
-        latestPoll.update(with: currentState)
+        latestPoll.update(with: poll)
         latestPollSectionController.update(with: latestPoll)
     }
 
     // MARK: Helpers
-    func emitAnswer(answer: Answer, message: String) {
+    func emitAnswer(pollChoice: PollChoice, message: String) {
         let data: [String: Any] = [
-            RequestKeys.googleIDKey: User.currentUser?.id ?? "",
-            RequestKeys.pollKey: answer.pollId,
-            RequestKeys.choiceKey: answer.choice,
-            RequestKeys.textKey: answer.text
+            RequestKeys.letterKey: pollChoice.letter as Any,
+            RequestKeys.textKey: pollChoice.text
         ]
         socket.socket.emit(message, data)
     }
@@ -376,38 +388,29 @@ extension CardController: SocketDelegate {
     func emitDeletePoll(at index: Int) {
         switch pollsDateModel.polls[index].state {
         case .live:
-            socket.socket.emit(Routes.serverDeleteLive, pollsDateModel.polls[index].id)
+            socket.socket.emit(Routes.serverDeleteLive)
             pollsDateModel.polls[index].state = .ended
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false
         case .ended, .shared:
-            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id)
+            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id ?? -1)
         }
     }
     
     func emitShareResults() {
-        socket.socket.emit(Routes.serverShare, [])
+        let poll = pollsDateModel.polls[currentIndex]
+        socket.socket.emit(Routes.serverShare, poll.id ?? -1)
         Analytics.shared.log(with: SharedResultsPayload())
     }
     
-    func updatedPollOptions(for poll: Poll, currentState: CurrentState) -> [String] {
-        var updatedOptions = poll.options.filter { (option) -> Bool in
-            return currentState.results[option] != nil
-        }
-        let newOptions = currentState.results.keys.filter { return !poll.options.contains($0) }
-        updatedOptions.insert(contentsOf: newOptions, at: 0)
-        return updatedOptions
+    func updatedPollOptions(for poll: Poll) -> [PollResult] {
+        return poll.answerChoices
     }
     
-    func updateWithCurrentState(currentState: CurrentState, pollState: PollState?) {
+    func updateWithCurrentState(poll: Poll) {
         guard let latestPoll = pollsDateModel.polls.last else { return }
         // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
-        if latestPoll.questionType == .freeResponse {
-            latestPoll.options = updatedPollOptions(for: latestPoll, currentState: currentState)
-        }
-        
-        let updatedPoll = Poll(poll: latestPoll, currentState: currentState, updatedPollState: pollState)
-        updateLatestPoll(with: updatedPoll)
+        updateLatestPoll(with: latestPoll)
     }
     
     func updateLatestPoll(with poll: Poll) {
@@ -435,14 +438,12 @@ extension CardController: EditPollViewControllerDelegate {
                 self.currentIndex = self.currentIndex == 0 ? self.currentIndex : self.currentIndex - 1
             }
             self.updateCountLabelText()
+            if self.pollsDateModel.polls.isEmpty {
+                self.goBack()
+            }
         }
     }
 
-    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) {
-        // Commented out for now because reopening functionality needs to be fleshed out more
-//        let poll = pollsDateModel.polls[currentIndex]
-//        sender.dismiss(animated: true, completion: nil)
-//        startPoll(text: poll.text, type: poll.questionType, options: poll.options, state: .live, correctAnswer: poll.correctAnswer, shouldPopViewController: false)
-    }
+    func editPollViewControllerDidReopenPoll(sender: EditPollViewController) { }
 
 }

@@ -24,9 +24,9 @@ class MCChoiceCell: UICollectionViewCell {
     var pollState: PollState!
     
     // MARK: - Constants
-    let optionButtonFontSize: CGFloat = 16.0
-    let optionButtonCornerRadius: CGFloat = 8.0
     let optionButtonBorderWidth: CGFloat = 1.0
+    let optionButtonCornerRadius: CGFloat = 8.0
+    let optionButtonFontSize: CGFloat = 16.0
     let optionButtonTopPadding: CGFloat = 5
     
     override init(frame: CGRect) {
@@ -55,6 +55,10 @@ class MCChoiceCell: UICollectionViewCell {
             make.trailing.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
             make.top.equalToSuperview().offset(optionButtonTopPadding)
             make.bottom.equalToSuperview()
+        }
+        optionButton.titleLabel?.snp.makeConstraints { make in
+            make.width.equalToSuperview().inset(LayoutConstants.pollOptionsPadding)
+            make.center.equalToSuperview()
         }
         super.updateConstraints()
     }

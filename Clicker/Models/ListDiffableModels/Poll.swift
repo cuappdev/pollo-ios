@@ -14,23 +14,24 @@ enum PollState: String, Codable {
 }
 
 enum QuestionType: String, CustomStringConvertible, Codable {
-    case multipleChoice = "Multiple Choice"
-    case freeResponse = "Free Response"
-    
+
+    case freeResponse
+    case multipleChoice
+
     var description: String {
         switch self {
         case .multipleChoice: return StringConstants.multipleChoice
         case .freeResponse: return StringConstants.freeResponse
         }
     }
-    
+
     var descriptionForServer: String {
         switch self {
         case .multipleChoice: return Identifiers.multipleChoiceIdentifier
         case .freeResponse: return Identifiers.freeResponseIdentifier
         }
     }
-    
+
     var other: QuestionType {
         switch self {
         case .multipleChoice: return .freeResponse
@@ -40,148 +41,138 @@ enum QuestionType: String, CustomStringConvertible, Codable {
 }
 
 class PollResult: Codable, Equatable {
-    
+
     static func == (lhs: PollResult, rhs: PollResult) -> Bool {
-        return lhs.text == rhs.text && lhs.count == rhs.count
+        return lhs.letter == rhs.letter && lhs.text == rhs.text && lhs.count == rhs.count
     }
-    
+
+    var count: Int?
+    var letter: String?
     var text: String
-    var count: Int
     
-    init(text: String, count: Int) {
+    init(letter: String? = nil, text: String, count: Int?) {
+        self.letter = letter
         self.text = text
         self.count = count
     }
-    
+
 }
 
-class PollAnswer: Codable {
-    
-    var answer: String?
-    var answerIds: [Int]?
-    
-    init(answer: String?, answerIds: [Int]?) {
-        self.answer = answer
-        self.answerIds = answerIds
+class PollChoice: Codable {
+    var letter: String?
+    var text: String
+
+    init(letter: String? = nil, text: String) {
+        self.letter = letter
+        self.text = text
     }
-    
+
 }
 
 class Poll: Codable {
-    
-    var id: Int
-    var text: String
-    var questionType: QuestionType
-    var options: [String]
-    var results: [String: PollResult]
-    var answers: [String: PollAnswer]
-    var upvotes: [String: [String]]
-    var state: PollState
+
+    var answerChoices: [PollResult]
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
+    var createdAt: String? // string of seconds since 1970
+    var id: Int?
+    var state: PollState
+    var text: String
+    var type: QuestionType
+    var updatedAt: String?
+    var userAnswers: [String: [PollChoice]] // googleID to poll choice
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
     // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
-    
-    /// `startTime` is the time (in seconds since 1970) that the poll was started.
-    var startTime: Double?
-    
+
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(id: Int = -1, text: String, questionType: QuestionType, options: [String], results: [String: PollResult], state: PollState, correctAnswer: String?) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         self.id = id
         self.text = text
-        self.questionType = questionType
-        self.options = options
-        self.results = results
-        self.answers = [:]
-        self.upvotes = [:]
-        self.state = state
+        self.answerChoices = answerChoices
+        self.type = type
         self.correctAnswer = correctAnswer
-        self.startTime = state == .live ? NSDate().timeIntervalSince1970 : nil
-    }
-    
-    init(poll: Poll, currentState: CurrentState, updatedPollState: PollState?) {
-        self.id = poll.id
-        self.text = poll.text
-        self.questionType = poll.questionType
-        self.options = poll.options
-        self.results = currentState.results
-        self.answers = currentState.answers
-        self.upvotes = currentState.upvotes
-        self.state = updatedPollState ?? poll.state
-        self.startTime = poll.startTime
-        self.correctAnswer = poll.correctAnswer
-    }
-    
-    func getSelected() -> Any? {
-        guard let userId = User.currentUser?.id else { return nil }
-        guard let selected = answers[userId] else { return nil }
-        switch questionType {
-        case .multipleChoice:
-            guard let answer = selected.answer else { return nil }
-            return answer
-        case .freeResponse:
-            guard let answerIds = selected.answerIds else { return nil }
-            return answerIds
-        }
+        self.userAnswers = userAnswers
+        self.state = state
     }
 
     init(poll: Poll, state: PollState) {
         self.id = poll.id
         self.text = poll.text
-        self.questionType = poll.questionType
-        self.options = poll.options
-        self.results = poll.results
-        self.answers = poll.answers
-        self.upvotes = poll.upvotes
-        self.state = state
-        self.startTime = poll.startTime
+        self.answerChoices = poll.answerChoices
+        self.type = poll.type
         self.correctAnswer = poll.correctAnswer
+        self.userAnswers = poll.userAnswers
+        self.state = state
+    }
+
+    func getSelected() -> Any? {
+        if userAnswers.isEmpty { return nil }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], !answers.isEmpty else { return nil }
+        switch type {
+        case .multipleChoice:
+            guard let answer = answers[0].letter else { return nil }
+            return answer
+        case .freeResponse:
+            return answers[0].text
+        }
     }
 
     // MARK: - Public
-    func update(with currentState: CurrentState) {
-        self.results = currentState.results
-        self.answers = currentState.answers
-        self.upvotes = currentState.upvotes
+    func update(with poll: Poll) {
+        self.id = poll.id
+        self.text = poll.text
+        self.answerChoices = poll.answerChoices
+        self.type = poll.type
+        self.correctAnswer = poll.correctAnswer
+        self.userAnswers = poll.userAnswers
+        self.state = poll.state
     }
     
-    // Returns array representation of results where each element is (answerId, text, count)
-    // Ex) [(1, 'Blah', 3), (2, 'Jupiter', 6)...]
-    func getFRResultsArray() -> [(String, String, Int)] {
-        return options.compactMap { answerId -> (String, String, Int)? in
-            guard let choice = results[answerId] else { return nil }
-            return (answerId, choice.text, choice.count)
+    // Returns array representation of results where each element is (text, count)
+    // Ex) [('Blah', 3), ('Jupiter', 6)...]
+    func getFRResultsArray() -> [(String, Int)] {
+        return answerChoices.compactMap { pollResult -> (String, Int)? in
+            guard let count = pollResult.count else { return nil }
+            return (pollResult.text, count)
         }
     }
     
-    func getTotalResults() -> Int {
-        return results.values.reduce(0) { (currentTotalResults, result) -> Int in
-            return currentTotalResults + result.count
+    func totalResults(from choices: [PollResult]) -> Int {
+        return choices.reduce(0) { (total, choice) -> Int in
+            return total + (choice.count ?? 0)
+        }
+    }
+    
+    func getTotalResults(for userRole: UserRole) -> Int {
+        switch userRole {
+        case .member:
+            return state == .shared ? totalResults(from: answerChoices) : 0
+        case .admin:
+            return totalResults(from: answerChoices)
         }
     }
 
     // Returns whether user upvoted answerId
-    func userDidUpvote(answerId: String) -> Bool {
-        if let userId = User.currentUser?.id, let userUpvotedAnswerIds = upvotes[userId] {
-            return userUpvotedAnswerIds.contains(answerId)
+    func userDidUpvote(answerText: String) -> Bool {
+        if let googleID = User.currentUser?.id, let userUpvotedAnswers = userAnswers[googleID] {
+            return userUpvotedAnswers.contains { $0.text == answerText }
         }
         return false
     }
 
     // Returns whether user selected this multiple choice (A, B, C, ...)
     func userDidSelect(mcChoice: String) -> Bool {
-        guard let userId = User.currentUser?.id else { return false }
-        guard let userSelectedAnswer = answers[userId] else { return false }
-        guard let userSelectedChoice = userSelectedAnswer.answer else { return false }
-        return userSelectedChoice == mcChoice
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first?.letter else { return false }
+        return letter == mcChoice
     }
 
     func updateSelected(mcChoice: String) {
-        if let userId = User.currentUser?.id {
-            answers[userId] = PollAnswer(answer: mcChoice, answerIds: nil)
-        }
+        guard let googleID = User.currentUser?.id else { return }
+        userAnswers[googleID]?[0] = PollChoice(text: mcChoice)
     }
 
 }
@@ -195,7 +186,14 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id && text == object.text && questionType == object.questionType && results == object.results
+        return id == object.id && text == object.text && type == object.type && answerChoices == object.answerChoices
     }
     
+}
+
+extension Encodable {
+    var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+    }
 }

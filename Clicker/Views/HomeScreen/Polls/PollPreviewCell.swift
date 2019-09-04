@@ -27,31 +27,31 @@ class PollPreviewCell: UICollectionViewCell {
     }
     
     // MARK: - View vars
-    var nameLabel: UILabel!
     var descriptionLabel: UILabel!
+    var dotsButton: UIButton!
+    var lineView: UIView!
     var liveCircleView: UIView!
     var liveLabel: UILabel!
-    var lineView: UIView!
-    var dotsButton: UIButton!
+    var nameLabel: UILabel!
     var openSessionActivityIndicatorView: UIActivityIndicatorView!
     
     // MARK: - Data vars
-    weak var delegate: PollPreviewCellDelegate?
     var index: Int!
+    weak var delegate: PollPreviewCellDelegate?
     
     // MARK: - Constants
-    let nameLabelTopPadding: CGFloat = 19.5
-    let nameLabelWidth: CGFloat = 300
-    let nameLabelLeftPadding: CGFloat = 17
-    let liveCircleViewLength: CGFloat = 7
-    let liveCircleViewTopPadding: CGFloat = 8.5
-    let liveLabelLeftPadding: CGFloat = 6
     let activityLabelTopPadding: CGFloat = 4
+    let dotsButtonLength: CGFloat = 40
+    let dotsButtonRightPadding: CGFloat = 18.0
+    let liveCircleViewLength: CGFloat = 7
+    let liveCircleViewTopPadding: CGFloat = 8.0
+    let liveLabelLeftPadding: CGFloat = 6.0
     let lineViewHeight: CGFloat = 1
     let lineViewLeftPadding: CGFloat = 18
-    let dotsButtonRightPadding: CGFloat = 12
-    let dotsButtonLength: CGFloat = 40
     let liveLabelText = "Live Now"
+    let nameLabelLeftPadding: CGFloat = 18.0
+    let nameLabelTopPadding: CGFloat = 20.0
+    let nameLabelWidth: CGFloat = 300
     
     override init(frame: CGRect) {
         super.init(frame: frame)

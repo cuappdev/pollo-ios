@@ -6,15 +6,15 @@
 //  Copyright © 2019 CornellAppDev. All rights reserved.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 class GroupControlsInfoCell: UICollectionViewCell {
     
     // MARK: - View vars
+    var codeLabel: UILabel!
     var numMembersLabel: UILabel!
     var numPollsLabel: UILabel!
-    var codeLabel: UILabel!
     var separatorLineView1: UIView!
     var separatorLineView2: UIView!
     

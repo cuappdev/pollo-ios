@@ -6,32 +6,33 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 
 //
-import UIKit
+
 import GoogleSignIn
 import SnapKit
+import UIKit
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
+    var appNameLabel: UILabel!
     var gradient: CAGradientLayer!
+    var pronunciationLabel: UILabel!
     var signInButton: GIDSignInButton!
     var welcomeLabel: UILabel!
-    var appNameLabel: UILabel!
-    var pronunciationLabel: UILabel!
     
     // MARK: - CONSTANTS
-    let welcomeLabelText: String = "Welcome to"
-    let appNameLabelText: String = "Pollo"
-    let pronunciationLabelText: String = "\"Poh-loh\""
-    let welcomeLabelWidth: CGFloat = 249.5
-    let welcomeLabelHeight: CGFloat = 31.5
-    let welcomeLabelTopScaleFactor: CGFloat = 0.3
-    let appNameLabelOffset: CGFloat = 5
     let appNameLabelHeight: CGFloat = 71.5
+    let appNameLabelOffset: CGFloat = 5
+    let appNameLabelText: String = "Pollo"
     let pronunciationLabelHeight: CGFloat = 19
+    let pronunciationLabelText: String = "\"Poh-loh\""
     let pronunciationLabelTopOffset: CGFloat = 14.5
-    let signInButtonWidth: CGFloat = 200
     let signInButtonHeight: CGFloat = 40
     let signInButtonTopOffset: CGFloat = 28
+    let signInButtonWidth: CGFloat = 200
+    let welcomeLabelHeight: CGFloat = 31.5
+    let welcomeLabelText: String = "Welcome to"
+    let welcomeLabelTopScaleFactor: CGFloat = 0.3
+    let welcomeLabelWidth: CGFloat = 249.5
     
     // MARK: - INITIALIZATION
     override func viewDidLoad() {

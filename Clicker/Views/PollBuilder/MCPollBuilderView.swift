@@ -24,14 +24,15 @@ class MCPollBuilderView: UIView {
     var tapGestureRecognizer: UITapGestureRecognizer!
     
     // MARK: - Data vars
+    var askQuestionModel: AskQuestionModel!
+    var draftsTitleModel: DraftsTitleModel?
+    var editable: Bool!
+    var grayViewBottomConstraint: Constraint!
+    var mcOptionModels: [PollBuilderMCOptionModel]!
+    var session: Session!
     weak var delegate: MCPollBuilderViewDelegate?
     weak var pollBuilderDelegate: PollBuilderViewDelegate?
-    var session: Session!
-    var grayViewBottomConstraint: Constraint!
-    var editable: Bool!
-    var askQuestionModel: AskQuestionModel!
-    var mcOptionModels: [PollBuilderMCOptionModel]!
-    var draftsTitleModel: DraftsTitleModel?
+
     var questionText: String? {
         guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
             return nil
@@ -84,6 +85,18 @@ class MCPollBuilderView: UIView {
         updateTotalOptions()
     }
     
+    func getChoices() -> [PollResult] {
+        return mcOptionModels.compactMap { (mcOptionModel) -> PollResult? in
+            switch mcOptionModel.type {
+            case .newOption(option: let option, index: let index, isCorrect: _):
+                let letter = intToMCOption(index)
+                return PollResult(letter: letter, text: option != "" ? option : letter, count: 0)
+            case .addOption:
+                return nil
+            }
+        }
+    }
+
     func getOptions() -> [String] {
         return mcOptionModels.compactMap { (mcOptionModel) -> String? in
             switch mcOptionModel.type {

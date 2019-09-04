@@ -25,12 +25,10 @@ extension Endpoint {
     }
     
     private struct UpdateSessionBody: Codable {
-        
         var id: Int
-        var name: String
         var code: String
+        var name: String
         var isLocationRestricted: Bool
-        
     }
     
     private struct JoinSessionBody: Codable {
@@ -75,7 +73,7 @@ extension Endpoint {
     }
     
     static func updateSession(id: Int, name: String, code: String, isLocationRestricted: Bool) -> Endpoint {
-        let body = UpdateSessionBody(id: id, name: name, code: code, isLocationRestricted: isLocationRestricted)
+        let body = UpdateSessionBody(id: id, code: code, name: name, isLocationRestricted: isLocationRestricted)
         return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     

@@ -17,9 +17,8 @@ class DraftsTitleSectionController: ListSectionController {
     let cellHeight: CGFloat = 60
 
     // MARK: - Override
-    override func sizeForItem(at index: Int) -> CGSize {
-        guard let containerSize = collectionContext?.containerSize else {
-            return .zero
+    override func sizeForItem(at index: Int) -> CGSize { guard let containerSize = collectionContext?.containerSize else {
+        return .zero
         }
         return CGSize(width: containerSize.width, height: cellHeight)
     }

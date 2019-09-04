@@ -12,12 +12,12 @@ extension Endpoint {
     
     private struct DraftBody: Codable {
         
-        var text: String
         var options: [String]
+        var text: String
         
         init(text: String, options: [String]) {
-            self.text = text
             self.options = options
+            self.text = text
         }
         
     }

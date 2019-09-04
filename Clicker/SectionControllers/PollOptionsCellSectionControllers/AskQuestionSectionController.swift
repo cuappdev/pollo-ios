@@ -11,16 +11,18 @@ import IGListKit
 protocol AskQuestionSectionControllerDelegate: class {
     func askQuestionSectionControllerDidUpdateEditable(_ editable: Bool)
     func askQuestionSectionControllerDidUpdateText(_ text: String?)
+    func askQuestionSectionControllerDidUpdateHeight()
 }
 
 class AskQuestionSectionController: ListSectionController {
 
     // MARK: - Data vars
-    weak var delegate: AskQuestionSectionControllerDelegate?
     var askQuestionModel: AskQuestionModel!
+    weak var delegate: AskQuestionSectionControllerDelegate?
 
     // MARK: - Constants
-    let cellHeight: CGFloat = 48
+    let cellPadding: CGFloat = 10
+    var cellHeight: CGFloat = 48
 
     // MARK: - Init
     init(delegate: AskQuestionSectionControllerDelegate) {
@@ -50,7 +52,7 @@ class AskQuestionSectionController: ListSectionController {
         guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? AskQuestionCell else {
             return nil
         }
-        return cell.textField.text
+        return cell.questionTextView.text
     }
 
 }
@@ -63,6 +65,11 @@ extension AskQuestionSectionController: AskQuestionCellDelegate {
 
     func askQuestionCellDidUpdateText(_ text: String?) {
         delegate?.askQuestionSectionControllerDidUpdateText(text)
+    }
+    
+    func askQuestionCellDidUpdateHeight(_ height: CGFloat) {
+        cellHeight = height + cellPadding
+        delegate?.askQuestionSectionControllerDidUpdateHeight()
     }
 
 }

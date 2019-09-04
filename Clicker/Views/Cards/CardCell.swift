@@ -15,49 +15,49 @@ protocol CardCellDelegate: class {
 
     var userRole: UserRole { get }
 
-    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?)
-    func cardCellDidUpvote(cardCell: CardCell, answerId: String)
+    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
-    func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
+    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) 
+    func cardCellDidUpvote(cardCell: CardCell, pollChoice: PollChoice)
 
 }
 
 class CardCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var shadowView: UIView!
     var collectionView: UICollectionView!
     var questionButton: UIButton!
+    var shadowView: UIView!
     var timerLabel: UILabel!
     
     // MARK: - Data vars
-    weak var delegate: CardCellDelegate!
-    var poll: Poll!
     var adapter: ListAdapter!
-    var topHamburgerCardModel: HamburgerCardModel!
-    var questionModel: QuestionModel!
-    var frInputModel: FRInputModel!
-    var separatorLineModel: SeparatorLineModel!
-    var pollOptionsModel: PollOptionsModel!
-    var miscellaneousModel: PollMiscellaneousModel!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
+    var frInputModel: FRInputModel!
+    var miscellaneousModel: PollMiscellaneousModel!
+    var poll: Poll!
+    var pollOptionsModel: PollOptionsModel!
+    var questionModel: QuestionModel!
+    var separatorLineModel: SeparatorLineModel!
     var timer: Timer?
+    var topHamburgerCardModel: HamburgerCardModel!
+    weak var delegate: CardCellDelegate!
     
     // MARK: - Constants
-    let collectionViewHorizontalPadding: CGFloat = 5.0
-    let questionButtonFontSize: CGFloat = 16.0
-    let questionButtonCornerRadius: CGFloat = 23.0
-    let questionButtonBorderWidth: CGFloat = 1.0
-    let questionButtonWidth: CGFloat = 170.0
-    let questionButtonHeight: CGFloat = 47.0
-    let questionButtonBottomPadding: CGFloat = 5.0
-    let timerLabelFontSize: CGFloat = 14.0
-    let timerLabelBottomPadding: CGFloat =  16.0
+    let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
-    let shareResultsText = "Share Results"
     let initialTimerLabelText = "00:00"
+    let questionButtonBorderWidth: CGFloat = 1.0
+    let questionButtonBottomPadding: CGFloat = 5.0
+    let questionButtonCornerRadius: CGFloat = 23.0
+    let questionButtonFontSize: CGFloat = 16.0
+    let questionButtonHeight: CGFloat = 47.0
+    let questionButtonWidth: CGFloat = 170.0
+    let shareResultsText = "Share Results"
+    let timerLabelBottomPadding: CGFloat =  16.0
+    let timerLabelFontSize: CGFloat = 14.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -140,7 +140,8 @@ class CardCell: UICollectionViewCell {
         
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
-        miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+        let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
+        miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -154,7 +155,7 @@ class CardCell: UICollectionViewCell {
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: poll.state, totalVotes: poll.getTotalResults(), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             DispatchQueue.main.async {
                 self.adapter.performUpdates(animated: false, completion: nil)
             }
@@ -169,24 +170,24 @@ class CardCell: UICollectionViewCell {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
             timerLabel.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
             questionButton.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(questionType: poll.questionType, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
         }
     }
     
     @objc func setTimerText() {
-        guard let start = poll.startTime else {
+        guard let start = poll.createdAt else {
             self.timerLabel.text = self.initialTimerLabelText
             return
         }
-        let elapsedSeconds = Int(NSDate().timeIntervalSince1970 - start)
+        let elapsedSeconds = Int(NSDate().timeIntervalSince(convertUnixStringToDate(start)))
         if elapsedSeconds < 10 {
             timerLabel.text = "00:0\(elapsedSeconds)"
         } else if elapsedSeconds < 60 {
@@ -231,12 +232,12 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        if userRole == .member && poll.questionType == .freeResponse && poll.state == .live {
+        if userRole == .member && poll.type == .freeResponse && poll.state == .live {
             objects.append(frInputModel)
         }
         switch userRole {
         case .admin:
-            if poll.questionType == .multipleChoice {
+            if poll.type == .multipleChoice {
                 objects.append(miscellaneousModel)
             }
         case .member:
@@ -296,9 +297,8 @@ extension CardCell: FRInputSectionControllerDelegate {
     }
     
     private func addFRResponseToPoll(response: String, poll: Poll) {
-        poll.options = [response]
         let result = PollResult(text: response, count: 1)
-        poll.results[response] = result
+        poll.answerChoices.append(result)
     }
 }
 
@@ -314,8 +314,9 @@ extension CardCell: PollOptionsSectionControllerDelegate {
         delegate.cardCellDidSubmitChoice(cardCell: self, choice: choice, index: index)
     }
 
-    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, answerId: String) {
-        delegate.cardCellDidUpvote(cardCell: self, answerId: answerId)
+    func pollOptionsSectionControllerDidUpvote(sectionController: PollOptionsSectionController, text: String) {
+        let pollChoice = PollChoice(text: text)
+        delegate.cardCellDidUpvote(cardCell: self, pollChoice: pollChoice)
     }
     
 }

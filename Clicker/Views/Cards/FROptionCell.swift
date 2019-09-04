@@ -10,33 +10,32 @@ import UIKit
 
 protocol FROptionCellDelegate: class {
     
-    func frOptionCellDidReceiveUpvote(for answerId: String)
+    func frOptionCellDidReceiveUpvote(for text: String)
     
 }
 
 class FROptionCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var optionLabel: UILabel!
     var numUpvotedLabel: UILabel!
-    var upvoteImageView: UIImageView!
-    var upvoteButton: UIButton!
+    var optionLabel: UILabel!
     var separatorLineView: UIView!
+    var upvoteButton: UIButton!
+    var upvoteImageView: UIImageView!
     
     // MARK: - Data vars
     weak var delegate: FROptionCellDelegate?
     var didUpvote: Bool!
-    var answerId: String!
     
     // MARK: - Constants
-    let optionLabelFontSize: CGFloat = 14
-    let optionLabelWidthScaleFactor: CGFloat = 0.8
+    let defaultNumUpvotedText = "0"
     let numUpvotedLabelRightPadding: CGFloat = 13
     let numUpvotedLabelWidth: CGFloat = 24
-    let upvoteImageViewHeight: CGFloat = 10
-    let upvoteButtonWidth: CGFloat = 50
+    let optionLabelFontSize: CGFloat = 14
+    let optionLabelWidthScaleFactor: CGFloat = 0.8
     let separatorLineViewHeight: CGFloat = 1
-    let defaultNumUpvotedText = "0"
+    let upvoteButtonWidth: CGFloat = 50
+    let upvoteImageViewHeight: CGFloat = 10
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -109,7 +108,6 @@ class FROptionCell: UICollectionViewCell {
     func configure(for frOptionModel: FROptionModel, delegate: FROptionCellDelegate) {
         self.delegate = delegate
         self.didUpvote = frOptionModel.didUpvote
-        self.answerId = frOptionModel.answerId
         optionLabel.text = frOptionModel.option
         let numUpvotedLabelTextColor: UIColor = frOptionModel.didUpvote ? .clickerGreen0 : .clickerGrey2
         numUpvotedLabel.textColor = numUpvotedLabelTextColor
@@ -131,7 +129,7 @@ class FROptionCell: UICollectionViewCell {
 
     // MARK: - Actions
     @objc func upvoteFROption() {
-        delegate?.frOptionCellDidReceiveUpvote(for: answerId)
+        delegate?.frOptionCellDidReceiveUpvote(for: optionLabel.text ?? "")
     }
     
     required init?(coder aDecoder: NSCoder) {

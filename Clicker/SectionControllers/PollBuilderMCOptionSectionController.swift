@@ -10,10 +10,10 @@ import IGListKit
 
 protocol PollBuilderMCOptionSectionControllerDelegate: class {
     
-    func pollBuilderSectionControllerShouldAddOption()
-    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int, isCorrect: Bool)
-    func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool)
     func pollBuilderSectionControllerDidDeleteOption(index: Int)
+    func pollBuilderSectionControllerDidUpdateIsCorrect(option: String, index: Int, isCorrect: Bool)
+    func pollBuilderSectionControllerDidUpdateOption(option: String, index: Int, isCorrect: Bool)
+    func pollBuilderSectionControllerShouldAddOption()
     
 }
 

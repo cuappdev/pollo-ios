@@ -19,13 +19,13 @@ class QuestionCell: UICollectionViewCell {
     weak var delegate: QuestionCellDelegate?
     
     // MARK: - View vars
-    var questionLabel: UILabel!
     var editButton: UIButton!
+    var questionLabel: UILabel!
     
     // MARK: - Constants
+    let editButtonImageName = "dots"
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let untitledPollString = "Untitled Poll"
-    let editButtonImageName = "dots"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

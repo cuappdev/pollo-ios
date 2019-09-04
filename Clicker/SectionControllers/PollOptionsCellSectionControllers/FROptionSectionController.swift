@@ -12,7 +12,7 @@ protocol FROptionSectionControllerDelegate {
     
     var pollState: PollState { get }
     
-    func frOptionSectionControllerDidUpvote(for answerId: String)
+    func frOptionSectionControllerDidUpvote(for option: String)
     
 }
 
@@ -23,9 +23,9 @@ class FROptionSectionController: ListSectionController {
     var frOptionModel: FROptionModel!
     
     // MARK: - Constants
+    let frOptionCellOptionLabelSize: CGFloat = 14
     let frOptionCellOptionLabelVerticalPadding: CGFloat = 19.5
     let frOptionCellOptionLabelWidthScaleFactor: CGFloat = 0.8
-    let frOptionCellOptionLabelSize: CGFloat = 14
     
     init(delegate: FROptionSectionControllerDelegate) {
         self.delegate = delegate
@@ -63,8 +63,8 @@ class FROptionSectionController: ListSectionController {
 
 extension FROptionSectionController: FROptionCellDelegate {
 
-    func frOptionCellDidReceiveUpvote(for answerId: String) {
-        delegate.frOptionSectionControllerDidUpvote(for: answerId)
+    func frOptionCellDidReceiveUpvote(for text: String) {
+        delegate.frOptionSectionControllerDidUpvote(for: text)
     }
     
 }

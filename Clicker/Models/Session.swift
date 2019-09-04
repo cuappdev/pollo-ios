@@ -9,22 +9,20 @@
 import IGListKit
 
 struct Code: Codable {
-    
     var code: String
-    
 }
 
 class Session: Codable {
-    
-    var id: Int
-    var name: String
+
+    let identifier = UUID().uuidString
     var code: String
     var description: String?
-    var updatedAt: String?
+    var id: Int
     var isLive: Bool?
+    var name: String
+    var updatedAt: String?
     var location: Coord
     var isLocationRestricted: Bool
-    let identifier = UUID().uuidString
     
     init(id: Int, name: String, code: String, isLocationRestricted: Bool, location: Coord) {
         self.id = id
@@ -39,11 +37,12 @@ class Session: Codable {
         self.name = name
         self.code = code
         self.description = latestActivity
+        self.id = id
         self.isLive = isLive
         self.isLocationRestricted = isLocationRestricted
         self.location = location
     }
-    
+
 }
 
 extension Session: ListDiffable {

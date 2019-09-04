@@ -14,9 +14,9 @@ class ArrowView: UIView {
     var arrowImageView: UIImageView!
     
     // MARK: - Constants
+    let animationDuration: TimeInterval = 0.2
     let bottomInset: CGFloat = 9.8
     let topOffset: CGFloat = 5
-    let animationDuration: TimeInterval = 0.2
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -16,28 +16,28 @@ enum SettingType {
 }
 
 class PollsSettingModel {
-    
-    var title: String
-    var description: String
-    var type: SettingType
-    var isEnabled: Bool
+
     let identifier = UUID().uuidString
-    
+    var description: String
+    var isEnabled: Bool
+    var title: String
+    var type: SettingType
+
     init(title: String, description: String, type: SettingType, isEnabled: Bool) {
-        self.title = title
         self.description = description
-        self.type = type
         self.isEnabled = isEnabled
+        self.title = title
+        self.type = type
     }
-    
+
 }
 
 extension PollsSettingModel: ListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString
     }
-    
+
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? HeaderModel else { return false }

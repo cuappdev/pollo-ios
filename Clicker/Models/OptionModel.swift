@@ -9,11 +9,11 @@
 import Foundation
 
 class OptionModel {
-    
+
     var option: String
-    
+
     init(option: String) {
         self.option = option
     }
-    
+
 }
