@@ -6,13 +6,14 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-import Fabric
+import Crashlytics
 import FLEX
+import Fabric
+import Firebase
 import FutureNova
 import GoogleSignIn
-import Crashlytics
 import StoreKit
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -24,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     private let networking: Networking = URLSession.shared.request
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FIRApp.configure()
         setupWindow()
         setupNavigationController()
         setupNetworking()

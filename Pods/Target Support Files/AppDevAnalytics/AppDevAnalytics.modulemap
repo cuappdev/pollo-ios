@@ -1,0 +1,6 @@
+framework module AppDevAnalytics {
+  umbrella header "AppDevAnalytics-umbrella.h"
+
+  export *
+  module * { export * }
+}
