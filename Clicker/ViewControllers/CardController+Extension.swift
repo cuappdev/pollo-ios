@@ -115,6 +115,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 
         // EMIT START QUESTION
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
+        newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
         let newPollDict: [String: Any] = [
             "text": text,
@@ -270,12 +271,6 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
-        if pollsDateModel.polls.contains(where: { otherPoll -> Bool in
-            if let otherID = otherPoll.id, let id = poll.id {
-                return otherID == id
-            }
-            return false
-        }) { return }
         pollsDateModel.polls.append(poll)
         adapter.performUpdates(animated: false) { completed in
             if completed {
@@ -343,6 +338,16 @@ extension CardController: SocketDelegate {
             updateLatestPoll(with: poll)
             adapter.performUpdates(animated: false, completion: nil)
         }
+    }
+
+    func receivedFRFilter(_ pollFilter: PollFilter) {
+        guard !pollFilter.success else { return }
+        let newPoll = Poll(poll: pollsDateModel.polls[currentIndex], state: pollsDateModel.polls[currentIndex].state)
+        newPoll.pollFilter = pollFilter
+        updateLatestPoll(with: newPoll)
+        adapter.performUpdates(animated: false, completion: nil)
+        let alertController = self.createAlert(title: "Inappropriate Content", message: "We have detected inappropriate language. Please submit an appropriate response.")
+        present(alertController, animated: true, completion: nil)
     }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {

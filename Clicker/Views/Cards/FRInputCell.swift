@@ -64,8 +64,10 @@ class FRInputCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with delegate: FRInputCellDelegate) {
+    func configure(for model: FRInputModel, with delegate: FRInputCellDelegate) {
         self.delegate = delegate
+        guard let filter = model.filter, let text = model.text else { return }
+        inputTextField.updateTextToDisplayProfanity(for: filter, in: text)
     }
     
     required init?(coder aDecoder: NSCoder) {

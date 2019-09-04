@@ -7,6 +7,7 @@
 //
 
 import IGListKit
+import FutureNova
 import Presentr
 import UIKit
 
@@ -39,6 +40,13 @@ extension PollsViewController: ListAdapterDataSource, PollTypeSectionControllerD
 extension PollsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pollsOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
+
+        if scrollView.contentOffset.x == 0 {
+            newGroupButton.isHidden = true
+        }
+        if scrollView.contentOffset.x == view.frame.width {
+            newGroupButton.isHidden = false
+        }
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -57,7 +65,7 @@ extension PollsViewController: PollsCellDelegate {
         isOpeningGroup = true
         joinSessionWithIdAndCode(id: session.id, code: session.code, location: User.currentUserLocation).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
             let session = sessionResponse.data
-            return self.getSortedPolls(with: session.id)
+            return self.getSortedPolls(with: session.id).decode()
         }.observe { [weak self] result in
             guard let `self` = self else { return }
             DispatchQueue.main.async {
@@ -158,12 +166,19 @@ extension PollsViewController: SliderBarDelegate {
         pollsCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
 
+    func changeNewGroupButton(status: Bool) {
+        newGroupButton.isHidden = status
+    }
+
 }
 
 extension PollsViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        if let text = textField.text, text.count == IntegerConstants.validCodeLength { // Valid code length
+            joinSession()
+        }
+        view.endEditing(true)
         return false
     }
     

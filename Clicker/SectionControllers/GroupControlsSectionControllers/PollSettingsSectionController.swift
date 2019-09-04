@@ -9,14 +9,19 @@
 import IGListKit
 
 protocol PollSettingsSectionControllerDelegate: class {
+<<<<<<< HEAD
     
     func pollSettingsSectionControllerDidToggleSetting(settingsModel: PollsSettingModel)
     
+=======
+    func pollSettingsSectionControllerDidUpdate(_ sectionController: PollSettingsSectionController, to newValue: Bool)
+>>>>>>> master
 }
 
 class PollSettingsSectionController: ListSectionController {
     
     // MARK: - Data vars
+    weak var delegate: PollSettingsSectionControllerDelegate?
     var settingsModel: PollsSettingModel!
     weak var delegate: PollSettingsSectionControllerDelegate?
     
@@ -24,11 +29,16 @@ class PollSettingsSectionController: ListSectionController {
     let cellHeight: CGFloat = 96
     let padding: CGFloat = 16
     
+<<<<<<< HEAD
     init(settingsModel: PollsSettingModel, delegate: PollSettingsSectionControllerDelegate) {
+=======
+    init(delegate: PollSettingsSectionControllerDelegate?) {
+>>>>>>> master
         super.init()
         self.settingsModel = settingsModel
         self.delegate = delegate
         self.inset = UIEdgeInsets(top: padding, left: 0, bottom: 0, right: 0)
+        self.delegate = delegate
     }
     
     // MARK: - ListSectionController overrides
@@ -41,7 +51,12 @@ class PollSettingsSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: SettingCell.self, for: self, at: index) as! SettingCell
+<<<<<<< HEAD
         cell.configure(settingsModel: settingsModel, delegate: self)
+=======
+        cell.configure(for: settingsModel)
+        cell.delegate = self
+>>>>>>> master
         return cell
     }
     
@@ -51,10 +66,20 @@ class PollSettingsSectionController: ListSectionController {
 
 }
 
+<<<<<<< HEAD
 extension PollSettingsSectionController: SettingCellDelegate {
     
     func settingCellDidToggle(settingsModel: PollsSettingModel) {
         delegate?.pollSettingsSectionControllerDidToggleSetting(settingsModel: settingsModel)
     }
     
+=======
+// MARK: - SettingCellDelegate
+extension PollSettingsSectionController: SettingCellDelegate {
+
+    func settingCellDidUpdate(_ cell: SettingCell, to newValue: Bool) {
+        delegate?.pollSettingsSectionControllerDidUpdate(self, to: newValue)
+    }
+
+>>>>>>> master
 }

@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C19424D227260AF008CC996 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C19424C227260AF008CC996 /* Response.swift */; };
 		0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E51FD21711B1B001E07BC /* Date+Shared.swift */; };
 		0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C30875A2206B31500AC9589 /* UserEndpoints.swift */; };
-		0C40B4752201E54C005BED7B /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4742201E54C005BED7B /* Future.swift */; };
-		0C40B4772201E559005BED7B /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4762201E559005BED7B /* Endpoint.swift */; };
 		0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B4782201E56B005BED7B /* PollEndpoints.swift */; };
 		0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */; };
 		0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47C22064263005BED7B /* SessionEndpoints.swift */; };
+		0C4A24CF227638A700AE0B76 /* UITextField+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
 		0C55CE262233056900E9912C /* HeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C55CE252233056900E9912C /* HeaderModel.swift */; };
 		0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
@@ -86,6 +86,7 @@
 		C2434CBF21388E2B00929C98 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2434CBE21388E2B00929C98 /* Poll.swift */; };
 		C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A56209956C600DC5EDC /* DeletePollViewController.swift */; };
 		C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2504A58209963A200DC5EDC /* EditNameViewController.swift */; };
+		C25EA130231F59FA00E3F4CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */; };
 		C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */; };
 		C25F21EA203F77FA001F540E /* AnswerMCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F21E9203F77FA001F540E /* AnswerMCCell.swift */; };
 		C2649F752142314B00370454 /* PollOptionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2649F742142314B00370454 /* PollOptionsModel.swift */; };
@@ -167,13 +168,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C19424C227260AF008CC996 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		0C1E51FD21711B1B001E07BC /* Date+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Shared.swift"; sourceTree = "<group>"; };
 		0C30875A2206B31500AC9589 /* UserEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndpoints.swift; sourceTree = "<group>"; };
-		0C40B4742201E54C005BED7B /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
-		0C40B4762201E559005BED7B /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		0C40B4782201E56B005BED7B /* PollEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47C22064263005BED7B /* SessionEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndpoints.swift; sourceTree = "<group>"; };
+		0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Shared.swift"; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
 		0C55CE252233056900E9912C /* HeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderModel.swift; sourceTree = "<group>"; };
 		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
@@ -250,6 +251,7 @@
 		C2434CBE21388E2B00929C98 /* Poll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		C2504A56209956C600DC5EDC /* DeletePollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePollViewController.swift; sourceTree = "<group>"; };
 		C2504A58209963A200DC5EDC /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
+		C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C25F21E7203F76F2001F540E /* CreateMCOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMCOptionCell.swift; sourceTree = "<group>"; };
 		C25F21E9203F77FA001F540E /* AnswerMCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMCCell.swift; sourceTree = "<group>"; };
 		C2649F742142314B00370454 /* PollOptionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionsModel.swift; sourceTree = "<group>"; };
@@ -346,10 +348,9 @@
 		0C40B4732201E52C005BED7B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				0C40B4742201E54C005BED7B /* Future.swift */,
-				0C40B4762201E559005BED7B /* Endpoint.swift */,
 				0C40B4782201E56B005BED7B /* PollEndpoints.swift */,
 				0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */,
+				0C19424C227260AF008CC996 /* Response.swift */,
 				0C40B47C22064263005BED7B /* SessionEndpoints.swift */,
 				0C30875A2206B31500AC9589 /* UserEndpoints.swift */,
 			);
@@ -635,6 +636,7 @@
 				C2BB14B9209469CD0081C35D /* Utils.swift */,
 				C2900D422146F72900566F25 /* String+Shared.swift */,
 				6397F8C72174294C00F515DE /* UINavigationController+Shared.swift */,
+				0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -697,6 +699,7 @@
 		C7F923C41F73540600B1E975 /* Clicker */ = {
 			isa = PBXGroup;
 			children = (
+				C25EA12F231F59FA00E3F4CA /* GoogleService-Info.plist */,
 				0C40B4732201E52C005BED7B /* Networking */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
@@ -833,6 +836,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
+				C25EA130231F59FA00E3F4CA /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -849,9 +853,10 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
+				"${BUILT_PRODUCTS_DIR}/FutureNova/FutureNova.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/IGListKit/IGListKit.framework",
@@ -867,6 +872,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLEX.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FutureNova.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IGListKit.framework",
@@ -878,7 +884,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		904AB02D71A4A8F02355A7BC /* [CP] Copy Pods Resources */ = {
@@ -889,7 +895,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -900,7 +906,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Clicker/Pods-Clicker-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A7E37B266A6A59B49588A337 /* [CP] Check Pods Manifest.lock */ = {
@@ -1005,7 +1011,6 @@
 				0C30875B2206B31500AC9589 /* UserEndpoints.swift in Sources */,
 				C20B570721388F500091034F /* EmptyStateModel.swift in Sources */,
 				C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */,
-				0C40B4752201E54C005BED7B /* Future.swift in Sources */,
 				C212EE2D21838D9600D15785 /* QuizModeOverlayView.swift in Sources */,
 				63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */,
 				C20B570B2138917D0091034F /* EmptyStateCell.swift in Sources */,
@@ -1075,6 +1080,7 @@
 				C271A0802193F62800EF12B4 /* ViewAllCell.swift in Sources */,
 				C21C95BE2145D90900F58874 /* FROptionSectionController.swift in Sources */,
 				C2E1A2642139F0E500087EE4 /* MCResultSectionController.swift in Sources */,
+				0C19424D227260AF008CC996 /* Response.swift in Sources */,
 				C7F923C61F73540600B1E975 /* AppDelegate.swift in Sources */,
 				C2504A57209956C600DC5EDC /* DeletePollViewController.swift in Sources */,
 				C22F66622141B75100D4E349 /* SeparatorLineModel.swift in Sources */,
@@ -1094,6 +1100,7 @@
 				C20B570D213893180091034F /* PollSectionController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */,
+				0C4A24CF227638A700AE0B76 /* UITextField+Shared.swift in Sources */,
 				0CDAF0D321727D4B004DB6EA /* SpaceSectionController.swift in Sources */,
 				0CF647832176970900535573 /* ArrowView.swift in Sources */,
 				0CCA95E9223417ED006A3659 /* ExportButtonCell.swift in Sources */,
@@ -1106,7 +1113,6 @@
 				C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */,
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,
 				B638A09D2235B1C300D1C2D2 /* GroupControlsInfoModel.swift in Sources */,
-				0C40B4772201E559005BED7B /* Endpoint.swift in Sources */,
 				C2833DF82158753800586D87 /* PollsDateViewController+Extension.swift in Sources */,
 				6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */,
 				C26EBB6921B8F54900AC2B60 /* MCPollBuilderView+Extension.swift in Sources */,

@@ -86,6 +86,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isHidden = true
 
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
+        newPoll.createdAt = Date().secondsString
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
@@ -133,7 +134,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count)
+                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count, delegate: self)
                     self.navigationController?.pushViewController(groupControlsVC, animated: true)
                 case .error(let error):
                     print(error)
@@ -146,11 +147,22 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
 
 }
 
+// MARK: - GroupControlsViewControllerDelegate
+extension PollsDateViewController: GroupControlsViewControllerDelegate {
+
+    func groupControlsViewControllerDidUpdateSession(_ session: Session) {
+        self.session = session
+    }
+
+}
+
 extension PollsDateViewController: SocketDelegate {
 
     func sessionConnected() {}
     
     func sessionDisconnected() {}
+
+    func receivedFRFilter(_ pollFilter: PollFilter) { }
 
     func sessionErrored() {
         socket.socket.connect(timeoutAfter: 5) { [weak self] in
@@ -166,13 +178,7 @@ extension PollsDateViewController: SocketDelegate {
     }
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
-        guard let lastPollsDateModel = pollsDateArray.first,
-            let id = poll.id,
-            !lastPollsDateModel.polls.contains(where: { otherPoll -> Bool in
-                if let otherID = otherPoll.id { return otherID == id }
-                return false
-            }) else { return }
-        appendPoll(poll: poll) 
+        appendPoll(poll: poll)
         adapter.performUpdates(animated: false, completion: nil)
     }
     

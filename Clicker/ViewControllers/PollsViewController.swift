@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import FutureNova
 import GoogleSignIn
 import IGListKit
 import Presentr
@@ -36,6 +37,11 @@ class PollsViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var isListeningToKeyboard: Bool = true
     var isOpeningGroup: Bool = false
+    var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return decoder
+    }()
     var pollTypeModels: [PollTypeModel]!
     var session: Session?
     
@@ -134,6 +140,7 @@ class PollsViewController: UIViewController {
         newGroupButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
         newGroupButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         newGroupButton.addTarget(self, action: #selector(newGroupAction), for: .touchUpInside)
+        newGroupButton.isHidden = pollsOptionsView.isJoined
         view.addSubview(newGroupButton)
         
         settingsButton = UIButton()
@@ -332,29 +339,51 @@ class PollsViewController: UIViewController {
         newGroupButton.isUserInteractionEnabled = true
     }
     
+<<<<<<< HEAD
     func joinSessionWithCode(code: String, location: Coord) -> Future<Response<Session>> {
         return networking(Endpoint.joinSessionWithCode(code: code, location: location)).decode()
+=======
+    func joinSessionWithCode(with code: String) -> Future<Data> {
+        return networking(Endpoint.joinSessionWithCode(with: code))
+>>>>>>> master
     }
     
-    func getSortedPolls(with id: Int) -> Future<Response<[PollsDateModel]>> {
-        return networking(Endpoint.getSortedPolls(with: id)).decode()
+    func getSortedPolls(with id: Int) -> Future<Data> {
+        return networking(Endpoint.getSortedPolls(with: id))
     }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
+<<<<<<< HEAD
         joinSessionWithCode(code: code, location: User.currentUserLocation).chained { sessionResponse -> Future<Response<[PollsDateModel]>> in
             self.session = sessionResponse.data
             return self.getSortedPolls(with: sessionResponse.data.id) 
+=======
+        joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
+            if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
+                self.session = sessionResponse.data
+                return self.getSortedPolls(with: sessionResponse.data.id)
+            }
+            // Fail out of get sorted polls call
+            return self.getSortedPolls(with: -1)
+>>>>>>> master
         }.observe { [weak self] result in
-            guard let `self` = self, let session = self.session else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let pollsResponse):
-                    
+            guard let `self` = self else { return }
+            switch result {
+            case .value(let data):
+                guard let pollsResponse = try? self.jsonDecoder.decode(Response<[GetSortedPollsResponse]>.self, from: data), pollsResponse.success else {
+                    DispatchQueue.main.async {
+                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    return
+                }
+                DispatchQueue.main.async {
+                    guard let session = self.session else { return }
                     var pollsDateArray = [PollsDateModel]()
                     
                     pollsResponse.data.forEach { response in
-                        let mutableResponse = response
+                        var mutableResponse = response
                         if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
                             pollsDateArray[index].polls.append(contentsOf: response.polls)
                         } else {
@@ -370,9 +399,16 @@ class PollsViewController: UIViewController {
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())
+<<<<<<< HEAD
                 case .error(let error):
                     // Distinguish location vs. general error messages here, handle the two differently
                     print(error)
+=======
+                }
+            case .error(let error):
+                print(error)
+                DispatchQueue.main.async {
+>>>>>>> master
                     let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
                     self.present(alertController, animated: true, completion: nil)
                 }
@@ -395,7 +431,7 @@ class PollsViewController: UIViewController {
     @objc func didStartTyping(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            updateJoinSessionButton(canJoin: text.count == 6)
+            updateJoinSessionButton(canJoin: text.count == IntegerConstants.validCodeLength)
         }
     }
     
@@ -434,7 +470,11 @@ class PollsViewController: UIViewController {
                     var auxiliaryDict = [Double: Session]()
                     response.data.forEach { session in
                         if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+<<<<<<< HEAD
                             auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive, isLocationRestricted: session.isLocationRestricted, location: session.location)
+=======
+                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive, isFilterActivated: session.isFilterActivated)
+>>>>>>> master
                         }
                     }
                     auxiliaryDict.keys.sorted().forEach { timestamp in
@@ -456,7 +496,7 @@ class PollsViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         isListeningToKeyboard = true
-        newGroupButton?.isEnabled = true
+        newGroupButton.isHidden = pollsOptionsView.isJoined
         isOpeningGroup = false
     }
     

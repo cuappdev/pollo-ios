@@ -51,6 +51,7 @@ struct Routes {
     static let userDelete = "user/poll/delete"
     static let userDeleteLive = "user/poll/delete/live"
     static let userEnd = "user/poll/end"
+    static let userFreeResponseFilter = "user/poll/fr/filter"
     static let userFreeResponseLive = "user/poll/fr/live"
     static let userResults = "user/poll/results"
     static let userStart = "user/poll/start"
@@ -124,6 +125,7 @@ struct IntegerConstants {
     static let maxOptionsForMemberFR = 6
     static let maxOptionsForMemberMC = 8
     static let maxQuestionCharacterCount = 120
+    static let validCodeLength = 6
 }
 
 struct UserDefault {

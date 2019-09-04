@@ -6,10 +6,18 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import UIKit
+import FutureNova
 import IGListKit
 import SnapKit
+<<<<<<< HEAD
 import CoreLocation
+=======
+import UIKit
+
+protocol GroupControlsViewControllerDelegate: class {
+    func groupControlsViewControllerDidUpdateSession(_ session: Session)
+}
+>>>>>>> master
 
 class GroupControlsViewController: UIViewController {
 
@@ -37,11 +45,14 @@ class GroupControlsViewController: UIViewController {
             adapter.performUpdates(animated: false, completion: nil)
         }
     }
+    private let networking: Networking = URLSession.shared.request
     var spaceOne: SpaceModel!
     var spaceTwo: SpaceModel!
     var spaceThree: SpaceModel!
     var spaceFour: SpaceModel!
     var spaceFive: SpaceModel!
+
+    weak var delegate: GroupControlsViewControllerDelegate?
 
     // MARK: - Constants
     let attendanceHeaderLabel = "Attendance"
@@ -73,11 +84,12 @@ class GroupControlsViewController: UIViewController {
         return .lightContent
     }
 
-    init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel], numMembers: Int) {
+    init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel], numMembers: Int, delegate: GroupControlsViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
         self.session = session
         self.pollsDateAttendanceArray = pollsDateAttendanceArray
         self.numMembers = numMembers
+        self.delegate = delegate
     }
 
     override func viewDidLoad() {
@@ -89,6 +101,18 @@ class GroupControlsViewController: UIViewController {
         spaceThree = SpaceModel(space: spaceThreeHeight, backgroundColor: .clickerBlack1)
         spaceFour = SpaceModel(space: spaceFourHeight, backgroundColor: .clickerBlack1)
         spaceFive = SpaceModel(space: spaceFiveHeight, backgroundColor: .clickerBlack1)
+
+        attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
+        pollSettingsHeader = HeaderModel(title: pollSettingsHeaderLabel)
+
+        filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: session.isFilterActivated ?? true)
+        liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
+        locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .filter, isEnabled: true)
+
+        let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
+            return result + pollsDateAttendanceModel.model.polls.count
+        }
+        infoModel = GroupControlsInfoModel(numMembers: numMembers, numPolls: numPolls, code: session.code)
 
         setupNavBar()
         setupViews()
@@ -159,11 +183,17 @@ class GroupControlsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Networking
+    func updateGroupControlFiltering(to newValue: Bool) -> Future<Response<Session>> {
+        return networking(Endpoint.updateGroupControlForSession(with: session.id, isFilteringActivated: newValue)).decode()
+    }
+
 }
 
 extension GroupControlsViewController: ListAdapterDataSource {
 
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
+<<<<<<< HEAD
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
         }
@@ -177,6 +207,8 @@ extension GroupControlsViewController: ListAdapterDataSource {
         filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: true)
         locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .location, isEnabled: session.isLocationRestricted)
         
+=======
+>>>>>>> master
         if pollsDateAttendanceArray.count <= 3 {
             let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
             let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceFive]
@@ -198,8 +230,12 @@ extension GroupControlsViewController: ListAdapterDataSource {
         } else if object is HeaderModel {
             return HeaderSectionController()
         } else if object is PollsSettingModel {
+<<<<<<< HEAD
             let settingsModel = object as! PollsSettingModel
             return PollSettingsSectionController(settingsModel: settingsModel, delegate: self)
+=======
+            return PollSettingsSectionController(delegate: self)
+>>>>>>> master
         } else {
             return ViewAllSectionController(delegate: self)
         }
@@ -280,6 +316,33 @@ extension GroupControlsViewController: AttendanceViewControllerDelegate {
         self.pollsDateAttendanceArray = deselectedPollsDateAttendanceArray
         adapter.performUpdates(animated: false, completion: nil)
         isExportable = false
+    }
+
+}
+
+// MARK: - PollSettingsSectionControllerDelegate
+extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
+
+    func pollSettingsSectionControllerDidUpdate(_ sectionController: PollSettingsSectionController, to newValue: Bool) {
+        guard let pollsSettingModel = adapter.object(for: sectionController) as? PollsSettingModel else { return }
+        if pollsSettingModel.isEqual(toDiffableObject: filterSetting) {
+            updateGroupControlFiltering(to: newValue).observe { [weak self] result in
+                guard let `self` = self else { return }
+                switch result {
+                case .value(let response):
+                    self.session = response.data
+                    self.delegate?.groupControlsViewControllerDidUpdateSession(self.session)
+                    let filterSetting = self.filterSetting.copy() as! PollsSettingModel
+                    filterSetting.isEnabled = response.data.isFilterActivated ?? true
+                    self.filterSetting = filterSetting
+                    DispatchQueue.main.async {
+                        self.adapter.performUpdates(animated: false, completion: nil)
+                    }
+                case .error(let error):
+                    print(error)
+                }
+            }
+        }
     }
 
 }

@@ -6,13 +6,15 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
-import UIKit
-import Fabric
-import FLEX
-import GoogleSignIn
 import Crashlytics
+import FLEX
+import Fabric
+import Firebase
+import FutureNova
+import GoogleSignIn
 import StoreKit
 import CoreLocation
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLocationManagerDelegate {
@@ -26,9 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLoca
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        FIRApp.configure()
         setupLocationManager()
         setupWindow()
         setupNavigationController()
+        setupNetworking()
         setupGoogleSignIn()
         setupNavBar()
         setupFabric()
@@ -97,6 +101,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLoca
         print("[Running Clicker in release configuration]")
         Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
         #endif
+    }
+
+    func setupNetworking() {
+        #if LOCAL_SERVER
+        Endpoint.config.scheme = "http"
+        Endpoint.config.host = "localhost"
+        Endpoint.config.port = 3000
+        #else
+        Endpoint.config.scheme = "https"
+        Endpoint.config.host = Keys.hostURL.value
+        #endif
+
+        if let apiVersion = Endpoint.apiVersion {
+            Endpoint.config.commonPath = "/api/v\(apiVersion)"
+        }
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {

@@ -18,6 +18,7 @@ class Session: Codable {
     var code: String
     var description: String?
     var id: Int
+    var isFilterActivated: Bool?
     var isLive: Bool?
     var name: String
     var updatedAt: String?
@@ -32,7 +33,7 @@ class Session: Codable {
         self.location = location
     }
     
-    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?, isLocationRestricted: Bool, location: Coord) {
+    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?, isLocationRestricted: Bool, location: Coord, isFilterActivated: Bool?) {
         self.id = id
         self.name = name
         self.code = code
@@ -41,6 +42,7 @@ class Session: Codable {
         self.isLive = isLive
         self.isLocationRestricted = isLocationRestricted
         self.location = location
+        self.isFilterActivated = isFilterActivated
     }
 
 }

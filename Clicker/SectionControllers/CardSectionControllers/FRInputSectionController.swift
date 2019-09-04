@@ -34,7 +34,7 @@ class FRInputSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: FRInputCell.self, for: self, at: index) as! FRInputCell
-        cell.configure(with: self)
+        cell.configure(for: frInputModel, with: self)
         cell.setNeedsUpdateConstraints()
         return cell
     }

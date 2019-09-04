@@ -10,7 +10,15 @@ import IGListKit
 
 class FRInputModel: ListDiffable {
 
+    var filter: [String]?
+    var text: String?
+
     let identifier = UUID().uuidString
+
+    init(pollFilter: PollFilter? = nil) {
+        self.filter = pollFilter?.filter
+        self.text = pollFilter?.text
+    }
 
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSString

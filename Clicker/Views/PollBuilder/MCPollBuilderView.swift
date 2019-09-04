@@ -34,7 +34,7 @@ class MCPollBuilderView: UIView {
     weak var pollBuilderDelegate: PollBuilderViewDelegate?
 
     var questionText: String? {
-        guard let sectionController = adapter.sectionController(for: askQuestionModel) as? AskQuestionSectionController else {
+        guard let sectionController = adapter.sectionController(forSection: 0) as? AskQuestionSectionController else {
             return nil
         }
         return sectionController.getTextFieldText()

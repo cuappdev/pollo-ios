@@ -10,21 +10,20 @@ import UIKit
 import SnapKit
 
 protocol SettingCellDelegate: class {
-    
     func settingCellDidToggle(settingsModel: PollsSettingModel)
-    
+    func settingCellDidUpdate(_ cell: SettingCell, to newValue: Bool)
 }
 
 class SettingCell: UICollectionViewCell {
-    
-    // MARK: - Data vars
-    weak var delegate: SettingCellDelegate?
-    var settingsModel: PollsSettingModel!
     
     // MARK: - View vars
     var body: UILabel!
     var title: UILabel!
     var toggle: UISwitch!
+
+    // MARK: Data vars
+    weak var delegate: SettingCellDelegate?
+    var settingsModel: PollsSettingModel!
     
     // MARK: Constants
     let bodyHeight: CGFloat = 29
@@ -102,4 +101,9 @@ class SettingCell: UICollectionViewCell {
         body.text = settingsModel.description
         toggle.isOn = settingsModel.isEnabled
     }
+
+    @objc func toggleSwitched() {
+        delegate?.settingCellDidUpdate(self, to: toggle.isOn)
+    }
+
 }

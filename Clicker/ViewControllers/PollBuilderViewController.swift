@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import FutureNova
 import UIKit
 import Presentr
 
@@ -414,10 +415,10 @@ class PollBuilderViewController: UIViewController {
         switch questionType { 
         case .multipleChoice:
             answerChoices = mcPollBuilder.getChoices()
-            let question = mcPollBuilder.questionText ?? ""
+            let question = loadedMCDraft?.text ?? ""
             delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
         case .freeResponse:
-            let question = frPollBuilder.questionText ?? ""
+            let question = loadedFRDraft?.text ?? ""
             delegate?.startPoll(text: question, type: .freeResponse, options: [], state: .live, answerChoices: [], correctAnswer: nil, shouldPopViewController: true)
         }
 
