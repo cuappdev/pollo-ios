@@ -82,8 +82,8 @@ class PollsViewController: UIViewController {
         
         view.backgroundColor = .clickerGrey8
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         promptUserReview()
         setupViews()
@@ -149,7 +149,7 @@ class PollsViewController: UIViewController {
         settingsButton.addTarget(self, action: #selector(settingsAction), for: .touchUpInside)
         view.addSubview(settingsButton)
         
-        newGroupActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        newGroupActivityIndicatorView = UIActivityIndicatorView(style: .gray)
         newGroupActivityIndicatorView.isHidden = true
         newGroupActivityIndicatorView.isUserInteractionEnabled = false
         view.addSubview(newGroupActivityIndicatorView)
@@ -186,7 +186,7 @@ class PollsViewController: UIViewController {
         codeTextField.leftViewMode = .always
         codeTextField.rightView = joinSessionButton
         codeTextField.rightViewMode = .always
-        codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey13, NSAttributedStringKey.font: UIFont._16MediumFont])
+        codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey13, NSAttributedString.Key.font: UIFont._16MediumFont])
         codeTextField.textColor = .white
         codeTextField.autocapitalizationType = .allCharacters
         joinSessionContainerView.addSubview(codeTextField)
@@ -490,7 +490,7 @@ class PollsViewController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
         if !isListeningToKeyboard || hasPresentedViewController { return }
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
             UIView.animate(withDuration: 0.5) {
                 self.dimmingView.alpha = 1
@@ -508,7 +508,7 @@ class PollsViewController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         let hasPresentedViewController = self.presentedViewController != nil && !(self.presentedViewController is UIAlertController)
         if !isListeningToKeyboard || hasPresentedViewController { return }
-        if (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue != nil {
+        if (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue != nil {
             UIView.animate(withDuration: 0.5) {
                 self.dimmingView.alpha = 0
             }
@@ -523,7 +523,7 @@ class PollsViewController: UIViewController {
     }
 
     // MARK: - Shake to send feedback
-    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
             alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { _ in

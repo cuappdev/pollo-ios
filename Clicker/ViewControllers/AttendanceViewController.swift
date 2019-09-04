@@ -78,7 +78,7 @@ class AttendanceViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
         let backImage = UIImage(named: backImageName)?.withRenderingMode(.alwaysOriginal)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
@@ -109,7 +109,7 @@ class AttendanceViewController: UIViewController {
         exportButton.layer.cornerRadius = exportButtonHeight / 2.0
         exportButton.layer.borderWidth = exportButtonBorderWidth
         view.addSubview(exportButton)
-        view.bringSubview(toFront: exportButton)
+        view.bringSubviewToFront(exportButton)
 
         isExportable = pollsDateAttendanceArray.contains(where: { $0.isSelected })
     }
