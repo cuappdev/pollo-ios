@@ -83,7 +83,7 @@ class MCResultCell: UICollectionViewCell {
 
         highlightView = UIView()
         containerView.addSubview(highlightView)
-        containerView.sendSubview(toBack: highlightView)
+        containerView.sendSubviewToBack(highlightView)
         
         checkImageView = UIImageView()
         checkImageView.image = UIImage(named: checkImageName)?.withRenderingMode(.alwaysTemplate)

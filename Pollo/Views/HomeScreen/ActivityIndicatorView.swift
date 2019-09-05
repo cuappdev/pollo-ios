@@ -16,7 +16,7 @@ class ActivityIndicatorView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicator = UIActivityIndicatorView(style: .gray)
         activityIndicator.startAnimating()
         addSubview(activityIndicator)
         

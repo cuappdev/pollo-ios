@@ -93,7 +93,7 @@ class PollPreviewCell: UICollectionViewCell {
         dotsButton.clipsToBounds = true
         contentView.addSubview(dotsButton)
         
-        openSessionActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        openSessionActivityIndicatorView = UIActivityIndicatorView(style: .gray)
         openSessionActivityIndicatorView.isHidden = true
         openSessionActivityIndicatorView.isUserInteractionEnabled = false
         contentView.addSubview(openSessionActivityIndicatorView)

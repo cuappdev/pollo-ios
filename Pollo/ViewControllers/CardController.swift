@@ -109,10 +109,10 @@ class CardController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = true
-        collectionView.decelerationRate = UIScrollViewDecelerationRateFast
+        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
-        view.sendSubview(toBack: collectionView)
+        view.sendSubviewToBack(collectionView)
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)

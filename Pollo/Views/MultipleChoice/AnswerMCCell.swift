@@ -22,7 +22,7 @@ class AnswerMCCell: UITableViewCell {
     var optionLabel = UILabel()
     
     // MARK: - INITIALIZATION
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         backgroundColor = .clickerGrey4
@@ -50,7 +50,7 @@ class AnswerMCCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        contentView.frame = UIEdgeInsetsInsetRect(contentView.frame, UIEdgeInsets(top: 0, left: 18, bottom: 5, right: 18))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 18, bottom: 5, right: 18))
         
         choiceLabel.snp.updateConstraints { make in
             make.size.equalTo(CGSize(width: frame.width * 0.13, height: frame.height))

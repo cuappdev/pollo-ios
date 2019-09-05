@@ -81,7 +81,7 @@ class PollsDateViewController: UIViewController {
         collectionView.bounces = true
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
-        view.sendSubview(toBack: collectionView)
+        view.sendSubviewToBack(collectionView)
         
         let updater = ListAdapterUpdater()
         adapter = ListAdapter(updater: updater, viewController: self)

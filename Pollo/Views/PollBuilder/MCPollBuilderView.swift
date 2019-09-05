@@ -44,8 +44,8 @@ class MCPollBuilderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Add Keyboard Handlers
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         clearMCOptionModels()
         
@@ -162,7 +162,7 @@ class MCPollBuilderView: UIView {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+        if (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 70, right: 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
@@ -171,7 +171,7 @@ class MCPollBuilderView: UIView {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+        if (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
             shouldLightenDraftsText(false)

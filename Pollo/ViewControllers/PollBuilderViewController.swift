@@ -94,8 +94,8 @@ class PollBuilderViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         // Add Keyboard Handlers
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGestureRecognizer.delegate = self
@@ -481,7 +481,7 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = view.safeAreaInsets.bottom
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
@@ -499,7 +499,7 @@ class PollBuilderViewController: UIViewController {
             shouldIgnoreNextKeyboardHiding = false
             return
         }
-        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+        if (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             buttonsView.snp.updateConstraints { update in
                 update.left.equalToSuperview()
                 update.width.equalToSuperview()

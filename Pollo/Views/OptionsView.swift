@@ -51,7 +51,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         sliderBar = UIView()
         sliderBar.backgroundColor = UIColor(red: 0 / 255.0, green: 0 / 255.0, blue: 0 / 255.0, alpha: 1.0)
         addSubview(sliderBar)
-        bringSubview(toFront: sliderBar)
+        bringSubviewToFront(sliderBar)
         sliderBarLeftConstraint = sliderBar.leftAnchor.constraint(equalTo: leftAnchor)
         sliderBarLeftConstraint.isActive = true
     }

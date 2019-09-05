@@ -65,7 +65,7 @@ class FROptionCell: UICollectionViewCell {
         upvoteButton = UIButton()
         upvoteButton.addTarget(self, action: #selector(upvoteFROption), for: .touchUpInside)
         contentView.addSubview(upvoteButton)
-        contentView.bringSubview(toFront: upvoteButton)
+        contentView.bringSubviewToFront(upvoteButton)
         
         separatorLineView = UIView()
         separatorLineView.backgroundColor = .clickerGrey5

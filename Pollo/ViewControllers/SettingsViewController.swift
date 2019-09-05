@@ -135,7 +135,7 @@ class SettingsViewController: UIViewController {
     }
 
     // MARK: - Shake to send feedback
-    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let alert = createAlert(title: submitFeedbackTitle, message: submitFeedbackMessage)
             alert.addAction(UIAlertAction(title: submitFeedbackTitle, style: .default, handler: { _ in
