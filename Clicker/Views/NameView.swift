@@ -32,8 +32,8 @@ class NameView: UIView, UITextFieldDelegate {
         backgroundColor = .clear
         setupViews()
         setupConstraints()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func setupViews() {
@@ -43,7 +43,7 @@ class NameView: UIView, UITextFieldDelegate {
         addSubview(blurEffectView)
 
         titleField = UITextField()
-        titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedStringKey.foregroundColor: UIColor.clickerGrey2, NSAttributedStringKey.font: UIFont._24MediumFont])
+        titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey2, NSAttributedString.Key.font: UIFont._24MediumFont])
         if session.code != session.name {
             titleField.text = session.name
         }
@@ -58,7 +58,7 @@ class NameView: UIView, UITextFieldDelegate {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let superview = superview else { return }
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let iphoneXBottomPadding = safeAreaInsets.bottom
             titleField.snp.remakeConstraints { remake in
                 remake.centerX.equalToSuperview()
@@ -71,7 +71,7 @@ class NameView: UIView, UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
+        if (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             titleField.snp.remakeConstraints { remake in
                 remake.centerX.equalToSuperview()
                 remake.width.equalToSuperview()
