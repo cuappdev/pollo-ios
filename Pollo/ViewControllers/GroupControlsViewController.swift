@@ -32,7 +32,6 @@ class GroupControlsViewController: UIViewController {
     var pollSettingsHeader: HeaderModel!
     var liveQuestionsSetting: PollsSettingModel!
     var filterSetting: PollsSettingModel!
-    var locationSetting: PollsSettingModel!
     var isExportable: Bool = false {
         didSet {
             exportAttendanceModel = ExportAttendanceModel(isExportable: isExportable)
@@ -63,8 +62,6 @@ class GroupControlsViewController: UIViewController {
     let infoViewTopPadding: CGFloat = 28
     let liveQuestionsDescription = "Allow audience to ask questions to host during session"
     let liveQuestionsTitle = "Live Questions"
-    let locationDescription = "Only allow poll members within 300 feet to participate"
-    let locationTitle = "Location Restriction"
     let navigationTitle = "Group Controls"
     let pollSettingsHeaderLabel = "Poll Settings"
     let separatorLineViewWidth: CGFloat = 0.5
@@ -101,7 +98,6 @@ class GroupControlsViewController: UIViewController {
 
         filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: session.isFilterActivated ?? true)
         liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
-        locationSetting = PollsSettingModel(title: locationTitle, description: locationDescription, type: .filter, isEnabled: true)
 
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
@@ -185,11 +181,11 @@ extension GroupControlsViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         if pollsDateAttendanceArray.count <= 3 {
             let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
-            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceFive]
+            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, spaceFive]
             return [precursorArray, pollsDateAttendanceArray, postArray].flatMap {$0}
         }
         let viewAllModel = ViewAllModel()
-        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceThree, viewAllModel, exportAttendanceModel, spaceFour, pollSettingsHeader, liveQuestionsSetting, filterSetting, locationSetting, spaceFive]
+        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceThree, viewAllModel, exportAttendanceModel, spaceFour, pollSettingsHeader, liveQuestionsSetting, filterSetting, spaceFive]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
