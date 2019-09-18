@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0920"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4A06050186AA0C0EC507079306FDB092"
+               BlueprintIdentifier = "AD76C038D4B45B8C3C88B989892B20F2"
                BuildableName = "Pods_Pollo.framework"
                BlueprintName = "Pods-Pollo"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -27,6 +27,15 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "AD76C038D4B45B8C3C88B989892B20F2"
+            BuildableName = "Pods_Pollo.framework"
+            BlueprintName = "Pods-Pollo"
+            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -39,17 +48,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4A06050186AA0C0EC507079306FDB092"
-            BuildableName = "Pods_Pollo.framework"
-            BlueprintName = "Pods-Pollo"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -64,14 +62,12 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4A06050186AA0C0EC507079306FDB092"
+            BlueprintIdentifier = "AD76C038D4B45B8C3C88B989892B20F2"
             BuildableName = "Pods_Pollo.framework"
             BlueprintName = "Pods-Pollo"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -82,7 +78,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4A06050186AA0C0EC507079306FDB092"
+            BlueprintIdentifier = "AD76C038D4B45B8C3C88B989892B20F2"
             BuildableName = "Pods_Pollo.framework"
             BlueprintName = "Pods-Pollo"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">

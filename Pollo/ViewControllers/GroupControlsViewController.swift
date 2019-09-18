@@ -29,7 +29,6 @@ class GroupControlsViewController: UIViewController {
     var numMembers = 0
     var infoModel: GroupControlsInfoModel!
     var attendanceHeader: HeaderModel!
-    var pollSettingsHeader: HeaderModel!
     var liveQuestionsSetting: PollsSettingModel!
     var filterSetting: PollsSettingModel!
     var isExportable: Bool = false {
@@ -41,9 +40,6 @@ class GroupControlsViewController: UIViewController {
     private let networking: Networking = URLSession.shared.request
     var spaceOne: SpaceModel!
     var spaceTwo: SpaceModel!
-    var spaceThree: SpaceModel!
-    var spaceFour: SpaceModel!
-    var spaceFive: SpaceModel!
 
     weak var delegate: GroupControlsViewControllerDelegate?
 
@@ -63,10 +59,7 @@ class GroupControlsViewController: UIViewController {
     let liveQuestionsDescription = "Allow audience to ask questions to host during session"
     let liveQuestionsTitle = "Live Questions"
     let navigationTitle = "Group Controls"
-    let pollSettingsHeaderLabel = "Poll Settings"
     let separatorLineViewWidth: CGFloat = 0.5
-    let spaceFiveHeight: CGFloat = 16
-    let spaceFourHeight: CGFloat = 57
     let spaceOneHeight: CGFloat = 38
     let spaceThreeHeight: CGFloat = 16
     let spaceTwoHeight: CGFloat = 16
@@ -89,15 +82,10 @@ class GroupControlsViewController: UIViewController {
 
         spaceOne = SpaceModel(space: spaceOneHeight, backgroundColor: .clickerBlack1)
         spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .clickerBlack1)
-        spaceThree = SpaceModel(space: spaceThreeHeight, backgroundColor: .clickerBlack1)
-        spaceFour = SpaceModel(space: spaceFourHeight, backgroundColor: .clickerBlack1)
-        spaceFive = SpaceModel(space: spaceFiveHeight, backgroundColor: .clickerBlack1)
 
         attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
-        pollSettingsHeader = HeaderModel(title: pollSettingsHeaderLabel)
-
+        
         filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: session.isFilterActivated ?? true)
-        liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
 
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
@@ -181,11 +169,11 @@ extension GroupControlsViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         if pollsDateAttendanceArray.count <= 3 {
             let precursorArray: [ListDiffable] = [infoModel, spaceOne, attendanceHeader, spaceTwo]
-            let postArray: [ListDiffable] = [exportAttendanceModel, spaceThree, pollSettingsHeader, liveQuestionsSetting, filterSetting, spaceFive]
+            let postArray: [ListDiffable] = [exportAttendanceModel]
             return [precursorArray, pollsDateAttendanceArray, postArray].flatMap {$0}
         }
         let viewAllModel = ViewAllModel()
-        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], spaceThree, viewAllModel, exportAttendanceModel, spaceFour, pollSettingsHeader, liveQuestionsSetting, filterSetting, spaceFive]
+        return [infoModel, spaceOne, attendanceHeader, spaceTwo, pollsDateAttendanceArray[0], pollsDateAttendanceArray[1], pollsDateAttendanceArray[2], viewAllModel, exportAttendanceModel]
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
