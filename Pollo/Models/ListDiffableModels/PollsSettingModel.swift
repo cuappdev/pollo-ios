@@ -12,7 +12,6 @@ import IGListKit
 enum SettingType {
     case filter
     case liveQuestions
-    case location
 }
 
 class PollsSettingModel: NSCopying {

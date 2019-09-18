@@ -58,8 +58,6 @@ class GroupControlsViewController: UIViewController {
     let infoViewTopPadding: CGFloat = 28
     let liveQuestionsDescription = "Allow audience to ask questions to host during session"
     let liveQuestionsTitle = "Live Questions"
-    let locationDescription = "Only allow poll members within 300 feet to participate"
-    let locationTitle = "Location Restriction"
     let navigationTitle = "Group Controls"
     let separatorLineViewWidth: CGFloat = 0.5
     let spaceOneHeight: CGFloat = 38
@@ -88,6 +86,7 @@ class GroupControlsViewController: UIViewController {
         attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
         
         filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: session.isFilterActivated ?? true)
+        liveQuestionsSetting = PollsSettingModel(title: liveQuestionsTitle, description: liveQuestionsDescription, type: .liveQuestions, isEnabled: true)
 
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
