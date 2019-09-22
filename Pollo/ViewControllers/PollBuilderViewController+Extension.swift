@@ -32,27 +32,6 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
     }
 }
 
-extension PollBuilderViewController: QuestionTypeDropDownViewDelegate {
-    
-    func questionTypeDropDownViewDidPick(questionType: QuestionType) {
-        hideDropDown()
-        self.questionType = questionType
-        updateQuestionTypeButton()
-        mcPollBuilder.isHidden = questionType == .freeResponse
-        frPollBuilder.isHidden = questionType == .multipleChoice
-
-        switch questionType {
-        case .freeResponse:
-            frPollBuilder.askQuestionModel = AskQuestionModel(currentQuestion: mcPollBuilder.questionText)
-            frPollBuilder.adapter.performUpdates(animated: false, completion: nil)
-        case .multipleChoice:
-            mcPollBuilder.askQuestionModel = AskQuestionModel(currentQuestion: frPollBuilder.questionText)
-            mcPollBuilder.adapter.performUpdates(animated: false, completion: nil)
-        }
-    }
-
-}
-
 extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -61,7 +40,7 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderViewDelegate {
+extension PollBuilderViewController: MCPollBuilderViewDelegate {
 
     func shouldEditDraft(draft: Draft) {
         let width: ModalSize = .full
@@ -82,17 +61,13 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate, FRPollBuilderVie
         let draftQuestionType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
         if questionType != draftQuestionType {
             mcPollBuilder.isHidden = draftQuestionType == .freeResponse
-            frPollBuilder.isHidden = draftQuestionType == .multipleChoice
             questionType = draftQuestionType
-            updateQuestionTypeButton()
         }
         switch draftQuestionType {
         case .multipleChoice:
             mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
             loadedMCDraft = draft
-        case .freeResponse:
-            frPollBuilder.fillDraft(title: draft.text)
-            loadedFRDraft = draft
+        case .freeResponse: break
         }
         updateCanDraft(true)
     }

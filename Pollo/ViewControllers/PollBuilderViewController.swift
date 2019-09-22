@@ -29,13 +29,9 @@ class PollBuilderViewController: UIViewController {
     var buttonsView: UIView!
     var centerView: UIView!
     var dimmingView: UIView!
-    var dropDown: QuestionTypeDropDownView!
-    var dropDownArrow: UIButton!
-    var dropDownGestureRecognizer: UITapGestureRecognizer!
     var exitButton: UIButton!
-    var frPollBuilder: FRPollBuilderView!
     var mcPollBuilder: MCPollBuilderView!
-    var questionTypeButton: UIButton!
+    var multipleChoiceLabel: UILabel!
     var quizModeOverlayView: QuizModeOverlayView!
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
@@ -51,7 +47,6 @@ class PollBuilderViewController: UIViewController {
     var dropDownHidden: Bool = true
     var isFollowUpQuestion: Bool = false
     var isKeyboardShown: Bool = false
-    var loadedFRDraft: Draft?
     var loadedMCDraft: Draft?
     var questionType: QuestionType!
     var shouldIgnoreNextKeyboardHiding: Bool = false
@@ -63,16 +58,11 @@ class PollBuilderViewController: UIViewController {
     let centerViewHeight: CGFloat = 24
     let centerViewWidth: CGFloat = 135
     let draftsButtonWidth: CGFloat = 100
-    let dropDownArrowHeight: CGFloat = 13
-    let dropDownArrowImageName = "DropdownArrowIcon"
-    let dropDownArrowInset: CGFloat = 10
-    let dropDownArrowLeftPadding: CGFloat = 5.0
-    let dropDownArrowWidth: CGFloat = 13
-    let dropDownHeight: CGFloat = 100
     let edgePadding: CGFloat = 18
     let editDraftModalSize: CGFloat = 50
     let errorText = "Error"
     let exitButtonImageName = "darkexit"
+    let exitButtonPadding = 20
     let failedToDeleteDraftText = "Failed to delete draft. Try again!"
     let popupViewHeight: CGFloat = 95
     let saveDraftButtonTitle = "Save as draft"
@@ -131,31 +121,16 @@ class PollBuilderViewController: UIViewController {
         centerView = UIView()
         view.addSubview(centerView)
         
-        questionTypeButton = UIButton()
-        questionTypeButton.setTitle(StringConstants.multipleChoice, for: .normal)
-        questionTypeButton.setTitleColor(.clickerBlack0, for: .normal)
-        questionTypeButton.titleLabel?.font = ._16SemiboldFont
-        questionTypeButton.contentHorizontalAlignment = .center
-        questionTypeButton.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
-        questionTypeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: questionTypeButton.titleLabel!.frame.size.width)
-        centerView.addSubview(questionTypeButton)
-        
-        dropDownArrow = UIButton()
-        let dropDownArrowImage = UIImage(named: dropDownArrowImageName)
-        dropDownArrow.setImage(dropDownArrowImage, for: .normal)
-        dropDownArrow.contentMode = .scaleAspectFit
-        dropDownArrow.addTarget(self, action: #selector(toggleQuestionType), for: .touchUpInside)
-        centerView.addSubview(dropDownArrow)
-        
         mcPollBuilder = MCPollBuilderView()
         mcPollBuilder.configure(with: self, pollBuilderDelegate: self)
-        
         view.addSubview(mcPollBuilder)
-        
-        frPollBuilder = FRPollBuilderView()
-        frPollBuilder.configure(with: self, pollBuilderDelegate: self)
-        view.addSubview(frPollBuilder)
-        frPollBuilder.isHidden = true
+
+        multipleChoiceLabel = UILabel()
+        multipleChoiceLabel.text = "Multiple Choice"
+        multipleChoiceLabel.font = ._18SemiboldFont
+        multipleChoiceLabel.textAlignment = .center
+        multipleChoiceLabel.textColor = .clickerBlack0
+        view.addSubview(multipleChoiceLabel)
         
         buttonsView = UIView()
         buttonsView.backgroundColor = .white
@@ -208,36 +183,7 @@ class PollBuilderViewController: UIViewController {
             make.height.equalToSuperview()
         }
     }
-    
-    func showDropDown() {
-        setupDimmingView()
-        
-        dropDown = QuestionTypeDropDownView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: dropDownHeight), delegate: self, selectedQuestionType: questionType)
-        view.addSubview(dropDown)
-        
-        topPaddingView = UIView()
-        topPaddingView.backgroundColor = .white
-        view.addSubview(topPaddingView)
-        
-        dropDown.snp.makeConstraints { make in
-            make.centerX.width.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.height.equalTo(dropDownHeight)
-        }
-        
-        topPaddingView.snp.makeConstraints { make in
-            make.centerX.width.top.equalToSuperview()
-            make.bottom.equalTo(dropDown.snp.top)
-        }
-        dropDownHidden = false
-    }
-    
-    @objc func hideDropDown() {
-        dropDown.removeFromSuperview()
-        topPaddingView.removeFromSuperview()
-        dropDownHidden = true
-        dimmingView.removeFromSuperview()
-    }
+
     
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
@@ -246,24 +192,18 @@ class PollBuilderViewController: UIViewController {
             make.size.equalTo(LayoutConstants.buttonSize)
         }
 
+        multipleChoiceLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(edgePadding)
+        }
+
         centerView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalTo(exitButton.snp.centerY)
             make.width.equalTo(centerViewWidth)
             make.height.equalTo(centerViewHeight)
         }
-        
-        questionTypeButton.snp.makeConstraints { make in
-            make.centerY.leading.height.equalToSuperview()
-        }
-        
-        dropDownArrow.snp.makeConstraints { make in
-            make.width.equalTo(dropDownArrowWidth)
-            make.height.equalTo(dropDownArrowHeight)
-            make.centerY.equalTo(questionTypeButton.snp.centerY)
-            make.leading.equalTo(questionTypeButton.snp.trailing).offset(dropDownArrowLeftPadding)
-        }
-        
+
         buttonsView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -288,15 +228,8 @@ class PollBuilderViewController: UIViewController {
         mcPollBuilder.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(edgePadding)
             make.right.equalToSuperview().inset(edgePadding)
-            make.top.equalTo(questionTypeButton.snp.bottom).offset(28)
+            make.top.equalTo(exitButton.snp.bottom).offset(exitButtonPadding)
             make.bottom.equalTo(buttonsView.snp.top)
-        }
-        
-        frPollBuilder.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(edgePadding)
-            make.right.equalToSuperview().inset(edgePadding)
-            make.top.equalTo(mcPollBuilder.snp.top)
-            make.bottom.equalTo(mcPollBuilder.snp.bottom)
         }
         
         bottomPaddingView.snp.makeConstraints { make in
@@ -309,11 +242,6 @@ class PollBuilderViewController: UIViewController {
                 make.edges.equalToSuperview()
             }
         }
-    }
-    
-    func updateQuestionTypeButton() {
-        let questionTypeText: String = questionType == .multipleChoice ? "Multiple Choice" : "Free Response"
-        questionTypeButton.setTitle(questionTypeText, for: .normal)
     }
     
     func updateDraft(id: String, text: String, options: [String]) -> Future<Response<Draft>> {
@@ -367,35 +295,8 @@ class PollBuilderViewController: UIViewController {
             loadedMCDraft = nil
             self.mcPollBuilder.reset()
             
-        case .freeResponse:
-            let question = frPollBuilder.questionText ?? ""
-            if let loadedDraft = loadedFRDraft {
-                updateDraft(id: "\(loadedDraft.id)", text: question, options: []).observe { [weak self] result in
-                    guard let `self` = self else { return }
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .value:
-                            self.getDrafts()
-                        case .error(let error):
-                            print("error: ", error)
-                        }
-                    }
-                }
-            } else {
-                createDraft(text: question, options: []).observe { [weak self] result in
-                    guard let `self` = self else { return }
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .value:
-                            self.getDrafts()
-                        case .error(let error):
-                            print("error: ", error)
-                        }
-                    }
-                }
-            }
-            loadedFRDraft = nil
-            self.frPollBuilder.reset()
+        case .freeResponse: break
+
         }
         self.updateCanDraft(false)
         Analytics.shared.log(with: CreatedDraftPayload())
@@ -417,32 +318,18 @@ class PollBuilderViewController: UIViewController {
             answerChoices = mcPollBuilder.getChoices()
             let question = loadedMCDraft?.text ?? ""
             delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
-        case .freeResponse:
-            let question = loadedFRDraft?.text ?? ""
-            delegate?.startPoll(text: question, type: .freeResponse, options: [], state: .live, answerChoices: [], correctAnswer: nil, shouldPopViewController: true)
+        case .freeResponse: break
         }
 
-        if loadedMCDraft != nil || loadedFRDraft != nil {
+        if loadedMCDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())
         } else {
             Analytics.shared.log(with: CreatedPollPaylod())
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !dropDownHidden {
-            hideDropDown()
-        }
-    }
-    
     @objc func hideKeyboard() {
         view.endEditing(true)
-    }
-    
-    @objc func toggleQuestionType() {
-        if dropDownHidden {
-            showDropDown()
-        }
     }
     
     @objc func exit() {
@@ -476,7 +363,6 @@ class PollBuilderViewController: UIViewController {
 
     func updatePollBuilderViews() {
         self.mcPollBuilder.needsPerformUpdates()
-        self.frPollBuilder.needsPerformUpdates()
     }
     
     // MARK: - KEYBOARD
