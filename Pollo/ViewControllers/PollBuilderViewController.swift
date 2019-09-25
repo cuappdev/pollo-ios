@@ -184,7 +184,6 @@ class PollBuilderViewController: UIViewController {
         }
     }
 
-    
     func setupConstraints() {
         exitButton.snp.makeConstraints { make in
             make.left.equalTo(edgePadding - LayoutConstants.buttonImageInsets.left)
@@ -295,7 +294,8 @@ class PollBuilderViewController: UIViewController {
             loadedMCDraft = nil
             self.mcPollBuilder.reset()
             
-        case .freeResponse: break }
+        case .freeResponse: break
+        }
         self.updateCanDraft(false)
         Analytics.shared.log(with: CreatedDraftPayload())
     }
@@ -316,7 +316,8 @@ class PollBuilderViewController: UIViewController {
             answerChoices = mcPollBuilder.getChoices()
             let question = loadedMCDraft?.text ?? ""
             delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
-        case .freeResponse: break }
+        case .freeResponse: break
+        }
 
         if loadedMCDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())

@@ -40,7 +40,7 @@ extension PollBuilderViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollBuilderViewController: MCPollBuilderViewDelegate {
+extension PollBuilderViewController: MCPollBuilderViewDelegate { 
 
     func shouldEditDraft(draft: Draft) {
         let width: ModalSize = .full
@@ -57,18 +57,9 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate {
         customPresentViewController(presenter, viewController: editDraftViewController, animated: true, completion: nil)
     }
 
-    func shouldLoadDraft(draft: Draft) {
-        let draftQuestionType: QuestionType = (draft.options == []) ? .freeResponse : .multipleChoice
-        if questionType != draftQuestionType {
-            mcPollBuilder.isHidden = draftQuestionType == .freeResponse
-            questionType = draftQuestionType
-        }
-        switch draftQuestionType {
-        case .multipleChoice:
-            mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
-            loadedMCDraft = draft
-        case .freeResponse: break
-        }
+    func loadDraft(draft: Draft) {
+        mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
+        loadedMCDraft = draft
         updateCanDraft(true)
     }
     
