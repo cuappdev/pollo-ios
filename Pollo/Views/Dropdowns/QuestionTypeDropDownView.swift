@@ -9,7 +9,6 @@
 import UIKit
 
 protocol QuestionTypeDropDownViewDelegate: class {
-    func questionTypeDropDownViewDidPick(questionType: QuestionType)
 }
 
 class QuestionTypeDropDownView: UIView {
@@ -51,7 +50,6 @@ class QuestionTypeDropDownView: UIView {
         backgroundColor = .white
         
         topButton = UIButton()
-        topButton.addTarget(self, action: #selector(didTapTopButton), for: .touchUpInside)
         addSubview(topButton)
         
         centerView = UIView()
@@ -71,7 +69,6 @@ class QuestionTypeDropDownView: UIView {
         centerView.addSubview(selectedImageView)
         
         bottomButton = UIButton()
-        bottomButton.addTarget(self, action: #selector(didTapBottomButton), for: .touchUpInside)
         addSubview(bottomButton)
         
         bottomLabel = UILabel()
@@ -154,14 +151,6 @@ class QuestionTypeDropDownView: UIView {
             make.center.equalToSuperview()
         }
         
-    }
-    
-    @objc func didTapTopButton() {
-        delegate?.questionTypeDropDownViewDidPick(questionType: selectedQuestionType)
-    }
-    
-    @objc func didTapBottomButton() {
-        delegate?.questionTypeDropDownViewDidPick(questionType: selectedQuestionType.other)
     }
 
 }
