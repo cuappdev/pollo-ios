@@ -109,9 +109,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             }) {
                 mcSelectedIndex = selectedIndex
             }
-        case .frOption(let frOptionModels):
-            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
-            hasOverflowOptions = frOptionModels.count > maxOptions
         }
         arrowView.isHidden = !hasOverflowOptions
         arrowView.toggle(show: !arrowView.isHidden, animated: false)
@@ -128,22 +125,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             case .mcResult(resultModels: let mcResultModels):
                 compare(oldMCResultModels: mcResultModels, updatedMCResultModels: updatedMCResultModels)
                 self.pollOptionsModel.type = updatedPollOptionsModelType
-            default:
-                return
-            }
-        case .frOption(optionModels: let updatedFROptionModels):
-            switch pollOptionsModel.type {
-            case .frOption:
-                pollOptionsModel.type = .frOption(optionModels: updatedFROptionModels)
-                adapter.performUpdates(animated: false, completion: nil)
-                let maxOptions = delegate?.userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
-                // Have to display arrow view if we've passed maxOptions
-                if updatedFROptionModels.count == maxOptions + 1 {
-                    hasOverflowOptions = true
-                    arrowView.isHidden = !hasOverflowOptions
-                    arrowView.toggle(show: !arrowView.isHidden, animated: false)
-                    collectionView.isScrollEnabled = hasOverflowOptions
-                }
             default:
                 return
             }
@@ -207,8 +188,6 @@ extension PollOptionsCell: ListAdapterDataSource {
             return MCResultSectionController(delegate: self, correctAnswer: correctAnswer)
         } else if object is MCChoiceModel {
             return MCChoiceSectionController(delegate: self)
-        } else if object is FROptionModel {
-            return FROptionSectionController(delegate: self)
         } else {
             guard let pollOptionsModel = pollOptionsModel else { return ListSectionController() }
             switch pollOptionsModel.type {
@@ -226,16 +205,10 @@ extension PollOptionsCell: ListAdapterDataSource {
     
 }
 
-extension PollOptionsCell: MCResultSectionControllerDelegate, FROptionSectionControllerDelegate {
+extension PollOptionsCell: MCResultSectionControllerDelegate {
     
     var userRole: UserRole {
         return delegate.userRole
-    }
-
-    func frOptionSectionControllerDidUpvote(for text: String) {
-        // Only members can upvote free responses
-        if delegate.userRole == .admin || pollOptionsModel.pollState != .live { return }
-        delegate.pollOptionsCellDidUpvote(for: text)
     }
     
 }

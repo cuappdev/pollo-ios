@@ -9,7 +9,6 @@
 import IGListKit
 
 enum PollOptionsModelType {
-    case frOption(optionModels: [FROptionModel])
     case mcChoice(choiceModels: [MCChoiceModel])
     case mcResult(resultModels: [MCResultModel])
 }

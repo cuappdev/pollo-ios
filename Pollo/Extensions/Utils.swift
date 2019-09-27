@@ -66,8 +66,6 @@ func decodeObjForKey(key: String) -> Any {
 func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
     switch poll.type {
-    case .freeResponse:
-        type = buildFROptionModelType(from: poll)
     case .multipleChoice:
         switch poll.state {
         case .live, .ended:
@@ -104,29 +102,10 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, user
         optionModels = mcChoiceModels
         optionHeight = LayoutConstants.mcOptionCellHeight
         maximumNumberVisibleOptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
-    case .frOption(let frOptionModels):
-        optionModels = frOptionModels
-        if optionModels.isEmpty {
-            return LayoutConstants.noResponsesSpace
-        }
-        optionHeight = LayoutConstants.frOptionCellHeight
-        maximumNumberVisibleOptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminFR : IntegerConstants.maxOptionsForMemberFR
     }
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
     let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
     return verticalPadding + optionsHeight
-}
-
-// MARK: - Helpers
-private func buildFROptionModelType(from poll: Poll) -> PollOptionsModelType {
-    var frOptionModels: [FROptionModel] = poll.getFRResultsArray().map { (option, count) -> FROptionModel in
-        let didUpvote = poll.userDidUpvote(answerText: option)
-        return FROptionModel(option: option, numUpvoted: count, didUpvote: didUpvote)
-    }
-    frOptionModels.sort { (frOptionModelA, frOptionModelB) -> Bool in
-        return frOptionModelA.numUpvoted > frOptionModelB.numUpvoted
-    }
-    return .frOption(optionModels: frOptionModels)
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
@@ -153,7 +132,7 @@ func formatResults(results: [String: JSON]) -> [String: PollResult] {
 }
 
 func getNumSelected(poll: Poll, choice: PollResult, userRole: UserRole) -> Int {
-    if userRole == .admin || poll.state == .shared || poll.type == .freeResponse {
+    if userRole == .admin || poll.state == .shared {
         return choice.count ?? 0
     }
     return 0

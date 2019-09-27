@@ -35,7 +35,6 @@ class CardCell: UICollectionViewCell {
     var adapter: ListAdapter!
     var bottomHamburgerCardModel: HamburgerCardModel!
     var collectionViewRightPadding: CGFloat!
-    var frInputModel: FRInputModel!
     var miscellaneousModel: PollMiscellaneousModel!
     var poll: Poll!
     var pollOptionsModel: PollOptionsModel!
@@ -65,7 +64,6 @@ class CardCell: UICollectionViewCell {
         topHamburgerCardModel = HamburgerCardModel(state: .top)
         separatorLineModel = SeparatorLineModel(state: .card)
         bottomHamburgerCardModel = HamburgerCardModel(state: .bottom)
-        frInputModel = FRInputModel()
         setupViews()
     }
     
@@ -142,14 +140,13 @@ class CardCell: UICollectionViewCell {
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
         miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
-        frInputModel = FRInputModel(pollFilter: poll.pollFilter)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
     // MARK: - Updates
     func update(with poll: Poll) {
         switch pollOptionsModel.type {
-        case .mcResult(resultModels: _), .frOption(optionModels: _):
+        case .mcResult(resultModels: _):
             guard let pollOptionsSectionController = adapter.sectionController(for: pollOptionsModel) as? PollOptionsSectionController else { return }
             let updatedPollOptionsModelType = buildPollOptionsModelType(from: poll, userRole: userRole)
             // Make sure to call update before updating pollOptionsModel.type so that
@@ -233,9 +230,6 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        if userRole == .member && poll.type == .freeResponse && poll.state == .live {
-            objects.append(frInputModel)
-        }
         switch userRole {
         case .admin:
             if poll.type == .multipleChoice {
@@ -252,8 +246,6 @@ extension CardCell: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is QuestionModel {
             return QuestionSectionController(delegate: self, userRole: userRole)
-        } else if object is FRInputModel {
-            return FRInputSectionController(delegate: self)
         } else if object is PollOptionsModel {
             return PollOptionsSectionController(delegate: self, correctAnswer: poll.correctAnswer)
         } else if object is PollMiscellaneousModel {
@@ -269,38 +261,6 @@ extension CardCell: ListAdapterDataSource {
         return nil
     }
     
-}
-
-extension CardCell: FRInputSectionControllerDelegate {
-    
-    func frInputSectionControllerSubmittedResponse(sectionController: FRInputSectionController, response: String) {
-        guard let pollOptionsModel = pollOptionsModel else { return }
-        switch pollOptionsModel.type {
-        case .frOption:
-            delegate?.cardCellDidSubmitChoice(cardCell: self, choice: response, index: nil)
-        default:
-            return
-        }
-    }
-    
-    // MARK: - Helpers
-    private func checkIfResponseIsNew(for response: String, frOptionModels: [FROptionModel]) -> Bool {
-        return frOptionModels.first { (frOptionModel) -> Bool in
-            return response == frOptionModel.option
-            } == nil
-    }
-    
-    private func indexOfFROptionModel(for answer: String, frOptionModels: [FROptionModel]) -> Int? {
-        let indexOptionPair = frOptionModels.enumerated().first { (_, frOptionModel) -> Bool in
-            return answer == frOptionModel.option
-        }
-        return indexOptionPair?.offset
-    }
-    
-    private func addFRResponseToPoll(response: String, poll: Poll) {
-        let result = PollResult(text: response, count: 1)
-        poll.answerChoices.append(result)
-    }
 }
 
 extension CardCell: PollOptionsSectionControllerDelegate {

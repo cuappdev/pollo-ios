@@ -33,7 +33,6 @@ class DraftCell: UICollectionViewCell {
     let editImageName = "dots"
     let editImageViewHeight: CGFloat = 3
     let editImageViewTopPadding: CGFloat = 30.5
-    let freeResponse = "Free Response"
     let horizontalPadding: CGFloat = 18
     let multipleChoice = "Multiple Choice"
     let questionLabelMaxNumLines = 3
@@ -50,8 +49,7 @@ class DraftCell: UICollectionViewCell {
     func configure(with draft: Draft) {
         self.draft = draft
         questionLabel.text = draft.text
-        let isMultipleChoice = !draft.options.isEmpty
-        draftTypeLabel.text = isMultipleChoice ? multipleChoice : freeResponse
+        draftTypeLabel.text = multipleChoice
     }
     
     func setupViews() {

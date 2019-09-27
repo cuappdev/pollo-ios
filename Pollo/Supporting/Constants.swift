@@ -24,7 +24,6 @@ struct Identifiers {
     static let createMCOptionCellIdentifier = "createMCOptionCellId"
     static let dateIdentifier = "dateCardId"
     static let draftCellIdentifier = "draftCellId"
-    static let freeResponseIdentifier = "FREE_RESPONSE"
     static let multipleChoiceIdentifier = "MULTIPLE_CHOICE"
     static let optionIdentifier = "optionCellId"
     static let pollPreviewIdentifier = "pollPreviewCellId"
@@ -115,14 +114,11 @@ struct RequestKeys {
 
 struct StringConstants {
     static let dateFormat = "MMM dd yyyy"
-    static let freeResponse = "Free Response"
     static let multipleChoice = "Multiple Choice"
 }
 
 struct IntegerConstants {
-    static let maxOptionsForAdminFR = 5
     static let maxOptionsForAdminMC = 6
-    static let maxOptionsForMemberFR = 6
     static let maxOptionsForMemberMC = 8
     static let maxQuestionCharacterCount = 120
     static let validCodeLength = 6

@@ -64,9 +64,6 @@ extension CardController: PollSectionControllerDelegate {
             guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
             let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
             emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
-        case .freeResponse:
-            let pollChoice = PollChoice(text: choice)
-            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         }
     }
 
@@ -328,26 +325,8 @@ extension CardController: SocketDelegate {
             delegate?.receivedResults(poll)
             return
         }
-        guard let latestPoll = pollsDateModel.polls.last else { return }
-        // Free Response receives results in live state
-        if latestPoll.state == .live && latestPoll.type == .freeResponse {
-            // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
-            latestPoll.answerChoices = updatedPollOptions(for: poll)
-            updateLiveCardCell(with: poll)
-        } else {
-            updateLatestPoll(with: poll)
-            adapter.performUpdates(animated: false, completion: nil)
-        }
-    }
-
-    func receivedFRFilter(_ pollFilter: PollFilter) {
-        guard !pollFilter.success else { return }
-        let newPoll = Poll(poll: pollsDateModel.polls[currentIndex], state: pollsDateModel.polls[currentIndex].state)
-        newPoll.pollFilter = pollFilter
-        updateLatestPoll(with: newPoll)
+        updateLatestPoll(with: poll)
         adapter.performUpdates(animated: false, completion: nil)
-        let alertController = self.createAlert(title: "Inappropriate Content", message: "We have detected inappropriate language. Please submit an appropriate response.")
-        present(alertController, animated: true, completion: nil)
     }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {
@@ -414,7 +393,6 @@ extension CardController: SocketDelegate {
     
     func updateWithCurrentState(poll: Poll) {
         guard let latestPoll = pollsDateModel.polls.last else { return }
-        // For FR, options is initialized to be an empty array so we need to update it whenever we receive results.
         updateLatestPoll(with: latestPoll)
     }
     
