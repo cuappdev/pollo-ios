@@ -155,6 +155,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
 
 extension PollOptionsCell: ListAdapterDataSource {
     
+    
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         var models = [ListDiffable]()
@@ -171,15 +172,6 @@ extension PollOptionsCell: ListAdapterDataSource {
             models.append(contentsOf: mcChoiceModels)
             models.append(bottomSpaceModel)
             return models
-        case .frOption(let frOptionModels):
-            if !frOptionModels.isEmpty {
-                models.append(contentsOf: frOptionModels)
-                models.append(bottomSpaceModel)
-            } else {
-                let noResponsesModel = SpaceModel(space: LayoutConstants.noResponsesSpace, backgroundColor: .white)
-                models.append(noResponsesModel)
-            }
-            return models
         }
     }
     
@@ -193,8 +185,6 @@ extension PollOptionsCell: ListAdapterDataSource {
             switch pollOptionsModel.type {
             case .mcResult, .mcChoice:
                 return SpaceSectionController(noResponses: false)
-            case .frOption(let models):
-                return SpaceSectionController(noResponses: models.isEmpty)
             }
         }
     }
