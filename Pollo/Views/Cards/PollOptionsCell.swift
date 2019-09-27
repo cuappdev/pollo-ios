@@ -155,7 +155,6 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
 
 extension PollOptionsCell: ListAdapterDataSource {
     
-    
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         var models = [ListDiffable]()
