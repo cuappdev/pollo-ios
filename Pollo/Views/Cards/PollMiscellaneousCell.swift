@@ -103,8 +103,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
             switch miscellaneousModel.questionType! {
             case .multipleChoice:
                 unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
-            case .freeResponse:
-                unit = miscellaneousModel.totalVotes == 1 ? responseString : "\(responseString)s"
             }
             totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
         case .member:
@@ -119,8 +117,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 switch miscellaneousModel.questionType! {
                 case .multipleChoice:
                     unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
-                case .freeResponse:
-                    unit = miscellaneousModel.totalVotes == 1 ? responseString : "\(responseString)s"
                 }
                 descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalVotes) \(unit)"
             }

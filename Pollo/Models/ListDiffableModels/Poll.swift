@@ -15,27 +15,17 @@ enum PollState: String, Codable {
 
 enum QuestionType: String, CustomStringConvertible, Codable {
 
-    case freeResponse
     case multipleChoice
 
     var description: String {
         switch self {
         case .multipleChoice: return StringConstants.multipleChoice
-        case .freeResponse: return StringConstants.freeResponse
         }
     }
 
     var descriptionForServer: String {
         switch self {
         case .multipleChoice: return Identifiers.multipleChoiceIdentifier
-        case .freeResponse: return Identifiers.freeResponseIdentifier
-        }
-    }
-
-    var other: QuestionType {
-        switch self {
-        case .multipleChoice: return .freeResponse
-        case .freeResponse: return .multipleChoice
         }
     }
 }
@@ -89,7 +79,6 @@ class Poll: Codable {
     var userAnswers: [String: [PollChoice]] // googleID to poll choice
     // results format:
     // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
-    // FREE_RESPONSE: {1: {'text': 'Blue', 'count': 3}, ...}
 
     // MARK: - Constants
     let identifier = UUID().uuidString
@@ -123,8 +112,6 @@ class Poll: Codable {
         case .multipleChoice:
             guard let answer = answers[0].letter else { return nil }
             return answer
-        case .freeResponse:
-            return answers[0].text
         }
     }
 
@@ -137,15 +124,6 @@ class Poll: Codable {
         self.correctAnswer = poll.correctAnswer
         self.userAnswers = poll.userAnswers
         self.state = poll.state
-    }
-    
-    // Returns array representation of results where each element is (text, count)
-    // Ex) [('Blah', 3), ('Jupiter', 6)...]
-    func getFRResultsArray() -> [(String, Int)] {
-        return answerChoices.compactMap { pollResult -> (String, Int)? in
-            guard let count = pollResult.count else { return nil }
-            return (pollResult.text, count)
-        }
     }
     
     func totalResults(from choices: [PollResult]) -> Int {
@@ -161,14 +139,6 @@ class Poll: Codable {
         case .admin:
             return totalResults(from: answerChoices)
         }
-    }
-
-    // Returns whether user upvoted answerId
-    func userDidUpvote(answerText: String) -> Bool {
-        if let googleID = User.currentUser?.id, let userUpvotedAnswers = userAnswers[googleID] {
-            return userUpvotedAnswers.contains { $0.text == answerText }
-        }
-        return false
     }
 
     // Returns whether user selected this multiple choice (A, B, C, ...)

@@ -70,16 +70,6 @@ class Socket {
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.receivedResults(poll, userRole: .member)
         }
-
-        socket.on(Routes.userFreeResponseFilter) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let pollFilter = try? self.jsonDecoder.decode(PollFilter.self, from: data) else { return }
-            self.delegate?.receivedFRFilter(pollFilter)
-        }
-
-        socket.on(Routes.userFreeResponseLive) { socketData, _ in
-            guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
-            self.delegate?.receivedResultsLive(poll, userRole: .member)
-        }
         
         // We only receive admin/poll/start when the user is an admin, rejoins a session, and there is a live poll
         socket.on(Routes.adminStart) { socketData, _ in
