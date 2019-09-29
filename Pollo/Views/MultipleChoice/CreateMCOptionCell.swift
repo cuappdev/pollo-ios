@@ -39,6 +39,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     let filledCircleImageName = "option_filled"
     let isCorrectButtonLeftPadding: CGFloat = 12
     let isCorrectButtonLength: CGFloat = 23
+    let trashIconInset: CGFloat = 13
     let trashIconHeight: CGFloat = 21.5
     let unfilledCircleImageName = "greyEmptyCircle"
     
@@ -72,17 +73,12 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         addOptionTextField.returnKeyType = .done
         addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addOptionTextField.delegate = self
-
+        containerView.addSubview(addOptionTextField)
+        
         trashButton = UIButton()
         trashButton.setImage(#imageLiteral(resourceName: "TrashIcon"), for: .normal)
         trashButton.addTarget(self, action: #selector(deleteOption), for: .touchUpInside)
-        
-        let rightTrashView = UIView(frame: CGRect(x: 0, y: 0, width: trashIconHeight + 13, height: contentView.frame.height))
-        addOptionTextField.rightView = rightTrashView
-        addOptionTextField.rightViewMode = .always
-        rightTrashView.addSubview(trashButton)
-        
-        containerView.addSubview(addOptionTextField)
+        containerView.addSubview(trashButton)
 
         setupConstraints()
     }
@@ -107,10 +103,9 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         }
         
         trashButton.snp.updateConstraints { make in
-            make.left.equalToSuperview()
+            make.width.height.equalTo(trashIconHeight)
+            make.right.equalToSuperview().inset(trashIconInset)
             make.centerY.equalToSuperview()
-            make.width.equalTo(trashIconHeight)
-            make.height.equalTo(trashIconHeight)
         }
     }
     
@@ -143,7 +138,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
     }
 
     @objc func isCorrectButtonTapped() {
-        isCorrect = !isCorrect
+        isCorrect.toggle()
         delegate?.createMCOptionCellDidUpdateIsCorrect(index: index, text: addOptionTextField.text ?? "", isCorrect: isCorrect)
     }
     
