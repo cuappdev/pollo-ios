@@ -170,6 +170,7 @@ class CardController: UIViewController {
         
         if userRole == .admin {
             createPollButton = UIButton()
+            createPollButton.isHidden = session.isLive ?? false
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)

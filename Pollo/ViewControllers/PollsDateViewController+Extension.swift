@@ -85,6 +85,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
+        session.isLive = true
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
         newPoll.createdAt = Date().secondsString
 
@@ -119,7 +120,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NameViewDelegate {
     
     func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)")
+        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
     }
     
 }
