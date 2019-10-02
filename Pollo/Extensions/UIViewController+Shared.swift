@@ -11,9 +11,9 @@ import SwiftyJSON
 
 extension UIViewController {
 
-    func createAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)? = nil) -> UIAlertController {
+    func createAlert(title: String, message: String, actionTitle: String = "Close", handler: ((UIAlertAction) -> Void)? = nil) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Close", style: .cancel, handler: handler))
+        alertController.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: handler))
         return alertController
     }
 

@@ -362,7 +362,7 @@ class PollsViewController: UIViewController {
             case .value(let data):
                 guard let pollsResponse = try? self.jsonDecoder.decode(Response<[GetSortedPollsResponse]>.self, from: data), pollsResponse.success else {
                     DispatchQueue.main.async {
-                        let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                        let alertController = self.createAlert(title: self.errorText, message: "We couldn't find a poll with that code. Please try again.", actionTitle: "Okay")
                         self.present(alertController, animated: true, completion: nil)
                     }
                     return
@@ -392,7 +392,7 @@ class PollsViewController: UIViewController {
             case .error(let error):
                 print(error)
                 DispatchQueue.main.async {
-                    let alertController = self.createAlert(title: self.errorText, message: "Failed to join session with code \(code). Try again!")
+                    let alertController = self.createAlert(title: "Invalid code", message: "We couldn't find a poll with that code. Please try again.", actionTitle: "Okay")
                     self.present(alertController, animated: true, completion: nil)
                 }
             }
