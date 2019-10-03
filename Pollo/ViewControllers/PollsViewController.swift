@@ -362,7 +362,7 @@ class PollsViewController: UIViewController {
             case .value(let data):
                 guard let pollsResponse = try? self.jsonDecoder.decode(Response<[GetSortedPollsResponse]>.self, from: data), pollsResponse.success else {
                     DispatchQueue.main.async {
-                        let alertController = self.createAlert(title: self.errorText, message: "We couldn't find a poll with that code. Please try again.", actionTitle: "Okay")
+                        let alertController = self.createAlert(title: self.errorText, message: "We couldn't find a group with that code. Please try again.", actionTitle: "Okay")
                         self.present(alertController, animated: true, completion: nil)
                     }
                     return
@@ -370,7 +370,6 @@ class PollsViewController: UIViewController {
                 DispatchQueue.main.async {
                     guard let session = self.session else { return }
                     var pollsDateArray = [PollsDateModel]()
-                    
                     pollsResponse.data.forEach { response in
                         var mutableResponse = response
                         if let index = pollsDateArray.firstIndex(where: { $0.dateValue.isSameDay(as: mutableResponse.dateValue)}) {
@@ -392,7 +391,7 @@ class PollsViewController: UIViewController {
             case .error(let error):
                 print(error)
                 DispatchQueue.main.async {
-                    let alertController = self.createAlert(title: "Invalid code", message: "We couldn't find a poll with that code. Please try again.", actionTitle: "Okay")
+                    let alertController = self.createAlert(title: "Invalid code", message: "We couldn't find a group with that code. Please try again.", actionTitle: "Okay")
                     self.present(alertController, animated: true, completion: nil)
                 }
             }
