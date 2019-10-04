@@ -67,7 +67,7 @@ fastlane/screenshots
 fastlane/test_output
 
 Secrets/
-Clicker/GoogleService-Info.plist
+Pollo/GoogleService-Info.plist
 
 # Swiftlint
 #.swiftlint.yml
