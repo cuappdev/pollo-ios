@@ -41,7 +41,8 @@ class PollPreviewCell: UICollectionViewCell {
     
     // MARK: - Constants
     let activityLabelTopPadding: CGFloat = 4
-    let dotsButtonLength: CGFloat = 40
+    let dotsButtonImageName = "threedots"
+    let dotsButtonLength: CGFloat = 52
     let dotsButtonRightPadding: CGFloat = 18.0
     let liveCircleViewLength: CGFloat = 7
     let liveCircleViewTopPadding: CGFloat = 8.0
@@ -87,7 +88,7 @@ class PollPreviewCell: UICollectionViewCell {
         contentView.addSubview(lineView)
         
         dotsButton = UIButton()
-        dotsButton.setImage(#imageLiteral(resourceName: "dots"), for: .normal)
+        dotsButton.setImage(#imageLiteral(resourceName: dotsButtonImageName), for: .normal)
         dotsButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
         dotsButton.addTarget(self, action: #selector(dotsBtnPressed), for: .touchUpInside)
         dotsButton.clipsToBounds = true
