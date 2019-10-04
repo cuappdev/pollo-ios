@@ -59,6 +59,7 @@ class PollsViewController: UIViewController {
     let joinSessionButtonAnimationDuration: TimeInterval = 0.2
     let joinSessionButtonTitle = "Join"
     let joinSessionContainerViewHeight: CGFloat = 64
+    let joinSessionFailureMessage = "We couldn't find a group with that code. Please try again."
     let joinedPollsOptionsText = "Joined"
     let newGroupButtonLength: CGFloat = 29
     let popupViewHeight: CGFloat = 140
@@ -362,7 +363,7 @@ class PollsViewController: UIViewController {
             case .value(let data):
                 guard let pollsResponse = try? self.jsonDecoder.decode(Response<[GetSortedPollsResponse]>.self, from: data), pollsResponse.success else {
                     DispatchQueue.main.async {
-                        let alertController = self.createAlert(title: self.errorText, message: "We couldn't find a group with that code. Please try again.", actionTitle: "Okay")
+                        let alertController = self.createAlert(title: self.errorText, message: self.joinSessionFailureMessage, actionTitle: "Okay")
                         self.present(alertController, animated: true, completion: nil)
                     }
                     return
@@ -391,7 +392,7 @@ class PollsViewController: UIViewController {
             case .error(let error):
                 print(error)
                 DispatchQueue.main.async {
-                    let alertController = self.createAlert(title: "Invalid code", message: "We couldn't find a group with that code. Please try again.", actionTitle: "Okay")
+                    let alertController = self.createAlert(title: "Invalid code", message: self.joinSessionFailureMessage, actionTitle: "Okay")
                     self.present(alertController, animated: true, completion: nil)
                 }
             }
