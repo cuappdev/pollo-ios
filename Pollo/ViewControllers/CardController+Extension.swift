@@ -110,6 +110,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 
         let correct = correctAnswer ?? ""
 
+        session.isLive = true
         // EMIT START QUESTION
         let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
         newPoll.createdAt = Date().secondsString
@@ -366,6 +367,7 @@ extension CardController: SocketDelegate {
     }
     
     func emitEndPoll() {
+        session.isLive = false
         socket.socket.emit(Routes.serverEnd, [])
     }
 

@@ -31,7 +31,7 @@ class PollBuilderViewController: UIViewController {
     var dimmingView: UIView!
     var exitButton: UIButton!
     var mcPollBuilder: MCPollBuilderView!
-    var multipleChoiceLabel: UILabel!
+    var createQuestionLabel: UILabel!
     var quizModeOverlayView: QuizModeOverlayView!
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
@@ -57,6 +57,7 @@ class PollBuilderViewController: UIViewController {
     let buttonsViewHeight: CGFloat = 67.5
     let centerViewHeight: CGFloat = 24
     let centerViewWidth: CGFloat = 135
+    let createQuestionText = "Create Question"
     let draftsButtonWidth: CGFloat = 100
     let edgePadding: CGFloat = 18
     let editDraftModalSize: CGFloat = 50
@@ -125,12 +126,12 @@ class PollBuilderViewController: UIViewController {
         mcPollBuilder.configure(with: self, pollBuilderDelegate: self)
         view.addSubview(mcPollBuilder)
 
-        multipleChoiceLabel = UILabel()
-        multipleChoiceLabel.text = "Multiple Choice"
-        multipleChoiceLabel.font = ._18SemiboldFont
-        multipleChoiceLabel.textAlignment = .center
-        multipleChoiceLabel.textColor = .clickerBlack0
-        view.addSubview(multipleChoiceLabel)
+        createQuestionLabel = UILabel()
+        createQuestionLabel.text = createQuestionText
+        createQuestionLabel.font = ._18SemiboldFont
+        createQuestionLabel.textAlignment = .center
+        createQuestionLabel.textColor = .clickerBlack0
+        view.addSubview(createQuestionLabel)
         
         buttonsView = UIView()
         buttonsView.backgroundColor = .white
@@ -191,7 +192,7 @@ class PollBuilderViewController: UIViewController {
             make.size.equalTo(LayoutConstants.buttonSize)
         }
 
-        multipleChoiceLabel.snp.makeConstraints { make in
+        createQuestionLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(edgePadding)
         }
@@ -304,7 +305,7 @@ class PollBuilderViewController: UIViewController {
             print("cannot start question before viewdidload")
             return
         }
-        
+
         delegate?.showNavigationBar()
         dismiss(animated: true, completion: nil)
         hideKeyboard()
@@ -312,7 +313,7 @@ class PollBuilderViewController: UIViewController {
         switch questionType { 
         case .multipleChoice:
             answerChoices = mcPollBuilder.getChoices()
-            let question = loadedMCDraft?.text ?? ""
+            let question = mcPollBuilder.questionText ?? ""
             delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
         }
 

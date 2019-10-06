@@ -306,6 +306,7 @@ class PollsViewController: UIViewController {
                 switch result {
                 case .value(let sessionResponse):
                     let session = sessionResponse.data
+                    session.isLive = false
                     self.isListeningToKeyboard = false
                     self.hideNewGroupActivityIndicatorView()
                     let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)

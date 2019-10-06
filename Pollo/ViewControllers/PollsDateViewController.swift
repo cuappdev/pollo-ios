@@ -59,7 +59,7 @@ class PollsDateViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         if createPollButton != nil {
-            let livePollExists = pollsDateArray.last?.polls.last?.state == .live
+            let livePollExists = session.isLive ?? false
             createPollButton.isUserInteractionEnabled = !livePollExists
             createPollButton.isHidden = livePollExists
         }
@@ -111,6 +111,7 @@ class PollsDateViewController: UIViewController {
         
         if userRole == .admin {
             createPollButton = UIButton()
+            createPollButton.isHidden = pollsDateArray.last?.polls.last?.state == .live
             createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)
