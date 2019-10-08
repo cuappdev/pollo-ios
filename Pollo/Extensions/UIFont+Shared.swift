@@ -26,6 +26,7 @@ extension UIFont {
     static let _12SemiboldFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let _16SemiboldFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
     static let _18SemiboldFont = UIFont.systemFont(ofSize: 18, weight: .semibold)
+    static let _20SemiboldFont = UIFont.systemFont(ofSize: 20, weight: .semibold)
     static let _21SemiboldFont = UIFont.systemFont(ofSize: 21, weight: .semibold)
     static let _22SemiboldFont = UIFont.systemFont(ofSize: 22, weight: .semibold)
     static let _30SemiboldFont = UIFont.systemFont(ofSize: 30, weight: .semibold)

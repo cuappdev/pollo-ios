@@ -72,7 +72,7 @@ class DraftCell: UICollectionViewCell {
         contentView.addSubview(loadButton)
         
         questionLabel = UILabel()
-        questionLabel.font = ._18HeavyFont
+        questionLabel.font = ._18SemiboldFont
         questionLabel.textAlignment = .left
         questionLabel.backgroundColor = .clear
         questionLabel.textColor = .clickerGrey2

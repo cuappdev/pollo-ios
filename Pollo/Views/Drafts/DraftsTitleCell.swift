@@ -13,17 +13,21 @@ class DraftsTitleCell: UICollectionViewCell {
 
     // MARK: - View vars
     var draftsLabel: UILabel!
+    
+    // MARK: - Constraints
+    let draftsLabelBottomInset = 14
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         draftsLabel = UILabel()
-        draftsLabel.font = ._16SemiboldFont
+        draftsLabel.font = ._18SemiboldFont
         draftsLabel.textAlignment = .center
         contentView.addSubview(draftsLabel)
 
         draftsLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(draftsLabelBottomInset)
         }
     }
 
