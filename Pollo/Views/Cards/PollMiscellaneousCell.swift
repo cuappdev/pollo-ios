@@ -35,7 +35,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .clickerWhite
+        contentView.backgroundColor = .offWhite
         setupViews()
     }
     
@@ -46,12 +46,12 @@ class PollMiscellaneousCell: UICollectionViewCell {
         contentView.addSubview(iconImageView)
         
         descriptionLabel = UILabel()
-        descriptionLabel.textColor = .clickerGrey2
+        descriptionLabel.textColor = .blueyGrey
         descriptionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(descriptionLabel)
         
         totalVotesLabel = UILabel()
-        totalVotesLabel.textColor = .clickerGrey2
+        totalVotesLabel.textColor = .blueyGrey
         totalVotesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(totalVotesLabel)
     }

@@ -78,7 +78,7 @@ class PollBuilderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerWhite
+        view.backgroundColor = .offWhite
         questionType = .multipleChoice
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 15
@@ -155,7 +155,7 @@ class PollBuilderViewController: UIViewController {
         startPollButton.setTitle(startPollButtonTitle, for: .normal)
         startPollButton.setTitleColor(.white, for: .normal)
         startPollButton.titleLabel?.font = ._16SemiboldFont
-        startPollButton.backgroundColor = .clickerGreen0
+        startPollButton.backgroundColor = .polloGreen
         startPollButton.layer.cornerRadius = buttonHeight / 2
         startPollButton.addTarget(self, action: #selector(startPoll), for: .touchUpInside)
         buttonsView.addSubview(startPollButton)

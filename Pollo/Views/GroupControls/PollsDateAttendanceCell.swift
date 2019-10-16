@@ -37,7 +37,7 @@ class PollsDateAttendanceCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         containerView = UIView()
-        containerView.backgroundColor = .clickerGrey10
+        containerView.backgroundColor = .darkgray
         containerView.layer.cornerRadius = contentViewCornerRadius
         containerView.clipsToBounds = true
         contentView.addSubview(containerView)

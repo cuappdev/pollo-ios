@@ -96,7 +96,7 @@ class OptionsView: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
         isJoined = indexPath.row == 0 
         sliderBarDelegate?.changeNewGroupButton(status: isJoined)
         let unselectedCell = collectionView.cellForItem(at: unselectedIndexPath) as! QuestionOptionCell
-        unselectedCell.optionLabel.textColor = .clickerGrey2
+        unselectedCell.optionLabel.textColor = .blueyGrey
     }
     
     required init?(coder _: NSCoder) {
@@ -108,7 +108,7 @@ class QuestionOptionCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            optionLabel.textColor = isSelected ? .black : .clickerGrey2
+            optionLabel.textColor = isSelected ? .black : .blueyGrey
         }
     }
     
@@ -117,7 +117,7 @@ class QuestionOptionCell: UICollectionViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textColor = .clickerGrey2
+        label.textColor = .blueyGrey
         label.font = UIFont._18MediumFont
         return label
     }()

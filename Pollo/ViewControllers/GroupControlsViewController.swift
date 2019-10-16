@@ -78,10 +78,10 @@ class GroupControlsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerBlack1
+        view.backgroundColor = .darkestGray
 
-        spaceOne = SpaceModel(space: spaceOneHeight, backgroundColor: .clickerBlack1)
-        spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .clickerBlack1)
+        spaceOne = SpaceModel(space: spaceOneHeight, backgroundColor: .darkestGray)
+        spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .darkestGray)
 
         attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
         

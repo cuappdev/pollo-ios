@@ -40,8 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        UITextField.appearance().tintColor = .clickerGreen0
-        UITextView.appearance().tintColor = .clickerGreen0
+        UITextField.appearance().tintColor = .polloGreen
+        UITextView.appearance().tintColor = .polloGreen
     }
     
     func setupNavigationController() {
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func setupNavBar() {
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.navigationBar.barTintColor = .clickerBlack1
+        pollsNavigationController.navigationBar.barTintColor = .darkestGray
         pollsNavigationController.navigationBar.isTranslucent = false
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)

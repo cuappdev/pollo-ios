@@ -119,7 +119,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
             self.isCorrect = isCorrect
             isCorrectButton.setImage(isCorrect ? filledCircleImage : unfilledCircleImage, for: .normal)
             let choiceTag = intToMCOption(index)
-            addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Option \(choiceTag)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey2, NSAttributedString.Key.font: UIFont._16RegularFont])
+            addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Option \(choiceTag)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.blueyGrey, NSAttributedString.Key.font: UIFont._16RegularFont])
             addOptionTextField.text = option
         default:
             return

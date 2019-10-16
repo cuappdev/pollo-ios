@@ -49,9 +49,9 @@ class ExportButtonCell: UICollectionViewCell {
     }
 
     func configure(for isExportable: Bool) {
-        let titleColor: UIColor = isExportable ? .white : .clickerGrey2
-        let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
-        let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)
+        let titleColor: UIColor = isExportable ? .white : .blueyGrey
+        let backgroundColor: UIColor = isExportable ? .polloGreen : .clear
+        let borderColor: UIColor = isExportable ? .polloGreen : UIColor.white.withAlphaComponent(0.9)
         exportButton.setTitleColor(titleColor, for: .normal)
         exportButton.backgroundColor = backgroundColor
         exportButton.layer.borderColor = borderColor.cgColor

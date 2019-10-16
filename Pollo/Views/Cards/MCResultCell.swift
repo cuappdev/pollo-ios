@@ -60,7 +60,7 @@ class MCResultCell: UICollectionViewCell {
         path.append(innerPart)
         innerShadow.shadowPath = path.cgPath
         innerShadow.masksToBounds = true
-        innerShadow.shadowColor = UIColor.clickerWhite2.cgColor
+        innerShadow.shadowColor = UIColor.offWhite.cgColor
         innerShadow.shadowOffset = CGSize.zero
         innerShadow.shadowOpacity = 1
         innerShadow.shadowRadius = 2.5
@@ -78,7 +78,7 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
-        numSelectedLabel.textColor = .clickerGrey2
+        numSelectedLabel.textColor = .blueyGrey
         containerView.addSubview(numSelectedLabel)
 
         highlightView = UIView()
@@ -165,7 +165,7 @@ class MCResultCell: UICollectionViewCell {
         self.correctAnswer = correctAnswer
         switch userRole {
         case .admin:
-            highlightView.backgroundColor = .clickerGreen0
+            highlightView.backgroundColor = .polloGreen
         case .member:
             let isSelected = resultModel.isSelected
             let answer = intToMCOption(resultModel.choiceIndex)
@@ -173,18 +173,18 @@ class MCResultCell: UICollectionViewCell {
                 if correctAnswer != "" {
                     if answer == correctAnswer {
                         showCorrectAnswer = true
-                        highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGrey5
+                        highlightView.backgroundColor = isSelected ? .polloGreen : .lightgray
                         optionLabel.textColor = .black
                     } else {
-                        highlightView.backgroundColor = isSelected ? .grapefruit : .clickerGrey5
-                        optionLabel.textColor = isSelected ? .black : .clickerGrey2
+                        highlightView.backgroundColor = isSelected ? .grapefruit : .lightgray
+                        optionLabel.textColor = .black
                     }
                 } else {
-                    highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                    highlightView.backgroundColor = isSelected ? .polloGreen : .lightGreen
                     optionLabel.textColor = .black
                 }
             } else {
-                highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                highlightView.backgroundColor = isSelected ? .polloGreen : .lightGreen
             }
         }
     }

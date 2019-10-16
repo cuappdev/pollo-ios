@@ -30,7 +30,7 @@ class QuestionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .clickerWhite
+        contentView.backgroundColor = .offWhite
         setupViews()
     }
     
@@ -82,7 +82,7 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.textAlignment = userRole == .admin ? .left : .center
         let isUntitledPoll = questionModel.question == ""
         questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
-        questionLabel.textColor = isUntitledPoll ? .clickerGrey2 : .black
+        questionLabel.textColor = isUntitledPoll ? .blueyGrey : .black
         questionLabel.alpha = isUntitledPoll ? 0.5 : 1.0
     }
     

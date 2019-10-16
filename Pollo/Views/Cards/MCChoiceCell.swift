@@ -40,10 +40,10 @@ class MCChoiceCell: UICollectionViewCell {
     func setupViews() {
         optionButton = UIButton()
         optionButton.layer.cornerRadius = optionButtonCornerRadius
-        optionButton.layer.borderColor = UIColor.clickerGreen0.cgColor
+        optionButton.layer.borderColor = UIColor.polloGreen.cgColor
         optionButton.layer.borderWidth = optionButtonBorderWidth
         optionButton.clipsToBounds = true
-        optionButton.setTitleColor(.clickerGreen0, for: .normal)
+        optionButton.setTitleColor(.polloGreen, for: .normal)
         optionButton.titleLabel?.font = UIFont.systemFont(ofSize: optionButtonFontSize, weight: .medium)
         optionButton.addTarget(self, action: #selector(optionButtonWasPressed), for: .touchUpInside)
         contentView.addSubview(optionButton)
@@ -91,21 +91,21 @@ class MCChoiceCell: UICollectionViewCell {
     }
     
     func configureForEndedPoll(isSelected: Bool) {
-        let optionButtonBackgroundColor: UIColor = isSelected ? .clickerGreen1 : .white
-        let optionButtonTitleColor: UIColor = isSelected ? .white : .clickerGreen1
+        let optionButtonBackgroundColor: UIColor = isSelected ? .lightGreen : .white
+        let optionButtonTitleColor: UIColor = isSelected ? .white : .lightGreen
         optionButton.backgroundColor = optionButtonBackgroundColor
         optionButton.setTitleColor(optionButtonTitleColor, for: .normal)
-        optionButton.layer.borderColor = UIColor.clickerGreen1.cgColor
+        optionButton.layer.borderColor = UIColor.lightGreen.cgColor
     }
     
     func selectChoice() {
-        optionButton.backgroundColor = .clickerGreen0
+        optionButton.backgroundColor = .polloGreen
         optionButton.setTitleColor(.white, for: .normal)
     }
     
     func deselectChoice() {
         optionButton.backgroundColor = .white
-        optionButton.setTitleColor(.clickerGreen0, for: .normal)
+        optionButton.setTitleColor(.polloGreen, for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {

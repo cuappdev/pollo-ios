@@ -75,7 +75,7 @@ class FRPollBuilderView: UIView {
     func setupViews() {
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clickerWhite
+        collectionView.backgroundColor = .offWhite
         collectionView.showsVerticalScrollIndicator = false
         addSubview(collectionView)
 

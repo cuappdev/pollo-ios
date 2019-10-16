@@ -28,7 +28,7 @@ class PollsDateCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clickerBlack1
+        backgroundColor = .darkestGray
         
         setupViews()
     }
@@ -36,7 +36,7 @@ class PollsDateCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         greyView = UIView()
-        greyView.backgroundColor = .clickerGrey10
+        greyView.backgroundColor = .darkgray
         greyView.layer.cornerRadius = cellCornerRadius
         contentView.addSubview(greyView)
 
