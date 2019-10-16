@@ -66,7 +66,7 @@ class PollPreviewCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
     
         descriptionLabel = UILabel()
-        descriptionLabel.font = ._16MediumFont
+        descriptionLabel.font = ._16SemiboldFont
         descriptionLabel.textColor = .clickerGrey2
         contentView.addSubview(descriptionLabel)
         

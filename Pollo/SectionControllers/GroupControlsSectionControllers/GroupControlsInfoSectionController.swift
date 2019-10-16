@@ -18,7 +18,7 @@ class GroupControlsInfoSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = infoModel.code.height(withConstrainedWidth: containerSize.width, font: ._16MediumFont)
+        let cellHeight = infoModel.code.height(withConstrainedWidth: containerSize.width, font: ._16SemiboldFont)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     

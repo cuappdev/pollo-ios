@@ -35,7 +35,7 @@ class QuizModeOverlayView: UIView {
 
         aboutQuizModeLabel = UILabel()
         aboutQuizModeLabel.text = aboutQuizModeLabelText
-        aboutQuizModeLabel.font = UIFont._16MediumFont
+        aboutQuizModeLabel.font = ._16SemiboldFont
         aboutQuizModeLabel.textColor = .white
         aboutQuizModeLabel.numberOfLines = 0
         aboutQuizModeLabel.lineBreakMode = .byWordWrapping

@@ -128,7 +128,7 @@ class PollBuilderViewController: UIViewController {
 
         createQuestionLabel = UILabel()
         createQuestionLabel.text = createQuestionText
-        createQuestionLabel.font = ._20SemiboldFont
+        createQuestionLabel.font = ._20BoldFont
         createQuestionLabel.textAlignment = .center
         createQuestionLabel.textColor = .clickerBlack0
         view.addSubview(createQuestionLabel)

@@ -37,7 +37,7 @@ class QuestionCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         questionLabel = UILabel()
-        questionLabel.font = ._20HeavyFont
+        questionLabel.font = ._20BoldFont
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)

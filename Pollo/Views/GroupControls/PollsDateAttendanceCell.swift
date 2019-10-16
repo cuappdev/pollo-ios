@@ -44,7 +44,7 @@ class PollsDateAttendanceCell: UICollectionViewCell {
 
         dateLabel = UILabel()
         dateLabel.textColor = .white
-        dateLabel.font = UIFont._16MediumFont
+        dateLabel.font = ._16SemiboldFont
         containerView.addSubview(dateLabel)
 
         checkedImage = UIImage(named: checkedImageName)

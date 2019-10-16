@@ -47,7 +47,7 @@ class AskQuestionCell: UICollectionViewCell {
         
         charCountLabel = UILabel()
         charCountLabel.textColor = .clickerGrey2
-        charCountLabel.font = ._12RegularFont
+        charCountLabel.font = ._12SemiboldFont
         contentView.addSubview(charCountLabel)
 
         setUpConstraints()

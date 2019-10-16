@@ -48,13 +48,13 @@ class SettingCell: UICollectionViewCell {
     
     private func setupViews() {
         title = UILabel()
-        title.font = UIFont._16MediumFont
+        title.font = ._16SemiboldFont
         title.textAlignment = .left
         title.textColor = .white
         contentView.addSubview(title)
         
         body = UILabel()
-        body.font = ._12MediumFont
+        body.font = ._12SemiboldFont
         body.textAlignment = .left
         body.textColor = .clickerGrey13
         body.numberOfLines = 2

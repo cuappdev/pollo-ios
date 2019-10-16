@@ -36,7 +36,7 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let calculatedTextHeight = draft.text.height(withConstrainedWidth: constrainedTextWidth, font: ._18HeavyFont)
+        let calculatedTextHeight = draft.text.height(withConstrainedWidth: constrainedTextWidth, font: ._18SemiboldFont)
         let adjustedTextHeight = calculatedTextHeight + 65 // 65 being the total padding + questionType height
         let textHeight = (adjustedTextHeight > maxDraftTextHeight) ? maxDraftTextHeight : adjustedTextHeight
         return CGSize(width: containerSize.width, height: textHeight)
