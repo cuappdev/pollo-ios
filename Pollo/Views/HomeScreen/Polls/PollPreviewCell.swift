@@ -78,7 +78,7 @@ class PollPreviewCell: UICollectionViewCell {
         
         liveLabel = UILabel()
         liveLabel.text = liveLabelText
-        liveLabel.font = UIFont._16SemiboldFont
+        liveLabel.font = ._16SemiboldFont
         liveLabel.textColor = .clickerGreen0
         liveLabel.isHidden = true
         contentView.addSubview(liveLabel)
