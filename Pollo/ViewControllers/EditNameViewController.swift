@@ -41,7 +41,7 @@ class EditNameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerWhite
+        view.backgroundColor = .offWhite
         self.title = "Edit Name"
         
         // Add Keyboard Handlers

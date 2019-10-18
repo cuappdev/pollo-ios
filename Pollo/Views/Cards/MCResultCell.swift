@@ -52,20 +52,6 @@ class MCResultCell: UICollectionViewCell {
         containerView.layer.borderColor = UIColor.clickerGrey5.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
-        
-        innerShadow = CALayer()
-        innerShadow.frame = CGRect(x: 0, y: 0, width: contentView.frame.width - LayoutConstants.pollOptionsPadding * 2, height: contentView.frame.height)
-        let path = UIBezierPath(rect: innerShadow.bounds.insetBy(dx: -20, dy: -20))
-        let innerPart = UIBezierPath(rect: innerShadow.bounds).reversing()
-        path.append(innerPart)
-        innerShadow.shadowPath = path.cgPath
-        innerShadow.masksToBounds = true
-        innerShadow.shadowColor = UIColor.clickerWhite2.cgColor
-        innerShadow.shadowOffset = CGSize.zero
-        innerShadow.shadowOpacity = 1
-        innerShadow.shadowRadius = 2.5
-        containerView.layer.addSublayer(innerShadow)
-        
         contentView.addSubview(containerView)
         
         optionLabel = UILabel()
@@ -78,7 +64,7 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
-        numSelectedLabel.textColor = .clickerGrey2
+        numSelectedLabel.textColor = .blueGrey
         containerView.addSubview(numSelectedLabel)
 
         highlightView = UIView()
@@ -165,7 +151,7 @@ class MCResultCell: UICollectionViewCell {
         self.correctAnswer = correctAnswer
         switch userRole {
         case .admin:
-            highlightView.backgroundColor = .clickerGreen0
+            highlightView.backgroundColor = .polloGreen
         case .member:
             let isSelected = resultModel.isSelected
             let answer = intToMCOption(resultModel.choiceIndex)
@@ -173,18 +159,18 @@ class MCResultCell: UICollectionViewCell {
                 if correctAnswer != "" {
                     if answer == correctAnswer {
                         showCorrectAnswer = true
-                        highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGrey5
+                        highlightView.backgroundColor = isSelected ? .polloGreen : .lightGrey
                         optionLabel.textColor = .black
                     } else {
-                        highlightView.backgroundColor = isSelected ? .grapefruit : .clickerGrey5
-                        optionLabel.textColor = isSelected ? .black : .clickerGrey2
+                        highlightView.backgroundColor = isSelected ? .grapefruit : .lightGrey
+                        optionLabel.textColor = .black
                     }
                 } else {
-                    highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                    highlightView.backgroundColor = isSelected ? .polloGreen : .lightGreen
                     optionLabel.textColor = .black
                 }
             } else {
-                highlightView.backgroundColor = isSelected ? .clickerGreen0 : .clickerGreen1
+                highlightView.backgroundColor = isSelected ? .polloGreen : .lightGreen
             }
         }
     }

@@ -113,7 +113,7 @@ class MCPollBuilderView: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clickerWhite
+        collectionView.backgroundColor = .offWhite
         collectionView.showsVerticalScrollIndicator = false
         collectionView.bounces = true
         addSubview(collectionView)

@@ -73,7 +73,7 @@ class EditPollViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerWhite
+        view.backgroundColor = .offWhite
         setupNavBar()
         setupViews()
         setupConstraints()
