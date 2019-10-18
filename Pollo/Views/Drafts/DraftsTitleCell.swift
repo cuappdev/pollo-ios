@@ -37,7 +37,7 @@ class DraftsTitleCell: UICollectionViewCell {
     }
 
     func shouldLightenText(_ shouldLighten: Bool) {
-        let textColor: UIColor = shouldLighten ? .blueyGrey : .black
+        let textColor: UIColor = shouldLighten ? .blueGrey : .black
         draftsLabel.textColor = textColor
     }
     

@@ -61,7 +61,7 @@ class AttendanceViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .darkestGray
+        view.backgroundColor = .darkestGrey
         self.title = navigtionTitle
         setupNavBar()
         setupViews()
@@ -130,7 +130,7 @@ class AttendanceViewController: UIViewController {
     }
 
     private func updateExportButton(for isExportable: Bool) {
-        let titleColor: UIColor = isExportable ? .white : .blueyGrey
+        let titleColor: UIColor = isExportable ? .white : .blueGrey
         let backgroundColor: UIColor = isExportable ? .polloGreen : .clear
         let borderColor: UIColor = isExportable ? .polloGreen : UIColor.white.withAlphaComponent(0.9)
         exportButton.setTitleColor(titleColor, for: .normal)

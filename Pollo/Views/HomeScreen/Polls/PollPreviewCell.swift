@@ -67,7 +67,7 @@ class PollPreviewCell: UICollectionViewCell {
     
         descriptionLabel = UILabel()
         descriptionLabel.font = ._16MediumFont
-        descriptionLabel.textColor = .blueyGrey
+        descriptionLabel.textColor = .blueGrey
         contentView.addSubview(descriptionLabel)
         
         liveCircleView = UIView()

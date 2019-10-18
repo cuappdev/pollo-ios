@@ -64,7 +64,7 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .medium)
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
-        numSelectedLabel.textColor = .blueyGrey
+        numSelectedLabel.textColor = .blueGrey
         containerView.addSubview(numSelectedLabel)
 
         highlightView = UIView()
@@ -159,10 +159,10 @@ class MCResultCell: UICollectionViewCell {
                 if correctAnswer != "" {
                     if answer == correctAnswer {
                         showCorrectAnswer = true
-                        highlightView.backgroundColor = isSelected ? .polloGreen : .lightgray
+                        highlightView.backgroundColor = isSelected ? .polloGreen : .lightGrey
                         optionLabel.textColor = .black
                     } else {
-                        highlightView.backgroundColor = isSelected ? .grapefruit : .lightgray
+                        highlightView.backgroundColor = isSelected ? .grapefruit : .lightGrey
                         optionLabel.textColor = .black
                     }
                 } else {

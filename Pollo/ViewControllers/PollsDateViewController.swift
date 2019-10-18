@@ -51,7 +51,7 @@ class PollsDateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .darkestGray
+        view.backgroundColor = .darkestGrey
         setupViews()
         setupNavBar()
         self.socket = Socket(id: "\(session.id)", delegate: self)

@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func setupNavBar() {
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.navigationBar.barTintColor = .darkestGray
+        pollsNavigationController.navigationBar.barTintColor = .darkestGrey
         pollsNavigationController.navigationBar.isTranslucent = false
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)

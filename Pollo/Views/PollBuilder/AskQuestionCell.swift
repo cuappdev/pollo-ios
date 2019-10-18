@@ -46,7 +46,7 @@ class AskQuestionCell: UICollectionViewCell {
         contentView.addSubview(questionTextView)
         
         charCountLabel = UILabel()
-        charCountLabel.textColor = .blueyGrey
+        charCountLabel.textColor = .blueGrey
         charCountLabel.font = ._12RegularFont
         contentView.addSubview(charCountLabel)
 
@@ -63,7 +63,7 @@ class AskQuestionCell: UICollectionViewCell {
             updateQuestionTextViewHeight()
         } else {
             questionTextView.text = questionLabelPlaceholder
-            questionTextView.textColor = .blueyGrey
+            questionTextView.textColor = .blueGrey
             charCountLabel.text = nil
         }
     }
@@ -110,7 +110,7 @@ extension AskQuestionCell: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .blueyGrey {
+        if textView.textColor == .blueGrey {
             textView.text = nil
             textView.textColor = .black
         }

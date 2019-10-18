@@ -21,7 +21,7 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
             saveDraftButton.backgroundColor = .clear
             saveDraftButton.layer.borderColor = UIColor.polloGreen.cgColor
         } else {
-            saveDraftButton.setTitleColor(.blueyGrey, for: .normal)
+            saveDraftButton.setTitleColor(.blueGrey, for: .normal)
             saveDraftButton.backgroundColor = .clickerGrey6
             saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
         }

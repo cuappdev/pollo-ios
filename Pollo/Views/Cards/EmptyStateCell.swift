@@ -172,7 +172,7 @@ class EmptyStateCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for emptyStateModel: EmptyStateModel, session: Session?, shouldDisplayNameView: Bool?, nameViewDelegate: NameViewDelegate?) {
         self.emptyStateModel = emptyStateModel
-        subtitleLabel.textColor = .blueyGrey
+        subtitleLabel.textColor = .blueGrey
         switch emptyStateModel.type {
         case .pollsViewController(let pollType):
             switch pollType {

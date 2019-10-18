@@ -56,14 +56,14 @@ class AddMoreOptionCell: UICollectionViewCell {
         
         plusLabel = UILabel()
         plusLabel.text = "+"
-        plusLabel.textColor = .blueyGrey
+        plusLabel.textColor = .blueGrey
         plusLabel.textAlignment = .center
         plusLabel.font = ._20MediumFont
         contentView.addSubview(plusLabel)
         
         addMoreLabel = UILabel()
         addMoreLabel.text = "Add Option"
-        addMoreLabel.textColor = .blueyGrey
+        addMoreLabel.textColor = .blueGrey
         addMoreLabel.font = ._16RegularFont
         contentView.addSubview(addMoreLabel)
     }

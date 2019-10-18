@@ -33,7 +33,7 @@ class SettingsInfoCell: UICollectionViewCell {
         
         descriptionView = UILabel()
         descriptionView.font = UIFont._16MediumFont
-        descriptionView.textColor = UIColor.blueyGrey
+        descriptionView.textColor = UIColor.blueGrey
         descriptionView.textAlignment = .left
         descriptionView.numberOfLines = 0
         contentView.addSubview(descriptionView)

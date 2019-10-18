@@ -82,7 +82,7 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.textAlignment = userRole == .admin ? .left : .center
         let isUntitledPoll = questionModel.question == ""
         questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
-        questionLabel.textColor = isUntitledPoll ? .blueyGrey : .black
+        questionLabel.textColor = isUntitledPoll ? .blueGrey : .black
         questionLabel.alpha = isUntitledPoll ? 0.5 : 1.0
     }
     

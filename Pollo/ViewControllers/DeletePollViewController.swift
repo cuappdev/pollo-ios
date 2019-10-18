@@ -64,7 +64,7 @@ class DeletePollViewController: UIViewController {
     func setupViews() {
         deleteLabel = UILabel()
         deleteLabel.text = userRole == .admin ? adminDeleteLabelText : memberDeleteLabelText
-        deleteLabel.textColor = .blueyGrey
+        deleteLabel.textColor = .blueGrey
         deleteLabel.textAlignment = .center
         deleteLabel.font = UIFont._16RegularFont
         deleteLabel.numberOfLines = 0
@@ -74,7 +74,7 @@ class DeletePollViewController: UIViewController {
         cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.white, for: .normal)
-        cancelButton.backgroundColor = .blueyGrey
+        cancelButton.backgroundColor = .blueGrey
         cancelButton.layer.cornerRadius = 25
         cancelButton.addTarget(self, action: #selector(backCancelBtnPressed), for: .touchUpInside)
         view.addSubview(cancelButton)

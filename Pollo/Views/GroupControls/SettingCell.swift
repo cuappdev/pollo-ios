@@ -37,7 +37,7 @@ class SettingCell: UICollectionViewCell {
         layer.cornerRadius = 5
         layer.masksToBounds = true
         
-        backgroundColor = .darkgray
+        backgroundColor = .darkGrey
         setupViews()
         setupConstraints()
     }

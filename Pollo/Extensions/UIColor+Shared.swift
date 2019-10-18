@@ -9,13 +9,13 @@ import UIKit
 
 extension UIColor {
     
-    @nonobjc static let darkestGray = UIColor(white: 32.0 / 255.0, alpha: 1.0)
+    @nonobjc static let darkestGrey = UIColor(white: 32.0 / 255.0, alpha: 1.0)
     @nonobjc static let polloGreen = UIColor(red: 41.0 / 255.0, green: 192.0 / 255.0, blue: 158.0 / 255.0, alpha: 1.0)
-    @nonobjc static let blueyGrey = UIColor(red: 158.0 / 255.0, green: 167.0 / 255.0, blue: 179.0 / 255.0, alpha: 1.0)
+    @nonobjc static let blueGrey = UIColor(red: 158.0 / 255.0, green: 167.0 / 255.0, blue: 179.0 / 255.0, alpha: 1.0)
     @nonobjc static let grapefruit = UIColor(red: 231.0 / 255.0, green: 99.0 / 255.0, blue: 102.0 / 255.0, alpha: 1.0)
-    @nonobjc static let lightgray = UIColor(white: 236.0 / 255.0, alpha: 1.0)
+    @nonobjc static let lightGrey = UIColor(white: 236.0 / 255.0, alpha: 1.0)
     @nonobjc static let lightGreen = UIColor(red: 199.0 / 255.0, green: 239.0 / 255.0, blue: 230.0 / 255.0, alpha: 1.0)
-    @nonobjc static let darkgray = UIColor(white: 61.0 / 255.0, alpha: 1.0)
+    @nonobjc static let darkGrey = UIColor(white: 61.0 / 255.0, alpha: 1.0)
     @nonobjc static let mediumGray = UIColor(white: 108.0 / 255.0, alpha: 1.0)
     @nonobjc static let offWhite = UIColor(white: 250.0 / 255.0, alpha: 1.0)
     @nonobjc static let aquaMarine = UIColor(red: 66/255, green: 219/255, blue: 197/255, alpha: 1.0)
