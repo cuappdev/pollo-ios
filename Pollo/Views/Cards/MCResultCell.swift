@@ -38,13 +38,15 @@ class MCResultCell: UICollectionViewCell {
     let containerViewCornerRadius: CGFloat = 8
     let containerViewHeight: CGFloat = 46
     let containerViewTopPadding: CGFloat = 8
+    let correctImageName = "correct"
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
     let horizontalPadding: CGFloat = 12
+    let incorrectImageName = "incorrect"
     let labelFontSize: CGFloat = 13
     let numSelectedLabelTrailingPadding: CGFloat = 16
     let numSelectedLabelWidth: CGFloat = 40
-    let selectedImageViewLength: CGFloat = 13
+    let selectedImageViewLength: CGFloat = 17
     let selectedDotViewLength: CGFloat = 15
     
     override init(frame: CGRect) {
@@ -162,7 +164,7 @@ class MCResultCell: UICollectionViewCell {
         
         selectedImageView.snp.makeConstraints { make in
             make.width.height.equalTo(selectedImageViewLength)
-            make.center.equalTo(selectedDotView)
+            make.center.equalTo(dotView)
         }
         
         if showCorrectAnswer {
@@ -211,14 +213,16 @@ class MCResultCell: UICollectionViewCell {
             if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
                 if answer == correctAnswer {
                     if isSelected {
-                        selectedDotView.backgroundColor = .lightGreen
+                        selectedDotView.backgroundColor = .clear
+                        selectedImageView.image = UIImage(named: correctImageName)
                     }
                     showCorrectAnswer = true
                     highlightView.backgroundColor = isSelected ? .lightGreen : .lightgrey
                     highlightView.layer.borderColor = isSelected ? UIColor.clickerGreen0.cgColor : UIColor.coolGrey.cgColor
                 } else {
                     if isSelected {
-                        selectedDotView.backgroundColor = .grapefruit
+                        selectedDotView.backgroundColor = .clear
+                        selectedImageView.image = UIImage(named: incorrectImageName)
                     }
                     highlightView.backgroundColor = .lightgrey
                     highlightView.layer.borderColor = UIColor.coolGrey.cgColor
@@ -226,6 +230,7 @@ class MCResultCell: UICollectionViewCell {
             } else {
                 if isSelected {
                     selectedDotView.backgroundColor = .coolGrey
+                    selectedImageView.image = nil
                 }
                 highlightView.backgroundColor = .lightgrey
                 highlightView.layer.borderColor = UIColor.coolGrey.cgColor
