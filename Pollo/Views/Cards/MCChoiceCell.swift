@@ -66,7 +66,7 @@ class MCChoiceCell: UICollectionViewCell {
         optionBackgroundView.clipsToBounds = true
         optionBackgroundView.layer.cornerRadius = optionBackgroundViewCornerRadius
         optionBackgroundView.backgroundColor = .white
-        optionBackgroundView.layer.borderColor = UIColor.coolGray.cgColor
+        optionBackgroundView.layer.borderColor = UIColor.coolGrey.cgColor
         optionBackgroundView.layer.borderWidth = optionBackgroundViewBorderWidth
         contentView.addSubview(optionBackgroundView)
         

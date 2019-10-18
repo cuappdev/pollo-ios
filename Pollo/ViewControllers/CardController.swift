@@ -57,7 +57,7 @@ class CardController: UIViewController {
     let collectionViewTopPadding: CGFloat = 16.0
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let countLabelHeight: CGFloat = 21.0
-    let countLabelHorizontalPadding: CGFloat = 2.5
+    let countLabelHorizontalPadding: CGFloat = 5
     let countLabelWidth: CGFloat = 30.5
     let editModalHeight: CGFloat = 205
     let navigationTitleHeight: CGFloat = 51.5
@@ -131,21 +131,9 @@ class CardController: UIViewController {
         countLabel.font = ._12MediumFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
-        updateCountLabelText()
         view.addSubview(countLabel)
         
-        countLabelBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(countLabelBackgroundViewTopPadding)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(countLabelWidth)
-            make.height.equalTo(countLabelHeight)
-        }
-        
-        countLabel.snp.makeConstraints { make in
-            make.center.equalTo(countLabelBackgroundView)
-            make.width.equalTo(countLabelBackgroundView).inset(countLabelHorizontalPadding * 2)
-            make.height.equalTo(countLabelHeight)
-        }
+        updateCountLabelText()
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(countLabelBackgroundView.snp.bottom).offset(collectionViewTopPadding)
@@ -183,8 +171,22 @@ class CardController: UIViewController {
     func updateCountLabelText() {
         let total = pollsDateModel.polls.count
         if total > 0 {
-            countLabel.text = "\(currentIndex + 1)/\(total)"
+            let countLabelText = "\(currentIndex + 1)/\(total)"
+            countLabel.text = countLabelText
             countLabelBackgroundView.isHidden = false
+            let countLabelWidth = countLabelText.width(withConstrainedHeight: countLabelHeight, font: countLabel.font)
+            countLabelBackgroundView.snp.remakeConstraints { remake in
+                remake.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(countLabelBackgroundViewTopPadding)
+                remake.centerX.equalToSuperview()
+                remake.width.equalTo(countLabelWidth + countLabelHorizontalPadding * 2)
+                remake.height.equalTo(countLabelHeight)
+            }
+
+            countLabel.snp.remakeConstraints { remake in
+                remake.center.equalTo(countLabelBackgroundView)
+                remake.width.equalTo(countLabelWidth)
+                remake.height.equalTo(countLabelHeight)
+            }
         } else {
             countLabel.text = ""
             countLabelBackgroundView.isHidden = true

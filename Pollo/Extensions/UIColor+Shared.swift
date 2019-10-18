@@ -40,8 +40,10 @@ extension UIColor {
     @nonobjc static let clickerWhite = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
     @nonobjc static let clickerWhite2 = UIColor(white: 234.0 / 255.0, alpha: 0.5)
     @nonobjc static let grapefruit = UIColor(red: 249.0 / 255.0, green: 93.0 / 255.0, blue: 93.0 / 255.0, alpha: 1.0)
-    @nonobjc static let coolGray = UIColor(red: 159.0 / 255.0, green: 165.0 / 255.0, blue: 177.0 / 255.0, alpha: 1.0)
+    @nonobjc static let coolGrey = UIColor(red: 159.0 / 255.0, green: 165.0 / 255.0, blue: 177.0 / 255.0, alpha: 1.0)
     @nonobjc static let mediumGray = UIColor(white: 108.0 / 255.0, alpha: 1.0)
+    @nonobjc static let lightGreen = UIColor(red: 199.0 / 255.0, green: 239.0 / 255.0, blue: 230.0 / 255.0, alpha: 1.0)
+    @nonobjc static let lightgrey = UIColor(white: 236.0 / 255.0, alpha: 1.0)
 
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
