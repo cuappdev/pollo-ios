@@ -112,7 +112,7 @@ class PollsViewController: UIViewController {
 
         titleLabel = UILabel()
         titleLabel.text = titleLabelText
-        titleLabel.font = ._30HeavyFont
+        titleLabel.font = ._30BoldFont
         titleLabel.textColor = .darkestGrey
         view.addSubview(titleLabel)
         
@@ -180,14 +180,14 @@ class PollsViewController: UIViewController {
         codeTextField.delegate = self
         codeTextField.layer.cornerRadius = codeTextFieldHeight / 2
         codeTextField.borderStyle = .none
-        codeTextField.font = ._16MediumFont
+        codeTextField.font = ._16SemiboldFont
         codeTextField.backgroundColor = .clickerGrey12
         codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: codeTextFieldEdgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
         codeTextField.rightView = joinSessionButton
         codeTextField.rightViewMode = .always
-        codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey13, NSAttributedString.Key.font: UIFont._16MediumFont])
+        codeTextField.attributedPlaceholder = NSAttributedString(string: codeTextFieldPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey13, NSAttributedString.Key.font: UIFont._16SemiboldFont])
         codeTextField.textColor = .white
         codeTextField.autocapitalizationType = .allCharacters
         joinSessionContainerView.addSubview(codeTextField)

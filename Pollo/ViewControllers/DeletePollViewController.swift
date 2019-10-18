@@ -66,7 +66,7 @@ class DeletePollViewController: UIViewController {
         deleteLabel.text = userRole == .admin ? adminDeleteLabelText : memberDeleteLabelText
         deleteLabel.textColor = .blueGrey
         deleteLabel.textAlignment = .center
-        deleteLabel.font = UIFont._16RegularFont
+        deleteLabel.font = ._16RegularFont
         deleteLabel.numberOfLines = 0
         deleteLabel.lineBreakMode = .byWordWrapping
         view.addSubview(deleteLabel)

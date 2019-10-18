@@ -53,7 +53,7 @@ class NavigationTitleView: UIView {
 
         secondaryLabel = UILabel()
         secondaryLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        secondaryLabel.font = ._12MediumFont
+        secondaryLabel.font = ._12SemiboldFont
         secondaryLabel.textAlignment = .center
         secondaryLabel.lineBreakMode = .byTruncatingTail
         addSubview(secondaryLabel)

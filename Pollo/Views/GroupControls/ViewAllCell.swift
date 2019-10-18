@@ -23,7 +23,7 @@ class ViewAllCell: UICollectionViewCell {
         viewAllLabel = UILabel()
         viewAllLabel.text = viewAllText
         viewAllLabel.textColor = .polloGreen
-        viewAllLabel.font = ._16MediumFont
+        viewAllLabel.font = ._16SemiboldFont
         contentView.addSubview(viewAllLabel)
 
         viewAllLabel.snp.makeConstraints { make in

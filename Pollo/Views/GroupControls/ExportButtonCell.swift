@@ -31,7 +31,7 @@ class ExportButtonCell: UICollectionViewCell {
 
         exportButton = UIButton()
         exportButton.setTitle(exportButtonTitle, for: .normal)
-        exportButton.titleLabel?.font = ._16MediumFont
+        exportButton.titleLabel?.font = ._16SemiboldFont
         exportButton.layer.cornerRadius = exportButtonHeight / 2.0
         exportButton.layer.borderWidth = exportButtonBorderWidth
         exportButton.addTarget(self, action: #selector(export), for: .touchUpInside)

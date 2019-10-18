@@ -54,7 +54,7 @@ class EditDraftViewController: UIViewController {
         deleteDraftLabel = UILabel()
         deleteDraftLabel.text = deleteDraftLabelText
         deleteDraftLabel.textColor = .clickerRed
-        deleteDraftLabel.font = UIFont._16RegularFont
+        deleteDraftLabel.font = ._16RegularFont
         view.addSubview(deleteDraftLabel)
         
         setupConstraints()

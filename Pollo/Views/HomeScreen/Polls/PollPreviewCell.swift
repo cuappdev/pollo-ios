@@ -66,7 +66,7 @@ class PollPreviewCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
     
         descriptionLabel = UILabel()
-        descriptionLabel.font = ._16MediumFont
+        descriptionLabel.font = ._16SemiboldFont
         descriptionLabel.textColor = .blueGrey
         contentView.addSubview(descriptionLabel)
         
@@ -78,7 +78,7 @@ class PollPreviewCell: UICollectionViewCell {
         
         liveLabel = UILabel()
         liveLabel.text = liveLabelText
-        liveLabel.font = UIFont._16SemiboldFont
+        liveLabel.font = ._16SemiboldFont
         liveLabel.textColor = .polloGreen
         liveLabel.isHidden = true
         contentView.addSubview(liveLabel)

@@ -128,7 +128,7 @@ class CardController: UIViewController {
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
-        countLabel.font = ._12MediumFont
+        countLabel.font = ._12SemiboldFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
         updateCountLabelText()

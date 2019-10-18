@@ -66,7 +66,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         containerView.addSubview(isCorrectButton)
 
         addOptionTextField = UITextField()
-        addOptionTextField.font = UIFont._16RegularFont
+        addOptionTextField.font = ._16RegularFont
         addOptionTextField.layer.cornerRadius = 5
         addOptionTextField.borderStyle = .none
         addOptionTextField.backgroundColor = .clickerGrey6

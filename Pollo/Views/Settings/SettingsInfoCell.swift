@@ -27,12 +27,12 @@ class SettingsInfoCell: UICollectionViewCell {
     
     func setupViews() {
         titleView = UILabel()
-        titleView.font = UIFont._18SemiboldFont
+        titleView.font = ._18SemiboldFont
         titleView.textAlignment = .left
         contentView.addSubview(titleView)
         
         descriptionView = UILabel()
-        descriptionView.font = UIFont._16MediumFont
+        descriptionView.font = ._16SemiboldFont
         descriptionView.textColor = UIColor.blueGrey
         descriptionView.textAlignment = .left
         descriptionView.numberOfLines = 0

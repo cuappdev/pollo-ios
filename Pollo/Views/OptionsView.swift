@@ -118,7 +118,7 @@ class QuestionOptionCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = .blueGrey
-        label.font = UIFont._18MediumFont
+        label.font = ._16SemiboldFont
         return label
     }()
     
