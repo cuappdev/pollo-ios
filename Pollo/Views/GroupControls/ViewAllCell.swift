@@ -22,7 +22,7 @@ class ViewAllCell: UICollectionViewCell {
 
         viewAllLabel = UILabel()
         viewAllLabel.text = viewAllText
-        viewAllLabel.textColor = .clickerGreen0
+        viewAllLabel.textColor = .polloGreen
         viewAllLabel.font = ._16SemiboldFont
         contentView.addSubview(viewAllLabel)
 

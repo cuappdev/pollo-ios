@@ -61,7 +61,7 @@ class AttendanceViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerBlack1
+        view.backgroundColor = .darkestGrey
         self.title = navigtionTitle
         setupNavBar()
         setupViews()
@@ -84,7 +84,7 @@ class AttendanceViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
 
         selectAllBarButtonItem = UIBarButtonItem(title: selectAllBarButtonTitle, style: .plain, target: self, action: #selector(selectAllBtnPressed))
-        selectAllBarButtonItem.tintColor = .clickerGreen0
+        selectAllBarButtonItem.tintColor = .polloGreen
         self.navigationItem.rightBarButtonItem = selectAllBarButtonItem
     }
 
@@ -130,9 +130,9 @@ class AttendanceViewController: UIViewController {
     }
 
     private func updateExportButton(for isExportable: Bool) {
-        let titleColor: UIColor = isExportable ? .white : .clickerGrey2
-        let backgroundColor: UIColor = isExportable ? .clickerGreen0 : .clear
-        let borderColor: UIColor = isExportable ? .clickerGreen0 : UIColor.white.withAlphaComponent(0.9)
+        let titleColor: UIColor = isExportable ? .white : .blueGrey
+        let backgroundColor: UIColor = isExportable ? .polloGreen : .clear
+        let borderColor: UIColor = isExportable ? .polloGreen : UIColor.white.withAlphaComponent(0.9)
         exportButton.setTitleColor(titleColor, for: .normal)
         exportButton.backgroundColor = backgroundColor
         exportButton.layer.borderColor = borderColor.cgColor

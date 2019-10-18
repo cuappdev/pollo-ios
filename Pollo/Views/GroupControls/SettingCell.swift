@@ -37,7 +37,7 @@ class SettingCell: UICollectionViewCell {
         layer.cornerRadius = 5
         layer.masksToBounds = true
         
-        backgroundColor = .clickerGrey10
+        backgroundColor = .darkGrey
         setupViews()
         setupConstraints()
     }
@@ -63,7 +63,7 @@ class SettingCell: UICollectionViewCell {
         toggle = UISwitch()
         toggle.thumbTintColor = .white
         toggle.tintColor = .white
-        toggle.onTintColor = .clickerGreen0
+        toggle.onTintColor = .polloGreen
         toggle.isEnabled = true
         toggle.addTarget(self, action: #selector(toggleSwitched), for: .valueChanged)
         contentView.addSubview(toggle)

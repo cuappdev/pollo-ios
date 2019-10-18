@@ -67,11 +67,11 @@ class PollPreviewCell: UICollectionViewCell {
     
         descriptionLabel = UILabel()
         descriptionLabel.font = ._16SemiboldFont
-        descriptionLabel.textColor = .clickerGrey2
+        descriptionLabel.textColor = .blueGrey
         contentView.addSubview(descriptionLabel)
         
         liveCircleView = UIView()
-        liveCircleView.backgroundColor = .clickerGreen0
+        liveCircleView.backgroundColor = .polloGreen
         liveCircleView.layer.cornerRadius = liveCircleViewLength / 2.0
         liveCircleView.isHidden = true
         contentView.addSubview(liveCircleView)
@@ -79,7 +79,7 @@ class PollPreviewCell: UICollectionViewCell {
         liveLabel = UILabel()
         liveLabel.text = liveLabelText
         liveLabel.font = ._16SemiboldFont
-        liveLabel.textColor = .clickerGreen0
+        liveLabel.textColor = .polloGreen
         liveLabel.isHidden = true
         contentView.addSubview(liveLabel)
         

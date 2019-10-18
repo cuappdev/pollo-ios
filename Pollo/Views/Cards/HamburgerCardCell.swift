@@ -25,7 +25,7 @@ class HamburgerCardCell: UICollectionViewCell {
         switch hamburgerCardModel.state {
         case .top:
             contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            contentView.backgroundColor = .clickerWhite
+            contentView.backgroundColor = .offWhite
         case .bottom:
             contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             contentView.backgroundColor = .white

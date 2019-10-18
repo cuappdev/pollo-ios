@@ -113,7 +113,7 @@ class PollsViewController: UIViewController {
         titleLabel = UILabel()
         titleLabel.text = titleLabelText
         titleLabel.font = ._30BoldFont
-        titleLabel.textColor = .clickerBlack1
+        titleLabel.textColor = .darkestGrey
         view.addSubview(titleLabel)
         
         pollsOptionsView = OptionsView(frame: .zero, options: [joinedPollsOptionsText, createdPollsOptionsText], sliderBarDelegate: self)
@@ -162,7 +162,7 @@ class PollsViewController: UIViewController {
         view.addSubview(dimmingView)
         
         joinSessionContainerView = UIView()
-        joinSessionContainerView.backgroundColor = .clickerBlack1
+        joinSessionContainerView.backgroundColor = .darkestGrey
         view.addSubview(joinSessionContainerView)
         
         joinSessionButton = UIButton()
@@ -170,7 +170,7 @@ class PollsViewController: UIViewController {
         joinSessionButton.setTitleColor(.white, for: .normal)
         joinSessionButton.titleLabel?.font = ._16SemiboldFont
         joinSessionButton.titleLabel?.textAlignment = .center
-        joinSessionButton.backgroundColor = .clickerGrey2
+        joinSessionButton.backgroundColor = .blueGrey
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
         joinSessionButton.alpha = 0.5
@@ -193,7 +193,7 @@ class PollsViewController: UIViewController {
         joinSessionContainerView.addSubview(codeTextField)
         
         bottomPaddingView = UIView()
-        bottomPaddingView.backgroundColor = .clickerBlack1
+        bottomPaddingView.backgroundColor = .darkestGrey
         view.addSubview(bottomPaddingView)
     }
     
@@ -402,7 +402,7 @@ class PollsViewController: UIViewController {
     
     func updateJoinSessionButton(canJoin: Bool) {
         UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
-            self.joinSessionButton.backgroundColor = canJoin ? .clickerGreen0 : .clickerGrey2
+            self.joinSessionButton.backgroundColor = canJoin ? .polloGreen : .blueGrey
             self.joinSessionButton.alpha = canJoin ? 1.0 : 0.5
         }
     }

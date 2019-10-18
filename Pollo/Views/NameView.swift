@@ -43,12 +43,12 @@ class NameView: UIView, UITextFieldDelegate {
         addSubview(blurEffectView)
 
         titleField = UITextField()
-        titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey2, NSAttributedString.Key.font: UIFont._24MediumFont])
+        titleField.attributedPlaceholder = NSAttributedString(string: "Give your group a name...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.blueGrey, NSAttributedString.Key.font: UIFont._24MediumFont])
         if session.code != session.name {
             titleField.text = session.name
         }
         titleField.font = ._24MediumFont
-        titleField.textColor = .clickerWhite
+        titleField.textColor = .offWhite
         titleField.textAlignment = .center
         titleField.delegate = self
         titleField.becomeFirstResponder()
