@@ -83,7 +83,7 @@ class MCResultCell: UICollectionViewCell {
         dotView.clipsToBounds = true
         dotView.layer.cornerRadius = dotViewLength / 2
         dotView.backgroundColor = .white
-        dotView.layer.borderColor = UIColor.clickerGrey2.cgColor
+        dotView.layer.borderColor = UIColor.blueGrey.cgColor
         dotView.layer.borderWidth = dotViewBorderWidth
         contentView.addSubview(dotView)
         
@@ -197,13 +197,13 @@ class MCResultCell: UICollectionViewCell {
         self.userRole = userRole
         switch userRole {
         case .admin:
-            containerView.backgroundColor = .lightgrey
-            highlightView.backgroundColor = .clickerGreen0
+            containerView.backgroundColor = .lightGrey
+            highlightView.backgroundColor = .polloGreen
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
         case .member:
-            optionLabel.textColor = .mediumGray
+            optionLabel.textColor = .mediumGrey
             numSelectedLabel.isHidden = true
             dotView.isHidden = false
             let isSelected = resultModel.isSelected
@@ -217,14 +217,14 @@ class MCResultCell: UICollectionViewCell {
                         selectedImageView.image = UIImage(named: correctImageName)
                     }
                     showCorrectAnswer = true
-                    highlightView.backgroundColor = isSelected ? .lightGreen : .lightgrey
-                    highlightView.layer.borderColor = isSelected ? UIColor.clickerGreen0.cgColor : UIColor.coolGrey.cgColor
+                    highlightView.backgroundColor = isSelected ? .lightGreen : .lightGrey
+                    highlightView.layer.borderColor = isSelected ? UIColor.polloGreen.cgColor : UIColor.coolGrey.cgColor
                 } else {
                     if isSelected {
                         selectedDotView.backgroundColor = .clear
                         selectedImageView.image = UIImage(named: incorrectImageName)
                     }
-                    highlightView.backgroundColor = .lightgrey
+                    highlightView.backgroundColor = .lightGrey
                     highlightView.layer.borderColor = UIColor.coolGrey.cgColor
                 }
             } else {
@@ -232,7 +232,7 @@ class MCResultCell: UICollectionViewCell {
                     selectedDotView.backgroundColor = .coolGrey
                     selectedImageView.image = nil
                 }
-                highlightView.backgroundColor = .lightgrey
+                highlightView.backgroundColor = .lightGrey
                 highlightView.layer.borderColor = UIColor.coolGrey.cgColor
             }
         }

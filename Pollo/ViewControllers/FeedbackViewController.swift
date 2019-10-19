@@ -60,7 +60,7 @@ class FeedbackViewController: UIViewController, WKUIDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if type == .pollsViewController {
-            self.navigationController?.navigationBar.barTintColor = .clickerBlack1
+            self.navigationController?.navigationBar.barTintColor = .darkestGrey
             self.navigationController?.setNavigationBarHidden(true, animated: false)
         }
     }

@@ -30,14 +30,14 @@ class QuestionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .clickerWhite
+        contentView.backgroundColor = .offWhite
         setupViews()
     }
     
     // MARK: - Layout
     func setupViews() {
         questionLabel = UILabel()
-        questionLabel.font = ._20HeavyFont
+        questionLabel.font = ._20BoldFont
         questionLabel.numberOfLines = 0
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)
@@ -82,7 +82,7 @@ class QuestionCell: UICollectionViewCell {
         questionLabel.textAlignment = userRole == .admin ? .left : .center
         let isUntitledPoll = questionModel.question == ""
         questionLabel.text = isUntitledPoll ? untitledPollString : questionModel.question
-        questionLabel.textColor = isUntitledPoll ? .clickerGrey2 : .black
+        questionLabel.textColor = isUntitledPoll ? .blueGrey : .black
         questionLabel.alpha = isUntitledPoll ? 0.5 : 1.0
     }
     

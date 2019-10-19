@@ -35,19 +35,19 @@ class AskQuestionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        contentView.backgroundColor = .clickerWhite
+        contentView.backgroundColor = .offWhite
         
         questionTextView = UITextView()
         questionTextView.delegate = self
         questionTextView.font = ._18RegularFont
-        questionTextView.backgroundColor = .clickerWhite
+        questionTextView.backgroundColor = .offWhite
         questionTextView.returnKeyType = .done
         questionTextView.isScrollEnabled = false
         contentView.addSubview(questionTextView)
         
         charCountLabel = UILabel()
-        charCountLabel.textColor = .clickerGrey2
-        charCountLabel.font = ._12RegularFont
+        charCountLabel.textColor = .blueGrey
+        charCountLabel.font = ._12SemiboldFont
         contentView.addSubview(charCountLabel)
 
         setUpConstraints()
@@ -63,7 +63,7 @@ class AskQuestionCell: UICollectionViewCell {
             updateQuestionTextViewHeight()
         } else {
             questionTextView.text = questionLabelPlaceholder
-            questionTextView.textColor = .clickerGrey2
+            questionTextView.textColor = .blueGrey
             charCountLabel.text = nil
         }
     }
@@ -110,7 +110,7 @@ extension AskQuestionCell: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .clickerGrey2 {
+        if textView.textColor == .blueGrey {
             textView.text = nil
             textView.textColor = .black
         }

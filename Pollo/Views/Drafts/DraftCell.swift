@@ -75,7 +75,7 @@ class DraftCell: UICollectionViewCell {
         questionLabel.font = ._18SemiboldFont
         questionLabel.textAlignment = .left
         questionLabel.backgroundColor = .clear
-        questionLabel.textColor = .clickerGrey2
+        questionLabel.textColor = .blueGrey
         questionLabel.numberOfLines = questionLabelMaxNumLines
         questionLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(questionLabel)
@@ -91,7 +91,7 @@ class DraftCell: UICollectionViewCell {
         contentView.addSubview(editImageView)
 
         draftTypeLabel = UILabel()
-        draftTypeLabel.textColor = .clickerGrey2
+        draftTypeLabel.textColor = .blueGrey
         draftTypeLabel.font = ._12SemiboldFont
         contentView.addSubview(draftTypeLabel)
     }

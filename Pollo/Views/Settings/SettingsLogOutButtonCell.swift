@@ -32,9 +32,9 @@ class SettingsLogOutButtonCell: UICollectionViewCell {
     
     func setupViews() {
         logOutButton = UIButton()
-        logOutButton.setTitleColor(UIColor.clickerGreen0, for: .normal)
+        logOutButton.setTitleColor(UIColor.polloGreen, for: .normal)
         logOutButton.titleLabel?.textAlignment = .left
-        logOutButton.titleLabel?.font = UIFont._18MediumFont
+        logOutButton.titleLabel?.font = ._18SemiboldFont
         logOutButton.contentHorizontalAlignment = .left
         logOutButton.addTarget(self, action: #selector(logOutClicked), for: .touchUpInside)
         contentView.addSubview(logOutButton)

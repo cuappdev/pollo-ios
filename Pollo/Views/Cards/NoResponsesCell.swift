@@ -21,8 +21,8 @@ class NoResponsesCell: UICollectionViewCell {
         
         noResponsesLabel = UILabel()
         noResponsesLabel.text = noResponsesText
-        noResponsesLabel.textColor = .clickerGrey2
-        noResponsesLabel.font = ._12MediumFont
+        noResponsesLabel.textColor = .blueGrey
+        noResponsesLabel.font = ._12SemiboldFont
         noResponsesLabel.textAlignment = .center
         contentView.addSubview(noResponsesLabel)
         

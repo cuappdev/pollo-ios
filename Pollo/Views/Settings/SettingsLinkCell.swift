@@ -26,9 +26,9 @@ class SettingsLinkCell: UICollectionViewCell {
     
     func setupViews() {
         linkButton = UIButton()
-        linkButton.setTitleColor(UIColor.clickerGreen0, for: .normal)
+        linkButton.setTitleColor(UIColor.polloGreen, for: .normal)
         linkButton.titleLabel?.textAlignment = .left
-        linkButton.titleLabel?.font = UIFont._18MediumFont
+        linkButton.titleLabel?.font = ._18SemiboldFont
         linkButton.contentHorizontalAlignment = .left
         linkButton.addTarget(self, action: #selector(linkClicked), for: .touchUpInside)
         contentView.addSubview(linkButton)

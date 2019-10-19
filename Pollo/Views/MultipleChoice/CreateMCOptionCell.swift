@@ -66,7 +66,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         containerView.addSubview(isCorrectButton)
 
         addOptionTextField = UITextField()
-        addOptionTextField.font = UIFont._16RegularFont
+        addOptionTextField.font = ._16RegularFont
         addOptionTextField.layer.cornerRadius = 5
         addOptionTextField.borderStyle = .none
         addOptionTextField.backgroundColor = .clickerGrey6
@@ -119,7 +119,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
             self.isCorrect = isCorrect
             isCorrectButton.setImage(isCorrect ? filledCircleImage : unfilledCircleImage, for: .normal)
             let choiceTag = intToMCOption(index)
-            addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Option \(choiceTag)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.clickerGrey2, NSAttributedString.Key.font: UIFont._16RegularFont])
+            addOptionTextField.attributedPlaceholder = NSAttributedString(string: "Option \(choiceTag)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.blueGrey, NSAttributedString.Key.font: UIFont._16RegularFont])
             addOptionTextField.text = option
         default:
             return

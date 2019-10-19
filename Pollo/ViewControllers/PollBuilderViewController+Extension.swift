@@ -17,11 +17,11 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
     func updateCanDraft(_ canDraft: Bool) {
         self.canDraft = canDraft
         if canDraft {
-            saveDraftButton.setTitleColor(.clickerGreen0, for: .normal)
+            saveDraftButton.setTitleColor(.polloGreen, for: .normal)
             saveDraftButton.backgroundColor = .clear
-            saveDraftButton.layer.borderColor = UIColor.clickerGreen0.cgColor
+            saveDraftButton.layer.borderColor = UIColor.polloGreen.cgColor
         } else {
-            saveDraftButton.setTitleColor(.clickerGrey2, for: .normal)
+            saveDraftButton.setTitleColor(.blueGrey, for: .normal)
             saveDraftButton.backgroundColor = .clickerGrey6
             saveDraftButton.layer.borderColor = UIColor.clickerGrey6.cgColor
         }

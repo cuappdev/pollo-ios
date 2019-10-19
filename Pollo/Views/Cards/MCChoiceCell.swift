@@ -53,7 +53,7 @@ class MCChoiceCell: UICollectionViewCell {
         dotView.backgroundColor = .white
         dotView.clipsToBounds = true
         dotView.layer.cornerRadius = dotViewLength / 2
-        dotView.layer.borderColor = UIColor.clickerGrey2.cgColor
+        dotView.layer.borderColor = UIColor.blueGrey.cgColor
         dotView.layer.borderWidth = dotViewBorderWidth
         contentView.addSubview(dotView)
         
@@ -136,16 +136,16 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Helpers
     func configureForLivePoll(isSelected: Bool) {
-        optionLabel.textColor = .clickerGrey10
+        optionLabel.textColor = .darkGrey
         selectedDotView.isHidden = !isSelected
-        selectedDotView.backgroundColor = .clickerBlack1
+        selectedDotView.backgroundColor = .darkestGrey
         optionButton.isEnabled = true
     }
     
     func configureForEndedPoll(isSelected: Bool) {
-        optionLabel.textColor = .mediumGray
+        optionLabel.textColor = .mediumGrey
         selectedDotView.isHidden = !isSelected
-        selectedDotView.backgroundColor = .clickerGrey2
+        selectedDotView.backgroundColor = .blueGrey
         optionButton.isEnabled = false
     }
     

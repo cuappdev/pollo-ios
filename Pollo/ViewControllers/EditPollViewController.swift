@@ -73,7 +73,7 @@ class EditPollViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clickerWhite
+        view.backgroundColor = .offWhite
         setupNavBar()
         setupViews()
         setupConstraints()
@@ -88,7 +88,7 @@ class EditPollViewController: UIViewController {
         editNameButton.setTitle(editNameButtonTitle, for: .normal)
         editNameButton.setTitleColor(.black, for: .normal)
         editNameButton.contentHorizontalAlignment = .left
-        editNameButton.titleLabel?.font = UIFont._16RegularFont
+        editNameButton.titleLabel?.font = ._16RegularFont
         editNameButton.addTarget(self, action: #selector(editNameBtnPressed), for: .touchUpInside)
         
         editView = UIView()
@@ -103,7 +103,7 @@ class EditPollViewController: UIViewController {
         deleteButton.setTitle(userRole == .admin ? adminDeleteButtonTitle : memberDeleteButtonTitle, for: .normal)
         deleteButton.setTitleColor(.clickerRed, for: .normal)
         deleteButton.contentHorizontalAlignment = .left
-        deleteButton.titleLabel?.font = UIFont._16RegularFont
+        deleteButton.titleLabel?.font = ._16RegularFont
         deleteButton.addTarget(self, action: #selector(deleteBtnPressed), for: .touchUpInside)
         
         deleteView = UIView()
@@ -212,7 +212,7 @@ class EditPollViewController: UIViewController {
     func setupNavBar() {
         let sessionNameButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         sessionNameButton.setTitleColor(.black, for: .normal)
-        sessionNameButton.titleLabel?.font = UIFont._18SemiboldFont
+        sessionNameButton.titleLabel?.font = ._18SemiboldFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sessionNameButton)
         
         let exitButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))

@@ -77,7 +77,7 @@ class CardController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .clickerBlack1
+        view.backgroundColor = .darkestGrey
         
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
         view.addGestureRecognizer(tapGestureRecognizer)
@@ -121,14 +121,14 @@ class CardController: UIViewController {
         adapter.scrollViewDelegate = self
         
         countLabelBackgroundView = UIView()
-        countLabelBackgroundView.backgroundColor = .clickerGrey10
+        countLabelBackgroundView.backgroundColor = .darkGrey
         countLabelBackgroundView.clipsToBounds = true
         countLabelBackgroundView.layer.cornerRadius = countLabelHeight / 2
         view.addSubview(countLabelBackgroundView)
 
         countLabel = UILabel()
         countLabel.textAlignment = .center
-        countLabel.font = ._12MediumFont
+        countLabel.font = ._12SemiboldFont
         countLabel.adjustsFontSizeToFitWidth = true
         countLabel.textColor = .white
         view.addSubview(countLabel)

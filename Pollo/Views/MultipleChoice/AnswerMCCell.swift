@@ -38,11 +38,11 @@ class AnswerMCCell: UITableViewCell {
     // MARK: - LAYOUT
     func setupViews() {
         choiceLabel.textColor = .clickerGrey3
-        choiceLabel.font = UIFont._16SemiboldFont
+        choiceLabel.font = ._16SemiboldFont
         choiceLabel.textAlignment = .center
         addSubview(choiceLabel)
         
-        optionLabel.font = UIFont._16RegularFont
+        optionLabel.font = ._16RegularFont
         optionLabel.backgroundColor = .clear
         addSubview(optionLabel)
     }

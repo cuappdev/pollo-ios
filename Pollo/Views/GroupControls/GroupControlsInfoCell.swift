@@ -36,19 +36,19 @@ class GroupControlsInfoCell: UICollectionViewCell {
     private func setupViews() {
         numMembersLabel = UILabel()
         numMembersLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        numMembersLabel.font = ._16MediumFont
+        numMembersLabel.font = ._16SemiboldFont
         numMembersLabel.textAlignment = .center
         contentView.addSubview(numMembersLabel)
         
         numPollsLabel = UILabel()
         numPollsLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        numPollsLabel.font = ._16MediumFont
+        numPollsLabel.font = ._16SemiboldFont
         numPollsLabel.textAlignment = .center
         contentView.addSubview(numPollsLabel)
         
         codeLabel = UILabel()
         codeLabel.textColor = UIColor.white.withAlphaComponent(0.75)
-        codeLabel.font = ._16MediumFont
+        codeLabel.font = ._16SemiboldFont
         codeLabel.textAlignment = .center
         contentView.addSubview(codeLabel)
         
