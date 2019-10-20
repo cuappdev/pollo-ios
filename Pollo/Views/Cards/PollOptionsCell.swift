@@ -213,7 +213,6 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
                 mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }
             // Select new choice
-            // Need to subtract 1 from index because topSpaceModel is the first section
             let selectedIndex = adapter.section(for: sectionController)
             let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
             mcChoiceModels[selectedIndex] = updatedMCChoiceModel

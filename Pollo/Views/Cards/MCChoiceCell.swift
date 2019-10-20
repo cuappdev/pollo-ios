@@ -17,11 +17,11 @@ protocol MCChoiceCellDelegate: class {
 class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var optionBackgroundView: UIView!
-    var optionLabel: UILabel!
-    var dotView: UIView!
-    var optionButton: UIButton!
-    var selectedDotView: UIView!
+    private let optionBackgroundView = UIView()
+    private let optionLabel = UILabel()
+    private let dotView = UIView()
+    private let optionButton = UIButton()
+    private let selectedDotView = UIView()
     
     // MARK: - Data vars
     weak var delegate: MCChoiceCellDelegate?
@@ -49,7 +49,6 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        dotView = UIView()
         dotView.backgroundColor = .white
         dotView.clipsToBounds = true
         dotView.layer.cornerRadius = dotViewLength / 2
@@ -57,12 +56,10 @@ class MCChoiceCell: UICollectionViewCell {
         dotView.layer.borderWidth = dotViewBorderWidth
         contentView.addSubview(dotView)
         
-        selectedDotView = UIView()
         selectedDotView.clipsToBounds = true
         selectedDotView.layer.cornerRadius = selectedDotViewLength / 2
         contentView.addSubview(selectedDotView)
         
-        optionBackgroundView = UIView()
         optionBackgroundView.clipsToBounds = true
         optionBackgroundView.layer.cornerRadius = optionBackgroundViewCornerRadius
         optionBackgroundView.backgroundColor = .white
@@ -70,12 +67,10 @@ class MCChoiceCell: UICollectionViewCell {
         optionBackgroundView.layer.borderWidth = optionBackgroundViewBorderWidth
         contentView.addSubview(optionBackgroundView)
         
-        optionLabel = UILabel()
         optionLabel.textAlignment = .left
         optionLabel.font = ._14MediumFont
         contentView.addSubview(optionLabel)
         
-        optionButton = UIButton()
         optionButton.addTarget(self, action: #selector(optionButtonWasPressed), for: .touchUpInside)
         contentView.addSubview(optionButton)
     }

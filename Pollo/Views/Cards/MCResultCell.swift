@@ -12,15 +12,13 @@ import SnapKit
 class MCResultCell: UICollectionViewCell {
     
     // MARK: - View vars
-    var checkImageView: UIImageView!
-    var containerView: UIView!
-    var dotView: UIView!
-    var highlightView: UIView!
-    var innerShadow: CALayer!
-    var numSelectedLabel: UILabel!
-    var optionLabel: UILabel!
-    var selectedDotView: UIView!
-    var selectedImageView: UIImageView!
+    private let containerView = UIView()
+    private let dotView = UIView()
+    private let highlightView = UIView()
+    private let numSelectedLabel = UILabel()
+    private let optionLabel = UILabel()
+    private let selectedDotView = UIView()
+    private let selectedImageView = UIImageView()
     
     // MARK: - Data vars
     var correctAnswer: String?
@@ -33,7 +31,6 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Constants
     let checkImageName = "correctanswer"
-    let checkImageViewLength: CGFloat = 14
     let containerViewBorderWidth: CGFloat = 0.6
     let containerViewCornerRadius: CGFloat = 8
     let containerViewHeight: CGFloat = 46
@@ -58,28 +55,24 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        containerView = UIView()
         containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.layer.borderColor = UIColor.coolGrey.cgColor
         containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
         contentView.addSubview(containerView)
         
-        optionLabel = UILabel()
         optionLabel.font = ._14MediumFont
         optionLabel.backgroundColor = .clear
         optionLabel.lineBreakMode = .byTruncatingTail
         optionLabel.textColor = .black
         containerView.addSubview(optionLabel)
         
-        numSelectedLabel = UILabel()
         numSelectedLabel.font = ._14MediumFont
         numSelectedLabel.backgroundColor = .clear
         numSelectedLabel.textAlignment = .right
         numSelectedLabel.textColor = .black
         containerView.addSubview(numSelectedLabel)
         
-        dotView = UIView()
         dotView.clipsToBounds = true
         dotView.layer.cornerRadius = dotViewLength / 2
         dotView.backgroundColor = .white
@@ -87,28 +80,20 @@ class MCResultCell: UICollectionViewCell {
         dotView.layer.borderWidth = dotViewBorderWidth
         contentView.addSubview(dotView)
         
-        selectedDotView = UIView()
         selectedDotView.clipsToBounds = true
         selectedDotView.layer.cornerRadius = selectedDotViewLength / 2
         contentView.addSubview(selectedDotView)
         
-        selectedImageView = UIImageView()
         contentView.addSubview(selectedImageView)
 
-        highlightView = UIView()
         containerView.addSubview(highlightView)
         containerView.sendSubviewToBack(highlightView)
-        
-        checkImageView = UIImageView()
-        checkImageView.image = UIImage(named: checkImageName)?.withRenderingMode(.alwaysTemplate)
-        checkImageView.tintColor = .charcoalGrey
-        containerView.addSubview(checkImageView)
     }
     
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - numSelectedLabelWidth - horizontalPadding * 4 - checkImageViewLength
+        let maxWidth = bounds.width - numSelectedLabelWidth - horizontalPadding * 4
         
         // If we already layed out constraints before, we should only update the
         // highlightView width constraint
@@ -116,9 +101,6 @@ class MCResultCell: UICollectionViewCell {
             let useMaxWidth = optionLabelWidth >= maxWidth || !showCorrectAnswer
             optionLabel.snp.updateConstraints { make in
                 make.width.equalTo(useMaxWidth ? maxWidth : optionLabelWidth)
-            }
-            if showCorrectAnswer {
-                updateCheckImageView()
             }
             let highlightViewMaxWidth = Float(self.contentView.bounds.width - horizontalPadding * 2)
             self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
@@ -166,10 +148,6 @@ class MCResultCell: UICollectionViewCell {
             make.width.height.equalTo(selectedImageViewLength)
             make.center.equalTo(dotView)
         }
-        
-        if showCorrectAnswer {
-            updateCheckImageView()
-        }
 
         highlightView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
@@ -177,15 +155,6 @@ class MCResultCell: UICollectionViewCell {
             highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
         }
         super.updateConstraints()
-    }
-    
-    func updateCheckImageView() {
-        checkImageView.image = UIImage(named: checkImageName)?.withRenderingMode(.alwaysTemplate)
-        checkImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(checkImageViewLength)
-            make.leading.equalTo(optionLabel.snp.trailing).offset(horizontalPadding)
-            make.centerY.equalToSuperview()
-        }
     }
     
     // MARK: - Configure
