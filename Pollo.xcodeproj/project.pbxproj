@@ -30,7 +30,6 @@
 		0CF647832176970900535573 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF647822176970900535573 /* ArrowView.swift */; };
 		3BE2EC4CF6A43F972650EC5C /* Pods_Pollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8812616CD823A168F697E7F4 /* Pods_Pollo.framework */; };
 		6353FD3A2086DDC900E16EB2 /* CardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353FD392086DDC900E16EB2 /* CardController.swift */; };
-		637FD6932093E5FA007BADF1 /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FD6922093E5FA007BADF1 /* NameView.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
 		6397F8C82174294C00F515DE /* UINavigationController+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6397F8C72174294C00F515DE /* UINavigationController+Shared.swift */; };
@@ -180,7 +179,6 @@
 		0CF647822176970900535573 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		274A52F154DE3D5EFF4998C7 /* Pods-Pollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.debug.xcconfig"; sourceTree = "<group>"; };
 		6353FD392086DDC900E16EB2 /* CardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardController.swift; sourceTree = "<group>"; };
-		637FD6922093E5FA007BADF1 /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
 		6389C9512085953F00F78003 /* PollsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsCell.swift; sourceTree = "<group>"; };
 		6397F8C72174294C00F515DE /* UINavigationController+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Shared.swift"; sourceTree = "<group>"; };
@@ -625,7 +623,6 @@
 				63A4A6492094DFD000523AE6 /* PollBuilder */,
 				C28AD560205CB7D50053AD62 /* QuestionSectionCell.swift */,
 				C2BF982A206BE1240048468E /* OptionsView.swift */,
-				637FD6922093E5FA007BADF1 /* NameView.swift */,
 				0CF647822176970900535573 /* ArrowView.swift */,
 			);
 			path = Views;
@@ -1031,7 +1028,6 @@
 				C2CA3A28208309F800E0BDC5 /* User.swift in Sources */,
 				C2434CBD2134FFD500929C98 /* PollsDateModel.swift in Sources */,
 				C22D5B5C21432562005A0E29 /* MCChoiceSectionController.swift in Sources */,
-				637FD6932093E5FA007BADF1 /* NameView.swift in Sources */,
 				C20B570D213893180091034F /* PollSectionController.swift in Sources */,
 				C2AC3E1C1FA7F83E00CC9D29 /* Session.swift in Sources */,
 				C2504A59209963A200DC5EDC /* EditNameViewController.swift in Sources */,

@@ -14,14 +14,10 @@ class EmptyStateSectionController: ListSectionController {
     // MARK: - Data vars
     var emptyStateModel: EmptyStateModel!
     var session: Session?
-    var shouldDisplayNameView: Bool?
-    weak var nameViewDelegate: NameViewDelegate?
 
-    convenience init(session: Session?, shouldDisplayNameView: Bool, nameViewDelegate: NameViewDelegate?) {
+    convenience init(session: Session?) {
         self.init()
-        self.nameViewDelegate = nameViewDelegate
         self.session = session
-        self.shouldDisplayNameView = shouldDisplayNameView
     }
     
     // MARK: - ListSectionController overrides
@@ -34,7 +30,7 @@ class EmptyStateSectionController: ListSectionController {
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: EmptyStateCell.self, for: self, at: index) as! EmptyStateCell
-        cell.configure(for: emptyStateModel, session: session, shouldDisplayNameView: shouldDisplayNameView, nameViewDelegate: nameViewDelegate)
+        cell.configure(for: emptyStateModel, session: session)
         cell.setNeedsUpdateConstraints()
         return cell
     }
