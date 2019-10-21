@@ -8,7 +8,7 @@
 
 import IGListKit
 
-protocol MCResultSectionControllerDelegate {
+protocol MCResultSectionControllerDelegate: class {
     
     var userRole: UserRole { get }
 
@@ -16,7 +16,7 @@ protocol MCResultSectionControllerDelegate {
 
 class MCResultSectionController: ListSectionController {
     
-    var delegate: MCResultSectionControllerDelegate!
+    weak var delegate: MCResultSectionControllerDelegate!
     var resultModel: MCResultModel!
     var correctAnswer: String?
     
