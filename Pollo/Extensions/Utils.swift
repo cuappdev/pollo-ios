@@ -88,8 +88,6 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
 }
 
 func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, userRole: UserRole) -> CGFloat {
-    
-    let verticalPadding: CGFloat = LayoutConstants.pollOptionsPadding * 2 + LayoutConstants.interItemPadding
     var optionModels: [OptionModel]
     var optionHeight: CGFloat
     var maximumNumberVisibleOptions: Int
@@ -105,7 +103,7 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, user
     }
     let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
     let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
-    return verticalPadding + optionsHeight
+    return LayoutConstants.pollOptionsBottomPadding + optionsHeight
 }
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {

@@ -16,7 +16,7 @@ extension UIColor {
     @nonobjc static let lightGrey = UIColor(white: 236.0 / 255.0, alpha: 1.0)
     @nonobjc static let lightGreen = UIColor(red: 199.0 / 255.0, green: 239.0 / 255.0, blue: 230.0 / 255.0, alpha: 1.0)
     @nonobjc static let darkGrey = UIColor(white: 61.0 / 255.0, alpha: 1.0)
-    @nonobjc static let mediumGray = UIColor(white: 108.0 / 255.0, alpha: 1.0)
+    @nonobjc static let mediumGrey = UIColor(white: 108.0 / 255.0, alpha: 1.0)
     @nonobjc static let offWhite = UIColor(white: 250.0 / 255.0, alpha: 1.0)
     @nonobjc static let aquaMarine = UIColor(red: 66/255, green: 219/255, blue: 197/255, alpha: 1.0)
     @nonobjc static let bluishGreen = UIColor(red: 10/255, green: 161/255, blue: 127/255, alpha: 1.0)
@@ -34,4 +34,5 @@ extension UIColor {
     @nonobjc static let clickerGrey8 = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 1.0)
     @nonobjc static let clickerRed = UIColor(red: 0.91, green: 0.39, blue: 0.4, alpha: 1.0)
     @nonobjc static let clickerWhite2 = UIColor(white: 234.0 / 255.0, alpha: 0.5)
+    @nonobjc static let coolGrey = UIColor(red: 159.0 / 255.0, green: 165.0 / 255.0, blue: 177.0 / 255.0, alpha: 1.0)
 }

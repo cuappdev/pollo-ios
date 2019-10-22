@@ -141,7 +141,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             let mcResultModel = oldMCResultModels[index]
             if !mcResultModel.isEqual(toUpdatedModel: updatedMCResultModel) {
                 // Have to do index + 1 because first model is SpaceModel
-                guard let sectionController = adapter.sectionController(forSection: index + 1) as? MCResultSectionController else { return }
+                guard let sectionController = adapter.sectionController(forSection: index) as? MCResultSectionController else { return }
                 sectionController.update(with: updatedMCResultModel)
             }
         }
@@ -158,16 +158,13 @@ extension PollOptionsCell: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let pollOptionsModel = pollOptionsModel else { return [] }
         var models = [ListDiffable]()
-        let topSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding, backgroundColor: .white)
-        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsPadding + LayoutConstants.interItemPadding, backgroundColor: .white)
+        let bottomSpaceModel = SpaceModel(space: LayoutConstants.pollOptionsBottomPadding, backgroundColor: .white)
         switch pollOptionsModel.type {
         case .mcResult(let mcResultModels):
-            models.append(topSpaceModel)
             models.append(contentsOf: mcResultModels)
             models.append(bottomSpaceModel)
             return models
         case .mcChoice(let mcChoiceModels):
-            models.append(topSpaceModel)
             models.append(contentsOf: mcChoiceModels)
             models.append(bottomSpaceModel)
             return models
@@ -216,8 +213,7 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
                 mcChoiceModels[mcSelectedIndex] = updateMCChoiceModel(at: mcSelectedIndex, isSelected: false, mcChoiceModels: mcChoiceModels)
             }
             // Select new choice
-            // Need to subtract 1 from index because topSpaceModel is the first section
-            let selectedIndex = adapter.section(for: sectionController) - 1
+            let selectedIndex = adapter.section(for: sectionController)
             let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
             mcChoiceModels[selectedIndex] = updatedMCChoiceModel
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)
