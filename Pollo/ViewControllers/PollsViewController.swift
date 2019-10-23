@@ -55,7 +55,7 @@ class PollsViewController: UIViewController {
     let codeTextFieldPlaceHolder = "Enter a group code..."
     let createSessionTextFieldPlaceHolder = "Enter a new group name..."
     let createSessionButtonTitle = "Create"
-    let createSessionButtownWidth: CGFloat = 83.5
+    let createSessionButtonWidth: CGFloat = 83.5
     let createdPollsOptionsText = "Created"
     let editModalHeight: CGFloat = 205
     let errorText = "Error"
@@ -177,7 +177,7 @@ class PollsViewController: UIViewController {
         createSessionTextField.borderStyle = .none
         createSessionTextField.font = ._16SemiboldFont
         createSessionTextField.backgroundColor = .mediumGrey2
-        createSessionTextField.addTarget(self, action: #selector(didStartTypingName), for: .editingChanged)
+        createSessionTextField.addTarget(self, action: #selector(didStartTypingGroupName), for: .editingChanged)
         createSessionTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: codeTextFieldEdgePadding, height: codeTextFieldHeight))
         createSessionTextField.leftViewMode = .always
         createSessionTextField.rightView = createSessionButton
@@ -198,7 +198,6 @@ class PollsViewController: UIViewController {
         joinSessionButton.backgroundColor = .blueGrey
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
-        joinSessionButton.alpha = 0.5
         view.addSubview(joinSessionButton)
         
         codeTextField = UITextField()
@@ -252,7 +251,7 @@ class PollsViewController: UIViewController {
         }
 
         createSessionButton.snp.makeConstraints { make in
-            make.width.equalTo(createSessionButtownWidth)
+            make.width.equalTo(createSessionButtonWidth)
             make.height.equalTo(codeTextFieldHeight)
         }
 
@@ -270,7 +269,7 @@ class PollsViewController: UIViewController {
         }
 
         joinSessionButton.snp.makeConstraints { make in
-            make.width.equalTo(createSessionButtownWidth)
+            make.width.equalTo(createSessionButtonWidth)
             make.height.equalTo(codeTextFieldHeight)
         }
         
@@ -353,7 +352,7 @@ class PollsViewController: UIViewController {
     // MARK: - Actions
     @objc func createSession() {
         guard let name = createSessionTextField.text, name != "" else { return }
-        createSessionTextField.text = ""
+        createSessionTextField.isEnabled = false
         updateCreateSessionButton(canCreate: false)
         displayNewGroupActivityIndicatorView()
             generateCode().chained { codeResponse -> Future<Response<Session>> in
@@ -371,6 +370,7 @@ class PollsViewController: UIViewController {
                     self.navigationController?.pushViewController(pollsDateViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: CreatedGroupPayload())
+                    self.createSessionTextField.text = ""
                 case .error(let error):
                     print(error)
                     self.hideNewGroupActivityIndicatorView()
@@ -379,11 +379,12 @@ class PollsViewController: UIViewController {
                 }
             }
         }
+        self.createSessionTextField.isEnabled = true
     }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
-        codeTextField.text = ""
+        codeTextField.isEnabled = false
         joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
             if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
                 self.session = sessionResponse.data
@@ -415,6 +416,7 @@ class PollsViewController: UIViewController {
                                 pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                             }
                         }
+                        self.codeTextField.text = ""
                     }
                     
                     self.updateJoinSessionButton(canJoin: false)
@@ -431,6 +433,7 @@ class PollsViewController: UIViewController {
                 }
             }
         }
+        self.codeTextField.isEnabled = true
     }
     
     func updateJoinSessionButton(canJoin: Bool) {
@@ -459,7 +462,7 @@ class PollsViewController: UIViewController {
         }
     }
 
-    @objc func didStartTypingName(_ textField: UITextField) {
+    @objc func didStartTypingGroupName(_ textField: UITextField) {
         if let text = textField.text {
             updateCreateSessionButton(canCreate: text != "")
         }

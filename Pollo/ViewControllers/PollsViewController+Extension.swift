@@ -168,10 +168,11 @@ extension PollsViewController: SliderBarDelegate {
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: 0, section: index)
         pollsCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
-
-        self.bottomPaddingView.backgroundColor = index == 1 ? .lightGrey : .darkestGrey
-        self.joinSessionContainerView.isHidden = index == 1
-        self.createSessionContainerView.isHidden = index == 0
+        let onCreated = index == 1
+        let onJoined = index == 0
+        self.bottomPaddingView.backgroundColor = onCreated ? .lightGrey : .darkestGrey
+        self.joinSessionContainerView.isHidden = onCreated
+        self.createSessionContainerView.isHidden = onJoined
     }
 
 }
