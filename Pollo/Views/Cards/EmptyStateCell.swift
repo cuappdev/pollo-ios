@@ -18,7 +18,6 @@ class EmptyStateCell: UICollectionViewCell {
     var containerView: UIView!
     var createDraftButton: UIButton!
     var iconImageView: UIImageView!
-    var nameView: NameView!
     var subtitleLabel: UILabel!
     var titleLabel: UILabel!
     
@@ -170,7 +169,7 @@ class EmptyStateCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for emptyStateModel: EmptyStateModel, session: Session?, shouldDisplayNameView: Bool?, nameViewDelegate: NameViewDelegate?) {
+    func configure(for emptyStateModel: EmptyStateModel, session: Session?) {
         self.emptyStateModel = emptyStateModel
         subtitleLabel.textColor = .blueGrey
         switch emptyStateModel.type {
@@ -191,20 +190,7 @@ class EmptyStateCell: UICollectionViewCell {
             iconImageView.image = UIImage(named: monkeyEmojiImageName)
             titleLabel.textColor = .clickerGrey5
             titleLabel.text = userRole == .admin ? adminNothingToSeeText : userNothingToSeeText
-            if let session = session, let shouldDisplayNameView = shouldDisplayNameView, let nameViewDelegate = nameViewDelegate, shouldDisplayNameView {
-                setupNameView(with: session, nameViewDelegate: nameViewDelegate)
-            }
             subtitleLabel.text = userRole == .admin ? adminWaitingText : userWaitingText
         }
     }
-
-    // MARK: - NAME THE POLL
-    func setupNameView(with session: Session, nameViewDelegate: NameViewDelegate) {
-        nameView = NameView(frame: .zero, session: session, delegate: nameViewDelegate)
-        contentView.addSubview(nameView)
-        nameView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
 }

@@ -42,10 +42,15 @@ extension PollsViewController: UIScrollViewDelegate {
         pollsOptionsView.sliderBarLeftConstraint.constant = scrollView.contentOffset.x / 2
 
         if scrollView.contentOffset.x == 0 {
-            newGroupButton.isHidden = true
+            self.joinSessionContainerView.isHidden = false
+            self.createSessionContainerView.isHidden = true
+            self.bottomPaddingView.backgroundColor = .darkestGrey
         }
+
         if scrollView.contentOffset.x == view.frame.width {
-            newGroupButton.isHidden = false
+            self.joinSessionContainerView.isHidden = true
+            self.createSessionContainerView.isHidden = false
+            self.bottomPaddingView.backgroundColor = .lightGrey
         }
     }
     
@@ -163,10 +168,11 @@ extension PollsViewController: SliderBarDelegate {
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: 0, section: index)
         pollsCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
-    }
-
-    func changeNewGroupButton(status: Bool) {
-        newGroupButton.isHidden = status
+        let onCreated = index == 1
+        let onJoined = index == 0
+        self.bottomPaddingView.backgroundColor = onCreated ? .lightGrey : .darkestGrey
+        self.joinSessionContainerView.isHidden = onCreated
+        self.createSessionContainerView.isHidden = onJoined
     }
 
 }

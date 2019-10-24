@@ -25,8 +25,7 @@ extension PollsDateViewController: ListAdapterDataSource {
             let pollsDateSectionController = PollsDateSectionController(delegate: self)
             return pollsDateSectionController
         } else {
-            let shouldDisplayNameView = userRole == .admin && session.name == session.code
-            let emptyStateController = EmptyStateSectionController(session: session, shouldDisplayNameView: shouldDisplayNameView, nameViewDelegate: self)
+            let emptyStateController = EmptyStateSectionController(session: session)
             return emptyStateController
         }
     }
@@ -115,14 +114,6 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
-}
-
-extension PollsDateViewController: NameViewDelegate {
-    
-    func nameViewDidUpdateSessionName() {
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
-    }
-    
 }
 
 extension PollsDateViewController: NavigationTitleViewDelegate {

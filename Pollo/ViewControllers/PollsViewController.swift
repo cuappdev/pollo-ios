@@ -19,12 +19,14 @@ class PollsViewController: UIViewController {
     var adapter: ListAdapter!
     var bottomPaddingView: UIView!
     var codeTextField: UITextField!
+    var createSessionButton: UIButton!
+    var createSessionContainerView: UIView!
+    var createSessionTextField: UITextField!
     var dimmingView: UIView!
     var headerGradientView: UIView!
     var joinSessionButton: UIButton!
     var joinSessionContainerView: UIView!
     var newGroupActivityIndicatorView: UIActivityIndicatorView!
-    var newGroupButton: UIButton!
     var pollsCollectionView: UICollectionView!
     var pollsOptionsView: OptionsView!
     var settingsButton: UIButton!
@@ -51,6 +53,9 @@ class PollsViewController: UIViewController {
     let codeTextFieldHeight: CGFloat = 40
     let codeTextFieldHorizontalPadding: CGFloat = 12
     let codeTextFieldPlaceHolder = "Enter a group code..."
+    let createSessionTextFieldPlaceHolder = "Enter a new group name..."
+    let createSessionButtonTitle = "Create"
+    let createSessionButtonWidth: CGFloat = 83.5
     let createdPollsOptionsText = "Created"
     let editModalHeight: CGFloat = 205
     let errorText = "Error"
@@ -61,7 +66,6 @@ class PollsViewController: UIViewController {
     let joinSessionContainerViewHeight: CGFloat = 64
     let joinSessionFailureMessage = "We couldn't find a group with that code. Please try again."
     let joinedPollsOptionsText = "Joined"
-    let newGroupButtonLength: CGFloat = 29
     let popupViewHeight: CGFloat = 140
     let submitFeedbackMessage = "You can help us make our app even better! Tap below to submit feedback."
     let submitFeedbackTitle = "Submit Feedback"
@@ -137,13 +141,6 @@ class PollsViewController: UIViewController {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        newGroupButton = UIButton()
-        newGroupButton.setImage(#imageLiteral(resourceName: "create_poll"), for: .normal)
-        newGroupButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
-        newGroupButton.addTarget(self, action: #selector(newGroupAction), for: .touchUpInside)
-        newGroupButton.isHidden = pollsOptionsView.isJoined
-        view.addSubview(newGroupButton)
-        
         settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "black_settings"), for: .normal)
         settingsButton.imageEdgeInsets = LayoutConstants.buttonImageInsets
@@ -160,6 +157,34 @@ class PollsViewController: UIViewController {
         dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         dimmingView.alpha = 0
         view.addSubview(dimmingView)
+
+        createSessionContainerView = UIView()
+        createSessionContainerView.backgroundColor = .lightGrey
+        view.addSubview(createSessionContainerView)
+
+        createSessionButton = UIButton()
+        createSessionButton.setTitle(createSessionButtonTitle, for: .normal)
+        createSessionButton.setTitleColor(.lightGrey, for: .normal)
+        createSessionButton.titleLabel?.font = ._16SemiboldFont
+        createSessionButton.titleLabel?.textAlignment = .center
+        createSessionButton.backgroundColor = .mediumGrey
+        createSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
+        createSessionButton.addTarget(self, action: #selector(createSession), for: .touchUpInside)
+        view.addSubview(createSessionButton)
+
+        createSessionTextField = UITextField()
+        createSessionTextField.layer.cornerRadius = codeTextFieldHeight / 2
+        createSessionTextField.borderStyle = .none
+        createSessionTextField.font = ._16SemiboldFont
+        createSessionTextField.backgroundColor = .mediumGrey2
+        createSessionTextField.addTarget(self, action: #selector(didStartTypingGroupName), for: .editingChanged)
+        createSessionTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: codeTextFieldEdgePadding, height: codeTextFieldHeight))
+        createSessionTextField.leftViewMode = .always
+        createSessionTextField.rightView = createSessionButton
+        createSessionTextField.rightViewMode = .always
+        createSessionTextField.attributedPlaceholder = NSAttributedString(string: createSessionTextFieldPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.mediumGrey, NSAttributedString.Key.font: UIFont._16SemiboldFont])
+        createSessionTextField.textColor = .black
+        createSessionContainerView.addSubview(createSessionTextField)
         
         joinSessionContainerView = UIView()
         joinSessionContainerView.backgroundColor = .darkestGrey
@@ -173,7 +198,6 @@ class PollsViewController: UIViewController {
         joinSessionButton.backgroundColor = .blueGrey
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
-        joinSessionButton.alpha = 0.5
         view.addSubview(joinSessionButton)
         
         codeTextField = UITextField()
@@ -182,7 +206,7 @@ class PollsViewController: UIViewController {
         codeTextField.borderStyle = .none
         codeTextField.font = ._16SemiboldFont
         codeTextField.backgroundColor = .clickerGrey12
-        codeTextField.addTarget(self, action: #selector(didStartTyping), for: .editingChanged)
+        codeTextField.addTarget(self, action: #selector(didStartTypingCode), for: .editingChanged)
         codeTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: codeTextFieldEdgePadding, height: codeTextFieldHeight))
         codeTextField.leftViewMode = .always
         codeTextField.rightView = joinSessionButton
@@ -191,7 +215,6 @@ class PollsViewController: UIViewController {
         codeTextField.textColor = .white
         codeTextField.autocapitalizationType = .allCharacters
         joinSessionContainerView.addSubview(codeTextField)
-        
         bottomPaddingView = UIView()
         bottomPaddingView.backgroundColor = .darkestGrey
         view.addSubview(bottomPaddingView)
@@ -203,6 +226,7 @@ class PollsViewController: UIViewController {
             make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
             make.height.equalTo(headerGradientHeight + UIApplication.shared.statusBarFrame.size.height)
         }
+        
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(headerGradientView.snp.centerY).multipliedBy(1.2)
             make.centerX.equalToSuperview()
@@ -219,6 +243,24 @@ class PollsViewController: UIViewController {
             make.width.equalToSuperview()
             make.height.equalToSuperview()
         }
+
+        createSessionContainerView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.width.centerX.equalToSuperview()
+            make.height.equalTo(joinSessionContainerViewHeight)
+        }
+
+        createSessionButton.snp.makeConstraints { make in
+            make.width.equalTo(createSessionButtonWidth)
+            make.height.equalTo(codeTextFieldHeight)
+        }
+
+        createSessionTextField.snp.makeConstraints { make in
+            make.height.equalTo(codeTextFieldHeight)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(codeTextFieldHorizontalPadding)
+            make.trailing.equalToSuperview().inset(codeTextFieldHorizontalPadding)
+        }
         
         joinSessionContainerView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -227,7 +269,7 @@ class PollsViewController: UIViewController {
         }
 
         joinSessionButton.snp.makeConstraints { make in
-            make.width.equalTo(83.5)
+            make.width.equalTo(createSessionButtonWidth)
             make.height.equalTo(codeTextFieldHeight)
         }
         
@@ -252,20 +294,14 @@ class PollsViewController: UIViewController {
         }
         
         newGroupActivityIndicatorView.snp.makeConstraints { make in
-            make.top.equalTo(newGroupButton.snp.top)
-            make.width.equalTo(newGroupButton.snp.width)
-            make.height.equalTo(newGroupButton.snp.height)
-            make.trailing.equalTo(newGroupButton.snp.trailing)
-        }
-        
-        newGroupButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonPadding - LayoutConstants.buttonImageInsets.top)
-            make.right.equalToSuperview().inset(buttonPadding - LayoutConstants.buttonImageInsets.right)
-            make.size.equalTo(LayoutConstants.buttonSize)
+            make.top.equalTo(createSessionContainerView.snp.top)
+            make.width.equalTo(createSessionContainerView.snp.width)
+            make.height.equalTo(createSessionContainerView.snp.height)
+            make.trailing.equalTo(createSessionContainerView.snp.trailing)
         }
         
         settingsButton.snp.makeConstraints { make in
-            make.top.equalTo(newGroupButton.snp.top)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(buttonPadding - LayoutConstants.buttonImageInsets.top)
             make.left.equalToSuperview().offset(buttonPadding - LayoutConstants.buttonImageInsets.left)
             make.size.equalTo(LayoutConstants.buttonSize)
         }
@@ -292,41 +328,8 @@ class PollsViewController: UIViewController {
         Ratings.shared.updateNumAppLaunches()
         Ratings.shared.promptReview()
     }
-    
-    // MARK: - Actions
-    @objc func newGroupAction() {
-        displayNewGroupActivityIndicatorView()
-        
-        generateCode().chained { codeResponse -> Future<Response<Session>> in
-            let code = codeResponse.data.code
-            return self.startSession(code: code, name: code, isGroup: false)
-        }.observe { [weak self] result in
-            guard let `self` = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let sessionResponse):
-                    let session = sessionResponse.data
-                    session.isLive = false
-                    self.isListeningToKeyboard = false
-                    self.hideNewGroupActivityIndicatorView()
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
-                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
-                    self.navigationController?.setNavigationBarHidden(false, animated: true)
-                    Analytics.shared.log(with: CreatedGroupPayload())
-                case .error(let error):
-                    print(error)
-                    self.hideNewGroupActivityIndicatorView()
-                    let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
+
     func displayNewGroupActivityIndicatorView() {
-        newGroupButton.isHidden = true
-        newGroupButton.isUserInteractionEnabled = false
-        
         newGroupActivityIndicatorView.isHidden = false
         newGroupActivityIndicatorView.isUserInteractionEnabled = true
         newGroupActivityIndicatorView.startAnimating()
@@ -336,9 +339,6 @@ class PollsViewController: UIViewController {
         newGroupActivityIndicatorView.stopAnimating()
         newGroupActivityIndicatorView.isHidden = true
         newGroupActivityIndicatorView.isUserInteractionEnabled = false
-        
-        newGroupButton.isHidden = false
-        newGroupButton.isUserInteractionEnabled = true
     }
     
     func joinSessionWithCode(with code: String) -> Future<Data> {
@@ -348,9 +348,43 @@ class PollsViewController: UIViewController {
     func getSortedPolls(with id: Int) -> Future<Data> {
         return networking(Endpoint.getSortedPolls(with: id))
     }
+
+    // MARK: - Actions
+    @objc func createSession() {
+        guard let name = createSessionTextField.text, name != "" else { return }
+        createSessionTextField.isEnabled = false
+        updateCreateSessionButton(canCreate: false)
+        displayNewGroupActivityIndicatorView()
+            generateCode().chained { codeResponse -> Future<Response<Session>> in
+                let code = codeResponse.data.code
+                return self.startSession(code: code, name: name, isGroup: false)
+            }.observe { [weak self] result in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .value(let sessionResponse):
+                    let session = sessionResponse.data
+                    session.isLive = false
+                    self.hideNewGroupActivityIndicatorView()
+                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    Analytics.shared.log(with: CreatedGroupPayload())
+                    self.createSessionTextField.text = ""
+                case .error(let error):
+                    print(error)
+                    self.hideNewGroupActivityIndicatorView()
+                    let alertController = self.createAlert(title: self.errorText, message: self.failedToCreateGroupText)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+        self.createSessionTextField.isEnabled = true
+    }
     
     @objc func joinSession() {
         guard let code = codeTextField.text, code != "" else { return }
+        codeTextField.isEnabled = false
         joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
             if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
                 self.session = sessionResponse.data
@@ -382,6 +416,7 @@ class PollsViewController: UIViewController {
                                 pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
                             }
                         }
+                        self.codeTextField.text = ""
                     }
                     
                     self.updateJoinSessionButton(canJoin: false)
@@ -398,6 +433,7 @@ class PollsViewController: UIViewController {
                 }
             }
         }
+        self.codeTextField.isEnabled = true
     }
     
     func updateJoinSessionButton(canJoin: Bool) {
@@ -406,22 +442,36 @@ class PollsViewController: UIViewController {
             self.joinSessionButton.alpha = canJoin ? 1.0 : 0.5
         }
     }
+
+    func updateCreateSessionButton(canCreate: Bool) {
+        UIView.animate(withDuration: joinSessionButtonAnimationDuration) {
+            self.createSessionButton.backgroundColor = canCreate ? .polloGreen : .blueGrey
+            self.createSessionButton.alpha = canCreate ? 1.0 : 0.5
+        }
+    }
     
     @objc func settingsAction() {
         let settingsNavigationController = UINavigationController(rootViewController: SettingsViewController())
         self.present(settingsNavigationController, animated: true, completion: nil)
     }
     
-    @objc func didStartTyping(_ textField: UITextField) {
+    @objc func didStartTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
             updateJoinSessionButton(canJoin: text.count == IntegerConstants.validCodeLength)
+        }
+    }
+
+    @objc func didStartTypingGroupName(_ textField: UITextField) {
+        if let text = textField.text {
+            updateCreateSessionButton(canCreate: text != "")
         }
     }
     
     @objc func hideKeyboard() {
         // Hide keyboard when user taps outside of text field on popup view
         codeTextField.resignFirstResponder()
+        createSessionTextField.resignFirstResponder()
     }
     
     @objc func reduceOpacity(sender: UIButton) {
@@ -476,7 +526,6 @@ class PollsViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         isListeningToKeyboard = true
-        newGroupButton.isHidden = pollsOptionsView.isJoined
         isOpeningGroup = false
     }
     
@@ -502,6 +551,13 @@ class PollsViewController: UIViewController {
                 make.height.equalTo(joinSessionContainerViewHeight)
             }
             joinSessionContainerView.superview?.layoutIfNeeded()
+            createSessionContainerView.snp.remakeConstraints { make in
+
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(keyboardSize.height - iphoneXBottomPadding)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(joinSessionContainerViewHeight)
+            }
+            createSessionContainerView.superview?.layoutIfNeeded()
             isKeyboardShown = true
         }
     }
@@ -519,6 +575,13 @@ class PollsViewController: UIViewController {
                 make.height.equalTo(joinSessionContainerViewHeight)
             }
             joinSessionContainerView.superview?.layoutIfNeeded()
+
+            createSessionContainerView.snp.remakeConstraints { make in
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(joinSessionContainerViewHeight)
+            }
+            createSessionContainerView.superview?.layoutIfNeeded()
             isKeyboardShown = false
         }
     }
