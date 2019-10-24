@@ -281,6 +281,7 @@ extension CardController: SocketDelegate {
         case .member:
             let updatedPoll = Poll(poll: latestPoll, state: .ended)
             updatedPoll.id = poll.id
+            updatedPoll.userAnswers = poll.userAnswers
             updateLatestPoll(with: updatedPoll)
             adapter.performUpdates(animated: false, completion: nil)
         }
