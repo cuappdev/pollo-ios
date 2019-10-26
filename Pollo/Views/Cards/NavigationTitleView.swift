@@ -21,6 +21,7 @@ class NavigationTitleView: UIView {
     var secondaryLabel: UILabel!
 
     // MARK: - Data vars
+    var buttonWidth: CGFloat!
     weak var delegate: NavigationTitleViewDelegate?
 
     // MARK: - Constants
@@ -36,9 +37,10 @@ class NavigationTitleView: UIView {
     let secondaryLabelHeight: CGFloat = 15
     let secondaryLabelTopOffset: CGFloat = 2
     let secondaryLabelWidth = UIScreen.main.bounds.width * 0.8
-
-    override init(frame: CGRect) {
+    
+    init(buttonWidth: CGFloat, frame: CGRect) {
         super.init(frame: frame)
+        self.buttonWidth = buttonWidth
         setupViews()
         setupConstraints()
     }
@@ -66,7 +68,7 @@ class NavigationTitleView: UIView {
 
         navigationButton = UIButton()
         navigationButton.backgroundColor = .clear
-        navigationButton.contentEdgeInsets = UIEdgeInsets(top: navigationButtonVerticalEdgeInset, left: navigationButtonHorizontalEdgeInset, bottom: navigationButtonVerticalEdgeInset, right: navigationButtonHorizontalEdgeInset)
+        navigationButton.contentEdgeInsets = UIEdgeInsets(top: navigationButtonVerticalEdgeInset, left: buttonWidth / 2, bottom: navigationButtonVerticalEdgeInset, right: buttonWidth / 2 + arrowImageViewLeftPadding + arrowImageViewWidth * 3)
         navigationButton.addTarget(self, action: #selector(groupControlsBtnTapped), for: .touchUpInside)
         addSubview(navigationButton)
     }

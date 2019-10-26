@@ -102,7 +102,10 @@ class PollsDateViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        navigationTitleView = NavigationTitleView()
+        let primaryTextWidth = session.name.width(withConstrainedHeight: navigationController?.navigationBar.frame.height ?? 0, font: ._16SemiboldFont)
+        let secondaryTextWidth = "Code: \(session.code)".width(withConstrainedHeight: navigationController?.navigationBar.frame.height ?? 0, font: ._12SemiboldFont)
+        let buttonWidth = primaryTextWidth > secondaryTextWidth ? primaryTextWidth : secondaryTextWidth
+        navigationTitleView = NavigationTitleView(buttonWidth: buttonWidth, frame: .zero)
         navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
         self.navigationItem.titleView = navigationTitleView
         

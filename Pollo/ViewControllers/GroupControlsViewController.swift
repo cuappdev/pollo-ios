@@ -103,7 +103,10 @@ class GroupControlsViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        navigationTitleView = NavigationTitleView()
+        let primaryTextWidth = navigationTitle.width(withConstrainedHeight: navigationController?.navigationBar.frame.height ?? 0, font: ._16SemiboldFont)
+        let secondaryTextWidth = session.name.width(withConstrainedHeight: navigationController?.navigationBar.frame.height ?? 0, font: ._12SemiboldFont)
+        let buttonWidth = primaryTextWidth > secondaryTextWidth ? primaryTextWidth : secondaryTextWidth
+        navigationTitleView = NavigationTitleView(buttonWidth: buttonWidth, frame: .zero)
         navigationTitleView.configure(primaryText: navigationTitle, secondaryText: session.name)
         self.navigationItem.titleView = navigationTitleView
 
