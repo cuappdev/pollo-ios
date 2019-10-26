@@ -14,12 +14,9 @@
 		0C40B47B22063DDD005BED7B /* DraftEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */; };
 		0C40B47D22064263005BED7B /* SessionEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B47C22064263005BED7B /* SessionEndpoints.swift */; };
 		0C4A24CF227638A700AE0B76 /* UITextField+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */; };
-		0C50CD60234E865A00A93045 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C50CD5F234E865900A93045 /* GoogleService-Info.plist */; };
 		0C531994215E7C1F00E4EFB7 /* CustomModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */; };
 		0C55CE262233056900E9912C /* HeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C55CE252233056900E9912C /* HeaderModel.swift */; };
 		0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F923CC1F73540600B1E975 /* Assets.xcassets */; };
-		0C618E5C2357CE7400C532F1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C618E5B2357CE7400C532F1 /* GoogleService-Info.plist */; };
-		0C618E5D2357CE7400C532F1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C618E5B2357CE7400C532F1 /* GoogleService-Info.plist */; };
 		0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */; };
 		0C8AE5D9215AD33300D54A36 /* EditDraftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */; };
 		0C8E384521557D8000AB8633 /* DraftSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8E384421557D8000AB8633 /* DraftSectionController.swift */; };
@@ -30,7 +27,7 @@
 		0CDAF0D321727D4B004DB6EA /* SpaceSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDAF0D221727D4B004DB6EA /* SpaceSectionController.swift */; };
 		0CDAF0D521727DA3004DB6EA /* SpaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDAF0D421727DA3004DB6EA /* SpaceCell.swift */; };
 		0CF647832176970900535573 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF647822176970900535573 /* ArrowView.swift */; };
-		3BE2EC4CF6A43F972650EC5C /* Pods_Pollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8812616CD823A168F697E7F4 /* Pods_Pollo.framework */; };
+		2B8168402364D82100DCDE4F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2B81683F2364D82100DCDE4F /* GoogleService-Info.plist */; };
 		6353FD3A2086DDC900E16EB2 /* CardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353FD392086DDC900E16EB2 /* CardController.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
@@ -166,10 +163,8 @@
 		0C40B47A22063DDD005BED7B /* DraftEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEndpoints.swift; sourceTree = "<group>"; };
 		0C40B47C22064263005BED7B /* SessionEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndpoints.swift; sourceTree = "<group>"; };
 		0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Shared.swift"; sourceTree = "<group>"; };
-		0C50CD5F234E865900A93045 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0C531993215E7C1F00E4EFB7 /* CustomModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalPresentationController.swift; sourceTree = "<group>"; };
 		0C55CE252233056900E9912C /* HeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderModel.swift; sourceTree = "<group>"; };
-		0C618E5B2357CE7400C532F1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0C67D34D217BCD9B0000B2A1 /* NoResponsesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResponsesCell.swift; sourceTree = "<group>"; };
 		0C8AE5D8215AD33300D54A36 /* EditDraftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDraftViewController.swift; sourceTree = "<group>"; };
 		0C8E384421557D8000AB8633 /* DraftSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftSectionController.swift; sourceTree = "<group>"; };
@@ -181,6 +176,7 @@
 		0CDAF0D421727DA3004DB6EA /* SpaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceCell.swift; sourceTree = "<group>"; };
 		0CF647822176970900535573 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		274A52F154DE3D5EFF4998C7 /* Pods-Pollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.debug.xcconfig"; sourceTree = "<group>"; };
+		2B81683F2364D82100DCDE4F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6353FD392086DDC900E16EB2 /* CardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardController.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
 		6389C9512085953F00F78003 /* PollsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsCell.swift; sourceTree = "<group>"; };
@@ -196,7 +192,6 @@
 		63E4DAF72097DE94000808EB /* NavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* PolloTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PolloTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADA372F38239979F9AEF65C /* Pods-Pollo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.release.xcconfig"; sourceTree = "<group>"; };
-		8812616CD823A168F697E7F4 /* Pods_Pollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B638A09C2235B1C300D1C2D2 /* GroupControlsInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsInfoModel.swift; sourceTree = "<group>"; };
 		B638A09E2235B7BC00D1C2D2 /* GroupControlsInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsInfoCell.swift; sourceTree = "<group>"; };
 		B638A0A02236B9C900D1C2D2 /* GroupControlsInfoSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlsInfoSectionController.swift; sourceTree = "<group>"; };
@@ -206,7 +201,6 @@
 		B638A0A8223833B800D1C2D2 /* PollsSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsSettingModel.swift; sourceTree = "<group>"; };
 		B638A0AA22389FB300D1C2D2 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		B638A0AC2238B2E000D1C2D2 /* PollSettingsSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollSettingsSectionController.swift; sourceTree = "<group>"; };
-		BBCCE3D254E127AE7DCF528A /* Pods_Clicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C203E56121332FA30016A147 /* PollsViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsViewController+Extension.swift"; sourceTree = "<group>"; };
 		C20B570621388F500091034F /* EmptyStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateModel.swift; sourceTree = "<group>"; };
 		C20B57082138903B0091034F /* EmptyStateSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateSectionController.swift; sourceTree = "<group>"; };
@@ -320,7 +314,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BE2EC4CF6A43F972650EC5C /* Pods_Pollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,8 +343,6 @@
 		618A8B524A20A6F4283D142B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BBCCE3D254E127AE7DCF528A /* Pods_Clicker.framework */,
-				8812616CD823A168F697E7F4 /* Pods_Pollo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -656,8 +647,7 @@
 		C7F923C41F73540600B1E975 /* Pollo */ = {
 			isa = PBXGroup;
 			children = (
-				0C618E5B2357CE7400C532F1 /* GoogleService-Info.plist */,
-				0C50CD5F234E865900A93045 /* GoogleService-Info.plist */,
+				2B81683F2364D82100DCDE4F /* GoogleService-Info.plist */,
 				0C40B4732201E52C005BED7B /* Networking */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
@@ -785,7 +775,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C618E5D2357CE7400C532F1 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,10 +783,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
-				0C618E5C2357CE7400C532F1 /* GoogleService-Info.plist in Resources */,
-				0C50CD60234E865A00A93045 /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
+				2B8168402364D82100DCDE4F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1149,7 +1137,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Pollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1281,7 +1269,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Pollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1432,7 +1420,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Pollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1456,7 +1444,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Pollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1464,7 +1452,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Clicker-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Pollo-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
