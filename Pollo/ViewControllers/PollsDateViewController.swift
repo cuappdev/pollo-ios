@@ -101,9 +101,8 @@ class PollsDateViewController: UIViewController {
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        
-        navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: session.name, secondaryText: "Code: \(session.code)", userRole: userRole, delegate: self)
+        let textHeight = navigationController?.navigationBar.frame.height ?? 0
+        navigationTitleView = getNavigationTitleView(primaryText: session.name, primaryTextHeight: textHeight, secondaryText: "Code: \(session.code)", secondaryTextHeight: textHeight, userRole: userRole, delegate: self)
         self.navigationItem.titleView = navigationTitleView
         
         let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)

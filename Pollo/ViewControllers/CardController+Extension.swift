@@ -294,7 +294,9 @@ extension CardController: SocketDelegate {
         }
         guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.id == pollID }) else { return }
         pollsDateModel.polls.remove(at: deleteIndex)
-        currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
+        if currentIndex != 0 {
+            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
+        }
         updateCountLabelText()
         adapter.performUpdates(animated: true, completion: nil)
     }
@@ -304,8 +306,11 @@ extension CardController: SocketDelegate {
             delegate?.pollDeletedLive()
             return
         }
-        pollsDateModel.polls.remove(at: currentIndex)
-        currentIndex = currentIndex == 0 ? currentIndex : currentIndex - 1
+        guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.state == .live }) else { return }
+        pollsDateModel.polls.remove(at: deleteIndex)
+        if currentIndex != 0 {
+            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
+        }
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
         if pollsDateModel.polls.isEmpty {
@@ -393,7 +398,13 @@ extension CardController: SocketDelegate {
     func updateLatestPoll(with poll: Poll) {
         if pollsDateModel.polls.isEmpty { return }
         let numPolls = pollsDateModel.polls.count
-        pollsDateModel.polls[numPolls - 1] = poll
+        let latestPollIndex = pollsDateModel.polls.firstIndex { latestPoll -> Bool in
+            if let pollId = poll.id, let latestPollId = latestPoll.id {
+                return pollId == latestPollId
+            }
+            return false
+        }
+        pollsDateModel.polls[latestPollIndex ?? numPolls - 1] = poll
     }
 
 }

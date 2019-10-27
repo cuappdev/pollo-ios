@@ -102,9 +102,8 @@ class GroupControlsViewController: UIViewController {
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
-
-        navigationTitleView = NavigationTitleView()
-        navigationTitleView.configure(primaryText: navigationTitle, secondaryText: session.name)
+        let textHeight = navigationController?.navigationBar.frame.height ?? 0
+        navigationTitleView = getNavigationTitleView(primaryText: navigationTitle, primaryTextHeight: textHeight, secondaryText: session.name, secondaryTextHeight: textHeight, userRole: nil, delegate: nil)
         self.navigationItem.titleView = navigationTitleView
 
         let backImage = UIImage(named: backImageName)?.withRenderingMode(.alwaysOriginal)
