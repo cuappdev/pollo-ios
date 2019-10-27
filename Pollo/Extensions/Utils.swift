@@ -51,6 +51,27 @@ func getLatestActivity(latestActivityTimestamp: Double, code: String, role: User
     return latestActivity
 }
 
+func getNavigationTitleView(primaryText: String, primaryTextHeight: CGFloat, secondaryText: String, secondaryTextHeight: CGFloat, userRole: UserRole?, delegate: NavigationTitleViewDelegate?) -> NavigationTitleView {
+    let primaryTextWidth = primaryText.width(
+        withConstrainedHeight: primaryTextHeight,
+        font: ._16SemiboldFont
+    )
+    let secondaryTextWidth = secondaryText.width(
+        withConstrainedHeight: secondaryTextHeight,
+        font: ._12SemiboldFont
+    )
+    let buttonWidth = primaryTextWidth > secondaryTextWidth
+        ? primaryTextWidth
+        : secondaryTextWidth
+    let navigationTitleView = NavigationTitleView(frame: .zero, buttonWidth: buttonWidth)
+    if let userRole = userRole, let delegate = delegate {
+        navigationTitleView.configure(primaryText: primaryText, secondaryText: secondaryText, userRole: userRole, delegate: delegate)
+    } else {
+        navigationTitleView.configure(primaryText: primaryText, secondaryText: secondaryText)
+    }
+    return navigationTitleView
+}
+
 // USER DEFAULTS
 func encodeObjForKey(obj: Any, key: String) {
     let encodedData = NSKeyedArchiver.archivedData(withRootObject: obj)

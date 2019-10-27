@@ -38,7 +38,7 @@ class NavigationTitleView: UIView {
     let secondaryLabelTopOffset: CGFloat = 2
     let secondaryLabelWidth = UIScreen.main.bounds.width * 0.8
     
-    init(buttonWidth: CGFloat, frame: CGRect) {
+    init(frame: CGRect, buttonWidth: CGFloat) {
         super.init(frame: frame)
         self.buttonWidth = buttonWidth
         setupViews()
