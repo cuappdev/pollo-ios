@@ -48,14 +48,15 @@ class CardCell: UICollectionViewCell {
     let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
     let initialTimerLabelText = "00:00"
+    let resultsSharedText = "Results Shared"
     let questionButtonBorderWidth: CGFloat = 1.0
-    let questionButtonBottomPadding: CGFloat = 5.0
+    let questionButtonBottomPadding: CGFloat = 16.0
     let questionButtonCornerRadius: CGFloat = 23.0
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonHeight: CGFloat = 47.0
     let questionButtonWidth: CGFloat = 170.0
     let shareResultsText = "Share Results"
-    let timerLabelBottomPadding: CGFloat =  16.0
+    let timerLabelBottomPadding: CGFloat =  91.0
     let timerLabelFontSize: CGFloat = 14.0
     
     override init(frame: CGRect) {
@@ -126,7 +127,7 @@ class CardCell: UICollectionViewCell {
         self.delegate = delegate
         self.poll = poll
         let isMember = userRole == .member
-        questionButton.isHidden = poll.state == .shared || isMember
+        questionButton.isHidden = isMember
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endPollText, for: .normal)
@@ -134,6 +135,10 @@ class CardCell: UICollectionViewCell {
             runTimer()
         } else if poll.state == .ended {
             questionButton.setTitle(shareResultsText, for: .normal)
+        } else if poll.state == .shared {
+            questionButton.setTitle(resultsSharedText, for: .normal)
+            questionButton.setTitleColor(.blueGrey, for: .normal)
+            questionButton.layer.borderColor = UIColor.blueGrey.cgColor
         }
         
         questionModel = QuestionModel(question: poll.text)
@@ -173,7 +178,9 @@ class CardCell: UICollectionViewCell {
             delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
             poll.state = .shared
-            questionButton.isHidden = true
+            questionButton.setTitle(resultsSharedText, for: .normal)
+            questionButton.setTitleColor(.blueGrey, for: .normal)
+            questionButton.layer.borderColor = UIColor.blueGrey.cgColor
             miscellaneousModel = PollMiscellaneousModel(questionType: poll.type, pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
@@ -260,7 +267,7 @@ extension CardCell: ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
     }
-    
+
 }
 
 extension CardCell: PollOptionsSectionControllerDelegate {
