@@ -56,8 +56,6 @@ class MCResultCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         containerView.layer.cornerRadius = containerViewCornerRadius
-        containerView.layer.borderColor = UIColor.coolGrey.cgColor
-        containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
         contentView.addSubview(containerView)
         
