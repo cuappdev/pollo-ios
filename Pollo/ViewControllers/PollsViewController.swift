@@ -353,7 +353,7 @@ class PollsViewController: UIViewController {
 
     // MARK: - Actions
     @objc func createSession() {
-        guard let name = createSessionTextField.text, name != "" else { return }
+        guard let name = createSessionTextField.text?.trim(), name != "" else { return }
         createSessionTextField.isEnabled = false
         updateCreateSessionButton(canCreate: false)
         displayNewGroupActivityIndicatorView()
@@ -385,7 +385,7 @@ class PollsViewController: UIViewController {
     }
     
     @objc func joinSession() {
-        guard let code = codeTextField.text, code != "" else { return }
+        guard let code = codeTextField.text?.trim(), code != "" else { return }
         codeTextField.isEnabled = false
         joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
             if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
