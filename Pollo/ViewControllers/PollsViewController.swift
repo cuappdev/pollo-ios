@@ -169,6 +169,7 @@ class PollsViewController: UIViewController {
         createSessionButton.titleLabel?.textAlignment = .center
         createSessionButton.backgroundColor = .mediumGrey
         createSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
+        createSessionButton.alpha = 0.5
         createSessionButton.addTarget(self, action: #selector(createSession), for: .touchUpInside)
         view.addSubview(createSessionButton)
 
@@ -197,6 +198,7 @@ class PollsViewController: UIViewController {
         joinSessionButton.titleLabel?.textAlignment = .center
         joinSessionButton.backgroundColor = .blueGrey
         joinSessionButton.layer.cornerRadius = codeTextFieldHeight / 2
+        joinSessionButton.alpha = 0.5
         joinSessionButton.addTarget(self, action: #selector(joinSession), for: .touchUpInside)
         view.addSubview(joinSessionButton)
         
@@ -351,7 +353,7 @@ class PollsViewController: UIViewController {
 
     // MARK: - Actions
     @objc func createSession() {
-        guard let name = createSessionTextField.text, name != "" else { return }
+        guard let name = createSessionTextField.text?.trim(), name != "" else { return }
         createSessionTextField.isEnabled = false
         updateCreateSessionButton(canCreate: false)
         displayNewGroupActivityIndicatorView()
@@ -383,7 +385,7 @@ class PollsViewController: UIViewController {
     }
     
     @objc func joinSession() {
-        guard let code = codeTextField.text, code != "" else { return }
+        guard let code = codeTextField.text?.trim(), code != "" else { return }
         codeTextField.isEnabled = false
         joinSessionWithCode(with: code).chained { sessionData -> Future<Data> in
             if let sessionResponse = try? self.jsonDecoder.decode(Response<Session>.self, from: sessionData) {
@@ -458,13 +460,13 @@ class PollsViewController: UIViewController {
     @objc func didStartTypingCode(_ textField: UITextField) {
         if let text = textField.text {
             textField.text = text.uppercased()
-            updateJoinSessionButton(canJoin: text.count == IntegerConstants.validCodeLength)
+            updateJoinSessionButton(canJoin: text.trim().count == IntegerConstants.validCodeLength)
         }
     }
 
     @objc func didStartTypingGroupName(_ textField: UITextField) {
         if let text = textField.text {
-            updateCreateSessionButton(canCreate: text != "")
+            updateCreateSessionButton(canCreate: text.trim() != "")
         }
     }
     
