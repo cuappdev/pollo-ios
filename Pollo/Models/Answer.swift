@@ -9,11 +9,11 @@
 class Answer {
 
     var choice: String
-    var id: Int?
-    var pollId: Int
+    var id: String?
+    var pollId: String
     var text: String
 
-    init(text: String, choice: String, pollId: Int) {
+    init(text: String, choice: String, pollId: String) {
         self.choice = choice
         self.pollId = pollId
         self.text = text

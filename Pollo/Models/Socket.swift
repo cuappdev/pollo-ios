@@ -58,7 +58,7 @@ class Socket {
         }
 
         socket.on(Routes.userDelete) { data, _ in
-            guard let pollID = data[0] as? Int else { return }
+            guard let pollID = data[0] as? String else { return }
             self.delegate?.pollDeleted(pollID, userRole: .member)
         }
 

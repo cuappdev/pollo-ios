@@ -115,11 +115,11 @@ class DeletePollViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func deleteSession(with id: Int) -> Future<DeleteResponse> {
+    func deleteSession(with id: String) -> Future<DeleteResponse> {
         return networking(Endpoint.deleteSession(with: id)).decode()
     }
     
-    func leaveSession(with id: Int) -> Future<DeleteResponse> {
+    func leaveSession(with id: String) -> Future<DeleteResponse> {
         return networking(Endpoint.leaveSession(with: id)).decode()
     }
     

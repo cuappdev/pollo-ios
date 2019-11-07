@@ -70,7 +70,7 @@ class Poll: Codable {
     var answerChoices: [PollResult]
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     var createdAt: String? // string of seconds since 1970
-    var id: Int?
+    var id: String?
     var pollFilter: PollFilter? // used for filtering user profanity
     var state: PollState
     var text: String
@@ -83,7 +83,7 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: Int = -1, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
