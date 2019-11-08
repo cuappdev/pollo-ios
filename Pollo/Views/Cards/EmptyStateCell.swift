@@ -34,11 +34,11 @@ class EmptyStateCell: UICollectionViewCell {
     let createDraftButtonText = "Create a draft"
     let createDraftButtonTopPadding: CGFloat = 15.0
     let createDraftButtonWidth: CGFloat = 169.5
-    let createNewGroupText = "Tap \"+\" above to create a new group!"
     let createdString = "created"
     let draftsViewControllerIconImageViewLength: CGFloat = 50.0
     let draftsViewControllerIconImageViewTopPadding: CGFloat = 200.0
     let enterCodeText = "Enter a code below to join a group!"
+    let enterGroupText = "Enter a name below to create a new group!"
     let iconImageViewTopPadding: CGFloat = 176.0
     let joinedString = "joined"
     let manShruggingImageName = "man_shrugging"
@@ -178,7 +178,7 @@ class EmptyStateCell: UICollectionViewCell {
             case .created:
                 iconImageView.image = UIImage(named: manShruggingImageName)
                 titleLabel.text = "No groups \(createdString)"
-                subtitleLabel.text = createNewGroupText
+                subtitleLabel.text = enterGroupText
             case .joined:
                 iconImageView.image = UIImage(named: womanShruggingImageName)
                 titleLabel.text = "No groups \(joinedString)"

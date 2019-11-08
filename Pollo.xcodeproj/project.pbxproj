@@ -51,6 +51,7 @@
 		B638A0A9223833B800D1C2D2 /* PollsSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B638A0A8223833B800D1C2D2 /* PollsSettingModel.swift */; };
 		B638A0AB22389FB300D1C2D2 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B638A0AA22389FB300D1C2D2 /* SettingCell.swift */; };
 		B638A0AD2238B2E000D1C2D2 /* PollSettingsSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B638A0AC2238B2E000D1C2D2 /* PollSettingsSectionController.swift */; };
+		B6AECB5F236F1F9A00F01E49 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6AECB5E236F1F9900F01E49 /* GoogleService-Info.plist */; };
 		C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203E56121332FA30016A147 /* PollsViewController+Extension.swift */; };
 		C20B570721388F500091034F /* EmptyStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B570621388F500091034F /* EmptyStateModel.swift */; };
 		C20B57092138903B0091034F /* EmptyStateSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B57082138903B0091034F /* EmptyStateSectionController.swift */; };
@@ -203,6 +204,7 @@
 		B638A0A8223833B800D1C2D2 /* PollsSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollsSettingModel.swift; sourceTree = "<group>"; };
 		B638A0AA22389FB300D1C2D2 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		B638A0AC2238B2E000D1C2D2 /* PollSettingsSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollSettingsSectionController.swift; sourceTree = "<group>"; };
+		B6AECB5E236F1F9900F01E49 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C203E56121332FA30016A147 /* PollsViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PollsViewController+Extension.swift"; sourceTree = "<group>"; };
 		C20B570621388F500091034F /* EmptyStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateModel.swift; sourceTree = "<group>"; };
 		C20B57082138903B0091034F /* EmptyStateSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateSectionController.swift; sourceTree = "<group>"; };
@@ -651,7 +653,7 @@
 		C7F923C41F73540600B1E975 /* Pollo */ = {
 			isa = PBXGroup;
 			children = (
-				2B81683F2364D82100DCDE4F /* GoogleService-Info.plist */,
+				B6AECB5E236F1F9900F01E49 /* GoogleService-Info.plist */,
 				0C40B4732201E52C005BED7B /* Networking */,
 				C7F923C51F73540600B1E975 /* AppDelegate.swift */,
 				C281886C1F7ADE6F00D7E944 /* Models */,
@@ -787,9 +789,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5C5F92220F9FDA0080F0AA /* Assets.xcassets in Resources */,
+				B6AECB5F236F1F9A00F01E49 /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
-				2B8168402364D82100DCDE4F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

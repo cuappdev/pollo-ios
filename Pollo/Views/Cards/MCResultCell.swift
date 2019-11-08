@@ -56,8 +56,6 @@ class MCResultCell: UICollectionViewCell {
     // MARK: - Layout
     func setupViews() {
         containerView.layer.cornerRadius = containerViewCornerRadius
-        containerView.layer.borderColor = UIColor.coolGrey.cgColor
-        containerView.layer.borderWidth = containerViewBorderWidth
         containerView.clipsToBounds = true
         contentView.addSubview(containerView)
         
@@ -150,9 +148,7 @@ class MCResultCell: UICollectionViewCell {
         }
 
         highlightView.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            let highlightViewMaxWidth = Float(contentView.bounds.width - horizontalPadding * 2)
-            highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
+            make.leading.top.bottom.trailing.equalToSuperview()
         }
         super.updateConstraints()
     }
@@ -167,7 +163,7 @@ class MCResultCell: UICollectionViewCell {
         switch userRole {
         case .admin:
             containerView.backgroundColor = .lightGrey
-            highlightView.backgroundColor = .polloGreen
+            highlightView.backgroundColor = correctAnswer == resultModel.option ? .lightGreen : .lightGrey
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
@@ -212,12 +208,7 @@ class MCResultCell: UICollectionViewCell {
         optionLabel.text = resultModel.option
         percentSelected = resultModel.percentSelected
         numSelectedLabel.text = "\(Int(percentSelected * 100))%"
-        // Update highlightView's width constraint offset
-        let highlightViewMaxWidth = Float(self.contentView.bounds.width - horizontalPadding * 2)
-        self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
-        UIView.animate(withDuration: 0.15) {
-            self.highlightView.superview?.layoutIfNeeded()
-        }
+        highlightView.backgroundColor = correctAnswer == resultModel.option ? .lightGreen : .lightGrey
     }
     
     override func prepareForReuse() {
