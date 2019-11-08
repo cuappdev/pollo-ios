@@ -121,7 +121,7 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
     func navigationTitleViewNavigationButtonTapped() {
         guard userRole == .admin else { return }
         let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
-        getMembers(with: session?.id ?? -1).observe { [weak self] result in
+        getMembers(with: session?.id ?? "").observe { [weak self] result in
             guard let `self` = self else { return }
             DispatchQueue.main.async {
                 switch result {
@@ -183,7 +183,7 @@ extension PollsDateViewController: SocketDelegate {
         adapter.performUpdates(animated: false, completion: nil)
     }
 
-    func pollDeleted(_ pollID: Int, userRole: UserRole) {
+    func pollDeleted(_ pollID: String, userRole: UserRole) {
         for i in 0..<pollsDateArray.count {
             if let index = pollsDateArray[i].polls.firstIndex(where: { $0.id == pollID }) {
                 var newPolls = pollsDateArray[i].polls.map { Poll(poll: $0, state: $0.state) }

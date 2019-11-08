@@ -347,7 +347,7 @@ class PollsViewController: UIViewController {
         return networking(Endpoint.joinSessionWithCode(with: code))
     }
     
-    func getSortedPolls(with id: Int) -> Future<Data> {
+    func getSortedPolls(with id: String) -> Future<Data> {
         return networking(Endpoint.getSortedPolls(with: id))
     }
 
@@ -393,7 +393,7 @@ class PollsViewController: UIViewController {
                 return self.getSortedPolls(with: sessionResponse.data.id)
             }
             // Fail out of get sorted polls call
-            return self.getSortedPolls(with: -1)
+            return self.getSortedPolls(with: "")
         }.observe { [weak self] result in
             guard let `self` = self else { return }
             switch result {
@@ -488,7 +488,7 @@ class PollsViewController: UIViewController {
         }
     }
     
-    func joinSessionWithIdAndCode(id: Int, code: String) -> Future<Response<Session>> {
+    func joinSessionWithIdAndCode(id: String, code: String) -> Future<Response<Session>> {
         return networking(Endpoint.joinSessionWithIdAndCode(id: id, code: code)).decode()
     }
     

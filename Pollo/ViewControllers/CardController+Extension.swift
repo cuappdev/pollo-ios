@@ -287,7 +287,7 @@ extension CardController: SocketDelegate {
         }
     }
 
-    func pollDeleted(_ pollID: Int, userRole: UserRole) {
+    func pollDeleted(_ pollID: String, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: pollsDateModel.dateValue) {
             delegate?.pollDeleted(pollID, userRole: userRole)
             return
@@ -376,13 +376,13 @@ extension CardController: SocketDelegate {
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false
         case .ended, .shared:
-            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id ?? -1)
+            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id ?? "")
         }
     }
     
     func emitShareResults() {
         let poll = pollsDateModel.polls[currentIndex]
-        socket.socket.emit(Routes.serverShare, poll.id ?? -1)
+        socket.socket.emit(Routes.serverShare, poll.id ?? "")
         Analytics.shared.log(with: SharedResultsPayload())
     }
     

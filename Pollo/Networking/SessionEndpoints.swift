@@ -28,10 +28,10 @@ extension Endpoint {
     private struct UpdateSessionBody: Codable {
         
         var code: String
-        var id: Int
+        var id: String
         var name: String
         
-        init(id: Int, name: String, code: String) {
+        init(id: String, name: String, code: String) {
             self.code = code
             self.id = id
             self.name = name
@@ -41,10 +41,10 @@ extension Endpoint {
     
     private struct JoinSessionBody: Codable {
         
-        var id: Int
+        var id: String
         var code: String
         
-        init(id: Int, code: String) {
+        init(id: String, code: String) {
             self.id = id
             self.code = code
         }
@@ -59,7 +59,7 @@ extension Endpoint {
         return Endpoint(path: "/generate/code", headers: headers)
     }
     
-    static func getSession(with id: Int) -> Endpoint {
+    static func getSession(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)", headers: headers)
     }
     
@@ -68,25 +68,25 @@ extension Endpoint {
         return Endpoint(path: "/sessions/all/\(userRole)", headers: headers)
     }
     
-    static func updateSession(id: Int, name: String, code: String) -> Endpoint {
+    static func updateSession(id: String, name: String, code: String) -> Endpoint {
         let body = UpdateSessionBody(id: id, name: name, code: code)
         return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     
-    static func deleteSession(with id: Int) -> Endpoint {
+    static func deleteSession(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
     }
 
-    static func updateGroupControlForSession(with id: Int, isFilteringActivated: Bool) -> Endpoint {
+    static func updateGroupControlForSession(with id: String, isFilteringActivated: Bool) -> Endpoint {
         let body = UpdateGroupControlsBody(isActivated: isFilteringActivated)
         return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
     }
     
-    static func leaveSession(with id: Int) -> Endpoint {
+    static func leaveSession(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: .delete)
     }
     
-    static func getMembers(with id: Int) -> Endpoint {
+    static func getMembers(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)/members", headers: headers)
     }
     
@@ -134,11 +134,11 @@ extension Endpoint {
         return Endpoint(path: "/join/session", headers: headers, body: ["code": code])
     }
     
-    static func joinSessionWithId(with id: Int) -> Endpoint {
+    static func joinSessionWithId(with id: String) -> Endpoint {
         return Endpoint(path: "/join/session", headers: headers, body: ["id": id])
     }
     
-    static func joinSessionWithIdAndCode(id: Int, code: String) -> Endpoint {
+    static func joinSessionWithIdAndCode(id: String, code: String) -> Endpoint {
         let body = JoinSessionBody(id: id, code: code)
         return Endpoint(path: "/join/session", headers: headers, body: body)
     }

@@ -17,19 +17,19 @@ class Session: Codable {
     let identifier = UUID().uuidString
     var code: String
     var description: String?
-    var id: Int
+    var id: String
     var isFilterActivated: Bool?
     var isLive: Bool?
     var name: String
     var updatedAt: String?
 
-    init(id: Int, name: String, code: String) {
+    init(id: String, name: String, code: String) {
         self.code = code
         self.id = id
         self.name = name
     }
 
-    init(id: Int, name: String, code: String, latestActivity: String?, isLive: Bool?, isFilterActivated: Bool?) {
+    init(id: String, name: String, code: String, latestActivity: String?, isLive: Bool?, isFilterActivated: Bool?) {
         self.code = code
         self.description = latestActivity
         self.id = id

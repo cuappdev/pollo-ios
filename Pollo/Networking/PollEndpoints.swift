@@ -17,7 +17,7 @@ extension Endpoint {
         ]
     }
     
-    static func getSortedPolls(with id: Int) -> Endpoint {
+    static func getSortedPolls(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)/polls", headers: headers)
     }
     
