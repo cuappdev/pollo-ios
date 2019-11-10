@@ -9,13 +9,26 @@
 import SnapKit
 import UIKit
 
-class QuizModeOverlayView: UIView {
+enum OnboardingStage {
+    case welcome
+    case createQuestion
+    case autofillChoices
+    case quizMode
+    case saveDraft
+    case startQuestion
+    case finished
+}
+
+class OnboardingView: UIView {
 
     // MARK: - View vars
     var aboutQuizModeLabel: UILabel!
     var circleImageView: UIImageView!
     var dismissButton: UIButton!
     var dismissTimer: Timer!
+    
+    // MARK: - Data vars
+    var stage: OnboardingStage = .welcome
 
     // MARK: - Constants
     let aboutQuizModeLabelLeftPadding: CGFloat = 10
