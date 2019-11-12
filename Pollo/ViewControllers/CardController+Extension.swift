@@ -111,7 +111,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 
         session.isLive = true
         // EMIT START QUESTION
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, userAnswers: [:], state: state)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: state)
         newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
         let newPollDict: [String: Any] = [
@@ -287,7 +287,7 @@ extension CardController: SocketDelegate {
         }
     }
 
-    func pollDeleted(_ pollID: Int, userRole: UserRole) {
+    func pollDeleted(_ pollID: String, userRole: UserRole) {
         if !pollsDateModel.dateValue.isSameDay(as: pollsDateModel.dateValue) {
             delegate?.pollDeleted(pollID, userRole: userRole)
             return
@@ -376,13 +376,13 @@ extension CardController: SocketDelegate {
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false
         case .ended, .shared:
-            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id ?? -1)
+            socket.socket.emit(Routes.serverDelete, pollsDateModel.polls[index].id ?? "")
         }
     }
     
     func emitShareResults() {
         let poll = pollsDateModel.polls[currentIndex]
-        socket.socket.emit(Routes.serverShare, poll.id ?? -1)
+        socket.socket.emit(Routes.serverShare, poll.id ?? "")
         Analytics.shared.log(with: SharedResultsPayload())
     }
     

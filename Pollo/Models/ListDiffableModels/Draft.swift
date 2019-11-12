@@ -12,11 +12,11 @@ import IGListKit
 class Draft: Codable {
 
     let identifier: String = UUID().uuidString
-    var id: Int
+    var id: String
     var options: [String]
     var text: String
 
-    init(id: Int, text: String, options: [String]) {
+    init(id: String, text: String, options: [String]) {
         self.id = id
         self.options = options
         self.text = text

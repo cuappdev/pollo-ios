@@ -126,7 +126,7 @@ class PollsDateViewController: UIViewController {
         present(pollBuilderViewController, animated: true, completion: nil)
     }
     
-    func deleteSession(with id: Int) -> Future<DeleteResponse> {
+    func deleteSession(with id: String) -> Future<DeleteResponse> {
         return networking(Endpoint.deleteSession(with: id)).decode()
     }
     
@@ -158,7 +158,7 @@ class PollsDateViewController: UIViewController {
         }
     }
     
-    func getMembers(with id: Int) -> Future<Response<[GetMemberResponse]>> {
+    func getMembers(with id: String) -> Future<Response<[GetMemberResponse]>> {
         return networking(Endpoint.getMembers(with: id)).decode()
     }
     

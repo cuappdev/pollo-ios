@@ -15,7 +15,7 @@ enum UserRole: String {
 
 struct GetMemberResponse: Codable {
 
-    var id: Int
+    var id: String
     var name: String
     var netID: String
 

@@ -16,7 +16,7 @@ protocol CardControllerDelegate: class {
     func cardControllerDidStartNewPoll(poll: Poll)
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func navigationTitleViewNavigationButtonTapped()
-    func pollDeleted(_ pollID: Int, userRole: UserRole)
+    func pollDeleted(_ pollID: String, userRole: UserRole)
     func pollDeletedLive()
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollStarted(_ poll: Poll, userRole: UserRole)
