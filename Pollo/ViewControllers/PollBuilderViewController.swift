@@ -32,7 +32,7 @@ class PollBuilderViewController: UIViewController {
     var exitButton: UIButton!
     var mcPollBuilder: MCPollBuilderView!
     var createQuestionLabel: UILabel!
-    var quizModeOverlayView: QuizModeOverlayView!
+    var onboardingView: OnboardingView!
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
     var tapGestureRecognizer: UITapGestureRecognizer!
@@ -99,13 +99,13 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if quizModeOverlayView != nil {
+        if onboardingView != nil {
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
             let circleImageXOffset: CGFloat = 12.0
             let circleImageYOffset: CGFloat = circleImageXOffset
             let circleImageFrame = CGRect(x: collectionViewFrame.origin.x + circleImageXOffset, y: collectionViewFrame.origin.y + circleImageYOffset, width: collectionViewFrame.width, height: collectionViewFrame.height)
-            quizModeOverlayView.configure(with: circleImageFrame)
+            onboardingView.configure(with: circleImageFrame)
         }
     }
     
@@ -166,8 +166,8 @@ class PollBuilderViewController: UIViewController {
 
         let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayQuizOverlay)
         if !displayedQuizModeOverlay {
-            quizModeOverlayView = QuizModeOverlayView()
-            view.addSubview(quizModeOverlayView)
+            onboardingView = OnboardingView()
+            view.addSubview(onboardingView)
             UserDefault.set(value: true, for: UserDefault.Keys.displayQuizOverlay)
         }
     }
@@ -237,8 +237,8 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if quizModeOverlayView != nil {
-            quizModeOverlayView.snp.makeConstraints { make in
+        if onboardingView != nil {
+            onboardingView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }

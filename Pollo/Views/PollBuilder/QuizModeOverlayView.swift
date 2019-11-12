@@ -28,6 +28,7 @@ class OnboardingView: UIView {
     var dismissTimer: Timer!
     
     // MARK: - Data vars
+    var isTransitioning = false
     var stage: OnboardingStage = .welcome
 
     // MARK: - Constants
