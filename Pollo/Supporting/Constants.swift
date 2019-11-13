@@ -139,7 +139,7 @@ struct UserDefault {
     }
 
     struct Keys {
-        static let displayQuizOverlay = "displayQuizOverlay"
+        static let displayOnboarding = "displayOnboarding"
     }
 }
     

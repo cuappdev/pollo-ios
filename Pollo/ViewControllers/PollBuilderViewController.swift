@@ -168,11 +168,11 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
 
-        let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayQuizOverlay)
+        let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayOnboarding)
         if !displayedQuizModeOverlay {
             onboardingView = OnboardingView()
             view.addSubview(onboardingView)
-            // UserDefault.set(value: true, for: UserDefault.Keys.displayQuizOverlay)
+             UserDefault.set(value: true, for: UserDefault.Keys.displayOnboarding)
         }
     }
     

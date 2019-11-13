@@ -22,9 +22,6 @@ enum OnboardingStage {
 class OnboardingView: UIView {
 
     // MARK: - View vars
-    var aboutQuizModeLabel: UILabel!
-    var circleImageView: UIImageView!
-    var transitionButton: UIButton!
     private let addOptionLabel = UILabel()
     private let addOptionView = UIView()
     private let animatedLabel = UILabel()
@@ -40,6 +37,7 @@ class OnboardingView: UIView {
     private let secondCorrectView = UIView()
     private let secondOptionLabel = UILabel()
     private let secondOptionView = UIView()
+    private let transitionButton = UIButton()
     private let welcomeContainerView = UIView()
     private let welcomeDescriptionLabel = UILabel()
     private let welcomeTitleLabel = UILabel()
@@ -51,19 +49,24 @@ class OnboardingView: UIView {
     var stage: OnboardingStage = .welcome
 
     // MARK: - Constants
-    let aboutQuizModeLabelLeftPadding: CGFloat = 10
-    let aboutQuizModeLabelText = "To use quiz mode, tap to set a correct answer"
-    let aboutQuizModeLabelWidth: CGFloat = 176.5
+    let addOptionLabelLeadingOffset: CGFloat = 6.5
     let addOptionLabelText = "Add Option"
+    let addOptionViewTopOffset: CGFloat = 6
+    let animatedLabelBottomOffset: CGFloat = 67.5
+    let animatedLabelBottomSmallOffset: CGFloat = 5
+    let animatedLabelHorizontalInset: CGFloat = 85
+    let animatedLabelTopOffset: CGFloat = 11
+    let animationDuration: TimeInterval = 0.3
     let askQuestionBorderHeight: CGFloat = 2
     let askQuestionBorderTopOffset: CGFloat = 5
     let askQuestionLabelHorizontalInset: CGFloat = 23
     let askQuestionLabelText = "Ask a question..."
+    let askQuestionLabelTopOffset: CGFloat = 4
     let buttonViewBorderWidth: CGFloat = 2
+    let buttonViewBottomOffset: CGFloat = 10
     let buttonViewHeight: CGFloat = 47.5
+    let buttonViewHorizontalPadding: CGFloat = 18
     let buttonViewWidth: CGFloat = 161
-    let circleImageViewLength: CGFloat = 23.0
-    let circleImageViewName = "whiteEmptyCircle"
     let continueLabelText = "Tap anywhere to continue"
     let continueLabelTopOffset: CGFloat = 40
     let correctViewBorderWidth: CGFloat = 2
@@ -71,13 +74,17 @@ class OnboardingView: UIView {
     let correctViewLength: CGFloat = 23
     let firstOptionTextAutofilled = "A"
     let firstOptionTextRegular = "Option A"
+    let firstOptionViewTopOffset: CGFloat = 11
+    let optionHorizontalPadding: CGFloat = 18
     let optionLabelLeadingOffset: CGFloat = 8
     let optionViewBorderWidth: CGFloat = 2
     let optionViewCornerRadius: CGFloat = 5
     let plusLabelText = "+"
+    let plusLabelWidth: CGFloat = 13
     let saveDraftText = "Save as draft"
     let secondOptionTextAutofilled = "B"
     let secondOptionTextRegular = "Option B"
+    let secondOptionViewTopOffset: CGFloat = 6
     let startQuestionText = "Start Poll"
     let welcomeDescriptionLabelHorizontalInset: CGFloat = 92
     let welcomeDescriptionLabelText = "Here are some tips to get you started."
@@ -207,7 +214,6 @@ class OnboardingView: UIView {
         buttonLabel.alpha = 0
         addSubview(buttonLabel)
 
-        transitionButton = UIButton()
         transitionButton.backgroundColor = .clear
         transitionButton.addTarget(self, action: #selector(transitionButtonTapped), for: .touchUpInside)
         addSubview(transitionButton)
@@ -256,7 +262,7 @@ class OnboardingView: UIView {
         }
         
         askQuestionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(containerFrame.origin.y - 4)
+            make.top.equalToSuperview().offset(containerFrame.origin.y - askQuestionLabelTopOffset)
             make.leading.equalToSuperview().offset(askQuestionLabelHorizontalInset)
         }
         
@@ -268,9 +274,9 @@ class OnboardingView: UIView {
         }
         
         firstOptionView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(18)
-            make.top.equalTo(askQuestionBorder.snp.bottom).offset(11)
-            make.trailing.equalToSuperview().inset(18)
+            make.leading.equalToSuperview().offset(optionHorizontalPadding)
+            make.top.equalTo(askQuestionBorder.snp.bottom).offset(firstOptionViewTopOffset)
+            make.trailing.equalToSuperview().inset(optionHorizontalPadding)
             make.height.equalTo(47)
         }
         
@@ -287,7 +293,7 @@ class OnboardingView: UIView {
         
         secondOptionView.snp.makeConstraints { make in
             make.leading.trailing.height.equalTo(firstOptionView)
-            make.top.equalTo(firstOptionView.snp.bottom).offset(6)
+            make.top.equalTo(firstOptionView.snp.bottom).offset(secondOptionViewTopOffset)
         }
         
         secondCorrectView.snp.makeConstraints { make in
@@ -304,30 +310,30 @@ class OnboardingView: UIView {
         addOptionView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(firstOptionView)
             make.height.equalTo(53)
-            make.top.equalTo(secondOptionView.snp.bottom).offset(6)
+            make.top.equalTo(secondOptionView.snp.bottom).offset(addOptionViewTopOffset)
         }
         
         plusLabel.snp.makeConstraints { make in
-            make.width.equalTo(13)
-            make.leading.equalTo(addOptionView).offset(18)
+            make.width.equalTo(plusLabelWidth)
+            make.leading.equalTo(addOptionView).offset(optionHorizontalPadding)
             make.centerY.equalTo(addOptionView)
         }
         
         addOptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(plusLabel.snp.trailing).offset(6.5)
+            make.leading.equalTo(plusLabel.snp.trailing).offset(addOptionLabelLeadingOffset)
             make.centerY.equalTo(addOptionView)
         }
         
         animatedLabel.snp.makeConstraints { make in
-            make.top.equalTo(addOptionView.snp.bottom).offset(11)
+            make.top.equalTo(addOptionView.snp.bottom).offset(animatedLabelTopOffset)
             make.leading.trailing.equalTo(addOptionView)
         }
         
         buttonView.snp.makeConstraints { make in
             make.width.equalTo(buttonViewWidth)
             make.height.equalTo(buttonViewHeight)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-10)
-            make.trailing.equalToSuperview().inset(18)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-buttonViewBottomOffset)
+            make.trailing.equalToSuperview().inset(buttonViewHorizontalPadding)
         }
         
         buttonLabel.snp.makeConstraints { make in
@@ -339,6 +345,26 @@ class OnboardingView: UIView {
         }
     }
     
+    func getAnimatedLabelLeadingOffset() -> CGFloat {
+        if stage == .autofillChoices {
+            return 89
+        } else if stage == .quizMode {
+            return 18
+        }
+        return 177
+    }
+    
+    func getAnimatedLabelTrailingInset() -> CGFloat {
+        if stage == .autofillChoices {
+            return 16
+        } else if stage == .quizMode {
+            return 92
+        } else if stage == .saveDraft {
+            return 130
+        }
+        return 20
+    }
+    
     @objc func transitionButtonTapped() {
         if !shouldTransition { return }
         shouldTransition = false
@@ -346,7 +372,7 @@ class OnboardingView: UIView {
         case .welcome:
             stage = .createQuestion
             animatedLabel.text = getAnimatedLabelText()
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 self.welcomeContainerView.alpha = 0
                 self.askQuestionLabel.alpha = 1
                 self.askQuestionBorder.alpha = 1
@@ -371,7 +397,7 @@ class OnboardingView: UIView {
             firstOptionLabel.text = firstOptionTextAutofilled
             secondOptionLabel.text = secondOptionTextAutofilled
             animatedLabel.textAlignment = .right
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 self.askQuestionLabel.alpha = 0
                 self.askQuestionBorder.alpha = 0
                 self.addOptionView.alpha = 0
@@ -380,9 +406,9 @@ class OnboardingView: UIView {
                 self.buttonView.alpha = 1
                 self.buttonLabel.alpha = 1
                 self.animatedLabel.snp.remakeConstraints { remake in
-                    remake.leading.equalToSuperview().offset(89)
-                    remake.trailing.equalTo(self.firstOptionView).inset(16)
-                    remake.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-67.5)
+                    remake.leading.equalToSuperview().offset(self.getAnimatedLabelLeadingOffset())
+                    remake.trailing.equalTo(self.firstOptionView).inset(self.getAnimatedLabelTrailingInset())
+                    remake.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-self.animatedLabelBottomOffset)
                 }
                 self.layoutIfNeeded()
             }) { completed in
@@ -392,7 +418,7 @@ class OnboardingView: UIView {
             }
         case .autofillChoices:
             stage = .quizMode
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 self.firstOptionView.alpha = 0
                 self.firstOptionLabel.alpha = 0
                 self.secondOptionView.alpha = 0
@@ -400,9 +426,9 @@ class OnboardingView: UIView {
                 self.buttonView.alpha = 0
                 self.buttonLabel.alpha = 0
                 self.animatedLabel.snp.remakeConstraints { remake in
-                    remake.leading.equalTo(self.firstCorrectView.snp.trailing).offset(self.optionLabelLeadingOffset)
-                    remake.top.equalTo(self.firstCorrectView).offset(-5)
-                    remake.trailing.equalToSuperview().inset(92)
+                remake.leading.equalTo(self.firstCorrectView.snp.trailing).offset(self.getAnimatedLabelLeadingOffset())
+                    remake.top.equalTo(self.firstCorrectView).offset(-self.animatedLabelBottomSmallOffset)
+                    remake.trailing.equalToSuperview().inset(self.getAnimatedLabelTrailingInset())
                 }
                 self.layoutIfNeeded()
             }) { completed in
@@ -419,21 +445,21 @@ class OnboardingView: UIView {
             buttonView.snp.remakeConstraints { remake in
                 remake.width.equalTo(buttonViewWidth)
                 remake.height.equalTo(buttonViewHeight)
-                remake.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-10)
-                remake.leading.equalToSuperview().offset(18)
+                remake.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-self.buttonViewBottomOffset)
+                remake.leading.equalToSuperview().offset(self.buttonViewHorizontalPadding)
             }
             buttonLabel.snp.remakeConstraints { remake in
                 remake.center.equalTo(buttonView)
             }
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 self.firstCorrectView.alpha = 0
                 self.secondCorrectView.alpha = 0
                 self.buttonView.alpha = 1
                 self.buttonLabel.alpha = 1
                 self.animatedLabel.snp.remakeConstraints { remake in
                     remake.leading.equalTo(self.buttonView)
-                    remake.bottom.equalTo(self.buttonView.snp.top).offset(-5)
-                    remake.trailing.equalToSuperview().inset(130)
+                    remake.bottom.equalTo(self.buttonView.snp.top).offset(-self.animatedLabelBottomSmallOffset)
+                    remake.trailing.equalToSuperview().inset(self.getAnimatedLabelTrailingInset())
                 }
                 self.layoutIfNeeded()
             }) { completed in
@@ -446,20 +472,20 @@ class OnboardingView: UIView {
             animatedLabel.text = getAnimatedLabelText()
             animatedLabel.textAlignment = .right
             buttonLabel.text = startQuestionText
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 self.buttonView.snp.remakeConstraints { remake in
                     remake.width.equalTo(self.buttonViewWidth)
                     remake.height.equalTo(self.buttonViewHeight)
-                    remake.trailing.equalToSuperview().inset(18)
-                    remake.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-10)
+                    remake.trailing.equalToSuperview().inset(self.buttonViewHorizontalPadding)
+                    remake.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-self.buttonViewBottomOffset)
                 }
                 self.buttonLabel.snp.remakeConstraints { remake in
                     remake.center.equalTo(self.buttonView)
                 }
                 self.animatedLabel.snp.remakeConstraints { remake in
-                    remake.trailing.equalToSuperview().inset(20)
-                    remake.bottom.equalTo(self.buttonView.snp.top).offset(-5)
-                    remake.leading.equalToSuperview().offset(177)
+                    remake.trailing.equalToSuperview().inset(self.getAnimatedLabelTrailingInset())
+                    remake.bottom.equalTo(self.buttonView.snp.top).offset(-self.animatedLabelBottomSmallOffset)
+                    remake.leading.equalToSuperview().offset(self.getAnimatedLabelLeadingOffset())
                 }
                 self.layoutIfNeeded()
             }) { completed in
@@ -472,12 +498,12 @@ class OnboardingView: UIView {
             animatedLabel.text = getAnimatedLabelText()
             animatedLabel.font = ._30BoldFont
             animatedLabel.textAlignment = .center
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: animationDuration) {
                 self.buttonView.alpha = 0
                 self.buttonLabel.alpha = 0
             }
             animatedLabel.snp.remakeConstraints { remake in
-                remake.width.equalToSuperview().multipliedBy(0.75)
+                remake.width.equalToSuperview().offset(-animatedLabelHorizontalInset * 2)
                 remake.center.equalToSuperview()
             }
             shouldTransition = true
