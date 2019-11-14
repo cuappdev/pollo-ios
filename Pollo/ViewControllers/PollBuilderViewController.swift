@@ -32,7 +32,7 @@ class PollBuilderViewController: UIViewController {
     var exitButton: UIButton!
     var mcPollBuilder: MCPollBuilderView!
     var createQuestionLabel: UILabel!
-    var onboardingView: OnboardingView!
+    var onboardingView: OnboardingView?
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
     var tapGestureRecognizer: UITapGestureRecognizer!
@@ -101,7 +101,7 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if onboardingView != nil && didLayoutSubviews && !isOnboardingViewConfigured {
+        if let onboardingView = onboardingView, didLayoutSubviews && !isOnboardingViewConfigured {
             isOnboardingViewConfigured = true
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
@@ -168,11 +168,11 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
 
-        let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayOnboarding)
-        if !displayedQuizModeOverlay {
+        let displayedOnboarding = UserDefault.getBoolValue(for: UserDefault.Keys.displayOnboarding)
+        if !displayedOnboarding {
             onboardingView = OnboardingView()
-            view.addSubview(onboardingView)
-             UserDefault.set(value: true, for: UserDefault.Keys.displayOnboarding)
+            view.addSubview(onboardingView!)
+            UserDefault.set(value: true, for: UserDefault.Keys.displayOnboarding)
         }
     }
     
@@ -241,7 +241,7 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if onboardingView != nil {
+        if let onboardingView = onboardingView {
             onboardingView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }

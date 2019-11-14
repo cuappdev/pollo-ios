@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-enum OnboardingStage {
+private enum OnboardingStage {
     case welcome
     case createQuestion
     case autofillChoices
@@ -44,51 +44,34 @@ class OnboardingView: UIView {
     
     // MARK: - Data vars
     var containerFrame: CGRect!
-    var isTransitioning = false
-    var stage: OnboardingStage = .welcome
+    var isTransitioning = true
+    fileprivate var stage: OnboardingStage = .welcome
 
     // MARK: - Constants
-    let addOptionLabelLeadingOffset: CGFloat = 6.5
     let addOptionLabelText = "Add Option"
-    let addOptionViewTopOffset: CGFloat = 6
     let animatedLabelBottomOffset: CGFloat = 67.5
     let animatedLabelBottomSmallOffset: CGFloat = 5
     let animatedLabelHorizontalInset: CGFloat = 85
-    let animatedLabelTopOffset: CGFloat = 11
     let animationDuration: TimeInterval = 0.3
-    let askQuestionBorderHeight: CGFloat = 2
-    let askQuestionBorderTopOffset: CGFloat = 5
-    let askQuestionLabelHorizontalInset: CGFloat = 23
     let askQuestionLabelText = "Ask a question..."
-    let askQuestionLabelTopOffset: CGFloat = 4
     let buttonViewBorderWidth: CGFloat = 2
     let buttonViewBottomOffset: CGFloat = 10
     let buttonViewHeight: CGFloat = 47.5
     let buttonViewHorizontalPadding: CGFloat = 18
     let buttonViewWidth: CGFloat = 161
     let continueLabelText = "Tap anywhere to continue"
-    let continueLabelTopOffset: CGFloat = 40
     let correctViewBorderWidth: CGFloat = 2
-    let correctViewLeadingOffset: CGFloat = 12
     let correctViewLength: CGFloat = 23
     let firstOptionTextAutofilled = "A"
     let firstOptionTextRegular = "Option A"
-    let firstOptionViewTopOffset: CGFloat = 11
-    let optionHorizontalPadding: CGFloat = 18
-    let optionLabelLeadingOffset: CGFloat = 8
     let optionViewBorderWidth: CGFloat = 2
     let optionViewCornerRadius: CGFloat = 5
     let plusLabelText = "+"
-    let plusLabelWidth: CGFloat = 13
     let saveDraftText = "Save as draft"
     let secondOptionTextAutofilled = "B"
     let secondOptionTextRegular = "Option B"
-    let secondOptionViewTopOffset: CGFloat = 6
     let startQuestionText = "Start Poll"
-    let welcomeDescriptionLabelHorizontalInset: CGFloat = 92
     let welcomeDescriptionLabelText = "Here are some tips to get you started."
-    let welcomeDescriptionLabelTopOffset: CGFloat = 8
-    let welcomeTitleLabelHorizontalInset: CGFloat = 85
     let welcomeTitleLabelText = "Welcome to your first poll!"
 
     override init(frame: CGRect) {
@@ -238,6 +221,24 @@ class OnboardingView: UIView {
     }
     
     func setupConstraints() {
+        let addOptionLabelLeadingOffset: CGFloat = 6.5
+        let addOptionViewTopOffset: CGFloat = 6
+        let animatedLabelTopOffset: CGFloat = 11
+        let askQuestionBorderHeight: CGFloat = 2
+        let askQuestionBorderTopOffset: CGFloat = 5
+        let askQuestionLabelHorizontalInset: CGFloat = 23
+        let askQuestionLabelTopOffset: CGFloat = 4
+        let continueLabelTopOffset: CGFloat = 40
+        let correctViewLeadingOffset: CGFloat = 12
+        let firstOptionViewTopOffset: CGFloat = 11
+        let optionHorizontalPadding: CGFloat = 18
+        let optionLabelLeadingOffset: CGFloat = 8
+        let plusLabelWidth: CGFloat = 13
+        let secondOptionViewTopOffset: CGFloat = 6
+        let welcomeDescriptionLabelHorizontalInset: CGFloat = 92
+        let welcomeDescriptionLabelTopOffset: CGFloat = 8
+        let welcomeTitleLabelHorizontalInset: CGFloat = 85
+        
         let welcomeTitleLabelHeight = welcomeTitleLabelText.height(withConstrainedWidth: frame.width - welcomeTitleLabelHorizontalInset * 2, font: welcomeTitleLabel.font)
         let welcomeDescriptionLabelHeight = welcomeDescriptionLabelText.height(withConstrainedWidth: frame.width - welcomeDescriptionLabelHorizontalInset * 2, font: welcomeDescriptionLabel.font)
         let continueLabelHeight = continueLabelText.height(withConstrainedWidth: frame.width, font: continueLabel.font)
