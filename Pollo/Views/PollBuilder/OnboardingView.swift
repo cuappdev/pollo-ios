@@ -422,6 +422,8 @@ class OnboardingView: UIView {
             }
         case .autofillChoices:
             stage = .quizMode
+            animatedLabel.text = getAnimatedLabelText()
+            animatedLabel.textAlignment = .left
             UIView.animate(withDuration: animationDuration, animations: {
                 self.firstOptionView.alpha = 0
                 self.firstOptionLabel.alpha = 0
@@ -437,8 +439,6 @@ class OnboardingView: UIView {
                 self.layoutIfNeeded()
             }) { completed in
                 if completed {
-                    self.animatedLabel.text = self.getAnimatedLabelText()
-                    self.animatedLabel.textAlignment = .left
                     self.isTransitioning = true
                 }
             }
