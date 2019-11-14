@@ -45,7 +45,6 @@ class OnboardingView: UIView {
     // MARK: - Data vars
     var containerFrame: CGRect!
     var isTransitioning = false
-    var shouldTransition = true
     var stage: OnboardingStage = .welcome
 
     // MARK: - Constants
@@ -220,18 +219,22 @@ class OnboardingView: UIView {
     }
     
     func getAnimatedLabelText() -> String {
-        if stage == .createQuestion {
+        switch stage {
+        case .welcome:
+            return ""
+        case .createQuestion:
             return "To customize this question, type here and add additional options"
-        } else if stage == .autofillChoices {
+        case .autofillChoices:
             return "To autofill choices A, B, ... , tap here to start live polling"
-        } else if stage == .quizMode {
+        case .quizMode:
             return "To use quiz mode, select a correct answer"
-        } else if stage == .saveDraft {
+        case .saveDraft:
             return "To come back to this question, tap here"
-        } else if stage == .startQuestion {
+        case .startQuestion:
             return "To start polling now, tap here"
+        case .finished:
+            return "That's it! You're good to go."
         }
-        return "That's it! You're good to go."
     }
     
     func setupConstraints() {
@@ -366,8 +369,8 @@ class OnboardingView: UIView {
     }
     
     @objc func transitionButtonTapped() {
-        if !shouldTransition { return }
-        shouldTransition = false
+        if !isTransitioning { return }
+        isTransitioning = false
         switch stage {
         case .welcome:
             stage = .createQuestion
@@ -388,7 +391,7 @@ class OnboardingView: UIView {
                 self.animatedLabel.alpha = 1
             }) { completed in
                 if completed {
-                    self.shouldTransition = true
+                    self.isTransitioning = true
                 }
             }
         case .createQuestion:
@@ -413,7 +416,7 @@ class OnboardingView: UIView {
                 self.layoutIfNeeded()
             }) { completed in
                 if completed {
-                    self.shouldTransition = true
+                    self.isTransitioning = true
                 }
             }
         case .autofillChoices:
@@ -435,7 +438,7 @@ class OnboardingView: UIView {
                 if completed {
                     self.animatedLabel.text = self.getAnimatedLabelText()
                     self.animatedLabel.textAlignment = .left
-                    self.shouldTransition = true
+                    self.isTransitioning = true
                 }
             }
         case .quizMode:
@@ -464,7 +467,7 @@ class OnboardingView: UIView {
                 self.layoutIfNeeded()
             }) { completed in
                 if completed {
-                    self.shouldTransition = true
+                    self.isTransitioning = true
                 }
             }
         case .saveDraft:
@@ -490,7 +493,7 @@ class OnboardingView: UIView {
                 self.layoutIfNeeded()
             }) { completed in
                 if completed {
-                    self.shouldTransition = true
+                    self.isTransitioning = true
                 }
             }
         case .startQuestion:
@@ -506,7 +509,7 @@ class OnboardingView: UIView {
                 remake.width.equalToSuperview().offset(-animatedLabelHorizontalInset * 2)
                 remake.center.equalToSuperview()
             }
-            shouldTransition = true
+            isTransitioning = true
         case .finished:
             removeFromSuperview()
         }
