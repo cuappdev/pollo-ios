@@ -222,6 +222,7 @@ class OnboardingView: UIView {
     
     func setupConstraints() {
         let addOptionLabelLeadingOffset: CGFloat = 6.5
+        let addOptionViewHeight: CGFloat = 53
         let addOptionViewTopOffset: CGFloat = 6
         let animatedLabelTopOffset: CGFloat = 11
         let askQuestionBorderHeight: CGFloat = 2
@@ -231,8 +232,10 @@ class OnboardingView: UIView {
         let continueLabelTopOffset: CGFloat = 40
         let correctViewLeadingOffset: CGFloat = 12
         let firstOptionViewTopOffset: CGFloat = 11
+        let minAnimatedLabelHeight: CGFloat = 53
         let optionHorizontalPadding: CGFloat = 18
         let optionLabelLeadingOffset: CGFloat = 8
+        let optionViewHeight: CGFloat = 47
         let plusLabelWidth: CGFloat = 13
         let secondOptionViewTopOffset: CGFloat = 6
         let welcomeDescriptionLabelHorizontalInset: CGFloat = 92
@@ -281,7 +284,7 @@ class OnboardingView: UIView {
             make.leading.equalToSuperview().offset(optionHorizontalPadding)
             make.top.equalTo(askQuestionBorder.snp.bottom).offset(firstOptionViewTopOffset)
             make.trailing.equalToSuperview().inset(optionHorizontalPadding)
-            make.height.equalTo(47)
+            make.height.equalTo(optionViewHeight)
         }
         
         firstCorrectView.snp.makeConstraints { make in
@@ -313,7 +316,7 @@ class OnboardingView: UIView {
         
         addOptionView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(firstOptionView)
-            make.height.equalTo(53)
+            make.height.equalTo(addOptionViewHeight)
             make.top.equalTo(secondOptionView.snp.bottom).offset(addOptionViewTopOffset)
         }
         
@@ -331,6 +334,7 @@ class OnboardingView: UIView {
         animatedLabel.snp.makeConstraints { make in
             make.top.equalTo(addOptionView.snp.bottom).offset(animatedLabelTopOffset)
             make.leading.trailing.equalTo(addOptionView)
+            make.height.greaterThanOrEqualTo(minAnimatedLabelHeight)
         }
         
         buttonView.snp.makeConstraints { make in
