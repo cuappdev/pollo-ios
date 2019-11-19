@@ -46,7 +46,6 @@ struct Routes {
     static let serverShare = "server/poll/results"
     static let serverStart = "server/poll/start"
     static let serverTally = "server/poll/tally"
-    static let serverUpvote = "server/poll/upvote"
     static let userDelete = "user/poll/delete"
     static let userDeleteLive = "user/poll/delete/live"
     static let userEnd = "user/poll/end"
@@ -92,7 +91,6 @@ struct ParserKeys {
     static let textKey = "text"
     static let typeKey = "type"
     static let updatedAtKey = "updatedAt"
-    static let upvotesKey = "upvotes"
 }
 
 struct RequestKeys {
