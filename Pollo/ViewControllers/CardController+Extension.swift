@@ -58,12 +58,10 @@ extension CardController: PollSectionControllerDelegate {
     }
     
     func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-        switch poll.type {
-        case .multipleChoice:
-            guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
-            let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
-            emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
-        }
+
+        guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
+        let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
+        emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
     }
 
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -97,7 +95,7 @@ extension CardController: PollSectionControllerDelegate {
 
 extension CardController: PollBuilderViewControllerDelegate {
 
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
 
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
@@ -106,7 +104,7 @@ extension CardController: PollBuilderViewControllerDelegate {
 
         session.isLive = true
         // EMIT START QUESTION
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: state)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, correctAnswer: correctAnswer, userAnswers: [:], state: state)
         newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
         let newPollDict: [String: Any] = [
@@ -115,7 +113,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             "state": "live",
             "correctAnswer": correct,
             "userAnswers": [String: [PollChoice]](),
-            "type": type.rawValue
+            "type": QuestionType.multipleChoice.rawValue
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)
@@ -141,7 +139,7 @@ extension CardController: PollBuilderViewControllerDelegate {
     }
     
     // MARK: - Helpers
-    private func buildEmptyResultsFromOptions(options: [String], questionType: QuestionType) -> [String: JSON] {
+    private func buildEmptyResultsFromOptions(options: [String]) -> [String: JSON] {
         var results: [String: JSON] = [:]
         options.enumerated().forEach { (index, option) in
             let infoDict: JSON = [
@@ -149,7 +147,7 @@ extension CardController: PollBuilderViewControllerDelegate {
                 RequestKeys.countKey: 0
             ]
             let letterChoice = intToMCOption(index) // i.e. A, B, C, ...
-            let key = questionType == .multipleChoice ? letterChoice : option
+            let key = letterChoice
             results[key] = infoDict
         }
         return results

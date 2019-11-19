@@ -86,19 +86,16 @@ func decodeObjForKey(key: String) -> Any {
 // MARK: - Utils for Polls
 func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
-    switch poll.type {
-    case .multipleChoice:
-        switch poll.state {
-        case .live, .ended:
-            switch userRole {
-            case .member:
-                type = buildMCChoiceModelType(from: poll)
-            case .admin:
-                type = buildMCResultModelType(from: poll, userRole: userRole)
-            }
-        case .shared:
+    switch poll.state {
+    case .live, .ended:
+        switch userRole {
+        case .member:
+            type = buildMCChoiceModelType(from: poll)
+        case .admin:
             type = buildMCResultModelType(from: poll, userRole: userRole)
         }
+    case .shared:
+        type = buildMCResultModelType(from: poll, userRole: userRole)
     }
     return type
 }

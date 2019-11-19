@@ -74,7 +74,6 @@ class Poll: Codable {
     var pollFilter: PollFilter? // used for filtering user profanity
     var state: PollState
     var text: String
-    var type: QuestionType
     var updatedAt: String?
     var userAnswers: [String: [PollChoice]] // googleID to poll choice
     // results format:
@@ -83,13 +82,12 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
         self.text = text
         self.answerChoices = answerChoices
-        self.type = type
         self.correctAnswer = correctAnswer
         self.userAnswers = userAnswers
         self.state = state
@@ -99,7 +97,6 @@ class Poll: Codable {
         self.id = poll.id
         self.text = poll.text
         self.answerChoices = poll.answerChoices
-        self.type = poll.type
         self.correctAnswer = poll.correctAnswer
         self.userAnswers = poll.userAnswers
         self.state = state
@@ -108,11 +105,8 @@ class Poll: Codable {
     func getSelected() -> Any? {
         if userAnswers.isEmpty { return nil }
         guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], !answers.isEmpty else { return nil }
-        switch type {
-        case .multipleChoice:
-            guard let answer = answers[0].letter else { return nil }
-            return answer
-        }
+        guard let answer = answers[0].letter else { return nil }
+        return answer
     }
 
     // MARK: - Public
@@ -120,7 +114,6 @@ class Poll: Codable {
         self.id = poll.id
         self.text = poll.text
         self.answerChoices = poll.answerChoices
-        self.type = poll.type
         self.correctAnswer = poll.correctAnswer
         self.userAnswers = poll.userAnswers
         self.state = poll.state
@@ -163,7 +156,7 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id && text == object.text && type == object.type && answerChoices == object.answerChoices
+        return id == object.id && text == object.text && answerChoices == object.answerChoices
     }
     
 }

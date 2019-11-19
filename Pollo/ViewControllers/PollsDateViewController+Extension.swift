@@ -80,12 +80,12 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 }
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
         session.isLive = true
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
         newPoll.createdAt = Date().secondsString
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
@@ -98,7 +98,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
             "state": "live",
             "correctAnswer": correct,
             "userAnswers": [String: [PollChoice]](),
-            "type": type.rawValue
+            "type": QuestionType.multipleChoice.rawValue
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)

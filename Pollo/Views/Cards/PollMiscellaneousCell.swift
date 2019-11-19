@@ -100,10 +100,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 descriptionLabel.text = "Shared with group"
             }
             var unit: String
-            switch miscellaneousModel.questionType! {
-            case .multipleChoice:
-                unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
-            }
+            unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
             totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
         case .member:
             descriptionLabel.textAlignment = .center
@@ -114,10 +111,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 descriptionLabel.text = endedTextMember
             case .shared:
                 var unit: String
-                switch miscellaneousModel.questionType! {
-                case .multipleChoice:
-                    unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
-                }
+                unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
                 descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalVotes) \(unit)"
             }
         }
