@@ -32,13 +32,14 @@ class MCResultCell: UICollectionViewCell {
     // MARK: - Constants
     let checkImageName = "correctanswer"
     let containerViewBorderWidth: CGFloat = 0.3
-    let containerViewCornerRadius: CGFloat = 8
+    let containerViewCornerRadius: CGFloat = 3
     let containerViewHeight: CGFloat = 46
     let containerViewTopPadding: CGFloat = 8
     let correctImageName = "correct"
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
     let highlightViewBorderWidth: CGFloat = 0.6
+    let highlightViewCornerRadius: CGFloat = 8
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
     let labelFontSize: CGFloat = 13
@@ -56,11 +57,14 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.clipsToBounds = true
         containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
-        containerView.layer.borderWidth = containerViewBorderWidth
         contentView.addSubview(containerView)
+
+        highlightView.layer.cornerRadius = highlightViewCornerRadius
+        highlightView.clipsToBounds = true
+        highlightView.layer.borderWidth = highlightViewBorderWidth
+        containerView.addSubview(highlightView)
         
         optionLabel.font = ._14MediumFont
         optionLabel.backgroundColor = .clear
@@ -86,12 +90,6 @@ class MCResultCell: UICollectionViewCell {
         contentView.addSubview(selectedDotView)
         
         contentView.addSubview(selectedImageView)
-
-        highlightView.layer.cornerRadius = containerViewCornerRadius
-        highlightView.clipsToBounds = true
-        highlightView.layer.borderWidth = highlightViewBorderWidth
-        containerView.addSubview(highlightView)
-        containerView.sendSubviewToBack(highlightView)
     }
     
     override func updateConstraints() {
@@ -173,13 +171,16 @@ class MCResultCell: UICollectionViewCell {
         switch userRole {
         case .admin:
             containerView.backgroundColor = correctAnswer == answer ? .lightGreen : .lightGrey
+            containerView.layer.borderWidth = containerViewBorderWidth
+            containerView.layer.cornerRadius = containerViewCornerRadius
             highlightView.isHidden = true
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
         case .member:
             containerView.backgroundColor = .clear
-            containerView.layer.borderColor = UIColor.coolGrey.cgColor
+            containerView.layer.borderWidth = highlightViewBorderWidth
+            containerView.layer.cornerRadius = highlightViewCornerRadius
             optionLabel.textColor = .mediumGrey
             numSelectedLabel.isHidden = true
             dotView.isHidden = false
