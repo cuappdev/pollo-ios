@@ -31,13 +31,14 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Constants
     let checkImageName = "correctanswer"
-    let containerViewBorderWidth: CGFloat = 0.6
+    let containerViewBorderWidth: CGFloat = 0.3
     let containerViewCornerRadius: CGFloat = 8
     let containerViewHeight: CGFloat = 46
     let containerViewTopPadding: CGFloat = 8
     let correctImageName = "correct"
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
+    let highlightViewBorderWidth: CGFloat = 0.6
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
     let labelFontSize: CGFloat = 13
@@ -57,6 +58,8 @@ class MCResultCell: UICollectionViewCell {
     func setupViews() {
         containerView.layer.cornerRadius = containerViewCornerRadius
         containerView.clipsToBounds = true
+        containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
+        containerView.layer.borderWidth = containerViewBorderWidth
         contentView.addSubview(containerView)
         
         optionLabel.font = ._14MediumFont
@@ -84,6 +87,9 @@ class MCResultCell: UICollectionViewCell {
         
         contentView.addSubview(selectedImageView)
 
+        highlightView.layer.cornerRadius = containerViewCornerRadius
+        highlightView.clipsToBounds = true
+        highlightView.layer.borderWidth = highlightViewBorderWidth
         containerView.addSubview(highlightView)
         containerView.sendSubviewToBack(highlightView)
     }
@@ -148,8 +154,11 @@ class MCResultCell: UICollectionViewCell {
         }
 
         highlightView.snp.makeConstraints { make in
-            make.leading.top.bottom.trailing.equalToSuperview()
+            make.leading.top.bottom.equalToSuperview()
+            let highlightViewMaxWidth = Float(contentView.bounds.width - horizontalPadding * 2)
+            highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
         }
+
         super.updateConstraints()
     }
     
@@ -160,21 +169,23 @@ class MCResultCell: UICollectionViewCell {
         numSelectedLabel.text = "\(Int(percentSelected * 100))%"
         self.correctAnswer = correctAnswer
         self.userRole = userRole
+        let answer = intToMCOption(resultModel.choiceIndex)
         switch userRole {
         case .admin:
-            containerView.backgroundColor = .lightGrey
-            highlightView.backgroundColor = correctAnswer == resultModel.option ? .lightGreen : .lightGrey
+            containerView.backgroundColor = correctAnswer == answer ? .lightGreen : .lightGrey
+            highlightView.isHidden = true
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
         case .member:
+            containerView.backgroundColor = .clear
+            containerView.layer.borderColor = UIColor.coolGrey.cgColor
             optionLabel.textColor = .mediumGrey
             numSelectedLabel.isHidden = true
             dotView.isHidden = false
             let isSelected = resultModel.isSelected
             selectedDotView.isHidden = !isSelected
             selectedImageView.isHidden = selectedDotView.isHidden
-            let answer = intToMCOption(resultModel.choiceIndex)
             if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
                 if answer == correctAnswer {
                     if isSelected {
@@ -182,8 +193,8 @@ class MCResultCell: UICollectionViewCell {
                         selectedImageView.image = UIImage(named: correctImageName)
                     }
                     showCorrectAnswer = true
-                    highlightView.backgroundColor = isSelected ? .lightGreen : .lightGrey
-                    highlightView.layer.borderColor = isSelected ? UIColor.polloGreen.cgColor : UIColor.coolGrey.cgColor
+                    highlightView.backgroundColor = .lightGreen
+                    highlightView.layer.borderColor = UIColor.polloGreen.cgColor
                 } else {
                     if isSelected {
                         selectedDotView.backgroundColor = .clear
@@ -208,7 +219,6 @@ class MCResultCell: UICollectionViewCell {
         optionLabel.text = resultModel.option
         percentSelected = resultModel.percentSelected
         numSelectedLabel.text = "\(Int(percentSelected * 100))%"
-        highlightView.backgroundColor = correctAnswer == resultModel.option ? .lightGreen : .lightGrey
     }
     
     override func prepareForReuse() {
