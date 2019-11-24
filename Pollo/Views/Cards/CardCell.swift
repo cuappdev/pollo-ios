@@ -131,10 +131,14 @@ class CardCell: UICollectionViewCell {
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endPollText, for: .normal)
+            questionButton.setTitleColor(.white, for: .normal)
+            questionButton.layer.borderColor = UIColor.white.cgColor
             setTimerText()
             runTimer()
         } else if poll.state == .ended {
             questionButton.setTitle(shareResultsText, for: .normal)
+            questionButton.setTitleColor(.white, for: .normal)
+            questionButton.layer.borderColor = UIColor.white.cgColor
         } else if poll.state == .shared {
             questionButton.setTitle(resultsSharedText, for: .normal)
             questionButton.setTitleColor(.blueGrey, for: .normal)
