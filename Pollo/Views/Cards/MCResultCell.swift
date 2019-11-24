@@ -153,8 +153,7 @@ class MCResultCell: UICollectionViewCell {
 
         highlightView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
-            let highlightViewMaxWidth = Float(contentView.bounds.width - horizontalPadding * 2)
-            highlightViewWidthConstraint = make.width.equalTo(0).offset(highlightViewMaxWidth * percentSelected).constraint
+            make.width.equalToSuperview().multipliedBy(percentSelected)
         }
 
         super.updateConstraints()
