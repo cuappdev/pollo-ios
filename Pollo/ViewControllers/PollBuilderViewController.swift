@@ -32,7 +32,7 @@ class PollBuilderViewController: UIViewController {
     var exitButton: UIButton!
     var mcPollBuilder: MCPollBuilderView!
     var createQuestionLabel: UILabel!
-    var quizModeOverlayView: QuizModeOverlayView!
+    var onboardingView: OnboardingView?
     var saveDraftButton: UIButton!
     var startPollButton: UIButton!
     var tapGestureRecognizer: UITapGestureRecognizer!
@@ -43,10 +43,12 @@ class PollBuilderViewController: UIViewController {
     var answerChoices: [PollResult]!
     var canDraft: Bool!
     var correctAnswer: String?
+    var didLayoutSubviews = false
     var drafts: [Draft] = []
     var dropDownHidden: Bool = true
     var isFollowUpQuestion: Bool = false
     var isKeyboardShown: Bool = false
+    var isOnboardingViewConfigured = false
     var loadedMCDraft: Draft?
     var questionType: QuestionType!
     var shouldIgnoreNextKeyboardHiding: Bool = false
@@ -99,14 +101,16 @@ class PollBuilderViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if quizModeOverlayView != nil {
+        if let onboardingView = onboardingView, didLayoutSubviews && !isOnboardingViewConfigured {
+            isOnboardingViewConfigured = true
             let mcPollBuilderCVFrame = mcPollBuilder.collectionView.frame
             let collectionViewFrame = mcPollBuilder.convert(mcPollBuilderCVFrame, to: view)
             let circleImageXOffset: CGFloat = 12.0
             let circleImageYOffset: CGFloat = circleImageXOffset
             let circleImageFrame = CGRect(x: collectionViewFrame.origin.x + circleImageXOffset, y: collectionViewFrame.origin.y + circleImageYOffset, width: collectionViewFrame.width, height: collectionViewFrame.height)
-            quizModeOverlayView.configure(with: circleImageFrame)
+            onboardingView.configure(with: circleImageFrame)
         }
+        didLayoutSubviews = true
     }
     
     // MARK: - Layout
@@ -164,11 +168,11 @@ class PollBuilderViewController: UIViewController {
         bottomPaddingView.backgroundColor = .white
         view.addSubview(bottomPaddingView)
 
-        let displayedQuizModeOverlay = UserDefault.getBoolValue(for: UserDefault.Keys.displayQuizOverlay)
-        if !displayedQuizModeOverlay {
-            quizModeOverlayView = QuizModeOverlayView()
-            view.addSubview(quizModeOverlayView)
-            UserDefault.set(value: true, for: UserDefault.Keys.displayQuizOverlay)
+        let displayedOnboarding = UserDefault.getBoolValue(for: UserDefault.Keys.displayOnboarding)
+        if !displayedOnboarding {
+            onboardingView = OnboardingView()
+            view.addSubview(onboardingView!)
+            UserDefault.set(value: true, for: UserDefault.Keys.displayOnboarding)
         }
     }
     
@@ -237,8 +241,8 @@ class PollBuilderViewController: UIViewController {
             make.top.equalTo(buttonsView.snp.bottom)
         }
 
-        if quizModeOverlayView != nil {
-            quizModeOverlayView.snp.makeConstraints { make in
+        if let onboardingView = onboardingView {
+            onboardingView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }
