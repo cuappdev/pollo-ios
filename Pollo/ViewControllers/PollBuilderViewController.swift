@@ -53,6 +53,10 @@ class PollBuilderViewController: UIViewController {
     var questionType: QuestionType!
     var shouldIgnoreNextKeyboardHiding: Bool = false
     weak var delegate: PollBuilderViewControllerDelegate?
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: Constants
     let buttonHeight: CGFloat = 47.5
@@ -401,9 +405,5 @@ class PollBuilderViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
     }
 }

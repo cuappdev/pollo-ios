@@ -56,8 +56,7 @@ class DraftCell: UICollectionViewCell {
             borderView.layer.borderColor = UIColor.blueGrey.cgColor
             draftTypeLabel.textColor = .darkestGrey
             questionLabel.textColor = .darkestGrey
-        }
-        else {
+        } else {
             draft.isLoaded = false
             borderView.layer.borderColor = UIColor.clickerGrey5.cgColor
             draftTypeLabel.textColor = .blueGrey
@@ -139,8 +138,7 @@ class DraftCell: UICollectionViewCell {
             borderView.layer.borderColor = UIColor.blueGrey.cgColor
             draftTypeLabel.textColor = .darkestGrey
             questionLabel.textColor = .darkestGrey
-        }
-        else {
+        } else {
             draft.isLoaded = false
             delegate?.draftCellDidResetPollBuilder()
             borderView.layer.borderColor = UIColor.clickerGrey5.cgColor

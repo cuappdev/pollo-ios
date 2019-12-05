@@ -126,7 +126,6 @@ class PollsDateViewController: UIViewController {
         present(pollBuilderViewController, animated: true, completion: nil)
     }
 
-    
     func deleteSession(with id: String) -> Future<DeleteResponse> {
         return networking(Endpoint.deleteSession(with: id)).decode()
     }

@@ -21,7 +21,7 @@ class Draft: Codable {
         self.id = id
         self.options = options
         self.text = text
-    } 
+    }
 
 }
 
