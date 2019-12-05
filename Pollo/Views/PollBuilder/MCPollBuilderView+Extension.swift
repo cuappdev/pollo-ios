@@ -125,6 +125,9 @@ extension MCPollBuilderView: PollBuilderMCOptionSectionControllerDelegate {
 }
 
 extension MCPollBuilderView: DraftSectionControllerDelegate {
+    func draftSectionControllerDidResetPollBuilder() {
+       delegate?.unloadDraft()
+    }
 
     func draftSectionControllerLoadDraft(draft: Draft) {
         delegate?.loadDraft(draft: draft)

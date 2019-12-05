@@ -61,6 +61,22 @@ extension PollBuilderViewController: MCPollBuilderViewDelegate {
         mcPollBuilder.fillDraft(title: draft.text, options: draft.options)
         loadedMCDraft = draft
         updateCanDraft(true)
+        for d in drafts {
+            if d.id == draft.id {
+                d.isLoaded = draft.isLoaded
+            }
+            else {
+                d.isLoaded = false
+            }
+        }
+        mcPollBuilder.adapter.reloadData(completion: nil)
+    }
+
+    func unloadDraft() {
+        mcPollBuilder.reset()
+        correctAnswer = nil
+        loadedMCDraft = nil
+        updateCanDraft(false)
     }
     
 }

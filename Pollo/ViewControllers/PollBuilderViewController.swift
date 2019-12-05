@@ -79,6 +79,7 @@ class PollBuilderViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.modalPresentationCapturesStatusBarAppearance = true
         
         view.backgroundColor = .offWhite
         questionType = .multipleChoice
@@ -115,7 +116,7 @@ class PollBuilderViewController: UIViewController {
     
     // MARK: - Layout
     func setupViews() {
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         exitButton = UIButton()
         exitButton.setImage(UIImage(named: exitButtonImageName), for: .normal)
@@ -323,6 +324,7 @@ class PollBuilderViewController: UIViewController {
 
         if loadedMCDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())
+            editDraftViewControllerDidTapDeleteDraftButton(draft: loadedMCDraft!)
         } else {
             Analytics.shared.log(with: CreatedPollPaylod())
         }
@@ -401,4 +403,7 @@ class PollBuilderViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 }
