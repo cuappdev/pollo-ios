@@ -14,6 +14,7 @@ protocol MCPollBuilderViewDelegate: class {
     var drafts: [Draft] { get }
     func shouldEditDraft(draft: Draft)
     func loadDraft(draft: Draft)
+    func unloadDraft()
 }
 
 class MCPollBuilderView: UIView {
