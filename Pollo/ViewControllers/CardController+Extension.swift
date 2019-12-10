@@ -260,7 +260,12 @@ extension CardController: SocketDelegate {
             delegate?.pollStarted(poll, userRole: userRole)
             return
         }
+
+        if pollsDateModel.polls.contains(where: { $0.isEqual(toDiffableObject: poll)}) {
+            pollsDateModel.polls.removeLast()
+        }
         pollsDateModel.polls.append(poll)
+
         adapter.performUpdates(animated: false) { completed in
             if completed {
                 self.scrollToLatestPoll()
