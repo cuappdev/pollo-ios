@@ -261,9 +261,7 @@ extension CardController: SocketDelegate {
             return
         }
 
-        if pollsDateModel.polls.contains(where: { $0.isEqual(toDiffableObject: poll)}) {
-            pollsDateModel.polls.removeLast()
-        }
+        pollsDateModel.polls = pollsDateModel.polls.filter { !$0.isEqual(toDiffableObject: poll) }
         pollsDateModel.polls.append(poll)
 
         adapter.performUpdates(animated: false) { completed in
