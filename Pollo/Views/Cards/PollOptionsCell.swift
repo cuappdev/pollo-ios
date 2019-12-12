@@ -14,7 +14,6 @@ protocol PollOptionsCellDelegate: class {
     var userRole: UserRole { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int)
-    func pollOptionsCellDidUpvote(for text: String)
     
 }
 
