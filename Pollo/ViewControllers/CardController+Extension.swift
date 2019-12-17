@@ -65,11 +65,6 @@ extension CardController: PollSectionControllerDelegate {
             emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
         }
     }
-
-    func pollSectionControllerDidUpvote(pollChoice: PollChoice) {
-        guard let pollChoiceDict = pollChoice.dictionary else { return }
-        socket.socket.emit(Routes.serverUpvote, pollChoiceDict)
-    }
     
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
         createPollButton.isUserInteractionEnabled = true
