@@ -9,7 +9,7 @@ Pollo is one of the latest apps by [Cornell AppDev](http://cornellappdev.com), a
 ## Installation
 We use [CocoaPods](http://cocoapods.org) for our dependency manager. This should be installed before continuing.
 
-Clone the project with `git clone https://github.com/cuappdev/clicker-ios.git`
+Clone the project with `git clone https://github.com/cuappdev/pollo-ios.git`
 
 After cloning the project, `cd` into the new directory and install dependencies with `pod install`.
 
@@ -64,6 +64,6 @@ IGListKit is a `UICollectionView` framework built by Instagram that we use throu
  * [AppDevAnalytics](https://github.com/cuappdev/ios-analytics.git): Used for event logging.
  * [IGListKit](https://github.com/Instagram/IGListKit): Used for collection views.
 
-Check out [Issues](https://github.com/cuappdev/clicker-ios/issues) to see what we are working on!
+Check out [Issues](https://github.com/cuappdev/pollo-ios/issues) to see what we are working on!
 
 [Back to top ^](#)
