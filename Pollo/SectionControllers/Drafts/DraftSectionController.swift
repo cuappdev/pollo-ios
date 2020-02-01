@@ -12,6 +12,7 @@ import IGListKit
 protocol DraftSectionControllerDelegate: class {
     func draftSectionControllerLoadDraft(draft: Draft)
     func draftSectionControllerEditDraft(draft: Draft)
+    func draftSectionControllerDidResetPollBuilder()
 }
 
 class DraftSectionController: ListSectionController, DraftCellDelegate {
@@ -58,6 +59,10 @@ class DraftSectionController: ListSectionController, DraftCellDelegate {
     
     func draftCellDidTapLoadButton(draft: Draft) {
         delegate?.draftSectionControllerLoadDraft(draft: draft)
+    }
+
+    func draftCellDidResetPollBuilder() {
+        delegate?.draftSectionControllerDidResetPollBuilder()
     }
     
     override func didUpdate(to object: Any) {
