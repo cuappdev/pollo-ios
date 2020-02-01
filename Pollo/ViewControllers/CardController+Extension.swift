@@ -112,8 +112,7 @@ extension CardController: PollBuilderViewControllerDelegate {
             "answerChoices": answerChoicesDict,
             "state": "live",
             "correctAnswer": correct,
-            "userAnswers": [String: [PollChoice]](),
-            "type": QuestionType.multipleChoice.rawValue
+            "userAnswers": [String: [PollChoice]]()
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)

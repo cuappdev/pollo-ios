@@ -13,23 +13,6 @@ enum PollState: String, Codable {
     case live, ended, shared
 }
 
-enum QuestionType: String, CustomStringConvertible, Codable {
-
-    case multipleChoice
-
-    var description: String {
-        switch self {
-        case .multipleChoice: return StringConstants.multipleChoice
-        }
-    }
-
-    var descriptionForServer: String {
-        switch self {
-        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
-        }
-    }
-}
-
 class PollResult: Codable, Equatable {
 
     static func == (lhs: PollResult, rhs: PollResult) -> Bool {
@@ -68,7 +51,7 @@ struct PollFilter: Codable {
 class Poll: Codable {
 
     var answerChoices: [PollResult]
-    var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
+    var correctAnswer: String?
     var createdAt: String? // string of seconds since 1970
     var id: String?
     var pollFilter: PollFilter? // used for filtering user profanity

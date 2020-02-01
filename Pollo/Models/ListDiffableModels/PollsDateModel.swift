@@ -17,7 +17,6 @@ struct PollsResponse: Codable {
     var id: String
     var state: PollState
     var text: String
-    var type: QuestionType
     var updatedAt: String?
     var userAnswers: [String: PollResult]
 
