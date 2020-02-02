@@ -11,6 +11,7 @@ import UIKit
 protocol DraftCellDelegate: class {
     func draftCellDidTapEditButton(draft: Draft)
     func draftCellDidTapLoadButton(draft: Draft)
+    func draftCellDidResetPollBuilder()
 }
 
 class DraftCell: UICollectionViewCell {
@@ -50,6 +51,17 @@ class DraftCell: UICollectionViewCell {
         self.draft = draft
         questionLabel.text = draft.text
         draftTypeLabel.text = multipleChoice
+        if draft.isLoaded ?? false {
+            draft.isLoaded = true
+            borderView.layer.borderColor = UIColor.blueGrey.cgColor
+            draftTypeLabel.textColor = .darkestGrey
+            questionLabel.textColor = .darkestGrey
+        } else {
+            draft.isLoaded = false
+            borderView.layer.borderColor = UIColor.clickerGrey5.cgColor
+            draftTypeLabel.textColor = .blueGrey
+            questionLabel.textColor = .blueGrey
+        }
     }
     
     func setupViews() {
@@ -120,7 +132,19 @@ class DraftCell: UICollectionViewCell {
     }
     
     @objc func loadButtonPressed() {
-        delegate?.draftCellDidTapLoadButton(draft: draft)
+        if !(draft.isLoaded ?? false) {
+            draft.isLoaded = true
+            delegate?.draftCellDidTapLoadButton(draft: draft)
+            borderView.layer.borderColor = UIColor.blueGrey.cgColor
+            draftTypeLabel.textColor = .darkestGrey
+            questionLabel.textColor = .darkestGrey
+        } else {
+            draft.isLoaded = false
+            delegate?.draftCellDidResetPollBuilder()
+            borderView.layer.borderColor = UIColor.clickerGrey5.cgColor
+            draftTypeLabel.textColor = .blueGrey
+            questionLabel.textColor = .blueGrey
+        }
     }
     
     func setupConstraints() {

@@ -15,6 +15,7 @@ class Draft: Codable {
     var id: String
     var options: [String]
     var text: String
+    var isLoaded: Bool? = false
 
     init(id: String, text: String, options: [String]) {
         self.id = id
