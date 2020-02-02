@@ -87,8 +87,7 @@ class Poll: Codable {
 
     func getSelected() -> Any? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], !answers.isEmpty else { return nil }
-        guard let answer = answers[0].letter else { return nil }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let answer = answers.first?.letter else { return nil }
         return answer
     }
 

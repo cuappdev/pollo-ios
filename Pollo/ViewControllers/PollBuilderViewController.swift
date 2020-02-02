@@ -262,10 +262,10 @@ class PollBuilderViewController: UIViewController {
 
         let question = mcPollBuilder.questionText ?? ""
         var options = mcPollBuilder.getOptions()
-       if options.isEmpty {
+        if options.isEmpty {
             options.append("")
             options.append("")
-       }
+        }
         if let loadedDraft = loadedMCDraft {
             updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
                 guard let `self` = self else { return }
