@@ -64,7 +64,7 @@ extension PollSectionController: CardCellDelegate {
     
     func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) {
         if let index = index {
-            poll.updateSelected(mcChoice: intToMCOption(index))
+            poll.updateSelected(mcChoice: intToMCOption(index), choice: choice)
         }
         delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
     }

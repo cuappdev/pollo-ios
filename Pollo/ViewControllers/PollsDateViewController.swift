@@ -50,7 +50,6 @@ class PollsDateViewController: UIViewController {
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .darkestGrey
         setupViews()
         setupNavBar()
