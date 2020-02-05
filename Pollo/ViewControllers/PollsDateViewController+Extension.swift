@@ -9,6 +9,7 @@
 import IGListKit
 import SwiftyJSON
 import UIKit
+import NotificationBannerSwift
 
 extension PollsDateViewController: ListAdapterDataSource {
     
@@ -150,20 +151,31 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 
 extension PollsDateViewController: SocketDelegate {
 
-    func sessionConnected() {}
-    
+    func sessionConnected() {
+        print("connected to socket")
+        let banner = NotificationBanner.connectedBanner()
+        self.currentBanner = banner
+    }
+
     func sessionDisconnected() {}
 
-    func sessionErrored() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
+    func sessionReconnecting(_ reason: Any?) {
+        let reason = reason as? String ?? ""
+
+        let banner = NotificationBanner.reconnectingBanner(reason: reason)
+        self.currentBanner = banner
+
+        socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
-            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
-                self.goBack()
-                self.socket.delegate = nil
-            })
-            if self.presentedViewController == nil {
-                self.present(alertController, animated: true, completion: nil)
-            }
+            print("Reconnect failed.")
+            self.socket.socket.setReconnecting(reason: reason)
+        }
+    }
+
+    func sessionErrored(_ error: Any?) {
+        // Attempt reconnect if not already
+        if currentBanner == nil {
+            self.socket.socket.setReconnecting(reason: error as? String ?? "")
         }
     }
     

@@ -10,6 +10,7 @@ import IGListKit
 import Presentr
 import SwiftyJSON
 import UIKit
+import NotificationBannerSwift
 
 extension CardController: ListAdapterDataSource {
     
@@ -220,27 +221,43 @@ extension CardController: UIScrollViewDelegate {
 
 extension CardController: SocketDelegate {
 
-    func sessionConnected() {}
+    func sessionConnected() {
+        print("Connected to socket")
+        let banner = NotificationBanner.connectedBanner()
+        self.currentBanner = banner
+        collectionView.isUserInteractionEnabled = true
+    }
     
-    func sessionDisconnected() {}
-
-    func sessionErrored() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
+    func sessionDisconnected() {
+        let banner = NotificationBanner.disconnectedBanner()
+        banner.onTap = { [weak self] in
             guard let `self` = self else { return }
-            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
-                guard let viewControllers = self.navigationController?.viewControllers else { return }
-                if viewControllers.count > 3 {
-                    // Pop back to PollsViewController
-                    guard let viewController = viewControllers[viewControllers.count - 3] as? PollsViewController else { return }
-                    self.navigationController?.popToViewController(viewController, animated: true)
-                    self.socket.socket.disconnect()
-                    self.socket.delegate = nil
-                    viewController.pollsDateViewControllerWasPopped(for: self.userRole)
-                }
-            })
-            if self.presentedViewController == nil {
-                self.present(alertController, animated: true, completion: nil)
-            }
+            banner.dismiss()
+            self.socket.socket.setReconnecting(reason: "")
+        }
+
+        self.currentBanner = banner
+        collectionView.isUserInteractionEnabled = false
+    }
+
+    func sessionReconnecting(_ reason: Any?) {
+        let reason = reason as? String ?? ""
+
+        let banner = NotificationBanner.reconnectingBanner(reason: reason)
+        self.currentBanner = banner
+        self.collectionView.isUserInteractionEnabled = false
+
+        socket.socket.connect(timeoutAfter: 10) { [weak self] in
+            guard let `self` = self else { return }
+            print("Reconnect failed.")
+            self.sessionDisconnected()
+        }
+    }
+
+    func sessionErrored(_ error: Any?) {
+        // Attempt reconnect if not already
+        if currentBanner == nil {
+            self.socket.socket.setReconnecting(reason: "An error occurred.")
         }
     }
 

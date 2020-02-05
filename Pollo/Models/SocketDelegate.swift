@@ -6,15 +6,22 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import NotificationBannerSwift
+
 protocol SocketDelegate: class {
 
+    /// Called when a connection is successfully established.
     func sessionConnected()
+    /// Called when a socket is disconnected and a reconnect attempt will not be made.
     func sessionDisconnected()
+    /// Called when an error is thrown by the socket.
+    func sessionErrored(_ error: Any?)
+    /// Called when a reconnect attempt is made.
+    func sessionReconnecting(_ reason: Any?)
     func pollEnded(_ poll: Poll, userRole: UserRole)
     func pollDeleted(_ pollID: String, userRole: UserRole)
     func pollDeletedLive()
     func pollStarted(_ poll: Poll, userRole: UserRole)
-    func sessionErrored()
     
     // USER RECEIVES
     func receivedResults(_ poll: Poll, userRole: UserRole)
@@ -23,4 +30,6 @@ protocol SocketDelegate: class {
     // ADMIN RECEIVES
     func updatedTally(_ poll: Poll, userRole: UserRole)
     func updatedTallyLive(_ poll: Poll, userRole: UserRole)
+
+    var currentBanner: BaseNotificationBanner? { get set }
 }

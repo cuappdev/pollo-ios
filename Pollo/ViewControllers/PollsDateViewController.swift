@@ -10,6 +10,7 @@ import FutureNova
 import IGListKit
 import Presentr
 import UIKit
+import NotificationBannerSwift
 
 protocol PollsDateViewControllerDelegate: class {
     func pollsDateViewControllerWasPopped(for userRole: UserRole)
@@ -24,6 +25,17 @@ class PollsDateViewController: UIViewController {
     var createPollButton: UIButton!
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
+    var currentBanner: BaseNotificationBanner? {
+        willSet {
+            if let oldBanner = currentBanner {
+                oldBanner.dismiss()
+            }
+        } didSet {
+            if let newBanner = currentBanner {
+                newBanner.show(bannerPosition: .bottom)
+            }
+        }
+    }
     
     // MARK: - Data vars
     private let networking: Networking = URLSession.shared.request
@@ -67,6 +79,11 @@ class PollsDateViewController: UIViewController {
             removeEmptyModels()
         }
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentBanner?.dismiss()
+    }
     
     // MARK: - Layout
     func setupViews() {
@@ -94,6 +111,7 @@ class PollsDateViewController: UIViewController {
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
+        self.currentBanner = NotificationBanner.connectingBanner()
     }
     
     func setupNavBar() {

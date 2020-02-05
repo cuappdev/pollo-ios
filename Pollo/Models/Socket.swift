@@ -31,7 +31,7 @@ class Socket {
         #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
         guard let accessToken = User.userSession?.accessToken else { fatalError("No access token") }
-        manager = SocketManager(socketURL: url, config: [.log(true), .compress, .connectParams([RequestKeys.accessTokenKey: accessToken])])
+        manager = SocketManager(socketURL: url, config: [.log(true), .reconnects(false), .compress, .connectParams([RequestKeys.accessTokenKey: accessToken])])
         
         socket = manager.socket(forNamespace: "/\(id)")
         
@@ -43,8 +43,14 @@ class Socket {
             self.delegate?.sessionDisconnected()
         }
 
-        socket.on(clientEvent: .error) { _, _ in
-            self.delegate?.sessionErrored()
+        socket.on(clientEvent: .error) { data, _ in
+            print(data)
+            self.delegate?.sessionErrored(data.first)
+        }
+
+        socket.on(clientEvent: .reconnect) { (data, _) in
+            print(data)
+            self.delegate?.sessionReconnecting(data.first)
         }
         
         socket.on(Routes.userStart) { socketData, _ in
