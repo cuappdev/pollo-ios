@@ -4,4 +4,4 @@ xcode_workspace: Pollo.xcworkspace
 xcode_scheme: PolloTests
 install: pod update
 script:
-  - xcodebuild clean build -sdk iphonesimulator -workspace Clicker.xcworkspace -scheme ClickerTests CODE_SIGNING_REQUIRED=NO > /dev/null
+  - xcodebuild clean build -sdk iphonesimulator -workspace Pollo.xcworkspace -scheme PolloTests CODE_SIGNING_REQUIRED=NO > /dev/null
