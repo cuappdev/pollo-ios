@@ -83,6 +83,7 @@ class PollsDateViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         currentBanner?.dismiss()
+        currentBanner = nil
     }
     
     // MARK: - Layout

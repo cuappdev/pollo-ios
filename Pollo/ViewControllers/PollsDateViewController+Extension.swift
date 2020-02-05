@@ -152,7 +152,7 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 extension PollsDateViewController: SocketDelegate {
 
     func sessionConnected() {
-        print("connected to socket")
+        print("Connected to socket")
         let banner = NotificationBanner.connectedBanner()
         self.currentBanner = banner
     }
@@ -175,7 +175,7 @@ extension PollsDateViewController: SocketDelegate {
     func sessionErrored(_ error: Any?) {
         // Attempt reconnect if not already
         if currentBanner == nil {
-            self.socket.socket.setReconnecting(reason: error as? String ?? "")
+            self.socket.socket.setReconnecting(reason: "")
         }
     }
     

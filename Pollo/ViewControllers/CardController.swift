@@ -120,6 +120,7 @@ class CardController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         currentBanner?.dismiss()
+        currentBanner = nil
         reachability.stopNotifier()
         NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: reachability)
     }
@@ -254,6 +255,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
+        currentBanner = nil
         delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)
     }
