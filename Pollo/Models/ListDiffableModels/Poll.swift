@@ -149,7 +149,7 @@ class Poll: Codable {
 
     func updateSelected(mcChoice: String, choice: String) {
         guard let googleID = User.currentUser?.id else { return }
-        userAnswers[googleID]?[0] = PollChoice(letter: mcChoice, text: choice)
+        userAnswers[googleID] = [PollChoice(letter: mcChoice, text: choice)]
     }
 
 }
