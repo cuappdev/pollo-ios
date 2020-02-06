@@ -152,7 +152,6 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 extension PollsDateViewController: SocketDelegate {
 
     func sessionConnected() {
-        print("Connected to socket")
         let banner = NotificationBanner.connectedBanner()
         self.socket.delegate?.currentBanner = banner
     }
@@ -179,7 +178,6 @@ extension PollsDateViewController: SocketDelegate {
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
-            print("Reconnect failed.")
             self.socket.delegate?.sessionDisconnected()
         }
     }

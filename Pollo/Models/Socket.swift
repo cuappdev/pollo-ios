@@ -44,12 +44,10 @@ class Socket {
         }
 
         socket.on(clientEvent: .error) { data, _ in
-            print(data)
             self.delegate?.sessionErrored(data.first)
         }
 
         socket.on(clientEvent: .reconnect) { (data, _) in
-            print(data)
             self.delegate?.sessionReconnecting(data.first)
         }
         

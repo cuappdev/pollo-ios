@@ -222,7 +222,6 @@ extension CardController: UIScrollViewDelegate {
 extension CardController: SocketDelegate {
 
     func sessionConnected() {
-        print("Connected to socket")
         let banner = NotificationBanner.connectedBanner()
         self.currentBanner = banner
         collectionView.isUserInteractionEnabled = true
@@ -252,7 +251,6 @@ extension CardController: SocketDelegate {
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
-            print("Reconnect failed.")
             self.socket.delegate?.sessionDisconnected()
         }
     }
