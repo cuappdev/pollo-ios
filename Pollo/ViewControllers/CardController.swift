@@ -39,11 +39,10 @@ class CardController: UIViewController {
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
     var currentBanner: BaseNotificationBanner? {
-        willSet {
-            if let oldBanner = currentBanner {
+        didSet {
+            if let oldBanner = oldValue {
                 oldBanner.dismiss()
             }
-        } didSet {
             if let newBanner = currentBanner {
                 newBanner.show(bannerPosition: .bottom)
             }
@@ -108,7 +107,7 @@ class CardController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        socket.updateDelegate(self)
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
         do {
             try reachability.startNotifier()
@@ -119,8 +118,6 @@ class CardController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        currentBanner?.dismiss()
-        currentBanner = nil
         reachability.stopNotifier()
         NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: reachability)
     }
@@ -255,6 +252,7 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
+        currentBanner?.dismiss()
         currentBanner = nil
         delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)

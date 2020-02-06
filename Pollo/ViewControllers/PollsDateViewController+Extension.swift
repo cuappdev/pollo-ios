@@ -157,7 +157,15 @@ extension PollsDateViewController: SocketDelegate {
         self.currentBanner = banner
     }
 
-    func sessionDisconnected() {}
+    func sessionDisconnected() {
+        let banner = NotificationBanner.disconnectedBanner()
+        banner.onTap = { [weak self] in
+            guard let `self` = self else { return }
+            banner.dismiss()
+            self.socket.socket.setReconnecting(reason: "")
+        }
+        self.currentBanner = banner
+    }
 
     func sessionReconnecting(_ reason: Any?) {
         let reason = reason as? String ?? ""
@@ -168,7 +176,7 @@ extension PollsDateViewController: SocketDelegate {
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
             print("Reconnect failed.")
-            self.socket.socket.setReconnecting(reason: reason)
+            self.socket.delegate?.sessionDisconnected()
         }
     }
 

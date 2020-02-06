@@ -106,7 +106,7 @@ class Socket {
         socket.connect()
     }
 
-    func updateDelegate(_ delegate: SocketDelegate) {
+    func updateDelegate(_ delegate: SocketDelegate?) {
         self.delegate = delegate
     }
     

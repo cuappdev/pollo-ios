@@ -250,7 +250,7 @@ extension CardController: SocketDelegate {
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
             print("Reconnect failed.")
-            self.sessionDisconnected()
+            self.socket.delegate?.sessionDisconnected()
         }
     }
 
