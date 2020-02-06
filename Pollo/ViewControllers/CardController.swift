@@ -40,12 +40,8 @@ class CardController: UIViewController {
     var peopleButton: UIButton!
     var currentBanner: BaseNotificationBanner? {
         didSet {
-            if let oldBanner = oldValue {
-                oldBanner.dismiss()
-            }
-            if let newBanner = currentBanner {
-                newBanner.show(bannerPosition: .bottom)
-            }
+            oldValue?.dismiss()
+            currentBanner?.show(bannerPosition: .bottom)
         }
     }
     

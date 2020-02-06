@@ -15,6 +15,7 @@ extension NotificationBanner {
     static func connectingBanner() -> BaseNotificationBanner {
         let banner = StatusBarNotificationBanner(title: "Connecting...", style: .warning, colors: PolloBannerColors())
         banner.autoDismiss = false
+        banner.haptic = .none
         return banner
     }
 
@@ -39,6 +40,7 @@ extension NotificationBanner {
     static func reconnectingBanner(reason: String = "") -> BaseNotificationBanner {
         let banner = StatusBarNotificationBanner(title: "\(reason) Trying to reconnect...".trim(), style: .warning, colors: PolloBannerColors())
         banner.autoDismiss = false
+        banner.haptic = .none
 
         return banner
     }

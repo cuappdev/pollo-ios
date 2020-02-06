@@ -154,24 +154,28 @@ extension PollsDateViewController: SocketDelegate {
     func sessionConnected() {
         print("Connected to socket")
         let banner = NotificationBanner.connectedBanner()
-        self.currentBanner = banner
+        self.socket.delegate?.currentBanner = banner
     }
 
     func sessionDisconnected() {
-        let banner = NotificationBanner.disconnectedBanner()
-        banner.onTap = { [weak self] in
+        socket.socket.connect(timeoutAfter: 5) { [weak self] in
             guard let `self` = self else { return }
-            banner.dismiss()
-            self.socket.socket.setReconnecting(reason: "")
+            let banner = NotificationBanner.disconnectedBanner()
+            banner.onTap = { [weak self] in
+                guard let `self` = self else { return }
+                banner.dismiss()
+                self.socket.socket.setReconnecting(reason: "")
+            }
+            self.socket.delegate?.currentBanner = banner
         }
-        self.currentBanner = banner
+
     }
 
     func sessionReconnecting(_ reason: Any?) {
         let reason = reason as? String ?? ""
 
         let banner = NotificationBanner.reconnectingBanner(reason: reason)
-        self.currentBanner = banner
+        self.socket.delegate?.currentBanner = banner
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
@@ -182,7 +186,7 @@ extension PollsDateViewController: SocketDelegate {
 
     func sessionErrored(_ error: Any?) {
         // Attempt reconnect if not already
-        if currentBanner == nil {
+        if self.socket.delegate?.currentBanner == nil {
             self.socket.socket.setReconnecting(reason: "")
         }
     }
@@ -269,7 +273,7 @@ extension PollsDateViewController: SocketDelegate {
     func appendPoll(poll: Poll) {
         let todaysDate = Date()
         if let firstPollDateModel = pollsDateArray.first, firstPollDateModel.dateValue.isSameDay(as: todaysDate) {
-            var updatedPolls = firstPollDateModel.polls
+            var updatedPolls = firstPollDateModel.polls.filter { !$0.isEqual(toDiffableObject: poll) }
             updatedPolls.append(poll)
             let updatedPollsDateModel = PollsDateModel(date: firstPollDateModel.date, polls: updatedPolls)
             pollsDateArray[0] = updatedPollsDateModel
