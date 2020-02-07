@@ -38,12 +38,6 @@ class CardController: UIViewController {
     var createPollButton: UIButton!
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
-    var currentBanner: BaseNotificationBanner? {
-        didSet {
-            oldValue?.dismiss()
-            currentBanner?.show(bannerPosition: .bottom)
-        }
-    }
     
     // MARK: - Data vars
     lazy var cvItemWidth = collectionView.frame.width - 2*collectionViewHorizontalInset
@@ -248,8 +242,8 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-        currentBanner?.dismiss()
-        currentBanner = nil
+//        currentBanner?.dismiss()
+//        currentBanner = nil
         delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)
     }

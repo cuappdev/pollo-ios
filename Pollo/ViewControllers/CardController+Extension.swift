@@ -223,7 +223,7 @@ extension CardController: SocketDelegate {
 
     func sessionConnected() {
         let banner = NotificationBanner.connectedBanner()
-        self.currentBanner = banner
+        BannerController.shared.show(banner)
         collectionView.isUserInteractionEnabled = true
     }
     
@@ -233,11 +233,10 @@ extension CardController: SocketDelegate {
             let banner = NotificationBanner.disconnectedBanner()
             banner.onTap = { [weak self] in
                 guard let `self` = self else { return }
-                banner.dismiss()
                 self.socket.socket.setReconnecting(reason: "")
             }
 
-            self.currentBanner = banner
+            BannerController.shared.show(banner)
             self.collectionView.isUserInteractionEnabled = false
         }
     }
@@ -246,7 +245,7 @@ extension CardController: SocketDelegate {
         let reason = reason as? String ?? ""
 
         let banner = NotificationBanner.reconnectingBanner(reason: reason)
-        self.currentBanner = banner
+        BannerController.shared.show(banner)
         self.collectionView.isUserInteractionEnabled = false
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
@@ -257,7 +256,7 @@ extension CardController: SocketDelegate {
 
     func sessionErrored(_ error: Any?) {
         // Attempt reconnect if not already
-        if currentBanner == nil {
+        if BannerController.shared.currentBanner == nil {
             self.socket.socket.setReconnecting(reason: "")
         }
     }

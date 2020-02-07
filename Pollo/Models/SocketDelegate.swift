@@ -30,6 +30,4 @@ protocol SocketDelegate: class {
     // ADMIN RECEIVES
     func updatedTally(_ poll: Poll, userRole: UserRole)
     func updatedTallyLive(_ poll: Poll, userRole: UserRole)
-
-    var currentBanner: BaseNotificationBanner? { get set }
 }
