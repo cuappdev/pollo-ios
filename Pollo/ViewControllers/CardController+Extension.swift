@@ -241,12 +241,10 @@ extension CardController: SocketDelegate {
         }
     }
 
-    func sessionReconnecting(_ reason: Any?) {
-        let reason = reason as? String ?? ""
-
+    func sessionReconnecting(reason: String) {
         let banner = NotificationBanner.reconnectingBanner(reason: reason)
         BannerController.shared.show(banner)
-        self.collectionView.isUserInteractionEnabled = false
+        collectionView.isUserInteractionEnabled = false
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
@@ -254,7 +252,7 @@ extension CardController: SocketDelegate {
         }
     }
 
-    func sessionErrored(_ error: Any?) {
+    func sessionErrored() {
         // Attempt reconnect if not already
         if BannerController.shared.currentBanner == nil {
             self.socket.socket.setReconnecting(reason: "")

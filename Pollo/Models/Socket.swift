@@ -43,12 +43,12 @@ class Socket {
             self.delegate?.sessionDisconnected()
         }
 
-        socket.on(clientEvent: .error) { data, _ in
-            self.delegate?.sessionErrored(data.first)
+        socket.on(clientEvent: .error) { _, _ in
+            self.delegate?.sessionErrored()
         }
 
         socket.on(clientEvent: .reconnect) { (data, _) in
-            self.delegate?.sessionReconnecting(data.first)
+            self.delegate?.sessionReconnecting(reason: data.first as? String ?? "")
         }
         
         socket.on(Routes.userStart) { socketData, _ in

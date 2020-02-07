@@ -241,8 +241,6 @@ class CardController: UIViewController {
     }
     
     @objc func goBack() {
-//        currentBanner?.dismiss()
-//        currentBanner = nil
         delegate?.cardControllerWillDisappear(with: pollsDateModel, numberOfPeople: numberOfPeople)
         self.navigationController?.popViewController(animated: true)
     }

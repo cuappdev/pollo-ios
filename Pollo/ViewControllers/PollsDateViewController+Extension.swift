@@ -170,9 +170,7 @@ extension PollsDateViewController: SocketDelegate {
 
     }
 
-    func sessionReconnecting(_ reason: Any?) {
-        let reason = reason as? String ?? ""
-
+    func sessionReconnecting(reason: String) {
         let banner = NotificationBanner.reconnectingBanner(reason: reason)
         BannerController.shared.show(banner)
 
@@ -182,7 +180,7 @@ extension PollsDateViewController: SocketDelegate {
         }
     }
 
-    func sessionErrored(_ error: Any?) {
+    func sessionErrored() {
         // Attempt reconnect if not already
         if BannerController.shared.currentBanner == nil {
             self.socket.socket.setReconnecting(reason: "")
