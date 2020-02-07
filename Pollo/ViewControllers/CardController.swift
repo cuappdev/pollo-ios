@@ -101,7 +101,7 @@ class CardController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
         do {
             try reachability.startNotifier()
-        } catch{
+        } catch {
             print("Could not start reachability notifier")
         }
     }
@@ -113,8 +113,7 @@ class CardController: UIViewController {
     }
 
     @objc func reachabilityChanged(note: Notification) {
-
-        let reachability = note.object as! Reachability
+        guard let reachability = note.object as? Reachability else { return }
         switch reachability.connection {
         case .wifi:
             print("Reachable via WiFi")
