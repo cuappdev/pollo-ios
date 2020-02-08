@@ -147,9 +147,9 @@ class Poll: Codable {
         return letter == mcChoice
     }
 
-    func updateSelected(mcChoice: String) {
+    func updateSelected(mcChoice: String, choice: String) {
         guard let googleID = User.currentUser?.id else { return }
-        userAnswers[googleID]?[0] = PollChoice(text: mcChoice)
+        userAnswers[googleID] = [PollChoice(letter: mcChoice, text: choice)]
     }
 
 }
