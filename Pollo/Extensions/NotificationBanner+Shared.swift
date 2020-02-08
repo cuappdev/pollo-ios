@@ -51,9 +51,7 @@ class PolloBannerColors: BannerColorsProtocol {
 
     internal func color(for style: BannerStyle) -> UIColor {
         switch style {
-        case .danger: return .grapefruit
-        case .success: return .polloGreen
-        case .warning: return .grapefruit
+        case .danger, .warning: return .grapefruit
         default: return .polloGreen
         }
     }
