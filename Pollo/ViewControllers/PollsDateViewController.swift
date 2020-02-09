@@ -139,9 +139,7 @@ class PollsDateViewController: UIViewController {
     @objc func goBack() {
         socket.updateDelegate(nil)
         socket.socket.disconnect()
-//        currentBanner?.dismiss()
-//        currentBanner = nil
-       BannerController.shared.dismiss()
+        BannerController.shared.dismiss()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
