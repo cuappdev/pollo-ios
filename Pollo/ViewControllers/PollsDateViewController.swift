@@ -10,6 +10,7 @@ import FutureNova
 import IGListKit
 import Presentr
 import UIKit
+import NotificationBannerSwift
 
 protocol PollsDateViewControllerDelegate: class {
     func pollsDateViewControllerWasPopped(for userRole: UserRole)
@@ -65,6 +66,11 @@ class PollsDateViewController: UIViewController {
         if !pollsDateArray.isEmpty {
             removeEmptyModels()
         }
+        socket.updateDelegate(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     // MARK: - Layout
@@ -93,6 +99,7 @@ class PollsDateViewController: UIViewController {
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
+        BannerController.shared.show(NotificationBanner.connectingBanner())
     }
     
     func setupNavBar() {
@@ -130,7 +137,11 @@ class PollsDateViewController: UIViewController {
     }
     
     @objc func goBack() {
+        socket.updateDelegate(nil)
         socket.socket.disconnect()
+//        currentBanner?.dismiss()
+//        currentBanner = nil
+       BannerController.shared.dismiss()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {

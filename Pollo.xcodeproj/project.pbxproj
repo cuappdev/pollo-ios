@@ -28,6 +28,8 @@
 		0CDAF0D521727DA3004DB6EA /* SpaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDAF0D421727DA3004DB6EA /* SpaceCell.swift */; };
 		0CF647832176970900535573 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF647822176970900535573 /* ArrowView.swift */; };
 		28CDF83CA126ADF88B9A6FAB /* Pods_Pollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7D1F88A8FFC4A020BFA1A2 /* Pods_Pollo.framework */; };
+		2B35DECF23EA32FE008FE5B4 /* NotificationBanner+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B35DECE23EA32FE008FE5B4 /* NotificationBanner+Shared.swift */; };
+		2BD92A4923EDD95F00114E2D /* BannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD92A4823EDD95F00114E2D /* BannerController.swift */; };
 		6353FD3A2086DDC900E16EB2 /* CardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353FD392086DDC900E16EB2 /* CardController.swift */; };
 		6389C94E20858D5400F78003 /* PollPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C94D20858D5400F78003 /* PollPreviewCell.swift */; };
 		6389C9522085953F00F78003 /* PollsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389C9512085953F00F78003 /* PollsCell.swift */; };
@@ -175,6 +177,8 @@
 		0CDAF0D421727DA3004DB6EA /* SpaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceCell.swift; sourceTree = "<group>"; };
 		0CF647822176970900535573 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		274A52F154DE3D5EFF4998C7 /* Pods-Pollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.debug.xcconfig"; sourceTree = "<group>"; };
+		2B35DECE23EA32FE008FE5B4 /* NotificationBanner+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationBanner+Shared.swift"; sourceTree = "<group>"; };
+		2BD92A4823EDD95F00114E2D /* BannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerController.swift; sourceTree = "<group>"; };
 		5B7D1F88A8FFC4A020BFA1A2 /* Pods_Pollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6353FD392086DDC900E16EB2 /* CardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardController.swift; sourceTree = "<group>"; };
 		6389C94D20858D5400F78003 /* PollPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollPreviewCell.swift; sourceTree = "<group>"; };
@@ -586,6 +590,7 @@
 				C2900D422146F72900566F25 /* String+Shared.swift */,
 				6397F8C72174294C00F515DE /* UINavigationController+Shared.swift */,
 				0C4A24CE227638A700AE0B76 /* UITextField+Shared.swift */,
+				2B35DECE23EA32FE008FE5B4 /* NotificationBanner+Shared.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -599,6 +604,7 @@
 				C2E9C70A2182ACCE00E36659 /* EventPayload.swift */,
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				D412ACD12247BF7C009B6E83 /* Ratings.swift */,
+				2BD92A4823EDD95F00114E2D /* BannerController.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -803,7 +809,10 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/IGListKit/IGListKit.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Presentr/Presentr.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -817,7 +826,10 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IGListKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Presentr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -1000,6 +1012,7 @@
 				C2434CB92134715600929C98 /* PollTypeSectionController.swift in Sources */,
 				C25F21E8203F76F2001F540E /* CreateMCOptionCell.swift in Sources */,
 				C22F66642141B7AA00D4E349 /* SeparatorLineCell.swift in Sources */,
+				2BD92A4923EDD95F00114E2D /* BannerController.swift in Sources */,
 				0C40B4792201E56B005BED7B /* PollEndpoints.swift in Sources */,
 				C26EBB6721B8F46100AC2B60 /* DraftsTitleCell.swift in Sources */,
 				B638A0A52236C2ED00D1C2D2 /* HeaderCell.swift in Sources */,
@@ -1030,6 +1043,7 @@
 				C271A07C2193F00B00EF12B4 /* PollsDateAttendanceSectionController.swift in Sources */,
 				D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */,
 				C2833DF62158747C00586D87 /* PollsDateViewController.swift in Sources */,
+				2B35DECF23EA32FE008FE5B4 /* NotificationBanner+Shared.swift in Sources */,
 				63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */,
 				C26D5F53214F5FE900548255 /* PollsDateCell.swift in Sources */,
 				C2A0F7CD213A106C00A28D75 /* HamburgerCardModel.swift in Sources */,

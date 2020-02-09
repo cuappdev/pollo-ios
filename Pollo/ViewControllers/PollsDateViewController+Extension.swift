@@ -9,6 +9,7 @@
 import IGListKit
 import SwiftyJSON
 import UIKit
+import NotificationBannerSwift
 
 extension PollsDateViewController: ListAdapterDataSource {
     
@@ -150,20 +151,39 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 
 extension PollsDateViewController: SocketDelegate {
 
-    func sessionConnected() {}
-    
-    func sessionDisconnected() {}
+    func sessionConnected() {
+        let banner = NotificationBanner.connectedBanner()
+        BannerController.shared.show(banner)
+    }
 
-    func sessionErrored() {
+    func sessionDisconnected() {
         socket.socket.connect(timeoutAfter: 5) { [weak self] in
             guard let `self` = self else { return }
-            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
-                self.goBack()
-                self.socket.delegate = nil
-            })
-            if self.presentedViewController == nil {
-                self.present(alertController, animated: true, completion: nil)
+            let banner = NotificationBanner.disconnectedBanner()
+            banner.onTap = { [weak self] in
+                guard let `self` = self else { return }
+                banner.dismiss()
+                self.socket.socket.setReconnecting(reason: "")
             }
+            BannerController.shared.show(banner)
+        }
+
+    }
+
+    func sessionReconnecting(reason: String) {
+        let banner = NotificationBanner.reconnectingBanner(reason: reason)
+        BannerController.shared.show(banner)
+
+        socket.socket.connect(timeoutAfter: 10) { [weak self] in
+            guard let `self` = self else { return }
+            self.socket.delegate?.sessionDisconnected()
+        }
+    }
+
+    func sessionErrored() {
+        // Attempt reconnect if not already
+        if BannerController.shared.currentBanner == nil {
+            self.socket.socket.setReconnecting(reason: "")
         }
     }
     
@@ -249,7 +269,7 @@ extension PollsDateViewController: SocketDelegate {
     func appendPoll(poll: Poll) {
         let todaysDate = Date()
         if let firstPollDateModel = pollsDateArray.first, firstPollDateModel.dateValue.isSameDay(as: todaysDate) {
-            var updatedPolls = firstPollDateModel.polls
+            var updatedPolls = firstPollDateModel.polls.filter { !$0.isEqual(toDiffableObject: poll) }
             updatedPolls.append(poll)
             let updatedPollsDateModel = PollsDateModel(date: firstPollDateModel.date, polls: updatedPolls)
             pollsDateArray[0] = updatedPollsDateModel

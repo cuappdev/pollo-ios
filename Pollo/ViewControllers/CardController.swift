@@ -10,6 +10,8 @@ import IGListKit
 import FutureNova
 import Presentr
 import UIKit
+import NotificationBannerSwift
+import Reachability
 
 protocol CardControllerDelegate: class {
     
@@ -51,6 +53,7 @@ class CardController: UIViewController {
     var userRole: UserRole!
     var wasScrolledToIndex: Int!
     weak var delegate: CardControllerDelegate?
+    var reachability: Reachability!
     
     // MARK: - Constants
     let collectionViewHorizontalInset: CGFloat = 9.0
@@ -85,6 +88,43 @@ class CardController: UIViewController {
         setupNavBar()
         setupViews()
         socket.updateDelegate(self)
+        do {
+            try reachability = Reachability()
+        } catch {
+            fatalError("Reachability failed on init.")
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        socket.updateDelegate(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
+        do {
+            try reachability.startNotifier()
+        } catch {
+            print("Could not start reachability notifier")
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        reachability.stopNotifier()
+        NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: reachability)
+    }
+
+    @objc func reachabilityChanged(note: Notification) {
+        guard let reachability = note.object as? Reachability else { return }
+        switch reachability.connection {
+        case .wifi:
+            print("Reachable via WiFi")
+            socket.socket.connect()
+        case .cellular:
+            print("Reachable via Cellular")
+            socket.socket.connect()
+        default:
+            print("Network not reachable")
+            self.socket.socket.setReconnecting(reason: "No Internet connection.")
+        }
     }
     
     @objc func didTap() {
