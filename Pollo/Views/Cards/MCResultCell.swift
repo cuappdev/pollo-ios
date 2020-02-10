@@ -169,10 +169,9 @@ class MCResultCell: UICollectionViewCell {
         let answer = intToMCOption(resultModel.choiceIndex)
         switch userRole {
         case .admin:
-            containerView.backgroundColor = correctAnswer == answer ? .lightGreen : .lightGrey
-            containerView.layer.borderWidth = containerViewBorderWidth
-            containerView.layer.cornerRadius = containerViewCornerRadius
-            highlightView.isHidden = true
+            containerView.backgroundColor = .clear
+            containerView.layer.borderWidth = highlightViewBorderWidth
+            containerView.layer.cornerRadius = highlightViewCornerRadius
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
@@ -180,37 +179,38 @@ class MCResultCell: UICollectionViewCell {
             containerView.backgroundColor = .clear
             containerView.layer.borderWidth = highlightViewBorderWidth
             containerView.layer.cornerRadius = highlightViewCornerRadius
-            optionLabel.textColor = .mediumGrey
             numSelectedLabel.isHidden = true
             dotView.isHidden = false
-            let isSelected = resultModel.isSelected
-            selectedDotView.isHidden = !isSelected
-            selectedImageView.isHidden = selectedDotView.isHidden
-            if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
-                if answer == correctAnswer {
-                    if isSelected {
-                        selectedDotView.backgroundColor = .clear
-                        selectedImageView.image = UIImage(named: correctImageName)
-                    }
-                    showCorrectAnswer = true
-                    highlightView.backgroundColor = .lightGreen
-                    highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-                } else {
-                    if isSelected {
-                        selectedDotView.backgroundColor = .clear
-                        selectedImageView.image = UIImage(named: incorrectImageName)
-                    }
-                    highlightView.backgroundColor = .lightGrey
-                    highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+            optionLabel.textColor = .mediumGrey
+        }
+        
+        let isSelected = resultModel.isSelected
+        selectedDotView.isHidden = !isSelected
+        selectedImageView.isHidden = selectedDotView.isHidden
+        if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
+            if answer == correctAnswer {
+                if isSelected {
+                    selectedDotView.backgroundColor = .clear
+                    selectedImageView.image = UIImage(named: correctImageName)
                 }
+                showCorrectAnswer = true
+                highlightView.backgroundColor = .lightGreen
+                highlightView.layer.borderColor = UIColor.polloGreen.cgColor
             } else {
                 if isSelected {
-                    selectedDotView.backgroundColor = .coolGrey
-                    selectedImageView.image = nil
+                    selectedDotView.backgroundColor = .clear
+                    selectedImageView.image = UIImage(named: incorrectImageName)
                 }
                 highlightView.backgroundColor = .lightGrey
                 highlightView.layer.borderColor = UIColor.coolGrey.cgColor
             }
+        } else {
+            if isSelected {
+                selectedDotView.backgroundColor = .coolGrey
+                selectedImageView.image = nil
+            }
+            highlightView.backgroundColor = .lightGrey
+            highlightView.layer.borderColor = UIColor.coolGrey.cgColor
         }
     }
 
