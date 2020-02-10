@@ -169,21 +169,17 @@ class MCResultCell: UICollectionViewCell {
         let answer = intToMCOption(resultModel.choiceIndex)
         switch userRole {
         case .admin:
-            containerView.backgroundColor = .clear
-            containerView.layer.borderWidth = highlightViewBorderWidth
-            containerView.layer.cornerRadius = highlightViewCornerRadius
             numSelectedLabel.isHidden = false
             dotView.isHidden = true
             optionLabel.textColor = .black
         case .member:
-            containerView.backgroundColor = .clear
-            containerView.layer.borderWidth = highlightViewBorderWidth
-            containerView.layer.cornerRadius = highlightViewCornerRadius
             numSelectedLabel.isHidden = true
             dotView.isHidden = false
             optionLabel.textColor = .mediumGrey
         }
-        
+        containerView.backgroundColor = .clear
+        containerView.layer.borderWidth = highlightViewBorderWidth
+        containerView.layer.cornerRadius = highlightViewCornerRadius
         let isSelected = resultModel.isSelected
         selectedDotView.isHidden = !isSelected
         selectedImageView.isHidden = selectedDotView.isHidden
