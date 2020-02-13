@@ -368,8 +368,10 @@ class PollsViewController: UIViewController {
                     let session = sessionResponse.data
                     session.isLive = false
                     self.hideNewGroupActivityIndicatorView()
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
-                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+//                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+
+                    let pollingViewController = PollingViewController(delegate: self, pollsDateArray: [], session: session, userRole: .admin)
+                    self.navigationController?.pushViewController(pollingViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: CreatedGroupPayload())
                     self.createSessionTextField.text = ""
@@ -422,8 +424,8 @@ class PollsViewController: UIViewController {
                     }
                     
                     self.updateJoinSessionButton(canJoin: false)
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
-                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    let pollingViewController = PollingViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: .member)
+                    self.navigationController?.pushViewController(pollingViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     Analytics.shared.log(with: JoinedGroupPayload())
                 }

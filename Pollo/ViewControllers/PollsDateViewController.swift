@@ -12,10 +12,6 @@ import Presentr
 import UIKit
 import NotificationBannerSwift
 
-protocol PollsDateViewControllerDelegate: class {
-    func pollsDateViewControllerWasPopped(for userRole: UserRole)
-}
-
 class PollsDateViewController: UIViewController {
     
     // MARK: - View vars
@@ -33,16 +29,16 @@ class PollsDateViewController: UIViewController {
     var session: Session!
     var socket: Socket!
     var userRole: UserRole!
-    weak var delegate: PollsDateViewControllerDelegate?
+//    weak var delegate: PollsDateViewControllerDelegate?
     
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 20
     let countLabelWidth: CGFloat = 42.0
     let insetPadding: CGFloat = 16
     
-    init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
+    init(pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
-        self.delegate = delegate
+//        self.delegate = delegate
         self.pollsDateArray = pollsDateArray
         self.session = session
         self.userRole = userRole
@@ -53,7 +49,8 @@ class PollsDateViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .darkestGrey
         setupViews()
-        setupNavBar()
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+//        setupNavBar()
         self.socket = Socket(id: "\(session.id)", delegate: self)
     }
     
@@ -99,30 +96,31 @@ class PollsDateViewController: UIViewController {
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        BannerController.shared.show(NotificationBanner.connectingBanner())
+        (self.parent as? PollingViewController)?.currentBanner = NotificationBanner.connectingBanner()
+//        BannerController.shared.show(NotificationBanner.connectingBanner())
     }
     
-    func setupNavBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        // REMOVE BOTTOM SHADOW
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        let textHeight = navigationController?.navigationBar.frame.height ?? 0
-        navigationTitleView = getNavigationTitleView(primaryText: session.name, primaryTextHeight: textHeight, secondaryText: "Code: \(session.code)", secondaryTextHeight: textHeight, userRole: userRole, delegate: self)
-        self.navigationItem.titleView = navigationTitleView
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
-        if userRole == .admin {
-            createPollButton = UIButton()
-            createPollButton.isHidden = pollsDateArray.last?.polls.last?.state == .live
-            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
-            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton]
-        }
-    }
+//    func setupNavBar() {
+//        navigationController?.setNavigationBarHidden(false, animated: false)
+//        // REMOVE BOTTOM SHADOW
+//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+//        navigationController?.navigationBar.shadowImage = UIImage()
+//        let textHeight = navigationController?.navigationBar.frame.height ?? 0
+//        navigationTitleView = getNavigationTitleView(primaryText: session.name, primaryTextHeight: textHeight, secondaryText: "Code: \(session.code)", secondaryTextHeight: textHeight, userRole: userRole, delegate: self)
+//        self.navigationItem.titleView = navigationTitleView
+//
+//        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+//
+//        if userRole == .admin {
+//            createPollButton = UIButton()
+//            createPollButton.isHidden = pollsDateArray.last?.polls.last?.state == .live
+//            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+//            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+//            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+//            self.navigationItem.rightBarButtonItems = [createPollBarButton]
+//        }
+//    }
 
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
@@ -136,35 +134,35 @@ class PollsDateViewController: UIViewController {
         return networking(Endpoint.deleteSession(with: id)).decode()
     }
     
-    @objc func goBack() {
-        socket.updateDelegate(nil)
-        socket.socket.disconnect()
-        BannerController.shared.dismiss()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.popViewController(animated: true)
-        if pollsDateArray.isEmpty && session.name == session.code {
-            deleteSession(with: session.id).observe { [weak self] result in
-                guard let `self` = self else { return }
-                DispatchQueue.main.async {
-                    switch result {
-                    case .value(let response):
-                        if response.success {
-                            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
-                        } else {
-                            let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
-                            self.present(alertController, animated: true, completion: nil)
-                        }
-                    case .error(let error):
-                        print(error)
-                        let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                }
-            }
-        } else {
-            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
-        }
-    }
+//    @objc func goBack() {
+//        socket.updateDelegate(nil)
+//        socket.socket.disconnect()
+//        BannerController.shared.dismiss()
+//        self.navigationController?.setNavigationBarHidden(true, animated: false)
+//        self.navigationController?.popViewController(animated: true)
+//        if pollsDateArray.isEmpty && session.name == session.code {
+//            deleteSession(with: session.id).observe { [weak self] result in
+//                guard let `self` = self else { return }
+//                DispatchQueue.main.async {
+//                    switch result {
+//                    case .value(let response):
+//                        if response.success {
+//                            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
+//                        } else {
+//                            let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+//                            self.present(alertController, animated: true, completion: nil)
+//                        }
+//                    case .error(let error):
+//                        print(error)
+//                        let alertController = self.createAlert(title: "Error", message: "Failed to delete session. Try again!")
+//                        self.present(alertController, animated: true, completion: nil)
+//                    }
+//                }
+//            }
+//        } else {
+//            self.delegate?.pollsDateViewControllerWasPopped(for: self.userRole)
+//        }
+//    }
     
     func getMembers(with id: String) -> Future<Response<[GetMemberResponse]>> {
         return networking(Endpoint.getMembers(with: id)).decode()
@@ -172,9 +170,5 @@ class PollsDateViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
     }
 }

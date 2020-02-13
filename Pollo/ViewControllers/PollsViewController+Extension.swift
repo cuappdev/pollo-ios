@@ -89,8 +89,8 @@ extension PollsViewController: PollsCellDelegate {
                             }
                         }
                     }
-                    let pollsDateViewController = PollsDateViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: userRole)
-                    self.navigationController?.pushViewController(pollsDateViewController, animated: true)
+                    let pollingViewController = PollingViewController(delegate: self, pollsDateArray: pollsDateArray.reversed(), session: session, userRole: userRole)
+                    self.navigationController?.pushViewController(pollingViewController, animated: true)
                     self.navigationController?.setNavigationBarHidden(false, animated: true)
                     withCell.hideOpenSessionActivityIndicatorView()
                     self.isOpeningGroup = false
@@ -205,7 +205,7 @@ extension PollsViewController: UIGestureRecognizerDelegate {
     
 }
 
-extension PollsViewController: PollsDateViewControllerDelegate {
+extension PollsViewController: PollingViewControllerDelegate {
 
     func pollsDateViewControllerWasPopped(for userRole: UserRole) {
         reloadSessions(for: userRole) { sessions in

@@ -17,7 +17,7 @@ protocol CardControllerDelegate: class {
     
     func cardControllerDidStartNewPoll(poll: Poll)
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
-    func navigationTitleViewNavigationButtonTapped()
+//    func navigationTitleViewNavigationButtonTapped()
     func pollDeleted(_ pollID: String, userRole: UserRole)
     func pollDeletedLive()
     func pollEnded(_ poll: Poll, userRole: UserRole)
@@ -85,7 +85,7 @@ class CardController: UIViewController {
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
         view.addGestureRecognizer(tapGestureRecognizer)
         
-        setupNavBar()
+//        setupNavBar()
         setupViews()
         socket.updateDelegate(self)
         do {
@@ -183,28 +183,28 @@ class CardController: UIViewController {
         }
     }
     
-    func setupNavBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        // REMOVE BOTTOM SHADOW
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        let textHeight = navigationController?.navigationBar.frame.height ?? 0
-        navigationTitleView = getNavigationTitleView(primaryText: session.name, primaryTextHeight: textHeight, secondaryText: "Code: \(session.code)", secondaryTextHeight: textHeight, userRole: userRole, delegate: self)
-        self.navigationItem.titleView = navigationTitleView
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
-        
-        if userRole == .admin {
-            createPollButton = UIButton()
-            createPollButton.isHidden = session.isLive ?? false
-            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
-            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
-            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
-            self.navigationItem.rightBarButtonItems = [createPollBarButton]
-        }
-
-    }
+//    func setupNavBar() {
+//        navigationController?.setNavigationBarHidden(false, animated: false)
+//        // REMOVE BOTTOM SHADOW
+//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+//        navigationController?.navigationBar.shadowImage = UIImage()
+//        let textHeight = navigationController?.navigationBar.frame.height ?? 0
+//        navigationTitleView = getNavigationTitleView(primaryText: session.name, primaryTextHeight: textHeight, secondaryText: "Code: \(session.code)", secondaryTextHeight: textHeight, userRole: userRole, delegate: self)
+//        self.navigationItem.titleView = navigationTitleView
+//
+//        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .done, target: self, action: #selector(goBack))
+//
+//        if userRole == .admin {
+//            createPollButton = UIButton()
+//            createPollButton.isHidden = session.isLive ?? false
+//            createPollButton.setImage(#imageLiteral(resourceName: "whiteCreatePoll"), for: .normal)
+//            createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
+//            let createPollBarButton = UIBarButtonItem(customView: createPollButton)
+//            self.navigationItem.rightBarButtonItems = [createPollBarButton]
+//        }
+//
+//    }
     
     // MARK: Helpers
     func updateCountLabelText() {

@@ -76,6 +76,12 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
     func pollsDateSectionControllerDidTap(for pollsDateModel: PollsDateModel) {
         let cardController = CardController(delegate: self, pollsDateModel: pollsDateModel, session: session, socket: socket, userRole: userRole, numberOfPeople: numberOfPeople)
         self.navigationController?.pushViewController(cardController, animated: true)
+//        cardController.modalPresentationStyle = .popover
+//        self.present(cardController, animated: true, completion: nil)
+//        self.parent?.add(cardController.navigationController ?? cardController)
+//        self.parent?.add(cardController)
+
+//        self.parent?.navigationController?.pushViewController(cardController, animated: true)
     }
     
 }
@@ -117,47 +123,17 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
 }
 
-extension PollsDateViewController: NavigationTitleViewDelegate {
-
-    func navigationTitleViewNavigationButtonTapped() {
-        guard userRole == .admin else { return }
-        let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
-        getMembers(with: session?.id ?? "").observe { [weak self] result in
-            guard let `self` = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count, delegate: self)
-                    self.navigationController?.pushViewController(groupControlsVC, animated: true)
-                case .error(let error):
-                    print(error)
-                    let alertController = self.createAlert(title: "Error", message: "Failed to load data. Try again!")
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-
-}
-
-// MARK: - GroupControlsViewControllerDelegate
-extension PollsDateViewController: GroupControlsViewControllerDelegate {
-
-    func groupControlsViewControllerDidUpdateSession(_ session: Session) {
-        self.session = session
-    }
-
-}
-
 extension PollsDateViewController: SocketDelegate {
 
     func sessionConnected() {
         let banner = NotificationBanner.connectedBanner()
-        BannerController.shared.show(banner)
+        (self.navigationController?.parent as? PollingViewController)?.currentBanner = banner
+//        BannerController.shared.show(banner)
     }
 
     func sessionDisconnected() {
         socket.socket.connect(timeoutAfter: 5) { [weak self] in
+            DispatchQueue.main.async {
             guard let `self` = self else { return }
             let banner = NotificationBanner.disconnectedBanner()
             banner.onTap = { [weak self] in
@@ -166,6 +142,7 @@ extension PollsDateViewController: SocketDelegate {
                 self.socket.socket.setReconnecting(reason: "")
             }
             BannerController.shared.show(banner)
+            }
         }
 
     }
