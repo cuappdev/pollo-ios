@@ -385,6 +385,7 @@ extension CardController: SocketDelegate {
         switch pollsDateModel.polls[index].state {
         case .live:
             socket.socket.emit(Routes.serverDeleteLive)
+            session.isLive = false
             pollsDateModel.polls[index].state = .ended
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false
