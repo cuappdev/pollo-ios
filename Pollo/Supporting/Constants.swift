@@ -12,7 +12,7 @@ import UIKit
 struct Links {
     static let allApps = "https://itunes.apple.com/us/developer/walker-white/id1089672961"
     static let appDevSite = "https://www.cornellappdev.com/"
-    static let feedbackForm = "https://goo.gl/forms/9izY3GCRWoA1Fe8e2"
+    static let feedbackForm = "https://forms.gle/HvT5srEt7ZXbdieaA"
     static let privacyPolicy = "https://www.cornellappdev.com/privacy/policies/pollo/"
 }
 
