@@ -307,9 +307,7 @@ extension CardController: SocketDelegate {
         }
         guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.id == pollID }) else { return }
         pollsDateModel.polls.remove(at: deleteIndex)
-        if currentIndex != 0 {
-            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
-        }
+        currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
         adapter.performUpdates(animated: true, completion: nil)
     }
@@ -321,9 +319,7 @@ extension CardController: SocketDelegate {
         }
         guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.state == .live }) else { return }
         pollsDateModel.polls.remove(at: deleteIndex)
-        if currentIndex != 0 {
-            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
-        }
+        currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
         if pollsDateModel.polls.isEmpty {
@@ -437,7 +433,7 @@ extension CardController: EditPollViewControllerDelegate {
         adapter.performUpdates(animated: true) { completed in
             if completed && !self.pollsDateModel.polls.isEmpty {
                 // Move current index based on which poll was deleted
-                self.currentIndex = self.currentIndex == 0 ? self.currentIndex : self.currentIndex - 1
+                self.currentIndex = self.currentIndex == self.pollsDateModel.polls.count ? self.currentIndex - 1 : self.currentIndex
             }
             self.updateCountLabelText()
             if self.pollsDateModel.polls.isEmpty {
