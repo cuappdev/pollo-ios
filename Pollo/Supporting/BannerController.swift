@@ -36,9 +36,7 @@ public class BannerController {
 
 extension BannerController: NotificationBannerDelegate {
     public func notificationBannerWillAppear(_ banner: BaseNotificationBanner) {
-        if self.currentBanner == nil {
-            banner.isHidden = true
-        }
+        banner.isHidden = self.currentBanner == nil
     }
 
     public func notificationBannerDidAppear(_ banner: BaseNotificationBanner) {
