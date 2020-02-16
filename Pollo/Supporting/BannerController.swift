@@ -16,6 +16,7 @@ public class BannerController {
     var currentBanner: BaseNotificationBanner?
 
     func show(_ banner: BaseNotificationBanner) {
+        banner.delegate = self
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.currentBanner?.dismiss()
@@ -31,4 +32,22 @@ public class BannerController {
             self.currentBanner = nil
         }
     }
+}
+
+extension BannerController: NotificationBannerDelegate {
+
+    public func notificationBannerWillAppear(_ banner: BaseNotificationBanner) {
+        banner.isHidden = self.currentBanner == nil
+    }
+
+    public func notificationBannerDidAppear(_ banner: BaseNotificationBanner) {
+        if self.currentBanner == nil {
+            banner.dismiss()
+        }
+    }
+
+    public func notificationBannerWillDisappear(_ banner: BaseNotificationBanner) { }
+
+    public func notificationBannerDidDisappear(_ banner: BaseNotificationBanner) { }
+
 }
