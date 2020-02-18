@@ -37,6 +37,7 @@ public class BannerController {
 extension BannerController: NotificationBannerDelegate {
 
     public func notificationBannerWillAppear(_ banner: BaseNotificationBanner) {
+        banner.haptic = .none
         banner.isHidden = self.currentBanner == nil
     }
 
