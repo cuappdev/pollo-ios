@@ -224,7 +224,7 @@ extension CardController: SocketDelegate {
     func sessionConnected() {
         let banner = NotificationBanner.connectedBanner()
         BannerController.shared.show(banner)
-        collectionView.isUserInteractionEnabled = true
+        isConnected = true
     }
     
     func sessionDisconnected() {
@@ -237,14 +237,14 @@ extension CardController: SocketDelegate {
             }
 
             BannerController.shared.show(banner)
-            self.collectionView.isUserInteractionEnabled = false
+            self.isConnected = false
         }
     }
 
     func sessionReconnecting(reason: String) {
         let banner = NotificationBanner.reconnectingBanner(reason: reason)
         BannerController.shared.show(banner)
-        collectionView.isUserInteractionEnabled = false
+        isConnected = false
 
         socket.socket.connect(timeoutAfter: 10) { [weak self] in
             guard let `self` = self else { return }
