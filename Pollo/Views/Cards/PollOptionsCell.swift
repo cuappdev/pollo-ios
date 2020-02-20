@@ -12,6 +12,7 @@ import IGListKit
 protocol PollOptionsCellDelegate: class {
     
     var userRole: UserRole { get }
+    var isConnected: Bool { get }
     
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int)
     
@@ -195,6 +196,10 @@ extension PollOptionsCell: MCResultSectionControllerDelegate {
     var userRole: UserRole {
         return delegate.userRole
     }
+
+    var isConnected: Bool {
+        return delegate.isConnected
+    }
     
 }
 
@@ -205,6 +210,7 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
     }
     
     func mcChoiceSectionControllerWasSelected(sectionController: MCChoiceSectionController) {
+        guard isConnected else { return }
         switch pollOptionsModel.type {
         case .mcChoice(choiceModels: var mcChoiceModels):
             if mcSelectedIndex != NSNotFound {

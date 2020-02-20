@@ -14,7 +14,7 @@ import NotificationBannerSwift
 import Reachability
 
 protocol CardControllerDelegate: class {
-    
+
     func cardControllerDidStartNewPoll(poll: Poll)
     func cardControllerWillDisappear(with pollsDateModel: PollsDateModel, numberOfPeople: Int)
     func navigationTitleViewNavigationButtonTapped()
@@ -54,6 +54,7 @@ class CardController: UIViewController {
     var wasScrolledToIndex: Int!
     weak var delegate: CardControllerDelegate?
     var reachability: Reachability!
+    var isConnected: Bool = true
     
     // MARK: - Constants
     let collectionViewHorizontalInset: CGFloat = 17.0

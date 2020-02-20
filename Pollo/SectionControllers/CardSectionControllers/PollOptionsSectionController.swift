@@ -11,6 +11,7 @@ import IGListKit
 protocol PollOptionsSectionControllerDelegate {
     
     var userRole: UserRole { get }
+    var isConnected: Bool { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
     
@@ -60,6 +61,10 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     
     var userRole: UserRole {
         return delegate.userRole
+    }
+
+    var isConnected: Bool {
+        return delegate.isConnected
     }
 
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int) {
