@@ -56,14 +56,13 @@ class CardController: UIViewController {
     var reachability: Reachability!
     
     // MARK: - Constants
-    let collectionViewHorizontalInset: CGFloat = 9.0
+    let collectionViewHorizontalInset: CGFloat = 17.0
     let collectionViewTopPadding: CGFloat = 16.0
     let countLabelBackgroundViewTopPadding: CGFloat = 24
     let countLabelHeight: CGFloat = 21.0
     let countLabelHorizontalPadding: CGFloat = 5
     let countLabelWidth: CGFloat = 30.5
     let editModalHeight: CGFloat = 205
-    let navigationTitleHeight: CGFloat = 51.5
     let swipeVelocityThreshold: CGFloat = 0.5
     
     init(delegate: CardControllerDelegate, pollsDateModel: PollsDateModel, session: Session, socket: Socket, userRole: UserRole, numberOfPeople: Int) {

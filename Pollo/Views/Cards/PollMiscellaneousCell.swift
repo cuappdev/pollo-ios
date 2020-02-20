@@ -26,11 +26,10 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let liveEndedDescriptionTextAdmin = "Only you can see results"
     let liveOpenTextMember = "Open for responses"
     let liveSubmittedTextMember = "Submitted! Tap other answers to change"
-    let responseString = "response"
     let sharedDescriptionText = "Shared with group"
     let sharedTextMember = "Final results  • "
     let totalVotesLabelTrailingPadding: CGFloat = 18
-    let voteString = "Vote"
+    let voteString = "Response"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,7 +75,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 make.centerY.equalToSuperview()
             }
         case .member:
-            
             descriptionLabel.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.centerY.equalToSuperview()
@@ -94,10 +92,10 @@ class PollMiscellaneousCell: UICollectionViewCell {
             switch miscellaneousModel.pollState {
             case .live, .ended:
                 iconImageView.image = #imageLiteral(resourceName: "solo_eye")
-                descriptionLabel.text = "Only you can see results"
+                descriptionLabel.text = liveEndedDescriptionTextAdmin
             case .shared:
                 iconImageView.image = #imageLiteral(resourceName: "results_shared")
-                descriptionLabel.text = "Shared with group"
+                descriptionLabel.text = sharedDescriptionText
             }
             var unit: String
             switch miscellaneousModel.questionType! {

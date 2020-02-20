@@ -13,7 +13,6 @@ class PollsDateCell: UICollectionViewCell {
     // MARK: - View vars
     var dateLabel: UILabel!
     var greyView: UIView!
-    var numQuestionsLabel: UILabel!
     var rightArrowButtonImageView: UIImageView!
     
     // MARK: - Constants
@@ -21,8 +20,6 @@ class PollsDateCell: UICollectionViewCell {
     let dateLabelFontSize: CGFloat = 16
     let dateLabelLeftPadding: CGFloat = 16
     let greyViewInset: CGFloat = 16
-    let numQuestionsLabelFontSize: CGFloat = 11
-    let numQuestionsLabelRightPadding: CGFloat = 40.5
     let rightArrowButtonImageViewHeight: CGFloat = 15
     let rightArrowButtonImageViewRightPadding: CGFloat = 13
     
@@ -44,12 +41,6 @@ class PollsDateCell: UICollectionViewCell {
         dateLabel.textColor = .white
         dateLabel.font = UIFont.boldSystemFont(ofSize: dateLabelFontSize)
         contentView.addSubview(dateLabel)
-        
-        numQuestionsLabel = UILabel()
-        numQuestionsLabel.textColor = .white
-        numQuestionsLabel.font = UIFont.systemFont(ofSize: numQuestionsLabelFontSize)
-        numQuestionsLabel.textAlignment = .right
-        contentView.addSubview(numQuestionsLabel)
         
         rightArrowButtonImageView = UIImageView()
         rightArrowButtonImageView.image = #imageLiteral(resourceName: "forward_arrow")
@@ -75,19 +66,12 @@ class PollsDateCell: UICollectionViewCell {
             make.height.equalTo(rightArrowButtonImageViewHeight)
         }
         
-        numQuestionsLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(greyView.snp.trailing).inset(numQuestionsLabelRightPadding)
-            make.centerY.equalToSuperview()
-        }
-        
         super.updateConstraints()
     }
     
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
         dateLabel.text = reformatDate(pollsDateModel.dateValue)
-        let numPolls = pollsDateModel.polls.count
-        numQuestionsLabel.text = "\(numPolls) \(numPolls > 1 ? "Questions" : "Question")"
     }
     
     // MARK: - Helpers
