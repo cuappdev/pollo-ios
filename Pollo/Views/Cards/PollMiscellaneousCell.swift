@@ -26,10 +26,11 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let liveEndedDescriptionTextAdmin = "Only you can see results"
     let liveOpenTextMember = "Open for responses"
     let liveSubmittedTextMember = "Submitted! Tap other answers to change"
+    let responseString = "Response"
     let sharedDescriptionText = "Shared with group"
     let sharedTextMember = "Final results  • "
     let totalResponsesLabelTrailingPadding: CGFloat = 18
-    let responseString = "Response"
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
