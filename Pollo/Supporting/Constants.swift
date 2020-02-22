@@ -58,7 +58,7 @@ struct Routes {
 struct LayoutConstants {
     static let buttonImageInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
     static let buttonSize: CGSize = CGSize(width: 44, height: 44)
-    static let cardHorizontalPadding: CGFloat = 18
+    static let cardHorizontalPadding: CGFloat = 16
     static let frInputCellHeight: CGFloat = 64
     static let frOptionCellHeight: CGFloat = 58
     static let hamburgerCardCellHeight: CGFloat = 25
