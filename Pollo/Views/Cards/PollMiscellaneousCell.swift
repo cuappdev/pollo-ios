@@ -16,7 +16,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     // MARK: - View vars
     var descriptionLabel: UILabel!
     var iconImageView: UIImageView!
-    var totalVotesLabel: UILabel!
+    var totalResponsesLabel: UILabel!
     
     // MARK: - Constants
     let descriptionLabelXPadding: CGFloat = 10
@@ -28,8 +28,8 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let liveSubmittedTextMember = "Submitted! Tap other answers to change"
     let sharedDescriptionText = "Shared with group"
     let sharedTextMember = "Final results  • "
-    let totalVotesLabelTrailingPadding: CGFloat = 18
-    let voteString = "Response"
+    let totalResponsesLabelTrailingPadding: CGFloat = 18
+    let responseString = "Response"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,10 +49,10 @@ class PollMiscellaneousCell: UICollectionViewCell {
         descriptionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(descriptionLabel)
         
-        totalVotesLabel = UILabel()
-        totalVotesLabel.textColor = .blueGrey
-        totalVotesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
-        contentView.addSubview(totalVotesLabel)
+        totalResponsesLabel = UILabel()
+        totalResponsesLabel.textColor = .blueGrey
+        totalResponsesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
+        contentView.addSubview(totalResponsesLabel)
     }
     
     override func updateConstraints() {
@@ -70,8 +70,8 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 make.centerY.equalToSuperview()
             }
             
-            totalVotesLabel.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().inset(totalVotesLabelTrailingPadding)
+            totalResponsesLabel.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().inset(totalResponsesLabelTrailingPadding)
                 make.centerY.equalToSuperview()
             }
         case .member:
@@ -100,9 +100,9 @@ class PollMiscellaneousCell: UICollectionViewCell {
             var unit: String
             switch miscellaneousModel.questionType! {
             case .multipleChoice:
-                unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
+                unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
             }
-            totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
+            totalResponsesLabel.text = "\(miscellaneousModel.totalResponses) \(unit)"
         case .member:
             descriptionLabel.textAlignment = .center
             switch miscellaneousModel.pollState {
@@ -114,9 +114,9 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 var unit: String
                 switch miscellaneousModel.questionType! {
                 case .multipleChoice:
-                    unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
+                    unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
                 }
-                descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalVotes) \(unit)"
+                descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalResponses) \(unit)"
             }
         }
     }
