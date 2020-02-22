@@ -180,33 +180,31 @@ class MCResultCell: UICollectionViewCell {
         containerView.backgroundColor = .clear
         containerView.layer.borderWidth = highlightViewBorderWidth
         containerView.layer.cornerRadius = highlightViewCornerRadius
+        
+        // Setup default MC visuals
         let isSelected = resultModel.isSelected
         selectedDotView.isHidden = !isSelected
+        selectedDotView.backgroundColor = .coolGrey
+        
         selectedImageView.isHidden = selectedDotView.isHidden
+        selectedImageView.image = nil
+        
+        highlightView.backgroundColor = .lightGrey
+        highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+        
+        // Override default visuals when there is correct answer
         if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
-            if answer == correctAnswer {
-                if isSelected {
+            let selectedCorrectAnswer = answer == correctAnswer
+            if isSelected {
                     selectedDotView.backgroundColor = .clear
-                    selectedImageView.image = UIImage(named: correctImageName)
-                }
+                    selectedImageView.image = UIImage(named: selectedCorrectAnswer  ? correctImageName : incorrectImageName)
+            }
+            if selectedCorrectAnswer {
                 showCorrectAnswer = true
                 highlightView.backgroundColor = .lightGreen
                 highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-            } else {
-                if isSelected {
-                    selectedDotView.backgroundColor = .clear
-                    selectedImageView.image = UIImage(named: incorrectImageName)
-                }
-                highlightView.backgroundColor = .lightGrey
-                highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+                
             }
-        } else {
-            if isSelected {
-                selectedDotView.backgroundColor = .coolGrey
-                selectedImageView.image = nil
-            }
-            highlightView.backgroundColor = .lightGrey
-            highlightView.layer.borderColor = UIColor.coolGrey.cgColor
         }
     }
 
