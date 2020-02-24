@@ -24,7 +24,6 @@ class MCResultCell: UICollectionViewCell {
     // MARK: - Data vars
     var correctAnswer: String?
     var didLayoutConstraints = false
-    var highlightViewWidthConstraint: Constraint!
     var index: Int!
     var percentSelected: Float!
     var showCorrectAnswer = false
