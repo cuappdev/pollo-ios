@@ -22,7 +22,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let descriptionLabelXPadding: CGFloat = 10
     let endedTextMember = "Poll Closed"
     let iconImageViewLength: CGFloat = 15
-    let labelFontSize: CGFloat = 12
     let liveEndedDescriptionTextAdmin = "Only you can see results"
     let liveOpenTextMember = "Open for responses"
     let liveSubmittedTextMember = "Submitted! Tap other answers to change"
@@ -47,12 +46,12 @@ class PollMiscellaneousCell: UICollectionViewCell {
         
         descriptionLabel = UILabel()
         descriptionLabel.textColor = .blueGrey
-        descriptionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
+        descriptionLabel.font = ._12SemiboldFont
         contentView.addSubview(descriptionLabel)
         
         totalResponsesLabel = UILabel()
         totalResponsesLabel.textColor = .blueGrey
-        totalResponsesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
+        totalResponsesLabel.font = ._12SemiboldFont
         contentView.addSubview(totalResponsesLabel)
     }
     
