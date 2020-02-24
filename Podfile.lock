@@ -46,7 +46,12 @@ PODS:
   - IGListKit/Default (3.4.0):
     - IGListKit/Diffing
   - IGListKit/Diffing (3.4.0)
+  - MarqueeLabel/Swift (3.2.1)
+  - NotificationBannerSwift (2.1.0):
+    - MarqueeLabel/Swift (~> 3.2.1)
+    - SnapKit (~> 4.2.0)
   - Presentr (1.9)
+  - ReachabilitySwift (5.0.0)
   - SnapKit (4.2.0)
   - Socket.IO-Client-Swift (14.0.0):
     - Starscream (~> 3.0.6)
@@ -65,7 +70,9 @@ DEPENDENCIES:
   - FutureNova (from `https://github.com/cuappdev/ios-networking.git`)
   - Google/SignIn
   - IGListKit
+  - NotificationBannerSwift
   - Presentr
+  - ReachabilitySwift
   - SnapKit
   - Socket.IO-Client-Swift
   - Sourcery
@@ -94,6 +101,10 @@ SPEC REPOS:
     - Starscream
     - SwiftLint
     - SwiftyJSON
+  trunk:
+    - MarqueeLabel
+    - NotificationBannerSwift
+    - ReachabilitySwift
 
 EXTERNAL SOURCES:
   AppDevAnalytics:
@@ -125,7 +136,10 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
+  MarqueeLabel: 2daf039bf916937c8a4c9adfc13577cc5e51b4ce
+  NotificationBannerSwift: 4483919639202bec56d6bfe8f106ebc352d38bc7
   Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
   Sourcery: 5895672cae353cdbfa95f3f4aaeb75a664d76f6a
@@ -133,6 +147,6 @@ SPEC CHECKSUMS:
   SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: dac16c72fdb268627f63857ab3ae911b4b093ca7
+PODFILE CHECKSUM: 914f699c138be415007dd374b94ea8d8911bf4d0
 
 COCOAPODS: 1.8.4

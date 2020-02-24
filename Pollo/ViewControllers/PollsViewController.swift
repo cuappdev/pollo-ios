@@ -529,6 +529,7 @@ class PollsViewController: UIViewController {
         }
         isListeningToKeyboard = true
         isOpeningGroup = false
+        BannerController.shared.dismiss()
     }
     
     override func viewDidLayoutSubviews() {

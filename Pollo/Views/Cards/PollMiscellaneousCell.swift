@@ -16,7 +16,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
     // MARK: - View vars
     var descriptionLabel: UILabel!
     var iconImageView: UIImageView!
-    var totalVotesLabel: UILabel!
+    var totalResponsesLabel: UILabel!
     
     // MARK: - Constants
     let descriptionLabelXPadding: CGFloat = 10
@@ -26,11 +26,11 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let liveEndedDescriptionTextAdmin = "Only you can see results"
     let liveOpenTextMember = "Open for responses"
     let liveSubmittedTextMember = "Submitted! Tap other answers to change"
-    let responseString = "response"
+    let responseString = "Response"
     let sharedDescriptionText = "Shared with group"
     let sharedTextMember = "Final results  • "
-    let totalVotesLabelTrailingPadding: CGFloat = 18
-    let voteString = "Vote"
+    let totalResponsesLabelTrailingPadding: CGFloat = 18
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,10 +50,10 @@ class PollMiscellaneousCell: UICollectionViewCell {
         descriptionLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
         contentView.addSubview(descriptionLabel)
         
-        totalVotesLabel = UILabel()
-        totalVotesLabel.textColor = .blueGrey
-        totalVotesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
-        contentView.addSubview(totalVotesLabel)
+        totalResponsesLabel = UILabel()
+        totalResponsesLabel.textColor = .blueGrey
+        totalResponsesLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .semibold)
+        contentView.addSubview(totalResponsesLabel)
     }
     
     override func updateConstraints() {
@@ -71,12 +71,11 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 make.centerY.equalToSuperview()
             }
             
-            totalVotesLabel.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().inset(totalVotesLabelTrailingPadding)
+            totalResponsesLabel.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().inset(totalResponsesLabelTrailingPadding)
                 make.centerY.equalToSuperview()
             }
         case .member:
-            
             descriptionLabel.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.centerY.equalToSuperview()
@@ -94,17 +93,17 @@ class PollMiscellaneousCell: UICollectionViewCell {
             switch miscellaneousModel.pollState {
             case .live, .ended:
                 iconImageView.image = #imageLiteral(resourceName: "solo_eye")
-                descriptionLabel.text = "Only you can see results"
+                descriptionLabel.text = liveEndedDescriptionTextAdmin
             case .shared:
                 iconImageView.image = #imageLiteral(resourceName: "results_shared")
-                descriptionLabel.text = "Shared with group"
+                descriptionLabel.text = sharedDescriptionText
             }
             var unit: String
             switch miscellaneousModel.questionType! {
             case .multipleChoice:
-                unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
+                unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
             }
-            totalVotesLabel.text = "\(miscellaneousModel.totalVotes) \(unit)"
+            totalResponsesLabel.text = "\(miscellaneousModel.totalResponses) \(unit)"
         case .member:
             descriptionLabel.textAlignment = .center
             switch miscellaneousModel.pollState {
@@ -116,9 +115,9 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 var unit: String
                 switch miscellaneousModel.questionType! {
                 case .multipleChoice:
-                    unit = miscellaneousModel.totalVotes == 1 ? voteString : "\(voteString)s"
+                    unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
                 }
-                descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalVotes) \(unit)"
+                descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalResponses) \(unit)"
             }
         }
     }

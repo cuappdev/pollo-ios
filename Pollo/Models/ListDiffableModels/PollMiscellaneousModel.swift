@@ -14,13 +14,13 @@ class PollMiscellaneousModel {
     var didSubmitChoice: Bool
     var pollState: PollState
     var questionType: QuestionType!
-    var totalVotes: Int
+    var totalResponses: Int
     var userRole: UserRole
 
-    init(questionType: QuestionType, pollState: PollState, totalVotes: Int, userRole: UserRole, didSubmitChoice: Bool) {
+    init(questionType: QuestionType, pollState: PollState, totalResponses: Int, userRole: UserRole, didSubmitChoice: Bool) {
         self.questionType = questionType
         self.pollState = pollState
-        self.totalVotes = totalVotes
+        self.totalResponses = totalResponses
         self.userRole = userRole
         self.didSubmitChoice = didSubmitChoice
     }
