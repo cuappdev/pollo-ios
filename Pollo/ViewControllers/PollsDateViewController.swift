@@ -140,7 +140,6 @@ class PollsDateViewController: UIViewController {
         socket.updateDelegate(nil)
         socket.socket.disconnect()
         BannerController.shared.dismiss()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.popViewController(animated: true)
         if pollsDateArray.isEmpty && session.name == session.code {
             deleteSession(with: session.id).observe { [weak self] result in

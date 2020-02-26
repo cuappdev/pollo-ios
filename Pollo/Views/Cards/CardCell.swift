@@ -14,6 +14,7 @@ import UIKit
 protocol CardCellDelegate: class {
 
     var userRole: UserRole { get }
+    var isConnected: Bool { get }
 
     func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
@@ -277,6 +278,10 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     
     var userRole: UserRole {
         return delegate.userRole
+    }
+
+    var isConnected: Bool {
+        return delegate.isConnected
     }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {
