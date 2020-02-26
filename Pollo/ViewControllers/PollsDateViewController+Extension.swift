@@ -120,24 +120,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
-        guard userRole != .admin && userRole != .member else { return }
-
-        // This code will be executed when we reenable the settings page
-        let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
-        getMembers(with: session?.id ?? "").observe { [weak self] result in
-            guard let `self` = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count, delegate: self)
-                    self.navigationController?.pushViewController(groupControlsVC, animated: true)
-                case .error(let error):
-                    print(error)
-                    let alertController = self.createAlert(title: "Error", message: "Failed to load data. Try again!")
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
-        }
+        // TODO: Push the group controls page once we re-enable
+        return
     }
 
 }
