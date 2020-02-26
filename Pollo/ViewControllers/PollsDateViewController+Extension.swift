@@ -120,7 +120,9 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
-        guard userRole == .admin else { return }
+        guard userRole != .admin && userRole != .member else { return }
+
+        // This code will be executed when we reenable the settings page
         let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
         getMembers(with: session?.id ?? "").observe { [weak self] result in
             guard let `self` = self else { return }
