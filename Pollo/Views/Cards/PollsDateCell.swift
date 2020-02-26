@@ -19,7 +19,7 @@ class PollsDateCell: UICollectionViewCell {
     // MARK: - Constants
     let cellCornerRadius: CGFloat = 5
     let dateLabelFontSize: CGFloat = 16
-    let dateLabelLeftPadding: CGFloat = 25
+    let dateLabelLeftPadding: CGFloat = 7
     let greyViewInset: CGFloat = 16
     let rightArrowButtonImageViewHeight: CGFloat = 15
     let rightArrowButtonImageViewRightPadding: CGFloat = 13
@@ -64,7 +64,7 @@ class PollsDateCell: UICollectionViewCell {
         }
 
         dateLabel.snp.makeConstraints { make in
-            make.leading.equalTo(greyView.snp.leading).offset(dateLabelLeftPadding)
+            make.leading.equalTo(indicatorDot.snp.trailing).offset(dateLabelLeftPadding)
             make.centerY.equalToSuperview()
         }
         
@@ -76,7 +76,7 @@ class PollsDateCell: UICollectionViewCell {
 
         indicatorDot.snp.makeConstraints { make in
             make.leading.equalTo(greyView.snp.leading).offset(indicatorDotLeftPadding)
-            make.centerY.equalTo(greyView)
+            make.centerY.equalToSuperview()
             make.height.width.equalTo(indicatorDotHeight)
         }
         
