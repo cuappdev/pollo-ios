@@ -14,14 +14,17 @@ class PollsDateCell: UICollectionViewCell {
     var dateLabel: UILabel!
     var greyView: UIView!
     var rightArrowButtonImageView: UIImageView!
+    var indicatorDot: UIView!
     
     // MARK: - Constants
     let cellCornerRadius: CGFloat = 5
     let dateLabelFontSize: CGFloat = 16
-    let dateLabelLeftPadding: CGFloat = 16
+    let dateLabelLeftPadding: CGFloat = 25
     let greyViewInset: CGFloat = 16
     let rightArrowButtonImageViewHeight: CGFloat = 15
     let rightArrowButtonImageViewRightPadding: CGFloat = 13
+    let indicatorDotLeftPadding: CGFloat = 10
+    let indicatorDotHeight: CGFloat = 8
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,6 +49,11 @@ class PollsDateCell: UICollectionViewCell {
         rightArrowButtonImageView.image = #imageLiteral(resourceName: "forward_arrow")
         rightArrowButtonImageView.contentMode = .scaleAspectFit
         contentView.addSubview(rightArrowButtonImageView)
+
+        indicatorDot = UIView()
+        indicatorDot.backgroundColor = .polloGreen
+        indicatorDot.layer.cornerRadius = indicatorDotHeight / 2
+        contentView.addSubview(indicatorDot)
     
     }
     
@@ -65,6 +73,12 @@ class PollsDateCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.height.equalTo(rightArrowButtonImageViewHeight)
         }
+
+        indicatorDot.snp.makeConstraints { make in
+            make.leading.equalTo(greyView.snp.leading).offset(indicatorDotLeftPadding)
+            make.centerY.equalTo(greyView)
+            make.height.width.equalTo(indicatorDotHeight)
+        }
         
         super.updateConstraints()
     }
@@ -72,6 +86,7 @@ class PollsDateCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(for pollsDateModel: PollsDateModel) {
         dateLabel.text = reformatDate(pollsDateModel.dateValue)
+        indicatorDot.isHidden = !pollsDateModel.polls.contains(where: { $0.state == .live })
     }
     
     // MARK: - Helpers
