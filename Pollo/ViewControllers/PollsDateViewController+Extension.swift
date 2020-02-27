@@ -121,7 +121,6 @@ extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
         // TODO: Push the group controls page once we re-enable
-        return
     }
 
 }
