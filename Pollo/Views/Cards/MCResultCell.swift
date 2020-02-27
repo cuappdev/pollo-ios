@@ -43,11 +43,7 @@ class MCResultCell: UICollectionViewCell {
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
     let numSelectedLabelTopPadding: CGFloat = 23
-    let numSelectedLabelTrailingPadding: CGFloat = 9
-    let numSelectedLabelWidth: CGFloat = 40
     let percentSelectedLabelTopPadding: CGFloat = 38
-    let percentSelectedLabelTrailingPadding: CGFloat = 9
-    let percentSelectedLabelWidth: CGFloat = 45
     let selectedImageViewLength: CGFloat = 17
     let selectedDotViewLength: CGFloat = 15
     
@@ -103,7 +99,7 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - percentSelectedLabelWidth - horizontalPadding * 4
+        let maxWidth = bounds.width - horizontalPadding - adminTrailingPadding
         
         // If we already laid out constraints before, we should only update the
         // highlightView width constraint
@@ -163,13 +159,13 @@ class MCResultCell: UICollectionViewCell {
         
         numSelectedLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(numSelectedLabelTopPadding)
-            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
-            make.width.equalTo(numSelectedLabelWidth)
+            make.leading.equalTo(containerView.snp.trailing)
+            make.trailing.equalToSuperview()
         }
         percentSelectedLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(percentSelectedLabelTopPadding)
-            make.trailing.equalToSuperview().inset(percentSelectedLabelTrailingPadding)
-            make.width.equalTo(percentSelectedLabelWidth)
+            make.leading.equalTo(containerView.snp.trailing)
+            make.trailing.equalToSuperview()
         }
 
         super.updateConstraints()
