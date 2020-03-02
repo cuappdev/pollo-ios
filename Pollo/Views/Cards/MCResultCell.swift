@@ -159,13 +159,13 @@ class MCResultCell: UICollectionViewCell {
         
         numSelectedLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(numSelectedLabelTopPadding)
-            make.leading.equalTo(containerView.snp.trailing)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(containerView.snp.trailing).inset(horizontalPadding/3)
+            make.trailing.equalToSuperview().inset(horizontalPadding/3)
         }
         percentSelectedLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(percentSelectedLabelTopPadding)
-            make.leading.equalTo(containerView.snp.trailing)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(containerView.snp.trailing).offset(horizontalPadding/3)
+            make.trailing.equalToSuperview().inset(horizontalPadding/3)
         }
 
         super.updateConstraints()
