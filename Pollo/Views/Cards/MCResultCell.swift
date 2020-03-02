@@ -30,7 +30,6 @@ class MCResultCell: UICollectionViewCell {
     var userRole: UserRole!
     
     // MARK: - Constants
-    let adminTrailingPadding: CGFloat = 58
     let checkImageName = "correctanswer"
     let containerViewBorderWidth: CGFloat = 0.3
     let containerViewCornerRadius: CGFloat = 3
@@ -42,10 +41,11 @@ class MCResultCell: UICollectionViewCell {
     let highlightViewCornerRadius: CGFloat = 8
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
+    let numPercentSelectedTrailingPadding: CGFloat = 58
     let numSelectedLabelTopPadding: CGFloat = 23
     let percentSelectedLabelTopPadding: CGFloat = 38
-    let selectedImageViewLength: CGFloat = 17
     let selectedDotViewLength: CGFloat = 15
+    let selectedImageViewLength: CGFloat = 17
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,7 +99,7 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - horizontalPadding - adminTrailingPadding
+        let maxWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding
         
         // If we already laid out constraints before, we should only update the
         // highlightView width constraint
@@ -136,7 +136,7 @@ class MCResultCell: UICollectionViewCell {
         
         containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(horizontalPadding + (userRole == .admin ? 0 : horizontalPadding + dotViewLength))
-            make.trailing.equalToSuperview().inset(userRole == .admin ? adminTrailingPadding : horizontalPadding)
+            make.trailing.equalToSuperview().inset(numPercentSelectedTrailingPadding)
             make.height.equalTo(containerViewHeight)
             make.bottom.equalToSuperview()
         }
@@ -176,14 +176,12 @@ class MCResultCell: UICollectionViewCell {
         self.correctAnswer = correctAnswer
         self.userRole = userRole
         
-        numSelectedLabel.isHidden = userRole == .member
         numSelectedLabel.text = "\(resultModel.numSelected)"
         
         optionLabel.text = resultModel.option
         optionLabel.textColor = userRole == .admin ? .black : .mediumGrey
         
         percentSelected = resultModel.percentSelected
-        percentSelectedLabel.isHidden = userRole == .member
         percentSelectedLabel.text = "(\(Int(percentSelected * 100))%)"
         
         dotView.isHidden = userRole == .admin
