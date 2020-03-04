@@ -77,7 +77,8 @@ class NavigationTitleView: UIView {
         primaryLabel.text = primaryText
         secondaryLabel.text = secondaryText
         self.delegate = delegate
-        arrowImageView.isHidden = delegate == nil || userRole == .member
+        // Hidden until settings page is reenabled
+        arrowImageView.isHidden = true
     }
     
     func setupConstraints() {
