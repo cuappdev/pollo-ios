@@ -302,6 +302,7 @@ class PollBuilderViewController: UIViewController {
                 }
             }
             loadedMCDraft = nil
+            correctAnswer = nil
             self.mcPollBuilder.reset()
         }
         self.updateCanDraft(false)
