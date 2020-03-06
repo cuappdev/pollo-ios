@@ -130,6 +130,8 @@
 		C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */; };
 		C2E9C7092182A40600E36659 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9C7082182A40600E36659 /* Analytics.swift */; };
 		C2E9C70B2182ACCE00E36659 /* EventPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9C70A2182ACCE00E36659 /* EventPayload.swift */; };
+		C2F426DB2412C3D60068AD19 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2F426DA2412C3D60068AD19 /* Keys.plist */; };
+		C2F426DD2412C4900068AD19 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F426DC2412C4900068AD19 /* Keys.swift */; };
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
@@ -142,7 +144,6 @@
 		D13E9092208712A300856DD4 /* PollBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13E9091208712A300856DD4 /* PollBuilderViewController.swift */; };
 		D412ACD02246EDAA009B6E83 /* SettingsLogOutButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */; };
 		D412ACD22247BF7C009B6E83 /* Ratings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D412ACD12247BF7C009B6E83 /* Ratings.swift */; };
-		D946CA7E221346860005AD70 /* keys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D946CA7D221346860005AD70 /* keys.generated.swift */; };
 		D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */; };
 /* End PBXBuildFile section */
 
@@ -283,6 +284,8 @@
 		C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMiscellaneousModel.swift; sourceTree = "<group>"; };
 		C2E9C7082182A40600E36659 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		C2E9C70A2182ACCE00E36659 /* EventPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPayload.swift; sourceTree = "<group>"; };
+		C2F426DA2412C3D60068AD19 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		C2F426DC2412C4900068AD19 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
@@ -300,7 +303,6 @@
 		D412ACCF2246EDAA009B6E83 /* SettingsLogOutButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogOutButtonCell.swift; sourceTree = "<group>"; };
 		D412ACD12247BF7C009B6E83 /* Ratings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ratings.swift; sourceTree = "<group>"; };
 		D7B41E55A9A1772AE24A174C /* Pods-Pollo.debug local server.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.debug local server.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.debug local server.xcconfig"; sourceTree = "<group>"; };
-		D946CA7D221346860005AD70 /* keys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keys.generated.swift; sourceTree = "<group>"; };
 		D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = testflight_release_notes.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -333,14 +335,6 @@
 				0C30875A2206B31500AC9589 /* UserEndpoints.swift */,
 			);
 			path = Networking;
-			sourceTree = "<group>";
-		};
-		0C41C955214DB62B00F559C9 /* Secrets */ = {
-			isa = PBXGroup;
-			children = (
-				D946CA7D221346860005AD70 /* keys.generated.swift */,
-			);
-			path = Secrets;
 			sourceTree = "<group>";
 		};
 		6332DAB0217BB4C0003E71F9 /* PollsViewControllerSectionControllers */ = {
@@ -605,6 +599,8 @@
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				D412ACD12247BF7C009B6E83 /* Ratings.swift */,
 				2BD92A4823EDD95F00114E2D /* BannerController.swift */,
+				C2F426DA2412C3D60068AD19 /* Keys.plist */,
+				C2F426DC2412C4900068AD19 /* Keys.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -630,7 +626,6 @@
 			isa = PBXGroup;
 			children = (
 				D946CA812213D2EA0005AD70 /* testflight_release_notes.txt */,
-				0C41C955214DB62B00F559C9 /* Secrets */,
 				C2434C8D2133346C00929C98 /* Pollo-Bridging-Header.h */,
 				C7F923C41F73540600B1E975 /* Pollo */,
 				C7F923C31F73540600B1E975 /* Products */,
@@ -716,7 +711,6 @@
 			buildConfigurationList = C7F923D41F73540600B1E975 /* Build configuration list for PBXNativeTarget "Pollo" */;
 			buildPhases = (
 				A7E37B266A6A59B49588A337 /* [CP] Check Pods Manifest.lock */,
-				D946CA7922127E3F0005AD70 /* Secrets */,
 				C7F923BE1F73540600B1E975 /* Sources */,
 				C7F923BF1F73540600B1E975 /* Frameworks */,
 				C7F923C01F73540600B1E975 /* Resources */,
@@ -790,6 +784,7 @@
 				8754D17523E23D1C009AA2F0 /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
+				C2F426DB2412C3D60068AD19 /* Keys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,22 +886,6 @@
 			shellPath = /bin/sh;
 			shellScript = "#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET\n\n# Note: Uncomment these lines to turn on SwiftLint\n# if which swiftlint >/dev/null; then\n# swiftlint\n# else\n# echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n# fi\n";
 		};
-		D946CA7922127E3F0005AD70 /* Secrets */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/env-vars.sh",
-			);
-			name = Secrets;
-			outputPaths = (
-				"${SRCROOT}/Secrets/keys.generated.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#check if env-vars.sh exists\nif [ -f ./env-vars.sh ]\nthen\nsource ./env-vars.sh\nfi\n$PODS_ROOT/Sourcery/bin/sourcery --sources . --templates Sourcery/keys.stencil --output Secrets --args random=\"pollo\",apiURL=$API_URL,apiDevURL=$API_DEV_URL,fabricAPIKey=$FABRIC_API_KEY\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -946,6 +925,7 @@
 				0C67D34E217BCD9B0000B2A1 /* NoResponsesCell.swift in Sources */,
 				C28679DD2155A5A300554F7B /* PollBuilderMCOptionModel.swift in Sources */,
 				C28679DF2155A83000554F7B /* PollBuilderMCOptionSectionController.swift in Sources */,
+				C2F426DD2412C4900068AD19 /* Keys.swift in Sources */,
 				6389C9522085953F00F78003 /* PollsCell.swift in Sources */,
 				C2649F77214232CF00370454 /* PollOptionsSectionController.swift in Sources */,
 				C203E56221332FA30016A147 /* PollsViewController+Extension.swift in Sources */,
@@ -990,7 +970,6 @@
 				6353FD3A2086DDC900E16EB2 /* CardController.swift in Sources */,
 				0C1E51FE21711B1B001E07BC /* Date+Shared.swift in Sources */,
 				C26EBB6F21B9051B00AC2B60 /* AskQuestionCell.swift in Sources */,
-				D946CA7E221346860005AD70 /* keys.generated.swift in Sources */,
 				C28AD561205CB7D50053AD62 /* QuestionSectionCell.swift in Sources */,
 				0CCA95E722341529006A3659 /* ExportAttendanceSectionController.swift in Sources */,
 				C2F86664215174E800D045CD /* SessionSectionController.swift in Sources */,

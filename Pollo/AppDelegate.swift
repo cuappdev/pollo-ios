@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         Endpoint.config.port = 3000
         #else
         Endpoint.config.scheme = "https"
-        Endpoint.config.host = Keys.hostURL.value
+        Endpoint.config.host = Keys.hostURL
         #endif
 
         if let apiVersion = Endpoint.apiVersion {

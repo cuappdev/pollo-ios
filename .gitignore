@@ -73,3 +73,6 @@ Pollo/GoogleService-Info.plist
 #.swiftlint.yml
 
 .DS_Store
+
+# Secrets
+Pollo/Supporting/Keys.plist

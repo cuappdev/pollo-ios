@@ -23,5 +23,4 @@ target 'Pollo' do
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
   pod 'SwiftyJSON'
-  pod 'Sourcery'
 end
