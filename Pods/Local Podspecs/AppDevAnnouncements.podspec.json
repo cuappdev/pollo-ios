@@ -1,0 +1,23 @@
+{
+  "name": "AppDevAnnouncements",
+  "version": "0.0.1",
+  "summary": "A short description of AppDevAnnouncements.",
+  "description": "Custom Notification",
+  "homepage": "http://EXAMPLE/AppDevAnnouncements",
+  "license": "MIT",
+  "authors": {
+    "Cornell AppDev": "cornellappdev@gmail.com"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source": {
+    "git": "https://github.com/cuappdev/appdev-announcements.git",
+    "tag": "0.0.1"
+  },
+  "source_files": [
+    "AppDevAnnouncements/Classes/*.swift",
+    "AppDevAnnouncements/Resources/*.xcassets"
+  ],
+  "resources": "AppDevAnnouncements/Resources/*.xcassets"
+}
