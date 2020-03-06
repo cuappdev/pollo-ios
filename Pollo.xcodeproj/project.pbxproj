@@ -130,8 +130,8 @@
 		C2E1A2662139F43400087EE4 /* PollMiscellaneousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */; };
 		C2E9C7092182A40600E36659 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9C7082182A40600E36659 /* Analytics.swift */; };
 		C2E9C70B2182ACCE00E36659 /* EventPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9C70A2182ACCE00E36659 /* EventPayload.swift */; };
-		C2F426DB2412C3D60068AD19 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2F426DA2412C3D60068AD19 /* Keys.plist */; };
 		C2F426DD2412C4900068AD19 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F426DC2412C4900068AD19 /* Keys.swift */; };
+		C2F426DF2412C7860068AD19 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2F426DE2412C7860068AD19 /* Keys.plist */; };
 		C2F48EB3208302AE0022FE6B /* Draft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB2208302AE0022FE6B /* Draft.swift */; };
 		C2F48EB7208302F90022FE6B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB6208302F90022FE6B /* Socket.swift */; };
 		C2F48EB9208303020022FE6B /* SocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F48EB8208303020022FE6B /* SocketDelegate.swift */; };
@@ -284,8 +284,8 @@
 		C2E1A2652139F43400087EE4 /* PollMiscellaneousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMiscellaneousModel.swift; sourceTree = "<group>"; };
 		C2E9C7082182A40600E36659 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		C2E9C70A2182ACCE00E36659 /* EventPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPayload.swift; sourceTree = "<group>"; };
-		C2F426DA2412C3D60068AD19 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		C2F426DC2412C4900068AD19 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		C2F426DE2412C7860068AD19 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		C2F48EB2208302AE0022FE6B /* Draft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Draft.swift; sourceTree = "<group>"; };
 		C2F48EB6208302F90022FE6B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		C2F48EB8208303020022FE6B /* SocketDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketDelegate.swift; sourceTree = "<group>"; };
@@ -599,8 +599,8 @@
 				C7F923CC1F73540600B1E975 /* Assets.xcassets */,
 				D412ACD12247BF7C009B6E83 /* Ratings.swift */,
 				2BD92A4823EDD95F00114E2D /* BannerController.swift */,
-				C2F426DA2412C3D60068AD19 /* Keys.plist */,
 				C2F426DC2412C4900068AD19 /* Keys.swift */,
+				C2F426DE2412C7860068AD19 /* Keys.plist */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -784,7 +784,7 @@
 				8754D17523E23D1C009AA2F0 /* GoogleService-Info.plist in Resources */,
 				D946CA822213D2EA0005AD70 /* testflight_release_notes.txt in Resources */,
 				D13E908B2086BC3200856DD4 /* LaunchScreen.storyboard in Resources */,
-				C2F426DB2412C3D60068AD19 /* Keys.plist in Resources */,
+				C2F426DF2412C7860068AD19 /* Keys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
