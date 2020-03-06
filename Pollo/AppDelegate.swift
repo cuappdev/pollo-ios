@@ -6,6 +6,7 @@
 //  Copyright © 2017 CornellAppDev. All rights reserved.
 //
 
+import AppDevAnnouncements
 import Crashlytics
 import FLEX
 import Fabric
@@ -32,6 +33,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         setupGoogleSignIn()
         setupNavBar()
         setupFabric()
+
+        // Setup AppDevAnnouncements
+        AnnouncementNetworking.setupConfig(
+            scheme: Keys.announcementsScheme,
+            host: Keys.announcementsHost,
+            commonPath: Keys.announcementsCommonPath,
+            announcementPath: Keys.announcementsPath
+        )
 
         return true
     }

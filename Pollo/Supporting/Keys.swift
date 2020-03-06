@@ -12,7 +12,7 @@ struct Keys {
 
     static let announcementsCommonPath = Keys.keyDict["announcements-common-path"] as! String
     static let announcementsHost = Keys.keyDict["announcements-host"] as! String
-    static let announcementsPath = Keys.keyDict["announcementsPath"] as! String
+    static let announcementsPath = Keys.keyDict["announcements-path"] as! String
     static let announcementsScheme = Keys.keyDict["announcements-scheme"] as! String
     static let apiDevURL = Keys.keyDict["api-dev-url"] as! String
     static let apiURL = Keys.keyDict["api-url"] as! String
