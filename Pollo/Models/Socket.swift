@@ -25,7 +25,7 @@ class Socket {
     init(id: String, delegate: SocketDelegate) {
         self.id = id
         self.delegate = delegate
-        var urlString = "https://\(Keys.hostURL.value)"
+        var urlString = "https://\(Keys.hostURL)"
         #if LOCAL_SERVER
         urlString = "http://localhost:3000"
         #endif

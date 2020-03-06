@@ -3,6 +3,7 @@ PODS:
   - AppDevAnalytics (0.1.7):
     - Crashlytics (~> 3.12)
     - SwiftyJSON (= 4.2)
+  - AppDevAnnouncements (0.0.1)
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
   - Fabric (1.9.0)
@@ -55,7 +56,6 @@ PODS:
   - SnapKit (4.2.0)
   - Socket.IO-Client-Swift (14.0.0):
     - Starscream (~> 3.0.6)
-  - Sourcery (0.15.0)
   - Starscream (3.0.6)
   - SwiftLint (0.30.1)
   - SwiftyJSON (4.2.0)
@@ -63,6 +63,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - AppDevAnalytics (from `https://github.com/cuappdev/ios-analytics.git`)
+  - AppDevAnnouncements (from `https://github.com/cuappdev/appdev-announcements.git`)
   - Crashlytics
   - Fabric
   - Firebase/Analytics
@@ -75,7 +76,6 @@ DEPENDENCIES:
   - ReachabilitySwift
   - SnapKit
   - Socket.IO-Client-Swift
-  - Sourcery
   - SwiftLint
   - SwiftyJSON
 
@@ -97,7 +97,6 @@ SPEC REPOS:
     - Presentr
     - SnapKit
     - Socket.IO-Client-Swift
-    - Sourcery
     - Starscream
     - SwiftLint
     - SwiftyJSON
@@ -109,6 +108,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   AppDevAnalytics:
     :git: https://github.com/cuappdev/ios-analytics.git
+  AppDevAnnouncements:
+    :git: https://github.com/cuappdev/appdev-announcements.git
   FutureNova:
     :git: https://github.com/cuappdev/ios-networking.git
 
@@ -116,6 +117,9 @@ CHECKOUT OPTIONS:
   AppDevAnalytics:
     :commit: 06d443f7c87c1e7c6f415d1d685debd200b89bf2
     :git: https://github.com/cuappdev/ios-analytics.git
+  AppDevAnnouncements:
+    :commit: 4cfbcd46af092037ac6632fe5616a13e5f280615
+    :git: https://github.com/cuappdev/appdev-announcements.git
   FutureNova:
     :commit: b191dd799244cdf9f48309d46a03c64884a4ef84
     :git: https://github.com/cuappdev/ios-networking.git
@@ -123,6 +127,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   AppDevAnalytics: 5dc89bdd7c88de7c02891cf26498b35b92bccd67
+  AppDevAnnouncements: e17a7f441fb0664583bb08e21dc709214d15b70f
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: 4b66b5b59c43edac745b87f0c87e42cdd0279c13
@@ -142,11 +147,10 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
-  Sourcery: 5895672cae353cdbfa95f3f4aaeb75a664d76f6a
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 914f699c138be415007dd374b94ea8d8911bf4d0
+PODFILE CHECKSUM: c90310f385c829113a498eab78b4489e2accc942
 
 COCOAPODS: 1.8.4
