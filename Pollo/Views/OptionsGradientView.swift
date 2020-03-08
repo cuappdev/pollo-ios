@@ -14,9 +14,7 @@ class OptionsGradientView: UIView {
     let gradientLayer = CAGradientLayer()
     
     // MARK: - Constants
-    let animationDuration: TimeInterval = 0.2
-    let bottomInset: CGFloat = 9.8
-    let topOffset: CGFloat = 5
+    private let animationDuration: TimeInterval = 0.2
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,7 +24,6 @@ class OptionsGradientView: UIView {
         gradientLayer.frame = frame
         gradientLayer.colors = [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0).cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
-        //gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.25)
         layer.addSublayer(gradientLayer)
     }
     

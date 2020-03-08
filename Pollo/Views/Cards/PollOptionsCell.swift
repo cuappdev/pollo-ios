@@ -68,11 +68,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !optionGradientView.isHidden {
             let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-            if diff < 10 {
-                optionGradientView.toggle(show: false, animated: true)
-            } else {
-                optionGradientView.toggle(show: true, animated: true)
-            }
+            optionGradientView.toggle(show: diff >= 10, animated: true)
         }
     }
     

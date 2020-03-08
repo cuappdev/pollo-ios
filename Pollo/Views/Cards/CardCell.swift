@@ -239,13 +239,7 @@ extension CardCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let questionModel = questionModel, let pollOptionsModel = pollOptionsModel, let miscellaneousModel = miscellaneousModel else { return [] }
-        var objects: [ListDiffable] = []
-        objects.append(topHamburgerCardModel)
-        objects.append(questionModel)
-        objects.append(miscellaneousModel)
-        objects.append(separatorLineModel)
-        objects.append(pollOptionsModel)
-        return objects
+        return [topHamburgerCardModel, questionModel, miscellaneousModel, separatorLineModel, pollOptionsModel]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -279,10 +273,9 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     }
     
     var maxCellHeight: CGFloat {
-        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight
-        + LayoutConstants.separatorLineCardCellHeight
-        let belowCardCellHeight = responsivePadding + (delegate.userRole != .admin ? 0 : questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding)
-        return self.frame.height - (cardCellTopHeight + belowCardCellHeight)
+        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
+        let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding
+        return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : 0) + responsivePadding)
     }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {
