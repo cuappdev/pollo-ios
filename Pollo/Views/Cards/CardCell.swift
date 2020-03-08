@@ -48,13 +48,14 @@ class CardCell: UICollectionViewCell {
     let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
     let initialTimerLabelText = "00:00"
-    let resultsSharedText = "Results Shared"
     let questionButtonBorderWidth: CGFloat = 1.0
     let questionButtonBottomPadding: CGFloat = 16.0
     let questionButtonCornerRadius: CGFloat = 23.0
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonHeight: CGFloat = 47.0
     let questionButtonWidth: CGFloat = 170.0
+    let responsivePadding: CGFloat = 32.0
+    let resultsSharedText = "Results Shared"
     let shareResultsText = "Share Results"
     let timerLabelBottomPadding: CGFloat =  91.0
     let timerLabelFontSize: CGFloat = 14.0
@@ -241,14 +242,7 @@ extension CardCell: ListAdapterDataSource {
         var objects: [ListDiffable] = []
         objects.append(topHamburgerCardModel)
         objects.append(questionModel)
-        switch userRole {
-        case .admin:
-            if poll.type == .multipleChoice {
-                objects.append(miscellaneousModel)
-            }
-        case .member:
-            objects.append(miscellaneousModel)
-        }
+        objects.append(miscellaneousModel)
         objects.append(separatorLineModel)
         objects.append(pollOptionsModel)
         return objects
@@ -282,6 +276,13 @@ extension CardCell: PollOptionsSectionControllerDelegate {
 
     var isConnected: Bool {
         return delegate.isConnected
+    }
+    
+    var maxCellHeight: CGFloat {
+        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight
+        + LayoutConstants.separatorLineCardCellHeight
+        let belowCardCellHeight = responsivePadding + (delegate.userRole != .admin ? 0 : questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding)
+        return self.frame.height - (cardCellTopHeight + belowCardCellHeight)
     }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {

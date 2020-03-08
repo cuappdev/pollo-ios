@@ -12,6 +12,7 @@ protocol PollOptionsSectionControllerDelegate {
     
     var userRole: UserRole { get }
     var isConnected: Bool { get }
+    var maxCellHeight: CGFloat { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
     
@@ -34,7 +35,8 @@ class PollOptionsSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, userRole: delegate.userRole)
+        let calculatedCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, userRole: delegate.userRole)
+        let cellHeight = min(delegate.maxCellHeight, calculatedCellHeight)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
