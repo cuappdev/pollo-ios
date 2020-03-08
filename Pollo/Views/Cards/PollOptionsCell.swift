@@ -21,7 +21,7 @@ protocol PollOptionsCellDelegate: class {
 class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
-    var arrowView: ArrowView!
+    var optionGradientView: OptionsGradientView!
     var collectionView: UICollectionView!
     
     // MARK: - Data vars
@@ -61,17 +61,17 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        arrowView = ArrowView()
-        contentView.addSubview(arrowView)
+        optionGradientView = OptionsGradientView(frame: frame)
+        contentView.addSubview(optionGradientView)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !arrowView.isHidden {
+        if !optionGradientView.isHidden {
             let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
             if diff < 10 {
-                arrowView.toggle(show: false, animated: true)
+                optionGradientView.toggle(show: false, animated: true)
             } else {
-                arrowView.toggle(show: true, animated: true)
+                optionGradientView.toggle(show: true, animated: true)
             }
         }
     }
@@ -83,10 +83,8 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.bottom.equalToSuperview()
         }
         
-        arrowView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
+        optionGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         super.updateConstraints()
@@ -110,8 +108,9 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 mcSelectedIndex = selectedIndex
             }
         }
-        arrowView.isHidden = !hasOverflowOptions
-        arrowView.toggle(show: !arrowView.isHidden, animated: false)
+        optionGradientView.isHidden = !hasOverflowOptions
+        optionGradientView.gradientLayer.endPoint = CGPoint(x: 0.5, y: delegate.userRole == .admin ? 0 : 0.25)
+        optionGradientView.toggle(show: !optionGradientView.isHidden, animated: false)
         collectionView.isScrollEnabled = hasOverflowOptions
         adapter.performUpdates(animated: false, completion: nil)
     }
