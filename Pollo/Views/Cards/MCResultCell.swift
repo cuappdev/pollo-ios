@@ -31,13 +31,15 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Constants
     let checkImageName = "correctanswer"
-    let containerViewBorderWidth: CGFloat = 0.3
-    let containerViewCornerRadius: CGFloat = 3
+    let containerViewBorderWidth: CGFloat = 0.6
+    let containerViewCorrectBorderWidth: CGFloat = 1.5
+    let containerViewCornerRadius: CGFloat = 8
     let containerViewHeight: CGFloat = 46
     let correctImageName = "correct"
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
-    let highlightViewBorderWidth: CGFloat = 0.6
+    let highlightViewBorderWidth: CGFloat = 0.3
+    let highlightViewCorrectBornerWidth: CGFloat = 1.0
     let highlightViewCornerRadius: CGFloat = 8
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
@@ -108,9 +110,13 @@ class MCResultCell: UICollectionViewCell {
             optionLabel.snp.updateConstraints { make in
                 make.width.equalTo(useMaxWidth ? maxWidth : optionLabelWidth)
             }
-            highlightView.snp.remakeConstraints { make in
-                make.leading.top.bottom.equalToSuperview()
-                make.width.equalToSuperview().multipliedBy(self.percentSelected)
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.highlightView.snp.remakeConstraints { make in
+                    make.leading.top.bottom.equalToSuperview()
+                    make.width.equalToSuperview().multipliedBy(self.percentSelected)
+                }
+                self.layoutIfNeeded()
             }
             super.updateConstraints()
             return
@@ -187,8 +193,9 @@ class MCResultCell: UICollectionViewCell {
         dotView.isHidden = userRole == .admin
         
         containerView.backgroundColor = .clear
-        containerView.layer.borderWidth = highlightViewBorderWidth
-        containerView.layer.cornerRadius = highlightViewCornerRadius
+        containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
+        containerView.layer.borderWidth = containerViewBorderWidth
+        containerView.layer.cornerRadius = containerViewCornerRadius
         
         // Setup default MC visuals
         let isSelected = resultModel.isSelected
@@ -200,6 +207,8 @@ class MCResultCell: UICollectionViewCell {
         
         highlightView.backgroundColor = .lightGrey
         highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+        highlightView.layer.borderWidth = highlightViewBorderWidth
+        highlightView.layer.cornerRadius = highlightViewCornerRadius
         
         // Override default visuals when there is correct answer
         if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
@@ -209,11 +218,11 @@ class MCResultCell: UICollectionViewCell {
                 showCorrectAnswer = true
                 
                 containerView.layer.borderColor = UIColor.polloGreen.cgColor
-                containerView.layer.borderWidth = 1.5
+                containerView.layer.borderWidth = containerViewSelectedBorderWidth
                 
                 highlightView.backgroundColor = .lightGreen
                 highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-                highlightView.layer.borderWidth = 1.5
+                highlightView.layer.borderWidth = highlightViewSelectedBornerWidth
             }
             if isSelected {
                     selectedDotView.backgroundColor = .clear
