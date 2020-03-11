@@ -218,11 +218,11 @@ class MCResultCell: UICollectionViewCell {
                 showCorrectAnswer = true
                 
                 containerView.layer.borderColor = UIColor.polloGreen.cgColor
-                containerView.layer.borderWidth = containerViewSelectedBorderWidth
+                containerView.layer.borderWidth = containerViewCorrectBorderWidth
                 
                 highlightView.backgroundColor = .lightGreen
                 highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-                highlightView.layer.borderWidth = highlightViewSelectedBornerWidth
+                highlightView.layer.borderWidth = highlightViewCorrectBornerWidth
             }
             if isSelected {
                     selectedDotView.backgroundColor = .clear
