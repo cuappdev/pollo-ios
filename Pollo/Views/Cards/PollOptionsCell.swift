@@ -21,7 +21,7 @@ protocol PollOptionsCellDelegate: class {
 class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - View vars
-    var arrowView: ArrowView!
+    var optionGradientView: OptionsGradientView!
     var collectionView: UICollectionView!
     
     // MARK: - Data vars
@@ -61,18 +61,14 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         adapter.dataSource = self
         adapter.scrollViewDelegate = self
         
-        arrowView = ArrowView()
-        contentView.addSubview(arrowView)
+        optionGradientView = OptionsGradientView(frame: frame)
+        contentView.addSubview(optionGradientView)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !arrowView.isHidden {
+        if !optionGradientView.isHidden {
             let diff = collectionView.contentSize.height - bounds.height - scrollView.contentOffset.y
-            if diff < 10 {
-                arrowView.toggle(show: false, animated: true)
-            } else {
-                arrowView.toggle(show: true, animated: true)
-            }
+            optionGradientView.toggle(show: diff >= 10, animated: true)
         }
     }
     
@@ -83,35 +79,33 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
             make.bottom.equalToSuperview()
         }
         
-        arrowView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
+        optionGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         super.updateConstraints()
     }
 
     // MARK: - Configure
-    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?) {
+    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?, maxCellHeight: CGFloat) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
         self.correctAnswer = correctAnswer
+        let currentCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
         switch pollOptionsModel.type {
-        case .mcResult(let mcResultModels):
-            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
-            hasOverflowOptions = mcResultModels.count > maxOptions
+        case .mcResult(_):
+            hasOverflowOptions = currentCellHeight > maxCellHeight
         case .mcChoice(let mcChoiceModels):
-            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
-            hasOverflowOptions = mcChoiceModels.count > maxOptions
+            hasOverflowOptions = currentCellHeight > maxCellHeight
             if let selectedIndex = mcChoiceModels.firstIndex(where: { (mcChoiceModel) -> Bool in
                 return mcChoiceModel.isSelected
             }) {
                 mcSelectedIndex = selectedIndex
             }
         }
-        arrowView.isHidden = !hasOverflowOptions
-        arrowView.toggle(show: !arrowView.isHidden, animated: false)
+        optionGradientView.isHidden = !hasOverflowOptions
+        optionGradientView.gradientLayer.endPoint = CGPoint(x: 0.5, y: delegate.userRole == .admin ? 0 : 0.25)
+        optionGradientView.toggle(show: !optionGradientView.isHidden, animated: false)
         collectionView.isScrollEnabled = hasOverflowOptions
         adapter.performUpdates(animated: false, completion: nil)
     }
