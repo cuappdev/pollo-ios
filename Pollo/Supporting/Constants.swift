@@ -117,8 +117,6 @@ struct StringConstants {
 }
 
 struct IntegerConstants {
-    static let maxOptionsForAdminMC = 5
-    static let maxOptionsForMemberMC = 7
     static let maxQuestionCharacterCount = 120
     static let validCodeLength = 6
 }

@@ -54,7 +54,8 @@ class CardCell: UICollectionViewCell {
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonHeight: CGFloat = 47.0
     let questionButtonWidth: CGFloat = 170.0
-    let responsivePadding: CGFloat = 32.0
+    let responsiveAdminPadding: CGFloat = 32.0
+    let responsiveStudentPadding: CGFloat = 50.0
     let resultsSharedText = "Results Shared"
     let shareResultsText = "Share Results"
     let timerLabelBottomPadding: CGFloat =  91.0
@@ -267,15 +268,15 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     var userRole: UserRole {
         return delegate.userRole
     }
-
-    var isConnected: Bool {
-        return delegate.isConnected
-    }
     
     var maxCellHeight: CGFloat {
         let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
-        let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding
-        return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : 0) + responsivePadding)
+        let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding + responsiveAdminPadding
+        return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : responsiveStudentPadding))
+    }
+    
+    var isConnected: Bool {
+        return delegate.isConnected
     }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {

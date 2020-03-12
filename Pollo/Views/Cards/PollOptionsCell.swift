@@ -87,17 +87,16 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
 
     // MARK: - Configure
-    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?) {
+    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?, maxCellHeight: CGFloat) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
         self.correctAnswer = correctAnswer
+        let currentCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
         switch pollOptionsModel.type {
-        case .mcResult(let mcResultModels):
-            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
-            hasOverflowOptions = mcResultModels.count > maxOptions
+        case .mcResult(_):
+            hasOverflowOptions = currentCellHeight > maxCellHeight
         case .mcChoice(let mcChoiceModels):
-            let maxOptions = delegate.userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
-            hasOverflowOptions = mcChoiceModels.count > maxOptions
+            hasOverflowOptions = currentCellHeight > maxCellHeight
             if let selectedIndex = mcChoiceModels.firstIndex(where: { (mcChoiceModel) -> Bool in
                 return mcChoiceModel.isSelected
             }) {

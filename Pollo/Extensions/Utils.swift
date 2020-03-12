@@ -108,22 +108,15 @@ func buildPollOptionsModel(from poll: Poll, userRole: UserRole) -> PollOptionsMo
     return PollOptionsModel(type: type, pollState: poll.state)
 }
 
-func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel, userRole: UserRole) -> CGFloat {
+func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> CGFloat {
     var optionModels: [OptionModel]
-    var optionHeight: CGFloat
-    var maximumNumberVisibleOptions: Int
     switch pollOptionsModel.type {
     case .mcResult(let mcResultModels):
         optionModels = mcResultModels
-        optionHeight = LayoutConstants.mcOptionCellHeight
-        maximumNumberVisibleOptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
     case .mcChoice(let mcChoiceModels):
         optionModels = mcChoiceModels
-        optionHeight = LayoutConstants.mcOptionCellHeight
-        maximumNumberVisibleOptions = userRole == .admin ? IntegerConstants.maxOptionsForAdminMC : IntegerConstants.maxOptionsForMemberMC
     }
-    let numOptions = min(optionModels.count, maximumNumberVisibleOptions)
-    let optionsHeight: CGFloat = CGFloat(numOptions) * optionHeight
+    let optionsHeight: CGFloat = CGFloat(optionModels.count) * LayoutConstants.mcOptionCellHeight
     return LayoutConstants.pollOptionsBottomPadding + optionsHeight
 }
 
