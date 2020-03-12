@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import AppDevAnnouncements
 import FutureNova
 import GoogleSignIn
 import IGListKit
@@ -93,6 +94,11 @@ class PollsViewController: UIViewController {
         promptUserReview()
         setupViews()
         setupConstraints()
+        presentAnnouncement { success in
+            if success {
+                Analytics.shared.log(with: AnnouncementPresentedPayload())
+            }
+        }
     }
     
     // MARK: - Configure
