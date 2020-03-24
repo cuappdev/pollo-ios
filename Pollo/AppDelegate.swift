@@ -193,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
             
         } else {
-            print("\(error.localizedDescription)")
+            self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
         }
     }
     

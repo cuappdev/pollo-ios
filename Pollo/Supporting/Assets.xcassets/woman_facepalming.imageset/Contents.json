@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "scale" : "1x",
+      "idiom" : "universal",
+      "filename" : "womanFacepalming1F926200D2640Fe0F1.png"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "womanFacepalming1F926200D2640Fe0F1@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "womanFacepalming1F926200D2640Fe0F1@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
