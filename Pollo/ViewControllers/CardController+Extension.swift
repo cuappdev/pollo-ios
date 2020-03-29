@@ -222,41 +222,15 @@ extension CardController: UIScrollViewDelegate {
 extension CardController: SocketDelegate {
 
     func sessionConnected() {
-        let banner = NotificationBanner.connectedBanner()
-        BannerController.shared.show(banner)
         isConnected = true
     }
     
     func sessionDisconnected() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
-            guard let `self` = self else { return }
-            let banner = NotificationBanner.disconnectedBanner()
-            banner.onTap = { [weak self] in
-                guard let `self` = self else { return }
-                self.socket.socket.setReconnecting(reason: "")
-            }
-
-            BannerController.shared.show(banner)
-            self.isConnected = false
-        }
-    }
-
-    func sessionReconnecting(reason: String) {
-        let banner = NotificationBanner.reconnectingBanner(reason: reason)
-        BannerController.shared.show(banner)
         isConnected = false
-
-        socket.socket.connect(timeoutAfter: 10) { [weak self] in
-            guard let `self` = self else { return }
-            self.socket.delegate?.sessionDisconnected()
-        }
     }
 
-    func sessionErrored() {
-        // Attempt reconnect if not already
-        if BannerController.shared.currentBanner == nil {
-            self.socket.socket.setReconnecting(reason: "")
-        }
+    func sessionReconnecting() {
+        isConnected = false
     }
 
     func receivedUserCount(_ count: Int) {

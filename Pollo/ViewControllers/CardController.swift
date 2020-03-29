@@ -123,7 +123,7 @@ class CardController: UIViewController {
             socket.socket.connect()
         default:
             print("Network not reachable")
-            self.socket.socket.setReconnecting(reason: "No Internet connection.")
+            self.socket.manager.reconnect()
         }
     }
     
