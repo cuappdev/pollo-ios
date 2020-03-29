@@ -49,7 +49,7 @@ class NoInternetViewController: UIViewController {
         descriptionLabel.text = descriptionLabelText
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = ._16SemiboldFont
-        descriptionLabel.textColor = .lightGrey
+        descriptionLabel.textColor = .lightGray
         view.addSubview(descriptionLabel)
         
         retryButton.setTitle(retryButtonText, for: .normal)
@@ -91,10 +91,11 @@ class NoInternetViewController: UIViewController {
     }
     
     @objc func retryPressed() {
+        retryButton.setTitleColor(.lightGray, for: .normal)
+        retryButton.layer.borderColor = UIColor.lightGray.cgColor
         DispatchQueue.main.async {
             GIDSignIn.sharedInstance().signInSilently()
         }
-        self.navigationController?.popViewController(animated: false)
     }
     
 
