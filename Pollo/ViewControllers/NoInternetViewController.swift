@@ -14,7 +14,7 @@ class NoInternetViewController: UIViewController {
     // MARK: - View vars
     let descriptionLabel = UILabel()
     let facepalmImageView = UIImageView()
-    let retryButton = UIButton()
+    let retryButton = UIButton(type: .system)
     let titleLabel = UILabel()
     
     // MARK: - Constants
@@ -32,6 +32,10 @@ class NoInternetViewController: UIViewController {
     let retryButtonWidth: CGFloat = 197
     let titleLabelHeight: CGFloat = 28
     let titleLabelText = "Oops"
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,8 +95,6 @@ class NoInternetViewController: UIViewController {
     }
     
     @objc func retryPressed() {
-        retryButton.setTitleColor(.lightGray, for: .normal)
-        retryButton.layer.borderColor = UIColor.lightGray.cgColor
         DispatchQueue.main.async {
             GIDSignIn.sharedInstance().signInSilently()
         }
