@@ -9,6 +9,7 @@ target 'Pollo' do
   # Pods for Pollo
   pod 'Alamofire'
   pod 'AppDevAnalytics', :git => 'https://github.com/cuappdev/ios-analytics.git'
+  pod 'AppDevAnnouncements', :git => 'https://github.com/cuappdev/appdev-announcements.git'
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'Firebase/Analytics'
@@ -16,10 +17,11 @@ target 'Pollo' do
   pod 'FutureNova', :git => 'https://github.com/cuappdev/ios-networking.git'
   pod 'Google/SignIn'
   pod 'IGListKit'
+  pod 'NotificationBannerSwift'
   pod 'Presentr'
+  pod 'ReachabilitySwift'
   pod 'SnapKit'
   pod 'Socket.IO-Client-Swift'
   pod 'SwiftLint'
   pod 'SwiftyJSON'
-  pod 'Sourcery'
 end

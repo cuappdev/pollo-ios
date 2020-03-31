@@ -14,6 +14,7 @@ import UIKit
 protocol CardCellDelegate: class {
 
     var userRole: UserRole { get }
+    var isConnected: Bool { get }
 
     func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
@@ -47,13 +48,15 @@ class CardCell: UICollectionViewCell {
     let collectionViewHorizontalPadding: CGFloat = 8.0
     let endPollText = "End Poll"
     let initialTimerLabelText = "00:00"
-    let resultsSharedText = "Results Shared"
     let questionButtonBorderWidth: CGFloat = 1.0
     let questionButtonBottomPadding: CGFloat = 16.0
     let questionButtonCornerRadius: CGFloat = 23.0
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonHeight: CGFloat = 47.0
     let questionButtonWidth: CGFloat = 170.0
+    let responsiveAdminPadding: CGFloat = 32.0
+    let responsiveStudentPadding: CGFloat = 50.0
+    let resultsSharedText = "Results Shared"
     let shareResultsText = "Share Results"
     let timerLabelBottomPadding: CGFloat =  91.0
     let timerLabelFontSize: CGFloat = 14.0
@@ -147,7 +150,7 @@ class CardCell: UICollectionViewCell {
         questionModel = QuestionModel(question: poll.text)
         pollOptionsModel = buildPollOptionsModel(from: poll, userRole: userRole)
         let didSubmitChoice = userRole == .admin ? false : poll.getSelected() != nil
-        miscellaneousModel = PollMiscellaneousModel(pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
+        miscellaneousModel = PollMiscellaneousModel(pollState: poll.state, totalResponses: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: didSubmitChoice)
         adapter.performUpdates(animated: false, completion: nil)
     }
 
@@ -161,7 +164,7 @@ class CardCell: UICollectionViewCell {
             // we don't change the previous pollOptionsModel in pollOptionsSectionController.
             pollOptionsSectionController.update(with: updatedPollOptionsModelType)
             pollOptionsModel.type = updatedPollOptionsModelType
-            miscellaneousModel = PollMiscellaneousModel(pollState: poll.state, totalVotes: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(pollState: poll.state, totalResponses: poll.getTotalResults(for: userRole), userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             DispatchQueue.main.async {
                 self.adapter.performUpdates(animated: false, completion: nil)
             }
@@ -176,7 +179,7 @@ class CardCell: UICollectionViewCell {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
             timerLabel.isHidden = true
-            miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalResponses: miscellaneousModel.totalResponses, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidEndPoll(cardCell: self, poll: poll)
         } else if poll.state == .ended {
@@ -184,7 +187,7 @@ class CardCell: UICollectionViewCell {
             questionButton.setTitle(resultsSharedText, for: .normal)
             questionButton.setTitleColor(.blueGrey, for: .normal)
             questionButton.layer.borderColor = UIColor.blueGrey.cgColor
-            miscellaneousModel = PollMiscellaneousModel(pollState: .shared, totalVotes: miscellaneousModel.totalVotes, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
+            miscellaneousModel = PollMiscellaneousModel(pollState: .shared, totalResponses: miscellaneousModel.totalResponses, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
             delegate?.cardCellDidShareResults(cardCell: self, poll: poll)
         }
@@ -237,18 +240,7 @@ extension CardCell: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         guard let questionModel = questionModel, let pollOptionsModel = pollOptionsModel, let miscellaneousModel = miscellaneousModel else { return [] }
-        var objects: [ListDiffable] = []
-        objects.append(topHamburgerCardModel)
-        objects.append(questionModel)
-        switch userRole {
-        case .admin:
-            objects.append(miscellaneousModel)
-        case .member:
-            objects.append(miscellaneousModel)
-        }
-        objects.append(separatorLineModel)
-        objects.append(pollOptionsModel)
-        return objects
+        return [topHamburgerCardModel, questionModel, miscellaneousModel, separatorLineModel, pollOptionsModel]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -277,8 +269,18 @@ extension CardCell: PollOptionsSectionControllerDelegate {
         return delegate.userRole
     }
     
+    var maxCellHeight: CGFloat {
+        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
+        let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding + responsiveAdminPadding
+        return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : responsiveStudentPadding))
+    }
+    
+    var isConnected: Bool {
+        return delegate.isConnected
+    }
+    
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {
-        miscellaneousModel = PollMiscellaneousModel(pollState: miscellaneousModel.pollState, totalVotes: miscellaneousModel.totalVotes, userRole: miscellaneousModel.userRole, didSubmitChoice: true)
+        miscellaneousModel = PollMiscellaneousModel(pollState: miscellaneousModel.pollState, totalResponses: miscellaneousModel.totalResponses, userRole: miscellaneousModel.userRole, didSubmitChoice: true)
         adapter.performUpdates(animated: false, completion: nil)
         delegate.cardCellDidSubmitChoice(cardCell: self, choice: choice, index: index)
     }

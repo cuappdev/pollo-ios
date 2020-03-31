@@ -217,28 +217,16 @@ extension CardController: UIScrollViewDelegate {
 
 extension CardController: SocketDelegate {
 
-    func sessionConnected() {}
+    func sessionConnected() {
+        isConnected = true
+    }
     
-    func sessionDisconnected() {}
+    func sessionDisconnected() {
+        isConnected = false
+    }
 
-    func sessionErrored() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
-            guard let `self` = self else { return }
-            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
-                guard let viewControllers = self.navigationController?.viewControllers else { return }
-                if viewControllers.count > 3 {
-                    // Pop back to PollsViewController
-                    guard let viewController = viewControllers[viewControllers.count - 3] as? PollsViewController else { return }
-                    self.navigationController?.popToViewController(viewController, animated: true)
-                    self.socket.socket.disconnect()
-                    self.socket.delegate = nil
-                    viewController.pollsDateViewControllerWasPopped(for: self.userRole)
-                }
-            })
-            if self.presentedViewController == nil {
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
+    func sessionReconnecting() {
+        isConnected = false
     }
 
     func receivedUserCount(_ count: Int) {
@@ -289,9 +277,7 @@ extension CardController: SocketDelegate {
         }
         guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.id == pollID }) else { return }
         pollsDateModel.polls.remove(at: deleteIndex)
-        if currentIndex != 0 {
-            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
-        }
+        currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
         adapter.performUpdates(animated: true, completion: nil)
     }
@@ -303,9 +289,7 @@ extension CardController: SocketDelegate {
         }
         guard let deleteIndex = pollsDateModel.polls.firstIndex(where: { $0.state == .live }) else { return }
         pollsDateModel.polls.remove(at: deleteIndex)
-        if currentIndex != 0 {
-            currentIndex = currentIndex >= deleteIndex ? currentIndex - 1 : currentIndex
-        }
+        currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
         if pollsDateModel.polls.isEmpty {
@@ -367,6 +351,7 @@ extension CardController: SocketDelegate {
         switch pollsDateModel.polls[index].state {
         case .live:
             socket.socket.emit(Routes.serverDeleteLive)
+            session.isLive = false
             pollsDateModel.polls[index].state = .ended
             createPollButton.isUserInteractionEnabled = true
             createPollButton.isHidden = false
@@ -418,7 +403,7 @@ extension CardController: EditPollViewControllerDelegate {
         adapter.performUpdates(animated: true) { completed in
             if completed && !self.pollsDateModel.polls.isEmpty {
                 // Move current index based on which poll was deleted
-                self.currentIndex = self.currentIndex == 0 ? self.currentIndex : self.currentIndex - 1
+                self.currentIndex = self.currentIndex == self.pollsDateModel.polls.count ? self.currentIndex - 1 : self.currentIndex
             }
             self.updateCountLabelText()
             if self.pollsDateModel.polls.isEmpty {

@@ -118,22 +118,7 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 extension PollsDateViewController: NavigationTitleViewDelegate {
 
     func navigationTitleViewNavigationButtonTapped() {
-        guard userRole == .admin else { return }
-        let pollsDateAttendanceArray = pollsDateArray.map { PollsDateAttendanceModel(model: $0, isSelected: false) }
-        getMembers(with: session?.id ?? "").observe { [weak self] result in
-            guard let `self` = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let response):
-                    let groupControlsVC = GroupControlsViewController(session: self.session, pollsDateAttendanceArray: pollsDateAttendanceArray, numMembers: response.data.count, delegate: self)
-                    self.navigationController?.pushViewController(groupControlsVC, animated: true)
-                case .error(let error):
-                    print(error)
-                    let alertController = self.createAlert(title: "Error", message: "Failed to load data. Try again!")
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
-        }
+        // TODO: Push the group controls page once we re-enable
     }
 
 }
@@ -150,21 +135,10 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 extension PollsDateViewController: SocketDelegate {
 
     func sessionConnected() {}
-    
+
     func sessionDisconnected() {}
 
-    func sessionErrored() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
-            guard let `self` = self else { return }
-            let alertController = self.createAlert(title: "Error", message: "Could not join poll. Try joining again!", handler: { _ in
-                self.goBack()
-                self.socket.delegate = nil
-            })
-            if self.presentedViewController == nil {
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
-    }
+    func sessionReconnecting() {}
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         appendPoll(poll: poll)
@@ -248,7 +222,7 @@ extension PollsDateViewController: SocketDelegate {
     func appendPoll(poll: Poll) {
         let todaysDate = Date()
         if let firstPollDateModel = pollsDateArray.first, firstPollDateModel.dateValue.isSameDay(as: todaysDate) {
-            var updatedPolls = firstPollDateModel.polls
+            var updatedPolls = firstPollDateModel.polls.filter { !$0.isEqual(toDiffableObject: poll) }
             updatedPolls.append(poll)
             let updatedPollsDateModel = PollsDateModel(date: firstPollDateModel.date, polls: updatedPolls)
             pollsDateArray[0] = updatedPollsDateModel

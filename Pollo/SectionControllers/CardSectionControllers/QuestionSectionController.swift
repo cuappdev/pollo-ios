@@ -19,9 +19,6 @@ class QuestionSectionController: ListSectionController {
     var userRole: UserRole!
     weak var delegate: QuestionSectionControllerDelegate?
     
-    // MARK: - Constants
-    let questionLabelVerticalPadding: CGFloat = 10
-    
     init(delegate: QuestionSectionControllerDelegate, userRole: UserRole) {
         self.delegate = delegate
         self.userRole = userRole
@@ -36,7 +33,7 @@ class QuestionSectionController: ListSectionController {
         if userRole == .admin {
             questionLabelWidth -= LayoutConstants.moreButtonWidth
         }
-        let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20BoldFont) + questionLabelVerticalPadding
+        let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20BoldFont)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     

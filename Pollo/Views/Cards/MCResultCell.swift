@@ -17,13 +17,13 @@ class MCResultCell: UICollectionViewCell {
     private let highlightView = UIView()
     private let numSelectedLabel = UILabel()
     private let optionLabel = UILabel()
+    private let percentSelectedLabel = UILabel()
     private let selectedDotView = UIView()
     private let selectedImageView = UIImageView()
     
     // MARK: - Data vars
     var correctAnswer: String?
     var didLayoutConstraints = false
-    var highlightViewWidthConstraint: Constraint!
     var index: Int!
     var percentSelected: Float!
     var showCorrectAnswer = false
@@ -31,22 +31,23 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Constants
     let checkImageName = "correctanswer"
-    let containerViewBorderWidth: CGFloat = 0.3
-    let containerViewCornerRadius: CGFloat = 3
+    let containerViewBorderWidth: CGFloat = 0.6
+    let containerViewCorrectBorderWidth: CGFloat = 1.5
+    let containerViewCornerRadius: CGFloat = 8
     let containerViewHeight: CGFloat = 46
-    let containerViewTopPadding: CGFloat = 8
     let correctImageName = "correct"
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
-    let highlightViewBorderWidth: CGFloat = 0.6
+    let highlightViewBorderWidth: CGFloat = 0.3
+    let highlightViewCorrectBorderWidth: CGFloat = 1.0
     let highlightViewCornerRadius: CGFloat = 8
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
-    let labelFontSize: CGFloat = 13
-    let numSelectedLabelTrailingPadding: CGFloat = 16
-    let numSelectedLabelWidth: CGFloat = 40
-    let selectedImageViewLength: CGFloat = 17
+    let numPercentSelectedTrailingPadding: CGFloat = 58
+    let numSelectedLabelTopPadding: CGFloat = 23
+    let percentSelectedLabelTopPadding: CGFloat = 38
     let selectedDotViewLength: CGFloat = 15
+    let selectedImageViewLength: CGFloat = 17
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,26 +58,6 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Layout
     func setupViews() {
-        containerView.clipsToBounds = true
-        containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
-        contentView.addSubview(containerView)
-
-        highlightView.layer.cornerRadius = highlightViewCornerRadius
-        highlightView.clipsToBounds = true
-        highlightView.layer.borderWidth = highlightViewBorderWidth
-        containerView.addSubview(highlightView)
-        
-        optionLabel.font = ._14MediumFont
-        optionLabel.backgroundColor = .clear
-        optionLabel.lineBreakMode = .byTruncatingTail
-        optionLabel.textColor = .black
-        containerView.addSubview(optionLabel)
-        
-        numSelectedLabel.font = ._14MediumFont
-        numSelectedLabel.backgroundColor = .clear
-        numSelectedLabel.textAlignment = .right
-        numSelectedLabel.textColor = .black
-        containerView.addSubview(numSelectedLabel)
         
         dotView.clipsToBounds = true
         dotView.layer.cornerRadius = dotViewLength / 2
@@ -90,50 +71,58 @@ class MCResultCell: UICollectionViewCell {
         contentView.addSubview(selectedDotView)
         
         contentView.addSubview(selectedImageView)
+        
+        containerView.clipsToBounds = true
+        containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
+        contentView.addSubview(containerView)
+        
+        highlightView.layer.cornerRadius = highlightViewCornerRadius
+        highlightView.clipsToBounds = true
+        highlightView.layer.borderWidth = highlightViewBorderWidth
+        containerView.addSubview(highlightView)
+        
+        optionLabel.font = ._14MediumFont
+        optionLabel.backgroundColor = .clear
+        optionLabel.lineBreakMode = .byTruncatingTail
+        optionLabel.textColor = .black
+        containerView.addSubview(optionLabel)
+        
+        numSelectedLabel.font = ._14MediumFont
+        numSelectedLabel.textAlignment = .center
+        numSelectedLabel.textColor = .black
+        contentView.addSubview(numSelectedLabel)
+        
+        percentSelectedLabel.font = ._12SemiboldFont
+        percentSelectedLabel.textAlignment = .center
+        percentSelectedLabel.textColor = .blueGrey
+        contentView.addSubview(percentSelectedLabel)
     }
     
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - numSelectedLabelWidth - horizontalPadding * 4
+        let maxWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding
         
-        // If we already layed out constraints before, we should only update the
+        // If we already laid out constraints before, we should only update the
         // highlightView width constraint
         if didLayoutConstraints {
             let useMaxWidth = optionLabelWidth >= maxWidth || !showCorrectAnswer
             optionLabel.snp.updateConstraints { make in
                 make.width.equalTo(useMaxWidth ? maxWidth : optionLabelWidth)
             }
-            let highlightViewMaxWidth = Float(self.contentView.bounds.width - horizontalPadding * 2)
-            self.highlightViewWidthConstraint?.update(offset: highlightViewMaxWidth * self.percentSelected)
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.highlightView.snp.remakeConstraints { make in
+                    make.leading.top.bottom.equalToSuperview()
+                    make.width.equalToSuperview().multipliedBy(self.percentSelected)
+                }
+                self.layoutIfNeeded()
+            }
             super.updateConstraints()
             return
         }
 
         didLayoutConstraints = true
-        containerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(horizontalPadding + (userRole == .admin ? 0 : horizontalPadding + dotViewLength))
-            make.trailing.equalToSuperview().inset(horizontalPadding)
-            make.height.equalTo(containerViewHeight)
-            make.bottom.equalToSuperview()
-        }
-        
-        numSelectedLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(numSelectedLabelTrailingPadding)
-            make.width.equalTo(numSelectedLabelWidth)
-        }
-        
-        optionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(horizontalPadding)
-            make.trailing.equalToSuperview().inset(horizontalPadding)
-            make.centerY.equalToSuperview()
-            if showCorrectAnswer {
-                make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
-            } else {
-                make.width.equalTo(maxWidth)
-            }
-        }
         
         dotView.snp.makeConstraints { make in
             make.width.height.equalTo(dotViewLength)
@@ -150,10 +139,39 @@ class MCResultCell: UICollectionViewCell {
             make.width.height.equalTo(selectedImageViewLength)
             make.center.equalTo(dotView)
         }
+        
+        containerView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(horizontalPadding + (userRole == .admin ? 0 : horizontalPadding + dotViewLength))
+            make.trailing.equalToSuperview().inset(numPercentSelectedTrailingPadding)
+            make.height.equalTo(containerViewHeight)
+            make.bottom.equalToSuperview()
+        }
+        
+        optionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(horizontalPadding)
+            make.trailing.equalToSuperview().inset(horizontalPadding)
+            make.centerY.equalToSuperview()
+            if showCorrectAnswer {
+                make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
+            } else {
+                make.width.equalTo(maxWidth)
+            }
+        }
 
         highlightView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(percentSelected)
+        }
+        
+        numSelectedLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(numSelectedLabelTopPadding)
+            make.leading.equalTo(containerView.snp.trailing).inset(horizontalPadding/3)
+            make.trailing.equalToSuperview().inset(horizontalPadding/3)
+        }
+        percentSelectedLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(percentSelectedLabelTopPadding)
+            make.leading.equalTo(containerView.snp.trailing).offset(horizontalPadding/3)
+            make.trailing.equalToSuperview().inset(horizontalPadding/3)
         }
 
         super.updateConstraints()
@@ -161,64 +179,68 @@ class MCResultCell: UICollectionViewCell {
     
     // MARK: - Configure
     func configure(for resultModel: MCResultModel, userRole: UserRole, correctAnswer: String?) {
-        optionLabel.text = resultModel.option
-        percentSelected = resultModel.percentSelected
-        numSelectedLabel.text = "\(Int(percentSelected * 100))%"
         self.correctAnswer = correctAnswer
         self.userRole = userRole
-        let answer = intToMCOption(resultModel.choiceIndex)
-        switch userRole {
-        case .admin:
-            containerView.backgroundColor = correctAnswer == answer ? .lightGreen : .lightGrey
-            containerView.layer.borderWidth = containerViewBorderWidth
-            containerView.layer.cornerRadius = containerViewCornerRadius
-            highlightView.isHidden = true
-            numSelectedLabel.isHidden = false
-            dotView.isHidden = true
-            optionLabel.textColor = .black
-        case .member:
-            containerView.backgroundColor = .clear
-            containerView.layer.borderWidth = highlightViewBorderWidth
-            containerView.layer.cornerRadius = highlightViewCornerRadius
-            optionLabel.textColor = .mediumGrey
-            numSelectedLabel.isHidden = true
-            dotView.isHidden = false
-            let isSelected = resultModel.isSelected
-            selectedDotView.isHidden = !isSelected
-            selectedImageView.isHidden = selectedDotView.isHidden
-            if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
-                if answer == correctAnswer {
-                    if isSelected {
-                        selectedDotView.backgroundColor = .clear
-                        selectedImageView.image = UIImage(named: correctImageName)
-                    }
-                    showCorrectAnswer = true
-                    highlightView.backgroundColor = .lightGreen
-                    highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-                } else {
-                    if isSelected {
-                        selectedDotView.backgroundColor = .clear
-                        selectedImageView.image = UIImage(named: incorrectImageName)
-                    }
-                    highlightView.backgroundColor = .lightGrey
-                    highlightView.layer.borderColor = UIColor.coolGrey.cgColor
-                }
-            } else {
-                if isSelected {
-                    selectedDotView.backgroundColor = .coolGrey
-                    selectedImageView.image = nil
-                }
-                highlightView.backgroundColor = .lightGrey
-                highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+        
+        numSelectedLabel.text = "\(resultModel.numSelected)"
+        
+        optionLabel.text = resultModel.option
+        optionLabel.textColor = userRole == .admin ? .black : .mediumGrey
+        
+        percentSelected = resultModel.percentSelected
+        percentSelectedLabel.text = "(\(Int(percentSelected * 100))%)"
+        
+        dotView.isHidden = userRole == .admin
+        
+        containerView.backgroundColor = .clear
+        containerView.layer.borderColor = UIColor.mediumGrey2.cgColor
+        containerView.layer.borderWidth = containerViewBorderWidth
+        containerView.layer.cornerRadius = containerViewCornerRadius
+        
+        // Setup default MC visuals
+        let isSelected = resultModel.isSelected
+        selectedDotView.isHidden = !isSelected
+        selectedDotView.backgroundColor = .coolGrey
+        
+        selectedImageView.isHidden = selectedDotView.isHidden
+        selectedImageView.image = nil
+        
+        highlightView.backgroundColor = .lightGrey
+        highlightView.layer.borderColor = UIColor.coolGrey.cgColor
+        highlightView.layer.borderWidth = highlightViewBorderWidth
+        highlightView.layer.cornerRadius = highlightViewCornerRadius
+        
+        // Override default visuals when there is correct answer
+        if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
+            let answer = intToMCOption(resultModel.choiceIndex)
+            let selectedCorrectAnswer = answer == correctAnswer
+            if selectedCorrectAnswer {
+                showCorrectAnswer = true
+                
+                containerView.layer.borderColor = UIColor.polloGreen.cgColor
+                containerView.layer.borderWidth = containerViewCorrectBorderWidth
+                
+                highlightView.backgroundColor = .lightGreen
+                highlightView.layer.borderColor = UIColor.polloGreen.cgColor
+                highlightView.layer.borderWidth = highlightViewCorrectBorderWidth
+            }
+            if isSelected {
+                    selectedDotView.backgroundColor = .clear
+                    selectedImageView.image = UIImage(named: selectedCorrectAnswer  ? correctImageName : incorrectImageName)
             }
         }
     }
 
     // MARK: - Updates
     func update(with resultModel: MCResultModel, correctAnswer: String?) {
+        numSelectedLabel.text = "\(resultModel.numSelected)"
+        
         optionLabel.text = resultModel.option
+        
         percentSelected = resultModel.percentSelected
-        numSelectedLabel.text = "\(Int(percentSelected * 100))%"
+        percentSelectedLabel.text = "(\(Int(percentSelected * 100))%)"
+        
+        updateConstraints()
     }
     
     override func prepareForReuse() {

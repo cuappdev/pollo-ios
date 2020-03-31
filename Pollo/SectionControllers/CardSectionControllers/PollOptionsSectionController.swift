@@ -10,6 +10,8 @@ import IGListKit
 
 protocol PollOptionsSectionControllerDelegate {
     
+    var isConnected: Bool { get }
+    var maxCellHeight: CGFloat { get }
     var userRole: UserRole { get }
     
     func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
@@ -33,13 +35,14 @@ class PollOptionsSectionController: ListSectionController {
         guard let containerSize = collectionContext?.containerSize else {
             return .zero
         }
-        let cellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel, userRole: delegate.userRole)
+        let calculatedCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
+        let cellHeight = min(delegate.maxCellHeight, calculatedCellHeight)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(of: PollOptionsCell.self, for: self, at: index) as! PollOptionsCell
-        cell.configure(for: pollOptionsModel, delegate: self, correctAnswer: correctAnswer)
+        cell.configure(for: pollOptionsModel, delegate: self, correctAnswer: correctAnswer, maxCellHeight: delegate.maxCellHeight)
         cell.setNeedsUpdateConstraints()
         return cell
     }
@@ -60,6 +63,10 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     
     var userRole: UserRole {
         return delegate.userRole
+    }
+
+    var isConnected: Bool {
+        return delegate.isConnected
     }
 
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int) {

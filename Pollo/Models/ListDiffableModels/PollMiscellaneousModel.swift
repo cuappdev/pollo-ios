@@ -13,12 +13,12 @@ class PollMiscellaneousModel {
     let identifier = UUID().uuidString
     var didSubmitChoice: Bool
     var pollState: PollState
-    var totalVotes: Int
+    var totalResponses: Int
     var userRole: UserRole
 
-    init(pollState: PollState, totalVotes: Int, userRole: UserRole, didSubmitChoice: Bool) {
+    init(pollState: PollState, totalResponses: Int, userRole: UserRole, didSubmitChoice: Bool) {
         self.pollState = pollState
-        self.totalVotes = totalVotes
+        self.totalResponses = totalResponses
         self.userRole = userRole
         self.didSubmitChoice = didSubmitChoice
     }
