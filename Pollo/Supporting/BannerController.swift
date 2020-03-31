@@ -17,28 +17,24 @@ public class BannerController {
 
     func show(_ banner: BaseNotificationBanner) {
         banner.delegate = self
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.currentBanner?.dismiss()
-            self.currentBanner = banner
-            self.currentBanner?.show(bannerPosition: .bottom)
-        }
+        self.currentBanner?.dismiss()
+        self.currentBanner = banner
+        self.currentBanner?.show(bannerPosition: .bottom)
     }
 
     func dismiss() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.currentBanner?.dismiss()
-            self.currentBanner = nil
-        }
+        self.currentBanner?.dismiss()
+        self.currentBanner = nil
     }
 }
 
 extension BannerController: NotificationBannerDelegate {
 
     public func notificationBannerWillAppear(_ banner: BaseNotificationBanner) {
-        banner.haptic = .none
-        banner.isHidden = self.currentBanner == nil
+        if self.currentBanner == nil {
+            banner.haptic = .none
+            banner.isHidden = true
+        }
     }
 
     public func notificationBannerDidAppear(_ banner: BaseNotificationBanner) {

@@ -213,6 +213,7 @@ extension PollOptionsCell: MCChoiceSectionControllerDelegate {
             }
             // Select new choice
             let selectedIndex = adapter.section(for: sectionController)
+            guard selectedIndex < mcChoiceModels.count else { return }
             let updatedMCChoiceModel = updateMCChoiceModel(at: selectedIndex, isSelected: true, mcChoiceModels: mcChoiceModels)
             mcChoiceModels[selectedIndex] = updatedMCChoiceModel
             pollOptionsModel.type = .mcChoice(choiceModels: mcChoiceModels)

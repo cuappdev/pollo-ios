@@ -9,7 +9,6 @@
 import IGListKit
 import SwiftyJSON
 import UIKit
-import NotificationBannerSwift
 
 extension PollsDateViewController: ListAdapterDataSource {
     
@@ -136,41 +135,11 @@ extension PollsDateViewController: GroupControlsViewControllerDelegate {
 
 extension PollsDateViewController: SocketDelegate {
 
-    func sessionConnected() {
-        let banner = NotificationBanner.connectedBanner()
-        BannerController.shared.show(banner)
-    }
+    func sessionConnected() {}
 
-    func sessionDisconnected() {
-        socket.socket.connect(timeoutAfter: 5) { [weak self] in
-            guard let `self` = self else { return }
-            let banner = NotificationBanner.disconnectedBanner()
-            banner.onTap = { [weak self] in
-                guard let `self` = self else { return }
-                banner.dismiss()
-                self.socket.socket.setReconnecting(reason: "")
-            }
-            BannerController.shared.show(banner)
-        }
+    func sessionDisconnected() {}
 
-    }
-
-    func sessionReconnecting(reason: String) {
-        let banner = NotificationBanner.reconnectingBanner(reason: reason)
-        BannerController.shared.show(banner)
-
-        socket.socket.connect(timeoutAfter: 10) { [weak self] in
-            guard let `self` = self else { return }
-            self.socket.delegate?.sessionDisconnected()
-        }
-    }
-
-    func sessionErrored() {
-        // Attempt reconnect if not already
-        if BannerController.shared.currentBanner == nil {
-            self.socket.socket.setReconnecting(reason: "")
-        }
-    }
+    func sessionReconnecting() {}
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         appendPoll(poll: poll)
