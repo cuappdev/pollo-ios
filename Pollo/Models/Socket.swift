@@ -6,9 +6,9 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import NotificationBannerSwift
 import SocketIO
 import SwiftyJSON
-import NotificationBannerSwift
 
 class Socket {
 
@@ -46,7 +46,7 @@ class Socket {
         socket.on(clientEvent: .disconnect) { _, _ in
             let banner = NotificationBanner.disconnectedBanner()
             banner.onTap = { [weak self] in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.manualReconnect()
             }
             BannerController.shared.show(banner)
@@ -120,7 +120,7 @@ class Socket {
         BannerController.shared.show(banner)
 
         socket.connect(timeoutAfter: 10) { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             let banner = NotificationBanner.disconnectedBanner()
             banner.onTap = { [weak self] in
                 guard let `self` = self else { return }

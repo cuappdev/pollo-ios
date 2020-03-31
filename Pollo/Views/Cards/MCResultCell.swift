@@ -39,7 +39,7 @@ class MCResultCell: UICollectionViewCell {
     let dotViewBorderWidth: CGFloat = 2
     let dotViewLength: CGFloat = 23
     let highlightViewBorderWidth: CGFloat = 0.3
-    let highlightViewCorrectBornerWidth: CGFloat = 1.0
+    let highlightViewCorrectBorderWidth: CGFloat = 1.0
     let highlightViewCornerRadius: CGFloat = 8
     let horizontalPadding: CGFloat = 12
     let incorrectImageName = "incorrect"
@@ -222,7 +222,7 @@ class MCResultCell: UICollectionViewCell {
                 
                 highlightView.backgroundColor = .lightGreen
                 highlightView.layer.borderColor = UIColor.polloGreen.cgColor
-                highlightView.layer.borderWidth = highlightViewCorrectBornerWidth
+                highlightView.layer.borderWidth = highlightViewCorrectBorderWidth
             }
             if isSelected {
                     selectedDotView.backgroundColor = .clear

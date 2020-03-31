@@ -10,7 +10,6 @@ import IGListKit
 import Presentr
 import SwiftyJSON
 import UIKit
-import NotificationBannerSwift
 
 extension CardController: ListAdapterDataSource {
     

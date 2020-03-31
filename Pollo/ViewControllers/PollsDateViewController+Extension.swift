@@ -9,7 +9,6 @@
 import IGListKit
 import SwiftyJSON
 import UIKit
-import NotificationBannerSwift
 
 extension PollsDateViewController: ListAdapterDataSource {
     
