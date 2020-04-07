@@ -13,12 +13,12 @@ import Presentr
 protocol PollBuilderViewDelegate: class {
     func ignoreNextKeyboardHiding()
     func updateCanDraft(_ canDraft: Bool)
-    func updateCorrectAnswer(correctAnswer: String?)
+    func updateCorrectAnswer(correctAnswer: Int?)
     var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate: class {
-    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool)
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: Int?, shouldPopViewController: Bool)
     func showNavigationBar()
 }
 
@@ -42,7 +42,7 @@ class PollBuilderViewController: UIViewController {
     private let networking: Networking = URLSession.shared.request
     var answerChoices: [PollResult]!
     var canDraft: Bool!
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var didLayoutSubviews = false
     var drafts: [Draft] = []
     var dropDownHidden: Bool = true

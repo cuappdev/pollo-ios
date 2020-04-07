@@ -21,11 +21,11 @@ protocol PollOptionsSectionControllerDelegate {
 class PollOptionsSectionController: ListSectionController {
     
     // MARK: - Data vars
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
     
-    init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: String?) {
+    init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: Int?) {
         self.correctAnswer = correctAnswer
         self.delegate = delegate
     }

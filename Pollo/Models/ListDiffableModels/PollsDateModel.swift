@@ -12,7 +12,7 @@ import IGListKit
 struct PollsResponse: Codable {
 
     var answerChoices: [PollResult]
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var createdAt: String?
     var id: String
     var state: PollState

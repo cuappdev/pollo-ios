@@ -80,7 +80,7 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 }
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
-    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: Int?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
@@ -90,9 +90,9 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
-        let correct = correctAnswer ?? ""
+        let correct = correctAnswer
 
-        let newPollDict: [String: Any] = [
+        let newPollDict: [String: Any?] = [
             "text": text,
             "answerChoices": answerChoicesDict,
             "state": "live",
