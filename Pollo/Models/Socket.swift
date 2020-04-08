@@ -6,6 +6,7 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import NotificationBannerSwift
 import SocketIO
 import SwiftyJSON
 
@@ -31,26 +32,35 @@ class Socket {
         #endif
         guard let url = URL(string: urlString) else { fatalError("Bad url") }
         guard let accessToken = User.userSession?.accessToken else { fatalError("No access token") }
-        manager = SocketManager(socketURL: url, config: [.log(true), .reconnects(false), .compress, .connectParams([RequestKeys.accessTokenKey: accessToken])])
+        manager = SocketManager(socketURL: url, config: [.log(true), .reconnects(true), .reconnectAttempts(3), .reconnectWait(2), .reconnectWaitMax(10), .compress, .connectParams([RequestKeys.accessTokenKey: accessToken])])
         
         socket = manager.socket(forNamespace: "/\(id)")
         
         socket.on(clientEvent: .connect) { _, _ in
+            let banner = NotificationBanner.connectedBanner()
+            BannerController.shared.show(banner)
+
             self.delegate?.sessionConnected()
         }
         
         socket.on(clientEvent: .disconnect) { _, _ in
+            let banner = NotificationBanner.disconnectedBanner()
+            banner.onTap = { [weak self] in
+                guard let self = self else { return }
+                self.manualReconnect()
+            }
+            BannerController.shared.show(banner)
+
             self.delegate?.sessionDisconnected()
         }
 
-        socket.on(clientEvent: .error) { _, _ in
-            self.delegate?.sessionErrored()
+        socket.on(clientEvent: .reconnect) { ( _, _) in
+            let banner = NotificationBanner.reconnectingBanner()
+            BannerController.shared.show(banner)
+
+            self.delegate?.sessionReconnecting()
         }
 
-        socket.on(clientEvent: .reconnect) { (data, _) in
-            self.delegate?.sessionReconnecting(reason: data.first as? String ?? "")
-        }
-        
         socket.on(Routes.userStart) { socketData, _ in
             guard let data = try? JSONSerialization.data(withJSONObject: socketData[0]), let poll = try? self.jsonDecoder.decode(Poll.self, from: data) else { return }
             self.delegate?.pollStarted(poll, userRole: .member)
@@ -102,6 +112,22 @@ class Socket {
         }
 
         socket.connect()
+    }
+
+    /// Manually reconnect socket to the server
+    func manualReconnect() {
+        let banner = NotificationBanner.reconnectingBanner()
+        BannerController.shared.show(banner)
+
+        socket.connect(timeoutAfter: 10) { [weak self] in
+            guard let self = self else { return }
+            let banner = NotificationBanner.disconnectedBanner()
+            banner.onTap = { [weak self] in
+                guard let `self` = self else { return }
+                self.manualReconnect()
+            }
+            BannerController.shared.show(banner)
+        }
     }
 
     func updateDelegate(_ delegate: SocketDelegate?) {
