@@ -12,26 +12,26 @@ import GoogleSignIn
 class NoInternetViewController: UIViewController {
     
     // MARK: - View vars
-    let descriptionLabel = UILabel()
-    let facepalmImageView = UIImageView()
-    let retryButton = UIButton(type: .system)
-    let titleLabel = UILabel()
+    private let descriptionLabel = UILabel()
+    private let facepalmImageView = UIImageView()
+    private let retryButton = UIButton(type: .system)
+    private let titleLabel = UILabel()
     
     // MARK: - Constants
-    let descriptionLabelHeight: CGFloat = 12
-    let descriptionLabelText = "No Internet Connection"
-    let descriptionLabelTopPadding: CGFloat = 5
-    let facepalmImage = UIImage(named: "woman_facepalming")
-    let facepalmImageViewBottomPadding: CGFloat = 16
-    let facepalmImageViewWidth: CGFloat = 60
-    let retryButtonBorderWidth: CGFloat = 2.5
-    let retryButtonCornerRadius: CGFloat = 20
-    let retryButtonHeight: CGFloat = 35
-    let retryButtonText = "Retry"
-    let retryButtonTopPadding: CGFloat = 16
-    let retryButtonWidth: CGFloat = 197
-    let titleLabelHeight: CGFloat = 28
-    let titleLabelText = "Oops"
+    private let descriptionLabelHeight: CGFloat = 12
+    private let descriptionLabelText = "No Internet Connection"
+    private let descriptionLabelTopPadding: CGFloat = 5
+    private let facepalmImage = UIImage(named: "woman_facepalming")
+    private let facepalmImageViewBottomPadding: CGFloat = 16
+    private let facepalmImageViewWidth: CGFloat = 60
+    private let retryButtonBorderWidth: CGFloat = 2.5
+    private let retryButtonCornerRadius: CGFloat = 20
+    private let retryButtonHeight: CGFloat = 35
+    private let retryButtonText = "Retry"
+    private let retryButtonTopPadding: CGFloat = 16
+    private let retryButtonWidth: CGFloat = 197
+    private let titleLabelHeight: CGFloat = 28
+    private let titleLabelText = "Oops"
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
