@@ -211,7 +211,7 @@ class MCResultCell: UICollectionViewCell {
         highlightView.layer.cornerRadius = highlightViewCornerRadius
         
         // Override default visuals when there is correct answer
-        if let correctAnswer = correctAnswer {
+        if let correctAnswer = correctAnswer, correctAnswer != -1 {
             let answer = resultModel.choiceIndex
             let selectedCorrectAnswer = answer == correctAnswer
             if selectedCorrectAnswer {

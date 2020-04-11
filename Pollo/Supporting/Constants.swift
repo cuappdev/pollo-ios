@@ -81,6 +81,7 @@ struct ParserKeys {
     static let countKey = "count"
     static let createdAtKey = "createdAt"
     static let idKey = "id"
+    static let letterKey = "letter"
     static let optionsKey = "options"
     static let pollKey = "poll"
     static let resultsKey = "results"

@@ -20,10 +20,10 @@ class PollResult: Codable, Equatable {
     }
 
     var count: Int?
-    var letter: String?
+    var letter: Int
     var text: String
     
-    init(letter: String? = nil, text: String, count: Int?) {
+    init(letter: Int, text: String, count: Int?) {
         self.letter = letter
         self.text = text
         self.count = count
@@ -40,7 +40,7 @@ struct PollFilter: Codable {
 class Poll: Codable {
 
     var answerChoices: [PollResult]
-    var correctAnswer: Int?
+    var correctAnswer: Int
     var createdAt: String? // string of seconds since 1970
     var id: String?
     var pollFilter: PollFilter? // used for filtering user profanity
@@ -60,7 +60,7 @@ class Poll: Codable {
         self.id = id
         self.text = text
         self.answerChoices = answerChoices
-        self.correctAnswer = correctAnswer
+        self.correctAnswer = correctAnswer ?? -1
         self.userAnswers = userAnswers
         self.state = state
     }
@@ -74,7 +74,7 @@ class Poll: Codable {
         self.state = state
     }
 
-    func getSelected() -> Any? {
+    func getSelected() -> Int? {
         if userAnswers.isEmpty { return nil }
         guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let answer = answers.first else { return nil }
         return answer

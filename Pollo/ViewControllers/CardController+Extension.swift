@@ -97,13 +97,12 @@ extension CardController: PollBuilderViewControllerDelegate {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
-        let correct = correctAnswer
-
         session.isLive = true
         // EMIT START QUESTION
         let newPoll = Poll(text: text, answerChoices: answerChoices, correctAnswer: correctAnswer, userAnswers: [:], state: state)
         newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
+        let correct = correctAnswer ?? -1
         let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,

@@ -119,12 +119,7 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     let mcChoiceModels = poll.answerChoices.enumerated().map { (index, option) -> MCChoiceModel in
-        var isSelected: Bool
-        if let selected = poll.getSelected() as? PollResult {
-            isSelected = poll.userDidSelect(mcChoice: index) || selected == option
-        } else {
-            isSelected = poll.userDidSelect(mcChoice: index)
-        }
+        let isSelected = poll.userDidSelect(mcChoice: index)
         return MCChoiceModel(option: option.text, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
@@ -135,7 +130,8 @@ func formatResults(results: [String: JSON]) -> [String: PollResult] {
     results.forEach { (key, value) in
         let text = value[ParserKeys.textKey].stringValue
         let count = value[ParserKeys.countKey].intValue
-        pollResults[key] = PollResult(text: text, count: count)
+        let letter = value[ParserKeys.letterKey].intValue
+        pollResults[key] = PollResult(letter: letter, text: text, count: count)
     }
     return pollResults
 }
@@ -153,11 +149,11 @@ func buildMCResultModelType(from poll: Poll, userRole: UserRole) -> PollOptionsM
     var choiceIndex = 0
     poll.answerChoices.forEach { choice in
         let numSelected = getNumSelected(poll: poll, choice: choice, userRole: userRole)
-        let letter = choice.letter ?? ""
+        let letter = choice.letter
         let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
         var isSelected = false
-        if let selected = poll.getSelected() as? String {
-            isSelected = letter == selected || selected == choice.text
+        if let selected = poll.getSelected() {
+            isSelected = letter == selected
         }
         let resultModel = MCResultModel(option: choice.text, numSelected: numSelected, percentSelected: percentSelected, isSelected: isSelected, choiceIndex: choiceIndex)
         mcResultModels.append(resultModel)

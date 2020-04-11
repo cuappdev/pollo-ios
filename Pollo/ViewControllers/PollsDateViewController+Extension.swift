@@ -90,13 +90,11 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
-        let correct = correctAnswer
-
         let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
             "state": "live",
-            "correctAnswer": correct,
+            "correctAnswer": correctAnswer,
             "userAnswers": [String: [Int]]()
         ]
 

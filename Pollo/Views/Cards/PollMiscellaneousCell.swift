@@ -107,7 +107,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
             case .ended:
                 descriptionLabel.text = endedTextMember
             case .shared:
-                var unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
+                let unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
                 descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalResponses) \(unit)"
             }
         }
