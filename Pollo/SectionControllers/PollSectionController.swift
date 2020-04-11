@@ -17,7 +17,7 @@ protocol PollSectionControllerDelegate: class {
     func pollSectionControllerDidEditPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll)
     func pollSectionControllerDidShareResultsForPoll(sectionController: PollSectionController, poll: Poll)
-    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll)
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: Int, poll: Poll)
 }
 
 class PollSectionController: ListSectionController {
@@ -67,11 +67,9 @@ extension PollSectionController: CardCellDelegate {
         return delegate.isConnected
     }
     
-    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) {
-        if let index = index {
-            poll.updateSelected(mcChoice: intToMCOption(index), choice: choice)
-        }
-        delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: choice, poll: poll)
+    func cardCellDidSubmitChoice(cardCell: CardCell, index: Int) {
+        poll.updateSelected(mcChoice: index)
+        delegate.pollSectionControllerDidSubmitChoiceForPoll(sectionController: self, choice: index, poll: poll)
     }
     
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll) {

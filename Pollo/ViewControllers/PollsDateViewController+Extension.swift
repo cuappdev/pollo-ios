@@ -92,12 +92,12 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
         let correct = correctAnswer
 
-        let newPollDict: [String: Any?] = [
+        let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
             "state": "live",
             "correctAnswer": correct,
-            "userAnswers": [String: [PollChoice]]()
+            "userAnswers": [String: [Int]]()
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)
@@ -206,9 +206,8 @@ extension PollsDateViewController: SocketDelegate {
     
     // MARK: Helpers
     
-    func emitAnswer(pollChoice: PollChoice, message: String) {
-        guard let pollChoiceDict = pollChoice.dictionary else { return }
-        socket.socket.emit(message, pollChoiceDict)
+    func emitAnswer(pollChoice: Int, message: String) {
+        socket.socket.emit(message, pollChoice)
     }
 
     func emitEndPoll() {

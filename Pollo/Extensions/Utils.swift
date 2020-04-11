@@ -121,9 +121,9 @@ private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     let mcChoiceModels = poll.answerChoices.enumerated().map { (index, option) -> MCChoiceModel in
         var isSelected: Bool
         if let selected = poll.getSelected() as? PollResult {
-            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || selected == option
+            isSelected = poll.userDidSelect(mcChoice: index) || selected == option
         } else {
-            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index))
+            isSelected = poll.userDidSelect(mcChoice: index)
         }
         return MCChoiceModel(option: option.text, isSelected: isSelected)
     }

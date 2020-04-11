@@ -19,7 +19,7 @@ protocol CardCellDelegate: class {
     func cardCellDidEditPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidEndPoll(cardCell: CardCell, poll: Poll)
     func cardCellDidShareResults(cardCell: CardCell, poll: Poll)
-    func cardCellDidSubmitChoice(cardCell: CardCell, choice: String, index: Int?) 
+    func cardCellDidSubmitChoice(cardCell: CardCell, index: Int) 
 
 }
 
@@ -279,10 +279,10 @@ extension CardCell: PollOptionsSectionControllerDelegate {
         return delegate.isConnected
     }
     
-    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?) {
+    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, index: Int) {
         miscellaneousModel = PollMiscellaneousModel(pollState: miscellaneousModel.pollState, totalResponses: miscellaneousModel.totalResponses, userRole: miscellaneousModel.userRole, didSubmitChoice: true)
         adapter.performUpdates(animated: false, completion: nil)
-        delegate.cardCellDidSubmitChoice(cardCell: self, choice: choice, index: index)
+        delegate.cardCellDidSubmitChoice(cardCell: self, index: index)
     }
     
 }

@@ -31,17 +31,6 @@ class PollResult: Codable, Equatable {
 
 }
 
-class PollChoice: Codable {
-    var letter: String?
-    var text: String
-
-    init(letter: String? = nil, text: String) {
-        self.letter = letter
-        self.text = text
-    }
-
-}
-
 struct PollFilter: Codable {
     var success: Bool
     var text: String? // passed in when success = false
@@ -58,14 +47,14 @@ class Poll: Codable {
     var state: PollState
     var text: String
     var updatedAt: String?
-    var userAnswers: [String: [PollChoice]] // googleID to poll choice
+    var userAnswers: [String: [Int]] // googleID to index of choice
     // results format:
-    // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
+    // {'User1': {3, 0, 1}, ...}
 
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], correctAnswer: Int? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], correctAnswer: Int? = nil, userAnswers: [String: [Int]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
@@ -87,7 +76,7 @@ class Poll: Codable {
 
     func getSelected() -> Any? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let answer = answers.first?.letter else { return nil }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let answer = answers.first else { return nil }
         return answer
     }
 
@@ -116,15 +105,15 @@ class Poll: Codable {
         }
     }
 
-    // Returns whether user selected this multiple choice (A, B, C, ...)
-    func userDidSelect(mcChoice: String) -> Bool {
-        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first?.letter else { return false }
+    // Returns whether user selected this multiple choice (0, 1, 2, ...)
+    func userDidSelect(mcChoice: Int) -> Bool {
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first else { return false }
         return letter == mcChoice
     }
 
-    func updateSelected(mcChoice: String, choice: String) {
+    func updateSelected(mcChoice: Int) {
         guard let googleID = User.currentUser?.id else { return }
-        userAnswers[googleID] = [PollChoice(letter: mcChoice, text: choice)]
+        userAnswers[googleID] = [mcChoice]
     }
 
 }

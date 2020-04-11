@@ -14,7 +14,7 @@ protocol PollOptionsSectionControllerDelegate {
     var maxCellHeight: CGFloat { get }
     var userRole: UserRole { get }
     
-    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
+    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, index: Int)
     
 }
 
@@ -70,7 +70,7 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     }
 
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int) {
-        delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, choice: choice, index: index)
+        delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, index: index)
     }
     
 }

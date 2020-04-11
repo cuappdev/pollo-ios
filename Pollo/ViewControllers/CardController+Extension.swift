@@ -57,11 +57,8 @@ extension CardController: PollSectionControllerDelegate {
         return userRole
     }
     
-    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: String, poll: Poll) {
-
-        guard let indexOfChoice = poll.answerChoices.firstIndex(where: { $0.text == choice }) else { return }
-        let pollChoice = PollChoice(letter: poll.answerChoices[indexOfChoice].letter, text: choice)
-        emitAnswer(pollChoice: pollChoice, message: Routes.serverAnswer)
+    func pollSectionControllerDidSubmitChoiceForPoll(sectionController: PollSectionController, choice: Int, poll: Poll) {
+        emitAnswer(pollChoice: choice, message: Routes.serverAnswer)
     }
 
     func pollSectionControllerDidEndPoll(sectionController: PollSectionController, poll: Poll) {
@@ -107,12 +104,12 @@ extension CardController: PollBuilderViewControllerDelegate {
         let newPoll = Poll(text: text, answerChoices: answerChoices, correctAnswer: correctAnswer, userAnswers: [:], state: state)
         newPoll.createdAt = Date().secondsString
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
-        let newPollDict: [String: Any?] = [
+        let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
             "state": "live",
             "correctAnswer": correct,
-            "userAnswers": [String: [PollChoice]]()
+            "userAnswers": [String: [Int]]()
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)
@@ -334,12 +331,8 @@ extension CardController: SocketDelegate {
     }
 
     // MARK: Helpers
-    func emitAnswer(pollChoice: PollChoice, message: String) {
-        let data: [String: Any] = [
-            RequestKeys.letterKey: pollChoice.letter as Any,
-            RequestKeys.textKey: pollChoice.text
-        ]
-        socket.socket.emit(message, data)
+    func emitAnswer(pollChoice: Int, message: String) {
+        socket.socket.emit(message, pollChoice)
     }
     
     func emitEndPoll() {
