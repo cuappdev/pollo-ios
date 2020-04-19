@@ -90,7 +90,7 @@ class MCPollBuilderView: UIView {
         return mcOptionModels.compactMap { (mcOptionModel) -> PollResult? in
             switch mcOptionModel.type {
             case .newOption(option: let option, index: let index, isCorrect: _):
-                return PollResult(letter: index, text: option != "" ? option : intToMCOption(index), count: 0)
+                return PollResult(index: index, text: option != "" ? option : intToMCOption(index), count: 0)
             case .addOption:
                 return nil
             }

@@ -16,15 +16,15 @@ enum PollState: String, Codable {
 class PollResult: Codable, Equatable {
 
     static func == (lhs: PollResult, rhs: PollResult) -> Bool {
-        return lhs.letter == rhs.letter && lhs.text == rhs.text && lhs.count == rhs.count
+        return lhs.index == rhs.index && lhs.text == rhs.text && lhs.count == rhs.count
     }
 
-    var count: Int?
-    var letter: Int
+    var index: Int // index of option
     var text: String
+    var count: Int?
     
-    init(letter: Int, text: String, count: Int?) {
-        self.letter = letter
+    init(index: Int, text: String, count: Int?) {
+        self.index = index
         self.text = text
         self.count = count
     }
@@ -76,8 +76,8 @@ class Poll: Codable {
 
     func getSelected() -> Int? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let answer = answers.first else { return nil }
-        return answer
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let indexOfChoice = answers.first else { return nil }
+        return indexOfChoice
     }
 
     // MARK: - Public
@@ -107,8 +107,8 @@ class Poll: Codable {
 
     // Returns whether user selected this multiple choice (0, 1, 2, ...)
     func userDidSelect(mcChoice: Int) -> Bool {
-        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first else { return false }
-        return letter == mcChoice
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let index = userSelectedAnswers.first else { return false }
+        return index == mcChoice
     }
 
     func updateSelected(mcChoice: Int) {
