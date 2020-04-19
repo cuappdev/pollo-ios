@@ -273,7 +273,9 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     }
     
     var maxCellHeight: CGFloat {
-        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
+        let questionCellWidth = self.frame.width - LayoutConstants.cardHorizontalPadding * 2 - LayoutConstants.moreButtonWidth
+        let questionCellHeight = questionModel.question.height(forConstrainedWidth: questionCellWidth, font: ._20BoldFont)
+        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
         let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding + responsiveAdminPadding
         return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : responsiveStudentPadding))
     }

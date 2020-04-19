@@ -70,7 +70,6 @@ struct LayoutConstants {
     static let pollMiscellaneousCellHeight: CGFloat = 30
     static let pollOptionsBottomPadding: CGFloat = 16
     static let pollOptionsPadding: CGFloat = 18
-    static let questionCellHeight: CGFloat = 24
     static let separatorLineCardCellHeight: CGFloat = 1
     static let separatorLineSettingsCellHeight: CGFloat = 5
 }
