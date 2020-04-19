@@ -33,6 +33,7 @@ class QuestionSectionController: ListSectionController {
         if userRole == .admin {
             questionLabelWidth -= LayoutConstants.moreButtonWidth
         }
+        // LayoutConstants.questionCellHeight unused here - see PR
         let cellHeight = questionModel.question.height(withConstrainedWidth: questionLabelWidth, font: ._20BoldFont)
         return CGSize(width: containerSize.width, height: cellHeight)
     }
