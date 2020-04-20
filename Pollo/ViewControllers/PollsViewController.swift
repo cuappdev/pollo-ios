@@ -512,7 +512,7 @@ class PollsViewController: UIViewController {
                     var auxiliaryDict = [Double: Session]()
                     response.data.forEach { session in
                         if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive, isFilterActivated: session.isFilterActivated)
+                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: userRole), isLive: session.isLive)
                         }
                     }
                     auxiliaryDict.keys.sorted().forEach { timestamp in
