@@ -10,8 +10,8 @@ import Foundation
 import IGListKit
 
 enum SettingType {
-    case filter
-    case liveQuestions
+    // In the future, add group setting identifiers here
+    case `default`
 }
 
 class PollsSettingModel: NSCopying {

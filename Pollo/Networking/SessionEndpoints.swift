@@ -76,11 +76,6 @@ extension Endpoint {
     static func deleteSession(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
     }
-
-    static func updateGroupControlForSession(with id: String, isFilteringActivated: Bool) -> Endpoint {
-        let body = UpdateGroupControlsBody(isActivated: isFilteringActivated)
-        return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
-    }
     
     static func leaveSession(with id: String) -> Endpoint {
         return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: .delete)

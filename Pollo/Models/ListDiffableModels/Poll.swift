@@ -59,19 +59,12 @@ class PollChoice: Codable {
 
 }
 
-struct PollFilter: Codable {
-    var success: Bool
-    var text: String? // passed in when success = false
-    var filter: [String]? // passed in when success = false
-}
-
 class Poll: Codable {
 
     var answerChoices: [PollResult]
     var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
     var createdAt: String? // string of seconds since 1970
     var id: String?
-    var pollFilter: PollFilter? // used for filtering user profanity
     var state: PollState
     var text: String
     var type: QuestionType
