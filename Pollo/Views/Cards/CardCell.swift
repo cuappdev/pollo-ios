@@ -59,7 +59,7 @@ class CardCell: UICollectionViewCell {
     let resultsSharedText = "Results Shared"
     let shareResultsText = "Share Results"
     let timerLabelBottomPadding: CGFloat = 45.0
-    let timerLabelFontSize: CGFloat = 14.0
+    let timerLabelFontSize: CGFloat = 17.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
