@@ -37,13 +37,15 @@ class Socket {
         socket = manager.socket(forNamespace: "/\(id)")
         
         socket.on(clientEvent: .connect) { _, _ in
+            guard let delegate = self.delegate else { return }
             let banner = NotificationBanner.connectedBanner()
             BannerController.shared.show(banner)
 
-            self.delegate?.sessionConnected()
+            delegate.sessionConnected()
         }
         
         socket.on(clientEvent: .disconnect) { _, _ in
+            guard let delegate = self.delegate else { return }
             let banner = NotificationBanner.disconnectedBanner()
             banner.onTap = { [weak self] in
                 guard let self = self else { return }
@@ -51,14 +53,15 @@ class Socket {
             }
             BannerController.shared.show(banner)
 
-            self.delegate?.sessionDisconnected()
+            delegate.sessionDisconnected()
         }
 
         socket.on(clientEvent: .reconnect) { ( _, _) in
+            guard let delegate = self.delegate else { return }
             let banner = NotificationBanner.reconnectingBanner()
             BannerController.shared.show(banner)
 
-            self.delegate?.sessionReconnecting()
+            delegate.sessionReconnecting()
         }
 
         socket.on(Routes.userStart) { socketData, _ in
@@ -116,6 +119,7 @@ class Socket {
 
     /// Manually reconnect socket to the server
     func manualReconnect() {
+        guard self.delegate != nil else { return }
         let banner = NotificationBanner.reconnectingBanner()
         BannerController.shared.show(banner)
 
