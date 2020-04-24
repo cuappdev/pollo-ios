@@ -13,25 +13,18 @@ import UIKit
 extension PollsDateViewController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if pollsDateArray.isEmpty {
-            let type: EmptyStateType = .cardController(userRole: userRole)
-            return [EmptyStateModel(type: type)]
-        }
         return pollsDateArray
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if object is PollsDateModel {
-            let pollsDateSectionController = PollsDateSectionController(delegate: self)
-            return pollsDateSectionController
-        } else {
-            let emptyStateController = EmptyStateSectionController(session: session)
-            return emptyStateController
-        }
+        let pollsDateSectionController = PollsDateSectionController(delegate: self)
+        return pollsDateSectionController
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
+        let emptyCell = EmptyStateCell()
+        emptyCell.configure(for: EmptyStateModel(type: .cardController(userRole: userRole)), session: session)
+        return emptyCell
     }
 }
 
