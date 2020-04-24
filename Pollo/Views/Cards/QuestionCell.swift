@@ -24,6 +24,7 @@ class QuestionCell: UICollectionViewCell {
     
     // MARK: - Constants
     let editButtonImageName = "dots"
+    let editButtonWidth = 18
     let questionLabelWidthScaleFactor: CGFloat = 0.75
     let untitledPollString = "Untitled Poll"
     
@@ -59,6 +60,7 @@ class QuestionCell: UICollectionViewCell {
             editButton.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().inset(LayoutConstants.cardHorizontalPadding)
                 make.top.equalToSuperview()
+                make.width.equalTo(editButtonWidth)
             }
             
             questionLabel.snp.makeConstraints { make in
