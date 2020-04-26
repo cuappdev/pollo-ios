@@ -84,8 +84,7 @@ extension PollsViewController: PollsCellDelegate {
                             pollsDateArray[index].polls.append(contentsOf: response.polls)
                         } else {
                             response.polls.forEach { poll in
-                                let polls = [Poll(text: poll.text, answerChoices: poll.answerChoices, type: poll.type, correctAnswer: poll.correctAnswer, userAnswers: poll.userAnswers, state: poll.state)]
-                                pollsDateArray.append(PollsDateModel(date: response.date, polls: polls))
+                                pollsDateArray.append(PollsDateModel(date: response.date, polls: [poll]))
                             }
                         }
                     }
