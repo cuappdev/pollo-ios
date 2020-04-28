@@ -192,7 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 }
             }
             
-        } else {
+        } else if(didSignInSilently){
             self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
         }
     }
