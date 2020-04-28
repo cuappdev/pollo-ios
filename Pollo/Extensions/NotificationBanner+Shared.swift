@@ -12,6 +12,13 @@ import NotificationBannerSwift
 
 extension NotificationBanner {
 
+    override public func isEqual(_ object: Any?) -> Bool {
+        guard let banner = object as? NotificationBanner,
+            let title1 = self.titleLabel?.text,
+            let title2 = banner.titleLabel?.text else { return false }
+        return title1 == title2
+    }
+
     static func connectingBanner() -> BaseNotificationBanner {
         let banner = StatusBarNotificationBanner(title: "Connecting...", style: .warning, colors: PolloBannerColors())
         banner.autoDismiss = false
