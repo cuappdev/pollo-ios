@@ -64,6 +64,8 @@ extension PollsDateModel: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? PollsDateModel else { return false }
-        return identifier == object.identifier
+        return polls.enumerated().reduce(true, { acc, enum_poll in
+            acc || enum_poll.element.isEqual(toDiffableObject: object.polls[enum_poll.offset])
+        })
     }
 }

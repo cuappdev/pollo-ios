@@ -156,7 +156,7 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id && text == object.text && type == object.type && answerChoices == object.answerChoices
+        return id == object.id && state == object.state && text == object.text && type == object.type && answerChoices == object.answerChoices
     }
     
 }

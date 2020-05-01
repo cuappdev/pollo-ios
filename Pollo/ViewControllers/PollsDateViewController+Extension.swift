@@ -235,8 +235,12 @@ extension PollsDateViewController: SocketDelegate {
             pollsDateArray.insert(todayPollsDateModel, at: 0)
         } else {
             // User has polls for today, so just update latest poll for today
-            let todayPolls = latestPollsDateModel.polls
-            pollsDateArray[0].polls[todayPolls.count - 1] = poll
+
+            var todayPolls = latestPollsDateModel.polls
+            todayPolls[todayPolls.count - 1] = poll
+            let todayPollsDateModel = PollsDateModel(date: latestPollsDateModel.date, polls: todayPolls)
+            pollsDateArray[0] = todayPollsDateModel
+             
         }
     }
     
