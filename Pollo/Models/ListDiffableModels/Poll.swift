@@ -76,7 +76,7 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String? = nil, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
