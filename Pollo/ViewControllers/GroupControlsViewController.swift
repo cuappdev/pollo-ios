@@ -29,8 +29,6 @@ class GroupControlsViewController: UIViewController {
     var numMembers = 0
     var infoModel: GroupControlsInfoModel!
     var attendanceHeader: HeaderModel!
-    var liveQuestionsSetting: PollsSettingModel!
-    var filterSetting: PollsSettingModel!
     var isExportable: Bool = false {
         didSet {
             exportAttendanceModel = ExportAttendanceModel(isExportable: isExportable)
@@ -51,13 +49,9 @@ class GroupControlsViewController: UIViewController {
     let collectionViewBottomPadding: CGFloat = 24
     let collectionViewHeight: CGFloat = 218
     let collectionViewTopPadding: CGFloat = 10
-    let filterDescription = "Filter responses to prohibit inappropriate language"
-    let filterTitle = "Filter Responses"
     let infoViewHeight: CGFloat = 20
     let infoViewHorizontalPadding: CGFloat = 30
     let infoViewTopPadding: CGFloat = 28
-    let liveQuestionsDescription = "Allow audience to ask questions to host during session"
-    let liveQuestionsTitle = "Live Questions"
     let navigationTitle = "Group Controls"
     let separatorLineViewWidth: CGFloat = 0.5
     let spaceOneHeight: CGFloat = 38
@@ -84,8 +78,6 @@ class GroupControlsViewController: UIViewController {
         spaceTwo = SpaceModel(space: spaceTwoHeight, backgroundColor: .darkestGrey)
 
         attendanceHeader = HeaderModel(title: attendanceHeaderLabel)
-        
-        filterSetting = PollsSettingModel(title: filterTitle, description: filterDescription, type: .filter, isEnabled: session.isFilterActivated ?? true)
 
         let numPolls = pollsDateAttendanceArray.reduce(0) { (result, pollsDateAttendanceModel) -> Int in
             return result + pollsDateAttendanceModel.model.polls.count
@@ -154,11 +146,6 @@ class GroupControlsViewController: UIViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Networking
-    func updateGroupControlFiltering(to newValue: Bool) -> Future<Response<Session>> {
-        return networking(Endpoint.updateGroupControlForSession(with: session.id, isFilteringActivated: newValue)).decode()
     }
 
 }
@@ -239,25 +226,7 @@ extension GroupControlsViewController: AttendanceViewControllerDelegate {
 extension GroupControlsViewController: PollSettingsSectionControllerDelegate {
 
     func pollSettingsSectionControllerDidUpdate(_ sectionController: PollSettingsSectionController, to newValue: Bool) {
-        guard let pollsSettingModel = adapter.object(for: sectionController) as? PollsSettingModel else { return }
-        if pollsSettingModel.isEqual(toDiffableObject: filterSetting) {
-            updateGroupControlFiltering(to: newValue).observe { [weak self] result in
-                guard let `self` = self else { return }
-                switch result {
-                case .value(let response):
-                    self.session = response.data
-                    self.delegate?.groupControlsViewControllerDidUpdateSession(self.session)
-                    let filterSetting = self.filterSetting.copy() as! PollsSettingModel
-                    filterSetting.isEnabled = response.data.isFilterActivated ?? true
-                    self.filterSetting = filterSetting
-                    DispatchQueue.main.async {
-                        self.adapter.performUpdates(animated: false, completion: nil)
-                    }
-                case .error(let error):
-                    print(error)
-                }
-            }
-        }
+        // Send future group setting changes here
     }
 
 }

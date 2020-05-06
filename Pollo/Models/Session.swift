@@ -18,7 +18,6 @@ class Session: Codable {
     var code: String
     var description: String?
     var id: String
-    var isFilterActivated: Bool?
     var isLive: Bool?
     var name: String
     var updatedAt: String?
@@ -29,13 +28,12 @@ class Session: Codable {
         self.name = name
     }
 
-    init(id: String, name: String, code: String, latestActivity: String?, isLive: Bool?, isFilterActivated: Bool?) {
+    init(id: String, name: String, code: String, latestActivity: String?, isLive: Bool?) {
         self.code = code
         self.description = latestActivity
         self.id = id
         self.isLive = isLive
         self.name = name
-        self.isFilterActivated = isFilterActivated
     }
 
 }

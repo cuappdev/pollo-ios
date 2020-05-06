@@ -53,13 +53,13 @@ class CardCell: UICollectionViewCell {
     let questionButtonCornerRadius: CGFloat = 23.0
     let questionButtonFontSize: CGFloat = 16.0
     let questionButtonHeight: CGFloat = 47.0
-    let questionButtonWidth: CGFloat = 170.0
+    let questionButtonWidth: CGFloat = 160.0
     let responsiveAdminPadding: CGFloat = 32.0
     let responsiveStudentPadding: CGFloat = 50.0
     let resultsSharedText = "Results Shared"
     let shareResultsText = "Share Results"
-    let timerLabelBottomPadding: CGFloat =  91.0
-    let timerLabelFontSize: CGFloat = 14.0
+    let timerLabelBottomPadding: CGFloat = 45.0
+    let timerLabelFontSize: CGFloat = 17.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -113,6 +113,7 @@ class CardCell: UICollectionViewCell {
         timerLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(timerLabelBottomPadding)
+            make.height.equalTo(timerLabelFontSize)
         }
         
         questionButton.snp.makeConstraints { make in
@@ -133,8 +134,8 @@ class CardCell: UICollectionViewCell {
         timerLabel.isHidden = !(poll.state == .live) || isMember
         if poll.state == .live {
             questionButton.setTitle(endPollText, for: .normal)
-            questionButton.setTitleColor(.white, for: .normal)
-            questionButton.layer.borderColor = UIColor.white.cgColor
+            questionButton.setTitleColor(.clickerRed, for: .normal)
+            questionButton.layer.borderColor = UIColor.clickerRed.cgColor
             setTimerText()
             runTimer()
         } else if poll.state == .ended {
@@ -178,6 +179,8 @@ class CardCell: UICollectionViewCell {
         if poll.state == .live {
             poll.state = .ended
             questionButton.setTitle(shareResultsText, for: .normal)
+            questionButton.setTitleColor(.white, for: .normal)
+            questionButton.layer.borderColor = UIColor.white.cgColor
             timerLabel.isHidden = true
             miscellaneousModel = PollMiscellaneousModel(pollState: .ended, totalResponses: miscellaneousModel.totalResponses, userRole: userRole, didSubmitChoice: poll.getSelected() != nil)
             adapter.performUpdates(animated: false, completion: nil)
@@ -270,7 +273,9 @@ extension CardCell: PollOptionsSectionControllerDelegate {
     }
     
     var maxCellHeight: CGFloat {
-        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + LayoutConstants.questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
+        let questionCellWidth = self.frame.width - LayoutConstants.cardHorizontalPadding * 2 - LayoutConstants.moreButtonWidth
+        let questionCellHeight = questionModel.question.height(forConstrainedWidth: questionCellWidth, font: ._20BoldFont)
+        let cardCellTopHeight = LayoutConstants.hamburgerCardCellHeight + questionCellHeight + LayoutConstants.pollMiscellaneousCellHeight + LayoutConstants.separatorLineCardCellHeight
         let belowAdminCardCellHeight = questionButtonHeight + questionButtonBottomPadding + timerLabelFontSize + timerLabelBottomPadding + responsiveAdminPadding
         return self.frame.height - (cardCellTopHeight + (delegate.userRole == .admin ? belowAdminCardCellHeight : responsiveStudentPadding))
     }

@@ -14,25 +14,19 @@ import UIKit
 extension CardController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        if pollsDateModel.polls.isEmpty {
-            let type: EmptyStateType = .cardController(userRole: userRole)
-            return [EmptyStateModel(type: type)]
-        }
         return pollsDateModel.polls
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if object is Poll {
-            let pollSectionController = PollSectionController(delegate: self)
-            return pollSectionController
-        } else {
-            let emptyStateController = EmptyStateSectionController(session: session)
-            return emptyStateController
-        }
+        
+        let pollSectionController = PollSectionController(delegate: self)
+        return pollSectionController
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
+        let emptyCell = EmptyStateCell()
+        emptyCell.configure(for: EmptyStateModel(type: .cardController(userRole: userRole)), session: session)
+        return emptyCell
     }
 }
 
@@ -288,9 +282,6 @@ extension CardController: SocketDelegate {
         currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
         adapter.performUpdates(animated: false, completion: nil)
-        if pollsDateModel.polls.isEmpty {
-            goBack()
-        }
     }
     
     func receivedResults(_ poll: Poll, userRole: UserRole) {

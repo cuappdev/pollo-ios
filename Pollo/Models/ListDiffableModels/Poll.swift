@@ -31,10 +31,15 @@ class PollResult: Codable, Equatable {
 
 }
 
-struct PollFilter: Codable {
-    var success: Bool
-    var text: String? // passed in when success = false
-    var filter: [String]? // passed in when success = false
+class PollChoice: Codable {
+    var letter: String?
+    var text: String
+
+    init(letter: String? = nil, text: String) {
+        self.letter = letter
+        self.text = text
+    }
+
 }
 
 class Poll: Codable {
@@ -43,7 +48,6 @@ class Poll: Codable {
     var correctAnswer: Int
     var createdAt: String? // string of seconds since 1970
     var id: String?
-    var pollFilter: PollFilter? // used for filtering user profanity
     var state: PollState
     var text: String
     var updatedAt: String?
@@ -54,7 +58,7 @@ class Poll: Codable {
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = "", text: String, answerChoices: [PollResult], correctAnswer: Int? = nil, userAnswers: [String: [Int]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String = nil, text: String, answerChoices: [PollResult], correctAnswer: Int? = nil, userAnswers: [String: [Int]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
