@@ -147,7 +147,7 @@ extension PollsDateViewController: SocketDelegate {
             return
         }
         updateLatestPoll(with: poll)
-        adapter.performUpdates(animated: true, completion: nil)
+        adapter.performUpdates(animated: false, completion: nil)
     }
 
     func pollDeleted(_ pollID: String, userRole: UserRole) {
