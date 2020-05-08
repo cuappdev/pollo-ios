@@ -263,7 +263,7 @@ extension CardController: SocketDelegate {
             updatedPoll.id = poll.id
             updatedPoll.userAnswers = poll.userAnswers
             updateLatestPoll(with: updatedPoll)
-            adapter.performUpdates(animated: false, completion: nil)
+            adapter.performUpdates(animated: true, completion: nil)
         }
     }
 
@@ -297,7 +297,7 @@ extension CardController: SocketDelegate {
             return
         }
         updateLatestPoll(with: poll)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {
