@@ -23,6 +23,7 @@ class DraftsTitleCell: UICollectionViewCell {
         draftsLabel = UILabel()
         draftsLabel.font = ._18SemiboldFont
         draftsLabel.textAlignment = .center
+        draftsLabel.textColor = .black
         contentView.addSubview(draftsLabel)
 
         draftsLabel.snp.makeConstraints { make in
@@ -33,12 +34,7 @@ class DraftsTitleCell: UICollectionViewCell {
 
     // MARK: - Configure
     func configure(with draftsTitleModel: DraftsTitleModel) {
-        draftsLabel.text = "Drafts(\(draftsTitleModel.numDrafts))"
-    }
-
-    func shouldLightenText(_ shouldLighten: Bool) {
-        let textColor: UIColor = shouldLighten ? .blueGrey : .black
-        draftsLabel.textColor = textColor
+        draftsLabel.text = "Drafts (\(draftsTitleModel.numDrafts))"
     }
     
     required init?(coder aDecoder: NSCoder) {

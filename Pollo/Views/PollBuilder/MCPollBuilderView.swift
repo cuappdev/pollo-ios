@@ -152,14 +152,6 @@ class MCPollBuilderView: UIView {
             opt.totalOptions = mcOptionModels.count - 1
         }
     }
-
-    func shouldLightenDraftsText(_ shouldLighten: Bool) {
-        guard let draftsTitleModel = draftsTitleModel,
-            let sectionController = adapter.sectionController(for: draftsTitleModel) as? DraftsTitleSectionController else {
-                return
-        }
-        sectionController.shouldLightenText(shouldLighten)
-    }
     
     // MARK: - KEYBOARD
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -167,7 +159,6 @@ class MCPollBuilderView: UIView {
             let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 70, right: 0.0)
             collectionView.contentInset = contentInsets
             collectionView.superview?.layoutIfNeeded()
-            shouldLightenDraftsText(true)
         }
     }
     
@@ -175,7 +166,6 @@ class MCPollBuilderView: UIView {
         if (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue != nil {
             collectionView.contentInset = .zero
             collectionView.superview?.layoutIfNeeded()
-            shouldLightenDraftsText(false)
         }
     }
     
