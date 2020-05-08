@@ -39,6 +39,8 @@ extension Endpoint {
         public var port: Int?
         public var commonPath: String?
         public var commonHeaders: [String: String]?
+        public var keyEncodingStrategy: JSONEncoder.KeyEncodingStrategy = .useDefaultKeys
+        public var keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys
     }
 }
 
@@ -66,7 +68,10 @@ extension Endpoint {
         self.headers = modifiedHeaders
 
         self.method = method
-        self.body = try? JSONEncoder().encode(body)
+
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = Endpoint.config.keyEncodingStrategy
+        self.body = try? encoder.encode(body)
 
         self.host = customHost
         self.port = customPort
@@ -120,7 +125,9 @@ extension Endpoint {
         self.headers = modifiedHeaders
 
         // Encode body
-        self.body = try? JSONEncoder().encode(body)
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = Endpoint.config.keyEncodingStrategy
+        self.body = try? encoder.encode(body)
 
         self.host = customHost
         self.port = customPort

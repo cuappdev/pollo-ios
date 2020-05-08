@@ -8,6 +8,20 @@
 
 import Foundation
 
+
+extension String: LocalizedError {
+
+    public var errorDescription: String? { return self }
+
+}
+
+struct APIResponse: Codable {
+
+    var success: Bool
+    var error: String?
+
+}
+
 public typealias Networking = (Endpoint) -> Future<Data>
 
 public enum Result<Value> {
@@ -30,6 +44,7 @@ extension Result where Value == Data {
     func decoded<T: Decodable>() throws -> T {
         let decoder = JSONDecoder()
         let data = try resolve()
+        try handleNetworkingError(decoder: decoder, data: data)
         return try decoder.decode(T.self, from: data)
     }
 }
@@ -150,17 +165,23 @@ extension Future where Value == Data {
 
     public func decode<NextValue: Codable>(_ type: NextValue.Type) -> Future<NextValue> {
         return transformed {
-            //Uncomment this line to see what is being decoded
-            print(String.init(data: $0, encoding: .utf8))
-            return try JSONDecoder().decode(NextValue.self, from: $0)
+            // Uncomment this line to see what is being decoded
+            // print(String.init(data: $0, encoding: .utf8))
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = Endpoint.config.keyDecodingStrategy
+            try handleNetworkingError(decoder: decoder, data: $0)
+            return try decoder.decode(NextValue.self, from: $0)
         }
     }
     
     public func decode<NextValue: Codable>() -> Future<NextValue> {
         return transformed {
-            //Uncomment this line to see what is being decoded
-            print(String.init(data: $0, encoding: .utf8))
-            return try JSONDecoder().decode(NextValue.self, from: $0)
+            // Uncomment this line to see what is being decoded
+            // print(String.init(data: $0, encoding: .utf8))
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = Endpoint.config.keyDecodingStrategy
+            try handleNetworkingError(decoder: decoder, data: $0)
+            return try decoder.decode(NextValue.self, from: $0)
         }
     }
 }
@@ -182,4 +203,11 @@ public func chain<A, B, C>(
     // of the inner function into the outer one — but since that
     // now returns another function, we'll also call that one.
     return { outer(inner($0))() }
+}
+
+private func handleNetworkingError(decoder: JSONDecoder, data: Data) throws {
+    let baseData = try decoder.decode(APIResponse.self, from: data)
+    if !baseData.success, let errorString = baseData.error {
+        throw errorString
+    }
 }
