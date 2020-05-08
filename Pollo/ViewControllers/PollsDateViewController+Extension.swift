@@ -136,7 +136,7 @@ extension PollsDateViewController: SocketDelegate {
     
     func pollStarted(_ poll: Poll, userRole: UserRole) {
         appendPoll(poll: poll)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     func pollEnded(_ poll: Poll, userRole: UserRole) {
@@ -147,7 +147,7 @@ extension PollsDateViewController: SocketDelegate {
             return
         }
         updateLatestPoll(with: poll)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func pollDeleted(_ pollID: String, userRole: UserRole) {
@@ -160,7 +160,7 @@ extension PollsDateViewController: SocketDelegate {
             }
         }
         removeEmptyModels()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func pollDeletedLive() {
@@ -173,7 +173,7 @@ extension PollsDateViewController: SocketDelegate {
             }
         }
         removeEmptyModels()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func receivedResults(_ poll: Poll, userRole: UserRole) {

@@ -288,7 +288,7 @@ extension CardController: SocketDelegate {
         pollsDateModel.polls.remove(at: deleteIndex)
         currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     func receivedResults(_ poll: Poll, userRole: UserRole) {
