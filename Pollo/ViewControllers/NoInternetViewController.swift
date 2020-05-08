@@ -33,13 +33,10 @@ class NoInternetViewController: UIViewController {
     private let titleLabelHeight: CGFloat = 28
     private let titleLabelText = "Oops"
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationController?.navigationBar.barStyle = .black
         
         facepalmImageView.image = facepalmImage
         view.addSubview(facepalmImageView)

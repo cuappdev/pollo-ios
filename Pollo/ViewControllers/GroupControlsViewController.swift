@@ -58,10 +58,6 @@ class GroupControlsViewController: UIViewController {
     let spaceThreeHeight: CGFloat = 16
     let spaceTwoHeight: CGFloat = 16
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
     init(session: Session, pollsDateAttendanceArray: [PollsDateAttendanceModel], numMembers: Int, delegate: GroupControlsViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
         self.session = session
@@ -91,6 +87,7 @@ class GroupControlsViewController: UIViewController {
 
     private func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.barStyle = .black
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()

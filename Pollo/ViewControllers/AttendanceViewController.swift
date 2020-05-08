@@ -49,10 +49,6 @@ class AttendanceViewController: UIViewController {
     let navigtionTitle = "Attendance"
     let selectAllBarButtonTitle = "Select All"
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
     init(delegate: AttendanceViewControllerDelegate, pollsDateAttendanceArray: [PollsDateAttendanceModel]) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
@@ -74,6 +70,7 @@ class AttendanceViewController: UIViewController {
 
     private func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.barStyle = .black
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
