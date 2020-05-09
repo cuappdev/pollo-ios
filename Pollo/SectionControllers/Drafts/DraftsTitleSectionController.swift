@@ -33,10 +33,4 @@ class DraftsTitleSectionController: ListSectionController {
         self.draftsTitleModel = object as? DraftsTitleModel
     }
 
-    // MARK: - Public
-    func shouldLightenText(_ shouldLighten: Bool) {
-        guard let cell = collectionContext?.cellForItem(at: 0, sectionController: self) as? DraftsTitleCell else { return }
-        cell.shouldLightenText(shouldLighten)
-    }
-
 }

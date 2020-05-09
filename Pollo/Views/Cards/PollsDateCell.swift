@@ -94,7 +94,8 @@ class PollsDateCell: UICollectionViewCell {
     func reformatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM d"
-        return dateFormatter.string(from: date.toLocalTime())
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: date)
     }
     
     required init?(coder aDecoder: NSCoder) {

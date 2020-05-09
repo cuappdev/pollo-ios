@@ -1,6 +1,6 @@
 {
   "name": "AppDevAnalytics",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "swift_versions": "4.2",
   "summary": "A wrapper for classes used to log analytics to Firebase.",
   "description": "A wrapper for classes used to log analytics to Firebase.",
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/cuappdev/ios-analytics.git",
-    "tag": "0.1.7"
+    "tag": "0.1.9"
   },
   "platforms": {
     "ios": "9.0"
@@ -27,7 +27,7 @@
       "~> 3.12"
     ],
     "SwiftyJSON": [
-      "4.2"
+      "~> 4.2"
     ]
   },
   "swift_version": "4.2"

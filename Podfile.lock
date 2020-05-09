@@ -1,12 +1,12 @@
 PODS:
-  - Alamofire (4.8.1)
-  - AppDevAnalytics (0.1.7):
+  - Alamofire (5.1.0)
+  - AppDevAnalytics (0.1.9):
     - Crashlytics (~> 3.12)
-    - SwiftyJSON (= 4.2)
+    - SwiftyJSON (~> 4.2)
   - AppDevAnnouncements (0.0.1)
-  - Crashlytics (3.12.0):
-    - Fabric (~> 1.9.0)
-  - Fabric (1.9.0)
+  - Crashlytics (3.14.0):
+    - Fabric (~> 1.10.2)
+  - Fabric (1.10.2)
   - Firebase/Analytics (3.17.0):
     - Firebase/Core
   - Firebase/Core (3.17.0):
@@ -20,8 +20,8 @@ PODS:
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseInstanceID (1.0.10):
     - FirebaseCore (~> 3.6)
-  - FLEX (2.4.0)
-  - FutureNova (0.1.4)
+  - FLEX (4.1.1)
+  - FutureNova (0.1.6)
   - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
   - Google/SignIn (3.1.0):
@@ -31,34 +31,32 @@ PODS:
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleToolboxForMac/Defines (2.2.0)
-  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
-  - GTMSessionFetcher/Core (1.2.1)
-  - IGListKit (3.4.0):
-    - IGListKit/Default (= 3.4.0)
-  - IGListKit/Default (3.4.0):
-    - IGListKit/Diffing
-  - IGListKit/Diffing (3.4.0)
-  - MarqueeLabel/Swift (3.2.1)
-  - NotificationBannerSwift (2.1.0):
-    - MarqueeLabel/Swift (~> 3.2.1)
-    - SnapKit (~> 4.2.0)
+  - GoogleToolboxForMac/DebugUtils (2.2.2):
+    - GoogleToolboxForMac/Defines (= 2.2.2)
+  - GoogleToolboxForMac/Defines (2.2.2)
+  - "GoogleToolboxForMac/NSData+zlib (2.2.2)":
+    - GoogleToolboxForMac/Defines (= 2.2.2)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.2)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.2)
+    - GoogleToolboxForMac/Defines (= 2.2.2)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.2)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
+  - GTMSessionFetcher/Core (1.4.0)
+  - IGListDiffKit (4.0.0)
+  - IGListKit (4.0.0):
+    - IGListDiffKit (= 4.0.0)
+  - MarqueeLabel (4.0.2)
+  - NotificationBannerSwift (3.0.2):
+    - MarqueeLabel (~> 4.0.0)
+    - SnapKit (~> 5.0.0)
   - Presentr (1.9)
   - ReachabilitySwift (5.0.0)
-  - SnapKit (4.2.0)
-  - Socket.IO-Client-Swift (14.0.0):
-    - Starscream (~> 3.0.6)
-  - Starscream (3.0.6)
-  - SwiftLint (0.30.1)
-  - SwiftyJSON (4.2.0)
+  - SnapKit (5.0.1)
+  - Socket.IO-Client-Swift (15.2.0):
+    - Starscream (~> 3.1)
+  - Starscream (3.1.1)
+  - SwiftLint (0.39.2)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -80,7 +78,7 @@ DEPENDENCIES:
   - SwiftyJSON
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Alamofire
     - Crashlytics
     - Fabric
@@ -93,17 +91,17 @@ SPEC REPOS:
     - GoogleSignIn
     - GoogleToolboxForMac
     - GTMSessionFetcher
+    - IGListDiffKit
     - IGListKit
+    - MarqueeLabel
+    - NotificationBannerSwift
     - Presentr
+    - ReachabilitySwift
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
     - SwiftLint
     - SwiftyJSON
-  trunk:
-    - MarqueeLabel
-    - NotificationBannerSwift
-    - ReachabilitySwift
 
 EXTERNAL SOURCES:
   AppDevAnalytics:
@@ -115,42 +113,43 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   AppDevAnalytics:
-    :commit: 06d443f7c87c1e7c6f415d1d685debd200b89bf2
+    :commit: bdeef81c5da3365f30a3cb537460cc83b9056cdb
     :git: https://github.com/cuappdev/ios-analytics.git
   AppDevAnnouncements:
     :commit: 4cfbcd46af092037ac6632fe5616a13e5f280615
     :git: https://github.com/cuappdev/appdev-announcements.git
   FutureNova:
-    :commit: b191dd799244cdf9f48309d46a03c64884a4ef84
+    :commit: db0540d78bd5bfb67f39945bbaf0fd3f2fbf56b5
     :git: https://github.com/cuappdev/ios-networking.git
 
 SPEC CHECKSUMS:
-  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
-  AppDevAnalytics: 5dc89bdd7c88de7c02891cf26498b35b92bccd67
+  Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
+  AppDevAnalytics: 82908380b2ac12488c35881b5446fe1161156b92
   AppDevAnnouncements: e17a7f441fb0664583bb08e21dc709214d15b70f
-  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
-  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: 4b66b5b59c43edac745b87f0c87e42cdd0279c13
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
-  FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
-  FutureNova: bec0b346fcab0312cc63cb70c052511f08153436
+  FLEX: 81096107977a09836eb440173010ceeef01105d6
+  FutureNova: 95f9aa352b2c250253b96fdf380754afcc87c7f3
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
-  IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
-  MarqueeLabel: 2daf039bf916937c8a4c9adfc13577cc5e51b4ce
-  NotificationBannerSwift: 4483919639202bec56d6bfe8f106ebc352d38bc7
+  GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
+  IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
+  MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
+  NotificationBannerSwift: 713e20f21b6105f4a36a00e5d9fa414a930d3d8e
   Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
-  SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
-  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
 PODFILE CHECKSUM: c90310f385c829113a498eab78b4489e2accc942
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

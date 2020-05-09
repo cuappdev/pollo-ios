@@ -53,10 +53,6 @@ class PollBuilderViewController: UIViewController {
     var shouldIgnoreNextKeyboardHiding: Bool = false
     var didLoad: Bool = false
     weak var delegate: PollBuilderViewControllerDelegate?
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
     
     // MARK: Constants
     let buttonHeight: CGFloat = 47.5
@@ -121,6 +117,7 @@ class PollBuilderViewController: UIViewController {
     // MARK: - Layout
     func setupViews() {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.navigationBar.barStyle = .black
         
         exitButton = UIButton()
         exitButton.setImage(UIImage(named: exitButtonImageName), for: .normal)

@@ -123,6 +123,9 @@ class MCChoiceCell: UICollectionViewCell {
     
     // MARK: - Action
     @objc func optionButtonWasPressed() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+        
         if pollState == .live {
             delegate?.mcChoiceCellWasSelected()
         }

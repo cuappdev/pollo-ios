@@ -256,7 +256,7 @@ extension CardController: SocketDelegate {
             updatedPoll.id = poll.id
             updatedPoll.userAnswers = poll.userAnswers
             updateLatestPoll(with: updatedPoll)
-            adapter.performUpdates(animated: false, completion: nil)
+            adapter.performUpdates(animated: true, completion: nil)
         }
     }
 
@@ -281,7 +281,7 @@ extension CardController: SocketDelegate {
         pollsDateModel.polls.remove(at: deleteIndex)
         currentIndex = currentIndex == pollsDateModel.polls.count ? currentIndex - 1 : currentIndex
         updateCountLabelText()
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     func receivedResults(_ poll: Poll, userRole: UserRole) {
@@ -290,7 +290,7 @@ extension CardController: SocketDelegate {
             return
         }
         updateLatestPoll(with: poll)
-        adapter.performUpdates(animated: false, completion: nil)
+        adapter.performUpdates(animated: true, completion: nil)
     }
 
     func updatedTally(_ poll: Poll, userRole: UserRole) {

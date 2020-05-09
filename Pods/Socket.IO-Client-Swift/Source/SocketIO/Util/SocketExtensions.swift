@@ -38,7 +38,7 @@ extension Array {
 
 extension CharacterSet {
     static var allowedURLCharacterSet: CharacterSet {
-        return CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[]\" {}^").inverted
+        return CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[]\" {}^|").inverted
     }
 }
 
@@ -85,6 +85,8 @@ extension Dictionary where Key == String, Value == Any {
             return .sessionDelegate(delegate)
         case let ("compress", compress as Bool):
             return compress ? .compress : nil
+        case let ("enableSOCKSProxy", enable as Bool):
+            return .enableSOCKSProxy(enable)
         default:
             return nil
         }

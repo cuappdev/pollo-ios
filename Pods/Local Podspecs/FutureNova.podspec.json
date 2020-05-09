@@ -1,6 +1,6 @@
 {
   "name": "FutureNova",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "summary": "A simple networking wrapper using Futures and Promises.",
   "description": "A simple networking wrapper using Futures and Promises.",
   "homepage": "https://github.com/cuappdev/ios-networking",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/cuappdev/ios-networking.git",
-    "tag": "0.1.4"
+    "tag": "0.1.6"
   },
   "platforms": {
     "ios": "11.0"

@@ -72,6 +72,7 @@ class CreateMCOptionCell: UICollectionViewCell, UITextFieldDelegate {
         addOptionTextField.backgroundColor = .clickerGrey6
         addOptionTextField.returnKeyType = .done
         addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        addOptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingDidEnd)
         addOptionTextField.delegate = self
         containerView.addSubview(addOptionTextField)
         
