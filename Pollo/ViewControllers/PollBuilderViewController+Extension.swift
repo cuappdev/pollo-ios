@@ -27,7 +27,7 @@ extension PollBuilderViewController: PollBuilderViewDelegate {
         }
     }
     
-    func updateCorrectAnswer(correctAnswer: String?) {
+    func updateCorrectAnswer(correctAnswer: Int?) {
         self.correctAnswer = correctAnswer
     }
 }

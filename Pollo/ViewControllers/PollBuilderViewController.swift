@@ -13,12 +13,12 @@ import Presentr
 protocol PollBuilderViewDelegate: class {
     func ignoreNextKeyboardHiding()
     func updateCanDraft(_ canDraft: Bool)
-    func updateCorrectAnswer(correctAnswer: String?)
+    func updateCorrectAnswer(correctAnswer: Int?)
     var isKeyboardShown: Bool { get }
 }
 
 protocol PollBuilderViewControllerDelegate: class {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool)
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: Int?, shouldPopViewController: Bool)
     func showNavigationBar()
 }
 
@@ -42,7 +42,7 @@ class PollBuilderViewController: UIViewController {
     private let networking: Networking = URLSession.shared.request
     var answerChoices: [PollResult]!
     var canDraft: Bool!
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var didLayoutSubviews = false
     var drafts: [Draft] = []
     var dropDownHidden: Bool = true
@@ -50,8 +50,8 @@ class PollBuilderViewController: UIViewController {
     var isKeyboardShown: Bool = false
     var isOnboardingViewConfigured = false
     var loadedMCDraft: Draft?
-    var questionType: QuestionType!
     var shouldIgnoreNextKeyboardHiding: Bool = false
+    var didLoad: Bool = false
     weak var delegate: PollBuilderViewControllerDelegate?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -86,7 +86,7 @@ class PollBuilderViewController: UIViewController {
         self.modalPresentationCapturesStatusBarAppearance = true
         
         view.backgroundColor = .offWhite
-        questionType = .multipleChoice
+        didLoad = true
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 15
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -264,53 +264,51 @@ class PollBuilderViewController: UIViewController {
     // MARK: - Actions
     @objc func saveAsDraft() {
         if !canDraft { return }
-        guard let type = questionType else {
+        if !didLoad {
             print("warning! cannot save as draft before viewDidLoad")
             return
         }
-        switch type {
-        case .multipleChoice:
-            let question = mcPollBuilder.questionText ?? ""
-            var options = mcPollBuilder.getOptions()
-           if options.isEmpty {
-                options.append("")
-                options.append("")
-           }
-            if let loadedDraft = loadedMCDraft {
-                updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
-                    guard let `self` = self else { return }
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .value:
-                            self.getDrafts()
-                        case .error(let error):
-                            print("error: ", error)
-                        }
-                    }
-                }
-            } else {
-                createDraft(text: question, options: options).observe { [weak self] result in
-                    guard let `self` = self else { return }
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .value:
-                            self.getDrafts()
-                        case .error(let error):
-                            print("error: ", error)
-                        }
+
+        let question = mcPollBuilder.questionText ?? ""
+        var options = mcPollBuilder.getOptions()
+        if options.isEmpty {
+            options.append("")
+            options.append("")
+        }
+        if let loadedDraft = loadedMCDraft {
+            updateDraft(id: "\(loadedDraft.id)", text: question, options: options).observe { [weak self] result in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value:
+                        self.getDrafts()
+                    case .error(let error):
+                        print("error: ", error)
                     }
                 }
             }
-            loadedMCDraft = nil
-            self.mcPollBuilder.reset()
+        } else {
+            createDraft(text: question, options: options).observe { [weak self] result in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .value:
+                        self.getDrafts()
+                    case .error(let error):
+                        print("error: ", error)
+                    }
+                }
+            }
         }
+        loadedMCDraft = nil
+        self.mcPollBuilder.reset()
         self.updateCanDraft(false)
         Analytics.shared.log(with: CreatedDraftPayload())
     }
     
     @objc func startPoll() {
         // MULTIPLE CHOICE
-        guard let questionType = questionType else {
+        if !didLoad {
             print("cannot start question before viewdidload")
             return
         }
@@ -319,12 +317,11 @@ class PollBuilderViewController: UIViewController {
         dismiss(animated: true, completion: nil)
         hideKeyboard()
         
-        switch questionType { 
-        case .multipleChoice:
-            answerChoices = mcPollBuilder.getChoices()
-            let question = mcPollBuilder.questionText ?? ""
-            delegate?.startPoll(text: question, type: .multipleChoice, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
-        }
+
+        answerChoices = mcPollBuilder.getChoices()
+        let question = mcPollBuilder.questionText ?? ""
+        delegate?.startPoll(text: question, options: mcPollBuilder.getOptions(), state: .live, answerChoices: answerChoices, correctAnswer: correctAnswer, shouldPopViewController: true)
+
 
         if loadedMCDraft != nil {
             Analytics.shared.log(with: CreatedPollFromDraftPayload())

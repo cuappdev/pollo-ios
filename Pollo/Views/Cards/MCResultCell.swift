@@ -22,7 +22,7 @@ class MCResultCell: UICollectionViewCell {
     private let selectedImageView = UIImageView()
     
     // MARK: - Data vars
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var didLayoutConstraints = false
     var index: Int!
     var percentSelected: Float!
@@ -178,7 +178,7 @@ class MCResultCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(for resultModel: MCResultModel, userRole: UserRole, correctAnswer: String?) {
+    func configure(for resultModel: MCResultModel, userRole: UserRole, correctAnswer: Int?) {
         self.correctAnswer = correctAnswer
         self.userRole = userRole
         
@@ -211,8 +211,8 @@ class MCResultCell: UICollectionViewCell {
         highlightView.layer.cornerRadius = highlightViewCornerRadius
         
         // Override default visuals when there is correct answer
-        if let correctAnswer = correctAnswer, !correctAnswer.isEmpty {
-            let answer = intToMCOption(resultModel.choiceIndex)
+        if let correctAnswer = correctAnswer, correctAnswer != -1 {
+            let answer = resultModel.choiceIndex
             let selectedCorrectAnswer = answer == correctAnswer
             if selectedCorrectAnswer {
                 showCorrectAnswer = true
@@ -232,7 +232,7 @@ class MCResultCell: UICollectionViewCell {
     }
 
     // MARK: - Updates
-    func update(with resultModel: MCResultModel, correctAnswer: String?) {
+    func update(with resultModel: MCResultModel, correctAnswer: Int?) {
         numSelectedLabel.text = "\(resultModel.numSelected)"
         
         optionLabel.text = resultModel.option

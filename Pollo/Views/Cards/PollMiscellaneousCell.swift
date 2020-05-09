@@ -30,7 +30,6 @@ class PollMiscellaneousCell: UICollectionViewCell {
     let sharedTextMember = "Final results  • "
     let totalResponsesLabelTrailingPadding: CGFloat = 18
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -98,10 +97,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
                 descriptionLabel.text = sharedDescriptionText
             }
             var unit: String
-            switch miscellaneousModel.questionType! {
-            case .multipleChoice:
-                unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
-            }
+            unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
             totalResponsesLabel.text = "\(miscellaneousModel.totalResponses) \(unit)"
         case .member:
             descriptionLabel.textAlignment = .center
@@ -111,11 +107,7 @@ class PollMiscellaneousCell: UICollectionViewCell {
             case .ended:
                 descriptionLabel.text = endedTextMember
             case .shared:
-                var unit: String
-                switch miscellaneousModel.questionType! {
-                case .multipleChoice:
-                    unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
-                }
+                let unit = miscellaneousModel.totalResponses == 1 ? responseString : "\(responseString)s"
                 descriptionLabel.text = "\(sharedTextMember) \(miscellaneousModel.totalResponses) \(unit)"
             }
         }

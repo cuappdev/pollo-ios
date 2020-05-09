@@ -73,25 +73,22 @@ extension PollsDateViewController: PollsDateSectionControllerDelegate {
 }
 
 extension PollsDateViewController: PollBuilderViewControllerDelegate {
-    func startPoll(text: String, type: QuestionType, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: String?, shouldPopViewController: Bool) {
+    func startPoll(text: String, options: [String], state: PollState, answerChoices: [PollResult], correctAnswer: Int?, shouldPopViewController: Bool) {
         createPollButton.isUserInteractionEnabled = false
         createPollButton.isHidden = true
 
         session.isLive = true
-        let newPoll = Poll(text: text, answerChoices: answerChoices, type: type, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
+        let newPoll = Poll(text: text, answerChoices: answerChoices, correctAnswer: correctAnswer, userAnswers: [:], state: .live)
         newPoll.createdAt = Date().secondsString
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
-
-        let correct = correctAnswer ?? ""
 
         let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
             "state": "live",
-            "correctAnswer": correct,
-            "userAnswers": [String: [PollChoice]](),
-            "type": type.rawValue
+            "correctAnswer": correctAnswer,
+            "userAnswers": [String: [Int]]()
         ]
 
         socket.socket.emit(Routes.serverStart, newPollDict)
@@ -200,9 +197,8 @@ extension PollsDateViewController: SocketDelegate {
     
     // MARK: Helpers
     
-    func emitAnswer(pollChoice: PollChoice, message: String) {
-        guard let pollChoiceDict = pollChoice.dictionary else { return }
-        socket.socket.emit(message, pollChoiceDict)
+    func emitAnswer(pollChoice: Int, message: String) {
+        socket.socket.emit(message, pollChoice)
     }
 
     func emitEndPoll() {

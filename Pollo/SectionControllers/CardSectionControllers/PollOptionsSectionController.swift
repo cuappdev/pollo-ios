@@ -14,18 +14,18 @@ protocol PollOptionsSectionControllerDelegate {
     var maxCellHeight: CGFloat { get }
     var userRole: UserRole { get }
     
-    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, choice: String, index: Int?)
+    func pollOptionsSectionControllerDidSubmitChoice(sectionController: PollOptionsSectionController, index: Int)
     
 }
 
 class PollOptionsSectionController: ListSectionController {
     
     // MARK: - Data vars
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var delegate: PollOptionsSectionControllerDelegate!
     var pollOptionsModel: PollOptionsModel!
     
-    init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: String?) {
+    init(delegate: PollOptionsSectionControllerDelegate, correctAnswer: Int?) {
         self.correctAnswer = correctAnswer
         self.delegate = delegate
     }
@@ -70,7 +70,7 @@ extension PollOptionsSectionController: PollOptionsCellDelegate {
     }
 
     func pollOptionsCellDidSubmitChoice(choice: String, index: Int) {
-        delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, choice: choice, index: index)
+        delegate.pollOptionsSectionControllerDidSubmitChoice(sectionController: self, index: index)
     }
     
 }

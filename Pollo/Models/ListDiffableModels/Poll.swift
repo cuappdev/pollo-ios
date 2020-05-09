@@ -13,35 +13,18 @@ enum PollState: String, Codable {
     case live, ended, shared
 }
 
-enum QuestionType: String, CustomStringConvertible, Codable {
-
-    case multipleChoice
-
-    var description: String {
-        switch self {
-        case .multipleChoice: return StringConstants.multipleChoice
-        }
-    }
-
-    var descriptionForServer: String {
-        switch self {
-        case .multipleChoice: return Identifiers.multipleChoiceIdentifier
-        }
-    }
-}
-
 class PollResult: Codable, Equatable {
 
     static func == (lhs: PollResult, rhs: PollResult) -> Bool {
-        return lhs.letter == rhs.letter && lhs.text == rhs.text && lhs.count == rhs.count
+        return lhs.index == rhs.index && lhs.text == rhs.text && lhs.count == rhs.count
     }
 
-    var count: Int?
-    var letter: String?
+    var index: Int // index of option
     var text: String
+    var count: Int?
     
-    init(letter: String? = nil, text: String, count: Int?) {
-        self.letter = letter
+    init(index: Int, text: String, count: Int?) {
+        self.index = index
         self.text = text
         self.count = count
     }
@@ -62,28 +45,26 @@ class PollChoice: Codable {
 class Poll: Codable {
 
     var answerChoices: [PollResult]
-    var correctAnswer: String?  // only exists for multiple choice (format: 'A', 'B', ...)
+    var correctAnswer: Int
     var createdAt: String? // string of seconds since 1970
     var id: String?
     var state: PollState
     var text: String
-    var type: QuestionType
     var updatedAt: String?
-    var userAnswers: [String: [PollChoice]] // googleID to poll choice
+    var userAnswers: [String: [Int]] // googleID to index of choice
     // results format:
-    // MULTIPLE_CHOICE: {'A': {'text': 'Blue', 'count': 3}, ...}
+    // {'User1': {3, 0, 1}, ...}
 
     // MARK: - Constants
     let identifier = UUID().uuidString
     
-    init(createdAt: String? = nil, updatedAt: String? = nil, id: String? = nil, text: String, answerChoices: [PollResult], type: QuestionType, correctAnswer: String? = nil, userAnswers: [String: [PollChoice]], state: PollState) {
+    init(createdAt: String? = nil, updatedAt: String? = nil, id: String? = nil, text: String, answerChoices: [PollResult], correctAnswer: Int? = nil, userAnswers: [String: [Int]], state: PollState) {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.id = id
         self.text = text
         self.answerChoices = answerChoices
-        self.type = type
-        self.correctAnswer = correctAnswer
+        self.correctAnswer = correctAnswer ?? -1
         self.userAnswers = userAnswers
         self.state = state
     }
@@ -92,20 +73,15 @@ class Poll: Codable {
         self.id = poll.id
         self.text = poll.text
         self.answerChoices = poll.answerChoices
-        self.type = poll.type
         self.correctAnswer = poll.correctAnswer
         self.userAnswers = poll.userAnswers
         self.state = state
     }
 
-    func getSelected() -> Any? {
+    func getSelected() -> Int? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], !answers.isEmpty else { return nil }
-        switch type {
-        case .multipleChoice:
-            guard let answer = answers[0].letter else { return nil }
-            return answer
-        }
+        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let indexOfChoice = answers.first else { return nil }
+        return indexOfChoice
     }
 
     // MARK: - Public
@@ -113,7 +89,6 @@ class Poll: Codable {
         self.id = poll.id
         self.text = poll.text
         self.answerChoices = poll.answerChoices
-        self.type = poll.type
         self.correctAnswer = poll.correctAnswer
         self.userAnswers = poll.userAnswers
         self.state = poll.state
@@ -134,15 +109,15 @@ class Poll: Codable {
         }
     }
 
-    // Returns whether user selected this multiple choice (A, B, C, ...)
-    func userDidSelect(mcChoice: String) -> Bool {
-        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let letter = userSelectedAnswers.first?.letter else { return false }
-        return letter == mcChoice
+    // Returns whether user selected this multiple choice (0, 1, 2, ...)
+    func userDidSelect(mcChoice: Int) -> Bool {
+        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let index = userSelectedAnswers.first else { return false }
+        return index == mcChoice
     }
 
-    func updateSelected(mcChoice: String, choice: String) {
+    func updateSelected(mcChoice: Int) {
         guard let googleID = User.currentUser?.id else { return }
-        userAnswers[googleID] = [PollChoice(letter: mcChoice, text: choice)]
+        userAnswers[googleID] = [mcChoice]
     }
 
 }
@@ -156,7 +131,7 @@ extension Poll: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if self === object { return true }
         guard let object = object as? Poll else { return false }
-        return id == object.id && text == object.text && type == object.type && answerChoices == object.answerChoices
+        return id == object.id && text == object.text && answerChoices == object.answerChoices
     }
     
 }

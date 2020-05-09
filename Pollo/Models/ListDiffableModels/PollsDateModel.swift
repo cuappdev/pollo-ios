@@ -12,14 +12,13 @@ import IGListKit
 struct PollsResponse: Codable {
 
     var answerChoices: [PollResult]
-    var correctAnswer: String?
+    var correctAnswer: Int
     var createdAt: String?
     var id: String
     var state: PollState
     var text: String
-    var type: QuestionType
     var updatedAt: String?
-    var userAnswers: [String: PollResult]
+    var userAnswers: [String: [Int]]
 
 }
 

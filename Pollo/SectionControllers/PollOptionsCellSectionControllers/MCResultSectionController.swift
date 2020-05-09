@@ -18,9 +18,9 @@ class MCResultSectionController: ListSectionController {
     
     weak var delegate: MCResultSectionControllerDelegate!
     var resultModel: MCResultModel!
-    var correctAnswer: String?
+    var correctAnswer: Int?
     
-    init(delegate: MCResultSectionControllerDelegate, correctAnswer: String?) {
+    init(delegate: MCResultSectionControllerDelegate, correctAnswer: Int?) {
         self.delegate = delegate
         self.correctAnswer = correctAnswer
     }

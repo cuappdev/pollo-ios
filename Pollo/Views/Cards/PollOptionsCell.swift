@@ -26,7 +26,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     
     // MARK: - Data vars
     var adapter: ListAdapter!
-    var correctAnswer: String?
+    var correctAnswer: Int?
     var hasOverflowOptions: Bool = false
     var mcSelectedIndex: Int = NSNotFound
     var pollOptionsModel: PollOptionsModel!
@@ -87,7 +87,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
 
     // MARK: - Configure
-    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: String?, maxCellHeight: CGFloat) {
+    func configure(for pollOptionsModel: PollOptionsModel, delegate: PollOptionsCellDelegate, correctAnswer: Int?, maxCellHeight: CGFloat) {
         self.pollOptionsModel = pollOptionsModel
         self.delegate = delegate
         self.correctAnswer = correctAnswer
@@ -111,7 +111,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
     }
 
     // MARK: - Update
-    func update(with updatedPollOptionsModelType: PollOptionsModelType, correctAnswer: String?) {
+    func update(with updatedPollOptionsModelType: PollOptionsModelType, correctAnswer: Int?) {
         self.correctAnswer = correctAnswer
         switch updatedPollOptionsModelType {
         case .mcResult(resultModels: let updatedMCResultModels):

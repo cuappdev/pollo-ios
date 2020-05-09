@@ -86,19 +86,16 @@ func decodeObjForKey(key: String) -> Any {
 // MARK: - Utils for Polls
 func buildPollOptionsModelType(from poll: Poll, userRole: UserRole) -> PollOptionsModelType {
     var type: PollOptionsModelType
-    switch poll.type {
-    case .multipleChoice:
-        switch poll.state {
-        case .live, .ended:
-            switch userRole {
-            case .member:
-                type = buildMCChoiceModelType(from: poll)
-            case .admin:
-                type = buildMCResultModelType(from: poll, userRole: userRole)
-            }
-        case .shared:
+    switch poll.state {
+    case .live, .ended:
+        switch userRole {
+        case .member:
+            type = buildMCChoiceModelType(from: poll)
+        case .admin:
             type = buildMCResultModelType(from: poll, userRole: userRole)
         }
+    case .shared:
+        type = buildMCResultModelType(from: poll, userRole: userRole)
     }
     return type
 }
@@ -122,12 +119,7 @@ func calculatePollOptionsCellHeight(for pollOptionsModel: PollOptionsModel) -> C
 
 private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
     let mcChoiceModels = poll.answerChoices.enumerated().map { (index, option) -> MCChoiceModel in
-        var isSelected: Bool
-        if let selected = poll.getSelected() as? PollResult {
-            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index)) || selected == option
-        } else {
-            isSelected = poll.userDidSelect(mcChoice: intToMCOption(index))
-        }
+        let isSelected = poll.userDidSelect(mcChoice: index)
         return MCChoiceModel(option: option.text, isSelected: isSelected)
     }
     return .mcChoice(choiceModels: mcChoiceModels)
@@ -136,9 +128,10 @@ private func buildMCChoiceModelType(from poll: Poll) -> PollOptionsModelType {
 func formatResults(results: [String: JSON]) -> [String: PollResult] {
     var pollResults = [String: PollResult]()
     results.forEach { (key, value) in
+        let index = value[ParserKeys.indexKey].intValue
         let text = value[ParserKeys.textKey].stringValue
         let count = value[ParserKeys.countKey].intValue
-        pollResults[key] = PollResult(text: text, count: count)
+        pollResults[key] = PollResult(index: index, text: text, count: count)
     }
     return pollResults
 }
@@ -156,11 +149,11 @@ func buildMCResultModelType(from poll: Poll, userRole: UserRole) -> PollOptionsM
     var choiceIndex = 0
     poll.answerChoices.forEach { choice in
         let numSelected = getNumSelected(poll: poll, choice: choice, userRole: userRole)
-        let letter = choice.letter ?? ""
+        let index = choice.index
         let percentSelected = totalNumResults > 0 ? Float(numSelected) / totalNumResults : 0
         var isSelected = false
-        if let selected = poll.getSelected() as? String {
-            isSelected = letter == selected || selected == choice.text
+        if let selected = poll.getSelected() {
+            isSelected = index == selected
         }
         let resultModel = MCResultModel(option: choice.text, numSelected: numSelected, percentSelected: percentSelected, isSelected: isSelected, choiceIndex: choiceIndex)
         mcResultModels.append(resultModel)
