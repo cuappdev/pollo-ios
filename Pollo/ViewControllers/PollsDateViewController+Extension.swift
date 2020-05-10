@@ -83,6 +83,8 @@ extension PollsDateViewController: PollBuilderViewControllerDelegate {
 
         let answerChoicesDict = answerChoices.compactMap { $0.dictionary }
 
+        let correct = correctAnswer ?? -1
+        
         let newPollDict: [String: Any] = [
             "text": text,
             "answerChoices": answerChoicesDict,
