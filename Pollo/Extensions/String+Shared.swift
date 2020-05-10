@@ -6,6 +6,9 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import Foundation
+import UIKit
+
 extension String {
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)

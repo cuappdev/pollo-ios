@@ -8,7 +8,6 @@
 
 import AppDevAnnouncements
 import Crashlytics
-import FLEX
 import Fabric
 import Firebase
 import FutureNova

@@ -20,7 +20,6 @@ PODS:
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseInstanceID (1.0.10):
     - FirebaseCore (~> 3.6)
-  - FLEX (4.1.1)
   - FutureNova (0.1.6)
   - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
@@ -41,7 +40,7 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.2.2)
     - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.2)"
   - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
-  - GTMSessionFetcher/Core (1.4.0)
+  - GTMSessionFetcher/Core (1.3.1)
   - IGListDiffKit (4.0.0)
   - IGListKit (4.0.0):
     - IGListDiffKit (= 4.0.0)
@@ -65,7 +64,6 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - Firebase/Analytics
-  - FLEX
   - FutureNova (from `https://github.com/cuappdev/ios-networking.git`)
   - Google/SignIn
   - IGListKit
@@ -86,7 +84,6 @@ SPEC REPOS:
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseInstanceID
-    - FLEX
     - Google
     - GoogleSignIn
     - GoogleToolboxForMac
@@ -132,12 +129,11 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
-  FLEX: 81096107977a09836eb440173010ceeef01105d6
   FutureNova: 95f9aa352b2c250253b96fdf380754afcc87c7f3
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
@@ -150,6 +146,6 @@ SPEC CHECKSUMS:
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: c90310f385c829113a498eab78b4489e2accc942
+PODFILE CHECKSUM: 2d7fb432fb531d78484b5040ac11850677f01179
 
 COCOAPODS: 1.9.1

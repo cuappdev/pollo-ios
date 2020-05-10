@@ -6,8 +6,10 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
+import UIKit
+
 extension UINavigationController {
-    open override var childForStatusBarStyle: UIViewController? {
+    public override var childForStatusBarStyle: UIViewController? {
         return visibleViewController
     }
 }
