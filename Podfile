@@ -13,7 +13,6 @@ target 'Pollo' do
   pod 'Crashlytics'
   pod 'Fabric'
   pod 'Firebase/Analytics'
-  pod 'FLEX'
   pod 'FutureNova', :git => 'https://github.com/cuappdev/ios-networking.git'
   pod 'Google/SignIn'
   pod 'IGListKit'
