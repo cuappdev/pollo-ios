@@ -40,15 +40,18 @@ class PollsDateViewController: UIViewController {
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 20
     let countLabelWidth: CGFloat = 42.0
+    let exportNoticeLabelBottomPadding: CGFloat = 86
     let exportNoticeLabelHeight: CGFloat = 34
+    let exportNoticeLabelHorizontalPadding: CGFloat = 22
     let exportNoticeLabelTopPadding: CGFloat = 9
     let exportNoticeLabelWidth: CGFloat = 299
     let exportNoticeViewBorderWidth: CGFloat = 1.5
     let exportNoticeViewBottomPadding: CGFloat = 77
     let exportNoticeViewCornerRadius: CGFloat = 6
     let exportNoticeViewHeight: CGFloat = 51
+    let exportNoticeViewHorizontalPadding: CGFloat = 16
+    let exportNoticeViewVerticalPadding: CGFloat = 8
     let exportNoticeViewWidth: CGFloat = 343
-    let insetPadding: CGFloat = 16
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -122,12 +125,12 @@ class PollsDateViewController: UIViewController {
         view.sendSubviewToBack(collectionView)
         
         if userRole == .admin {
-            let attributedString = NSMutableAttributedString(string: "Visit pollo.cornellappdev.com/export on a desktop device to export participation data.", attributes: [
+            let attributedString = NSMutableAttributedString(string: "Visit pollo.cornellappdev.com on a desktop device to export participation data.", attributes: [
               .font: UIFont.systemFont(ofSize: 14.0, weight: .medium),
               .foregroundColor: UIColor.white
             ])
             attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: 5, length: 1))
-            attributedString.addAttribute(.foregroundColor, value: UIColor.polloGreen, range: NSRange(location: 6, length: 31))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.polloGreen, range: NSRange(location: 6, length: 24))
             exportNoticeLabel = UILabel()
             exportNoticeLabel.font = ._14MediumFont
             exportNoticeLabel.textAlignment = .center
@@ -161,20 +164,20 @@ class PollsDateViewController: UIViewController {
         if userRole == .admin {
             exportNoticeView.snp.makeConstraints { make in
                 make.bottom.equalTo(view.snp.bottom).inset(exportNoticeViewBottomPadding)
-                make.height.equalTo(exportNoticeViewHeight)
-                make.width.equalTo(exportNoticeViewWidth)
+                make.top.equalTo(exportNoticeLabel).offset(-exportNoticeViewVerticalPadding)
+                make.bottom.equalTo(exportNoticeLabel).offset(exportNoticeViewVerticalPadding)
+                make.leading.trailing.equalToSuperview().inset(exportNoticeViewHorizontalPadding)
                 make.centerX.equalToSuperview()
             }
             
             exportNoticeLabel.snp.makeConstraints { make in
-                make.top.equalTo(exportNoticeView.snp.top).offset(exportNoticeLabelTopPadding)
-                make.height.equalTo(exportNoticeLabelHeight)
-                make.width.equalTo(exportNoticeLabelWidth)
+                make.bottom.equalToSuperview().inset(exportNoticeLabelBottomPadding)
+                make.leading.trailing.equalTo(exportNoticeView).inset(exportNoticeLabelHorizontalPadding)
                 make.centerX.equalTo(exportNoticeView.snp.centerX)
             }
         }
     }
-
+    
     // MARK: ACTIONS
     @objc func createPollBtnPressed() {
         let pollBuilderViewController = PollBuilderViewController(delegate: self)
