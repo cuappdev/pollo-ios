@@ -41,17 +41,12 @@ class PollsDateViewController: UIViewController {
     let collectionViewTopPadding: CGFloat = 20
     let countLabelWidth: CGFloat = 42.0
     let exportNoticeLabelBottomPadding: CGFloat = 86
-    let exportNoticeLabelHeight: CGFloat = 34
     let exportNoticeLabelHorizontalPadding: CGFloat = 22
-    let exportNoticeLabelTopPadding: CGFloat = 9
-    let exportNoticeLabelWidth: CGFloat = 299
     let exportNoticeViewBorderWidth: CGFloat = 1.5
     let exportNoticeViewBottomPadding: CGFloat = 77
     let exportNoticeViewCornerRadius: CGFloat = 6
-    let exportNoticeViewHeight: CGFloat = 51
     let exportNoticeViewHorizontalPadding: CGFloat = 16
     let exportNoticeViewVerticalPadding: CGFloat = 8
-    let exportNoticeViewWidth: CGFloat = 343
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
