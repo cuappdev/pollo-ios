@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         print("[Running Pollo in debug configuration]")
         #else
         print("[Running Pollo in release configuration]")
-        Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
         #endif
     }
 
