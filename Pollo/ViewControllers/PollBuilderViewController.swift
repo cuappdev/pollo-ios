@@ -117,7 +117,6 @@ class PollBuilderViewController: UIViewController {
     // MARK: - Layout
     func setupViews() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController?.navigationBar.barStyle = .black
         
         exitButton = UIButton()
         exitButton.setImage(UIImage(named: exitButtonImageName), for: .normal)
@@ -399,5 +398,9 @@ class PollBuilderViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }

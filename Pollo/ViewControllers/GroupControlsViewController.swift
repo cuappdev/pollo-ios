@@ -87,7 +87,6 @@ class GroupControlsViewController: UIViewController {
 
     private func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationController?.navigationBar.barStyle = .black
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -143,6 +142,10 @@ class GroupControlsViewController: UIViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
 }

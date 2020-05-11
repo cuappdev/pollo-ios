@@ -36,7 +36,6 @@ class NoInternetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        navigationController?.navigationBar.barStyle = .black
         
         facepalmImageView.image = facepalmImage
         view.addSubview(facepalmImageView)
@@ -95,5 +94,9 @@ class NoInternetViewController: UIViewController {
         DispatchQueue.main.async {
             GIDSignIn.sharedInstance().signInSilently()
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
