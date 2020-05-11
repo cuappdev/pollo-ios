@@ -40,13 +40,12 @@ class PollsDateViewController: UIViewController {
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 20
     let countLabelWidth: CGFloat = 42.0
-    let exportNoticeLabelBottomPadding: CGFloat = 86
     let exportNoticeLabelHorizontalPadding: CGFloat = 22
+    let exportNoticeLabelVerticalPadding: CGFloat = 8
     let exportNoticeViewBorderWidth: CGFloat = 1.5
     let exportNoticeViewBottomPadding: CGFloat = 77
     let exportNoticeViewCornerRadius: CGFloat = 6
     let exportNoticeViewHorizontalPadding: CGFloat = 16
-    let exportNoticeViewVerticalPadding: CGFloat = 8
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
         super.init(nibName: nil, bundle: nil)
@@ -126,18 +125,21 @@ class PollsDateViewController: UIViewController {
             ])
             attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: 5, length: 1))
             attributedString.addAttribute(.foregroundColor, value: UIColor.polloGreen, range: NSRange(location: 6, length: 24))
+
+            exportNoticeView = UIView()
+            exportNoticeView.layer.cornerRadius = exportNoticeViewCornerRadius
+            exportNoticeView.layer.borderWidth = exportNoticeViewBorderWidth
+            exportNoticeView.layer.borderColor = UIColor.white.cgColor
+            // Remove when web is in production
+            exportNoticeView.isHidden = true
+            view.addSubview(exportNoticeView)
+
             exportNoticeLabel = UILabel()
             exportNoticeLabel.font = ._14MediumFont
             exportNoticeLabel.textAlignment = .center
             exportNoticeLabel.attributedText = attributedString
             exportNoticeLabel.numberOfLines = 0
-            view.addSubview(exportNoticeLabel)
-            
-            exportNoticeView = UIView()
-            exportNoticeView.layer.cornerRadius = exportNoticeViewCornerRadius
-            exportNoticeView.layer.borderWidth = exportNoticeViewBorderWidth
-            exportNoticeView.layer.borderColor = UIColor.white.cgColor
-            view.addSubview(exportNoticeView)
+            exportNoticeView.addSubview(exportNoticeLabel)
         }
         
         let updater = ListAdapterUpdater()
@@ -159,16 +161,12 @@ class PollsDateViewController: UIViewController {
         if userRole == .admin {
             exportNoticeView.snp.makeConstraints { make in
                 make.bottom.equalTo(view.snp.bottom).inset(exportNoticeViewBottomPadding)
-                make.top.equalTo(exportNoticeLabel).offset(-exportNoticeViewVerticalPadding)
-                make.bottom.equalTo(exportNoticeLabel).offset(exportNoticeViewVerticalPadding)
                 make.leading.trailing.equalToSuperview().inset(exportNoticeViewHorizontalPadding)
-                make.centerX.equalToSuperview()
             }
             
             exportNoticeLabel.snp.makeConstraints { make in
-                make.bottom.equalToSuperview().inset(exportNoticeLabelBottomPadding)
-                make.leading.trailing.equalTo(exportNoticeView).inset(exportNoticeLabelHorizontalPadding)
-                make.centerX.equalTo(exportNoticeView.snp.centerX)
+                make.top.bottom.equalToSuperview().inset(exportNoticeLabelVerticalPadding)
+                make.leading.trailing.equalToSuperview().inset(exportNoticeLabelHorizontalPadding)
             }
         }
     }
