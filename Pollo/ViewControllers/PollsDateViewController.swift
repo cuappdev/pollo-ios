@@ -23,6 +23,8 @@ class PollsDateViewController: UIViewController {
     var collectionView: UICollectionView!
     var collectionViewLayout: UICollectionViewFlowLayout!
     var createPollButton: UIButton!
+    var exportNoticeLabel: UILabel!
+    var exportNoticeView: UIView!
     var navigationTitleView: NavigationTitleView!
     var peopleButton: UIButton!
     
@@ -38,6 +40,14 @@ class PollsDateViewController: UIViewController {
     // MARK: - Constants
     let collectionViewTopPadding: CGFloat = 20
     let countLabelWidth: CGFloat = 42.0
+    let exportNoticeLabelHeight: CGFloat = 34
+    let exportNoticeLabelTopPadding: CGFloat = 9
+    let exportNoticeLabelWidth: CGFloat = 299
+    let exportNoticeViewBorderWidth: CGFloat = 1.5
+    let exportNoticeViewBottomPadding: CGFloat = 77
+    let exportNoticeViewCornerRadius: CGFloat = 6
+    let exportNoticeViewHeight: CGFloat = 51
+    let exportNoticeViewWidth: CGFloat = 343
     let insetPadding: CGFloat = 16
     
     init(delegate: PollsDateViewControllerDelegate, pollsDateArray: [PollsDateModel], session: Session, userRole: UserRole) {
@@ -54,6 +64,7 @@ class PollsDateViewController: UIViewController {
         view.backgroundColor = .darkestGrey
         setupViews()
         setupNavBar()
+        setupConstraints()
         self.socket = Socket(id: "\(session.id)", delegate: self)
     }
     
@@ -74,37 +85,8 @@ class PollsDateViewController: UIViewController {
     }
     
     // MARK: - Layout
-    func setupViews() {
-        collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.minimumInteritemSpacing = 0
-        collectionViewLayout.minimumLineSpacing = 0
-        collectionViewLayout.scrollDirection = .vertical
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.scrollIndicatorInsets = .zero
-        collectionView.bounces = true
-        collectionView.backgroundColor = .clear
-        view.addSubview(collectionView)
-        view.sendSubviewToBack(collectionView)
-        
-        let updater = ListAdapterUpdater()
-        adapter = ListAdapter(updater: updater, viewController: self)
-        adapter.collectionView = collectionView
-        adapter.dataSource = self
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(collectionViewTopPadding)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        BannerController.shared.show(NotificationBanner.connectingBanner())
-    }
-    
     func setupNavBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationController?.navigationBar.barStyle = .black
         // REMOVE BOTTOM SHADOW
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -122,6 +104,74 @@ class PollsDateViewController: UIViewController {
             createPollButton.addTarget(self, action: #selector(createPollBtnPressed), for: .touchUpInside)
             let createPollBarButton = UIBarButtonItem(customView: createPollButton)
             self.navigationItem.rightBarButtonItems = [createPollBarButton]
+        }
+    }
+    
+    func setupViews() {
+        collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.minimumLineSpacing = 0
+        collectionViewLayout.scrollDirection = .vertical
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.scrollIndicatorInsets = .zero
+        collectionView.bounces = true
+        collectionView.backgroundColor = .clear
+        view.addSubview(collectionView)
+        view.sendSubviewToBack(collectionView)
+        
+        if userRole == .admin {
+            let attributedString = NSMutableAttributedString(string: "Visit pollo.cornellappdev.com/export on a desktop device to export participation data.", attributes: [
+              .font: UIFont.systemFont(ofSize: 14.0, weight: .medium),
+              .foregroundColor: UIColor.white
+            ])
+            attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: 5, length: 1))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.polloGreen, range: NSRange(location: 6, length: 31))
+            exportNoticeLabel = UILabel()
+            exportNoticeLabel.font = ._14MediumFont
+            exportNoticeLabel.textAlignment = .center
+            exportNoticeLabel.attributedText = attributedString
+            exportNoticeLabel.numberOfLines = 0
+            view.addSubview(exportNoticeLabel)
+            
+            exportNoticeView = UIView()
+            exportNoticeView.layer.cornerRadius = exportNoticeViewCornerRadius
+            exportNoticeView.layer.borderWidth = exportNoticeViewBorderWidth
+            exportNoticeView.layer.borderColor = UIColor.white.cgColor
+            view.addSubview(exportNoticeView)
+        }
+        
+        let updater = ListAdapterUpdater()
+        adapter = ListAdapter(updater: updater, viewController: self)
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
+        
+        BannerController.shared.show(NotificationBanner.connectingBanner())
+    }
+    
+    func setupConstraints() {
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(collectionViewTopPadding)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        if userRole == .admin {
+            exportNoticeView.snp.makeConstraints { make in
+                make.bottom.equalTo(view.snp.bottom).inset(exportNoticeViewBottomPadding)
+                make.height.equalTo(exportNoticeViewHeight)
+                make.width.equalTo(exportNoticeViewWidth)
+                make.centerX.equalToSuperview()
+            }
+            
+            exportNoticeLabel.snp.makeConstraints { make in
+                make.top.equalTo(exportNoticeView.snp.top).offset(exportNoticeLabelTopPadding)
+                make.height.equalTo(exportNoticeLabelHeight)
+                make.width.equalTo(exportNoticeLabelWidth)
+                make.centerX.equalTo(exportNoticeView.snp.centerX)
+            }
         }
     }
 
@@ -173,5 +223,8 @@ class PollsDateViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 }
