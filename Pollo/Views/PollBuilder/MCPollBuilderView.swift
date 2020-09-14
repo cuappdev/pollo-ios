@@ -147,7 +147,7 @@ class MCPollBuilderView: UIView {
     }
     
     func updateTotalOptions() {
-        mcOptionModels.forEach{ $0.totalOptions = mcOptionModels.count - 1 }
+        mcOptionModels.forEach { $0.totalOptions = mcOptionModels.count - 1 }
     }
     
     // MARK: - KEYBOARD
