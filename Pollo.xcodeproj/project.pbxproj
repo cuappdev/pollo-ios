@@ -41,6 +41,7 @@
 		63ACEC77214D61A000D555F1 /* SettingsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC76214D61A000D555F1 /* SettingsInfoCell.swift */; };
 		63ACEC79214D61BE00D555F1 /* SettingsLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACEC78214D61BE00D555F1 /* SettingsLinkCell.swift */; };
 		63E4DAF82097DE94000808EB /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4DAF72097DE94000808EB /* NavigationTitleView.swift */; };
+		87186C92252BD74B00662832 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87186C91252BD74B00662832 /* WebViewController.swift */; };
 		8754D17523E23D1C009AA2F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754D17423E23D1C009AA2F0 /* GoogleService-Info.plist */; };
 		878A4B0824145A2900627A99 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878A4B0724145A2900627A99 /* Keys.plist */; };
 		878A4B0D24145DE200627A99 /* OptionsGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878A4B0C24145DE200627A99 /* OptionsGradientView.swift */; };
@@ -195,6 +196,7 @@
 		63E4DAF72097DE94000808EB /* NavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		652915071F78124700882CBB /* PolloTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PolloTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADA372F38239979F9AEF65C /* Pods-Pollo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pollo/Pods-Pollo.release.xcconfig"; sourceTree = "<group>"; };
+		87186C91252BD74B00662832 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		8754D17423E23D1C009AA2F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		878A4B0724145A2900627A99 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		878A4B0C24145DE200627A99 /* OptionsGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsGradientView.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				C271A0752193E78800EF12B4 /* GroupControlsViewController.swift */,
 				C271A0932194026100EF12B4 /* AttendanceViewController.swift */,
 				87DB622B2428457400266BF5 /* NoInternetViewController.swift */,
+				87186C91252BD74B00662832 /* WebViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -970,6 +973,7 @@
 				C20B57192139DDA10091034F /* QuestionSectionController.swift in Sources */,
 				B638A0A9223833B800D1C2D2 /* PollsSettingModel.swift in Sources */,
 				C26D5F51214F5F3700548255 /* PollsDateSectionController.swift in Sources */,
+				87186C92252BD74B00662832 /* WebViewController.swift in Sources */,
 				C2E9C7092182A40600E36659 /* Analytics.swift in Sources */,
 				C2F48EC32083051A0022FE6B /* PollsViewController.swift in Sources */,
 				63ACEC70214B378E00D555F1 /* SettingsViewController.swift in Sources */,

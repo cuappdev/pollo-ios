@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleSignIn
 
 class NoInternetViewController: UIViewController {
     
@@ -92,7 +91,7 @@ class NoInternetViewController: UIViewController {
     
     @objc func retryPressed() {
         DispatchQueue.main.async {
-            GIDSignIn.sharedInstance().signInSilently()
+            //GIDSignIn.sharedInstance().signInSilently()
         }
     }
     
