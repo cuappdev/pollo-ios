@@ -118,54 +118,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal func signIn() {
         if true {
-            
             let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
             UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
             
-            var joinedSessions = [Session]()
-            var createdSessions = [Session]()
-            
             let dispatchGroup = DispatchGroup()
-            dispatchGroup.enter()
-            dispatchGroup.enter()
-            getPollSessions(with: .member).observe { memberResult in
-                switch memberResult {
-                case .value(let memberResponse):
-                    var auxiliaryDict = [Double: Session]()
-                    memberResponse.data.forEach { session in
-                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
-                        }
-                    }
-                    auxiliaryDict.keys.sorted().forEach { time in
-                        guard let joinedSession = auxiliaryDict[time] else { return }
-                        joinedSessions.append(joinedSession)
-                    }
-                case .error(let memberError):
-                    print(memberError)
-                }
-                dispatchGroup.leave()
+            
+            var joinedSessions = [Session]()
+            preparePollSessions(with: .member, dispatchGroup: dispatchGroup) { sessions in
+                joinedSessions = sessions
             }
-            getPollSessions(with: .admin).observe { adminResult in
-                switch adminResult {
-                case .value(let adminResponse):
-                    var auxiliaryDict = [Double: Session]()
-                    adminResponse.data.forEach { session in
-                        if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                            auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .admin), isLive: session.isLive)
-                        }
-                    }
-                    auxiliaryDict.keys.sorted().forEach { time in
-                        guard let createdSession = auxiliaryDict[time] else { return }
-                        createdSessions.append(createdSession)
-                    }
-                case .error(let adminError):
-                    print(adminError)
-                }
-                dispatchGroup.leave()
+            
+            var createdSessions = [Session]()
+            preparePollSessions(with: .admin, dispatchGroup: dispatchGroup) { sessions in
+                createdSessions = sessions
             }
+                
             dispatchGroup.notify(queue: .main, execute: {
-                //guard let `self` = self else { return }
                 DispatchQueue.main.async {
                     let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
                     self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
@@ -173,7 +141,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
             
         } else if didSignInSilently {
-            self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
+            //self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
+        }
+    }
+    
+    private func preparePollSessions(with userRole: UserRole, dispatchGroup: DispatchGroup, sessionResult: @escaping ([Session]) -> Void) {
+        var sessions = [Session]()
+        dispatchGroup.enter()
+        getPollSessions(with: userRole).observe { result in
+            switch result {
+            case .value(let response):
+                var auxiliaryDict = [Double: Session]()
+                response.data.forEach { session in
+                    if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                        auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .admin), isLive: session.isLive)
+                    }
+                }
+                auxiliaryDict.keys.sorted().forEach { time in
+                    guard let session = auxiliaryDict[time] else { return }
+                    sessions.append(session)
+                }
+                sessionResult(sessions)
+            case .error(let error):
+                print(error)
+            }
+            dispatchGroup.leave()
         }
     }
     
