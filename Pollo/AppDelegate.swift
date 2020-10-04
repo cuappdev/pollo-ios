@@ -212,6 +212,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal func logout() {
         UserDefaults.standard.removeObject(forKey: Identifiers.refreshTokenIdentifier)
+        User.userSession = nil
+        User.currentUser = nil
         didSignInSilently = false
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
         pollsNavigationController.popToRootViewController(animated: false)
