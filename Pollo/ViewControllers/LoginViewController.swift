@@ -145,36 +145,8 @@ class LoginViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func openSSO() {
-        if let unwrappedURL = URL(string: ssoEndpoint) {
-            ssoWebView.isHidden = false
-            ssoWebView.load(URLRequest(url: unwrappedURL))
-        }/*
-        let vc = UIViewController()
-        vc.view = ssoWebView
-        present(vc, animated: true) {
-            if let unwrappedURL = URL(string: self.ssoEndpoint) {
-                self.ssoWebView.load(URLRequest(url: unwrappedURL))
-            }
-        }*/
-    }
-}
-
-extension LoginViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == sessionTokenHandlerName {
-            print("Message successfully received")
-            guard let dict = message.body as? [String: AnyObject],
-                let accessToken = dict["accessToken"] as? String,
-                let isActive = dict["isActive"] as? Bool,
-                let refreshToken = dict["refreshToken"] as? String,
-                let sessionExpiration = dict["sessionExpiration"] as? Int
-                else { return }
-            print("Message successfully parsed")
-            print("Access Token: \(accessToken)")
-            print("isActive: \(isActive)")
-            print("Refresh Token: \(refreshToken)")
-            print("Session Expiration: \(sessionExpiration)")
-        }
+        let wvc = WebViewController()
+        navigationController?.pushViewController(wvc, animated: true)
     }
     
 }

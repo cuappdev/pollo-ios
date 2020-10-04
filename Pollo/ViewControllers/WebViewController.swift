@@ -15,7 +15,19 @@ class WebViewController: UIViewController {
     var ssoWebView: WKWebView!
     let sessionTokenHandlerName: String = "sessionTokenHandler"
     let ssoEndpoint: String = ":-)"
-    private let networking: Networking = URLSession.shared.request
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let _ = User.userSession else { return }
+        appDelegate.signIn()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,9 +55,6 @@ extension WebViewController: WKScriptMessageHandler {
             let sessionExpiration = dict["sessionExpiration"] as? String
             else { return }
         User.userSession = UserSession(accessToken: accessToken, refreshToken: refreshToken, sessionExpiration: sessionExpiration, isActive: isActive)
-        dismiss(animated: true) {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            appDelegate.signIn()
-        }
+        navigationController?.popViewController(animated: true)
     }
 }

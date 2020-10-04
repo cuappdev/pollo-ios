@@ -27,10 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         setupWindow()
         setupNavigationController()
-        setupNetworking()
-        //setupGoogleSignIn()
-        setupSignIn()
         setupNavBar()
+        setupNetworking()
+        setupSignIn()
         setupFabric()
 
         // Setup AppDevAnnouncements
@@ -57,7 +56,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pollsNavigationController = UINavigationController(rootViewController: launchScreenVC)
         window?.rootViewController = pollsNavigationController
     }
+    
+    private func setupNavBar() {
+        pollsNavigationController.setNavigationBarHidden(true, animated: false)
+        pollsNavigationController.navigationBar.barTintColor = .darkestGrey
+        pollsNavigationController.navigationBar.isTranslucent = false
+        
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        UINavigationBar.appearance().backIndicatorImage = backImage
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
+    }
+    
+    private func setupNetworking() {
+        #if LOCAL_SERVER
+        Endpoint.config.scheme = "http"
+        Endpoint.config.host = "localhost"
+        Endpoint.config.port = 3000
+        #else
+        Endpoint.config.scheme = "https"
+        Endpoint.config.host = Keys.hostURL
+        #endif
 
+        if let apiVersion = Endpoint.apiVersion {
+            Endpoint.config.commonPath = "/api/v\(apiVersion)"
+        }
+    }
+    
     private func setupSignIn() {
         let refreshToken = UserDefaults.standard.string(forKey: Identifiers.refreshTokenIdentifier)
         if let unwrappedToken = refreshToken {
@@ -97,16 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    private func setupNavBar() {
-        pollsNavigationController.setNavigationBarHidden(true, animated: false)
-        pollsNavigationController.navigationBar.barTintColor = .darkestGrey
-        pollsNavigationController.navigationBar.isTranslucent = false
-        
-        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
-        UINavigationBar.appearance().backIndicatorImage = backImage
-        UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
-    }
-    
     private func setupFabric() {
         #if DEBUG
         print("[Running Pollo in debug configuration]")
@@ -114,21 +128,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("[Running Pollo in release configuration]")
         Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
         #endif
-    }
-
-    private func setupNetworking() {
-        #if LOCAL_SERVER
-        Endpoint.config.scheme = "http"
-        Endpoint.config.host = "localhost"
-        Endpoint.config.port = 3000
-        #else
-        Endpoint.config.scheme = "https"
-        Endpoint.config.host = Keys.hostURL
-        #endif
-
-        if let apiVersion = Endpoint.apiVersion {
-            Endpoint.config.commonPath = "/api/v\(apiVersion)"
-        }
     }
         
     internal func signIn() {
