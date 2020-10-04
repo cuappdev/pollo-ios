@@ -107,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return networking(Endpoint.userRefreshSession(with: token)).decode()
     }
     
-    private func prepareRefreshedSession(with bearerToken: String, completion: @escaping (Bool) -> ()) {
+    private func prepareRefreshedSession(with bearerToken: String, completion: @escaping (Bool) -> Void) {
         userRefreshSession(with: bearerToken).observe { sessionResult in
             switch sessionResult {
             case .value(let sessionResponse):

@@ -25,7 +25,7 @@ class WebViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let _ = User.userSession else { return }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, User.userSession != nil else { return }
         appDelegate.signIn()
     }
     
