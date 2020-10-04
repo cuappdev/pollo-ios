@@ -11,14 +11,12 @@ import FutureNova
 
 extension Endpoint {
     
-    static var headers: [String: String] {
-        return [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
-        ]
+    static func headers(_ bearerToken: String = User.userSession?.accessToken ?? "") -> [String: String] {
+        return ["Authorization": "Bearer \(bearerToken)"]
     }
     
     static func getSortedPolls(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/polls", headers: headers)
+        return Endpoint(path: "/sessions/\(id)/polls", headers: headers())
     }
     
 }

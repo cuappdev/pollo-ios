@@ -12,11 +12,11 @@ import FutureNova
 extension Endpoint {
     
     static func getMe() -> Endpoint {
-        return Endpoint(path: "/users", headers: headers)
+        return Endpoint(path: "/users", headers: headers())
     }
     
-    static func userRefreshSession() -> Endpoint {
-        return Endpoint(path: "/auth/refresh", headers: headers)
+    static func userRefreshSession(with bearerToken: String) -> Endpoint {
+        return Endpoint(path: "/auth/refresh", headers: headers(bearerToken), method: .post)
     }
     
 }

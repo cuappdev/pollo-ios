@@ -90,9 +90,8 @@ class NoInternetViewController: UIViewController {
     }
     
     @objc func retryPressed() {
-        DispatchQueue.main.async {
-            //GIDSignIn.sharedInstance().signInSilently()
-        }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.signIn()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

@@ -57,25 +57,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pollsNavigationController = UINavigationController(rootViewController: launchScreenVC)
         window?.rootViewController = pollsNavigationController
     }
-    /*
-    func setupGoogleSignIn() {
-        GIDSignIn.sharedInstance().clientID = Google.googleClientID
-        GIDSignIn.sharedInstance().serverClientID = Google.googleClientID
-        GIDSignIn.sharedInstance().delegate = self
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
-            didSignInSilently = true
-            DispatchQueue.main.async {
-                GIDSignIn.sharedInstance().signInSilently()
+
+    private func setupSignIn() {
+        let refreshToken = UserDefaults.standard.string(forKey: Identifiers.refreshTokenIdentifier)
+        if let unwrappedToken = refreshToken {
+            print(unwrappedToken)
+            prepareRefreshedSession(with: unwrappedToken) { success in
+                if success {
+                    self.didSignInSilently = true
+                    self.signIn()
+                } else {
+                    DispatchQueue.main.async {
+                        let loginVC = LoginViewController()
+                        self.pollsNavigationController.pushViewController(loginVC, animated: false)
+                    }
+                }
             }
         } else {
             let loginVC = LoginViewController()
             pollsNavigationController.pushViewController(loginVC, animated: false)
         }
     }
-    */
-    private func setupSignIn() {
-        let loginVC = LoginViewController()
-        pollsNavigationController.pushViewController(loginVC, animated: false)
+    
+    private func userRefreshSession(with token: String) -> Future<Response<UserSession>> {
+        return networking(Endpoint.userRefreshSession(with: token)).decode()
+    }
+    
+    private func prepareRefreshedSession(with bearerToken: String, completion: @escaping (Bool) -> ()) {
+        userRefreshSession(with: bearerToken).observe { sessionResult in
+            switch sessionResult {
+            case .value(let sessionResponse):
+                let session = sessionResponse.data
+                User.userSession = UserSession(accessToken: session.accessToken, refreshToken: session.refreshToken, sessionExpiration: session.sessionExpiration, isActive: session.isActive)
+                completion(true)
+            case .error(let sessionError):
+                print(sessionError)
+                completion(false)
+            }
+        }
     }
     
     private func setupNavBar() {
@@ -111,38 +130,61 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Endpoint.config.commonPath = "/api/v\(apiVersion)"
         }
     }
+        
+    internal func signIn() {
+        let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
+        UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
+        
+        prepareUser()
+        
+        var dispatchGroup: DispatchGroup? = DispatchGroup()
+        var pollsRetrieved = false
+        
+        var joinedSessions = [Session]()
+        preparePollSessions(with: .member, dispatchGroup: dispatchGroup!) { sessions in
+            joinedSessions = sessions
+        }
+        var createdSessions = [Session]()
+        preparePollSessions(with: .admin, dispatchGroup: dispatchGroup!) { sessions in
+            createdSessions = sessions
+        }
+        
+        // no internet timeout
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if !pollsRetrieved {
+                dispatchGroup = nil
+                self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
+            }
+        }
+        // polls successfully retrieved
+        dispatchGroup?.notify(queue: .main, execute: {
+            DispatchQueue.main.async {
+                pollsRetrieved = true
+                UserDefaults.standard.set(User.userSession?.refreshToken, forKey: Identifiers.refreshTokenIdentifier)
+                let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
+            }
+        })
+    }
+    
+    private func getUser() -> Future<Response<GetMemberResponse>> {
+        return networking(Endpoint.getMe()).decode()
+    }
+    
+    private func prepareUser() {
+        getUser().observe { userResult in
+            switch userResult {
+            case .value(let userResponse):
+                let user = userResponse.data
+                User.currentUser = User(id: user.id, name: user.name, netId: user.netID)
+            case .error(let userError):
+                print(userError)
+            }
+        }
+    }
     
     private func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
         return networking(Endpoint.getPollSessions(with: role)).decode()
-    }
-    
-    internal func signIn() {
-        if true {
-            let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
-            UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
-            
-            let dispatchGroup = DispatchGroup()
-            
-            var joinedSessions = [Session]()
-            preparePollSessions(with: .member, dispatchGroup: dispatchGroup) { sessions in
-                joinedSessions = sessions
-            }
-            
-            var createdSessions = [Session]()
-            preparePollSessions(with: .admin, dispatchGroup: dispatchGroup) { sessions in
-                createdSessions = sessions
-            }
-                
-            dispatchGroup.notify(queue: .main, execute: {
-                DispatchQueue.main.async {
-                    let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                    self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
-                }
-            })
-            
-        } else if didSignInSilently {
-            //self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
-        }
     }
     
     private func preparePollSessions(with userRole: UserRole, dispatchGroup: DispatchGroup, sessionResult: @escaping ([Session]) -> Void) {
@@ -170,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     internal func logout() {
-        //GIDSignIn.sharedInstance().signOut()
+        UserDefaults.standard.removeObject(forKey: Identifiers.refreshTokenIdentifier)
         didSignInSilently = false
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
         pollsNavigationController.popToRootViewController(animated: false)

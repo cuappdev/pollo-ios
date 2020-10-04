@@ -28,6 +28,7 @@ struct Identifiers {
     static let optionIdentifier = "optionCellId"
     static let pollPreviewIdentifier = "pollPreviewCellId"
     static let questionOptionCellIdentifier = "questionOptionCellId"
+    static let refreshTokenIdentifier = "refreshTokenIdentifier"
     static let resultMCIdentifier = "resultMCCellId"
     static let significantEventsIdentifier = "significantEvents"
 }

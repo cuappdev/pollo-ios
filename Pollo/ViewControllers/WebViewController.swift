@@ -34,37 +34,18 @@ class WebViewController: UIViewController {
 
 extension WebViewController: WKScriptMessageHandler {
     
-    private func getUser() -> Future<Response<GetMemberResponse>> {
-        return networking(Endpoint.getMe()).decode()
-    }
-    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name != sessionTokenHandlerName { return }
-        print("Message successfully received")
         guard let dict = message.body as? [String: AnyObject],
             let accessToken = dict["accessToken"] as? String,
             let isActive = dict["isActive"] as? Bool,
             let refreshToken = dict["refreshToken"] as? String,
             let sessionExpiration = dict["sessionExpiration"] as? String
             else { return }
-        print("Message successfully parsed")
-        print("Access Token: \(accessToken)")
-        print("isActive: \(isActive)")
-        print("Refresh Token: \(refreshToken)")
-        print("Session Expiration: \(sessionExpiration)")
         User.userSession = UserSession(accessToken: accessToken, refreshToken: refreshToken, sessionExpiration: sessionExpiration, isActive: isActive)
         dismiss(animated: true) {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            self.getUser().observe { userResult in
-                switch userResult {
-                case .value(let userResponse):
-                    let user = userResponse.data
-                    User.currentUser = User(id: user.id, name: user.name, netId: user.netID)
-                    appDelegate.signIn()
-                case .error(let userError):
-                    print(userError)
-                }
-            }
+            appDelegate.signIn()
         }
     }
 }
