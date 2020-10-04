@@ -51,7 +51,7 @@ class Poll: Codable {
     var state: PollState
     var text: String
     var updatedAt: String?
-    var userAnswers: [String: [Int]] // googleID to index of choice
+    var userAnswers: [String: [Int]] // userID to index of choice
     // results format:
     // {'User1': {3, 0, 1}, ...}
 
@@ -80,7 +80,7 @@ class Poll: Codable {
 
     func getSelected() -> Int? {
         if userAnswers.isEmpty { return nil }
-        guard let googleID = User.currentUser?.id, let answers = userAnswers[googleID], let indexOfChoice = answers.first else { return nil }
+        guard let userID = User.currentUser?.id, let answers = userAnswers[userID], let indexOfChoice = answers.first else { return nil }
         return indexOfChoice
     }
 
@@ -111,13 +111,13 @@ class Poll: Codable {
 
     // Returns whether user selected this multiple choice (0, 1, 2, ...)
     func userDidSelect(mcChoice: Int) -> Bool {
-        guard let googleID = User.currentUser?.id, let userSelectedAnswers = userAnswers[googleID], let index = userSelectedAnswers.first else { return false }
+        guard let userID = User.currentUser?.id, let userSelectedAnswers = userAnswers[userID], let index = userSelectedAnswers.first else { return false }
         return index == mcChoice
     }
 
     func updateSelected(mcChoice: Int) {
-        guard let googleID = User.currentUser?.id else { return }
-        userAnswers[googleID] = [mcChoice]
+        guard let userID = User.currentUser?.id else { return }
+        userAnswers[userID] = [mcChoice]
     }
 
 }
