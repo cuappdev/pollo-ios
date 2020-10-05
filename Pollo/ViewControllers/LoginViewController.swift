@@ -17,7 +17,6 @@ class LoginViewController: UIViewController {
     let ssoButtonView = UIView()
     let ssoButtonImageView = UIImageView()
     let ssoButtonTitle = UILabel()
-    var ssoWebView: WKWebView!
     let welcomeLabel = UILabel()
     
     // MARK: - Constraints
@@ -42,8 +41,6 @@ class LoginViewController: UIViewController {
     let welcomeLabelText: String = "Welcome to"
     let ssoButtonTitleText: String = "Sign in with Cornell SSO"
     let ssoLogoImage: UIImage = UIImage(named: "cornell_logo")!
-    let sessionTokenHandlerName: String = "sessionTokenHandler"
-    let ssoEndpoint: String = ":-)"
     
     // MARK: - Setup
     override func viewDidLoad() {
@@ -91,12 +88,6 @@ class LoginViewController: UIViewController {
         ssoButtonTitle.font = ._14MediumFont
         ssoButtonTitle.textColor = .mediumGrey
         ssoButtonView.addSubview(ssoButtonTitle)
-        
-        let configuration = WKWebViewConfiguration()
-        configuration.userContentController.add(self, name: sessionTokenHandlerName)
-        ssoWebView = WKWebView(frame: view.frame, configuration: configuration)
-        ssoWebView.isHidden = true
-        view.addSubview(ssoWebView)
         
         setupConstraints()
     }

@@ -11,6 +11,7 @@ import FutureNova
 
 extension Endpoint {
     
+    // More often than not the bearer token is the accessToken, but refreshToken is required for refreshing the session
     static func headers(_ bearerToken: String = User.userSession?.accessToken ?? "") -> [String: String] {
         return ["Authorization": "Bearer \(bearerToken)"]
     }

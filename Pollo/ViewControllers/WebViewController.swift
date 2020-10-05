@@ -12,9 +12,8 @@ import WebKit
 
 class WebViewController: UIViewController {
 
-    var ssoWebView: WKWebView!
     let sessionTokenHandlerName: String = "sessionTokenHandler"
-    let ssoEndpoint: String = ":-)"
+    var ssoWebView: WKWebView!
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -37,7 +36,7 @@ class WebViewController: UIViewController {
         ssoWebView = WKWebView(frame: view.frame, configuration: configuration)
         view.addSubview(ssoWebView)
         
-        if let url = URL(string: ssoEndpoint) {
+        if let url = Endpoint.getSSOUrl(provider: "cornell").url {
             let request = URLRequest(url: url)
             ssoWebView.load(request)
         }

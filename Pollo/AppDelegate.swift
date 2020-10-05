@@ -85,7 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupSignIn() {
         let refreshToken = UserDefaults.standard.string(forKey: Identifiers.refreshTokenIdentifier)
         if let unwrappedToken = refreshToken {
-            print(unwrappedToken)
             prepareRefreshedSession(with: unwrappedToken) { success in
                 if success {
                     self.didSignInSilently = true
@@ -148,14 +147,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             createdSessions = sessions
         }
         
-        // no internet timeout
+        // No internet timeout
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             if !pollsRetrieved {
                 dispatchGroup = nil
                 self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
             }
         }
-        // polls successfully retrieved
+        // Polls successfully retrieved
         dispatchGroup?.notify(queue: .main, execute: {
             DispatchQueue.main.async {
                 pollsRetrieved = true
@@ -195,7 +194,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var auxiliaryDict = [Double: Session]()
                 response.data.forEach { session in
                     if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                        auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .admin), isLive: session.isLive)
+                        auxiliaryDict[latestActivityTimestamp] = Session(
+                            id: session.id,
+                            name: session.name,
+                            code: session.code,
+                            latestActivity: getLatestActivity(
+                                latestActivityTimestamp: latestActivityTimestamp,
+                                code: session.code,
+                                role: .admin
+                            ),
+                            isLive: session.isLive
+                        )
                     }
                 }
                 auxiliaryDict.keys.sorted().forEach { time in

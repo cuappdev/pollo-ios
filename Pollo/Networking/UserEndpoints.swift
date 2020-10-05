@@ -11,6 +11,10 @@ import FutureNova
 
 extension Endpoint {
     
+    static func getSSOUrl(provider: String) -> Endpoint {
+        return Endpoint(path: "/auth/saml/\(provider)/")
+    }
+    
     static func getMe() -> Endpoint {
         return Endpoint(path: "/users", headers: headers())
     }
