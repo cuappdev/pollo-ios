@@ -11,13 +11,13 @@ import WebKit
 
 class LoginViewController: UIViewController {
     
-    let appNameLabel = UILabel()
-    let gradient = CAGradientLayer()
-    let pronunciationLabel = UILabel()
-    let ssoButtonView = UIView()
-    let ssoButtonImageView = UIImageView()
-    let ssoButtonTitle = UILabel()
-    let welcomeLabel = UILabel()
+    var appNameLabel: UILabel!
+    var gradient: CAGradientLayer!
+    var pronunciationLabel: UILabel!
+    var ssoButtonView: UIView!
+    var ssoButtonImageView: UIImageView!
+    var ssoButtonTitle: UILabel!
+    var welcomeLabel: UILabel!
     
     // MARK: - Constraints
     let appNameLabelHeight: CGFloat = 71.5
@@ -46,12 +46,14 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        gradient = CAGradientLayer()
         gradient.colors = [UIColor.bluishGreen.cgColor, UIColor.aquaMarine.cgColor]
         gradient.startPoint = CGPoint(x: 1.0, y: 1.0)
         gradient.endPoint = CGPoint(x: 0.0, y: 0.0)
         gradient.frame = view.bounds
         view.layer.addSublayer(gradient)
         
+        welcomeLabel = UILabel()
         welcomeLabel.text = welcomeLabelText
         welcomeLabel.font = ._26MediumFont
         welcomeLabel.textColor = .white
@@ -59,6 +61,7 @@ class LoginViewController: UIViewController {
         welcomeLabel.textAlignment = .center
         view.addSubview(welcomeLabel)
         
+        appNameLabel = UILabel()
         appNameLabel.text = appNameLabelText
         appNameLabel.font = ._60HeavyFont
         appNameLabel.textColor = .white
@@ -66,6 +69,7 @@ class LoginViewController: UIViewController {
         appNameLabel.textAlignment = .center
         view.addSubview(appNameLabel)
         
+        pronunciationLabel = UILabel()
         pronunciationLabel.text = pronunciationLabelText
         pronunciationLabel.font = ._18MediumItalicFont
         pronunciationLabel.textColor = .white
@@ -73,16 +77,19 @@ class LoginViewController: UIViewController {
         pronunciationLabel.textAlignment = .center
         view.addSubview(pronunciationLabel)
         
+        ssoButtonView = UIView()
         ssoButtonView.backgroundColor = .white
         ssoButtonView.layer.cornerRadius = ssoButtonCornerRadius
         ssoButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openSSO)))
         view.addSubview(ssoButtonView)
         
+        ssoButtonImageView = UIImageView()
         ssoButtonImageView.image = ssoLogoImage.withRenderingMode(.alwaysTemplate)
         ssoButtonImageView.tintColor = .mediumGrey
         ssoButtonImageView.contentMode = .scaleAspectFill
         ssoButtonView.addSubview(ssoButtonImageView)
         
+        ssoButtonTitle = UILabel()
         ssoButtonTitle.text = ssoButtonTitleText
         ssoButtonTitle.textAlignment = .center
         ssoButtonTitle.font = ._14MediumFont

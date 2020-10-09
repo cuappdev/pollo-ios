@@ -156,8 +156,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // Polls successfully retrieved
         dispatchGroup?.notify(queue: .main, execute: {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 pollsRetrieved = true
+                guard let self = self else { return }
                 UserDefaults.standard.set(User.userSession?.refreshToken, forKey: Identifiers.refreshTokenIdentifier)
                 let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
                 self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
