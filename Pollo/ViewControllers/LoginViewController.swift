@@ -5,36 +5,44 @@
 //  Created by Kevin Chan on 3/20/18.
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 
-//
-
-import GoogleSignIn
 import SnapKit
 import UIKit
+import WebKit
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate {
+class LoginViewController: UIViewController {
     
     var appNameLabel: UILabel!
     var gradient: CAGradientLayer!
     var pronunciationLabel: UILabel!
-    var signInButton: GIDSignInButton!
+    var ssoButtonView: UIView!
+    var ssoButtonImageView: UIImageView!
+    var ssoButtonTitle: UILabel!
     var welcomeLabel: UILabel!
     
-    // MARK: - CONSTANTS
+    // MARK: - Constraints
     let appNameLabelHeight: CGFloat = 71.5
-    let appNameLabelOffset: CGFloat = 5
-    let appNameLabelText: String = "Pollo"
-    let pronunciationLabelHeight: CGFloat = 19
-    let pronunciationLabelText: String = "\"Poh-loh\""
+    let appNameLabelOffset: CGFloat = 5.0
+    let pronunciationLabelHeight: CGFloat = 19.0
     let pronunciationLabelTopOffset: CGFloat = 14.5
-    let signInButtonHeight: CGFloat = 40
-    let signInButtonTopOffset: CGFloat = 28
-    let signInButtonWidth: CGFloat = 200
+    let ssoButtonCornerRadius: CGFloat = 4.0
+    let ssoButtonHeight: CGFloat = 39.0
+    let ssoButtonImageViewLeadingPadding: CGFloat = 6.0
+    let ssoButtonImageViewVerticalPadding: CGFloat = 7.0
+    let ssoButtonTitleVerticalPadding: CGFloat = 11.0
+    let ssoButtonTopOffset: CGFloat = 36.0
+    let ssoButtonWidth: CGFloat = 200.0
     let welcomeLabelHeight: CGFloat = 31.5
-    let welcomeLabelText: String = "Welcome to"
     let welcomeLabelTopScaleFactor: CGFloat = 0.3
     let welcomeLabelWidth: CGFloat = 249.5
     
-    // MARK: - INITIALIZATION
+    // MARK: - Constants
+    let appNameLabelText: String = "Pollo"
+    let pronunciationLabelText: String = "\"Poh-loh\""
+    let ssoButtonTitleText: String = "Sign in with Cornell SSO"
+    let ssoLogoImage: UIImage = UIImage(named: "cornell_logo")!
+    let welcomeLabelText: String = "Welcome to"
+    
+    // MARK: - Setup
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,17 +77,28 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         pronunciationLabel.textAlignment = .center
         view.addSubview(pronunciationLabel)
         
-        GIDSignIn.sharedInstance().uiDelegate = self
+        ssoButtonView = UIView()
+        ssoButtonView.backgroundColor = .white
+        ssoButtonView.layer.cornerRadius = ssoButtonCornerRadius
+        ssoButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openSSO)))
+        view.addSubview(ssoButtonView)
         
-        signInButton = GIDSignInButton()
-        signInButton.style = .wide
-        signInButton.colorScheme = .light
-        view.addSubview(signInButton)
+        ssoButtonImageView = UIImageView()
+        ssoButtonImageView.image = ssoLogoImage.withRenderingMode(.alwaysTemplate)
+        ssoButtonImageView.tintColor = .mediumGrey
+        ssoButtonImageView.contentMode = .scaleAspectFill
+        ssoButtonView.addSubview(ssoButtonImageView)
+        
+        ssoButtonTitle = UILabel()
+        ssoButtonTitle.text = ssoButtonTitleText
+        ssoButtonTitle.textAlignment = .center
+        ssoButtonTitle.font = ._14MediumFont
+        ssoButtonTitle.textColor = .mediumGrey
+        ssoButtonView.addSubview(ssoButtonTitle)
         
         setupConstraints()
     }
     
-    // MARK: - CONSTRAINTS
     func setupConstraints() {
         welcomeLabel.snp.makeConstraints { make in
             make.width.equalTo(welcomeLabelWidth)
@@ -99,11 +118,33 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
             make.top.equalTo(appNameLabel.snp.bottom).offset(pronunciationLabelTopOffset)
             make.centerX.equalToSuperview()
         }
-        signInButton.snp.makeConstraints { make in
-            make.width.equalTo(signInButtonWidth)
-            make.height.equalTo(signInButtonHeight)
-            make.top.equalTo(pronunciationLabel.snp.bottom).offset(signInButtonTopOffset)
+        
+        ssoButtonView.snp.makeConstraints { make in
+            make.width.equalTo(ssoButtonWidth)
+            make.height.equalTo(ssoButtonHeight)
+            make.top.equalTo(pronunciationLabel.snp.bottom).offset(ssoButtonTopOffset)
             make.centerX.equalToSuperview()
         }
+        
+        ssoButtonImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(ssoButtonImageViewVerticalPadding)
+            make.bottom.equalToSuperview().inset(ssoButtonImageViewVerticalPadding)
+            make.leading.equalToSuperview().offset(ssoButtonImageViewLeadingPadding)
+            make.width.equalTo(ssoButtonImageView.snp.height)
+        }
+        
+        ssoButtonTitle.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(ssoButtonTitleVerticalPadding)
+            make.bottom.equalToSuperview().inset(ssoButtonTitleVerticalPadding)
+            make.leading.equalTo(ssoButtonImageView.snp.trailing)
+            make.trailing.equalToSuperview()
+        }
     }
+    
+    // MARK: - Actions
+    @objc private func openSSO() {
+        let wvc = WebViewController()
+        navigationController?.pushViewController(wvc, animated: true)
+    }
+    
 }

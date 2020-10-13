@@ -6,7 +6,6 @@
 //  Copyright © 2018 CornellAppDev. All rights reserved.
 //
 
-import GoogleSignIn
 import IGListKit
 import UIKit
 
@@ -46,7 +45,7 @@ class SettingsViewController: UIViewController {
     }
     
     func loadData() {
-        let settingsModel1 = SettingsDataModel(state: .info, title: account, description: User.currentUser?.email)
+        let settingsModel1 = SettingsDataModel(state: .info, title: account, description: "\(User.currentUser!.netId)@cornell.edu")
         let separatorLineModel1 = SeparatorLineModel(state: .settings)
         let settingsModel2 = SettingsDataModel(state: .info, title: about, description: aboutDescription)
         let settingsModel3 = SettingsDataModel(state: .link, title: moreApps, description: Links.allApps)

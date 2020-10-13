@@ -11,12 +11,11 @@ import Crashlytics
 import Fabric
 import Firebase
 import FutureNova
-import GoogleSignIn
 import StoreKit
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     var pollsNavigationController: UINavigationController!
@@ -28,9 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         FIRApp.configure()
         setupWindow()
         setupNavigationController()
-        setupNetworking()
-        setupGoogleSignIn()
         setupNavBar()
+        setupNetworking()
+        setupSignIn()
         setupFabric()
 
         // Setup AppDevAnnouncements
@@ -44,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return true
     }
     
-    func setupWindow() {
+    private func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
@@ -52,28 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         UITextView.appearance().tintColor = .polloGreen
     }
     
-    func setupNavigationController() {
+    private func setupNavigationController() {
         let launchScreenVC = UIStoryboard(name: launchScreen, bundle: nil).instantiateInitialViewController() ?? UIViewController()
         pollsNavigationController = UINavigationController(rootViewController: launchScreenVC)
         window?.rootViewController = pollsNavigationController
     }
     
-    func setupGoogleSignIn() {
-        GIDSignIn.sharedInstance().clientID = Google.googleClientID
-        GIDSignIn.sharedInstance().serverClientID = Google.googleClientID
-        GIDSignIn.sharedInstance().delegate = self
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
-            didSignInSilently = true
-            DispatchQueue.main.async {
-                GIDSignIn.sharedInstance().signInSilently()
-            }
-        } else {
-            let loginVC = LoginViewController()
-            pollsNavigationController.pushViewController(loginVC, animated: false)
-        }
-    }
-    
-    func setupNavBar() {
+    private func setupNavBar() {
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
         pollsNavigationController.navigationBar.barTintColor = .darkestGrey
         pollsNavigationController.navigationBar.isTranslucent = false
@@ -83,16 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
     }
     
-    func setupFabric() {
-        #if DEBUG
-        print("[Running Pollo in debug configuration]")
-        #else
-        print("[Running Pollo in release configuration]")
-        Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
-        #endif
-    }
-
-    func setupNetworking() {
+    private func setupNetworking() {
         #if LOCAL_SERVER
         Endpoint.config.scheme = "http"
         Endpoint.config.host = "localhost"
@@ -107,97 +82,148 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
-    }
-    
-    func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
-        return networking(Endpoint.getPollSessions(with: role)).decode()
-    }
-    
-    func userAuthenticate(with idToken: String) -> Future<Response<UserSession>> {
-        return networking(Endpoint.userAuthenticate(with: idToken)).decode()
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if error == nil {
-            let idToken = user.authentication.idToken ?? ""
-            let userId = user.userID ?? "ID" // For client-side use only!
-            let fullName = user.profile.name ?? "First Last"
-            let givenName = user.profile.givenName ?? "First"
-            let familyName = user.profile.familyName ?? "Last"
-            let email = user.profile.email ?? "pollo@defaultvalue.com"
-            let netId = String(email.split(separator: "@")[0])
-            User.currentUser = User(id: userId, name: fullName, netId: netId, givenName: givenName, familyName: familyName, email: email)
-            
-            let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
-            UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
-            
-            var joinedSessions = [Session]()
-            var createdSessions = [Session]()
-            
-            userAuthenticate(with: idToken).observe { [weak self] userResult in
-                switch userResult {
-                case .value(let userResponse):
-                    User.userSession = userResponse.data
-                    let dispatchGroup = DispatchGroup()
-                    dispatchGroup.enter()
-                    dispatchGroup.enter()
-                    self?.getPollSessions(with: .member).observe { memberResult in
-                        switch memberResult {
-                        case .value(let memberResponse):
-                            var auxiliaryDict = [Double: Session]()
-                            memberResponse.data.forEach { session in
-                                if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .member), isLive: session.isLive)
-                                }
-                            }
-                            auxiliaryDict.keys.sorted().forEach { time in
-                                guard let joinedSession = auxiliaryDict[time] else { return }
-                                joinedSessions.append(joinedSession)
-                            }
-                        case .error(let memberError):
-                            print(memberError)
-                        }
-                        dispatchGroup.leave()
+    private func setupSignIn() {
+        let refreshToken = UserDefaults.standard.string(forKey: Identifiers.refreshTokenIdentifier)
+        if let unwrappedToken = refreshToken {
+            prepareRefreshedSession(with: unwrappedToken) { success in
+                if success {
+                    self.didSignInSilently = true
+                    self.signIn()
+                } else {
+                    DispatchQueue.main.async {
+                        let loginVC = LoginViewController()
+                        self.pollsNavigationController.pushViewController(loginVC, animated: false)
                     }
-                    self?.getPollSessions(with: .admin).observe { adminResult in
-                        switch adminResult {
-                        case .value(let adminResponse):
-                            var auxiliaryDict = [Double: Session]()
-                            adminResponse.data.forEach { session in
-                                if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
-                                    auxiliaryDict[latestActivityTimestamp] = Session(id: session.id, name: session.name, code: session.code, latestActivity: getLatestActivity(latestActivityTimestamp: latestActivityTimestamp, code: session.code, role: .admin), isLive: session.isLive)
-                                }
-                            }
-                            auxiliaryDict.keys.sorted().forEach { time in
-                                guard let createdSession = auxiliaryDict[time] else { return }
-                                createdSessions.append(createdSession)
-                            }
-                        case .error(let adminError):
-                            print(adminError)
-                        }
-                        dispatchGroup.leave()
-                    }
-                    dispatchGroup.notify(queue: .main, execute: {
-                        guard let `self` = self else { return }
-                        DispatchQueue.main.async {
-                            let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
-                            self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
-                        }
-                    })
-                case .error(let userError):
-                    print(userError)
                 }
             }
-            
-        } else if didSignInSilently {
-            self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
+        } else {
+            let loginVC = LoginViewController()
+            pollsNavigationController.pushViewController(loginVC, animated: false)
         }
     }
     
-    func logout() {
-        GIDSignIn.sharedInstance().signOut()
+    private func userRefreshSession(with token: String) -> Future<Response<UserSession>> {
+        return networking(Endpoint.userRefreshSession(with: token)).decode()
+    }
+    
+    private func prepareRefreshedSession(with bearerToken: String, completion: @escaping (Bool) -> Void) {
+        userRefreshSession(with: bearerToken).observe { sessionResult in
+            switch sessionResult {
+            case .value(let sessionResponse):
+                let session = sessionResponse.data
+                User.userSession = UserSession(accessToken: session.accessToken, refreshToken: session.refreshToken, sessionExpiration: session.sessionExpiration, isActive: session.isActive)
+                completion(true)
+            case .error(let sessionError):
+                print(sessionError)
+                completion(false)
+            }
+        }
+    }
+    
+    private func setupFabric() {
+        #if DEBUG
+        print("[Running Pollo in debug configuration]")
+        #else
+        print("[Running Pollo in release configuration]")
+        Crashlytics.start(withAPIKey: Keys.fabricAPIKey)
+        #endif
+    }
+        
+    internal func signIn() {
+        let significantEvents: Int = UserDefaults.standard.integer(forKey: Identifiers.significantEventsIdentifier)
+        UserDefaults.standard.set(significantEvents + 2, forKey: Identifiers.significantEventsIdentifier)
+        
+        prepareUser()
+        
+        var dispatchGroup: DispatchGroup? = DispatchGroup()
+        var pollsRetrieved = false
+        
+        var joinedSessions = [Session]()
+        preparePollSessions(with: .member, dispatchGroup: dispatchGroup!) { sessions in
+            joinedSessions = sessions
+        }
+        var createdSessions = [Session]()
+        preparePollSessions(with: .admin, dispatchGroup: dispatchGroup!) { sessions in
+            createdSessions = sessions
+        }
+        
+        // No internet timeout
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if !pollsRetrieved {
+                dispatchGroup = nil
+                self.pollsNavigationController.pushViewController(NoInternetViewController(), animated: false)
+            }
+        }
+        // Polls successfully retrieved
+        dispatchGroup?.notify(queue: .main, execute: {
+            DispatchQueue.main.async { [weak self] in
+                pollsRetrieved = true
+                guard let self = self else { return }
+                UserDefaults.standard.set(User.userSession?.refreshToken, forKey: Identifiers.refreshTokenIdentifier)
+                let pollsViewController = PollsViewController(joinedSessions: joinedSessions, createdSessions: createdSessions)
+                self.pollsNavigationController.pushViewController(pollsViewController, animated: !self.didSignInSilently)
+            }
+        })
+    }
+    
+    private func getUser() -> Future<Response<GetMemberResponse>> {
+        return networking(Endpoint.getMe()).decode()
+    }
+    
+    private func prepareUser() {
+        getUser().observe { userResult in
+            switch userResult {
+            case .value(let userResponse):
+                let user = userResponse.data
+                User.currentUser = User(id: user.id, name: user.name, netId: user.netID)
+            case .error(let userError):
+                print(userError)
+            }
+        }
+    }
+    
+    private func getPollSessions(with role: UserRole) -> Future<Response<[Session]>> {
+        return networking(Endpoint.getPollSessions(with: role)).decode()
+    }
+    
+    private func preparePollSessions(with userRole: UserRole, dispatchGroup: DispatchGroup, sessionResult: @escaping ([Session]) -> Void) {
+        var sessions = [Session]()
+        dispatchGroup.enter()
+        getPollSessions(with: userRole).observe { result in
+            switch result {
+            case .value(let response):
+                var auxiliaryDict = [Double: Session]()
+                response.data.forEach { session in
+                    if let updatedAt = session.updatedAt, let latestActivityTimestamp = Double(updatedAt) {
+                        auxiliaryDict[latestActivityTimestamp] = Session(
+                            id: session.id,
+                            name: session.name,
+                            code: session.code,
+                            latestActivity: getLatestActivity(
+                                latestActivityTimestamp: latestActivityTimestamp,
+                                code: session.code,
+                                role: .admin
+                            ),
+                            isLive: session.isLive
+                        )
+                    }
+                }
+                auxiliaryDict.keys.sorted().forEach { time in
+                    guard let session = auxiliaryDict[time] else { return }
+                    sessions.append(session)
+                }
+                sessionResult(sessions)
+            case .error(let error):
+                print(error)
+            }
+            dispatchGroup.leave()
+        }
+    }
+    
+    internal func logout() {
+        UserDefaults.standard.removeObject(forKey: Identifiers.refreshTokenIdentifier)
+        User.userSession = nil
+        User.currentUser = nil
         didSignInSilently = false
         pollsNavigationController.setNavigationBarHidden(true, animated: false)
         pollsNavigationController.popToRootViewController(animated: false)

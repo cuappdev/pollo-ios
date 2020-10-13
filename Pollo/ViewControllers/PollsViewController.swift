@@ -8,7 +8,6 @@
 
 import AppDevAnnouncements
 import FutureNova
-import GoogleSignIn
 import IGListKit
 import Presentr
 import StoreKit

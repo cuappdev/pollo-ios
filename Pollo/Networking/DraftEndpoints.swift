@@ -24,21 +24,21 @@ extension Endpoint {
     }
     
     static func getDrafts() -> Endpoint {
-        return Endpoint(path: "/drafts", headers: headers)
+        return Endpoint(path: "/drafts", headers: headers())
     }
     
     static func createDraft(text: String, options: [String]) -> Endpoint {
         let body = DraftBody(text: text, options: options)
-        return Endpoint(path: "/drafts", headers: headers, body: body)
+        return Endpoint(path: "/drafts", headers: headers(), body: body)
     }
     
     static func updateDraft(id: String, text: String, options: [String]) -> Endpoint {
         let body = DraftBody(text: text, options: options)
-        return Endpoint(path: "/drafts/\(id)", headers: headers, body: body, method: .put)
+        return Endpoint(path: "/drafts/\(id)", headers: headers(), body: body, method: .put)
     }
     
     static func deleteDraft(with id: String) -> Endpoint {
-        return Endpoint(path: "/drafts/\(id)", headers: headers, method: .delete)
+        return Endpoint(path: "/drafts/\(id)", headers: headers(), method: .delete)
     }
     
 }

@@ -14,7 +14,6 @@ target 'Pollo' do
   pod 'Fabric'
   pod 'Firebase/Analytics'
   pod 'FutureNova', :git => 'https://github.com/cuappdev/ios-networking.git'
-  pod 'Google/SignIn'
   pod 'IGListKit'
   pod 'NotificationBannerSwift'
   pod 'Presentr'

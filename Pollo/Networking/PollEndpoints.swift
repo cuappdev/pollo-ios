@@ -11,14 +11,13 @@ import FutureNova
 
 extension Endpoint {
     
-    static var headers: [String: String] {
-        return [
-            "Authorization": "Bearer \(User.userSession?.accessToken ?? "")"
-        ]
+    // More often than not the bearer token is the accessToken, but refreshToken is required for refreshing the session
+    static func headers(_ bearerToken: String = User.userSession?.accessToken ?? "") -> [String: String] {
+        return ["Authorization": "Bearer \(bearerToken)"]
     }
     
     static func getSortedPolls(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/polls", headers: headers)
+        return Endpoint(path: "/sessions/\(id)/polls", headers: headers())
     }
     
 }

@@ -26,23 +26,11 @@ class User: Codable {
     static var currentUser: User?
     static var userSession: UserSession?
 
-    var email: String?
-    var familyName: String?
-    var givenName: String?
     var id: String
     var name: String
     var netId: String
 
     init(id: String, name: String, netId: String) {
-        self.id = id
-        self.name = name
-        self.netId = netId
-    }
-
-    init(id: String, name: String, netId: String, givenName: String, familyName: String, email: String) {
-        self.email = email
-        self.familyName = familyName
-        self.givenName = givenName
         self.id = id
         self.name = name
         self.netId = netId

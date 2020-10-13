@@ -28,6 +28,7 @@ struct Identifiers {
     static let optionIdentifier = "optionCellId"
     static let pollPreviewIdentifier = "pollPreviewCellId"
     static let questionOptionCellIdentifier = "questionOptionCellId"
+    static let refreshTokenIdentifier = "refreshTokenIdentifier"
     static let resultMCIdentifier = "resultMCCellId"
     static let significantEventsIdentifier = "significantEvents"
 }
@@ -99,7 +100,6 @@ struct RequestKeys {
     static let choiceKey = "choice"
     static let correctAnswerKey = "correctAnswer"
     static let countKey = "count"
-    static let googleIDKey = "googleID"
     static let indexKey = "index"
     static let optionsKey = "options"
     static let pollKey = "poll"
@@ -154,12 +154,6 @@ struct Device {
     }()
 
     static let modelName = UIDevice.current.model
-    
-    private init() {}
-}
-
-struct Google {
-    static let googleClientID = "43978214891-pk0scb60nvn2ofa5acccd58k79n4llkg.apps.googleusercontent.com"
     
     private init() {}
 }

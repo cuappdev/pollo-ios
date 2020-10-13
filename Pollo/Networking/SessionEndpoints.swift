@@ -56,86 +56,86 @@ extension Endpoint {
     }
     
     static func generateCode() -> Endpoint {
-        return Endpoint(path: "/generate/code", headers: headers)
+        return Endpoint(path: "/generate/code", headers: headers())
     }
     
     static func getSession(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)", headers: headers)
+        return Endpoint(path: "/sessions/\(id)", headers: headers())
     }
     
     static func getPollSessions(with role: UserRole) -> Endpoint {
         let userRole = role == .member ? "member" : "admin"
-        return Endpoint(path: "/sessions/all/\(userRole)", headers: headers)
+        return Endpoint(path: "/sessions/all/\(userRole)", headers: headers())
     }
     
     static func updateSession(id: String, name: String, code: String) -> Endpoint {
         let body = UpdateSessionBody(id: id, name: name, code: code)
-        return Endpoint(path: "/sessions/\(id)", headers: headers, body: body, method: .put)
+        return Endpoint(path: "/sessions/\(id)", headers: headers(), body: body, method: .put)
     }
     
     static func deleteSession(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)", headers: headers, method: .delete)
+        return Endpoint(path: "/sessions/\(id)", headers: headers(), method: .delete)
     }
     
     static func leaveSession(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, method: .delete)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers(), method: .delete)
     }
     
     static func getMembers(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers())
     }
     
     static func getAdmins(with id: String) -> Endpoint {
-        return Endpoint(path: "/sessions/\(id)/admins", headers: headers)
+        return Endpoint(path: "/sessions/\(id)/admins", headers: headers())
     }
     
     static func addMembers(id: String, memberIds: [Int]) -> Endpoint {
         let body = [
             "memberIds": memberIds
         ]
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, body: body)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers(), body: body)
     }
     
     static func removeMembers(id: String, memberIds: [Int]) -> Endpoint {
         let body = [
             "memberIds": memberIds
         ]
-        return Endpoint(path: "/sessions/\(id)/members", headers: headers, body: body, method: .put)
+        return Endpoint(path: "/sessions/\(id)/members", headers: headers(), body: body, method: .put)
     }
     
     static func addAdmins(id: String, adminIds: [Int]) -> Endpoint {
         let body = [
             "adminIds": adminIds
         ]
-        return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body)
+        return Endpoint(path: "/sessions/\(id)/admins", headers: headers(), body: body)
     }
     
     static func deleteAdmins(id: String, adminIds: [Int]) -> Endpoint {
         let body = [
             "adminIds": adminIds
         ]
-        return Endpoint(path: "/sessions/\(id)/admins", headers: headers, body: body, method: .put)
+        return Endpoint(path: "/sessions/\(id)/admins", headers: headers(), body: body, method: .put)
     }
     
     static func startSession(code: String, name: String?, isGroup: Bool?) -> Endpoint {
         if let name = name, let isGroup = isGroup {
             let body = CreateSessionBody(name: name, code: code, isGroup: isGroup)
-            return Endpoint(path: "/start/session", headers: headers, body: body)
+            return Endpoint(path: "/start/session", headers: headers(), body: body)
         }
-        return Endpoint(path: "/start/session", headers: headers, body: ["code": code])
+        return Endpoint(path: "/start/session", headers: headers(), body: ["code": code])
     }
     
     static func joinSessionWithCode(with code: String) -> Endpoint {
-        return Endpoint(path: "/join/session", headers: headers, body: ["code": code])
+        return Endpoint(path: "/join/session", headers: headers(), body: ["code": code])
     }
     
     static func joinSessionWithId(with id: String) -> Endpoint {
-        return Endpoint(path: "/join/session", headers: headers, body: ["id": id])
+        return Endpoint(path: "/join/session", headers: headers(), body: ["id": id])
     }
     
     static func joinSessionWithIdAndCode(id: String, code: String) -> Endpoint {
         let body = JoinSessionBody(id: id, code: code)
-        return Endpoint(path: "/join/session", headers: headers, body: body)
+        return Endpoint(path: "/join/session", headers: headers(), body: body)
     }
     
 }

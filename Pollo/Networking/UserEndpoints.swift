@@ -11,19 +11,16 @@ import FutureNova
 
 extension Endpoint {
     
+    static func getSSOUrl(provider: String) -> Endpoint {
+        return Endpoint(path: "/auth/saml/\(provider)/")
+    }
+    
     static func getMe() -> Endpoint {
-        return Endpoint(path: "/users", headers: headers)
+        return Endpoint(path: "/users", headers: headers())
     }
     
-    static func userAuthenticate(with idToken: String) -> Endpoint {
-        let headers = [
-            "Content-Type": "application/json"
-        ]
-        return Endpoint(path: "/auth/mobile", headers: headers, body: ["idToken": idToken])
-    }
-    
-    static func userRefreshSession() -> Endpoint {
-        return Endpoint(path: "/auth/refresh", headers: headers)
+    static func userRefreshSession(with bearerToken: String) -> Endpoint {
+        return Endpoint(path: "/auth/refresh", headers: headers(bearerToken), method: .post)
     }
     
 }
