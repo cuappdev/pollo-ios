@@ -26,11 +26,11 @@ class LoginViewController: UIViewController {
     let pronunciationLabelTopOffset: CGFloat = 14.5
     let ssoButtonCornerRadius: CGFloat = 4.0
     let ssoButtonHeight: CGFloat = 39.0
+    let ssoButtonImageViewLeadingPadding: CGFloat = 6.0
+    let ssoButtonImageViewVerticalPadding: CGFloat = 7.0
+    let ssoButtonTitleVerticalPadding: CGFloat = 11.0
     let ssoButtonTopOffset: CGFloat = 36.0
     let ssoButtonWidth: CGFloat = 200.0
-    let ssoButtonImageViewVerticalPadding: CGFloat = 7.0
-    let ssoButtonImageViewLeadingPadding: CGFloat = 6.0
-    let ssoButtonTitleVerticalPadding: CGFloat = 11.0
     let welcomeLabelHeight: CGFloat = 31.5
     let welcomeLabelTopScaleFactor: CGFloat = 0.3
     let welcomeLabelWidth: CGFloat = 249.5
@@ -38,9 +38,9 @@ class LoginViewController: UIViewController {
     // MARK: - Constants
     let appNameLabelText: String = "Pollo"
     let pronunciationLabelText: String = "\"Poh-loh\""
-    let welcomeLabelText: String = "Welcome to"
     let ssoButtonTitleText: String = "Sign in with Cornell SSO"
     let ssoLogoImage: UIImage = UIImage(named: "cornell_logo")!
+    let welcomeLabelText: String = "Welcome to"
     
     // MARK: - Setup
     override func viewDidLoad() {
