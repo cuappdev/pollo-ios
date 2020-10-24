@@ -101,7 +101,7 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding
+        let maxWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding - 2 * horizontalPadding
         
         // If we already laid out constraints before, we should only update the
         // highlightView width constraint
@@ -148,8 +148,10 @@ class MCResultCell: UICollectionViewCell {
         }
         
         optionLabel.snp.makeConstraints { make in
+
             make.leading.equalToSuperview().offset(horizontalPadding)
-            make.trailing.equalToSuperview().inset(horizontalPadding)
+            make.trailing.lessThanOrEqualToSuperview().inset(horizontalPadding)
+//            make.trailing.equalToSuperview().inset(horizontalPadding)
             make.centerY.equalToSuperview()
             if showCorrectAnswer {
                 make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
@@ -165,7 +167,7 @@ class MCResultCell: UICollectionViewCell {
         
         numSelectedLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(numSelectedLabelTopPadding)
-            make.leading.equalTo(containerView.snp.trailing).inset(horizontalPadding/3)
+            make.leading.equalTo(containerView.snp.trailing).offset(horizontalPadding/3)
             make.trailing.equalToSuperview().inset(horizontalPadding/3)
         }
         percentSelectedLabel.snp.makeConstraints { make in
