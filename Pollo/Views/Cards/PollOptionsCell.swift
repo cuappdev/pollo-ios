@@ -103,6 +103,10 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 mcSelectedIndex = selectedIndex
             }
         }
+
+        optionGradientView.removeFromSuperview()
+        optionGradientView = OptionsGradientView(frame: frame)
+        contentView.addSubview(optionGradientView)
         optionGradientView.isHidden = !hasOverflowOptions
         optionGradientView.gradientLayer.endPoint = CGPoint(x: 0.5, y: delegate.userRole == .admin ? 0 : 0.25)
         optionGradientView.toggle(show: !optionGradientView.isHidden, animated: false)
