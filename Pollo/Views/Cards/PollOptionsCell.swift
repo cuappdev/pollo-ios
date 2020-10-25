@@ -93,7 +93,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.correctAnswer = correctAnswer
         let currentCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
         switch pollOptionsModel.type {
-        case .mcResult(_):
+        case .mcResult:
             hasOverflowOptions = currentCellHeight > maxCellHeight
         case .mcChoice(let mcChoiceModels):
             hasOverflowOptions = currentCellHeight > maxCellHeight
@@ -103,6 +103,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
                 mcSelectedIndex = selectedIndex
             }
         }
+
         optionGradientView.isHidden = !hasOverflowOptions
         optionGradientView.gradientLayer.endPoint = CGPoint(x: 0.5, y: delegate.userRole == .admin ? 0 : 0.25)
         optionGradientView.toggle(show: !optionGradientView.isHidden, animated: false)
