@@ -93,7 +93,7 @@ class PollOptionsCell: UICollectionViewCell, UIScrollViewDelegate {
         self.correctAnswer = correctAnswer
         let currentCellHeight = calculatePollOptionsCellHeight(for: pollOptionsModel)
         switch pollOptionsModel.type {
-        case .mcResult(_):
+        case .mcResult:
             hasOverflowOptions = currentCellHeight > maxCellHeight
         case .mcChoice(let mcChoiceModels):
             hasOverflowOptions = currentCellHeight > maxCellHeight
