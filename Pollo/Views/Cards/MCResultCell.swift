@@ -101,14 +101,17 @@ class MCResultCell: UICollectionViewCell {
     override func updateConstraints() {
         guard let optionLabelText = optionLabel.text else { return }
         let optionLabelWidth = optionLabelText.width(withConstrainedHeight: bounds.height, font: optionLabel.font)
-        let maxWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding - 2 * horizontalPadding
-        
+        var maxLabelWidth = bounds.width - horizontalPadding - numPercentSelectedTrailingPadding - 2 * horizontalPadding
+        if userRole == .member {
+            maxLabelWidth -= dotViewLength + horizontalPadding
+        }
+
         // If we already laid out constraints before, we should only update the
         // highlightView width constraint
         if didLayoutConstraints {
-            let useMaxWidth = optionLabelWidth >= maxWidth || !showCorrectAnswer
+            let useMaxWidth = optionLabelWidth >= maxLabelWidth || !showCorrectAnswer
             optionLabel.snp.updateConstraints { make in
-                make.width.equalTo(useMaxWidth ? maxWidth : optionLabelWidth)
+                make.width.equalTo(useMaxWidth ? maxLabelWidth : optionLabelWidth)
             }
             UIView.animate(withDuration: 0.5) { [weak self] in
                 guard let self = self else { return }
@@ -141,22 +144,20 @@ class MCResultCell: UICollectionViewCell {
         }
         
         containerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(horizontalPadding + (userRole == .admin ? 0 : horizontalPadding + dotViewLength))
+            make.leading.equalToSuperview().offset(horizontalPadding + (userRole == .admin ? 0 : dotViewLength + horizontalPadding))
             make.trailing.equalToSuperview().inset(numPercentSelectedTrailingPadding)
             make.height.equalTo(containerViewHeight)
             make.bottom.equalToSuperview()
         }
         
         optionLabel.snp.makeConstraints { make in
-
             make.leading.equalToSuperview().offset(horizontalPadding)
             make.trailing.lessThanOrEqualToSuperview().inset(horizontalPadding)
-//            make.trailing.equalToSuperview().inset(horizontalPadding)
             make.centerY.equalToSuperview()
             if showCorrectAnswer {
-                make.width.equalTo(optionLabelWidth >= maxWidth ? maxWidth : optionLabelWidth)
+                make.width.equalTo(optionLabelWidth >= maxLabelWidth ? maxLabelWidth : optionLabelWidth)
             } else {
-                make.width.equalTo(maxWidth)
+                make.width.equalTo(maxLabelWidth)
             }
         }
 
