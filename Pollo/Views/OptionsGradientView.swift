@@ -26,6 +26,11 @@ class OptionsGradientView: UIView {
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
         layer.addSublayer(gradientLayer)
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = frame
+    }
     
     func toggle(show: Bool, animated: Bool) {
         let opacity = CGFloat(show ? 1 : 0)
