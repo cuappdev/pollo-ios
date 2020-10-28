@@ -14,13 +14,18 @@ class WebViewController: UIViewController {
 
     let sessionTokenHandlerName: String = "sessionTokenHandler"
     var ssoWebView: WKWebView!
+    let cornellColor: UIColor = UIColor(red: 179.0 / 255.0, green: 27.0 / 255.0, blue: 27.0 / 255.0, alpha: 1.0)
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.barTintColor = cornellColor
+        navigationController?.navigationBar.tintColor = .white
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.navigationBar.barTintColor = .darkestGrey
+        navigationController?.navigationBar.tintColor = .systemBlue
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -40,6 +45,10 @@ class WebViewController: UIViewController {
             let request = URLRequest(url: url)
             ssoWebView.load(request)
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
 
