@@ -140,7 +140,18 @@ class LoginViewController: UIViewController {
             make.trailing.equalToSuperview()
         }
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.barTintColor = .darkestGrey
+        navigationController?.navigationBar.tintColor = .systemBlue
+    }
+
     // MARK: - Actions
     @objc private func openSSO() {
         let wvc = WebViewController()

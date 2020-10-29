@@ -16,19 +16,17 @@ class WebViewController: UIViewController {
     var ssoWebView: WKWebView!
     let cornellColor: UIColor = UIColor(red: 179.0 / 255.0, green: 27.0 / 255.0, blue: 27.0 / 255.0, alpha: 1.0)
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = cornellColor
         navigationController?.navigationBar.tintColor = .white
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        navigationController?.navigationBar.barTintColor = .darkestGrey
-        navigationController?.navigationBar.tintColor = .systemBlue
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, User.userSession != nil else { return }
         appDelegate.signIn()
     }
