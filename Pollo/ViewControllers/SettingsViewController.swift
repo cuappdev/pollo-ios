@@ -97,7 +97,8 @@ class SettingsViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(61)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.centerX.equalToSuperview()
         }
         
     }
