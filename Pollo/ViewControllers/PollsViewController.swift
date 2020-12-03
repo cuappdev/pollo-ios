@@ -231,6 +231,7 @@ class PollsViewController: UIViewController {
         headerGradientView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-1 * UIApplication.shared.statusBarFrame.size.height)
             make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
+            make.centerX.equalToSuperview()
             make.height.equalTo(headerGradientHeight + UIApplication.shared.statusBarFrame.size.height)
         }
         
@@ -242,13 +243,12 @@ class PollsViewController: UIViewController {
         
         pollsOptionsView.snp.makeConstraints { make in
             make.bottom.equalTo(headerGradientView.snp.bottom)
-            make.width.equalToSuperview()
+            make.width.centerX.equalToSuperview()
             make.height.equalTo(40)
         }
         
         dimmingView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.edges.equalToSuperview()
         }
 
         createSessionContainerView.snp.makeConstraints { make in
@@ -260,6 +260,7 @@ class PollsViewController: UIViewController {
         createSessionButton.snp.makeConstraints { make in
             make.width.equalTo(createSessionButtonWidth)
             make.height.equalTo(codeTextFieldHeight)
+            make.centerY.trailing.equalToSuperview()
         }
 
         createSessionTextField.snp.makeConstraints { make in
@@ -278,6 +279,7 @@ class PollsViewController: UIViewController {
         joinSessionButton.snp.makeConstraints { make in
             make.width.equalTo(createSessionButtonWidth)
             make.height.equalTo(codeTextFieldHeight)
+            make.centerY.trailing.equalToSuperview()
         }
         
         codeTextField.snp.makeConstraints { make in
